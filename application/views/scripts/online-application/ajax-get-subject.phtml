@@ -1,0 +1,172 @@
+<div>
+
+<form method="post" action="<?php echo $this->baseUrl().'/online-application/credit-hour-apply/idprogram/'.$this->programid; ?>">
+<table><tr><td>
+<?php echo $this->translate('Kelas')." :"?></td><td>
+<dd id="ap_kelas_code-element">
+<select id="ap_kelas_code" name="ap_kelas_code">
+    <?php foreach ($this->branch as $key => $value):?>
+    <?php if($value['IdProgramBranch'] == $this->branch):?>
+    <option value="<?php echo $value['IdProgramBranch'];?>" selected><?php echo $value['GroupName'];?></option>
+    <?php else:?>
+    <option value="<?php echo $value['IdProgramBranch'];?>"><?php echo $value['GroupName'];?></option>
+    <?php endif;?>
+    <?php endforeach;?>
+</select>
+</dd></td></tr></table>
+<br>
+<fieldset><legend><?php echo "Program Studi Asal"?></legend>
+<table bgcolor="lightgrey" width="100%">
+<tr><td width="20%">
+<dt id="ap_jenjang_asal-label">
+<label class="required" for="ap_jenjang_asal">Jenjang Akademik</label>
+</dt></td>
+<td width="5px">:</td>
+<td> 
+ <select id="ap_jenjang" name="ap_jenjang">
+ 	<?php $jenjang=$this->creditapply['jenjang_asal'];?>
+    <option value="D2" <?php if ($jenjang=='D2') echo "selected"?>>D2</option>
+    <option value="D3" <?php if ($jenjang=='D3') echo "selected"?>>D3</option>
+    <option value="D4" <?php if ($jenjang=='D4') echo "selected"?>>D4</option>
+    <option value="S3" <?php if ($jenjang=='S3') echo "selected"?>>S3</option>
+    <option value="S2" <?php if ($jenjang=='S2') echo "selected"?>>S2</option>
+    <option value="S1" <?php if ($jenjang=='S1') echo "selected"?>>S1</option>
+  </select>
+ 	
+ </td>
+</tr>
+<tr><td>
+<dt id="ap_program_asal-label">
+<label class="required" for="ap_prog_asal">Nama Program Studi</label>
+</dt></td>
+<td width="5px">:</td>
+<td> 
+ <input type="text" id="ap_program_asal" name="ap_program_asal" size="50" value=" <?php echo $this->creditapply['program_asal']?>">
+</td>
+</tr>
+<tr><td>
+<dt id="ap_univ_asal-label">
+<label class="required" for="ap_univ_asal">Nama Perguruan Tinggi</label>
+</dt></td>
+<td width="5px">:</td>
+<td> 
+ <input type="text" id="ap_univ_asal" name="ap_univ_asal" size="50"  value=" <?php echo $this->creditapply['pt_asal']?>">
+</td>
+</tr>
+<tr><td>
+<dt id="ap_akreditasi_asal-label">
+<label class="required" for="ap_akreditasi_asal">Akreditasi</label>
+</dt></td>
+<td width="5px">:</td>
+<td> 
+ <select id="ap_akreditasi" name="ap_akreditasi">
+ <?php $akre=$this->creditapply['akreditasi_asal'];?>
+    <option value="A" <?php if ($akre=='A') echo "selected"?>>A</option>
+    <option value="B" <?php if ($akre=='B') echo "selected"?>>B</option>
+    <option value="C" <?php if ($akre=='C') echo "selected"?>>C</option>
+  </select>
+ 	
+ </td>
+</tr>
+</table>
+</fieldset>
+ 
+<br/>
+<h2><?php echo $this->translate('Subject List');?></h2>
+<?php if($this->landscapeType == '43') :?>
+<p>Masukan kode matakuliah, nama matakuliah, sks, dan nilai huruf transkrip lama anda, dan sesuaikan dengan matakuliah yang ada di Universitas Trisakti
+pastikan diisi dengan benar kami akan melakukan verifikasi dengan portal PDPT Dikti</p>
+<br>
+<table class="table" width="100%">
+    <tr>
+     	  <th>No</th>
+          <th><?php echo $this->translate('Subject Code');?></th>
+            <th><?php echo $this->translate('Subject Name');?></th>
+            <th><?php echo $this->translate('Credit Hours');?></th>
+            <th><?php echo $this->translate('Grade Name');?></th>
+            <th> -> </th>
+         <th><?php echo $this->translate('Credit Hours');?></th>
+        <th><?php echo $this->translate('Subject Name');?></th>
+    </tr>
+    <?php 
+    $i = 1;
+    $apply='';
+    foreach ($this->subjects as $key => $subject) :
+	    $CourseCode_apply='';
+	    $Course_apply='';
+	    $Grade_apply='';
+	    $CH_apply='';
+    	if (isset($subject['apply'])) {
+	    	$apply=$subject['apply']; 
+	    	if ($apply!=array()) {
+				$CourseCode_apply=$apply['CourseCode_apply'];
+				$Course_apply=$apply['Course_apply'];
+				$Grade_apply=$apply['Grade_apply'];
+				$CH_apply=$apply['CH_apply'];
+			} 
+		}
+?>
+    <tr>
+         <td align="center"><?php echo $i++;?></td>
+             <td align="center"><input type="text" size="10" name="code[<?php echo $subject['key'];?>]" value="<?php echo $CourseCode_apply;?>"/></td>
+            <td align="center"><input type="text" size="50" name="name[<?php echo $subject['key'];?>]" value="<?php echo $Course_apply;?>"/></td>
+            <td align="center"><input type="text" size="3" name="cr[<?php echo $subject['key'];?>]" value="<?php echo $CH_apply;?>"/></td>
+            <td align="center"><input type="text" size="4" name="grade[<?php echo $subject['key'];?>]" value="<?php echo $Grade_apply;?>"/></td>
+            <td witdh="10px"> -> </td>
+            <input type="hidden" size="4" name="IdSubject[<?php echo $subject['key'];?>]" value="<?php echo $subject['key'];?>"/> 
+            <td align="center"><?php echo $subject['CreditHours'];?></td>
+           <td><?php echo $subject['value'];?></td>
+             
+    </tr>
+    <?php endforeach;?>
+</table>
+<?php elseif ($this->landscapeType == '44'):
+		$CourseCode_apply='';
+	    $Course_apply='';
+	    $Grade_apply='';
+	    $CH_apply='';
+    	if (isset($subject['apply'])) {
+	    	$apply=$subject['apply']; 
+	    	if ($apply!=array()) {
+				$CourseCode_apply=$apply['CourseCode_apply'];
+				$Course_apply=$apply['Course_apply'];
+				$Grade_apply=$apply['Grade_apply'];
+				$CH_apply=$apply['CH_apply'];
+			} 
+		} ?>
+<table class="table" width="100%">
+    <tr>
+          <th>No</th>
+          <th><?php echo $this->translate('Subject Code');?></th>
+            <th><?php echo $this->translate('Subject Name');?></th>
+            <th><?php echo $this->translate('Credit Hours');?></th>
+            <th><?php echo $this->translate('Grade Name');?></th>
+            <th> -> </th>
+            <th><?php echo $this->translate('Credit Hours');?></th>
+        <th><?php echo $this->translate('Subject Name');?></th>
+    </tr>
+    <?php 
+    $i = 1;
+    foreach ($this->subjects as $key => $subject) :
+    	$apply=$subject['apply']; ?>
+    <tr>
+        <td align="center"><?php echo $i++;?></td>
+             <td align="center"><input type="text" size="10" name="code[<?php echo $subject['key'];?>]" value="<?php echo $CourseCode_apply;?>"/></td>
+            <td align="center"><input type="text" size="50" name="name[<?php echo $subject['key'];?>]" value="<?php echo $Course_apply;?>"/></td>
+            <td align="center"><input type="text" size="3" name="cr[<?php echo $subject['key'];?>]" value="<?php echo $CH_apply;?>"/></td>
+            <td align="center"><input type="text" size="4" name="grade[<?php echo $subject['key'];?>]" value="<?php echo $Grade_apply;?>"/></td>
+            <td witdh="10px"> -> </td>
+            <input type="hidden" size="4" name="IdSubject[<?php echo $subject['key'];?>]" value="<?php echo $subject['key'];?>"/> 
+            <td align="center"><?php echo $subject['CreditHours'];?></td>
+           <td><?php echo $subject['value'];?></td>
+    </tr>
+    <?php endforeach;?>
+</table>
+<?php endif;?>
+<input type="hidden" name="landscape_id" value="<?php echo $this->landscape[0]['IdLandscape'];?>" />
+<input type="hidden" name="program_id" value="<?php echo $this->programid;?>" />
+<table width="100%" bgcolor="lightgreen"><tr><td align="center">
+<input type="submit" class="button" name="submit" value="<?php echo $this->translate('Save');?>" />
+</td></tr></table>
+</form>
+</div>

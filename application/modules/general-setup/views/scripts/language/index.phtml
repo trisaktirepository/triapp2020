@@ -1,0 +1,113 @@
+<script type="text/javascript">
+	function del(){
+
+		var id = $('input[name=id]:checked').val();
+		
+		if(confirm('Are you sure to delete?')){
+			window.location = "<?php echo $this->url(array('module'=>'general-setup','controller'=>'language', 'action'=>'delete'),'default',true); ?>/id/"+id;
+		}
+	}
+	
+	function add(){
+		window.location="<?php echo $this->url(array('module'=>'general-setup','controller'=>'language', 'action'=>'add'),'default',true);?>";
+	}
+
+	function edit(){
+		var id = $('input[name=id]:checked').val();
+		window.location="<?php echo $this->url(array('module'=>'general-setup','controller'=>'language', 'action'=>'edit'),'default',true);?>/id/"+id;
+	}
+
+	function searchbox(){
+		$('#div_search').show();
+	}
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="javascript:add()">
+					<span class='add'></span>
+					Add
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:edit()">
+					<span class='edit'></span>
+					Edit
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:del()">
+					<span class='delete'></span>
+					Delete
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a id="search" href="#" onclick="javascript:searchbox()">
+					<span class='search'></span>
+					Search
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<div id="div_search" style="display:none;">
+	<fieldset>
+		<legend>Search</legend>
+		<form method="post">
+			<dl class="zend_form">
+			<dt id="sl_var_name-label"><label for="sl_var_name" class="required"><?php echo $this->translate("Search Keyword")?></label></dt>
+			<dd id="sl_var_name-element">
+			<input type="text" name="sl_var_name" id="sl_var_name" value="" /></dd>			
+				
+				<dd id="buttons-element"><div class="buttons">
+					<input type="submit" value="Search" id="btn_search" name="Search">
+					<input type="button" onclick="$('#div_search').hide();" value="Cancel" id="cancel" name="cancel"></div></dd>
+			</dl>
+		</form>
+	</fieldset>
+</div>
+
+<div style="width:100%;">
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+<table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		<th width="2"></th>
+		<th><?php echo $this->translate("Language Variable")?></th>
+		<th><?php echo $this->translate("English")?></th>
+		<th><?php echo $this->translate("Bahasa Indonesia")?></th>
+	</tr>
+	
+	<?php 
+	$i=0;
+	foreach ($this->paginator as $entry): 
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<td> <input type="radio" name="id" value="<?php echo $entry['sl_id']; ?>"></td>
+		<td><a href="<?php echo $this->url(array('module'=>'application','controller'=>'general-setup', 'action'=>'detail','id'=>$entry['sl_id']),'default',true); ?>"><?php echo $entry['sl_var_name']; ?></a></td>
+		<td align="center"><?php echo $entry['sl_english']; ?></td>
+		<td align="center"><?php echo $entry['sl_bahasa']; ?></td>
+	</tr>
+	<?php 
+	$i++;
+	endforeach 
+	?>
+
+</table>
+</div>
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>

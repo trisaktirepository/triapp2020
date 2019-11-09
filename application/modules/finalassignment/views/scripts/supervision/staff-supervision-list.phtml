@@ -1,0 +1,123 @@
+<script>
+  
+$(function() {
+
+	$( ".datepicker" ).datepicker({
+		maxDate: "0",
+		"dateFormat" : 'yy-mm-dd',
+		changeMonth: true,
+	    changeYear: true 
+	});
+});
+
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="/finalassignment/proposal/application/proposedby/<?php echo $this->proposedby;?>" >
+					<span class='add'></span>
+					<?php echo $this->translate("Create New Research"); ?>
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<?php if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+<br />
+<?php }?>
+<table>
+<tr><td><?php echo $this->translate('My Identity')?></td><td><?php echo $this->staff['FullName'];?></td>
+</tr>
+</table>
+<fieldset><legend><?php echo $this->translate('My Open Supervision')?></legend>
+<h2><?php echo $this->translate('History');?></h2>
+<table width="100%" class="table">
+	<tr>
+		<th><?php echo $this->translate('Title in Bahasa');?></th>
+		<th><?php echo $this->translate('Title in English');?></th>
+		<th><?php echo $this->translate('First Problem Statement');?></th>
+		<th><?php echo $this->translate('Second Problem Statement');?></th>
+		<th><?php echo $this->translate('Third Problem Statement');?></th>
+		<th><?php echo $this->translate('Abstract');?></th>
+		<th><?php echo $this->translate('NIM');?></th>
+		<th><?php echo $this->translate('Student');?></th>
+		<th><?php echo $this->translate('Progress %');?></th>
+		<th><?php echo $this->translate('Supervision Notes');?></th>
+	</tr>
+	<?php 
+	if($this->opensupervision_list){
+      foreach($this->opensupervision_list as $index => $batch){
+			$std=$batch['Student'];
+			//echo var_dump($std);
+	?>
+	<tr <?php echo $index%2==0?"class='shade'":""?> >
+		<td><?php echo $batch['title_bahasa'];?></td>
+		<td><?php echo $batch['title'];?></td>
+		<td><?php echo $batch['problem1'];?></td>
+		<td><?php echo $batch['problem2'];?></td>
+		<td><?php echo $batch['problem3'];?></td>
+		<td><?php echo $batch['abstrak'];?></td>
+		<td><?php echo $std['registrationId'];?></td>
+		<td><?php echo $std['student_name'];?></td>
+		<td><?php echo $batch['Progress'];?></td>
+		<td><a href="/finalassignment/supervision/supervision-index/idApplication/<?php echo $batch['IdTAApplication'];?>/IdStaff/<?php echo $batch['IdStaff'];?>">Manage</a></td>
+	</tr>
+	<?php 
+	  }
+	}
+	?>
+</table>
+</fieldset>
+<br />
+<fieldset><legend><?php echo $this->translate('My Finish Supervision')?></legend>
+<h2><?php echo $this->translate('History');?></h2>
+<table width="100%" class="table">
+	<tr>
+		<th><?php echo $this->translate('Title in Bahasa');?></th>
+		<th><?php echo $this->translate('Title in English');?></th>
+		<th><?php echo $this->translate('First Problem Statement');?></th>
+		<th><?php echo $this->translate('Second Problem Statement');?></th>
+		<th><?php echo $this->translate('Third Problem Statement');?></th>
+		<th><?php echo $this->translate('Abstract');?></th>
+		<th><?php echo $this->translate('NIM');?></th>
+		<th><?php echo $this->translate('Student');?></th>
+		<th><?php echo $this->translate('Supervision Notes');?></th>
+	</tr>
+	<?php 
+	if($this->finishsupervision_list){
+      foreach($this->finishsupervision_list as $index => $batch){
+			$std=$batch['Student'];
+	?>
+	<tr <?php echo $index%2==0?"class='shade'":""?> >
+		<td><?php echo $batch['title_bahasa'];?></td>
+		<td><?php echo $batch['title'];?></td>
+		<td><?php echo $batch['problem1'];?></td>
+		<td><?php echo $batch['problem2'];?></td>
+		<td><?php echo $batch['problem3'];?></td>
+		<td><?php echo $batch['abstrak'];?></td>
+		<td><?php echo $std['registrationId'];?></td>
+		<td><?php echo $std['student_name'];?></td>
+		<td><a href="/finalassignment/supervision/supervision-view/idApplication/<?php echo $batch['IdTAApplication'];?>">View</a></td>
+	</tr>
+	<?php 
+	  }
+	}
+	?>
+</table>
+ 
+</fieldset>
+ 

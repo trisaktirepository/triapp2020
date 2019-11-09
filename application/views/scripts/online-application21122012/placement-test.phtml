@@ -1,0 +1,127 @@
+<script>
+$(document).ready(function(){
+
+	 $( "#appl_dob" ).datepicker({
+	     	dateFormat: "dd-mm-yy",
+	     	changeMonth: true,
+	     	numberOfMonths: 2,
+	     });
+     
+   
+});
+
+
+
+function getLocation(element){
+	//appl_province
+	var select_date =  $("#aps_test_date").val()
+	
+	var selected_val = "<?php echo $this->aps_id;?>";
+	
+	 
+	$.ajax({ 
+		type: "POST",
+		url: "<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'ajax-get-location'),'default',true);?>/select_date/"+select_date, 
+		data: "select_date=" + select_date,
+		context: document.body, 
+		success:		   
+			function(data){			
+				response = eval(data);			
+				var location = document.getElementById('aps_id');
+				location.options.length = 0;
+				location.options[0]=new Option("<?php echo $this->translate('Please Select');?>",'0');
+				
+				for(var i=0; i<response.length; i++){	
+					if(response[i].aps_id==selected_val){
+						var selectedindex = i+1;
+					}								
+					location.options[i+1]=new Option(response[i].location_id+'-'+response[i].location_name,response[i].aps_id,0,selectedindex);
+				}		
+				
+	    	}
+	    	
+	});
+
+	
+	
+}	
+
+
+function getFees(){
+	
+	
+	var appl_id    =  $("#appl_id").val()
+	var transaction_id    =  $("#transaction_id").val()
+    var app_ptest_code    =  $("#app_ptest_code").val()
+    var aph_fees_program  =  $("#aph_fees_program").val()   
+    var aph_fees_location =  $("#aph_fees_location").val()
+     
+    var locationid = $("#aps_id option:selected").html().split("-");	
+	var lid = locationid[0];	
+
+	
+	url = "<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'ajax-get-fees'),'default',true);?>/code/"+app_ptest_code+"/program/"+aph_fees_program+"/location/"+aph_fees_location+"/lid/"+lid+"/tid/"+transaction_id
+   			
+	$.ajax({ 
+		type: "POST",
+		url: "<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'ajax-get-fees'),'default',true);?>/code/"+app_ptest_code+"/program/"+aph_fees_program+"/location/"+aph_fees_location+"/lid/"+lid+"/tid/"+transaction_id, 
+		data: "",
+		context: document.body, 
+		success:		   
+			function(data){		
+			document.getElementById('apt_fee_amt').value=data;						
+	    	}
+	    	
+	});
+}	
+
+$(window).load(function() {
+	if( $('#aps_test_date').val() != '' ){
+		getLocation();
+		
+	}
+});
+
+</script>
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+
+
+<div class="breadcrum">
+	<ul class="tri-steps">
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'biodata'),'default',true);?>"><?php echo $this->translate("biodata"); ?></a></div></li>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'contactinfo'),'default',true);?>"><?php echo $this->translate("contact_info"); ?></a></div></li>
+		<li class="prevDone"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'admission'),'default',true);?>"><?php echo $this->translate("Admission Type"); ?></a></div></li>
+		<li class="current"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'placement-test'),'default',true);?>"><?php echo $this->translate("test_schedule"); ?></a></div></li>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'programme'),'default',true);?>"><?php echo $this->translate("programme"); ?></a></div></li>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'uploaddocument'),'default',true);?>"><?php echo $this->translate("upload_document"); ?></a></div></li>
+		<li class="last"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'confirmation'),'default',true);?>"><?php echo $this->translate("confirmation"); ?></a></div></li>	
+	</ul>
+	<div class="clear"></div>
+</div>
+
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		
+	</div>
+</div>
+
+
+<?php echo $this->form; ?>
+
+
+
+
+

@@ -1,0 +1,73 @@
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>	
+		   <li>
+				<a href="<?php echo $this->url(array('module'=>'company','controller'=>'discpline', 'action'=>'student-case'),'default',true);?>">
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<div style="width:100%;">
+<form name="myform" id="myform" method="POST" action="">
+<table class="table" width="50%" cellpadding="5" cellspacing="2" border="0">
+	<tr>	
+		<th width="30%">Name</th>
+		<td><?php echo $this->student_name;?></td>	
+	</tr>
+	<tr>	
+		<th>Ic Number</th>
+		<td><?php echo $this->student_icno;?></td>	
+	</tr>
+	<tr>	
+		<th>Release Status</th>
+		<td><?php if($this->case_status==1) echo 'Released';?><?php if($this->case_status==0) echo 'Not Released';?>
+		</td>	
+	</tr>
+</table>
+</form>
+<br>
+<table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+	<tr>	
+		
+		<th>Case Name</th>
+		<th>Incidate Date</th>	
+		<th>Penalty</th>		
+		<th>Created By</th>		
+				
+	</tr>
+	
+	<?php 
+	$i=0;
+	foreach ($this->student_case as $entry): 
+
+	$oUser = new SystemSetup_Model_DbTable_User();
+	$user = $oUser->getData($entry["createdby"]);
+	$ruser = $oUser->getData($entry["releaseby"]);
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>		    
+		<td><?php  echo $entry["case_name"]?></td>
+		<td><?php  echo $entry["incident_date"]?></td>
+		<td><?php  echo $entry["penalty_name"]; ?></td>		
+		<td><?php  echo $user["fullname"].'<br>'.$entry["createddt"];?></td>
+		
+	</tr>
+	<?php 
+	$i++;
+	endforeach 
+	?>
+</table>
+
+</div>
+

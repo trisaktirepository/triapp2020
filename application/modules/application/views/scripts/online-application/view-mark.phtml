@@ -1,0 +1,44 @@
+<br><table width="100%"  border="0" cellpadding="5" cellspacing="0">
+  <tr>
+    <td>Placement Test Name :</td>
+    <td><?php echo $this->placement["NAME"];?></td>
+  </tr>
+   <tr>
+    <td>Programme Name : </td>
+    <td><?php echo $this->placement["main_name"];?></td>
+  </tr>
+   <tr>
+    <td>Date : </td>
+    <td><?php echo $this->placement["DATE"];?></td>
+  </tr>
+   <tr>
+    <td>Time : </td>
+    <td><?php echo $this->placement["TIME"];?></td>
+  </tr>
+   <tr>
+    <td>Venue : </td>
+    <td><?php echo $this->placement["branch_name"];?></td>
+  </tr>
+  
+</table>
+<br>
+<table width="100%"  border="0" cellpadding="5" cellspacing="1" bgcolor="#CCCCCC">
+  <tr align="center" bgcolor="#F2F2F2">
+    <td colspan="2"><strong>Component Name </strong></td>
+    <td><strong>Weightage</strong></td>
+    <td><strong>Total Mark </strong></td>
+  </tr>
+  	<?php
+  	$i=1;
+	foreach ($this->placemark as $mark){
+	?>
+  <tr bgcolor="#FFFFFF">
+    <td width="2"><?php echo $i;?>)</td>
+    <td><?php echo $mark["component_name"]; ?></td>
+    <td align="center"><?php echo $mark["component_weightage"]; ?></td>
+    <td align="center"><?php echo $mark["component_total_mark"]; ?></td>
+  </tr>
+  
+  <? $i++;
+	} ?>
+</table><br><br>

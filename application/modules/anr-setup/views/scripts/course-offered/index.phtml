@@ -1,0 +1,107 @@
+<script type="text/javascript">
+	function add(semID){
+		window.location="<?php echo $this->url(array('module'=>'anr-setup','controller'=>'course-offered', 'action'=>'add'),'default',true);?>/semester-id/" + semID;
+	}
+</script>
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<br />
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<br />
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<br />
+<?}?>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li class="divider"></li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<div style="width: 600px;">
+<fieldset style="width:450px; margin:0 0">
+	<legend>Search Options</legend>
+<form name="registration_form" action="<?php echo $this->url(array('module'=>'anr-setup','controller'=>'course-offered', 'action'=>'index'),'default',true);?>" method="post">
+	<table width="100%">
+		<tr>
+			<td>
+				Semester
+			</td>
+			<td width="5px">:</td>
+			<td>
+				<select name="semesterID" onChange="document.registration_form.submit()" style="width:250px">
+					<option value="0"> -- Select Semester --</option>
+					<?php
+						foreach ($this->semesterlist as $semester) {
+							if($semester['id'] ==$this->semesterID){
+								$selected="selected='selected'";
+							}else{
+								$selected="";
+							}
+							echo "<option value='".$semester['id']."' ".$selected." >".$semester['name'] ."</option>";
+						}
+					?>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">&nbsp;</td>
+			<td><input type="submit" value="view" /></td>
+		</tr>
+	</table>
+</form>
+</fieldset>
+</div>
+<br />
+<?php if(isset($this->semesterID) && $this->semesterID!=0) {?>
+<div class="span-7 buttons">
+	<a class="positive addLink" href="#" onClick="add('<?php echo $this->semesterID; ?>')">Manage Course Offer</a>
+</div>
+<?php }?>
+
+<table class="table" width="100%" cellpadding="0" cellspacing="1">
+	<tr>
+		<th>Course</th>
+		<th width="90px">Code</th>
+		<th>Department</th>
+	</tr>
+	<?php
+	if(isset($this->courseList)) {  
+		$i=0;
+		foreach ($this->courseList as $course){
+	?>
+		<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+			<td><?php echo $course['course_name']; ?></td>
+			<td align="center"><?php echo $course['course_code']; ?></td>
+			<td><?php echo $course['department_name']; ?></td>
+		</tr>
+	<?php
+		$i++; 
+		}
+	}else
+	if(isset($this->semesterID) && $this->semesterID!=0) {
+	?>
+		<tr>
+			<td colspan="3" align="center">
+				No Course Offered
+			</td>
+		</tr>
+	<?php 
+	}
+	?>
+</table>

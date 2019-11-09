@@ -1,0 +1,222 @@
+<script>
+function onclickUpload() {
+	$('#dialog-upload-application').dialog('open');
+}
+
+$(function() {
+	$( "#dialog-upload-application" ).dialog({
+		autoOpen: false,
+    	resizable: false,
+      	height:140,
+      	modal: true,
+      	buttons: {
+        	"Upload Letter": function() {
+        		$('#form_certificate').submit();
+        	},
+        	Cancel: function() {
+          		$( this ).dialog( "close" );
+        	}
+      	}
+    });
+
+	$( ".datepicker" ).datepicker({
+		maxDate: "0",
+		"dateFormat" : 'yy-mm-dd',
+		changeMonth: true,
+	    changeYear: true 
+	});
+});
+
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="/finalassignment/proposal/student-application/proposedby/<?php echo $this->proposedby;?>" >
+					<span class='add'></span>
+					<?php echo $this->translate("Create New Proposal"); ?>
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+<?php if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+<br />
+<?php }?>
+<fieldset><legend><?php echo 'Proposal Proposed by '.$this->student['registrationId'].' - '.$this->student['appl_fname'].' '.$this->student['appl_mname'].' '.$this->student['appl_lname'];?></legend>
+ 
+
+<h2><?php echo $this->translate('History');?></h2>
+<table width="100%" class="table">
+	<tr>
+		<th><?php echo $this->translate('Title in Bahasa');?></th>
+		<th><?php echo $this->translate('Title in English');?></th>
+		<th><?php echo $this->translate('First Problem Statement');?></th>
+		<th><?php echo $this->translate('Second Problem Statement');?></th>
+		<th><?php echo $this->translate('Third Problem Statement');?></th>
+		<th><?php echo $this->translate('Abstract');?></th>
+		<th><?php echo $this->translate('Edit');?></th>
+		<th><?php echo $this->translate('Download');?></th>
+		<th><?php echo $this->translate('Upload');?></th>
+		<th><?php echo $this->translate('Action');?></th>
+	</tr>
+	<?php 
+	if($this->proposal_list){
+      foreach($this->proposal_list as $index => $batch){
+		//echo var_dump($batch);
+	?>
+	<tr <?php echo $index%2==0?"class='shade'":""?> >
+		<td><?php echo $batch['title_bahasa'];?></td>
+		<td><?php echo $batch['title'];?></td>
+		<td><?php echo $batch['problem1'];?></td>
+		<td><?php echo $batch['problem2'];?></td>
+		<td><?php echo $batch['problem3'];?></td>
+		<td><?php echo $batch['abstrak'];?></td>
+		<td><?php if ($batch['STS_ACC']=='1') {?>
+			<a href="/finalassignment/proposal/student-application/edit/1/proposedby/<?php echo $this->proposedby;?>/idtaapplication/<?php echo $batch['IdTAApplication'];?>">View</a></td>
+		<?php } else {?>
+			<a href="/finalassignment/proposal/student-application/edit/1/proposedby/<?php echo $this->proposedby;?>/idtaapplication/<?php echo $batch['IdTAApplication'];?>">Edit</a></td>
+		<?php }?>
+		<td><?php if ($batch['printed_url']!='') {
+			 
+			$path = $batch['printed_url'];
+			$path ="<a target='_blank' href=http://".APP_HOSTNAME.$path.">" ;
+		
+		  echo $path;?><img src='<?php echo $this->baseUrl();?>/images/document.png' border=0 width='20' height='20' title="Download Printed Application to be Assigned by Student" ></a></td>
+		<?php } else { echo 'no doc';}?>
+		 
+		<td><?php if ($batch['doc_url']!='') {
+			$path = $batch['doc_url']; 
+		 
+			$path ="<a target='_blank' href=http://".APP_HOSTNAME.$path.">" ;
+		
+		  	echo $path; ?><img src='<?php echo $this->baseUrl();?>/images/document.png' border=0 width='20' height='20' title="Download  Application Letter" ></a></td>
+			<?php 
+			} else {?>
+			<img src='<?php echo $this->baseUrl();?>/images/upload.png' border=0 width='20' height='20' title="Upload Application Letter"  onclick="onclickUpload()" />
+		<?php }?>
+		</td>
+		<td><?php  if (isset($batch['Expired'])) {
+				?>
+				<a href="/finalassignment/extend/index/proposedby/<?php echo $this->proposedby;?>/idtaapplication/<?php echo $batch['IdTAApplication'];?>"><?php echo $this->translate('Extend');?></a>
+				<?php  
+				} else if (isset($batch['Change'])) {
+				?>
+				<a href="/finalassignment/change/index/proposedby/<?php echo $this->proposedby;?>/idtaapplication/<?php echo $batch['IdTAApplication'];?>"><?php echo $this->translate('Change');?></a>
+				<?php } else if (isset($batch['Supervision']) && $batch['Supervision']=="1") {
+				?>
+				<a href="/finalassignment/supervision/supervision-index/type/Student/proposedby/<?php echo $this->proposedby;?>/idApplication/<?php echo $batch['IdTAApplication'];?>"><?php echo $this->translate('Supervision');?></a>
+				<?php } else if (isset($batch['Supervision']) && $batch['Supervision']=="0")   echo $this->translate('Waiting for Dean approval'); 
+				  else  if (isset($batch['ApplyExam'])) {
+				?>
+				<a href="/finalassignment/examination/exam-application/proposedby/<?php echo $this->proposedby;?>/idtaapplication/<?php echo $batch['IdTAApplication'];?>"><?php echo $this->translate('Apply Exam');?></a>
+				<?php } else {?>
+				<?php echo $this->translate('Closed');?>
+				<?php }?>
+		</td>
+	</tr>
+	<?php 
+	  }
+	}
+	?>
+</table>
+</fieldset>
+<br><br>
+<fieldset><legend><?php echo $this->translate('Apply Open Proposal Proposed by Staff');?></legend>
+<table width="100%" class="table">
+	<tr>
+		<th><?php echo $this->translate('Title in Bahasa');?></th>
+		<th><?php echo $this->translate('Title in English');?></th>
+		<th><?php echo $this->translate('First Problem Statement');?></th>
+		<th><?php echo $this->translate('Second Problem Statement');?></th>
+		<th><?php echo $this->translate('Third Problem Statement');?></th>
+		<th><?php echo $this->translate('Abstract');?></th>
+		<th><?php echo $this->translate('Process');?></th>
+		<th><?php echo $this->translate('Download');?></th>
+		<th><?php echo $this->translate('Upload');?></th>
+		<th><?php echo $this->translate('# of Applicant');?></th>
+		<th><?php echo $this->translate('Action');?></th>
+	</tr>
+	<?php 
+	if($this->openStaffProposal_list){
+      foreach($this->openStaffProposal_list as $index => $batch){
+	?>
+	<tr <?php echo $index%2==0?"class='shade'":""?> >
+		<td><?php echo $batch['title_bahasa'];?></td>
+		<td><?php echo $batch['title'];?></td>
+		<td><?php echo $batch['problem1'];?></td>
+		<td><?php echo $batch['problem2'];?></td>
+		<td><?php echo $batch['problem3'];?></td>
+		<td><?php echo $batch['abstrak'];?></td>
+		<td><?php if (isset($batch['IdTAApplication'])) {?>
+			<a href="/finalassignment/proposal/student-apply-staff-proposal/appliedby/<?php echo $this->student['IdStudentRegistration'];?>/idta/<?php echo $batch['IdTA'];?>/IdTAApplication/<?php echo $batch['IdTAApplication'];?>">View</a></td>
+		<?php } else {?>
+			<a href="/finalassignment/proposal/student-apply-staff-proposal/appliedby/<?php echo $this->student['IdStudentRegistration'];?>/idta/<?php echo $batch['IdTA'];?>">Apply</a></td>
+		<?php }?>
+		<td><?php if ($batch['printed_url']!='') {
+			 
+			$path = $batch['printed_url'];
+			$path ="<a target='_blank' href=http://".APP_HOSTNAME.$path.">" ;
+		
+		  echo $path;?><img src='<?php echo $this->baseUrl();?>/images/document.png' border=0 width='20' height='20' title="Download Printed Application to be Assigned by Student" ></a></td>
+		<?php } else { echo 'no doc';}?>
+		 
+		<td><?php if ($batch['doc_url']!='' ) {
+			$dt = explode("triapp",$batch['doc_url']);
+			//echo var_dump($dt);exit;
+			$path = $dt[1];
+			$path ="<a target='_blank' href=http://".APP_HOSTNAME.$path.">" ;
+		
+		  	echo $path;?><img src='<?php echo $this->baseUrl();?>/images/document.png' border=0 width='20' height='20' title="Download Application Letter" ></a></td>
+			<img src='<?php echo $this->baseUrl();?>/images/upload.png' border=0 width='20' height='20' title="Upload Application Letter"  onclick="onclickUpload();" />
+			<?php 
+			} else if ($batch['printed_url']!='') {?>
+				<img src='<?php echo $this->baseUrl();?>/images/upload.png' border=0 width='20' height='20' title="Upload Application Letter"  onclick="onclickUpload();" />
+		<?php }?>
+		</td>
+		<td><?php echo $batch['nOfapplicant'];?></td>
+		<td><?php  if (isset($batch['Expired'])) {
+				?>
+				<a href="/finalassignment/extend/index/proposedby/<?php echo $this->proposedby;?>/idtaapplication/<?php echo $batch['IdTAApplication'];?>"><?php echo $this->translate('Extend');?></a>
+				<?php  
+				} else if (isset($batch['Change'])) {
+				?>
+				<a href="/finalassignment/change/index/proposedby/<?php echo $this->proposedby;?>/idtaapplication/<?php echo $batch['IdTAApplication'];?>"><?php echo $this->translate('Change');?></a>
+				<?php } else if (isset($batch['Supervision'])) {
+				?>
+				<a href="/finalassignment/supervision/supervision-index/type/Student/proposedby/<?php echo $this->proposedby;?>/idApplication/<?php echo $batch['IdTAApplication'];?>"><?php echo $this->translate('Supervision');?></a>
+				<?php } else  if (isset($batch['ApplyExam'])) {
+				?>
+				<a href="/finalassignment/examination/exam-application/proposedby/<?php echo $this->proposedby;?>/idtaapplication/<?php echo $batch['IdTAApplication'];?>"><?php echo $this->translate('Apply Exam');?></a>
+				<?php } else {?>
+				<?php echo $this->translate('Closed');?>
+				<?php }?>
+		</td>
+	</tr>
+	<?php 
+	  }
+	}
+	?>
+</table>
+</fieldset>
+
+<div id="dialog-upload-application" title="<?php echo $this->translate("Upload Application Letter");?>">
+  	<form name="form_certificate" id="form_certificate" method="post" action="/finalassignment/proposal/upload-std-application" enctype="multipart/form-data">
+  		<input type="file" name="file" />
+  		<input type="hidden" id="idTAApplication" name="idTAApplication" value="<?php echo $batch['IdTAApplication'];?>">
+  		<input type="hidden" id="IdStudentRegistration" name="IdStudentRegistration" value="<?php echo $batch['IdStudentRegistration'];?>">
+  		
+  	</form>
+</div>

@@ -1,0 +1,125 @@
+<?php 
+
+
+	//get locale
+	$registry = Zend_Registry::getInstance();
+	$locale = $registry->get('Zend_Locale');
+	$this->locale = $locale->toString();
+	
+	if($locale == 'ar_YE'){
+		$this->direction = "rtl";
+		$this->float = "right";	
+	}else{
+		$this->direction = "ltr";
+		$this->float = "left";
+	}
+?>
+
+	<?php echo $this->headMeta(); ?>
+	<?php echo $this->headTitle(); ?>
+	<?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/layout.css'); ?>
+	<?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/default/style.css'); ?>
+	<?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/default/left-menu.css'); ?>
+	
+	<?php
+		//$this->jQuery()->enable();
+		//$this->jQuery()->setVersion('1.5.0');
+		//$this->jQuery()->useCdn(true);
+	 	//$this->jQuery()->setLocalPath($this->baseUrl().'/js/jquery/jquery-1.4.1.min.js');
+		
+		//$this->jQuery()->uiEnable();
+		//$this->jQuery()->addStylesheet($this->baseUrl().'/js/jquery/themes/smoothness/jquery-ui.css');
+		//$this->jQuery()->setUiLocalPath($this->baseUrl().'/js/jquery/ui/jquery-ui.js');
+		
+		//echo $this->jQuery(); 
+	?>
+	
+	
+	<?php 
+	/*
+	
+	 	if($this->direction == 'rtl'){
+	 		
+	 		echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/default/dashboard_rtl.css');
+	 		
+	 		echo "<style>";
+	 		
+	 		echo "#appTitle{
+	 				left: 15px;
+					top: 25px;
+	 			}";
+	 		
+	 		echo "#main-content{
+						margin-right: 200px;
+				}";
+	 		
+		 	echo "div.toolbar-button {
+				float:left;
+				text-align: left;
+				}";
+		 	
+	 		echo "</style>";
+	 	}else{
+	 		echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/default/dashboard_ltr.css');
+	 		
+	 		echo "<style>";
+	 		
+	 		echo "#language{
+	 				right:0px;
+	 			}";
+	 		
+	 		echo "#appTitle{
+	 				right: 15px;
+					top: 25px;
+	 			}";
+
+	 		echo "#main-content{
+						margin-left: 200px;
+				}";
+	 		
+	 		echo "div.toolbar-button {
+				float:right;
+				text-align: right;
+				}";
+	 		
+	 		echo "</style>";
+	 	}
+	 */
+	 ?>
+	 	
+	<!--[if lt IE 7]>
+	<style media="screen" type="text/css">
+	#container {
+		height:100%;
+	}
+	</style>
+	<![endif]-->
+
+
+<div id="container">
+	
+	<div id="body">
+		<!-- Begin Section Content-->
+		<?php 
+			$module = Zend_Controller_Front::getInstance()->getRequest()->getModuleName();
+			
+			$controller = Zend_Controller_Front::getInstance()->getRequest()->getControllerName();
+			//echo $module ." - ". $controller;
+			?>
+			
+				<table width="100%" cellpadding="0" cellspacing="0" border="0">
+					<tr>
+						<td valign="top"><?php echo $this->layout()->content; ?></td>
+					</tr>
+				</table>
+			<?php
+			
+
+		?>
+		<!-- End Section Content-->
+	</div>
+	
+</div>
+<!--
+</body>
+</html>-->

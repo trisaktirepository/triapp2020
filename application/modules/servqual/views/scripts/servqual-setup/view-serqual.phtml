@@ -1,0 +1,89 @@
+<html>
+<style>
+.next_bar{
+	width: 100%;
+	background: #EEE;
+	margin: 10px 0;
+	padding: 2px 0;
+	text-align: center;
+}
+select{
+	width: 250px;
+}
+</style>
+
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				
+			</li>
+		</ul>
+	</div>
+</div>
+<?php if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+<br />
+<?php }?>
+<fieldset><legend><?php echo $this->translate($this->servqual['Title']);?></legend>
+	<?php echo $this->servqual['Direction'];?>
+</fieldset>
+<?php 
+foreach ($this->dimension_list as $key=>$grp):?>
+	<fieldset>
+	<legend> <?php echo $grp["Dimension"];?></legend>
+	 <table class="table" id="result" width="100%">
+		<thead>
+			<tr >
+				<th ><?php echo $this->translate('No');?></th>
+				<th align="center"><?php echo $this->translate('Question');?></th>
+				<th align="center"><?php echo $this->translate('Order');?></th>
+				<th align="center"><?php echo $this->translate('Answer');?></th>
+			</tr>
+	   </thead>
+	   <?php 
+	   $db=new Servqual_Model_DbTable_ServqualDetail();
+	   $dbScale=new Servqual_Model_DbTable_ServqualScale();
+	   $grp_question=$db->getDataDetail($this->servqual['IdServqual'], $grp['IdDimension']);
+	  // echo $this->servqual['IdServqual'].'-'. $grp['IdDimension'];
+	   if (count($grp_question)>0) {
+			$coun=1;
+			foreach ($grp_question as $question):
+				$scaleid=$question['Scale_id'];
+				$scalename=$dbScale->getDataPerScale($scaleid);
+				
+			?>
+	   			
+	   			<tr>
+	   			<td width="5%"><?php echo $coun;?></td>
+	   			<td ><?php echo $question['Question']?></td>
+	   			<td width="5%"><?php echo $question['Question_seq']?></td>
+	   			<td width="45%"><?php 
+	   				foreach ($scalename as $name):
+	   			?>
+	   			
+	   			<input type="radio" name="answer[<?php echo $key;?>]"> <?php echo (int)$name['score'].'. '.$name['title'];?>
+	   					
+	   			<?php 
+	   			endforeach;
+	   			?></td></tr><?php 
+	   			$coun++;
+	   		endforeach;
+	   }?>
+	  
+	</table>
+	</fieldset>
+	<?php 
+	endforeach;?>
+</div>

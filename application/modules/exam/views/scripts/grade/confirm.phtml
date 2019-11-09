@@ -1,0 +1,32 @@
+<script>
+function verify(){
+	if(document.verifyform.request_number.value==''){
+		alert('Please enter request number.');
+		document.verifyform.request_number.focus();
+		return false;
+	}
+	
+	reqno        = document.verifyform.request_number.value;	
+	group_id     = document.verifyform.group_id.value;	
+	program_id   = document.verifyform.program_id.value;	
+	semester_id  = document.verifyform.semester_id.value;	
+		
+	if(confirm('Are you sure you want to verify this grade. Once the grade has been verified, changes will not be allowed.')){	
+		//window.close();	
+		window.location = "<?php echo $this->url(array('module'=>'exam','controller'=>'grade', 'action'=>'confirm'),'default',true)?>/request_no/" + reqno + "/group_id/"+group_id+"/program_id/"+program_id+"/semester_id/"+semester_id
+		window.opener.location.reload(true);
+		}
+}
+</script>
+<form name="verifyform">
+<table cellpadding=5>
+<input type="text" name="group_id" value="<?php echo $this->group_id;?>"></input>
+<input type="text" name="program_id" value="<?php echo $this->program_id;?>"></input>
+<input type="text" name="semester_id" value="<?php echo $this->semester_id;?>"></input>
+
+	<tr><td colspan=2>Please enter Verification Request Code</td></tr>
+	<tr><td>Request Code:</td><td><input type"text" name="request_number" size=20 value=""></input></td></tr>
+	<tr><td>&nbsp;</td><td><input type="button" value="Verified" onclick="verify();"></input>
+						  <input type="button" value="Cancel" onclick="window.close();"></input></td></tr>
+</table>
+</form>

@@ -1,0 +1,204 @@
+<script type="text/javascript">
+	
+	
+	function save(){		
+		document.addfrm.action="<?php echo $this->url(array('module'=>'question-bank','controller'=>'question', 'action'=>'add-question'),'default',true);?>";
+		document.addfrm.submit();
+	}
+
+	
+
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+		<li>
+				<a href="#" onclick="javascript:save()">
+					<span class='save'></span>
+					Save
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'question-bank','controller'=>'question', 'action'=>'index'),'default',true);?>" >
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br>
+
+<div style="width:900px;">
+
+	<form name='addfrm' method="POST" action="">	
+	<input type="hidden" name="pool_id" value="<?php echo $this->pool_id;?>">
+
+	<table width="100%" border="0" cellpadding=" 5" cellspacing="1">
+  <tr>
+    <td>Topic</td>
+    <td>:</td>
+    <td>
+    <select name="topic_id" id="topic_id">
+		<option> --Select Chapter -- </option>
+		<?php 
+		foreach ($this->topic as $topic):		  
+		?>
+			<option value="<?php echo $topic['id']; ?>"><?php echo $topic['name']; ?> </option>	
+		<?php endforeach;?> 
+	</select>
+    
+    </td>
+  </tr>
+  <tr>
+    <td>Question Type</td>
+    <td>:</td>
+    <td>
+    <select name="question_type" id="question_type">
+		<option> --Select Question Type -- </option>
+		<?php 
+		foreach ($this->type as $type):		
+		?>
+			<option value="<?php echo $type['id']; ?>"><?php echo $type['name']; ?> </option>	
+		<?php endforeach;?> 
+	</select>
+	
+	</td>
+  </tr>
+  <tr>
+    <td>Question Level</td>
+    <td>:</td>
+    <td>
+    <select name="difficulty_level" id="difficulty_level">
+		<option> --Select Difficulty Level-- </option>
+		<option value="1" >Easy</option>
+		<option value="2" >Medium</option>
+		<option value="3" >Difficult</option>
+	</select>
+	
+	</td>
+  </tr>
+  
+   <tr>
+    <td>Status</td>
+    <td>:</td>
+    <td>
+    <select name="status" id="status">
+		<option> --Select Status-- </option>
+		<option value="1" >Active</option>
+		<option value="2" >Not Active</option>		
+	</select>
+	
+	</td>
+  </tr>
+  </table>
+  
+  
+<?
+//default value in future read from database
+$language = array(1=>'English', 2=>'Bahasa Malaysia');
+$column   = array(1=>'english', 2=>'malay'); //just like table fields
+$total_language =2;
+?>
+<input type="hidden" name="total_language" value="<?php echo $total_language;?>">
+
+<div id="tabs" >
+	<ul>
+		<li><a href="#tabs-1"><?php echo $language[1];?></a></li>
+		<li><a href="#tabs-2"><?php echo $language[2];?></a></li>
+	</ul>
+	
+<? for($lang=1; $lang<=$total_language; $lang++){?>
+  <div id="tabs-<?=$lang?>">			
+	<table width="100%" border="0" cellpadding="5" cellspacing="1">
+  <tr>
+    <td colspan="3" bgcolor="#f2f2f2"><?php echo $language[$lang];?></td>
+  </tr>
+  <tr valign="top">
+    <td>Question</td>
+    <td>:</td>
+    <td> <textarea name="question<?=$lang?>" id="question<?=$lang?>" cols="50"  rows="5"></textarea></td>
+  </tr>
+  
+  <? for($j=1; $j<=4; $j++){?>   
+       
+	  <tr valign="top">
+	    <td>Answer <?=$j?></td>
+	    <td>:</td>
+	    <td>
+	     <textarea name="answer<?=$lang?><?=$j?>" id="answer<?=$lang?><?=$j?>" cols="50" rows="5"></textarea> 
+	     <? if($lang==1){?>        
+	     <input type="radio" name="correct_answer" value="<?=$j?>" > Accept as correct
+	     <? } ?>
+	    </td>
+	  </tr>
+	  
+  <? } //end j for ?>
+  
+  </table>
+  </div>
+ <? } //end tabs lang ?> 
+  
+
+</div>
+
+
+</div>
+  
+ </form> 
+</div>
+
+
+
+
+<script type="text/javascript">
+
+
+for(m=1; m<=4; m++){	
+	
+	CKEDITOR.replace( 'question'+m,
+			{
+				height: 150, 
+				toolbar :
+				[
+				    { name: 'basicstyles', items : [ 'Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat' ] },
+				    { name: 'paragraph',   items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote','CreateDiv','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','BidiLtr','BidiRtl' ] },
+				    { name: 'links',       items : [ 'Link','Unlink','Anchor' ] },
+				   
+				    '/',
+				    { name: 'styles',      items : [ 'Styles','Format','Font','FontSize' ] },
+				    { name: 'colors',      items : [ 'TextColor','BGColor' ] },
+				    { name: 'tools',       items : [ 'Maximize', 'ShowBlocks','-','About' ] }
+				]
+				
+			});
+			
+			
+					
+	for(i=1; i<=4; i++){	
+			
+		CKEDITOR.replace( 'answer'+m+i,
+				{
+					height: 40, 
+					toolbar :
+					[
+					    { name: 'basicstyles', items : [ 'Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat' ] },
+					    { name: 'paragraph',   items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote','CreateDiv','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','BidiLtr','BidiRtl' ] },
+					  
+					]
+					
+				});
+	}
+}
+
+
+</script>

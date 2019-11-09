@@ -1,0 +1,226 @@
+<script type="text/javascript">
+	function search_subject(){
+		 
+		var semester_id = $('#IdSemester').val();
+		var program_id = $('#IdProgram').val();
+		var branch_id = $('#IdBranch').val();
+		var table = $("#result tbody");
+		
+		if(semester_id!=0 && program_id!=0){
+			$.ajax({
+				url: "/examination/mark-entry/search-course",
+			    type: "post",
+			    async : false,
+			    data: {'semester_id':semester_id, 'program_id':program_id, 'branch_id':branch_id},
+			    dataType: 'json',
+			    success: function(data){
+			    	$('#subject').empty();
+					$('#subject').append('<option value="">Please Select</option>');
+				    	
+				    	$.each(data, function(index) {
+				    		$('#subject').append('<option value="'+data[index].IdSubject+'">'+data[index].SubCode+' - '+data[index].SubjectName+'</option>');	
+				    	});
+			          
+				},
+				error:function(){
+			          alert("failure");
+				},
+				beforeSend: function() {
+					showLoading('subject','subject','loading');
+
+			        $(table).empty();
+				},
+				complete: function() {
+					hideLoading('loading','subject');
+				}   
+			});
+		}
+	}
+
+	function search_group(){
+		 
+		var semester_id = $('#IdSemester').val();
+		var program_id = $('#IdProgram').val();
+		var branch_id = $('#IdBranch').val();
+		var course_id = $('#subject').val();
+		var idstaff = $('#staffid').val();
+
+		var table = $("#result tbody");
+		var table_head = $("#result thead");
+        $(table).empty();
+        $(table_head).empty();
+
+      
+
+
+			    	   $.ajax({
+			  		      url: "/examination/mark-entry/search-course-group",
+			  		      type: "post",
+			  		      async : false,
+			  		      data: {'semester_id':semester_id, 'program_id':program_id, 'branch_id':branch_id, 'subject_id':course_id},
+			  		      dataType: 'json',
+			  		      beforeSend: function (){
+			  		    	  $(table).html('<tr><td colspan="6">Loading...</td></tr>');
+			  		      },
+			  		      success: function(data){
+			  		    	  $(table).empty();
+			  		    	  $(table_head).empty();
+				  				
+					    	  var head =    "<tr>"+
+					    	  					"<th><?php echo $this->translate("Mode Entry")?></th>"+
+								  				"<th><?php echo $this->translate('Group Name'); ?></th>"+
+								  				"<th><?php echo $this->translate('Group Code'); ?></th>"+
+								  				"<th><?php echo $this->translate('Branch Name'); ?></th>"+
+								  				"<th><?php echo $this->translate('Semester'); ?></th>"+
+								  				"<th><?php echo $this->translate('Coordinator'); ?></th>"+
+								  				"<th><?php echo $this->translate('Total Student'); ?></th>"+
+								  												  				
+											"</tr>"
+			  				 $(table_head).append(head);	
+				  				 
+			  		          if(data.length>0){
+			  		        	  for(var i=0; i<data.length; i++){
+			  				          var content = "<tr>" +
+				  				        			"<td><a href='#' onclick='view_detail2("+data[i].IdCourseTaggingGroup+","+semester_id+","+course_id+","+program_id+","+data[i].branch_id+","+idstaff+");'> Per Component</a>"+
+				  				       			    " | <a href='#' onclick='view_detailall("+data[i].IdCourseTaggingGroup+","+semester_id+","+course_id+","+program_id+","+data[i].branch_id+","+idstaff+");'> All </a></td>"+
+					  				       			"<td align='center'>"+data[i].GroupName+"</a></td>"+
+			  				          				"<td align='center'>"+data[i].GroupCode+"</a></td>"+
+				  				          			"<td align='center'>"+data[i].BranchName+"</a></td>"+
+			  				          				"<td>"+data[i].semester_name+"</td>"+
+			  				          				"<td>"+data[i].coordinator+"</td>"+
+			  				          				"<td align='center'>"+data[i].total_student+"</td>"+			  				          				
+			  				          				"</tr>"
+			  			        	  $(table).append(content);
+			  			          }
+			  		          }else{
+			  		        	  var content = '<tr><td colspan="6"> No Search Result </td></tr>';
+			  		        	  $(table).append(content);
+			  		          }
+			  		      },
+			  		      error:function(){
+			  		    	  $(table).empty();
+			  		          alert("failure");
+			  		      }   
+			  		});
+    		
+     
+       
+	}
+
+	function showLoading(target,target_div,loading_id){
+		$('#'+target).hide();
+		$('#'+target_div).after("<div id='"+loading_id+"'><img src='/images/ajax-loader-bar.gif' /></div>");
+	}
+
+	function hideLoading(loading_id,target){
+		$('#'+loading_id).remove();
+		$('#'+target).show();
+	}
+
+
+	function view_detail2(cgid,semester_id,course_id,program_id,branch_id,idstaff){	
+		window.open ('<?php echo $this->url(array('module'=>'assistant','controller'=>'mark-entry','action'=>'view-component'),'default',true);?>/gid/'+cgid+'/idSemester/'+semester_id+'/idSubject/'+course_id+'/idProgram/'+program_id+'/idBranch/'+branch_id+'/idstaff/'+idstaff, '_blank');  
+	}
+
+	function view_detailall(cgid,semester_id,course_id,program_id,branch_id,idstaff){	
+		window.open ('<?php echo $this->url(array('module'=>'assistant','controller'=>'mark-entry','action'=>'student-list-all'),'default',true);?>/id/'+cgid+'/idSemester/'+semester_id+'/idSubject/'+course_id+'/idProgram/'+program_id+'/idBranch/'+branch_id+'/idstaff/'+idstaff,'_blank');
+	
+	}
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+		
+		</ul>
+	</div>
+</div>
+<br />
+
+<?php if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+<br />
+<?php }?>
+
+<form action="" method="post" >
+	<dl class="zend_form">
+	
+		
+		 <dt id="IdSemester-label">
+			<label class="required" for="IdSemester"><?php echo $this->translate("Semester"); ?></label>
+		</dt>
+		<dd id="IdSemester-element">
+			<select id="IdSemester" name="IdSemester" onchange="search_subject();">
+			    <option value="0"><?php echo $this->translate("Please Select");?></option>
+			    <?php 
+			    	foreach ($this->semester_list as $semester):
+			    ?>
+			    		<option value="<?php echo $semester["key"];?>"><?php echo $semester["value"];?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select>
+		</dd>
+		
+		<dt id="IdProgram-label">
+			<label class="required" for="IdProgram"><?php echo $this->translate("Program"); ?></label>
+		</dt>
+		<dd id="IdProgram-element">
+			<select id="IdProgram" name="IdProgram" onchange="search_subject();">
+			    <option value=""><?php echo $this->translate("Please Select");?></option>
+			    <?php 
+			    	foreach ($this->program_list as $program):
+			    		
+			    ?>
+			    		<option value="<?php echo $program["IdProgram"];?>"><?php echo $program["ProgramCode"].' - '.$program["ArabicName"];?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select>
+		</dd>
+		
+		<dt id="IdBranch-label">
+			<label for="IdBranch"><?php echo $this->translate("Branch"); ?></label>
+		</dt>
+		<dd id="IdBranch-element">
+			<select id="IdBranch" name="IdBranch" onchange="search_subject();">
+			    <option value=""><?php echo $this->translate("Please Select");?></option>
+			    <?php 
+			    	foreach ($this->branch_list as $program):
+			    		
+			    ?>
+			    		<option value="<?php echo $program["key"];?>"><?php echo $program["value"];?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select>
+		</dd>
+		
+		<dt id="SubjectName-label">
+			<label class="optional" for="SubjectName"><?php echo $this->translate("Subject");?></label>
+		</dt>
+		<dd id="SubjectName-element">
+			<select name="subject" id="subject"  onchange="search_group();">
+				
+			</select>
+		</dd>
+		<input type="hidden" id="staffid" value="<?php echo $this->idstaff;?>">
+				
+	</dl>
+</form>
+
+<table class="table" id="result" width="100%">
+	<thead>
+	</thead>
+	<tbody>
+	</tbody>
+</table>

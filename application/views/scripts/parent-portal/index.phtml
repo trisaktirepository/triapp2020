@@ -1,0 +1,313 @@
+<script type="text/javascript">
+$(function() {
+	 $( "#ProfileTabs").tabs();
+});
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		
+	</div>
+</div>
+<br />
+<?php if($this->applicant['appl_email'] == $this->applicant['appl_password']):?>
+<div class="message error">
+	Password perlu ditukar. Klik <a href="<?php echo $this->url(array('module'=>'default','controller'=>'student-portal','action'=>'change-password'),'default',true) ?>">sini</a>
+    <div class="toolbar-button">
+		
+	</div>
+</div>
+<?php endif;?>
+<div style="width:100%;">
+
+
+<div id="ProfileTabs">
+
+
+<ul>
+	<li><a href="#Tab1"><?php echo $this->translate("Student Info");?></a></li>
+	<li><a href="#Tab2"><?php echo $this->translate("Registered Courses");?></a></li>	
+	<li><a href="#Tab3"><?php echo $this->translate("Student Semester Status");?></a></li>	
+</ul>
+
+
+<div id="Tab1"> 
+
+<h2><?php echo $this->translate("Student Info")?></h2>
+<table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		<th width="30%"><?php echo $this->translate("Student ID"); ?></th>
+		<td><?php echo $this->student["registrationId"]?></td>
+	</tr>
+	<tr>
+		<th width="30%"><?php echo $this->translate("Fakultas"); ?></th>
+		<td><?php echo $this->student["CollegeName"]?></td>
+	</tr>
+	<tr>
+		<th><?php echo $this->translate("Programe Studi"); ?></th>
+		<td><?php echo $this->student["ArabicName"]?></td>
+	</tr>
+	<tr>		
+		<th><?php echo $this->translate("Majoring"); ?></th>
+		<td><?php echo $this->student["majoring"]?></td>			
+	</tr>
+	<tr>		
+		<th><?php echo $this->translate("Intake"); ?></th>		
+		<td><?php echo $this->student["intake"]?></td>	
+	</tr>
+	<tr>		
+		<th><?php echo $this->translate("Cabang"); ?></th>
+		<td><?php echo $this->student["BranchName"]?></td>
+	</tr>
+	<tr>		
+		<th><?php echo $this->translate("Tanggal Pendaftaran"); ?></th>
+		<td><?php echo date("d-m-Y",strtotime($this->student["UpdDate"]));?></td>			
+	</tr>
+	<tr>		
+		<th><?php echo $this->translate("Status"); ?></th>
+		<td><?php echo $this->student["StudentStatus"]?></td>			
+	</tr>
+	
+</table>
+
+<br></br>
+
+<h2><?php echo $this->translate("Student Semester Status")?></h2>
+<table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		<th width="20%" rowspan="2"><?php echo $this->translate("Semester Name"); ?></th>
+		<th width="20%" rowspan="2"><?php echo $this->translate("Registered By"); ?></th>
+		<th width="20%" rowspan="2"><?php echo $this->translate("Registration Date"); ?></th>
+		<th width="20%" rowspan="2"><?php echo $this->translate("Status"); ?></th>
+		<th width="20%" colspan="2"><?php echo $this->translate("Kartu Rencana Studi"); ?></th>
+	</tr>
+	<tr>
+    	<th><?php echo $this->translate("Summary");?></th>
+		<th><?php echo $this->translate("Detail");?></th>
+	</tr>
+	<?php 
+	//print_r($this->registered_semester);
+	if(count($this->registered_semester)>0){
+		foreach($this->registered_semester as $semester){
+	?>
+	<tr>
+		<td align="center"><?php echo $semester["SemesterMainName"]?></td>
+		<td align="center"><?php echo $semester["fName"].' '.$semester["mName"].' '.$semester["lName"]?></td>
+		<td align="center"><?php echo date("d-m-Y",strtotime($semester["UpdDate"]));?></td>
+		<td align="center"><?php echo $semester["semester_status"];?></td>
+		<td align="center">
+		<?php 
+		if($semester["studentsemesterstatus"]==130){ //Register	
+
+			if($this->student['IdProgram']==3){
+				$type = 1;
+			}else{
+				$type = null;	
+			}
+			
+			$download_url = $this->url(array('module'=>'default','controller'=>'student-portal','action'=>'view-krs','idstudentsemsterstatus'=>$semester["idstudentsemsterstatus"],'type'=>$type),'default',true);
+			
+			echo "<small><a target='_blank' href='".$download_url."'><span class='ui-icon ui-icon-disk'></span></a></small>";
+		}
+		?>
+		</td>
+		<td align="center">
+		<?php 
+		if($semester["studentsemesterstatus"]==130 && $this->student['IdProgram']==3){ //Register
+			$type = 2;
+			
+			$download_url = $this->url(array('module'=>'default','controller'=>'student-portal','action'=>'view-krs','idstudentsemsterstatus'=>$semester["idstudentsemsterstatus"],'type'=>$type),'default',true);
+			
+			echo "<small><a target='_blank' href='".$download_url."'><span class='ui-icon ui-icon-disk'></span></a></small>";
+		}
+		?>
+		</td>
+	</tr>
+	<?php } }?>
+</table>
+</div>
+
+<!--  End div Tab 1 -->
+
+
+
+
+<!--  Course Registration -->
+
+<div id="Tab2"> 
+
+<?php 
+if($this->landscape["LandscapeType"]==43 || $this->landscape["LandscapeType"]==44){ 
+	if(count($this->semester) > 0){
+		foreach($this->semester as $semester){
+			
+			//get course registered  per semester
+  			$courseRegisterDb = new App_Model_Record_DbTable_StudentRegistration();
+  			$courses = $courseRegisterDb->getCourseRegisteredBySemester($semester["IdStudentRegistration"],$semester["IdSemesterMain"]);
+  					
+?>
+
+
+				<h2><?php echo $this->translate["Semester"].' '.$semester["SemesterMainName"];?></h2>
+  				<table class="table" width="100%" cellpadding="5" cellspacing="1">
+			  	<tr>			  	  		  	   
+			  		<th><?php echo $this->translate("Course Name")?></th>
+			  		<th><?php echo $this->translate("Course Code")?></th>
+			  		<th><?php echo $this->translate("Course Type")?></th>
+			  		<th><?php echo $this->translate("Credit Hours")?></th>
+			  		<th><?php echo $this->translate("Status")?></th>
+			  		<th><?php echo $this->translate("Schedule")?></th>
+			  </tr>			  	
+			  	<?php   
+			  	foreach($courses as $course){  
+			  		
+			  	//get course type
+			  	$landscapeSubjectDb  = new App_Model_Record_DbTable_Landscape();
+			  	$subjectInfo = $landscapeSubjectDb->getCourseInfo($course["IdLandscapeSub"]);
+  			 	
+			  	?>
+			  	<tr>			  			  	
+			  		<td><?php echo ($course["BahasaIndonesia"]!='' ? $course["BahasaIndonesia"]:$course["SubjectName"]); ?></td>
+			  		<td><?php echo $course["SubCode"]; ?></td>
+			  		<td><?php echo $subjectInfo["DefinitionDesc"];?></td>
+			  		<td align="center"><?php echo $course["CreditHours"]; ?></td>
+			  		<td><?php 
+			  		        if($course["Active"]==0) echo $this->translate("Not Register");
+			  				if($course["Active"]==1) echo $this->translate("Register"); 
+			  				if($course["Active"]==2) echo $this->translate("Drop");
+			  				if($course["Active"]==3) echo $this->translate("Withdraw"); 
+			  				if($course["Active"]==4) echo $this->translate("Repeat"); 
+			  				if($course["Active"]==5) echo $this->translate("Refer"); 
+			  				
+			  			?></td>
+			  	<td>
+			  	<?php 
+			  	if($course["Active"]==1 || $course["Active"]==3){
+			  		if($course["IdCourseTaggingGroup"]!=0){?>
+			  			<a href="<?php echo $this->url(array('module'=>'default','controller'=>'student-portal','action'=>'view-schedule','idGroup'=>$course["IdCourseTaggingGroup"]),'default',true);?>"><?php  echo $this->translate("View Schedule"); ?></a>
+			  		<?php }else { echo $this->translate("Currently Not Available");} }?>
+			  	</td>
+			  </tr>
+			  	<?php  } //end foreach ?>
+			  	
+			  </table>
+			  <br>
+ 			  <br>
+
+
+<?php 
+		}//end if semester
+	}//end if
+} //end Semester landscape ?>
+	
+	
+
+
+<?php 
+if ($this->landscape["LandscapeType"]==45) {
+	if(count($this->blocks)>0){ 
+		foreach($this->blocks as $block){
+			
+			//get course registered  by block
+  			$courseRegisterDb = new App_Model_Record_DbTable_StudentRegistration();
+  			$courses = $courseRegisterDb->getCourseRegisteredByBlock($block["IdStudentRegistration"],$block["IdBlock"]);
+  			
+?>
+
+ 				<h2><?php echo $block["blockname"];?></h2>
+  				<table class="table" width="100%" cellpadding="5" cellspacing="1">
+			  	<tr>
+			  	    <th><?php echo $this->translate("Semester Level")?></th>
+			  	    <th><?php echo $this->translate("Semester Name")?></th>
+			  		<th><?php echo $this->translate("Course Name")?></th>
+			  		<th><?php echo $this->translate("Course Code")?></th>
+			  		<th><?php echo $this->translate("Course Type")?></th>
+			  		<th><?php echo $this->translate("Credit Hours")?></th>
+			  		<th><?php echo $this->translate("Status")?></th>
+			  		<th><?php echo $this->translate("Schedule")?></th>
+			  	</tr>			  	
+			  	<?php   
+			  	foreach($courses as $course){  
+			  		
+			  	//get course type
+  				$blockSubjectDB = new App_Model_Record_DbTable_LandscapeBlockSubject();
+  				$blockSubjectInfo = $blockSubjectDB->getBlockCourseInfo($this->student["IdLandscape"],$block["IdBlock"],$course["IdSubject"]);	
+			  	
+			  	?>
+			  	<tr>
+			  		<td><?php echo $block["semester_level"];?></td>
+			  		<td><?php echo $block["SemesterMainCode"];?></td>
+			  		<td><?php echo ($course["BahasaIndonesia"]!='' ? $course["BahasaIndonesia"]:$course["SubjectName"]); ?></td>
+			  		<td><?php echo $course["SubCode"]; ?></td>
+			  		<td><?php echo $blockSubjectInfo["DefinitionDesc"];?></td>
+			  		<td><?php echo $course["CreditHours"]; ?></td>
+			  		<td><?php 
+			  				if($course["Active"]==1) echo $this->translate("Register"); 
+			  				if($course["Active"]==0) echo $this->translate("Not Register"); 
+			  			?></td>
+			  		<td>
+			  		<?php if($course["IdCourseTaggingGroup"]!=0){?>
+			  			<a href="<?php echo $this->url(array('module'=>'default','controller'=>'student-portal','action'=>'view-schedule','idGroup'=>$course["IdCourseTaggingGroup"]),'default',true);?>"><?php  echo $this->translate("View Schedule"); ?></a>
+			  		<?php }else { echo $this->translate("Currently Not Available");}?>
+			  		</td>
+			  	
+			  	</tr>
+			  	<?php  } //end foreach ?>
+			  	
+			  </table>
+			  <br>
+ 			  <br>
+
+	
+<?php 		}//end foreach
+	} //end if
+} //End Block Based Landscape ?>
+
+
+
+
+</div>
+<!--  End div Tab 2 -->
+
+
+<!--  Student Semester Status -->
+
+<div id="Tab3"> 
+<div>
+<h2><?php echo $this->translate("Student Semester Status")?></h2>
+<table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		<th width="25%"><?php echo $this->translate("Semester Name"); ?></th>
+		<th width="25%"><?php echo $this->translate("Registered By"); ?></th>
+		<th width="25%"><?php echo $this->translate("Registration Date"); ?></th>
+		<th width="25%"><?php echo $this->translate("Status"); ?></th>
+	</tr>
+	<?php 
+	//print_r($this->registered_semester);
+	if(count($this->registered_semester)>0){
+		foreach($this->registered_semester as $semester){
+	?>
+	<tr>
+		<td align="center"><?php echo $semester["SemesterMainName"]?></td>
+		<td align="center"><?php echo $semester["fName"].' '.$semester["mName"].' '.$semester["lName"]?></td>
+		<td align="center"><?php echo date("d-m-Y",strtotime($semester["UpdDate"]));?></td>
+		<td align="center">
+		
+		      <?php 		     
+		       echo $semester["semester_status"];
+		      
+		       if($semester["studentsemesterstatus"]==130){ //Register
+		      		echo '<br>';
+		      		$download_url = $this->url(array('module'=>'default','controller'=>'student-portal','action'=>'view-krs','idstudentsemsterstatus'=>$semester["idstudentsemsterstatus"],'IdStudentRegistration'=>$this->IdStudentRegistration),'default',true);
+		      		echo "<small><a target='_blank' href='".$download_url."'>".$this->translate("Kartu Rencana Studi")."</a></small>";
+		       }
+		      ?></td>
+	</tr>
+	<?php } }?>
+</table>
+</div>
+<!--  End div Tab 3 -->
+
+
+</div>

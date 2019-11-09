@@ -1,0 +1,50 @@
+<?php
+/*
+ *  @author Muhamad Alif
+ *  @created Oct 27, 2010
+ */
+?>
+<div id="vertmenu">
+	<ul >  
+		<li ><h1>Setup</h1></li>  
+	  <!--  <li ><a href="<?php echo $this->url(array('module'=>'finance','controller'=>'promotion','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Promotion Type"); ?></a></li>
+	    <li ><a href="<?php echo $this->url(array('module'=>'finance','controller'=>'setup','action'=>'charging'),'default',true) ?>"><?php echo $this->translate("Charging Period Setup"); ?></a></li>-->
+	    <li ><a href="<?php echo $this->url(array('module'=>'finance','controller'=>'bank','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Bank"); ?></a></li>
+	     
+	    <li ><a href="<?php echo $this->url(array('module'=>'finance','controller'=>'setup','action'=>'discmain'),'default',true) ?>"><?php echo $this->translate("Discount Setup"); ?></a></li>
+	   
+	    <li ><a href="<?php echo $this->url(array('module'=>'finance','controller'=>'paymentmode','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Payment Mode"); ?></a></li>
+	  <!--   
+	  <li ><a href="<?php echo $this->url(array('module'=>'finance','controller'=>'setup','action'=>'billtypegroup'),'default',true) ?>"><?php echo $this->translate("Bill Type Group"); ?></a></li>
+	    <li ><a href="<?php echo $this->url(array('module'=>'finance','controller'=>'setup','action'=>'billtype'),'default',true) ?>"><?php echo $this->translate("Bill Type"); ?></a></li>
+	    <li ><a href="<?php echo $this->url(array('module'=>'finance','controller'=>'setup','action'=>'cardtype'),'default',true) ?>"><?php echo $this->translate("Bank Card Type"); ?></a></li>-->
+	    
+	    <li ><a href="<?php echo $this->url(array('module'=>'finance','controller'=>'term','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Payment Term"); ?></a></li>
+	    
+	</ul>
+
+<br>
+
+	<ul >  
+		<li ><h1>Fee Setup</h1></li>  
+	    <li ><a href="<?php echo $this->url(array('module'=>'finance','controller'=>'feecomponent','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Fee Component"); ?></a></li>
+	    
+	    <li ><a href="<?php echo $this->url(array('module'=>'finance','controller'=>'feestructure','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Fee Structure"); ?></a></li>
+	   <!--  <li ><a href="<?php echo $this->url(array('module'=>'finance','controller'=>'addfee','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Additional Fee"); ?></a></li>
+	   <li ><a href="<?php echo $this->url(array('module'=>'finance','controller'=>'feelist','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Fee Structure List"); ?></a></li>
+	   <li ><a href="<?php echo $this->url(array('module'=>'finance','controller'=>'setup','action'=>'payment-method'),'default',true) ?>"><?php echo $this->translate("Payment Method"); ?></a></li>
+	     <li ><a href="<?php echo $this->url(array('module'=>'finance','controller'=>'setup','action'=>'payment-plan'),'default',true) ?>"><?php echo $this->translate("Payment Plan"); ?></a></li>-->
+	</ul>
+	
+	<br>
+
+	<ul >  
+		<li><h1>Finance</h1></li> 
+		 <li><a href="<?php echo $this->url(array('module'=>'finance','controller'=>'batch-term','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Tag Company/Takaful Operator Payment Term"); ?></a></li> 
+	    <li><a href="<?php echo $this->url(array('module'=>'finance','controller'=>'individual','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Individual Payment"); ?></a></li>
+	    <li><a href="<?php echo $this->url(array('module'=>'finance','controller'=>'company','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Company/Takaful Operator Payment"); ?></a></li>
+		<li><a href="<?php echo $this->url(array('module'=>'finance','controller'=>'invoice','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Generate Invoice"); ?></a></li>
+	</ul>
+</div>
+
+					    

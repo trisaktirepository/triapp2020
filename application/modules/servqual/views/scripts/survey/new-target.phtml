@@ -1,0 +1,461 @@
+<?php 
+	
+?>
+<script>
+	$(function(){
+		
+		$('#check_all').change(function(){
+			if( $(this).prop('checked') ){
+				$('.check').prop('checked',true);
+			}else{
+				$('.check').prop('checked',false);
+			}
+		});
+		
+	});
+</script>
+<style>
+.next_bar{
+	width: 100%;
+	background: #EEE;
+	margin: 10px 0;
+	padding: 2px 0;
+	text-align: center;
+}
+select{
+	width: 250px;
+}
+</style>
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				
+			</li>
+		</ul>
+	</div>
+</div>
+<?php if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+<br />
+<?php }?>
+
+<!-- STEP 1 -->
+<?php 
+if($this->step == 1){
+?>
+<!-- Breadcrum -->
+<div class="breadcrum">
+	<ul class="tri-steps">
+		<li class="current"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>1),'default',true);?>"><?php echo $this->translate("Semester"); ?></a></div></li>
+		<li class="next"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>2),'default',true);?>"><?php echo $this->translate("College"); ?></a></div></li>
+		<li class="next"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>3),'default',true);?>"><?php echo $this->translate("Program"); ?></a></div></li>
+		<li class="next"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>4),'default',true);?>"><?php echo $this->translate("Branch"); ?></a></div></li>	
+		<li class="next"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>5),'default',true);?>"><?php echo $this->translate("Subject"); ?></a></div></li>
+		<li class="next"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>6),'default',true);?>"><?php echo $this->translate("Subject Group"); ?></a></div></li>
+		<li class="next"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>7),'default',true);?>"><?php echo $this->translate("Confirmation"); ?></a></div></li>
+	</ul>
+	<div class="clear"></div>
+</div>
+<br />
+<!-- End Breadcrum -->
+
+<form id="form_1" method="post" action="/servqual/survey/new-target/step/1">
+<table>
+	<input type="hidden" name="IdSurvey" value="<?php echo $this->idsurvey;?>">
+	
+	<tr><td>Semester of Survey</td>
+		<td>:</td>
+		<td>
+			<select name="IdSemester">
+				<?php 
+				foreach ($this->semester_list as $list):
+					$select = "";
+					if( isset($this->semester) && $this->semester==$list['key'] ){
+						$select = 'selected="selected"';
+					}
+				?>
+					<option value="<?php echo $list['key'];?>" <?php echo $select; ?>><?php echo $list['value'];?></option>
+				<?php 
+				endforeach;
+				?>
+			</select>
+		</td>
+	</tr>
+</table>
+<div class="next_bar">
+	<input type="submit" value="<?php echo $this->translate("Next");?>" >
+</div>
+</form>
+<?php 
+}else
+?>
+
+
+<!-- STEP 2 -->
+<?php 
+if($this->step == 2){
+?>
+<!-- Breadcrum -->
+<div class="breadcrum">
+	<ul class="tri-steps">
+		<li class="previous"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>1),'default',true);?>"><?php echo $this->translate("Semester"); ?></a></div></li>
+		<li class="current"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>2),'default',true);?>"><?php echo $this->translate("College"); ?></a></div></li>
+		<li class="next"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>3),'default',true);?>"><?php echo $this->translate("Program"); ?></a></div></li>
+		<li class="next"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>4),'default',true);?>"><?php echo $this->translate("Branch"); ?></a></div></li>	
+		<li class="next"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>5),'default',true);?>"><?php echo $this->translate("Subject"); ?></a></div></li>
+		<li class="next"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>6),'default',true);?>"><?php echo $this->translate("Subject Group"); ?></a></div></li>
+		<li class="next"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>7),'default',true);?>"><?php echo $this->translate("Confirmation"); ?></a></div></li>
+	</ul>
+	<div class="clear"></div>
+</div>
+<br />
+<form id="form_2" method="post" action="/servqual/survey/new-target/step/2">
+<table class="table" id="result" width="100%">
+<tr><td width="20%"><?php echo $this->translate('Faculty')?></td>
+	<td ><select name="IdCollege">
+				<?php 
+				foreach ($this->facultylist as $list):
+					$select = "";
+					if( isset($this->faculty) && $this->faculty==$list['IdCollege'] ){
+						$select = 'selected="selected"';
+					}
+				?>
+					<option value="<?php echo $list['IdCollege'];?>" <?php echo $select; ?>><?php echo $list['ArabicName'];?></option>
+				<?php 
+				endforeach;
+				?>
+			</select></td>
+		</tr>	
+</table>
+<div class="next_bar">
+	<input type="submit" value="<?php echo $this->translate("Next");?>" />
+</div>
+</form>
+<!-- End Breadcrum -->
+<?php 
+}else
+?>
+
+
+<!-- STEP 3 -->
+<?php
+if($this->step == 3){
+?>
+<!-- Breadcrum -->
+<div class="breadcrum">
+	<ul class="tri-steps">
+		<li class="previous"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>1),'default',true);?>"><?php echo $this->translate("Semester"); ?></a></div></li>
+		<li class="previous"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>2),'default',true);?>"><?php echo $this->translate("College"); ?></a></div></li>
+		<li class="current"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>3),'default',true);?>"><?php echo $this->translate("Program"); ?></a></div></li>
+		<li class="next"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>4),'default',true);?>"><?php echo $this->translate("Branch"); ?></a></div></li>	
+		<li class="next"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>5),'default',true);?>"><?php echo $this->translate("Subject"); ?></a></div></li>
+		<li class="next"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>6),'default',true);?>"><?php echo $this->translate("Subject Group"); ?></a></div></li>
+		<li class="next"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>7),'default',true);?>"><?php echo $this->translate("Confirmation"); ?></a></div></li>
+	</ul>
+	<div class="clear"></div>
+</div>
+<br />
+<form id="form_3" method="post" action="/servqual/survey/new-target/step/3">
+<table class="table" id="result" width="100%">
+<tr><td  width="20%"><?php echo $this->translate('Program Study')?></td>
+	<td ><select name="IdProgram">
+			<option value="All"><?php echo $this->translate("All");?></option>
+				<?php 
+				foreach ($this->programlist as $list):
+					$select = "";
+					if( isset($this->program) && $this->program==$list['key'] ){
+						$select = 'selected="selected"';
+					}
+				?>
+					<option value="<?php echo $list['key'];?>" <?php echo $select; ?>><?php echo $list['ProgramCode'].'-'.$list['value'];?></option>
+				<?php 
+				endforeach;
+				?>
+			</select></td>
+		</tr>	
+</table>
+<div class="next_bar">
+	<input type="submit" value="<?php echo $this->translate("Next");?>" />
+</div>
+</form>
+
+<?php 
+}else
+?>
+
+
+<!-- STEP 4 -->
+<?php
+if($this->step == 4){
+?>
+<!-- Breadcrum -->
+<div class="breadcrum">
+	<ul class="tri-steps">
+		<li class="previous"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>1),'default',true);?>"><?php echo $this->translate("Semester"); ?></a></div></li>
+		<li class="previous"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>2),'default',true);?>"><?php echo $this->translate("College"); ?></a></div></li>
+		<li class="previuos"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>3),'default',true);?>"><?php echo $this->translate("Program"); ?></a></div></li>
+		<li class="current"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>4),'default',true);?>"><?php echo $this->translate("Branch"); ?></a></div></li>	
+		<li class="next"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>5),'default',true);?>"><?php echo $this->translate("Subject"); ?></a></div></li>
+		<li class="next"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>6),'default',true);?>"><?php echo $this->translate("Subject Group"); ?></a></div></li>
+		<li class="next"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>7),'default',true);?>"><?php echo $this->translate("Confirmation"); ?></a></div></li>
+	</ul>
+	<div class="clear"></div>
+</div>
+<br />
+<form id="form_4" method="post" action="/servqual/survey/new-target/step/4">
+<table class="table" id="result" width="100%">
+<tr><td  width="20%"><?php echo $this->translate('Branch')?></td>
+	<td><select name="IdBranch">
+				<option value="All"><?php echo $this->translate("All");?></option>
+				<?php 
+				foreach ($this->branchlist as $list):
+					$select = "";
+					if( isset($this->branch) && $this->branch==$list['key'] ){
+						$select = 'selected="selected"';
+					}
+				?>
+					<option value="<?php echo $list['key'];?>" <?php echo $select; ?>><?php echo $list['code'].'-'.$list['value'];?></option>
+				<?php 
+				endforeach;
+				?>
+			</select></td>
+		</tr>	
+</table>
+<div class="next_bar">
+	<input type="submit" value="<?php echo $this->translate("Next");?>" />
+</div>
+</form>
+
+
+<?php 
+}else
+?>
+
+
+<!-- STEP 5 -->
+<?php
+if($this->step == 5){
+?>
+<!-- Breadcrum -->
+<div class="breadcrum">
+	<ul class="tri-steps">
+		<li class="previous"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>1),'default',true);?>"><?php echo $this->translate("Semester"); ?></a></div></li>
+		<li class="previous"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>2),'default',true);?>"><?php echo $this->translate("College"); ?></a></div></li>
+		<li class="previuos"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>3),'default',true);?>"><?php echo $this->translate("Program"); ?></a></div></li>
+		<li class="previous"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>4),'default',true);?>"><?php echo $this->translate("Branch"); ?></a></div></li>	
+		<li class="current"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>5),'default',true);?>"><?php echo $this->translate("Subject"); ?></a></div></li>
+		<li class="next"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>6),'default',true);?>"><?php echo $this->translate("Subject Group"); ?></a></div></li>
+		<li class="next"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>7),'default',true);?>"><?php echo $this->translate("Confirmation"); ?></a></div></li>
+	</ul>
+	<div class="clear"></div>
+</div>
+<br />
+<form id="form_5" method="post" action="/servqual/survey/new-target/step/5">
+<table class="table" id="result" width="100%">
+<tr>
+	<th><?php echo $this->translate('No')?></th>
+	<th><?php echo $this->translate('Subject Code')?></th>
+	<th><?php echo $this->translate('Subject Name')?></th>
+	<th><?php echo $this->translate('Credit Hours')?></th>
+	<th><?php echo $this->translate('Number of Student')?></th>
+	<th><?php echo $this->translate('Lecturer')?></th>
+	<th><?php echo $this->translate('Select')?></th>
+</tr>
+<?php 
+	foreach ($this->subjectlist as $key=>$list):
+		$select = "";
+		if (isset($this->selectedsubjects)) {
+			foreach ($this->selectedsubjects as $subject) {
+				if( isset($subject) && $subject==$list['IdSubject'] ){
+					$select = 'checked="checked"';
+				} 
+			}
+		}
+?>
+<tr> 
+	<td witdh="5%"> <?php echo $key+1;?></td>
+	<td witdh="5%"> <?php echo $list['SubCode'];?></td>
+	<td> <?php echo $list['SubjectName'];?></td>
+	<td witdh="5%"> <?php echo $list['CreditHours'];?></td>
+	<td witdh="5%"> <?php echo $list['nOfStudent'];?></td>
+	<td> <?php echo $list['Lecturer'];?></td>
+	<td witdh="5%"> <input type="checkbox" name="subject[]" value="<?php echo $list['IdSubject']; ?>" <?php echo $select; ?>>
+<?php 
+	endforeach;
+?>
+</table>
+<div class="next_bar">
+	<input type="submit" value="<?php echo $this->translate("Next");?>" />
+</div>
+</form>
+
+<?php 
+}else
+?>
+
+
+<!-- STEP 6 -->
+<?php
+if($this->step == 6){
+?>
+<!-- Breadcrum -->
+<div class="breadcrum">
+	<ul class="tri-steps">
+		<li class="previous"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>1),'default',true);?>"><?php echo $this->translate("Semester"); ?></a></div></li>
+		<li class="previous"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>2),'default',true);?>"><?php echo $this->translate("College"); ?></a></div></li>
+		<li class="previuos"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>3),'default',true);?>"><?php echo $this->translate("Program"); ?></a></div></li>
+		<li class="previous"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>4),'default',true);?>"><?php echo $this->translate("Branch"); ?></a></div></li>	
+		<li class="previous"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>5),'default',true);?>"><?php echo $this->translate("Subject"); ?></a></div></li>
+		<li class="current"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>6),'default',true);?>"><?php echo $this->translate("Subject Group"); ?></a></div></li>
+		<li class="next"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>7),'default',true);?>"><?php echo $this->translate("Confirmation"); ?></a></div></li>
+	</ul>
+	<div class="clear"></div>
+</div>
+<br />
+<form id="form_6" method="post" action="/servqual/survey/new-target/step/6">
+<table class="table" id="result" width="70%">
+<?php //echo var_dump($this->subjectgroupslist);exit;?>
+<?php foreach ($this->subjectgroupslist as $key=>$subject) {?>
+<tr>
+	<td colspan="6"> <?php echo ($key+1).'. '.$subject['SubCode'].'-'.$subject['SubjectName'].' sks: '.$subject['CreditHours'];?></td>
+</tr>
+<?php 
+	
+	$grouplist = $subject['Groups'];
+	$selectedgroup= $this->selectedsubjectsgroup;
+	if (isset($grouplist)){
+	foreach ($grouplist as $index=>$list){
+		$select = "";
+		if (isset($selectedgroup)) {
+			foreach ($selectedgroup as $grp) {
+				//echo var_dump($grp);exit;
+				foreach ($grp as $item) {
+					if( isset($item) && $item==$list['IdCourseTaggingGroup'] ){
+						$select = 'checked="checked"';
+					}
+				} 
+			}
+		}
+?>
+<tr> 
+	<td width="5%"></td>
+	<td width="5%"> <?php echo $index+1;?></td>
+	<td width="20%"> <?php echo 'Group Code : '.$list['GroupCode'];?></td>
+	<td> <?php echo 'Group Name : '.$list['GroupName'];?></td>
+	<td width="20%"> <?php echo '# of Student :'.$list['nOfStudent'];?></td>
+	<td width="7%"><input type="checkbox" name="IdCourseTaggingGroup[<?php echo $subject['IdSubject'];?>][]" value="<?php echo $list['IdCourseTaggingGroup']; ?>" <?php echo $select; ?>>
+<?php 
+	};
+	}
+}?>
+</table>
+<div class="next_bar">
+	<input type="submit" value="<?php echo $this->translate("Next");?>" />
+</div>
+</form>
+
+
+
+<!-- STEP 7 -->
+<?php } else
+if($this->step == 7){
+?>
+<!-- Breadcrum -->
+<div class="breadcrum">
+	<ul class="tri-steps">
+		<li class="previous"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>1),'default',true);?>"><?php echo $this->translate("Semester"); ?></a></div></li>
+		<li class="previous"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>2),'default',true);?>"><?php echo $this->translate("College"); ?></a></div></li>
+		<li class="previuos"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>3),'default',true);?>"><?php echo $this->translate("Program"); ?></a></div></li>
+		<li class="previous"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>4),'default',true);?>"><?php echo $this->translate("Branch"); ?></a></div></li>	
+		<li class="previous"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>5),'default',true);?>"><?php echo $this->translate("Subject"); ?></a></div></li>
+		<li class="previous"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>6),'default',true);?>"><?php echo $this->translate("Subject Group"); ?></a></div></li>
+		<li class="next"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'new-target', 'step'=>7),'default',true);?>"><?php echo $this->translate("Confirmation"); ?></a></div></li>
+	</ul>
+	<div class="clear"></div>
+</div>
+<br />
+<form id="form_7" method="post" action="/servqual/survey/new-target/step/7">
+<fieldset><legend><?php echo $this->translate('Survey Name')?></legend>
+<table>
+	<tr><td><?php echo $this->translate('Title')?></td><td>:</td><td><?php echo $this->survey['SurveyName'];?></td>
+	<tr><td><?php echo $this->translate('Remark')?></td><td>:</td><td><?php echo $this->survey['Remark'];?></td>
+	<tr><td><?php echo $this->translate('Type of Survey')?></td><td>:</td><td><?php echo $this->survey['type_survey'];?></td>
+	<tr><td><?php echo $this->translate('Semester')?></td><td>:</td><td><?php echo $this->survey['IdSemester'];?></td>
+</table>
+
+</fieldset>
+<fieldset><legend><?php  echo $this->translate('Target of Assessment ')?></legend>
+<table>
+	<tr><td><?php echo $this->translate('Faculty')?></td><td>:</td><td><?php echo $this->program['collegeName'];?></td></tr>
+	<tr><td><?php echo $this->translate('Program')?></td><td>:</td><td><?php echo $this->program['ProgramName'];?></td></tr>
+	<tr><td><?php echo $this->translate('Branch')?></td><td>:</td><td><?php echo $this->branch['BranchName'];?></td></tr>
+</table>
+<input type="hidden" name="Survey" value="1">
+<?php  if (count($this->subjects)>0) {
+echo $this->translate('Subjects').':'?>
+<table>
+	<?php 
+	
+	$selectedgroup= $this->groups;
+	foreach ($this->subjects as $key=>$subject) {?>
+
+<tr>
+	<td colspan="6"> <?php echo ($key+1).'. '.$subject['SubCode'].'-'.$subject['SubjectName'].' sks: '.$subject['CreditHours'];?></td>
+</tr>
+<?php 
+	
+	$grouplist = $subject['Groups'];
+	if (isset( $selectedgroup[$subject['IdSubject']]))
+		$grp = $selectedgroup[$subject['IdSubject']];
+	
+	if (is_null($grp)) $grp=array();
+	foreach ($grouplist as $index=>$list) { 
+		$sts='';
+		$id=$list['IdCourseTaggingGroup'];
+		foreach ($grp as $idsearch) {
+			if ($idsearch==$id) $sts='1';
+		}
+		if ($sts=='') {
+	//echo var_dump($grouplist);echo '--';echo var_dump($grp);exit;
+	?>
+<tr> 
+	<td width="5%"></td>
+	<td width="5%"> <?php echo $index+1;?></td>
+	<td width="20%"> <?php echo 'Group Code : '.$list['GroupCode'];?></td>
+	<td> <?php echo 'Group Name : '.$list['GroupName'];?></td>
+	<td width="20%"> <?php echo '# of Student :'.$list['nOfStudent'];?></td>
+</tr>
+<?php 
+		};
+	}
+	
+}?>
+</table>
+<?php }?>
+</fieldset>
+
+<fieldset><legend><?php  echo $this->translate('Questioner')?></legend>
+<?php echo $this->action('view-survey',
+                          'survey',
+                          'servqual',
+                                 array('id' => $this->survey['IdServqual'])); ?>
+</fieldset>
+<div class="next_bar">
+	<input type="submit" value="<?php echo $this->translate("Save");?>" />
+</div>
+</form>
+
+<?php 
+} ?>

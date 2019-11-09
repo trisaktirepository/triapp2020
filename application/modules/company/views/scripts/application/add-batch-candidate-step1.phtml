@@ -1,0 +1,303 @@
+<?php 
+	echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery/plugin/colorbox/jquery.colorbox-min.js');
+	echo $this->headLink()->prependStylesheet($this->baseUrl().'/js/jquery/plugin/colorbox/colorbox.css');
+?>
+
+<style type="text/css">
+	.table tfoot td, .table tfoot tr{
+		background: #FFF;
+		border: none;	
+	}
+	
+	.table tfoot td#total{
+		border-top: 4px  double #AAAAAA;
+	}
+</style>
+
+<script type="text/javascript">
+
+if(typeof(Storage)!=="undefined"){
+	
+}
+else{
+	alert("your browser doesn't support html5");
+}
+
+var list_count = 0;
+var candidate = new Array();
+var total_amt = 0;
+
+$(function() {
+	//init on back btn
+	<?php
+		if( isset($this->data) ){
+		foreach ($this->data as $application):
+	?>
+		total_amt = ( parseInt(total_amt) + parseInt(<?php echo $application['course_fee']['amount'];?>) );
+	<?php 
+		endforeach;
+		}
+	?>
+
+	$("#total").html( "MYR " + formatCurrency(total_amt) );
+});
+
+function add_candidate(){
+	$.colorbox({
+		href:"<?php echo $this->url(array('module'=>'company','controller'=>'application', 'action'=>'ajax-select-candidate'),'default',true);?>",
+		height: '80%',
+		opacity: 0.5,
+		width: '60%',
+		onClosed: function(){			
+			for(var i=0; i<candidate.length; i++){
+				push_data(candidate[i].student_id, candidate[i].course_id);
+			}
+
+			candidate = new Array();
+		}
+	});
+}
+
+function push_data(student_id, course_id){
+	var student_data = get_student_data(student_id);
+	var course_data = get_course_data(course_id);
+	var course_fee = get_course_fee('1',course_id);
+
+	var row = 	"<tr> \
+					<td align='center'>"+ (parseInt(list_count) + parseInt(1))+".</td> \
+					<td>"+student_data.ARD_NAME+" <input type='hidden' name='student_id[]' value='"+student_data.ID+"' /></td> \
+					<td align='center'>"+student_data.ARD_IC+"</td> \
+					<td>"+course_data.name+" ("+course_data.code+")"+" <input type='hidden' name='course_id[]' value='"+course_data.id+"' /> </td> \
+					<td>"+course_fee.currency+" "+formatCurrency(course_fee.amount)+"</td> \
+					<td><a class='delLink2' onclick='delete_entry(this)' href='#'>Remove</a></td> \
+				</tr>";
+					
+	$("#candidate > tbody:last").append(row);
+
+	total_amt = parseInt(total_amt) + parseInt(course_fee.amount);
+	$('#total').html( "MYR "+formatCurrency(total_amt) );
+
+	list_count = parseInt(list_count) +parseInt(1);
+}
+
+function get_student_data(student_id){
+	var student_data = null;
+	
+	$.ajax({
+		async: false,
+		cache: false,
+		type: "POST",
+		url: '<?php echo $this->url(array('module'=>'company','controller'=>'application', 'action'=>'ajax-get-student-data'),'default',true);?>',
+		data: {'id':student_id},
+		dataType: 'json',
+	  	success: function(data) {
+	    	student_data = data;
+	  	}
+	});
+
+	return student_data;
+}
+
+function get_course_data(course_id){
+	var course_data = null;
+	
+	$.ajax({
+		async: false,
+		cache: false,
+		type: "POST",
+		url: '<?php echo $this->url(array('module'=>'company','controller'=>'application', 'action'=>'ajax-get-course-data'),'default',true);?>',
+		data: {'id':course_id},
+		dataType: 'json',
+	  	success: function(data) {
+	  		course_data = data;
+	  	}
+	});
+
+	return course_data;
+}
+
+function get_course_fee(program_id, course_id){
+	var course_fee_data = null;
+	
+	$.ajax({
+		async: false,
+		cache: false,
+		type: "POST",
+		url: '<?php echo $this->url(array('module'=>'company','controller'=>'application', 'action'=>'ajax-get-course-fee'),'default',true);?>',
+		data: {'pid':program_id ,'cid':course_id},
+		dataType: 'json',
+	  	success: function(data) {
+	  		course_fee_data = data;
+	  	}
+	});
+
+	return course_fee_data;
+}
+
+function delete_entry(element){
+	/* calculate total */
+	var amt_html = $(element).parent().prev().html()
+	var amt = parseInt(amt_html.replace("MYR ",""));
+
+	var total_html = $('#total').html();
+	var new_total_amt =  ( parseInt(total_html.replace("MYR ","")) - parseInt(amt) );
+
+	total_amt = new_total_amt;
+	$('#total').html( "MYR "+formatCurrency(total_amt) );
+	$(element).parent().parent().remove();
+}
+
+function formatCurrency(num) {
+    num = isNaN(num) || num === '' || num === null ? 0.00 : num;
+    return parseFloat(num).toFixed(2);
+}
+
+function validate(element){
+	var status = false;
+	var fields = $(element).serialize();
+
+	if(fields==""){
+		alert("Please add candidate."); 
+	}else{
+		status = true;
+	}
+	
+	return status;
+}
+</script>
+
+		
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<!--<ul>
+			<li>
+				<a href="#" onclick="javascript:searchbox()">
+					<span class='search'></span>
+					Search
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>-->
+	</div>
+</div>
+
+<div align="center" style="background:#ebebeb; height:30px;">
+<ul class="steps">
+	<li class="current">
+		<span>1.</span> Select Candidate & Course
+	</li>
+    <li class="next">
+		<span>2.</span> Select Schedule
+	</li>
+	<li class="empty">
+		<span>3.</span> Payment Selection
+	</li>
+	<li class="empty">
+		<span>4.</span> Confirmation
+	</li>
+	<li class="empty">
+		<span>5.</span> Receipt
+	</li>
+</ul>
+<br class="clear" />
+</div>
+<br />
+<div class="buttons">
+	<input id="add" type="button" value="Add Candidate" name="add" onClick="add_candidate();" />
+</div>
+
+<form method="post" action="<?php echo $this->url(array('module'=>'company','controller'=>'application', 'action'=>'add-batch-candidate-step2'),'default',true);?>" onsubmit="return validate(this)">
+
+<?php //get value from back button?>
+<?php if(isset($this->data)){?>
+<table id="candidate" class="table" width="100%" cellpadding="5" cellspacing="2">
+	<thead>
+		<tr>
+			<th width="5px">&nbsp;</th>
+			<th>Candidate Name</th>
+			<th width="100px">IC</th>
+			<th>Course</th>
+			<th width="80px">Cost</th>
+			<th width="65px">&nbsp;</th>
+		</tr>
+	</thead>
+	<tbody>
+	<?php
+	$i=0; 
+	foreach ($this->data as $application):?>
+	<tr>
+		<td><?php echo ($i+1);?></td>
+		<td><?php echo $application['student_info']['ARD_NAME']?> <input type='hidden' name='student_id[]' value='<?php echo $application['student_info']['ID']?>' /></td>
+		<td><?php echo $application['student_info']['ARD_IC']?></td>
+		<td><?php echo $application['course_info']['name']?> (<?php echo $application['course_info']['code']?>) <input type='hidden' name='course_id[]' value='<?php echo $application['course_info']['id']?>' /></td>
+		<td><?php echo $application['course_fee']['currency']; ?> <?php echo number_format($application['course_fee']['amount'], 2, '.', ''); ?></td>
+		<td>
+			<a class='delLink2' onclick='delete_entry(this)' href='#'>Remove</a>
+			<?php 
+				if( isset($application['schedule_info']) ){
+			?> 
+				<input type="hidden" name="schedule_id[]" value="<?php echo $application['schedule_info']['id'] ?>" />
+			<?php 
+				}
+			?>
+		</td>
+	</tr>
+	<?php
+	$i++; 
+	endforeach;
+	?>
+	</tbody>
+	<tfoot>
+		<tr>
+			<td colspan="4">&nbsp;</td>
+			<td id="total">MYR 0.00</td>
+			<td>&nbsp;</td>
+		</tr>
+	</tfoot>
+</table>
+<?php }else{?>
+<table id="candidate" class="table" width="100%" cellpadding="5" cellspacing="2">
+	<thead>
+		<tr>
+			<th width="5px">&nbsp;</th>
+			<th>Candidate Name</th>
+			<th width="100px">IC</th>
+			<th>Course</th>
+			<th width="80px">Cost</th>
+			<th width="65px">&nbsp;</th>
+		</tr>
+	</thead>
+	<tbody>
+	</tbody>
+	<tfoot>
+		<tr>
+			<td colspan="4">&nbsp;</td>
+			<td id="total">MYR 0.00</td>
+			<td>&nbsp;</td>
+		</tr>
+	</tfoot>
+</table>
+<?php }?>
+
+<div align="center" style="margin-top: 20px; padding: 5px; background: #EEEEEE;">
+	<div class="buttons">
+		<input id="add" type="submit" value="Next" name="submit"  />
+	</div>
+</div>
+</form>

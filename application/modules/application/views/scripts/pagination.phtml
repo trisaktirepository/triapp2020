@@ -1,0 +1,26 @@
+<div id="paginatorTop">
+<?php 
+
+	if(isset($this->previous)){
+		echo "&nbsp; <a class='pre' href='".$this->url(array('page'=>$this->previous,'admission_type'=>2,
+											 "academic_year"=>$this->academic_year,
+											 "period"=>$this->period,
+											 "faculty"=>$this->faculty,
+											 "program_code"=>$this->program_code,
+											 "selection_status"=>$this->selection_status))."'>Previous</a>";
+	}
+	
+	if(isset($this->previous) && isset($this->next)){
+		echo "&nbsp;|";
+	}
+	
+	if(isset($this->next)){
+		echo "&nbsp; <a class='nxt' href='".$this->url(array('page'=>$this->next,'admission_type'=>2,
+											 "academic_year"=>$this->academic_year,
+											 "period"=>$this->period,
+											 "faculty"=>$this->faculty,
+											 "program_code"=>$this->program_code,
+											 "selection_status"=>$this->selection_status))."'>Next</a>";
+	}
+?>
+</div>

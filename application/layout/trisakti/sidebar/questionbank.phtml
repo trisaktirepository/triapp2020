@@ -1,0 +1,33 @@
+<?php
+/*
+ *  @author Muhamad Alif
+ *  @created Oct 27, 2010
+ */
+?>
+<div id="vertmenu">
+	<ul >  
+		<li ><h1>Setup</h1></li>  
+	 <li ><a href="<?php echo $this->url(array('module'=>'question-bank','controller'=>'pool','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Question Pool"); ?></a></li>
+	 <li ><a href="<?php echo $this->url(array('module'=>'question-bank','controller'=>'chapter','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Chapter"); ?></a></li>
+	    
+	</ul>
+
+<br>
+
+	<ul>  
+		<li ><h1>Question Manager</h1></li>  
+	    <li ><a href="<?php echo $this->url(array('module'=>'question-bank','controller'=>'question','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Manage Question"); ?></a></li>
+</ul>
+	
+	<br>
+
+	<ul >  
+		<li><h1>Table of Specification</h1></li> 
+		 <li><a href="<?php echo $this->url(array('module'=>'question-bank','controller'=>'tos','action'=>'list-bank'),'default',true) ?>"><?php echo $this->translate("TOS Setup"); ?></a></li> 		
+		 <li><a href="<?php echo $this->url(array('module'=>'question-bank','controller'=>'exam-set','action'=>'list-set'),'default',true) ?>"><?php echo $this->translate("Exam Set Setup"); ?></a></li>
+		 <li><a href="<?php echo $this->url(array('module'=>'question-bank','controller'=>'exam-set','action'=>'generate'),'default',true) ?>"><?php echo $this->translate("Generate Exam Questions"); ?></a></li>
+		 <li><a href="<?php echo $this->url(array('module'=>'question-bank','controller'=>'exam-set','action'=>'student-list'),'default',true) ?>"><?php echo $this->translate("View Exam Questions"); ?></a></li>
+	</ul>
+</div>
+
+					    

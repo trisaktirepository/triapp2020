@@ -1,0 +1,188 @@
+<script>
+function changeCourse(faculty_id){
+ 	
+	$.ajax({ 
+		type: "POST",
+		url: "<?php echo $this->url(array('module'=>'question','controller'=>'sme','action'=>'ajax-get-course'),'default',true);?>/faculty_id/"+faculty_id, 
+		data: "faculty_id=" + faculty_id,
+		context: document.body, 
+		success:		   
+			function(data){
+				response = eval(data);
+				var course = document.getElementById('course_id');
+				course.options.length = 0;
+				course.options[0]=new Option('-- Please select --','0');
+				
+				for(var i=0; i<response.length; i++){
+					course.options[i+1]=new Option(response[i].courseid+' - '+response[i].coursename,response[i].courseid);
+				}		
+	    	}
+	    	
+	});
+	
+}
+
+
+function changeTopic(course_id){
+ 	
+	$.ajax({ 
+		type: "POST",
+		url: "<?php echo $this->url(array('module'=>'question','controller'=>'sme','action'=>'ajax-get-topic'),'default',true);?>/course_id/"+course_id, 
+		data: "course_id=" + course_id,
+		context: document.body, 
+		success:		   
+			function(data){			
+				response = eval(data);
+				var topic = document.getElementById('topic_id');
+				topic.options.length = 0;
+				topic.options[0]=new Option('-- Please select --','');
+				
+				for(var i=0; i<response.length; i++){
+					topic.options[i+1]=new Option(response[i].name,response[i].id);
+				}		
+	    	}
+	    	
+	});
+	
+	
+}
+</script>
+<table width="100%" border="0" align="center" cellpadding="1" cellspacing="1">
+  <tr> 
+    <td><strong>
+      <h1><?php echo $this->title;?></h1>
+      </strong></td>
+  </tr>
+  <tr> 
+    <td height="153"> 
+    
+    <form id="frmSearch" method="POST" action="<?php echo $this->url(array('module'=>'question','controller'=>'sme','action'=>'view'),'default',true);?>">
+     <table  cellspacing="1" cellpadding="5" id="mtable"  align="center">
+        <tr > 
+          <td width="18%">Faculty</td>
+          <td width="82%" >
+           <select name="faculty_id" id="cfaculty_id" onchange="changeCourse(this.options[this.selectedIndex].value)">
+			<option value="">-- Please select --</option>
+			<?php 
+			foreach($this->faculty as $f){
+				if($this->faculty_id==$f[id])
+				  $sel = "selected";
+				else
+				  $sel = "";
+			 	echo "<option value='$f[id]' $sel>$f[faculty_name]</option>";
+			 } ?>
+			</select>
+          </td>
+        </tr>
+        <tr> 
+          <td>Course</td>
+          <td><select name="course_id" id="course_id" onchange="changeTopic(this.options[this.selectedIndex].value)">
+        <option value="">-- Please Select --</option>
+        <?php 
+			foreach($this->course as $c){
+				if($this->course_id==$c[courseid])
+				  $sel = "selected";
+				else
+				  $sel = "";
+			 	echo "<option value='$c[courseid]' $sel>$c[courseid] - $c[coursename]</option>";
+			 } ?>
+      </select></td>
+        </tr>       
+        <tr> 
+          <td width="18%">Topic</td>
+          <td width="82%">
+         <select name="topic_id" id="topic_id">
+              <option value="">-- Please select --</option>
+          </select></td>
+        </tr>
+        <tr> 
+	    <td>Status</td>
+	    <td> <select name="status" id="status">
+	          <option value="">-- Please select --</option>
+	           <?php 
+			foreach($this->status as $s){
+				if($this->status_id==$s[id])
+				  $sel = "selected";
+				else
+				  $sel = "";
+			 	echo "<option value='$s[id]' $sel>$s[name]</option>";
+			 } ?>
+	        </select>
+	    
+	     <!-- <select name="status" id="status">
+	        <option value="">-- Please select --</option>
+	        <option value="1">Draft</option>
+	        <option value="2">Ready to Moderate</option>       
+	        <option value="3">Need Modification</option>       
+	        <option value="4">Approved</option>       
+	        <option value="5">Rejected</option>       
+	      </select>--></td>
+	  </tr>
+		<tr> 
+          <td>Question</td>
+          <td><input type="text" name="question" size="50" value=""></td>
+        </tr>
+        <tr> 
+          <td>Order by</td>
+          <td><select name="orderby" id="orderby">
+	        <option value="">-- Please select --</option>
+	        <option value="status">Status</option>
+	        <option value="createddt">Date Created</option>       
+	        <option value="topic_id">Topic</option>       
+	              
+	      </select></td>
+        </tr>
+        <tr> 
+          <td>&nbsp;</td>
+          <td><input type="submit" name="submit" value="Search" class="button"></td>
+        </tr>
+      </table>
+      
+      </form>
+    
+      <br>
+       <table  class="tblicon"  width="100%" border="0" align="center" cellpadding="1" cellspacing="1" >
+	     <tr> 
+          <td height="" colspan="4">Total : <?php echo $this->paginator->getTotalItemCount(); ?> </td>                        
+           
+          <td align="right"><?php  echo $this->paginationControl($this->paginator, 'Elastic','pagination.phtml',$this->searchParams);?></td>      
+        </tr>
+        </table>
+      <table border="0" align="center" cellpadding="1" cellspacing="1"  id="mtable"  >
+        <tr align="center"> 
+         <th>No.</th>
+          <th width="3%" bgcolor="#F0F0F0"><strong>ID</strong></th>
+          <th width="47%" bgcolor="#F0F0F0"><strong>Question</strong></th>
+          <th width="10%" bgcolor="#F0F0F0"><strong>Topic</strong></th>
+          <th width="10%" bgcolor="#F0F0F0"><strong>Taxanomy Level</strong></th> 
+          <th width="10%" bgcolor="#F0F0F0"><strong>Created Date</strong></th>
+          <th width="10%" bgcolor="#F0F0F0"><strong>Status</strong></th>
+          <th width="10%" bgcolor="#F0F0F0"><strong>Action</strong></th>
+        </tr>
+        <?php $i=0;  foreach ($this->paginator as $q){?>
+        <tr valign="top"> 
+          <td><?php echo $this->paginator->getAbsoluteItemNumber(0,$this->paginator->getCurrentPageNumber())+$i;?>.</td>
+
+          <td ><?php echo $q["id"]; ?></td>
+          <td ><?php echo $q["question"];?></td>
+          <td ><?php echo $q["topic_name"];?></td>
+          <td ><?php echo $q["taxanomy_name"];?></td>
+          <td ><?php echo $q["createddt"];?></td>
+          <td ><?php echo $q["status_name"];?></td>
+          <td >
+          <a href="<?php echo $this->url(array(module=>question ,controller => sme, action => preview,id => $q[id]))?>"><img src="<?php echo $this->baseUrl(); ?>/images/button-new.gif" title="View"></a>
+          <? if($q["status"]==1 || $q["status"]==3){?>
+          <a href="<?php echo $this->url(array(module=>question ,controller => sme, action => edit,id => $q[id]))?>"><img src="<?php echo $this->baseUrl(); ?>/images/button-edit.gif" title="Edit"></a>
+          <a href="<?php echo $this->url(array(module=>question ,controller => sme, action => del,id => $q[id]))?>"><img src="<?php echo $this->baseUrl(); ?>/images/button-cross.gif" title="Delete"></a>  
+          <? } ?>
+          </td>
+        </tr>
+        <? $i++; } ?>
+      </table> 
+      
+      </td>
+  </tr>
+  
+</table>
+
+<p>&nbsp;</p><p>&nbsp;</p>

@@ -1,0 +1,110 @@
+<script type="text/javascript">
+	$(function() {
+		// a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
+		$( "#dialog:ui-dialog" ).dialog( "destroy" );
+	
+		$( "#dialog-search" ).dialog({
+			width: 400,
+			autoOpen: false,
+			modal: true,
+			buttons: {
+				"Search": function() { 
+					$('#search_form').submit();
+				}, 
+				"Close": function() { 
+					$(this).dialog("close"); 
+				} 
+			}
+		});
+	});
+</script>
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onClick="$('#dialog-search').dialog('open');" >
+					<span class='search'></span>
+					Search
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<table class="table" width="100%" cellpadding="5" cellspacing="1">
+	<tr>
+		<th width="350px">Name</th>
+		<th width="110px">Code</th>
+		<th width="100px">Credit Hours</th>
+		<th>Prerequisites</th>
+	</tr>
+	<?php 
+	$i=0;
+	foreach ($this->courses as $course):?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?> >
+		<td><a href="<?php echo $this->url(array('module'=>'anr-setup','controller'=>'course-prerequisites', 'action'=>'view', 'course'=>$course['detail']['id']));?>"><?php echo $course['detail']['name']; ?></a></td>
+		<td align="center"><?php echo $course['detail']['code']; ?></td>
+		<td align="center"><?php echo $course['detail']['credit_hour']; ?></td>
+		<td>
+			<?php 
+			if(isset($course['prerequisites'])){
+				echo "<ul>";
+				foreach ($course['prerequisites'] as $precourse):
+				?>
+					<li><?php echo $precourse['name']; ?> (<?php echo $precourse['code']; ?>)</li>
+				<?php 
+				endforeach;
+				echo "</ul>";
+			}
+			?>		
+		</td>
+	</tr>
+	<?php
+	$i++; 
+	endforeach 
+	?>
+</table>
+
+<div id="dialog-search" title="Search">
+	<form name="search_form" id="search_form" action="" method="post">
+		<table width="100%">
+			<tr>
+				<td>
+					Course Name
+				</td>
+				<td width="5px">:</td>
+				<td>
+					<input type="text" name="name" value="<?php echo $this->search_name; ?>" />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					Course Code
+				</td>
+				<td width="5px">:</td>
+				<td>
+					<input type="text" name="code" value="<?php echo $this->search_code; ?>" />
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>

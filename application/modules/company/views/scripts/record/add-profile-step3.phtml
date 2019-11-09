@@ -1,0 +1,185 @@
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<!--<ul>
+			<li>
+				<a href="#" onclick="javascript:searchbox()">
+					<span class='search'></span>
+					Search
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>-->
+	</div>
+</div>
+
+<div align="center" style="background:#ebebeb; height:30px;">
+<ul class="steps">
+	<li class="prevDone">
+		<span>1</span> Personal Identity Number
+	</li>
+    <li class="prevDone">
+		<span>2</span> Personal Particular
+	</li>
+	<li class="current">
+		<span>2</span> Confirmation
+	</li>
+</ul>
+<br class="clear" />
+</div>
+
+<div class="clear">
+<table class="table6" width="100%" cellpadding="5" cellspacing="0" border="0">
+<tr bgcolor="#cccccc">
+		<td colspan="3"> Personal Particular</td>
+	</tr>	
+    <tr bgcolor="#ffffff">
+		<td valign="top" class="shade"><?php echo $this->translate("Full Name (as per NRIC)"); ?></td>
+		<td valign="top">:</td>
+		<td valign="top">
+			<?php echo $this->student['ARD_NAME'];?>
+		</td>
+	</tr>
+	
+	<tr bgcolor="#ffffff">
+		<td width="20%" valign="top" class="shade"><?php echo $this->translate("IC Number"); ?></td>
+		<td width="2%" valign="top">:</td>
+		<td width="80%" valign="top">
+			<?php echo $this->icno;?>
+		</td>
+	</tr>
+	
+	<tr bgcolor="#ffffff">
+		<td width="20%" valign="top" class="shade"><?php echo $this->translate("Date of Birth"); ?></td>
+		<td width="2%" valign="top">:</td>
+		<td width="80%" valign="top">
+		<?php 
+		$icno = $this->icno;
+		
+		$first = substr($icno,0);
+		$yeara = substr($icno, 0,2);
+		
+		if($first == 0){
+			$year = "20".$yeara; 
+		}else{
+			$year = "19".$yeara; 
+		}
+		
+		$month = substr($icno, 2,2);
+		$date = substr($icno, 4,2);
+		$dob2 = $year."-".$month."-".$date;
+		$dob = date('d-m-Y', strtotime($dob2));
+		
+		echo $dob;
+		?>
+		</td>
+	</tr>
+	 <tr bgcolor="#ffffff">
+		<td valign="top" class="shade"><?php echo $this->translate("Email Address");?></td>
+		<td valign="top">:</td>
+		<td valign="top">
+			<?php echo $this->student['ARD_EMAIL'];?>
+		</td>
+	</tr> 
+	<tr bgcolor="#ffffff">
+		<td valign="top" class="shade"><?php echo $this->translate("Mailing Address"); ?></td>
+		<td valign="top">:</td>
+		<td valign="top">
+			<?php echo $this->student['ARD_ADDRESS1'];?>
+			<?php echo $this->student['ARD_ADDRESS2']!=null?"<br />".$this->student['ARD_ADDRESS2']:"";?>
+			<?php echo $this->student['ARD_POSTCODE']!=null?"<br />".$this->student['ARD_POSTCODE']:"";?>
+			<?php echo $this->student['ARD_CITY']!=null?"<br />".$this->student['ARD_CITY']:"";?>
+			<?php echo $this->student['ARD_STATE']!=null?"<br />".$this->student['ARD_STATE']:""; ?>
+			MALAYSIA
+		</td>
+	</tr>
+	<tr bgcolor="#ffffff">
+		<td valign="top" class="shade"><?php echo $this->translate("Contact No"); ?> </td>
+		<td valign="top">:</td>
+		<td valign="top">
+			<?php echo $this->student['ARD_PHONE'];?>
+		</td>
+	</tr>
+	<tr bgcolor="#ffffff">
+		<td valign="top" class="shade"><?php echo $this->translate("Mobile No"); ?></td>
+		<td valign="top">:</td>
+		<td valign="top">
+			<?php echo $this->student['ARD_HPHONE'];?>
+		</td>
+	</tr>
+	<tr bgcolor="#ffffff">
+		<td valign="top" class="shade"><?php echo $this->translate("Race"); ?></td>
+		<td valign="top">:</td>
+		<td valign="top">
+			<?php echo $this->student['ARD_RACE']; ?>		
+		</td>
+	</tr>
+	<tr bgcolor="#ffffff">
+		<td valign="top" class="shade"><?php echo $this->translate("Religion"); ?></td>
+		<td valign="top">:</td>
+		<td valign="top">
+			<?php 
+				echo $this->student['ARD_RELIGION'];
+			?>		
+		</td>
+	</tr>
+	<tr bgcolor="#ffffff">
+		<td valign="top" class="shade"><?php echo $this->translate("Gender"); ?></td>
+		<td valign="top">:</td>
+		<td valign="top">
+			<? echo $this->student['ARD_SEX']=="M"?$this->translate("Male"):$this->translate("Female"); ?>
+		</td>
+	</tr>
+	<tr bgcolor="#ffffff">
+		<td valign="top" class="shade"><?php echo $this->translate("Qualification"); ?></td>
+		<td valign="top">:</td>
+		<td valign="top">
+			<?php 
+				echo $this->student['ARD_QUALIFICATION'];
+			?>
+		</td>
+	</tr>
+	<tr bgcolor="#cccccc">
+		<td colspan="3">E-Book Access</td>
+	</tr>
+	<tr bgcolor="#ffffff">
+		<td valign="top" class="shade"><?php echo $this->translate("Username"); ?></td>
+		<td valign="top">:</td>
+		<td valign="top">
+			<?php echo $this->student['username'];?>
+		</td>
+	</tr>
+	<tr bgcolor="#ffffff">
+		<td valign="top" class="shade"><?php echo $this->translate("Password"); ?></td>
+		<td valign="top">:</td>
+		<td valign="top">
+			<?php echo $this->student['clearpass'];?>
+		</td>
+	</tr>
+	</table>
+	<br>
+	<table width="100%" align="center">
+	<tr bgcolor="#ffffff" align="center">
+		<td valign="top" colspan="3" >
+			<input type="button" name="view" value="View Candidate Profile List" onclick="window.location='<?php echo $this->url(array('module'=>'company','controller'=>'record', 'action'=>'profile'),'default',true);?>'"> 
+			<input type="button" name="addnew" value="Add Another Candidate" onclick="window.location='<?php echo $this->url(array('module'=>'company','controller'=>'record', 'action'=>'add-profile-step1'),'default',true);?>'">
+		</td>
+	</tr>
+</table>
+</div>

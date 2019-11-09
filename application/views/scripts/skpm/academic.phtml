@@ -1,0 +1,316 @@
+<style type="text/css">
+.zend_form dt {
+    width: 177px;
+}
+.zend_form dd {
+    padding: 2px 187px;
+}
+</style>
+<script type="text/javascript">
+ 
+function edit_Honor(n) {
+	 
+	var x = document.getElementById("data").rows[n].cells;
+	 
+	document.getElementById("title_bahasa").value=x[2].innerHTML;
+	document.getElementById("title").value=x[3].innerHTML;
+ 
+	document.getElementById("given_by").value=x[4].innerHTML;
+	document.getElementById("idHonor").value=document.getElementById("idhonorslst["+n+"]").value;
+	document.getElementById("date_of_honor").value= x[5].innerHTML;
+	 
+	document.getElementById("level").value=document.getElementById("levellst["+n+"]").value;
+	document.getElementById("field").value=document.getElementById("fieldlst["+n+"]").value;
+	document.getElementById("role").value=document.getElementById("rolelst["+n+"]").value;
+	document.getElementById("achievment").value=document.getElementById("achievmentlst["+n+"]").value;
+	document.getElementById("category").value=document.getElementById("categorylst["+n+"]").value;
+	document.getElementById("IdSemester").value=document.getElementById("semesterlst["+n+"]").value;
+	document.getElementById("IdBukti").value=document.getElementById("buktilst["+n+"]").value;
+	
+}
+ 
+
+function onclickUpload(n,doc,path,id,type) {
+	//alert(id);
+	document.getElementById("items_id").value=n;
+	document.getElementById("document_name").value=doc;
+	document.getElementById("redirect_path").value=path;
+	document.getElementById("idStudentRegistrationUp").value=id;
+	document.getElementById("type").value=type;
+	$('#dialog-upload-certificate').dialog('open');
+}
+
+$(function() {
+	$( "#dialog-upload-certificate" ).dialog({
+		autoOpen: false,
+    	resizable: false,
+      	height:140,
+      	modal: true,
+      	buttons: {
+        	"Upload certificate": function() {
+        		$('#form_certificate').submit();
+        	},
+        	Cancel: function() {
+          		$( this ).dialog( "close" );
+        	}
+      	}
+    });
+
+	$( ".datepicker" ).datepicker({
+		maxDate: "0",
+		"dateFormat" : 'yy-mm-dd',
+		changeMonth: true,
+	    changeYear: true 
+	});
+});
+ 
+    
+ 
+ 
+</script>
+
+ 
+<div style="width:100%;">
+<fieldset>
+<form id="honors" method="post" action="<?php echo $this->baseUrl()?>/default/skpm/academic" >
+<input type="hidden" name="idHonor" id="idHonor"> 
+<input type="hidden" name="idStudentRegistration" id="idStudentRegistration" value="<?php echo $this->IdStudentRegistration;?>">
+<input type="hidden" name="nim" id="nim" value="<?php echo $this->nim;?>">
+<input type="hidden" name="studentname" id="studentname" value="<?php echo $this->studentname;?>">
+<table  width="80%" cellpadding="5" cellspacing="3" border="0">
+	<tr>	<td width="20%"><?php echo $this->translate("Name of Acitivity in Bahasa");?></td><td>:</td>
+			<td> <textarea rows="4" cols="50" id="title_bahasa" name="title_bahasa">    
+			</textarea></tr> 
+	<tr>	<td width="20%"><?php echo $this->translate("Name Of Acitivity");?></td><td>:</td>
+			<td> <textarea rows="4" cols="50" id="title" name="title">     
+			</textarea></tr>
+	<tr>	<td width="20%"><?php echo $this->translate("Conducted By");?></td><td>:</td>
+			<td><input type="text" id="given_by" name="given_by" size="50"></td>	</tr>		
+	<tr>	<td width="20%"><?php echo $this->translate("Acitivity date");?></td><td>:</td>
+			<td><input type="date" id="date_of_honor" name="date_of_honor" ></td></tr>
+	
+	<tr>	<td width="20%"><?php echo $this->translate("Role in Activity");?></td><td>:</td>
+			<td>
+		 
+			<select id="role" name="role">
+			    <option value="0"><?php echo $this->translate("Please Select");?></option>
+			    <?php 
+			    	foreach ($this->role_list as $level):
+			    ?>
+			    		<option value="<?php echo $level["key"];?>"<?php if($this->levelId == $level["key"]){ echo 'selected';}?>><?php echo $level["value"];?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select>
+		 
+			</td></tr>
+	<tr>	<td width="20%"><?php echo $this->translate("Category");?></td><td>:</td>
+			<td>
+		 
+			<select id="category" name="category">
+			    <option value="0"><?php echo $this->translate("Please Select");?></option>
+			    <?php 
+			    	foreach ($this->category_list as $level):
+			    ?>
+			    		<option value="<?php echo $level["key"];?>"<?php if($this->levelId == $level["key"]){ echo 'selected';}?>><?php echo $level["value"];?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select>
+		 
+			</td></tr>
+	<tr>	<td width="20%"><?php echo $this->translate("Level");?></td><td>:</td>
+			<td>
+		 
+			<select id="level" name="level">
+			    <option value="0"><?php echo $this->translate("Please Select");?></option>
+			    <?php 
+			    	foreach ($this->level_list as $level):
+			    ?>
+			    		<option value="<?php echo $level["key"];?>"<?php if($this->levelId == $level["key"]){ echo 'selected';}?>><?php echo $level["value"];?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select>
+		 
+			</td></tr>
+	<tr>	<td width="20%"><?php echo $this->translate("Field");?></td><td>:</td>
+			<td>
+			 
+			<select id="field" name="field">
+			    <option value="0"><?php echo $this->translate("Please Select");?></option>
+			    <?php 
+			    	foreach ($this->field_list as $semester):
+			    ?>
+			    		<option value="<?php echo $semester["key"];?>" <?php if($this->fieldId == $semester["key"]){ echo 'selected';}?>><?php echo $semester["value"];?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select>
+		 
+			</td></tr>
+	<tr>	<td width="20%"><?php echo $this->translate("Achievment");?></td><td>:</td>
+			<td>
+		 
+			<select id="achievment" name="achievment">
+			    <option value="0"><?php echo $this->translate("Please Select");?></option>
+			    <?php 
+			    	foreach ($this->achievment_list as $level):
+			    ?>
+			    		<option value="<?php echo $level["key"];?>"<?php if($this->levelId == $level["key"]){ echo 'selected';}?>><?php echo $level["value"];?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select>
+		 
+			</td></tr>
+	<tr>	<td width="20%"><?php echo $this->translate("Semester");?></td><td>:</td>
+			<td>
+			 
+			<select id="IdSemester" name="IdSemester" >
+			     <?php 
+			    	foreach ($this->semester_list as $semester):
+			    ?>
+			    		<option value="<?php echo $semester["key"];?>" <?php if($this->semesterid == $semester["key"]){ echo 'selected';}?>><?php echo $semester["value"];?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select>
+		 
+			</td></tr>
+	<tr>	<td width="20%"><?php echo $this->translate("Bukti Fisik");?></td><td>:</td>
+			<td>
+			 
+			<select id="IdBukti" name="IdBukti" >
+			     <?php 
+			    	foreach ($this->bukti_list as $semester):
+			    ?>
+			    		<option value="<?php echo $semester["key"];?>" <?php if($this->semesterid == $semester["key"]){ echo 'selected';}?>><?php echo $semester["value"];?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select>
+		 
+			</td></tr>
+	
+	<tr><td colspan="3" align="right"><input type="submit" name="submit" value="<?php echo $this->translate('Save')?>" ></td>
+	
+	</tr>
+</table>
+
+</form>
+</fieldset>
+<br>
+ 
+ 
+<table class="table" id="data" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		<th width="5%"><?php echo $this->translate("Status");?></th> 
+		<th width="5%"><?php echo $this->translate("No");?></th>
+		
+		<th width="35%"><?php echo $this->translate("Acitivity in Bahasa");?></th>
+		<th width="10%"><?php echo $this->translate("Acitivity");?></th>
+		<th width="10%"><?php echo $this->translate("Conduct By");?></th>			
+		<th width="10%"><?php echo $this->translate("Acitivity date");?></th>
+		<th width="10%"><?php echo $this->translate("Category");?></th>
+		<th width="10%"><?php echo $this->translate("Level");?></th>
+		<th width="10%"><?php echo $this->translate("Field");?></th>
+		<th width="10%"><?php echo $this->translate("Role");?></th>
+		<th width="10%"><?php echo $this->translate("Achievment");?></th>
+		<th width="10%"><?php echo $this->translate("Semester");?></th>
+		<th width="10%"><?php echo $this->translate("Certificate");?></th>
+		<th width="10%"><?php echo $this->translate("Action");?></th>
+	</tr>
+	<?php  
+	if (count($this->honors)>0) {
+		$i=1;
+	foreach($this->honors as $index=>$honor){ 
+		$id=$honor['idIlmiah'];
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<input type="hidden" id="idhonorslst[<?php echo $index+1;?>]" value="<?php echo $honor['idIlmiah'];?>">
+		<input type="hidden" id="categorylst[<?php echo $index+1;?>]" value="<?php echo $honor['categoryid'];?>">
+		<input type="hidden" id="levellst[<?php echo $index+1;?>]" value="<?php echo $honor['Level'];?>">
+		<input type="hidden" id="fieldlst[<?php echo $index+1;?>]" value="<?php echo $honor['fieldid'];?>">
+		<input type="hidden" id="rolelst[<?php echo $index+1;?>]" value="<?php echo $honor['roleid'];?>">
+		<input type="hidden" id="achievmentlst[<?php echo $index+1;?>]" value="<?php echo $honor['achievmentid'];?>">
+		<input type="hidden" id="semesterlst[<?php echo $index+1;?>]" value="<?php echo $honor['IdSemesterMain'];?>">
+		<input type="hidden" id="buktilst[<?php echo $index+1;?>]" value="<?php echo $honor['BuktiFisik'];?>">
+		
+		<td align="center">
+		<?php if ($honor['approved']=='2' ) {
+					 
+					?>
+					<img src='<?php echo $this->baseUrl();?>/images/reject.png' border=0 width='20' height='20' title="<?php echo $this->translate('rejected by student'); ?>"> 
+			  
+				<?php } ?>
+		<?php if ($honor['approved_by']==$this->iduser && $honor['approved']=='1') {
+					 
+					?>
+					 
+						<a href="<?php echo $this->url(array('module'=>'default','controller'=>'skpm', 'action'=>'academic-reject','idhonor'=>$honor['idIlmiah'],'id'=>$this->IdStudentRegistration,'name'=>$this->studentname,'nim'=>$this->nim),'default',true)?>"><img src='<?php echo $this->baseUrl();?>/images/accept.png' border=0 width='20' height='20' title='<?php echo $this->translate("do you want to unapprove?");?>' ></a>
+			<?php } else if ($honor['approved']=='1') {?> 
+			
+					<img src='<?php echo $this->baseUrl();?>/images/prohibit.png' border=0 width='20' height='20' title="<?php echo $this->translate('Approved by other'); ?>"> 	
+		<?php }
+			if ($honor['approved']=='0' ||$honor['approved']=='') {
+					 
+					?>
+					 
+						<img src='<?php echo $this->baseUrl();?>/images/free.png' border=0 width='20' height='20' title='<?php echo $this->translate("not approve yet?");?>' >
+			<?php }?>
+		 
+			 
+		</td>
+		<td><?php echo $index+1;?></td> 
+		
+		<td><?php  echo $honor['title_bahasa'];?> </td>
+		<td><?php echo $honor['title']; ?>
+		<td><?php echo $honor["given_by"];?></td>
+		<td><?php echo $honor["date_of_honor"];?></td>
+		<td><?php echo $honor["categoryname"];?></td>
+		<td><?php echo $honor["level"];?></td>
+		<td><?php echo $honor["field"];?></td>
+		<td><?php echo $honor["role"];?></td>
+		<td><?php echo $honor["achievmentname"];?></td>
+		<td><?php echo $honor["SemesterMainName"];?></td>
+		<?php 
+		$pathupload=$honor['path'];
+		if($pathupload!=''){
+			$dt = explode("triapp",$pathupload);
+			//echo var_dump($dt);exit;
+			$path = $dt[1];
+			$path ="<a target='_blank' href=http://".APP_HOSTNAME.$path.">" ;
+		
+		?> <td align="center"><?php  echo $path;?><img src='<?php echo $this->baseUrl();?>/images/document.png' border=0 width='20' height='20' title="Download" ></a></td><?php 
+		} else {
+				$direct=$this->url(array('module'=>'default','controller'=>'skpm', 'action'=>'skpm','id'=>$this->IdStudentRegistration,'nim'=>$this->nim,'name'=>$this->studentname),'default',true)."/#Tab2";?>
+		<td align="center"><img src='<?php echo $this->baseUrl();?>/images/upload.png' border=0 width='20' height='20' title="Upload"  onclick="onclickUpload(<?php echo $honor['idIlmiah']?>,'Honors','<?php echo $direct?>',<?php echo $this->IdStudentRegistration;?>,'101')" /></td>
+		<?php }?>
+		<td align="center">
+		<?php if ($honor['idUser']==$this->iduser && $honor['approved']=='0') {?>
+					<img src='<?php echo $this->baseUrl();?>/images/edit.png' border=0 width='16' height='16' title="Edit"  onclick="edit_Honor(<?php echo $index+1;?>)" >
+					<a href="<?php echo $this->url(array('module'=>'default','controller'=>'skpm', 'action'=>'delete-academic','idhonor'=>$honor['idIlmiah'],'id'=>$this->IdStudentRegistration,'name'=>$this->studentname,'nim'=>$this->nim),'default',true)?>" onclick="if(confirm('Confirm to delete?')){return true;}else{return false;}"><img src='<?php echo $this->baseUrl();?>/images/trash.png' border=0 width='16' height='16' title="Delete" ></a>
+		<?php }?></td>
+	
+	</tr>
+	<?php }
+} ?>
+
+</table>
+ 
+<br>
+ 
+</div>
+<div id="dialog-upload-certificate" title="<?php echo $this->translate("Upload Student's Certificate");?>">
+  	<form name="form_certificate" id="form_certificate" method="post" action="/default/skpm/upload-certificate" enctype="multipart/form-data">
+  		<input type="file" name="file" />
+  		<input type="hidden" name="document_name" id="document_name">
+  		<input type="hidden" id="items_id" name="items_id">
+  		<input type="hidden" id="type" name="type">
+  		<input type="hidden" id="idStudentRegistrationUp" name="idStudentRegistrationUp">
+  		<input type="hidden" name="redirect_path" id="redirect_path">
+  		
+  	</form>
+</div>
+ 

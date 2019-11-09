@@ -1,0 +1,197 @@
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li class="divider"></li>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'general-setup','controller'=>'client', 'action'=>'type'),'default',true);?>" >
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+<form name="onlineForm" method="post" action="<?php echo $this->url(array('module'=>'general-setup','controller'=>'takaful','action'=>'edit-type','id'=>$this->data["id"]),'default',true) ?>">
+
+<table width="100%" border="0">
+  <tr>
+    <td valign="top" width="20%">Client Type</td>
+    <td valign="top">:</td>
+    <td valign="top">
+					
+	<input type="radio" name="idClienttype" id="idClienttype" value="2" <?php  if ($this->data['idClienttype'] == 2) { echo "checked"; }?>> Takaful Operator<br>
+    <input type="radio" name="idClienttype" id="idClienttype" value="3" <?php  if ($this->data['idClienttype'] == 3) { echo "checked"; }?>> Company / Insurance Agency</td>
+  </tr>
+  <tr>
+    <td valign="top">Name</td>
+    <td valign="top">:</td>
+    <td valign="top">
+    <input type="text" name="name" id="name" value="<?php echo $this->data["name"];?>" size="80"></td>
+  </tr>
+  <tr>
+    <td valign="top">Short Name</td>
+    <td valign="top">:</td>
+    <td valign="top"><input type="text" name="shortName" id="shortName" value="<?php echo $this->data["shortName"];?>" size="50"></td>
+  </tr>
+  <tr>
+    <td valign="top">Registration Number</td>
+    <td valign="top">:</td>
+    <td valign="top"><input type="text" name="registrationNo" id="registrationNo" value="<?php echo $this->data["registrationNo"];?>"  size="80"></td>
+  </tr>
+  <tr>
+    <td valign="top">Business Type</td>
+    <td valign="top">:</td>
+    <td valign="top">
+    <select name="idbusinesstype" id="idbusinesstype">
+			<option value="0"> -- Please select -- </option>
+			<?php 
+				foreach ($this->businesstype as $data) {
+					
+					if ($data['id'] == $this->data['idbusinesstype']) {
+						$selected = "selected";
+					}else{
+						$selected ="";
+					}
+			
+					echo "<option value='".$data['id']."' $selected>".$data['name']."</option>";
+				}
+			?>
+		</select>
+		</td>
+  </tr>
+  <tr>
+    <td valign="top">Address</td>
+    <td valign="top">:</td>
+    <td valign="top"><input type="text" name="address" id="address"  value="<?php echo $this->data["address"];?>"  size="80"></td>
+  </tr>
+  <tr>
+    <td valign="top">City</td>
+    <td valign="top">:</td>
+    <td valign="top"><input type="text" name="city" id="city" value="<?php echo $this->data["city"];?>"></td>
+  </tr>
+  <tr>
+    <td valign="top">Postcode</td>
+    <td valign="top">:</td>
+    <td valign="top"><input type="text" name="postcode" id="postcode" value="<?php echo $this->data["postcode"];?>"></td>
+  </tr>
+  <tr>
+    <td valign="top">State</td>
+    <td valign="top">:</td>
+    <td valign="top">
+    <select name="state" id="state">
+			<option value="0"> -- Please select -- </option>
+			<?php 
+				foreach ($this->state as $data) {
+					
+					if ($data['id'] == $this->data['state']) {
+						$selected = "selected";
+					}else{
+						$selected ="";
+					}
+			
+					echo "<option value='".$data['id']."' $selected>".$data['name']."</option>";
+				}
+			?>
+		</select>
+		</td>
+  </tr>
+  <tr>
+    <td valign="top">Country</td>
+    <td valign="top">:</td>
+    <td valign="top">MALAYSIA <input type="hidden" name="country" id="country" value="129"></td>
+  </tr>
+  <tr>
+    <td valign="top">Phone Number (Office)</td>
+    <td valign="top">:</td>
+    <td valign="top"><input type="text" name="contactoffice" id="contactoffice" value="<?php echo $this->data["contactoffice"];?>"></td>
+  </tr>
+  <tr>
+    <td valign="top">Phone Number (Mobile)</td>
+    <td valign="top">:</td>
+    <td valign="top"><input type="text" name="contactno" id="contactno" value="<?php echo $this->data["contactno"];?>"></td>
+  </tr>
+  <tr>
+    <td valign="top">Fax</td>
+    <td valign="top">:</td>
+    <td valign="top"><input type="text" name="fax" id="fax" value="<?php echo $this->data["fax"];?>"></td>
+  </tr>
+  <tr>
+    <td valign="top">Email Address</td>
+    <td valign="top">:</td>
+    <td valign="top"><input type="text" name="email" id="email" value="<?php echo $this->data["email"];?>" size="80"></td>
+  </tr>
+  <tr>
+    <td valign="top">Alternate Email Address</td>
+    <td valign="top">:</td>
+    <td valign="top"><input type="text" name="altEmail" id="altEmail" value="<?php echo $this->data["altEmail"];?>" size="80"></td>
+  </tr>
+  <tr>
+    <td valign="top">Contact Person</td>
+    <td valign="top">:</td>
+    <td valign="top"><input type="text" name="contactperson" id="contactperson"  value="<?php echo $this->data["contactperson"];?>" size="80"></td>
+  </tr>
+  <tr>
+    <td valign="top">Login ID</td>
+    <td valign="top">:</td>
+    <td valign="top"><input type="text" name="loginid" id="loginid" value="<?php echo $this->data["loginid"];?>"></td>
+  </tr>
+  <tr>
+    <td valign="top">Password</td>
+    <td valign="top">:</td>
+    <td valign="top"><input type="text" name="password" id="password" value="<?php echo $this->data["clearpass"];?>"></td>
+  </tr>
+  <tr>
+    <td valign="top">Security Question</td>
+    <td valign="top">:</td>
+    <td valign="top">
+    <select name="question" id="question">
+			<option value="0"> -- Please select -- </option>
+			<?php 
+				foreach ($this->securityquestion as $data) {
+					
+					if ($data['id'] == $this->data['question']) {
+						$selected = "selected";
+					}else{
+						$selected ="";
+					}
+			
+					echo "<option value='".$data['id']."' $selected>".$data['question']."</option>";
+				}
+			?>
+		</select>
+    
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">Answer</td>
+    <td valign="top">:</td>
+    <td valign="top"><input type="text" name="answer" id="answer" value="<?php echo $this->data["answer"];?>" size="80"></td>
+  </tr>
+  <tr>
+    <td valign="top">Hint</td>
+    <td valign="top">:</td>
+    <td valign="top"><input type="text" name="hint" id="hint" value="<?php echo $this->data["hint"];?>"></td>
+  </tr>
+</table>
+
+<table>
+		<tr>
+			<td><input type="submit" value="Save" name="submit"></td>
+			<td><input type="submit" value="Reset" /></td>
+		</tr>
+	</table>
+	</form>
+	
+
+<?php 
+//	$this->form->setAction($this->url());
+	//echo  $this->form;
+?>

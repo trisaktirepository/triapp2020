@@ -1,0 +1,37 @@
+
+<?if(isset($this->noticeMessage)){?>
+<div id="msg" class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+
+
+<!--<table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>		
+		<th>Name</th>		
+		<th>Registration ID</th>
+		<th>Course</th>
+		<th>Action</th>
+	</tr>
+	
+	<?php 
+	$i=0;
+	foreach ($this->student as $entry): 
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>		
+		<td><?php echo $entry['student_id']; ?></td>				
+		<td><?php echo $entry['regId']; ?></td>		
+		<td><?php echo $entry['courseid']; ?></td>	
+		<td><a href="<?php echo $this->url(array('module'=>'question-bank','controller'=>'exam-set','action'=>'student-quest','regId'=>$entry['regId']),'default',true) ?>">View</a></td>	
+	</tr>
+	<?php 
+	$i++;
+	endforeach 
+	?>
+
+</table>-->

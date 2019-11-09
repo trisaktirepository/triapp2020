@@ -1,0 +1,217 @@
+<script>
+
+function cetak(){
+		$( "#dialog-khs" ).dialog('open');	
+}
+
+$(function() {
+
+	$( "#dialog-khs" ).dialog({
+	    autoOpen: false,
+	    width: 300,
+	    height: 150,
+	    modal: true,
+	    buttons: {          
+	        "Tutup": function() {
+	            $( this ).dialog( "close" );
+	        },
+	        "Cetak": function() {
+
+	        	if ($('#idSemesterStatus').val() != '') {
+	        		$("#formCetak").submit();
+		            $( this ).dialog( "close" );
+	        	} else {
+	        		  alert('Silahkan pilih Semester Studi');
+	        	}
+    	
+		        
+	        }
+	    }
+	});
+});
+
+</script>
+
+<?php if(!empty($this->all_date_publish)){ ?>
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+	<ul>
+		  <li>
+			<a href="#" onclick="cetak();">
+				<span class='print'></span>
+				Print KHS
+			</a>
+		</li>
+		</ul>
+	</div>
+</div>
+
+<br />
+
+<div style="width:100%;">
+
+<table width="100%" border="0" cellpadding="5" cellspacing="0" class="">
+	  
+		<tr>
+			<td width="20%">NIM/NAMA</td>
+			<td colspan="3">: <?php echo $this->student["registrationId"]; ?>&nbsp;&nbsp;&nbsp;<?php echo $this->student["appl_fname"].' '.$this->student["appl_mname"].' '.$this->student["appl_lname"];?> </td>
+	    </tr>
+		<tr>
+			<td>Program Studi </td>
+			<td colspan="3">: <?php echo $this->student["ArabicName"]; ?></td>
+	    </tr>
+		
+		<tr>
+			<td>Penasehat Akademik </td>
+			<td colspan="3">: <?php echo $this->academic_advisor; ?></td>
+	    </tr>
+	
+	</table>
+	
+<br><br>
+
+<?php 
+$today = date("d-m-Y"); 
+$barredDB = new App_Model_Record_DbTable_Barringrelease();
+foreach($this->semester as $semester){
+	if(isset($semester["publish_date"]) && $semester["publish_date"]!=''){
+	      	$barred = $barredDB->getBarringStudent($this->idstudreg,$semester['IdSemesterMain']);		
+	      	if(strtotime($semester["publish_date"]) <= strtotime($today)) {
+?>
+<fieldset>
+<legend>
+<h2><?php echo $semester["SemesterMainName"]; ?>&nbsp;&nbsp;&nbsp;<?php echo (isset($semester["blockname"])) ? '('.$semester["blockname"].')':''; ?></h2>
+</legend>
+<?php 
+if(count($barred)==0){
+?>
+<table width="80%">
+<tr>
+	<td width="20%">Total SKS </td><td  width="30%">: <?php echo $semester["sem_credithour"];?></td>
+	<td width="10%">IPS</td><td width="30%">: <?php echo $semester["gpa"];?></td>	
+</tr>
+<tr>
+	<td>Total SKS Kumulatif</td><td>: <?php echo $semester["cum_credithour"];?></td>	
+	<td>IPK</td><td>: <?php echo $semester["cgpa"];?></td>	
+</tr>
+</table>
+<br>
+<table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		<th width="5%"><?php echo $this->translate("No");?></th>
+		<th width="10%"><?php echo $this->translate("Kode");?></th>
+		<th width="35%"><?php echo $this->translate("Matakuliah");?></th>
+		<th width="8%"><?php echo $this->translate("SKS");?></th>	
+		<th width="8%"><?php echo $this->translate("Total");?></th>
+		<th width="8%"><?php echo $this->translate("Nilai");?></th>
+		<th width="8%"><?php echo $this->translate("Bobot");?></th>
+		<th width="8%"><?php echo $this->translate("Status");?></th>
+		<th width="10%"><?php echo $this->translate("Approval Status");?></th>
+	</tr>
+	<?php  
+	$total_credit_hour = 0;
+	$total_bobot=0;
+	foreach($semester["courses"] as $index=>$course){ 
+	$total_credit_hour = $total_credit_hour + $course["CreditHours"];
+	
+	if(isset($course["grade_point"])){
+		$bobot = $course["grade_point"]*$course["CreditHours"];
+		$total_bobot= abs($total_bobot) + abs($bobot);
+	}
+	?>
+	<tr>
+		<td><?php echo $index+1;?></td>
+		<td><?php echo $course["SubCode"];?></td>
+		<td><?php echo $course["BahasaIndonesia"];?></td>
+		<td align='center'><?php echo number_format($course["CreditHours"], 1, '.', '');?></td>		
+		<?php if ($course['publish']=='1') { ?>
+		<td align='center'><?php echo $course["final_course_mark"];?></td>
+		<td align='center'><?php 
+        $replace_grade = array('MG','IN','NR','W','F','FR');
+        if(in_array($course["exam_status"],$replace_grade))
+        {
+            echo $course["exam_status"];
+        }
+        else
+        {
+            echo $course["grade_name"];
+        }
+        ?></td>
+       
+		<td align='center'><?php if(isset($course["grade_point"])) { echo number_format($bobot, 2, '.', ''); }?></td>
+		
+        <td><?php 
+		if(isset($course["grade_status"]) && $course['publish']=='1'){
+				  if($course["grade_status"]=='Pass'){ 
+					echo $this->translate("Lulus");
+				  }elseif($course["grade_status"]=='Fail'){				  	
+				  	echo $this->translate("Tidak Lulus");
+				  }
+		};
+			?>
+		</td>
+		<td><?php echo (isset($course["mark_approveby"]) && $course["mark_approveby"]!=0) ? $this->translate("Approved"):$this->translate("Waiting for Approval");?></td>
+	 	<?php } else {?> 
+        <td colspan="5" align="center"><?php echo $this->translate('Mark is not publish yet')?></td><?php }?>
+        
+	</tr>
+	<?php } ?>
+	<tr>
+		<td colspan=3 align="right"><?php echo $this->translate("Total Credit Hour");?></td>
+		<td align='center'><?php echo $total_credit_hour;?></td>
+		<td colspan="2"  align="right"><?php echo $this->translate("Jumlah Bobot");?></td>
+		<td align='center'><?php echo number_format($total_bobot, 2, '.', ''); ?></td>
+		<td></td>
+		<td></td>		
+	</tr>
+	
+</table>
+<?php 
+}else{
+?>
+<table>
+<tr><td><font color="red"><?php echo $this->translate("KHS anda diblok ");?></font></td></tr>
+</table>
+<?php 
+}
+?>
+</fieldset>
+<br>
+<br>
+<?php }}} //end loop?>
+
+
+</div>
+
+
+<?php }else{ //end isset all publish date?>
+<div class="message notice"><?php echo $this->translate("KHS is currently not available");?>.</div>
+<?php }?>
+
+
+
+
+<div id="dialog-khs" title="Cetak Kartu Hasil Studi">
+<form name="formCetak" id="formCetak" method="post" action="<?php echo $this->url(array('module'=>'default','controller'=>'parent-portal','action'=>'cetak-khs'), 'default', true);?>">
+	<table>
+		<tr>
+			<td>Semester</td>
+			<td>: 
+				<select id="idSemesterStatus" name="idSemesterStatus">
+						<option value=""><?php echo $this->translate("Please Select"); ?></option>
+					<?php foreach($this->semester as $mysem){
+						$barred = $barredDB->getBarringStudent($this->idstudreg,$mysem['IdSemesterMain']);
+						if(isset($mysem["publish_date"]) && $mysem["publish_date"]!='' && (!$barred)){
+							if(strtotime($mysem["publish_date"]) <= strtotime($today) && count($barred)==0) {
+						?>
+						<option value="<?php echo $mysem["idstudentsemsterstatus"];?>"><?php echo $mysem["SemesterMainName"];?></option>
+					<?php  } } }  ?>
+				</select>
+			</td>
+		</tr>
+	</table>
+</form>
+</div>

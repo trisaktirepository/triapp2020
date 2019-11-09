@@ -1,0 +1,84 @@
+<script>
+$(document).ready(function(){
+
+	 $( "#appl_dob" ).datepicker({
+	     	dateFormat: "dd-mm-yy",
+	     	changeMonth: true,
+	     	numberOfMonths: 2,
+	     });
+   
+});
+
+$(window).load(function() {
+	if( $('#appl_marital_status').val() == 4 ){
+		$('#appl_no_of_child').removeAttr('disabled');
+	}else{
+		$('#appl_no_of_child').attr('disabled','disabled');
+		$('#appl_no_of_child').val("");
+	}
+});
+</script>
+
+<script type="text/javascript">
+	function changeOrigin(element){
+		if( $(element).val() == 0 ){
+			$('#country_origin').removeAttr('disabled');
+			$('#admission').hide();	
+		}else{
+			$('#country_origin').attr('disabled','disabled');
+			$('#country_origin').val("");	
+			$('#admission').show();		
+		}
+
+	}
+
+	function showdiv(element){
+		if( $(element).val() ==2 ){
+		 	$('#placement').show();
+		}else{
+			$('#placement').hide();
+		}
+	}
+
+	function enableChildren(element){
+		
+		if( $(element).val() == 4 ){
+			$('#appl_no_of_child').removeAttr('disabled');
+		}else{
+			$('#appl_no_of_child').attr('disabled','disabled');
+			$('#appl_no_of_child').val("");
+		}
+	}
+</script>
+
+<div class="breadcrum">
+	<ul class="tri-steps">
+		<li class="empty" ><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'register'),'default',true);?>"><?php echo $this->translate("Apply"); ?></a></div></li>
+		<li class="empty" ><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'index'),'default',true);?>"><?php echo $this->translate("Login"); ?></a></div></li>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'biodata'),'default',true);?>"><?php echo $this->translate("Biodata"); ?></a></div></li>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'contactinfo'),'default',true);?>"><?php echo $this->translate("Contact Info"); ?></a></div></li>
+		<li class="prevDone"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'programme'),'default',true);?>"><?php echo $this->translate("Programme"); ?></a></div></li>
+		<li class="current"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'parent'),'default',true);?>"><?php echo $this->translate("Parent"); ?></a></div></li>
+		<li class="last"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'uploaddocument'),'default',true);?>"><?php echo $this->translate("Upload Document"); ?></a></div></li>	
+	</ul>
+	<div class="clear"></div>
+</div>
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		
+	</div>
+</div>
+
+<?php echo $this->form; ?>

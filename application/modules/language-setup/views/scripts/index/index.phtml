@@ -1,0 +1,145 @@
+<script type="text/javascript">
+
+	$(function() {
+		// a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
+		$( "#dialog:ui-dialog" ).dialog( "destroy" );
+	
+		$( "#search-dialog" ).dialog({
+			autoOpen: false,
+			width: 350,
+			modal: true,
+			buttons: { 
+				"Search": function() {
+					 
+					$("#search_form").submit();
+					$(this).dialog("close"); 
+				},
+				"Close": function() { 
+					$(this).dialog("close"); 
+				} 
+			}
+		});
+	});
+
+
+	function del(title, id){
+		var id = $('input[name=index_id]:checked').val();
+
+		if(!id){
+			alert('Please select any index first');
+		}else{
+			if(confirm('Are you sure to delete this selected index?')){
+				window.location = "<?php echo $this->url(array('module'=>'language-setup','controller'=>'index', 'action'=>'delete')); ?>/id/"+id;
+			}
+		}
+		
+		
+	}
+	
+	function add(){		
+		window.location="<?php echo $this->url(array('module'=>'language-setup','controller'=>'index', 'action'=>'add'));?>";
+	}
+
+	function edit(){
+		var id = $('input[name=index_id]:checked').val();
+
+		if(!id){
+			alert('Please select any index first');
+		}else{
+			window.location="<?php echo $this->url(array('module'=>'language-setup','controller'=>'index', 'action'=>'edit'));?>/id/"+id;
+		}
+	}
+
+	function searchbox(){
+		$( "#search-dialog" ).dialog('open');
+		$("#search_box").val("");
+		$("#search_box").focus();
+		
+	}
+
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="javascript:add()">
+					<span class='add'></span>
+					Add
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:edit()">
+					<span class='edit'></span>
+					Edit
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:del()">
+					<span class='delete'></span>
+					Delete
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a id="search" href="#" onclick="javascript:searchbox()">
+					<span class='search'></span>
+					Search
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+
+<table class="table" width="100%" cellpadding="5" cellspacing="1">	
+	<tr>
+		<th width="25px">&nbsp;</th>
+		<th>English</th>
+		<th>Arabic</th>
+	</tr>
+	<?php 
+	$i=0;
+	foreach ($this->paginator as $data):
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<td width="25px">
+			<input type="radio" name="index_id" value="<?php echo $data['id']; ?>">
+		</td>
+		<td align="left"><?php echo $data['english']; ?></td>
+		<td><?php echo $data['arabic']; ?></td>
+	</tr>
+	<?php 
+	$i++;
+	endforeach 
+	?>
+	
+</table>
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>
+
+

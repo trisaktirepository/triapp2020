@@ -1,0 +1,13 @@
+<div id="vertmenu">
+	
+	<ul>  
+		<li><h1><?php echo $this->translate("New Application")?></h1></li>
+		<li><a href="<?php echo $this->url(array('module'=>'agent','controller'=>'index','action'=>'applicant-list'),'default',true) ?>"><?php echo $this->translate("applicant_list"); ?></a></li>
+	    <li><a href="<?php echo $this->url(array('module'=>'agent','controller'=>'index','action'=>'online'),'default',true) ?>"><?php echo $this->translate("online_entry"); ?></a></li>
+	    <!--
+	    <li><a href="<?php echo $this->url(array('module'=>'agent','controller'=>'index','action'=>'index'),'default',true) ?>"><?php echo $this->translate("manual_entry"); ?></a></li> 
+		<li><a href="<?php echo $this->url(array('module'=>'agent','controller'=>'batch-agent','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Batch Upload"); ?></a></li>
+		-->
+ </ul>
+    
+</div>

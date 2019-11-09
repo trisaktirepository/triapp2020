@@ -1,0 +1,106 @@
+<script type="text/javascript">
+	function del(){
+
+		var id = $('input[name=id]:checked').val();
+		
+		if(confirm('Are you sure to delete?')){
+			window.location = "<?php echo $this->url(array('module'=>'application','controller'=>'placement-test-type', 'action'=>'delete'),'default',true); ?>/id/"+id;
+		}
+	}
+	
+	function add(){
+		window.location="<?php echo $this->url(array('module'=>'application','controller'=>'placement-test-type', 'action'=>'add'),'default',true);?>";
+	}
+
+	function edit(){
+		var id = $('input[name=id]:checked').val();
+		window.location="<?php echo $this->url(array('module'=>'application','controller'=>'placement-test-type', 'action'=>'edit'),'default',true);?>/id/"+id;
+	}
+
+	function searchbox(){
+		$('#div_search').show();
+	}
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="javascript:add()">
+					<span class='add'></span>
+					Add
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:edit()">
+					<span class='edit'></span>
+					Edit
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:del()">
+					<span class='delete'></span>
+					Delete
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a id="search" href="#" onclick="javascript:searchbox()">
+					<span class='search'></span>
+					Search
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<div id="div_search" style="display:none;">
+	<fieldset>
+		<legend>Search</legend>
+		<form method="post">
+			<dl class="zend_form">
+				<?php echo $this->form->act_name; ?>
+				<dd id="buttons-element"><div class="buttons">
+					<input type="submit" value="Search" id="btn_search" name="Search">
+					<input type="button" onclick="$('#div_search').hide();" value="Cancel" id="cancel" name="cancel"></div></dd>
+			</dl>
+		</form>
+	</fieldset>
+</div>
+
+<div style="width:100%;">
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+<table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		<th width="2"></th>
+		<th>Type</th>
+	</tr>
+	
+	<?php 
+	$i=0;
+	foreach ($this->paginator as $entry): 
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<td> <input type="radio" name="id" value="<?php echo $entry['act_id']; ?>"></td>
+		<td><a href="<?php echo $this->url(array('module'=>'application','controller'=>'placement-test-type', 'action'=>'detail','id'=>$entry['act_id']),'default',true); ?>"><?php echo $entry['act_name']; ?></a></td>
+	</tr>
+	<?php 
+	$i++;
+	endforeach 
+	?>
+
+</table>
+</div>
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>

@@ -1,0 +1,127 @@
+<script type="text/javascript">
+function edit(id){
+		
+			window.location="<?php echo $this->url(array('module'=>'application','controller'=>'manual', 'action'=>'edit'),'default',true);?>/id/"+id;
+	}
+	
+	
+	</script>
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="javascript:edit(<?php echo $this->id?>)">
+					<span class='edit'></span>
+					Edit
+				</a>
+			</li>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'application','controller'=>'manual', 'action'=>'index'),'default',true);?>">
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+
+<div width="500px">
+	
+
+<p><h2>Personal Particulars</h2></p>
+	<table class="table3" width="700px" border="0" cellpadding="5" cellspacing="1">
+		<tr>
+			<th>NAME</th>
+			<td><?php echo $this->applicant['ARD_NAME']; ?></td>
+		</tr>
+		<tr>
+			<th>IC</th>
+			<td><?php echo $this->applicant['ARD_IC']; ?></td>
+		</tr>
+		<tr>
+			<th>GENDER</th>
+			<td><?php echo $this->applicant['ARD_SEX']=="F"?"Female":"Male"; ?></td>
+		</tr>
+			<tr>
+			<th>DOB</th>
+			<td><?php echo date('d F Y', strtotime($this->applicant['ARD_DOB'])); ?></td>
+		</tr>	
+		<tr>
+			<th width="150px">NATIONALITY</th>
+			<td><?php echo $this->applicant['ARD_CITIZEN']; ?></td>
+		</tr>
+	
+		<tr>
+			<th width="150px">ADDRESS 1</th>
+			<td><?php echo $this->applicant['ARD_ADDRESS1']; ?></td>
+			
+		</tr>
+		<tr>
+			<th>ADDRESS 2</th>
+			<td><?php echo $this->applicant['ARD_ADDRESS2']; ?></td>
+		</tr>
+		<tr>
+			<th>POSTCODE</th>
+			<td><?php echo $this->applicant['ARD_POSTCODE']; ?></td>
+		</tr>
+		<tr>
+			<th>STATE</th>
+			<td><?php echo $this->applicant['ARD_STATE']; ?></td>
+		</tr>
+		<tr>
+			<th>COUNTRY</th>
+			<td><?php echo $this->applicant['ARD_COUNTRY']; ?></td>
+		</tr>
+		<tr>
+			<th>EMAIL</th>
+			<td><?php echo $this->applicant['ARD_EMAIL']; ?></td>
+		</tr>	
+		
+		<tr>
+			<th width="150px">MOBILE NO.</th>
+			<td><?php echo $this->applicant['ARD_HPHONE']; ?></td>
+		</tr>
+	</table>
+</div>
+<br />
+<p><h2>Program Offered Details</h2></p>
+<div width="500px">
+	<table class="table3" width="700px" cellpadding="5" cellspacing="1">
+		<tr>
+			<th width="150px">Program Name</th>
+			<td><?php echo $this->applicant['main_name']; ?></td>
+		</tr>
+		<tr>
+			<th width="150px">Program Code</th>
+			<td><?php echo $this->applicant['program_code']; ?></td>
+		</tr>
+	</table>
+</div>
+<br />
+
+<div>
+	<input type="button" value="Back" onclick="javascript:window.location='<?php echo $this->url(array('module'=>'application','controller'=>'manual', 'action'=>'index'),'default',true);?>'" />
+</div>
+<br /><br />
+
+
+

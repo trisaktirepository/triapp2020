@@ -1,0 +1,39 @@
+<script type="text/javascript">
+$(document).ready(function() {
+
+	$('#hg010_hg001_country_id').change(function() {
+		var id = $('#hg010_hg001_country_id').val();
+	  	changeState(id)
+	});
+
+});
+
+function changeState(id){
+	$.ajax({ 
+		type: "POST",
+		url: "<?php echo $this->url(array('module'=>'setup','controller'=>'company','action'=>'ajax-get-state'),'default',true) ?>", 
+		data: "id=" +id,
+		context: document.body, 
+		success: function(data){
+			response = eval(data);
+			var stateList = document.getElementById('hg010_hg005_state_id');
+			stateList.options.length = 0;
+			stateList.options[0]=new Option('-- Select State --',0);
+			
+			for(var i=0; i<response.length; i++){
+				stateList.options[i+1]=new Option(response[i].hg005_desc,response[i].hg005_state_id);
+			}		
+    	}
+	});
+}
+</script>
+<div style="width:900px; margin:0 auto;">
+<div id="dark_grey">
+<fieldset><legend>&nbsp;<?php echo $this->title; ?>&nbsp;&nbsp;</legend>
+	<?php 
+		$this->form->setAction($this->url());
+		echo  $this->form;
+	?>	
+</fieldset>
+</div>
+</div>

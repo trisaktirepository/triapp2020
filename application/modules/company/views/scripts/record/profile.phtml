@@ -1,0 +1,102 @@
+<script type="text/javascript">
+	
+	function add(){
+		window.location="<?php echo $this->url(array('module'=>'company','controller'=>'record', 'action'=>'add-profile-step1'));?>";
+	}
+
+	function edit(){
+		var id = $('input[name=student_id]:checked').val();
+
+		if(!id){
+			alert('Please select any candidate first');
+		}else{
+			window.location="<?php echo $this->url(array('module'=>'company','controller'=>'record', 'action'=>'edit-profile'),'default',true);?>/id/"+id;
+		}
+	}
+</script>
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="javascript:add()">
+					<span class='add'></span>
+					Add
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:edit()">
+					<span class='edit'></span>
+					Edit
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="#" onclick="javascript:search()">
+					<span class='search'></span>
+					Search
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+<table class="table" width="100%" cellpadding="5" cellspacing="2">
+	<tr>
+		<th width="25px">&nbsp;</th>
+		<th>Full Name</th>
+		<th width="90px">IC</th>
+		<th width="100px">Username</th>
+		<th width="150px">Email</th>
+		<th width="150px">Takaful Operator / Company</th>
+		<th width="110px">Date Created</th>
+	</tr>
+	<?php
+		if(isset($this->paginator)){
+
+		$i=0;
+		foreach ($this->paginator as $user): 
+	?>
+		<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+			<td>
+				<input type="radio" name="student_id" value="<?php echo $user['ID']; ?>">
+			</td>
+			<td>
+				<a href="<?php echo $this->url(array('module'=>'company','controller'=>'record', 'action'=>'view', 'id'=>$user['ID']),'default',true);?>"><?php echo $user['ARD_NAME']; ?></a>
+			</td>
+			<td><?php echo $user['ARD_IC']; ?></td>
+			<td><?php echo $user['username']; ?></td>
+			<td><?php echo $user['ARD_EMAIL']; ?></td>
+			<td><?php echo $user['company_short_name']; ?></td>
+			<td align="center"><?php echo date('d/m/Y  g:ia', strtotime($user['ARD_DATE_APP'])); ?></td>
+		</tr>		
+	<?php 
+		$i++;
+		endforeach;
+	 
+		}
+	?>
+</table>
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>

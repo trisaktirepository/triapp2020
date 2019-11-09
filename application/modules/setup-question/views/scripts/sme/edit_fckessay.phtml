@@ -1,0 +1,51 @@
+<!--<table width="95%" border="0" align="center" cellpadding="1" cellspacing="1" id="mtable">
+        <tr> 
+          <th height="30" colspan="2"  ><strong>Question & Answer</strong></th>         
+        </tr>
+         <textarea  name="fquestion1" cols="50" rows="5" class="required"></textarea>
+        <? $i=1; foreach ($this->question as $question) { ?>
+        <input type="hidden" name="id<?=$i?>" value="<?php echo $question["id"];?>">
+        <tr> 
+          <td height="30" colspan="2" bgcolor="#DFDFDF"><strong>Language <?=$i;?>  </strong></td>
+          </tr>        
+        <tr bgcolor="#D7EBFF"> 
+         <td width="10%">Question</td> 
+          <td><textarea  name="fquestion<?=$i?>" cols="50" rows="5" class="required"><?php echo $question["question"]?> </textarea>   </td>            
+        </tr>
+         <tr> 
+          <td width="10%">Answer</td>          
+          <td> <textarea name="fanswer<?=$i?>" cols="50" rows="5"><?php echo $question["answer"]?></textarea> </td>    
+        </tr>
+        <? $i++;} ?>
+    
+       
+      </table>-->
+		
+
+
+	
+      
+      
+      <table width="95%" border="0" align="center" cellpadding="1" cellspacing="1" id="mtable">
+        <tr> 
+          <th height="30" colspan="2"  ><strong>Question & Answer</strong></th>         
+        </tr>
+        
+        <? $i=1; foreach ($this->question as $question) { ?>
+        <input type="hidden" name="id<?=$i?>" value="<?php echo $question["id"];?>">
+        <tr> 
+          <td height="30" colspan="2" bgcolor="#DFDFDF"><strong>Language <?=$i;?>  </strong></td>
+          </tr>        
+        <tr bgcolor="#D7EBFF"> 
+         <td width="10%">Question</td> 
+          <td><textarea  name="fquestion<?=$i?>" cols="50" rows="5" class="required"><?php echo stripslashes($question["question"])?> </textarea>   </td>            
+        </tr>
+         <tr bgcolor="#D7EBFF"> 
+          <td width="10%">Answer</td>          
+          <td> <textarea name="fanswer<?=$i?>" cols="50" rows="5"><?php echo $question["answer"]?></textarea> </td>    
+        </tr>
+        <? $i++;} ?>
+    
+       
+      </table>
+

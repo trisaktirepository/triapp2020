@@ -1,0 +1,199 @@
+<script type="text/javascript">
+<!--
+
+function edit(){
+	var trans_id = $('input[name=at_trans_id]:checked').val();
+
+	if(!trans_id){
+		alert('<?php echo $this->translate('Please select any applicant first');?>');
+	}else{
+		window.location="<?php echo $this->url(array('module'=>'agent','controller'=>'index', 'action'=>'continue'),'default',true);?>/id/"+trans_id;
+	}
+}
+
+function getPeriod(element){
+	var intake_id = $(element).val();
+	
+	$.ajax({
+		url: "<?php echo $this->url(array('module'=>'agent','controller'=>'index', 'action'=>'ajax-get-period'),'default',true);?>",
+		data: {'intake_id':intake_id},
+		type: 'POST',
+		dataType: 'json'	
+	}).done(function ( data ) {
+		
+		$('#period_id').empty().append('<option value=""> <?php echo $this->translate('please_select'); ?> </option>');
+	
+		$.each(data, function(index) {
+			$('#period_id').append('<option value="'+data[index].ap_id+'"> '+data[index].ap_desc+' </option>');
+		});
+	});
+}
+
+//-->
+</script>
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+		
+		   <li>
+				<a href="#" onclick="javascript:edit()">
+					<span class='edit'></span>
+					Edit
+				</a>
+			</li>
+		  
+			<li class="divider"></li>
+			
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+
+
+<div style="width:100%;">
+
+<?php 
+echo $this->form;
+?>
+<br>
+
+<table  width="100%" cellpadding="5" cellspacing="2" border="0">
+<tr valign="middle">
+	<td width="50%" align="left"><?php echo $this->translate("Total").' : '.$this->paginator->getTotalItemCount().' '.$this->translate("data(s) found"); ?>.</td>
+	<td width="50%" align="right"><?php echo $this->paginationControl($this->paginator,'Sliding','pagination.phtml',$this->searchParams); ?></td>
+</tr>
+</table>
+
+<table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+	<tr>
+		<th width="25px">&nbsp;</th>	
+		<th><?php echo $this->translate("agent_date_enter");?></th>	
+		<th><?php echo $this->translate("intake");?></th>	
+		<th><?php echo $this->translate("applicant_name");?></th>
+		<th><?php echo $this->translate("applicantID");?></th>
+		<th><?php echo $this->translate("admission_type");?></th>
+		<th><?php echo $this->translate("programme");?></th>
+		<th><?php echo $this->translate("date_applied");?></th>
+		<th><?php echo $this->translate("status");?></th>
+		<th><?php echo $this->translate("action");?></th>
+	
+	</tr>
+	
+	<?php 
+	$i=0;
+	foreach ($this->paginator as $entry): 
+		
+	$programDB =  new App_Model_Application_DbTable_ApplicantProgram();
+	$program_list = $programDB->getApplicantProgramByID($entry['at_trans_id']);
+	
+	if($entry['at_status']!='APPLY' || $this->curintake!=$entry["at_intake"]) {
+		$disabled = "disabled";
+	}else{
+		$disabled="";
+	}
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<td><?php //echo $entry['at_trans_id']; ?>
+			<input type="radio" name="at_trans_id" value="<?php echo $entry['at_trans_id']; ?>" <?php echo $disabled;?>>
+		</td>		
+		<td><?php echo date('d-m-Y',strtotime($entry['at_create_date'])); ?></td>
+		<td><?php echo $entry['IntakeDefaultLanguage']; ?></td>
+		<td>
+			<?php echo $entry['appl_fname']." ".$entry['appl_mname']." ".$entry['appl_lname']; ?>
+			
+			<?php 
+				if( ($entry['at_status']=='APPLY' || $entry['at_status']=='CLOSE' || $entry['at_status']=='PROCESS') ){
+			?>
+			<br />
+			<div style="font-size: 10px; margin: 5px 0 0 0; padding: 2px; background: #F0FFFF;">
+			<b>Usr</b>: <?php echo $entry['appl_email'];?><br />
+			<b>Pwd</b>: <?php echo $entry['appl_password'];?>
+			</div>
+			<?php 
+				}
+			?>
+		</td>
+		<td><?php echo $entry['at_pes_id']; ?></td>
+		<td><?php if($entry['at_appl_type']==1) echo $this->translate("Placement Test"); else  echo  $this->translate("high_school_certificate"); ?></td>
+		<td>
+		<?php		
+		if($program_list){
+		
+			echo '<ul type="1">';
+			foreach($program_list as $p){
+				echo '<li>'.$p["program_name_indonesia"].'</li>';
+			}
+			echo '</ul>';
+		}
+		?>
+		</td>
+		<td><?php if(isset($entry['at_submit_date'])) echo date('d-m-Y',strtotime($entry['at_submit_date'])); ?></td>
+		<td><?php 
+
+		if($entry['at_status']=='APPLY')   echo $this->translate("incomplete_app");
+		if($entry['at_status']=='CLOSE')   echo $this->translate("complete_app");
+		if($entry['at_status']=='PROCESS') echo $this->translate("process_app");
+		if($entry['at_status']=='OFFER') echo $this->translate("offer");
+		if($entry['at_status']=='REJECT') echo $this->translate("reject");
+		if($entry['at_status']=='REGISTERED') echo $this->translate("register");
+		?></td>
+		
+		<td align="center">
+		
+		<?php 
+		
+		$url=null;
+		
+		if($entry['entry_type']==1){ //online
+			
+			if($entry['at_appl_type']==1) { //usm
+				
+				if(($entry['at_status']!='APPLY') && ($entry['at_status']!='CLOSE')){	
+					$url = $this->url(array('module'=>'agent','controller'=>'index', 'action'=>'viewkartu','id'=>$entry['at_trans_id']),'default',true);
+				
+				}else if($entry['at_status']=='CLOSE'){
+					$url = $this->url(array('module'=>'agent','controller'=>'index', 'action'=>'verification','id'=>$entry['at_trans_id']),'default',true);
+				}
+				
+			}//end usm
+			
+			
+			if(($entry['at_appl_type']==2) && ($entry['at_status']!='APPLY')){	//PSSB
+				$url = $this->url(array('module'=>'agent','controller'=>'index', 'action'=>'viewletter','id'=>$entry['at_trans_id']),'default',true);
+			}//end pssb
+		}
+		
+		
+		
+		if($entry['entry_type']==2){ //manual
+			
+			if(($entry['at_appl_type']==1) && ($entry['at_status']!='APPLY')){	//usm
+				$url =  $this->url(array('module'=>'agent','controller'=>'index', 'action'=>'viewkartu','id'=>$entry['at_trans_id']),'default',true);
+			}
+			
+			if(($entry['at_appl_type']==2) && ($entry['at_status']!='APPLY')){	//PSSB
+				$url = $this->url(array('module'=>'agent','controller'=>'index', 'action'=>'viewletter','id'=>$entry['at_trans_id']),'default',true);
+			}
+		}
+		
+		?>
+		
+		<?php if($url){?>
+		<a href="<?php echo $url; ?>">[View]</a>
+		<?php }?>
+		
+		</td>
+	</tr>
+	<?php 
+	$i++;
+	endforeach 
+	?>
+</table>

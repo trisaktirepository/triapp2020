@@ -1,0 +1,133 @@
+<script type="text/javascript">
+$(function() {
+	$( "#search-dialog" ).dialog({ 
+		autoOpen: false,
+		width: 400,
+		modal: true,
+		buttons: { 
+			"Search": function() {
+				 
+				$("#course_form").submit();
+				$(this).dialog("close"); 
+			},
+			"Close": function() { 
+				$(this).dialog("close"); 
+			} 
+		} 
+	});
+	
+});
+
+function searchbox(){
+	$( "#search-dialog" ).dialog('open');
+}
+
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a id="search" href="#" onclick="javascript:searchbox()">
+					<span class='search'></span>
+					Search
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+
+<div style="width:100%;">
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+<form method="POST" action="">
+<div style="width:100%;" align="right">
+<select name="selProgram" id="selProgram" onChange="form.submit()">
+<option value="0">--Select Faculty--</option>
+<?php foreach ($this->faculty as $fac):
+
+if ($this->programSelected == $fac['id']) {
+	$selected = "selected";
+}else {
+	$selected = "";
+}
+
+?>
+<option value="<?php echo $fac['id']?>" <?php echo $selected;?>><?php echo $fac['name']?></option>
+<?php endforeach;?>
+</select>
+</div>
+<br>
+<table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		<th>Programme</th>
+		<th width="200px">Code</th>
+		<th width="100px">Course Status</th>
+	</tr>
+	
+	<?php 
+	$i=0;
+	foreach ($this->paginator as $entry): 
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<td><a href="<?php echo $this->url(array('module'=>'anr-setup','controller'=>'program-requirement','action'=>'view','id'=>$entry['id']));?>"><?php echo $entry['program_name']; ?></a></td>           
+		<td align="center"><?php echo $entry['code'];?></td>
+		<td align="center">
+		<?php
+		$programCourseDB = new App_Model_Record_DbTable_ProgramCourse();
+    	$status = 0;
+    	if($programCourseDB->getProgramCourse($entry['id'])!=null){
+    		$status = 1;
+    	}
+    	if ($status == 1) {
+    		echo "<a href=".$this->url(array('module'=>'anr-setup','controller'=>'academic-landscape','action'=>'view','program-id'=>$entry['id']))."><img src='/images/icon/tick.png' border='0'></a>"; 
+    	}else {
+    		echo "<a href=".$this->url(array('module'=>'anr-setup','controller'=>'academic-landscape','action'=>'view','program-id'=>$entry['id']))."><img src='/images/icon/off.png' border='0'></a>";
+    	}
+		?></td>
+	</tr>
+	<?php
+	$i++;
+	endforeach 
+	?>
+</table>
+</form>
+</div>
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>
+* Click on Programme Name to set-up programme requirement <br>
+<div id="search-dialog" title="Search Program">
+	<form name="course_form" id="course_form" action="" method="post">
+		<table class="table5" width="100%">
+			<tr>
+				<td width="100px">
+					Program Name
+				</td>
+				<td width="5px">:</td>
+				<td>
+					<input type="text" name="name" value="<?php echo $this->search_name; ?>" style="width:250px" />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					Program Code
+				</td>
+				<td width="5px">:</td>
+				<td>
+					<input type="text" name="code" value="<?php echo $this->search_code; ?>" style="width:250px" />
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>

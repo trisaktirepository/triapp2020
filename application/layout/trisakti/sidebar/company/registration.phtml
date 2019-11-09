@@ -1,0 +1,15 @@
+<?php
+/*
+ *  @author Alif
+ *  @created Apr 27, 2012
+ */
+?>
+<div id="vertmenu">
+	<ul>  
+		<li><h1>Application</h1>
+		<li><a href="<?php echo $this->url(array('module'=>'company','controller'=>'application','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Application List"); ?></a></li>
+	    <!--<li><a href="<?php echo $this->url(array('module'=>'company','controller'=>'application','action'=>'batch-application'),'default',true) ?>"><?php echo $this->translate("Batch Application List"); ?></a></li>-->
+	    <li><a href="<?php echo $this->url(array('module'=>'company','controller'=>'application','action'=>'add-batch-candidate-step1'),'default',true) ?>"><?php echo $this->translate("New Application <br />(by candidate)"); ?></a></li>
+	    <!--<li><a href="<?php echo $this->url(array('module'=>'company','controller'=>'application','action'=>'add-batch-course-step1'),'default',true) ?>"><?php echo $this->translate("Add Batch Application <br />(by course)"); ?></a></li>-->
+	</ul>
+</div>

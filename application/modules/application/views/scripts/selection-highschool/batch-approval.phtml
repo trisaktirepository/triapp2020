@@ -1,0 +1,227 @@
+<script type="text/javascript">
+	$(function() {
+		// a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
+		$( "#dialog:ui-dialog" ).dialog( "destroy" );
+	
+		$( "#dialog-info" ).dialog({
+			modal: true,
+			autoOpen: false,
+			width: 600,
+			buttons: {
+				"Save": function() { 
+					dialog_nomor = $("#dialog_nomor").val(); 
+					dialog_decree_date = $("#dialog_decree_date").val(); 
+
+					//alert(dialog_nomor+'--'+dialog_decree_date);
+					$("#nomor").val(dialog_nomor);
+					$("#decree_date").val(dialog_decree_date); 
+					
+					//$(this).dialog("close"); 
+					$("#myform").submit(); 
+				}, 
+				"Cancel": function() { 
+					$(this).dialog("close"); 
+				}
+				
+			}
+		});
+
+
+		$("#dialog_decree_date").datepicker({
+			"dateFormat":"yy-mm-dd",
+			"changeMonth":"true"		
+			
+		});
+
+		
+	});
+
+	
+	function save(){
+		$( "#dialog-info" ).dialog('open');
+		
+	}
+
+	
+	function printPreview(){
+		
+		url = "<?php echo $this->url(array('module'=>'application','controller'=>'selection-highschool','action'=>'print-batch-approval','faculty_id'=>$this->faculty_id,'program_code'=>$this->program_code,'academic_year'=>$this->ayear,'period'=>$this->period),'default',true);?>";
+		window.open (url, "mywindow","location=1,status=1,scrollbars=1, width=500,height=500");
+	}
+
+	function getProgramme(element,targetElement){
+		var faculty_id = $(element).val();
+		
+		$.ajax({
+			url: "<?php echo $this->url(array('module'=>'application','controller'=>'selection-highschool', 'action'=>'ajax-get-program'),'default',true);?>",
+			data: {'faculty_id':$(element).val()},
+			type: 'POST',
+			dataType: 'json'	
+		}).done(function ( data ) {
+
+			
+			$(targetElement).empty().append('<option value=""> <?php echo $this->translate("All"); ?> </option>');
+		
+			$.each(data, function(index) {
+				$(targetElement).append('<option value="'+data[index].ProgramCode+'"> '+data[index].ProgramName+' </option>');
+			});
+		});
+	}
+		
+	
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>		
+			<?php if(isset($this->paginator)){?>
+			<li>
+			
+				<a onclick="printPreview();" href="javascript:void(0);" >
+					<span class='print'></span>
+					<?php echo $this->translate("print")?>
+				</a>
+			</li>
+			
+			
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'application','controller'=>'selection-highschool','action'=>'download-batch-approval','faculty_id'=>$this->faculty_id,'program_code'=>$this->program_code,'academic_year'=>$this->ayear,'period'=>$this->period),'default',true);?>" >
+					<span class='dcsv'></span>
+					<?php echo $this->translate("download")?>
+				</a>
+			</li>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'application','controller'=>'selection-highschool','action'=>'upload-batch-approval','faculty_id'=>$this->faculty_id,'program_code'=>$this->program_code,'academic_year'=>$this->ayear,'period'=>$this->period),'default',true);?>" >
+					<span class='upload'></span>
+					<?php echo $this->translate("upload")?>
+				</a>
+			</li>
+			<li>
+				<a onclick="save();">
+					<span class='save'></span>
+					<?php echo $this->translate("save")?>
+				</a>
+			</li>
+			<?php }?>
+			<!--<li>
+				<a href="<?php echo $this->url(array('module'=>'application','controller'=>'selection-highschool', 'action'=>'index'),'default',true);?>" >
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			--><li class="divider"></li>
+			<li>
+				<a href="#" onclick="javascript:searchbox()">
+					<span class='search'></span>
+					<?php echo $this->translate("search")?>
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					<?php echo $this->translate("info")?>
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+
+
+<div style="width:100%;">
+<?php echo $this->form;?>
+
+<br>
+<form name="myform" id="myform" method="post" action="<?php echo $this->url(array('module'=>'application','controller'=>'selection-highschool','action'=>'save-approval'),'default',true);?>">
+
+<input type="hidden" name="nomor" id="nomor"  value="">
+<input type="hidden" name="decree_date" id="decree_date" value="">
+
+<table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+	<tr>
+		<th><?php echo $this->translate("no");?></th>	
+		<th><?php echo $this->translate("applicantID");?></th>
+		<th><?php echo $this->translate("name");?></th>	
+		<th><?php echo $this->translate("program");?></th>
+		<th><?php echo $this->translate("mark");?></th>
+		<th><?php echo $this->translate("dean_rank");?></th>
+		<th><?php echo $this->translate("dean_status");?></th>
+		<th><?php echo $this->translate("rector_rank");?></th>
+		<th><?php echo $this->translate("rector_status");?></th>		
+		<th><?php echo $this->translate("approval")?></th>
+		
+	</tr>
+	
+	<?php 
+	if(isset($this->paginator)){
+		$no=1;
+	foreach ($this->paginator as $entry){
+		
+	
+	//get dean rating
+	$assessmentDB=new App_Model_Application_DbTable_ApplicantAssessment();
+	$rate = $assessmentDB->getData($entry["transaction_id"]);
+	
+	//get education average mark
+	$educationDB = new App_Model_Application_DbTable_ApplicantEducation();
+	//$education = $educationDB->getEducationDetail($entry["appl_id"]);
+	$everage_mark = $educationDB->getAverageMark($entry["appl_id"]);
+	?>
+	<tr>
+		<td><?php echo $no;?></td>
+		<td><?php echo $entry["applicantID"]?></td>
+		<td><?php echo $entry["appl_fname"].' '.$entry["appl_mname"].' '.$entry["appl_lname"]?></td>				
+		<td><?php echo $entry["program_name_indonesia"]?></td>	
+		<td align="center"><?php echo round($everage_mark,2);?></td>
+		<td align="center"><?php echo $rate["aar_rating_dean"];?></td>
+		<td align="center">
+		<?php 
+			if($rate["aar_dean_status"]==1){ echo $this->translate("accept"); }
+			if($rate["aar_dean_status"]==2){ echo $this->translate("reject"); }
+		?></td>
+		<td align="center"><?php echo $rate["aar_rating_rector"];?></td>
+		<td align="center">
+		<?php
+			if($rate["aar_rector_status"]==1){ echo $this->translate("accept"); }
+			if($rate["aar_rector_status"]==2){ echo $this->translate("reject"); }
+		?></td>		
+		<td align="center">
+		    <input type="hidden" name="transaction_id[]" value="<?php echo $entry["transaction_id"]?>"></input>
+			<select name="approval[]">
+				<option value="OFFER"><?php echo $this->translate('OFFER');?></option>
+				<option value="REJECT"><?php echo $this->translate('REJECT');?></option>				
+			</select></td>
+	</tr>
+	<?php $no++;}//end paginator 
+	}?>
+		
+</table>
+</form>
+</div>
+
+
+<div id="dialog-info" title="Details Info">
+	<table width="100%" class="table5">
+		<tr>
+			<td>
+				<?php echo $this->translate("nomor")?>
+			</td>
+			<td width="5px">:</td>
+			<td>
+				<input type="text" name="dialog_nomor" id="dialog_nomor" style="width:250px" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<?php echo $this->translate("date")?>
+			</td>
+			<td width="5px">:</td>
+			<td>
+				<input type="text" name="dialog_decree_date" id="dialog_decree_date" style="width:250px" readonly />
+			</td>
+		</tr>
+		
+	</table>
+
+</div>

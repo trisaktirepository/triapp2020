@@ -1,0 +1,584 @@
+<?php 
+
+if($this->intake==""){
+	?>
+	<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+	<?php 
+}else{
+?>
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+		
+		   <li>
+				<a href="#" onclick="javascript:save()">
+					<span class='save'></span>
+					Save
+				</a>
+			</li>
+		   <li>
+				<a href="#" onclick="javascript:addRowToTable()">
+					<span class='addRow'></span>
+					Add Row
+				</a>
+			</li>
+			
+			<li>
+				<a href="#" onclick="javascript:removeRowFromTable()">
+					<span class='removeRow'></span>
+					Remove Row
+				</a>
+			</li>
+			<li class="divider"></li>
+			
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<div style="width:100%;">
+
+
+<script type="text/javascript">
+
+$(function() {
+		// a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
+		$( "#dialog:ui-dialog" ).dialog( "destroy" );
+	
+		$( "#dialog-info" ).dialog({
+			modal: true,
+			autoOpen: false,
+			width: 600,
+			buttons: {		
+			    "Select": function() { 	
+			     			     
+			     sel_iteration = $('#appl_iteration').val();
+			     appl_id       = $('#appl_id').val();
+			     appl_fname    = $('#appl_fname').text();
+			     appl_mname    = $('#appl_mname').text();
+			     appl_lname    = $('#appl_lname').text();
+			       
+			     $('#sel_profile'+sel_iteration).val(appl_id);
+			     $('#firstname'+sel_iteration).val(appl_fname);
+			     $('#middlename'+sel_iteration).val(appl_mname);
+			     $('#lastname'+sel_iteration).val(appl_lname);
+			     
+			     $(this).dialog("close"); 
+			     
+			    },	
+				"Cancel": function() { 
+				
+				    sel_iteration = $('#appl_iteration').val();
+				    $("#email"+sel_iteration).val('');
+					$(this).dialog("close"); 
+				}
+				
+			}
+		});
+
+
+	
+		
+	});
+
+function checkapplid(element){
+
+	//ini kene confirm pasala applicant ID = dgn admission type
+	  
+	var at_pes_id = $(element).val();
+	var at_admission_id = $("#at_admission_id").val();
+
+	if(at_pes_id == ''){
+
+		alert("<?php echo $this->translate("Maaf, No perserta wajib diisi dan silahkan mengisi no perserta yang unik.")?>");
+		
+	}else{
+	
+		$.ajax({
+			url: "<?php echo $this->url(array('module'=>'agent','controller'=>'index', 'action'=>'check-applicantid'),'default',true);?>",
+			data: {'at_pes_id':$(element).val()},
+			type: 'POST',
+			dataType: "json",	
+		}).done(function ( data ) {
+			
+			if(data.success==false){
+
+				if(data.validity==false){
+					alert("<?php echo $this->translate("Maaf. No peserta ini tidak sah.")?>");
+					$(element).val('');
+				}else
+				if(data.available==false){
+					alert("<?php echo $this->translate("Maaf. No peserta ini telah digunakan. Silahkan mengisi no perserta yang unik.")?>");
+					$(element).val('');
+				}else	
+				if(data.unique==false){
+					alert("<?php echo $this->translate("Maaf. Nomor peserta ini telah digunakan. Silahkan mengisi no perserta yang unik.")?>");
+					$(element).val('');	
+				}else{
+					alert("<?php echo $this->translate("Maaf. Nomor peserta ini tidak dapat digunakan.")?>");
+					$(element).val('');
+				}
+			}
+		});
+	}
+
+}
+
+
+function checkapplid2(element){
+	
+	var at_pes_id = $(element).val();
+	
+	var iteration = $('#iteration').val();
+
+	for(var h=1; h < iteration; h++){
+		
+		var enter_at_pes_id = $('#at_pes_id'+h).val();
+		
+		if(enter_at_pes_id==at_pes_id){
+			alert("<?php echo $this->translate("Maaf. No peserta ini telah digunakan. Silahkan mengisi no perserta yang unik.")?>");
+			$(element).val('');
+		}
+
+	}
+	
+}
+
+
+function checkEmail(element,iteration){
+	  
+		var email = $(element).val();
+
+		if(email == ''){
+
+			alert("<?php echo $this->translate("Maaf, Email wajib diisi dan silahkan mengisi email yang unik.")?>");
+			
+			$('#sel_profile'+iteration).val('');
+			$('#firstname'+iteration).val('');
+			$('#middlename'+iteration).val('');
+			$('#lastname'+iteration).val('');	
+			
+			
+		}else{
+			
+				$.ajax({
+					url: "<?php echo $this->url(array('module'=>'agent','controller'=>'index', 'action'=>'get-email'),'default',true);?>",
+					data: {'email':$(element).val()},
+					type: 'POST',
+					dataType: "json",	
+				}).done(function ( data ) {
+
+					
+					
+					if (data!=''){
+						$( "#dialog-info" ).dialog('open');
+									
+						$("#appl_id").val(data[0].appl_id);	
+						$("#appl_fname").text(data[0].appl_fname);
+						$('#appl_mname').text(data[0].appl_mname);
+						$('#appl_lname').text(data[0].appl_lname);
+						$("#appl_dob").text(data[0].appl_dob);
+						$("#appl_iteration").val(iteration);
+					}
+						
+				});
+	}
+	
+}
+
+function checkEmail2(element){
+	
+	var email = $(element).val();
+	
+	var iteration = $('#iteration').val();
+
+	for(var h=1; h < iteration; h++){
+		
+		var enter_email = $('#email'+h).val();
+		
+		if(enter_email==email){
+			alert("<?php echo $this->translate("Maaf. Email ini telah digunakan. Silahkan mengisi email yang unik.")?>");
+			$(element).val('');
+		}
+
+	}
+	
+}
+
+
+function validateColumn(){
+	
+	var iteration = $('#iteration').val();
+
+	
+	for(var h=1; h <= iteration; h++){
+
+    	var at_appl_type = $('#at_appl_type'+h).val();
+		var at_pes_id = $('#at_pes_id'+h).val();
+		var firstname = $('#firstname'+h).val();
+		var email = $('#email'+h).val();
+	
+		
+		if((at_appl_type=='') || (at_pes_id =='') || (firstname=='') || (email=='')){			
+			alert("<?php echo $this->translate("Maaf. Jenis Pendaftaran,No Peserta,Nama pertama peserta dan email wajib diisi.")?>");
+			return false;
+		}else if(h==iteration){
+			return true;
+		}
+	}
+}
+
+
+function addRowToTable()
+{
+	
+ 
+ 	
+  var tbl = document.getElementById('mtable');
+  var lastRow = tbl.rows.length; 
+  // if there's no header row in the table, then iteration = lastRow + 1
+  var iteration = lastRow;
+  var row = tbl.insertRow(lastRow);  
+
+  iteration = lastRow;   
+  document.getElementById('iteration').value = iteration
+   
+   
+  // left cell
+  var cellLeft = row.insertCell(0);
+  var textNode = document.createTextNode(iteration);
+  var sel_profile = document.createElement('input');
+  sel_profile.type = 'hidden';
+  sel_profile.name = 'sel_profile' + iteration;
+  sel_profile.id   = 'sel_profile'+ iteration;  
+  cellLeft.appendChild(sel_profile);
+  cellLeft.appendChild(textNode);
+
+	//admission
+  var admission = row.insertCell(1);  
+  var adm = document.createElement("select");
+  adm.name = 'at_appl_type' + iteration;
+  adm.id = 'at_appl_type'+ iteration;
+  adm.onchange=function () { }
+  admission.appendChild(adm);
+ 
+ 
+  $("<option>").attr("value", 1).text("<?php echo $this->translate("USM"); ?>").appendTo(adm);
+  $("<option>").attr("value", 2).text("<?php echo $this->translate("PSSB");?>").appendTo(adm);
+  
+
+  // applicantID
+  var applicantID = row.insertCell(2);
+  var applid = document.createElement('input');
+  applid.type = 'text';
+  applid.name = 'at_pes_id' + iteration;
+  applid.id = 'at_pes_id'+ iteration;  
+  applid.size = 10;
+  applid.maxLength = 9;
+  applid.onblur=function () { checkapplid(this); checkapplid2(this);}
+  applicantID.appendChild(applid);
+  
+  
+  // firstname
+  var firstname = row.insertCell(3);
+  var cn = document.createElement('input');
+  cn.type = 'text';
+  cn.name = 'firstname' + iteration;
+  cn.id = 'firstname'+ iteration;  
+  cn.size = 20;
+  firstname.appendChild(cn);
+  
+  
+  // middlename
+  var middlename = row.insertCell(4);
+  var ct = document.createElement('input');
+  ct.type = 'text';
+  ct.name = 'middlename' + iteration;
+  ct.id = 'middlename'+ iteration;
+  ct.size = 20;
+  middlename.appendChild(ct);
+
+  //lastname
+  var lastname = row.insertCell(5);
+  var ln = document.createElement('input');
+  ln.type = 'text';
+  ln.name = 'lastname' + iteration;
+  ln.id = 'lastname'+ iteration;
+  ln.size = 20;
+  lastname.appendChild(ln);
+
+  //email
+  var email = row.insertCell(6);
+  var e = document.createElement('input');
+  e.type = 'text';
+  e.name = 'email' + iteration;
+  e.id = 'email'+ iteration;  
+  e.size = 20;
+  e.onblur=function () { checkEmail(this,iteration);}
+  
+  email.appendChild(e);
+
+  //dob
+  var dob = row.insertCell(7);
+  var d = document.createElement('select');
+  d.name = 'day' + iteration;
+  d.id = 'day'+ iteration;
+  dob.appendChild(d);
+  
+	for(var h=1; h<=31; h++){
+   
+	  var option = document.createElement('option');
+	  option.value = h;
+	  option.appendChild(document.createTextNode(h));
+	  d.appendChild(option);
+  	} 
+
+  var m = document.createElement('select');
+  m.name = 'month' + iteration;
+  m.id = 'month'+ iteration;
+  dob.appendChild(m);
+
+  <?php  setlocale (LC_ALL, $this->locale); ?>
+  
+  var month=new Array();
+  month[1]="<?php echo strftime('%B', mktime(null, null, null, 1, 01))?>";
+  month[2]="<?php echo strftime('%B', mktime(null, null, null, 2, 01))?>";
+  month[3]="<?php echo strftime('%B', mktime(null, null, null, 3, 01))?>";
+  month[4]="<?php echo strftime('%B', mktime(null, null, null, 4, 01))?>";
+  month[5]="<?php echo strftime('%B', mktime(null, null, null, 5, 01))?>";
+  month[6]="<?php echo strftime('%B', mktime(null, null, null, 6, 01))?>";
+  month[7]="<?php echo strftime('%B', mktime(null, null, null, 7, 01))?>";
+  month[8]="<?php echo strftime('%B', mktime(null, null, null, 8, 01))?>";
+  month[9]="<?php echo strftime('%B', mktime(null, null, null, 9, 01))?>";
+  month[10]="<?php echo strftime('%B', mktime(null, null, null, 10, 01))?>";
+  month[11]="<?php echo strftime('%B', mktime(null, null, null, 11, 01))?>";
+  month[12]="<?php echo strftime('%B', mktime(null, null, null, 12, 01))?>";
+ 
+  
+  for (var x = 1; x < 13; x++){
+	  var n = month[x];
+	 
+	  var option2 = document.createElement('option');
+	  option2.value = x;
+	  option2.appendChild(document.createTextNode(n));
+	  m.appendChild(option2);
+  }
+
+
+  var y = document.createElement('select');
+  y.name = 'year' + iteration;
+  y.id = 'year'+ iteration;
+  dob.appendChild(y);
+
+
+  
+  var d = new Date();
+  var n = d.getFullYear();
+  for (var z = 1980; z < d.getFullYear()+1; z++){	 
+	  var option3 = document.createElement('option');
+	  option3.value = z;
+	  option3.appendChild(document.createTextNode(z));
+	  y.appendChild(option3);
+  }
+
+
+  
+ 
+  
+}
+
+
+function keyPressTest(e, obj)
+{
+  var validateChkb = document.getElementById('chkValidateOnKeyPress');
+  if (validateChkb.checked) {
+    var displayObj = document.getElementById('spanOutput');
+    var key;
+    if(window.event) {
+      key = window.event.keyCode; 
+    }
+    else if(e.which) {
+      key = e.which;
+    }
+    var objId;
+    if (obj != null) {
+      objId = obj.id;
+    } else {
+      objId = this.id;
+    }
+    displayObj.innerHTML = objId + ' : ' + String.fromCharCode(key);
+  }
+}
+function removeRowFromTable()
+{
+  curval = document.getElementById('iteration').value;
+  
+  var tbl = document.getElementById('mtable');
+  var lastRow = tbl.rows.length;
+  tbl.deleteRow(lastRow - 1);  
+  document.getElementById('iteration').value = curval-1;
+}
+
+function validateRow(frm)
+{	
+	    var tbl = document.getElementById('mtable');
+	    
+	    var lastRow = tbl.rows.length - 1;
+	        
+	    
+	    if(lastRow==0){
+	    	alert('There is no data entered.');
+			return false;
+	    }
+						    
+ 	return true;
+}
+
+
+function save(){
+	
+	returnVal = validateRow(document.form1);
+	returnCol = validateColumn();
+
+	
+	if(returnVal==true && returnCol==true){
+		//alert('Data will be save');
+		document.form1.action="<?php echo $this->url(array('module'=>'agent','controller'=> 'index','action'=>'index')); ?>";
+		document.form1.submit();
+	}
+}
+
+
+
+</script>
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<table width="100%" border="0" cellspacing="1" cellpadding="1">
+  <tr> 
+    <td height="69">
+      <h2>Instruction</h2>
+<ul style="1">
+	<li>To add row, click on "Add Row" button.</li>
+	<li>To remove row, click on "Remove Row" button.</li>
+	<li>To delete applicant, click on appropriate delete checkbox, then click "Delete" button. </li>
+	<li>Click "Save" button once you finish.</li>
+</ul><br><br></td>
+  </tr>
+  <tr> 
+    <td height=""> 
+   
+		<form name="form1" action="" method="post">
+		   
+    
+				<table id="mtable" class="table3" width="100%" cellpadding="5" cellspacing="1" >		
+						 
+				  <tr>			
+				    <th><?php echo $this->translate("no");?></th>	
+				    <th><?php echo $this->translate("admission_type");?></th>
+				    <th><?php echo $this->translate("applicantID");?></th>		  				   
+				    <th><?php echo $this->translate("firstname");?></th>	
+				    <th><?php echo $this->translate("middlename");?></th>	
+				    <th><?php echo $this->translate("lastname");?></th>				        
+				    <th><?php echo $this->translate("email / username");?></th>	
+				    <th width="70%"><?php echo $this->translate("dob");?></th>		
+				    			        
+				  </tr>
+				   <tr>		
+				        <td>1.<input name="sel_profile1" id="sel_profile1" type="hidden" value=""></td>	
+				        <td>
+						<select name="at_appl_type1" id="at_appl_type1">
+							<option value=1><?php echo $this->translate("usm")?></option>
+					    	<option value=2><?php echo $this->translate("high_school_certificate")?></option>
+					   </select>
+						</td>			  
+				        <td><input type="text" name="at_pes_id1" id="at_pes_id1" size="9" maxlength="9" value="" onblur=checkapplid(this);></input></td>
+					    <td><input type="text" name="firstname1" id="firstname1" size="20" value=""></input></td>
+					    <td><input type="text" name="middlename1" id="middlename1" size="20" value=""></input></td>		    				    
+					    <td><input type="text" name="lastname1" id="lastname1" size="20" value=""></input></td>
+					    <td><input type="text" name="email1" id="email1" size="20" value="" onblur=checkEmail(this,1);></input></td>
+					    <td width="30px">
+					    <?php  setlocale (LC_ALL, $this->locale); ?>
+					    <select name="day1">
+					        <?php for($i=1; $i<=31; $i++){?>
+					    	<option value='<?php echo $i?>'><?php echo $i?></option>
+					    	<?php } ?>
+					    </select>
+					       <select name="month1">
+					        <?php for($m=1; $m<=12; $m++){
+					          //$bulan =  date('F', mktime(null, null, null, $m, 01));
+					          $bulan = strftime('%B', mktime(null, null, null, $m, 01));
+					        	?>
+					    	<option value='<?php echo $m?>'><?php echo $bulan?></option>
+					    	<?php } ?>
+					    </select>
+					     <select name="year1">
+					        <?php for($y=1980; $y<=date("Y"); $y++){?>
+					    	<option value='<?php echo $y?>'><?php echo $y?></option>
+					    	<?php } ?>
+					    </select>
+						</td>
+						
+					</tr>
+			      
+			         
+			</table>
+				<input type="hidden" name="iteration" id="iteration" value="1"></input>
+	        	<input type="hidden" name="agentId" value="<?php ?>"></input>
+		
+		</form>
+
+      
+      
+      </td>
+  </tr>
+</table>
+
+</div>
+
+
+<div id="dialog-info" title="<?php echo $this->translate("Information Notice");?>">
+	<input type="hidden" id="appl_iteration" name="appl_iteration" value="">
+	<input type="hidden" id="appl_id" name="appl_id" value="">
+	<table width="100%" class="table5">
+		<tr><td colspan=3><?php echo $this->translate("Email ini telah digunakan oleh pemohon yang tertera dibawah"); ?>:-</td></tr>
+		<tr>
+			<td>
+				<?php echo $this->translate("Name")?>
+			</td>
+			<td width="5px">:</td>
+			<td>
+				<span id="appl_fname"></span>&nbsp;<span id="appl_mname"></span>&nbsp;<span id="appl_lname"></span>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<?php echo $this->translate("DOB")?>
+			</td>
+			<td width="5px">:</td>
+			<td>
+				<span id="appl_dob"></span>
+			</td>
+		</tr>
+		<tr><td colspan=3><?php echo $this->translate("Silahkan klik 'Select' untuk menggunakan profile pemohon ini. Atau klik 'Cancel' untuk mengisi email yang lain"); ?></td></tr>
+	</table>
+</div>
+<?php 
+}
+?>
+

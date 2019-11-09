@@ -1,0 +1,76 @@
+<?php 
+	//get locale
+	$registry = Zend_Registry::getInstance();
+	$locale = $registry->get('Zend_Locale');
+	$this->locale = $locale->toString();
+		
+?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<head>
+	<?php echo $this->headMeta(); ?>
+	<?php echo $this->headTitle(); ?>
+	
+	<?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/layout.css'); ?>
+	<?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/trisakti/simpletree.css'); ?>
+	<?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/trisakti/topmenu.css'); ?>
+	<?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/trisakti/style.css'); ?>
+	<?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/trisakti/left-menu.css'); ?>
+	
+	<?php
+		$this->jQuery()->enable();
+		$this->jQuery()->setVersion('1.7.2');
+		$this->jQuery()->useCdn(false);
+	 	$this->jQuery()->setLocalPath($this->baseUrl().'/js/jquery/jquery-1.5.0.min.js');
+		
+		$this->jQuery()->uiEnable();
+		$this->jQuery()->setUiVersion('1.8.18');
+		$this->jQuery()->useUiCdn(false);
+		$this->jQuery()->addStylesheet($this->baseUrl().'/js/jquery/themes/smoothness/jquery-ui.css');
+		$this->jQuery()->setUiLocalPath($this->baseUrl().'/js/jquery/jquery-ui-1.8.18.min.js');
+		
+		echo $this->jQuery();
+		
+		echo $this->headLink()->prependStylesheet($this->baseUrl().'/js/jquery/plugin/timepicker/timePicker.css');
+		echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery/plugin/timepicker/jquery.timepicker.js');		
+		echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery/plugin/multiselect-1.12/jquery.multiselect.min.js');
+		echo $this->headLink()->prependStylesheet($this->baseUrl().'/js/jquery/plugin/multiselect-1.12/jquery.multiselect.css');
+	?>
+	
+	
+</head>
+<body>
+<div id="container">
+	
+	<table width="100%" border="0" cellspacing="0" cellpadding="10" align="center">
+		<tr align="right" id="printRow">
+	<td><input type="button" value="Print" class="button" onclick="goprint();" ></td>
+</tr>		
+		<tr>
+			<td >	
+		<?
+		echo $this->layout()->content
+		?>
+		
+		
+			</td>
+		</tr>
+		
+		<tr align="right" ><td colspan="2">&nbsp;</td></tr>
+		<tr align="right" >
+			<td colspan="2"><br><br>Print Date: <?php echo date("F j, Y, g:i a"); ?></td>
+		</tr>
+		
+		</table>
+	
+</div>
+</body>
+</html>
+<script>
+function goprint(){
+	
+	document.getElementById('printRow').style.display = 'none';
+	window.print();
+}
+</script>

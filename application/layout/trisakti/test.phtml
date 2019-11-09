@@ -1,0 +1,222 @@
+<?php 
+	//get locale
+	$registry = Zend_Registry::getInstance();
+	$locale = $registry->get('Zend_Locale');
+	$this->locale = $locale->toString();
+	
+	if($locale == 'ar_YE'){
+		$this->direction = "rtl";	
+	}else{
+		$this->direction = "ltr";
+	}
+?>
+<?php 
+	//get locale
+	$registry = Zend_Registry::getInstance();
+	$locale = $registry->get('Zend_Locale');
+	$this->locale = $locale->toString();
+	
+	if($locale == 'ar_YE'){
+		$this->direction = "rtl";	
+	}else{
+		$this->direction = "ltr";
+	}
+?>
+<? echo $this->doctype(); ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->locale; ?>" dir="<?php echo $this->direction; ?>">
+<head>
+	<?php echo $this->headMeta(); ?>
+	<?php echo $this->headTitle(); ?>
+	<?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/layout.css'); ?>
+	<?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/default/style.css'); ?>
+	
+	<?php
+		$this->jQuery()->enable();
+		 
+		$this->jQuery()->addStylesheet($this->baseUrl().'/js/jquery/themes/smoothness/jquery-ui.css');
+	 	//$this->jQuery()->setLocalPath($this->baseUrl().'/js/jquery/jquery-1.4.1.min.js');
+		//$this->jQuery()->setUiLocalPath($this->baseUrl().'/js/jquery/ui/jquery-ui.js');
+	
+		echo $this->jQuery(); 
+	?>
+	
+	<?php echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery/ui/jquery-ui.js'); ?>	
+	<?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/js/jquery/plugin/potato.menu/jquery.ui.potato.menu.css'); ?>
+	
+	<?php 
+	 	if($this->direction == 'rtl'){
+	 		echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/default/dashboard_rtl.css');
+	 		echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery/plugin/potato.menu/jquery.ui.potato.menu.rtl.js');
+	 		echo "<style>";
+	 		echo "ul.potato-menu li.potato-menu-item {
+	 				float:right;
+				}";
+	 		echo "#language{
+	 				left:0px;
+	 			}";
+	 		
+	 		echo "#appTitle{
+	 				left: 15px;
+					top: 25px;
+	 			}";
+	 		
+	 		echo "</style>";
+	 	}else{
+	 		echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/default/dashboard_ltr.css');
+	 		echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery/plugin/potato.menu/jquery.ui.potato.menu.js');
+	 		
+	 		echo "<style>";
+	 		echo "ul.potato-menu li.potato-menu-item {
+	 				float:left;
+				}";
+	 		echo "#language{
+	 				right:0px;
+	 			}";
+	 		
+	 		echo "#appTitle{
+	 				right: 15px;
+					top: 25px;
+	 			}";
+	 		echo "</style>";
+	 	}
+	 
+	 ?>
+	 	
+	<!--[if lt IE 7]>
+	<style media="screen" type="text/css">
+	#container {
+		height:100%;
+	}
+	</style>
+	<![endif]-->
+	
+	<script type="text/javascript">
+	 $(document).ready(function() {
+	        $('#mainMenu').ptMenu();
+	        $('#mainMenu').show();
+	        
+	 });
+	</script>
+</head>
+<body>
+<div id="container">
+	<div id="header">
+		<!-- Header start -->
+		<div id="logo"><div id="name">&nbsp;</div></div>
+		<div id="appTitle"><?php echo APPLICATION_TITLE; ?></div>
+	</div>
+	<div id="menu">
+		<div id="language">
+			<select style="width:80px;" onChange="window.location = '?lang=' + this.options[this.selectedIndex].value">
+				<option value="ar" <?php echo $this->locale=="ar_YE"?"selected='selected'":""; ?>>Arabic</option>
+				<option value="en" <?php echo $this->locale=="en_US"?"selected='selected'":""; ?>>English</option>
+			</select>
+		</div>
+		<ul id="mainMenu" style="display: none;">
+			<li><a href="<?php echo $this->url(array('module'=>'index','controller'=>'index','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Home"); ?></a></li>
+			<li><a href="#"><?php echo $this->translate("Application"); ?></a>
+				<ul>
+			        <li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Online"); ?></a></li>
+			        <li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Normal (Manual)"); ?></a></li>
+			        <li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Auto Selection"); ?></a></li>
+			        <li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Placement Test"); ?></a></li>
+			        <li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Migration"); ?></a></li>
+			        <li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Report"); ?></a></li>
+			    </ul>
+			</li>
+			<li><a href="#"><?php echo $this->translate("Admission"); ?></a>
+				<ul>
+			        <li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Registration"); ?></a>
+			        	<ul>
+			        		<li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("New Student"); ?></a></li>
+			        		<li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Senior Student"); ?></a></li>
+			        	</ul>
+			        </li>
+			        <li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Add & Drop Course"); ?></a></li>
+			        <li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Report"); ?></a></li>
+			    </ul>
+			</li>
+			<li><a href="#"><?php echo $this->translate("Record"); ?></a>
+				<ul>
+			        <li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Student Profile"); ?></a></li>
+			        <li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Change Program"); ?></a></li>
+			        <li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Change Status"); ?></a></li>
+			        <li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Student Status"); ?></a></li>
+			        <li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Credit Transfer"); ?></a></li>
+			        <li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Report"); ?></a></li>
+			    </ul>
+			</li>
+			<li><a href="#"><?php echo $this->translate("Exam"); ?></a>
+				<ul>
+			        <li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Timetable"); ?></a></li>
+			        <li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Mark Entry"); ?></a></li>
+			        <li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Generate Result"); ?></a></li>
+			        <li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Mark Adjustment"); ?></a></li>
+			        <li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Report"); ?></a></li>
+			    </ul>
+			</li>
+			<li><a href="#"><?php echo $this->translate("General Setup"); ?></a>
+				<ul>
+			        <li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Organization"); ?></a>
+			        	<ul>
+			        		<li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("University"); ?></a></li>
+			        		<li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Branch"); ?></a></li>
+			        		<li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Faculty"); ?></a></li>
+			        		<li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Department"); ?></a></li>
+			        		<li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Report"); ?></a></li>
+			        	</ul>
+			        </li>
+			        <li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Program"); ?></a>
+			        	<ul>
+			        		<li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Market"); ?></a></li>
+			        		<li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Master Program"); ?></a></li>
+			        		<li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Program"); ?></a></li>
+			        		<li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Award"); ?></a></li>
+			        		<li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Program Requirement"); ?></a></li>
+			        	</ul>
+			        </li>
+			        <li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Semester"); ?></a>
+			        	<ul>
+			        		<li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Semester"); ?></a></li>
+			        		<li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Calendar"); ?></a></li>
+			        		<li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Activity"); ?></a></li>
+			        	</ul>
+			        </li>
+			        <li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Course"); ?></a>
+			        	<ul>
+			        		<li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Course"); ?></a></li>
+			        		<li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Academic Landscape"); ?></a></li>
+			        		<li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Course Offered"); ?></a></li>
+			        		<li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Course Prerequisites"); ?></a></li>
+			        	</ul>
+			        </li>
+			        <li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Exam"); ?></a>
+			        	<ul>
+			        		<li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Grade"); ?></a></li>
+			        		<li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Result Status"); ?></a></li>
+			        		<li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Assessment Component"); ?></a></li>
+			        		<li><a href="<?php echo $this->url(array('module'=>'employee','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Assessment Component Item"); ?></a></li>
+			        	</ul>
+			        </li>
+			    </ul>
+			</li>
+			<li>
+			    <a href="<?php echo $this->url(array('module'=>'auth','controller'=>'logout','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Logout"); ?></a>
+			</li>
+		</ul>
+	</div>
+		<!-- Header end -->
+	
+	<div id="body">
+		<!-- Begin Section Content-->
+		<?php echo $this->layout()->content ?>
+		<!-- End Section Content-->
+	</div>
+	<div id="footer">
+		<!-- Footer start -->
+		Copyright &copy; <?php echo APPLICATION_ENTERPRISE; ?>
+		<!-- Footer end -->
+	</div>
+</div>
+</body>
+</html>

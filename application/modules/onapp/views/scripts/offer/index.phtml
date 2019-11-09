@@ -1,0 +1,83 @@
+
+
+<script type='text/javascript'>
+function styledPopupClose() {
+ document.getElementById("styled_popup").style.display = "none";
+}
+</script>
+
+
+
+<script type="text/javascript">
+	function del(title, id){
+		if(confirm('Are you sure to delete '+title+'?')){
+			window.location = "<?php echo $this->url(array('module'=>'onapp','controller'=>'offer', 'action'=>'delete')); ?>/id/"+id;
+		}
+	}
+	
+	function add(){
+		window.location="<?php echo $this->url(array('module'=>'onapp','controller'=>'offer', 'action'=>'add'));?>";
+	}
+
+	function edit(id){
+		window.location="<?php echo $this->url(array('module'=>'onapp','controller'=>'offer', 'action'=>'edit'));?>/id/"+id;
+	}
+
+</script>
+<?php 
+	echo "<h1>". $this->title ."</h1>";
+?>
+
+<div id='styled_popup' name='styled_popup' style='display:none; position: absolute; top: 200px; left: 280px;'>
+<form name="f1" method="post">
+<table width="50%"  border="0" cellpadding="5" bgcolor="#cccccc" cellspacing="1">
+  <tr>
+    <td bgcolor="#FFFFFF">
+    <div align="right"><input type='submit' value=' X ' onClick='document.getElementById("styled_popup").style.display="none"'></div>
+    
+    <?php include('add.phtml'); ?></td>
+  </tr>
+ <!-- <tr>
+    <td bgcolor="#FFFFFF" align="center"><input type='submit' value=' Save '> </form>
+    <input type='submit' value=' Cancel ' onClick='document.getElementById("styled_popup").style.display="none"'></td>
+  </tr>-->
+</table>
+
+</div>
+
+
+<div style="width:900px; margin: 0 auto;">
+	<div class="span-7 buttons">
+		<a class="positive addLink" href="#" onClick='document.getElementById("styled_popup").style.display="block"'>Item</a>
+	</div>
+	<br />
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+	<tr>
+		<th>Offer Letter Items</th>
+		<th width="110px"><i>options</i></th>
+	</tr>
+	
+	<?php 
+	$i=0;
+	foreach ($this->paginator as $entry): 
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<td><?php echo $entry['SECTION']; ?></td>
+		<td>
+			<a class="editLink" href="#" onClick="edit(<?php echo $entry['ID']; ?>)">Edit</a>&nbsp;
+			<a class="delLink2" href="#" onClick="del('<?php echo $entry['SECTION']; ?>',<?php echo $entry['ID']; ?>)">Delete</a>
+		</td>
+	</tr>
+	<?php 
+	$i++;
+	endforeach 
+	?>
+
+</table>
+</div>
+<?php 
+	//echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>

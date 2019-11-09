@@ -1,0 +1,29 @@
+<?php 
+
+$output ='';
+$output .="No,ID Transaksi,No Peserta,Nama,Dean Rank,WR Rank,WR Status"."\n";
+$no=1;
+foreach($this->applicant as $entry){
+	//get dean rating
+	$assessmentDB=new App_Model_Application_DbTable_ApplicantAssessment();
+	$rate = $assessmentDB->getData($entry["transaction_id"]);
+	
+	 $output .= $no.','.$entry["transaction_id"].','.$entry["applicantID"].",".$entry["appl_fname"].' '.$entry["appl_mname"].' '.$entry["appl_lname"].','.$rate["aar_rating_dean"].','."\n";
+$no++;
+}
+		
+/*Now we're ready to create a file. This method generates a filename based on
+ the current date & time.
+*/
+$filename = 'batchrector_'.$this->program_code.'_'.$this->period.'_'.date("Ymd");
+
+//Generate the CSV file header
+header("Content-type: application/vnd.ms-excel");
+header("Content-disposition: csv" . date("Y-m-d") . ".csv");
+header("Content-disposition: filename=".$filename.".csv");
+
+//Print the contents of out to the generated file.
+print $output;
+
+exit;
+?>

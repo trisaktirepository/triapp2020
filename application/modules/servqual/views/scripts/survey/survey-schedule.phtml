@@ -1,0 +1,200 @@
+<script type="text/javascript">
+
+$(function () {
+
+	$( "#dialog-box" ).dialog({
+        autoOpen: false,
+        width: 650,
+        modal: true,
+        buttons: {
+            "save": function() {            	
+    			url="<?php echo $this->url(array('module'=>'servqual','controller'=>'survey','action'=>'survey-schedule'), 'default', true);?>";
+    			$("#formAdd").attr('action',url);
+
+    			var semester = $("#IdSemesterd option:selected").val();
+    			var program = $("#IdProgramd option:selected").val();
+    			var survey = $("#IdSurvey option:selected").val();
+    			var surveystart = $("#survey_start").val();
+    			var surveystop = $("#survey_stop").val();
+    			//alert(program);
+             	if(semester==0 || program==0 || surveystart=='' || survey==0 ){
+            		alert('Nilai diperlukan dan tidak boleh kosong.');
+             	}else{                 	
+    				$("#formAdd").submit();    
+             	}     	
+            },
+            "Cancel": function() {
+                $( this ).dialog( "close" );
+            }
+        }
+    });	
+
+
+	$("#survey_start").datepicker({
+		"dateFormat":"yy-mm-dd",
+		"changeMonth":"true"		
+	});
+	$("#survey_stop").datepicker({
+		"dateFormat":"yy-mm-dd",
+		"changeMonth":"true"		
+	});
+	
+});
+
+
+
+function add(){
+	$( "#dialog-box" ).dialog('open');	
+}
+
+
+function del(){
+	
+	var pm_id = $('input[name=pm_id]:checked').val();
+	
+	 if(pm_id){
+		 window.location = "<?php echo $this->url(array('module'=>'examination','controller'=>'publish-result','action'=>'delete'), 'default', true);?>/id/"+pm_id;
+	 }else{
+		 alert("You did not select any date.");
+	 }
+ 
+}
+</script>
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>		
+			<li>							
+				<a href="#" onClick="add()">
+				<span class='add'></span>Add</a>				
+			</li>	
+			<?php  if(count($this->survey_data) > 0 ){ ?>
+			<li>							
+				<a href="#" onClick="del()">
+				<span class='delete'></span>Delete</a>				
+			</li>			
+			<?php } ?>
+		</ul>
+	</div>
+</div>
+<br />
+
+<?php if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+<br />
+<?php }?>
+
+
+<div style="width:100%;">
+<?php echo $this->form; ?>
+
+<br>
+<?php  if(count($this->survey_data) > 0 ){ ?>
+<table class="table" width="80%" cellpadding="5" cellspacing="1" border="0">
+	<tr>		
+	    <th width="10%" align="center">&nbsp;</th>
+		<th width="20%"><?php echo $this->translate("Program"); ?></th>
+		<th width="20%"><?php echo $this->translate("Semester"); ?></th>
+		<th width="20%"><?php echo $this->translate("Survey Name"); ?></th>
+		<th width="20%"><?php echo $this->translate("Survey Start"); ?></th>
+		<th width="20%"><?php echo $this->translate("Survey Stop"); ?></th>
+		
+	</tr>
+	<?php
+			foreach($this->survey_data as $data){
+	?>
+	<tr>
+	    <td align="center">
+	    <input type="radio" name="pm_id" id="pm_id" value="<?php echo $data["pm_id"]?>"></td>
+		<td><?php echo $data["ProgramCode"].' - '.$data["ProgramName"]?></td>
+		<td><?php echo $data["SemesterName"]?></td>
+		<td><?php echo $data["SurveyName"]?></td>
+		<td><?php echo date("d-m-Y",strtotime($data["Survey_start"]));?></td>
+		<td><?php echo date("d-m-Y",strtotime($data["Survey_stop"]));?></td>
+		
+	</tr>
+	<?php } ?>
+		
+</table>
+	<?php }else{ echo $this->translate("No record found"); } ?>
+</div>
+
+
+<div id="dialog-box" title="<?php echo $this->translate("Setup Survey Schedulling Form"); ?>">
+<form id="formAdd" method="post">
+<dl class="zend_form">
+	
+		
+		 <dt id="IdSemesterd-label">
+			<label class="required" for="IdSemesterd"><?php echo $this->translate("Semester"); ?></label>
+		</dt>
+		<dd id="IdSemesterd-element">
+			<select id="IdSemesterd" name="IdSemesterd" >
+			    <option value="0"><?php echo $this->translate("Please Select");?></option>
+			    <?php 
+			    	foreach ($this->semester_list as $semester):
+			    ?>
+			    		<option value="<?php echo $semester["key"];?>"><?php echo $semester["value"];?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select>
+		</dd>
+		
+		<dt id="IdProgramd-label">
+			<label class="required" for="IdProgramd"><?php echo $this->translate("Program"); ?></label>
+		</dt>
+		<dd id="IdProgramd-element">
+			<select id="IdProgramd" name="IdProgramd" >
+			    <option value="0"><?php echo $this->translate("Please Select");?></option>
+			    <?php 
+			    	foreach ($this->program_list as $program):
+			    		
+			    ?>
+			    		<option value="<?php echo $program["key"];?>"><?php echo $program["value"];?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select>
+		</dd>
+		<dt id="IdSurvey-label">
+			<label class="required" for="IdSurvey"><?php echo $this->translate("Survey Name"); ?></label>
+		</dt>
+		<dd id="IdSurvey-element">
+			<select id="IdSurvey" name="IdSurvey" >
+			     <option value="0"><?php echo $this->translate("Please Select");?></option>
+			    <?php 
+			    	foreach ($this->survey_list as $survey):
+			    		
+			    ?>
+			    		<option value="<?php echo $survey["IdSurvey"];?>"><?php echo $survey["SurveyName"];?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select>
+		</dd>
+		<dt id="StartDate-label">
+			<label class="required" for="StartDate"><?php echo $this->translate("Started Date");?></label>
+		</dt>
+		<dd id="StartDate-element">
+			<input type="text" name="survey_start" id="survey_start" value="">
+		</dd>
+		<dt id="StopDate-label">
+			<label class="required" for="StopDate"><?php echo $this->translate("Stoped Date");?></label>
+		</dt>
+		<dd id="StopDate-element">
+			<input type="text" name="survey_stop" id="survey_stop" value="">
+		</dd>		
+	</dl>
+</form>  
+</div>

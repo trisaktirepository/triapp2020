@@ -1,0 +1,59 @@
+<div class="message toolbar toolbar-clear" style="background-color: #CCC;">
+	<h2><?php echo $this->translate("Academic Semester"); ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#">
+					<span class="info"></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+	<tr>
+		<th>Semester Name</th>
+		<th>year</th>
+		<th>Code</th>
+		<th>Start Date</th>
+		<th>End Date</th>
+	</tr>
+	
+	<?php 
+	$i=0;
+	foreach ($this->paginator as $entry): 
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<td>
+			<a href="<?php echo $this->url(array('module'=>'exam','controller'=>'user-setup','action'=>'tagging-detail-semester', 'sem_id'=>$entry['id']),'default',true) ?>"><?php echo $entry['name']; ?></a>
+		</td>
+		<td align="center"><?php echo $entry['year']; ?></td>
+		<td align="center"><?php echo $entry['code']; ?></td>
+		<td align="center"><?php echo date('d/m/Y', strtotime($entry['start_date'])); ?></td>
+		<td align="center"><?php echo date('d/m/Y', strtotime($entry['end_date'])); ?></td>
+	</tr>
+	<?php 
+	$i++;
+	endforeach 
+	?>
+	
+	<?php 
+	if( count($this->paginator) <1 ){
+	?>
+		<tr>
+			<td colspan="3" align="center">
+				<?php echo $this->translate("There are no user"); ?>
+			</td>
+		</tr>
+	<?php 
+	}
+	?>
+
+</table>
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>

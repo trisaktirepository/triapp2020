@@ -1,0 +1,214 @@
+ 
+<script>
+	 
+
+	function cetak(){
+		window.location="<?php echo $this->url(array('module'=>'finalassignment','controller'=>'proposal','action'=>'student-application-view','proposedby'=>$this->proposal['IdStudentRegistration'],'idtaapplication'=>$this->proposal['IdTAApplication']), 'default', true);?>";
+	}
+	function cetakpdf(){
+		window.location="<?php echo $this->url(array('module'=>'finalassignment','controller'=>'proposal','action'=>'student-application-pdf','proposedby'=>$this->proposal['IdStudentRegistration'],'idtaapplication'=>$this->proposal['IdTAApplication']), 'default', true);?>";
+	}
+	 
+</script
+
+<style>
+.table_content {
+	font-family: "Trebuchet MS", Helvetica, sans-serif;	
+    width: 100%;
+    cellspacing: 2px;
+    cellpadding: 5px;
+    border:1px solid #000;
+}
+ </style>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			 <li>
+			<a href="#" onclick="cetak();">
+				<span class='print'></span>
+				Print Screen
+			</a>
+			
+		</li>
+		 <li>
+			<a href="#" onclick="cetakpdf();">
+				<span class='print'></span>
+				Print Pdf
+			</a>
+			
+		</li>
+		</ul>
+	</div>
+</div>
+<?php if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+
+<br /> 
+<?php }?>
+<br />
+<fieldset><legend ><?php echo $this->translate('Student Info');?></legend>
+<table>
+<tr><td><?php echo $this->translate('NIM');?></td><td>:</td><td><?php echo $this->student['registrationId'];?></td>
+<tr><td><?php echo $this->translate('Name');?></td><td>:</td><td><?php echo $this->student['appl_fname'].' '.$this->student['appl_mname'].' '.$this->student['appl_lname'];?></td>
+<tr><td><?php echo $this->translate('Majoring');?></td><td>:</td><td><?php echo $this->student['majoring'];?></td>
+<tr><td><?php echo $this->translate('Credit Hours Transcript/All');?></td><td>:</td><td><?php echo $this->student['credithours'].'/'.$this->student['credithoursall'];?></td>
+<tr><td><?php echo $this->translate('CGPA Transcript/All');?></td><td>:</td><td><?php echo $this->student['cgpa'].'/'.$this->student['cgpaall'];?></td>
+<tr><td><?php echo $this->translate('Prerequisite');?></td><td>:</td>
+		<td><table class="table" width="100%">
+		<tr>
+			<th><?php echo $this->translate('Prerequisite Type');?></th>
+			<th><?php echo $this->translate('Subject Name');?></th>
+			<th><?php echo $this->translate('Minimum Value');?></th>
+			<th><?php echo $this->translate('Grade');?></th>
+			<th><?php echo $this->translate('Status');?></th>
+		</tr>
+		<?php if (count($this->prerequisites) >0 ) {
+				foreach ($this->prerequisites as $item) {
+					if ($item['PrerequisiteType']=='2') {
+						$type='Credit Hours';
+						$item['SubjectName']='-';
+						$item['Grade']='-';
+					}
+					else if ($item['PrerequisiteType']=='3') $type='Co-Prerequisite';
+					else  $type='Subject';
+		?>
+			<tr><td><?php echo $type;?></td>
+			<td><?php echo $item['SubjectName'];?></td>
+			<td align="center"><?php echo $item['PrerequisiteGrade'];?> </td>
+			<td align="center"><?php echo $item['Grade'];?> </td>
+			<td align="center"><?php echo $item['Ok'];?> </td>
+			</tr>
+		<?php 	}
+		
+				
+			if ($this->prerequisiteStatus=='0') {
+				$disable="disabled";?>
+				<tr colspan="3"><td bgcolor="red"><strong><?php echo $this->translate('Prohibit to take this application')?></strong></td> 
+			<?php 
+			}
+		}  else { ?>
+			<tr><td><?php echo $this->translate("No Prerequisite");?></tr>
+		<?php } ?>
+		
+		</table></td>
+</tr>
+	<tr><td><?php echo $this->translate('Related Subjects');?></td><td></td>
+	<td>
+		<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+		<tr><th><?php echo $this->translate('Subject Code')?></th>
+		<th><?php echo $this->translate('Subject Name')?></th>
+		<th><?php echo $this->translate('Credit Hours')?></th>
+		<th><?php echo $this->translate('Minumum Grade')?></th>
+		<th><?php echo $this->translate('Grade')?></th>
+		</tr> 
+		<?php foreach($this->subject_list as $item) {?>
+			<tr>
+			<td><?php echo $item['ShortName'];?></td>
+			<td><?php echo $item['SubjectName'];?></td>
+			<td><?php echo $item['CreditHours'];?></td>
+			<td><?php echo $item['Grade_min'];?></td>
+			<td><?php echo $item['Grade_name'];?></td>
+			</tr>
+			
+		<?php }?>
+		</table>
+	
+	</td>
+	</tr>
+</table>
+
+</fieldset>
+<br /> 
+<fieldset><legend><?php echo $this->translate('Summary of Proposal');?></legend>
+<form id="form" method="post" action="/finalassignment/proposal/student-apply-staff-proposal">
+<input type="hidden" id="IdFlowMain" name="IdFlowMain" value="<?php  echo $this->idflowmain;?>">
+<input type="hidden" name="appliedby" id="appliedby" value="<?php echo $this->student['IdStudentRegistration'];?>">
+<input type="hidden" name="idProposal" id="idProposal" value="<?php echo $this->idta ;?>">
+<input type="hidden" name="IdTAApplication" id="IdTAApplication" value="<?php echo $this->proposal['IdTAApplication'] ;?>">
+<table class="table_content" width="100%" cellpadding="5" cellspacing="0" border="0">
+	<tr>	<td width="25%"><?php echo $this->translate("Title in Bahasa");?></td><td>:</td>
+			<td><?php echo $this->proposal['title_bahasa']; ?></td>  </tr> 
+	<tr>	<td width="20%"><?php echo $this->translate("Title in English");?></td><td>:</td>
+			<td> <?php echo $this->proposal['title']; ?></td></tr>
+	<tr>	<td width="20%"><?php echo $this->translate("First Problem Statement");?></td><td>:</td>
+			<td> <?php echo $this->proposal['problem1']; ?></td></tr>
+	<tr>	<td width="20%"><?php echo $this->translate("Second Problem Statement");?></td><td>:</td>
+			<td> <?php echo $this->proposal['problem2']; ?></td></tr>
+	<tr>	<td width="20%"><?php echo $this->translate("Third Problem Statement");?></td><td>:</td>
+			<td> <?php echo $this->proposal['problem3']; ?></td></tr>
+	<tr>	<td width="20%"><?php echo $this->translate("Abstract");?></td><td>:</td>
+			<td> <?php echo $this->proposal['abstrak']; ?></td></tr>
+	<?php if (!isset($this->proposal['IdTAApplication'])) {?>
+	<tr><td colspan="3" align="center" bgcolor="lightblue" ><input type="submit" value="<?php echo $this->translate("Apply");?>" /></td>
+<?php }?>
+	</table>
+ 
+</form></fieldset>
+<fieldset><legend><?php echo $this->translate('List of applicant beside you');?></legend>
+<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+<tr>
+	<th><?php echo $this->translate('NIM');?></th>
+	<th><?php echo $this->translate('Student Name');?></th>
+</tr>
+<?php if (count($this->applicant_list)>0) {
+foreach($this->applicant_list as $item) {?>
+<tr><td><?php echo $item['registrationId'];?></td>
+<td><?php echo $item['studentname'];?></td>
+<?php }
+} else echo '<tr><td colspan="2">No other applicant </td></tr>';?>
+</table>
+</fieldset>
+
+<fieldset><legend><?php echo $this->translate('Status of Process');?></legend>
+<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+<tr>
+	<th><?php echo $this->translate('Name of Process');?></th>
+	<th><?php echo $this->translate('Authority of');?></th>
+	<th><?php echo $this->translate('PIC');?></th>
+	<th><?php echo $this->translate('Status of Process');?></th>
+	<th><?php echo $this->translate('Date of entry');?></th>
+	<th><?php echo $this->translate('Latest Date of Approval');?></th>
+	<th><?php echo $this->translate('Date of Approval');?></th>
+	<th><?php echo $this->translate('Documents');?></th>
+</tr>
+<?php  if ($this->process_status) {
+	foreach ($this->process_status as $status) {
+		if ($status['ApprovalStatus']==0) 
+			$statusApp="Waiting for Approval";
+		else if ($status['ApprovalStatus']==1) 
+			$statusApp="Approved";
+		else if ($status['ApprovalStatus']==2) 
+			$statusApp="Pending";
+		else  if ($status['ApprovalStatus']==3) 
+			$statusApp="Rejected";
+		?>
+	<tr>
+	<td><?php echo $status['ProcessName'];?></td>
+	<td><?php echo $status['StaffAs'];?></td>
+	<td><?php echo $status['FullName'];?></td>
+	<td><?php echo $this->translate($statusApp);?></td>
+	<td><?php echo $status['dt_entry'];?></td>
+	<td><?php echo $status['dt_latest'];?></td>
+	<td><?php echo $status['dt_Approved'];?></td>
+	<?php if (isset($status['doc_url']) && $status['doc_url']!='') {?>
+		<td><?php echo 'download document';?></td>
+	<?php } else  {?>
+		<td><?php echo $this->translate('no document');?></td>
+	<?php }?>
+</tr>
+<?php }
+} else echo '<tr><td> No Status of Process </td></tr>'?>
+ 
+ 
+</table>
+</fieldset> 

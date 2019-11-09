@@ -1,0 +1,99 @@
+<script>
+$(document).ready(function() {
+		
+		$("#exam_date").datepicker({
+				"dateFormat":"yy-mm-dd",
+				"changeMonth":"true",
+		});					
+	});
+	
+	function validate(){
+    	
+	 	if (document.searchfrm.idVenue.selectedIndex == 0 ) { 
+	 		alert ( "Please select venue!" ); 
+	 		return false; 
+	    } 
+	    
+	    
+	    if (document.searchfrm.exam_date.value == "" ) { 
+	 		alert ( "Please enter exam date!" ); 
+	 		document.searchfrm.exam_date.focus();
+	 		return false; 
+	    } 
+	    
+	    return true;
+    }
+</script>
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+</div>
+
+<br></br>
+<div style="width: 100%;">
+<fieldset style="width:450px;">
+	
+<form name="searchfrm" action="<?php echo $this->url(array('module'=>'exam','controller'=>'markentry','action'=>'print-preview'))?>" onsubmit="return validate();" method="post"  target="_blank">
+	<table width="100%">	
+		<tr>
+			<td>
+				Program 
+			</td>
+			<td width="5px">:</td>
+			<td>			
+				<select name="program_id" onchange="changeCourse(this.options[this.selectedIndex].value)">
+							
+							<?php 
+							foreach($this->program as $p){
+								if($this->program_id==$p[id])
+								  $sel = "selected";
+								else
+								  $sel = "";
+							 	echo "<option value='$p[id]' $sel>$p[program_name]</option>";
+							 } ?>
+							</select>
+			</td>
+		</tr>
+		
+		<tr>
+    <td>Exam Center</td>
+    <td>:</td>
+    <td>
+    <select name="idVenue" id="idVenue">
+		<option value="0"> --Select Venue-- </option>	
+		<? foreach ($this->venue as $v){
+			if($this->idVenue==$v["id"]){
+				$sel = "selected";
+			}else{
+				$sel = "";
+			}
+		?>	
+		<option value="<?php echo $v["id"]?>" <?php echo $sel;?>><?php echo $v["name"]?></option>		
+		<? } ?>
+	</select>
+	
+	</td>
+  </tr>			
+		
+			<tr>
+			<td>Exam Date</td>
+			<td width="5px">:</td>
+			<td><input type="text" name="exam_date" id="exam_date" size="10" value="<?php echo $this->exam_date; ?>"></td>
+		</tr>
+		<tr>
+			<td>Student Name / ICNO</td>
+			<td width="5px">:</td>
+			<td><input type="text" name="keyword" value="" size=40></input></td>
+		</tr>
+		<tr>
+			<td colspan="2">&nbsp;</td>
+			<td><input type="submit" value="submit" /></td>
+		</tr>
+	</table>
+</form>
+</fieldset>
+</div>
+<br>
+
+

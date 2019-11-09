@@ -1,0 +1,462 @@
+<script>
+var s_elementName = null;
+var s_element = null;
+$(function(){
+
+	//init staff name
+	if($('#IdLecturer').val()!=""){
+		var targetElement = $('#IdLecturerName1');
+		$.ajax({
+			url: "<?php echo $this->url(array('module'=>'generalsetup','controller'=>'course-group', 'action'=>'ajax-get-student'),'default',true);?>",
+			data: {'IdLecturer':$('#IdLecturer').val()},
+			type: 'POST',
+			async: false,
+			dataType: 'json',	
+			beforeSend: function(){
+				$(targetElement).hide();
+				$(targetElement).parent().append('<div class="loading">Loading...</div>');	
+			}	
+		}).done(function ( data ) {
+
+			$('.loading').remove();
+			$(targetElement).val(data.FullName);  
+			$(targetElement).show();
+		
+		});
+	}
+
+	//init verificator name
+	if($('#VerifyBy').val()!=""){
+		var targetElement = $('#VerifyByName');
+		$.ajax({
+			url: "<?php echo $this->url(array('module'=>'generalsetup','controller'=>'course-group', 'action'=>'ajax-get-lecturer'),'default',true);?>",
+			data: {'IdLecturer':$('#VerifyBy').val()},
+			type: 'POST',
+			async: false,
+			dataType: 'json',	
+			beforeSend: function(){
+				$(targetElement).hide();
+				$(targetElement).parent().append('<div class="loading">Loading...</div>');	
+			}	
+		}).done(function ( data ) {
+
+			$('.loading').remove();
+			$(targetElement).val(data.FullName);  
+			$(targetElement).show();
+		
+		});
+	}
+
+	//init program
+	<?php 
+	if(isset($this->data_program)){
+      foreach ($this->data_program as $program):
+	?>
+      $('#program tbody').append('<tr><td><?php echo $program['ArabicName']; ?> - <?php echo $program['ProgramCode']; ?></td><td align="center"><a href="#" onclick="to_remove_program(<?php echo $program['id']; ?>,this); return false;"><img src="/images/icon/user_trash_full.png" title="Delete" /></a></td></tr>');
+	<?php 
+	  endforeach;
+    } 
+    ?>
+	//init branch
+    <?php 
+    		if(isset($this->data_branch)){
+    	      foreach ($this->data_branch as $branch):
+    		?>
+    	      $('#branch tbody').append('<tr><td><?php echo $branch['BranchName']; ?> - <?php echo $branch['BranchCode']; ?></td><td align="center"><a href="#" onclick="to_remove_branch(<?php echo $branch['id']; ?>,this); return false;"><img src="/images/icon/user_trash_full.png" title="Delete" /></a></td></tr>');
+    		<?php 
+    		  endforeach;
+    	    } 
+    	    ?>
+    	    
+	$( "#dialog-assign" ).dialog({
+	  autoOpen: false,
+      modal: true,
+      width: 550,
+      buttons: {
+   
+        "<?php echo $this->translate('Assign'); ?>": function() {
+       	 //cek for class lecturer
+       	 $(s_element).val($('#staff_list').val());
+         $(s_elementName).val($('#staff_list').find('option:selected').text());
+        	 
+          isClassLecture();
+          
+          //------------------------
+          if ($('#status').val() =='0') {
+	          $(s_element).val('');
+	          $(s_elementName).val('');
+	         
+          } 
+          
+          $( this ).dialog( "close" );
+        },
+        Close: function() {
+          $( this ).dialog( "close" );
+        }
+      }
+    });
+	$( "#dialog-verify" ).dialog({
+		  autoOpen: false,
+	      modal: true,
+	      width: 550,
+	      buttons: {
+	   
+	        "<?php echo $this->translate('Assign'); ?>": function() {
+	       	 //cek for class lecturer
+	       	 $(s_element).val($('#staff_list_ver').val());
+	         $(s_elementName).val($('#staff_list_ver').find('option:selected').text());
+	        	 
+	          isClassLecture();
+	          
+	          //------------------------
+	          if ($('#status').val() =='0') {
+		          $(s_element).val('');
+		          $(s_elementName).val('');
+		         
+	          } 
+	          
+	          $( this ).dialog( "close" );
+	        },
+	        Close: function() {
+	          $( this ).dialog( "close" );
+	        }
+	      }
+	    });
+
+	$( "#dialog-program" ).dialog({
+		  autoOpen: false,
+	      modal: true,
+	      width: 550,
+	      buttons: {
+	    	  "<?php echo $this->translate('Add'); ?>": function() {  
+	    		  var sel_text = $('#program_sel').find('option:selected').text();
+	    		  var sel_id = $('#program_sel').val();
+	    		  
+	    		  var tappend = '<tr>'+
+	    		  '<td>'+
+	    		  '<input type="hidden" name="program_add[]" value="'+sel_id+'" />'+
+	    		  sel_text +
+	    		  '</td>'+
+	    		  '<td align="center"><a href="#" onclick="$(this).parent().parent().remove(); return false;"><img src="/images/icon/user_trash_full.png" title="Delete" /></td>'+
+	    		  '</tr>';
+		    	  $('#program tbody').append(tappend);
+		    	  
+	          $( this ).dialog( "close" );
+	        },
+	        Close: function() {
+	          $( this ).dialog( "close" );
+	        }
+	      }
+	    });
+    
+	$( "#dialog-branch" ).dialog({
+		  autoOpen: false,
+	      modal: true,
+	      width: 550,
+	      buttons: {
+	    	  "<?php echo $this->translate('Add'); ?>": function() {  
+	    		  var sel_text = $('#branch_sel').find('option:selected').text();
+	    		  var sel_id = $('#branch_sel').val();
+	    		  
+	    		  var tappend = '<tr>'+
+	    		  '<td>'+
+	    		  '<input type="hidden" name="branch_add[]" value="'+sel_id+'" />'+
+	    		  sel_text +
+	    		  '</td>'+
+	    		  '<td align="center"><a href="#" onclick="$(this).parent().parent().remove(); return false;"><img src="/images/icon/user_trash_full.png" title="Delete" /></td>'+
+	    		  '</tr>';
+		    	  $('#branch tbody').append(tappend);
+		    	  
+	          $( this ).dialog( "close" );
+	        },
+	        Close: function() {
+	          $( this ).dialog( "close" );
+	        }
+	      }
+	    });
+    
+    $('#assign-lecturer').click(function(){
+    	
+    	$( "#dialog-assign" ).dialog('open');
+    	 
+    	s_element = $('#IdLecturer');
+    	s_elementName = $('#IdLecturerName');
+    	 
+    	return false;
+    });
+
+    $('#assign-verificator').click(function(){
+    	$( "#dialog-verify" ).dialog('open');
+    	s_element = $('#VerifyBy');
+    	s_elementName = $('#VerifyByName');
+    	
+    	return false;
+    });
+
+
+    $('#assign-program').click(function(){
+    	$( "#dialog-program" ).dialog('open');
+
+    	return false;
+    });
+
+    $('#assign-branch').click(function(){
+    	$( "#dialog-branch" ).dialog('open');
+
+    	return false;
+    });
+});
+
+function getStudent(element,targetElement){
+	var nama = $(element).val();
+
+	$.ajax({
+		url: "<?php echo $this->url(array('module'=>'generalsetup','controller'=>'course-group', 'action'=>'ajax-get-student'),'default',true);?>",
+		data: {'nama':$(element).val()},
+		type: 'POST',
+		dataType: 'json',	
+		beforeSend: function(){
+			$(targetElement).hide();
+			$(targetElement).parent().append('<div class="loading">Loading...</div>');	
+		}	
+	}).done(function ( data ) {
+
+		$('.loading').remove();  
+		$(targetElement).show();
+		
+		$(targetElement).empty().append('<option value="0"> <?php echo $this->translate("Please Select"); ?> </option>');
+	
+		$.each(data, function(index) {
+			$(targetElement).append('<option value="'+data[index].IdStudentRegistration+'"> '+data[index].FullName+' </option>');
+		});
+	});
+}
+
+function getLecturer(element,targetElement){
+	var nama = $(element).val();
+ 
+	$.ajax({
+		url: "<?php echo $this->url(array('module'=>'generalsetup','controller'=>'course-group', 'action'=>'ajax-get-lecturer'),'default',true);?>",
+		data: {'nama':$(element).val()},
+		type: 'POST',
+		dataType: 'json',	
+		beforeSend: function(){
+			$(targetElement).hide();
+			$(targetElement).parent().append('<div class="loading">Loading...</div>');	
+		}	
+	}).done(function ( data ) {
+
+		$('.loading').remove();  
+		$(targetElement).show();
+		
+		$(targetElement).empty().append('<option value="0"> <?php echo $this->translate("Please Select"); ?> </option>');
+	
+		$.each(data, function(index) {
+			$(targetElement).append('<option value="'+data[index].IdStaff+'"> '+data[index].FullName+' </option>');
+		});
+	});
+}
+
+function isClassLecture(){
+	 
+	if($('#IdLecturer').val()!="" ){
+		var groupid = $('#IdCourseTaggingGroup').val();
+		 
+		$.ajax({
+			url: "<?php echo $this->url(array('module'=>'generalsetup','controller'=>'course-group', 'action'=>'ajax-get-lecturerclash'),'default',true);?>",
+			data: {'IdLecturer':$('#IdLecturer').val(),'IdGroup' : groupid},
+			type: 'POST',
+			async: false,
+			dataType: 'json' 
+		}).done(function ( data ) {
+			//alert(data.status);
+			document.getElementById("status").value=data.status; 
+
+			$('#msgtbl').empty();
+			document.getElementById("msg").innerHTML='';
+			if ($('#status').val()=='0') {
+				html='<font color="red">'+data.message+'</font><br><br>';  
+				document.getElementById("msg").innerHTML=html;
+				var html='<table class="table" ><tr><td>Subject Code</td><td>Subject Name</td><td>Klas</td><td>Hari</td><td>Mulai</td><td>Selesai</td></tr>';
+				
+				$.each(data.list, function(index) {
+					html=html+'<tr><td>'+data.list[index].subject_code+'</td><td>'+data.list[index].subject_name+'</td><td>'+data.list[index].GroupName+'</td><td>'+data.list[index].sc_day+'</td><td>'+data.list[index].sc_start_time+'</td><td>'+data.list[index].sc_end_time+' </td></tr>';
+				});
+				html=html+'</table>';
+				$('#msgtbl').append(html);
+				
+			}
+		
+		});
+	}
+}
+
+function go_nav_back(url){
+	url = '<?php echo $this->url(array('module'=>'assistant','controller'=>'course-group','action'=>'group-list','idSubject'=>$this->idSubject,'idSemester'=>$this->idSemester),'default',true);?>';
+	
+	window.location = url;
+}
+
+function to_remove_program(course_program_id, element){
+	  $('#GroupForm').append('<input type="hidden" name="program_remove[]" value="'+course_program_id+'" />');
+
+	  $(element).parent().parent().remove();	
+}
+function to_remove_branch(course_branch_id, element){
+	  $('#GroupForm').append('<input type="hidden" name="branch_remove[]" value="'+course_branch_id+'" />');
+
+	  $(element).parent().parent().remove();	
+}
+
+</script>
+
+<style>
+.zend_form dt {
+    width: 175px;
+}
+.zend_form dd {
+    padding: 2px 0 0 175px;
+}
+.zend_form dd {
+    width: 360px;
+}
+</style>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>			
+			
+			<li>
+				<a href="#" onclick="go_nav_back();" >
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<fieldset>
+  <legend><?php echo $this->translate("Subject Info")?></legend>
+  <table class="" width="50%" cellpadding="5" cellspacing="5" border="0">
+  	<tr>
+  		<td width="100px"><?php echo $this->translate("Subject Name")?></td>
+  		<td width="5px">:</td>
+  		<td><?php echo ($this->subject["subjectMainDefaultLanguage"]) ? $this->subject["subjectMainDefaultLanguage"]:$this->subject["SubjectName"];  ?></td>
+  	</tr>
+  	<tr>
+  		<td><?php echo $this->translate("Subject Code")?></td>
+  		<td width="5px">:</td>
+  		<td><?php echo $this->subject["SubCode"];?></td>
+  	</tr>
+  	<tr>
+  		<td><?php echo $this->translate("Semester")?></td>
+  		<td width="5px">:</td>
+  		<td><?php echo $this->semester["SemesterMainName"];?></td>
+  	</tr>
+  </table>
+</fieldset>
+<br>
+
+
+<?php echo $this->form;?>
+
+
+<div id="dialog-assign" title="Assign Assistants">
+  <table>
+    <tr>
+      <td><?php echo $this->translate('Assistant Search'); ?></td>
+      <td>:</td>
+      <td>
+        <input type="text" name="nama" id="nama" onchange="getStudent(this,$('#staff_list'));">
+      </td>
+    </tr>
+    <tr>
+      <td><?php echo $this->translate('Staff'); ?></td>
+      <td>:</td>
+      <td>
+        <select name="staff_list" id="staff_list">
+        </select>
+      </td>
+    </tr>
+  </table>
+</div>
+
+
+<div id="dialog-verify" title="Assign Verificator">
+  <table>
+    <tr>
+      <td><?php echo $this->translate('Satff Search'); ?></td>
+      <td>:</td>
+      <td>
+        <input type="text" name="nama" id="nama" onchange="getLecturer(this,$('#staff_list_ver'));">
+      </td>
+    </tr>
+    <tr>
+      <td><?php echo $this->translate('Staff'); ?></td>
+      <td>:</td>
+      <td>
+        <select name="staff_list_ver" id="staff_list_ver">
+        </select>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<div id="dialog-program" title="Add Program">
+  <table>
+    <tr>
+      <td><?php echo $this->translate('Program'); ?></td>
+      <td>:</td>
+      <td>
+        <select name="program_sel" id="program_sel">
+          <option><?php echo $this->translate("Please select"); ?></option>
+          <?php 
+          foreach($this->program_list as $list):
+          ?>
+          <optgroup label="<?php echo $list['faculty']['ArabicName'];?> - <?php echo $list['faculty']['CollegeCode'];?>">
+              <?php 
+              if(isset($list['program'])){
+                foreach ($list['program'] as $program){
+              ?>
+              <option value="<?php echo $program['IdProgram'];?>"><?php echo $program['ArabicName'];?> - <?php echo $program['ProgramCode'];?></option>
+              <?php
+                } 
+              }
+              ?>
+          </optgroup>
+          <?php 
+          endforeach;
+          ?>
+        </select>
+      </td>
+    </tr>
+   </table>
+</div>
+<div id="dialog-branch" title="Add Branch">
+  <table>
+    <tr>
+      <td><?php echo $this->translate('Branch'); ?></td>
+      <td>:</td>
+      <td>
+        <select name="branch_sel" id="branch_sel">
+          <option><?php echo $this->translate("Please select"); ?></option>
+          <?php 
+          foreach($this->branch_list as $list):
+               ?>
+              <option value="<?php echo $list['key'];?>"><?php echo $list['code'];?> - <?php echo $list['value'];?></option>
+              <?php
+           endforeach;
+              ?>
+            </select>
+      </td>
+    </tr>
+   </table>
+</div>

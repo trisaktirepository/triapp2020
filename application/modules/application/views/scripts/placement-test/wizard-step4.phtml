@@ -1,0 +1,278 @@
+<?php echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery/plugin/perifer-timePicker/jquery.timePicker.js');?>
+<?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/js/jquery/plugin/perifer-timePicker/timePicker.css'); ?>
+
+<script type="text/javascript">
+$(function() {
+
+	var YdateString = "<? echo date('Y', strtotime($this->placement_test['aph_start_date'])); ?>";
+	var MdateString = "<? echo date('m', strtotime($this->placement_test['aph_start_date'])); ?>";
+	var DdateString = "<? echo date('d', strtotime($this->placement_test['aph_start_date'])); ?>";
+	var minDate = new Date(YdateString,MdateString -1,DdateString);
+
+	var YdateString = "<? echo date('Y', strtotime($this->placement_test['aph_end_date'])); ?>";
+	var MdateString = "<? echo date('m', strtotime($this->placement_test['aph_end_date'])); ?>";
+	var DdateString = "<? echo date('d', strtotime($this->placement_test['aph_end_date'])); ?>";
+	var maxDate = new Date(YdateString,MdateString -1,DdateString);
+		
+    $( "#aps_test_date" ).datepicker({
+    	dateFormat: "dd-mm-yy",
+    	changeMonth: true,
+    	numberOfMonths: 1,
+    	minDate: minDate,
+    	maxDate: maxDate  
+    });
+
+    $(".timepicker").timePicker({
+  	  startTime: "06:00", // Using string. Can take string or Date object.
+  	  endTime: new Date(0, 0, 0, 15, 30, 0), // Using Date object here.
+  	  show24Hours: true,
+  	  separator: ':',
+  	  step: 15});
+
+    $( "#dialog-component-type-time" ).dialog({
+        autoOpen: false,
+        resizable: false,
+        modal: true,
+        buttons: {
+            "Save": function() {
+            	saveAjax();
+                $( this ).dialog( "close" );
+                $('#apst_aps_id').val();
+            },
+            Cancel: function() {
+                $( this ).dialog( "close" );
+                $('#apst_aps_id').val();
+            }
+        }
+    });  
+
+});
+
+function back(){
+	window.location="<?php echo $this->url(array('module'=>'application','controller'=>'placement-test','action'=>'index'), 'default', true);?>";
+}
+
+function deleteData(id){
+	$('#delete_id').val(id);
+	$('#delete_form').submit();
+}
+
+function nextProcess(){
+	window.location = "<?php echo $this->url(array('module'=>'application','controller'=>'placement-test','action'=>'wizard-step5'));?>";
+}
+
+function editTime(id){
+
+	$('#apst_aps_id').val(id);
+	
+	$.ajax({
+		url: "<?php echo $this->url(array('module'=>'application','controller'=>'placement-test', 'action'=>'ajax-get-pt-type-schedule'),'default',true);?>",
+		data: {'schedule_id':id},
+		type: 'POST',
+		dataType: 'json'	
+	}).done(function ( data ) {
+
+		$('#type_schedule').find('tbody').empty();
+				
+		$.each(data, function(index) {
+
+			$('#type_schedule').find('tbody')
+			.append($('<tr>')
+				.append($('<td>').html('<input type="hidden" name="apst_test_type[]" value="'+data[index].act_id+'" /><input type="hidden" name="apst_id[]" value="'+data[index].apst_id+'" />'+data[index].act_name))
+        		.append($('<td align="center">').html('<input type="text" class="timepicker" maxlength="8" name="apst_time_start[]" value="'+ (data[index].start_time ? data[index].start_time : "") +'" placeholder="'+data[index].act_start_time+'" />'))
+           	);
+		});
+
+	});
+	
+	$( "#dialog-component-type-time" ).dialog('open');
+
+	return false;
+}
+
+function saveAjax(){
+	var url ="<?php echo $this->url(array('module'=>'application','controller'=>'placement-test', 'action'=>'ajax-save-pt-type-schedule'),'default',true);?>";
+	$.ajax({
+        type: "POST",
+        url: url,
+        data: $("#form_component_type_schedule").serialize(), // serializes the form's elements.
+        success: function(data)
+        {
+            
+        }
+    });
+}
+</script>
+
+<style type="text/css">
+.table tr th{
+	width: 10px;
+}
+
+.weightage{
+	width:30px;
+}
+</style>
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li class="divider"></li>	
+			<li>							
+				<a href="#" onClick="back()"><span class='back'></span>Back</a>				
+			</li>
+		</ul>
+	</div>
+</div>
+
+<div align="center" style="background:#ebebeb; height:30px;">
+	<ul class="steps">
+	    <li class="prevDone">
+			<span>1</span> <a href="<?php echo $this->url(array('module'=>'application','controller'=>'placement-test','action'=>'wizard-step1'));?>"><?php echo $this->translate('Component Setup')?></a>
+		</li>
+	    <li class="prevDone">
+			<span>2</span> <a href="<?php echo $this->url(array('module'=>'application','controller'=>'placement-test','action'=>'wizard-step2'));?>"><?php echo $this->translate('Program Setup')?></a>
+		</li>
+		<li class="prevDone">
+			<span>3</span> <a href="<?php echo $this->url(array('module'=>'application','controller'=>'placement-test','action'=>'wizard-step3'));?>"><?php echo $this->translate('Component Weightage')?></a> 
+		</li>
+		<li class="current">
+			<span>4</span> <a href="<?php echo $this->url(array('module'=>'application','controller'=>'placement-test','action'=>'wizard-step4'));?>"><?php echo $this->translate('Schedule')?></a>
+		</li>
+		<li class="next">
+			<span>5</span> <?php echo $this->translate('Submit')?>
+		</li>
+	</ul>
+	<br class="clear" />
+</div>
+
+<br>
+<h1><?php echo $this->translate("Placement Test Info"); ?></h1>
+<div width="500px">
+		<table class="table2" width="100%" cellpadding="3" cellspacing="1">
+			<tr>
+				<th width="150px"><? echo $this->translate("Placement Test Name"); ?></th>
+				<td><?php echo $this->placement_test['aph_placement_name']; ?></td>
+			</tr>
+			<tr>
+				<th width="150px"><? echo $this->translate("Code"); ?></th>
+				<td><?php echo $this->placement_test['aph_placement_code']; ?></td>
+			</tr>
+			<tr>
+				<th width="150px"><? echo $this->translate("Fees By Program"); ?></th>
+				<td><?php echo $this->placement_test['aph_fees_program']==1?"Yes":"No"; ?></td>
+			</tr>
+			<tr>
+				<th width="150px"><? echo $this->translate("Fees By Location"); ?></th>
+				<td><?php echo $this->placement_test['aph_fees_location']==1?"Yes":"No"; ?></td>
+			</tr>
+			<tr>
+				<th><? echo $this->translate("Start Date"); ?></th>
+				<td><?php echo date("l, dS F Y", strtotime($this->placement_test['aph_start_date'])); ?></td>
+			</tr>
+			<tr>
+				<th><? echo $this->translate("End Date"); ?></th>
+				<td><?php echo date("l, dS F Y", strtotime($this->placement_test['aph_end_date'])); ?></td>
+			</tr>
+			<tr>
+				<th><? echo $this->translate("Efective Date"); ?></th>
+				<td><?php echo date("l, dS F Y", strtotime($this->placement_test['aph_effective_date'])); ?></td>
+			</tr>
+			<tr>
+				<th><? echo $this->translate("Created by"); ?></th>
+				<td><?php echo $this->placement_test['aph_create_by_name']; ?></td>
+			</tr>
+			<tr>
+				<th><? echo $this->translate("Created Date"); ?></th>
+				<td><?php echo date("d/m/Y g:ia", strtotime($this->placement_test['aph_create_date'])); ?></td>
+			</tr>
+		</table>	
+</div>
+<br />
+
+<h1><?php echo $this->translate("Schedule"); ?></h1>
+<div id="add_schedule" style="clear:both; border: 1px solid #111;">
+	<form method="post">
+		<input type="hidden" name="aps_placement_code" value="<?php echo $this->placement_test['aph_placement_code']; ?>" />
+		<dl class="zend_form">
+			<dt><?php echo $this->translate("Location"); ?></dt>
+			<dd>
+				<select name="aps_location_id">
+					<?php foreach ($this->locationList as $location):?>
+					<option value="<?php echo $location['al_id']; ?>" ><?php echo $location['al_location_name']; ?>(<?php echo $location['al_location_code']; ?>)</option>
+					<?php endforeach;?>
+				</select>
+			</dd>
+			
+			<dt><?php echo $this->translate("Date"); ?></dt>
+			<dd>
+				<input type="text" class="datepicker" name="aps_test_date" id="aps_test_date" placeholder="dd-mm-yyyy" />
+			</dd>
+			
+			<dt><?php echo $this->translate("Start Time"); ?></dt>
+			<dd>
+				<input type="text" class="timepicker" name="aps_start_time" id="aps_start_time" placeholder="08:00" />
+			</dd>
+			
+			<dt></dt>
+			<dd>
+				<input type="submit" name="submit" value="Add Schedule" />
+			</dd>
+		</dl>
+	</form>
+</div>
+<table class="table" width="100%">
+	<tr>
+		<th><?php echo $this->translate("Location"); ?></th>
+		<th width="30px"><?php echo $this->translate("Date"); ?></th>
+		<th width="30px"><?php echo $this->translate("Start Time"); ?></th>
+		<th width="20px">&nbsp;</th>
+	</tr>
+	<?php 
+		if($this->placement_test_ScheduleList){
+			foreach ($this->placement_test_ScheduleList as $schedule):
+	?>
+	<tr>
+		<td><?php echo $schedule['al_location_name']?> (<?php echo $schedule['al_location_code']?>)</td>
+		<td align="center"><?php echo date('d-m-Y', strtotime($schedule['aps_test_date'])); ?></td>
+		<td align="center"><?php echo date('h:i', strtotime($schedule['aps_start_time'])); ?></td>
+		<td align="center">
+			<a href="#" onclick="return editTime(<?php echo $schedule['aps_id'] ?>)">Component Type Time</a>
+			|
+			<a href="#" onclick="deleteData(<?php echo $schedule['aps_id'] ?>)">Delete</a>
+		</td>
+	</tr>
+	<?php 
+			endforeach;
+		}
+	?>
+</table>
+
+<?php if($this->placement_test_ScheduleList){?>
+<div align="center" style="margin: 20px 0; padding: 5px; background: #EEEEEE; border: 1px solid #333333;">
+	<input type="submit" value="<?php echo $this->translate("Proceed Next Process"); ?>" onclick="javascript:nextProcess()" />
+</div>
+<?php }?>
+
+<form name="delete_form" id="delete_form" method="post">
+	<input type="hidden" name="delete" value="1" />
+	<input type="hidden" name="id" id="delete_id" value="" />
+</form>
+
+<div id="dialog-component-type-time" title="Component Type Time">
+	<form name="form_component_type_schedule" id="form_component_type_schedule">
+		<input type="hidden" name="apst_aps_id" id="apst_aps_id" value="" />
+	<table id="type_schedule" class="table" width="100%">
+		<thead>
+			<tr>
+				<th><?php echo $this->translate("Component Type"); ?></th>
+				<th><?php echo $this->translate("Start Time"); ?></th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+	</form>
+</div>

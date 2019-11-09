@@ -1,0 +1,32 @@
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>		
+					
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					<?php echo $this->translate("info")?>
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+
+
+<div style="width:100%;">
+<table>
+	<tr>
+		<td>
+		<ul>
+			<li><a href="<?php echo $this->url(array('module'=>'application','controller'=>'selection-highschool-report','action'=>'report-student-view'),'default',true);?>"><?php echo $this->translate("Pengumuman Hasil Seleksi Untuk Dekan");?></a></li>
+			<li><a href="<?php echo $this->url(array('module'=>'application','controller'=>'selection-highschool-report','action'=>'report-student-view'),'default',true);?>"><?php echo $this->translate("Pengumuman Hasil Seleksi Untuk Paparan Mahasiswa");?></a></li>
+		    <li><a href="<?php echo $this->url(array('module'=>'application','controller'=>'selection-highschool-report','action'=>'raport-pssb'),'default',true);?>"><?php echo $this->translate("Raport PSSB");?></a></li>
+		</ul>
+		</td>
+	</tr>
+</table>
+</div>

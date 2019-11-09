@@ -1,0 +1,79 @@
+<script type="text/javascript">
+	function edit(id){
+		window.location="<?php echo $this->url(array('module'=>'general-setup','controller'=>'university', 'action'=>'edit', 'id'=>1));?>";
+	}
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="javascript:edit(1)">
+					<span class='edit'></span>
+					Edit
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+<?if(isset($this->noticeMessage)){?>
+<div id="msg" class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<table class="table2" width="600px" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		<th width="150px">Name</th>
+		<td><?php echo $this->data['name']; ?></td>
+	</tr>
+	<tr>
+		<th>Address</th>
+		<td><?php echo $this->data['address1']; ?></td>
+	</tr>
+	<tr>
+		<th>&nbsp;</th>
+		<td><?php echo $this->data['address2']; ?></td>
+	</tr>
+	<tr>
+		<th>City</th>
+		<td><?php echo $this->data['city']; ?></td>
+	</tr>
+	<tr>
+		<th>State</th>
+		<td><?php echo $this->data['state_name']; ?></td>
+	</tr>
+	<tr>
+		<th>Country</th>
+		<td><?php echo $this->data['country_name']; ?></td>
+	</tr>
+	<tr>
+		<th>Postcode</th>
+		<td><?php echo $this->data['postcode']; ?></td>
+	</tr>
+	<tr>
+		<th>Phone</th>
+		<td><?php echo $this->data['phone']; ?></td>
+	</tr>
+	<tr>
+		<th>Email</th>
+		<td><?php echo $this->data['email']; ?></td>
+	</tr>
+	<tr>
+		<th>URL</th>
+		<td><?php echo $this->data['url']; ?></td>
+	</tr>
+</table>

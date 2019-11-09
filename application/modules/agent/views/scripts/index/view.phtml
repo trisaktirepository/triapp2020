@@ -1,0 +1,35 @@
+
+<div class="breadcrum">
+	<ul class="tri-steps">
+		<li class="prevDone"><div class="text"><a href="<?php echo $this->url(array('module'=>'agent','controller'=>'index','action'=>'verification','id'=>$this->transaction_id),'default',true);?>"><?php echo $this->translate("verification"); ?></a></div></li>
+		<li class="lastCurrent"><div class="text"><a href="<?php echo $this->url(array('module'=>'agent','controller'=>'index','action'=>'view','id'=>$this->transaction_id),'default',true);?>"><?php echo $this->translate("application_info"); ?></a></div></li>
+		
+			</ul>
+	<div class="clear"></div>
+</div>
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+		<li>
+				<a href="<?php echo $this->url(array('module'=>'agent','controller'=>'index','action'=>'applicant-list'),'default',true);?>" >
+					<span class='back'></span>
+					<?php echo $this->translate("Back")?>
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>

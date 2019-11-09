@@ -1,0 +1,123 @@
+
+<script type="text/javascript">
+	function del(){
+		var id = $('input[name=venue_id]:checked').val();
+
+		if(!id){
+			alert('Please select any venue first');
+		}else{
+			if(confirm('Are you sure to delete this venue ?')){
+				window.location = "<?php echo $this->url(array('module'=>'general-setup','controller'=>'venue', 'action'=>'delete-detail'),'default',true); ?>/id/"+id;
+			}
+		}
+	}
+	
+	function add(){
+		window.location="<?php echo $this->url(array('module'=>'general-setup','controller'=>'venue', 'action'=>'add-detail', 'id'=>$this->id),'default',true);?>";
+	}
+
+	function edit(){
+		var id = $('input[name=venue_id]:checked').val();
+
+		if(!id){
+			alert('Please select any venue first');
+		}else{
+			window.location="<?php echo $this->url(array('module'=>'general-setup','controller'=>'venue', 'action'=>'edit-detail'),'default',true);?>/id/"+id;
+		}
+	}
+
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="javascript:add();">
+					<span class='add'></span>
+					Add
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:edit()">
+					<span class='edit'></span>
+					Edit
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:del()">
+					<span class='delete'></span>
+					Delete
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'general-setup','controller'=>'venue', 'action'=>'index'),'default',true);?>" >
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+<table class="table2" width="50%" cellspacing="2" cellpadding="5">
+	<tr>
+		<th width="150px">Venue Name</th>
+		<td><?php echo $this->venue['name']?></td>
+	</tr>
+	<tr>
+		<th width="150px">Venue Address</th>
+		<td>
+			<?php echo $this->venue['address1']!=null?$this->venue['address1']:""; ?>
+			<?php echo $this->venue['address2']!=null?"<br />".$this->venue['address2']:""; ?>
+			<?php echo $this->venue['city']!=null?"<br />".$this->venue['city']:""; ?>
+			<?php echo $this->venue['state_name']!=null?"<br />".$this->venue['state_name']:""; ?>
+			<?php echo $this->venue['country_name']!=null?"<br />".$this->venue['country_name']:""; ?>
+			<?php echo $this->venue['postcode']!=null?"<br />".$this->venue['postcode']:""; ?>
+		</td>
+	</tr>
+</table>
+<br />
+<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+	<tr>
+		<th width="1%">&nbsp;</th>
+		<th width="44%">Name</th>
+		<th width="44%">Type</th>
+		<th width="10%">Capacity</th>
+	</tr>
+	
+	<?php 
+	$i=0;
+	foreach ($this->paginator as $entry): 
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<td>
+			<input type="radio" name="venue_id" value="<?php echo $entry['id']; ?>">
+		</td>
+		<td><?php echo $entry['name']; ?></td>
+		<td><?php echo $entry['type_name']; ?></td>
+		<td align="center"><?php echo $entry['capacity']; ?></td>
+	</tr>
+	<?php 
+	$i++;
+	endforeach 
+	?>
+
+</table>
+
+<?php 
+
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>
+<div id="view-dialog" title="Office Details"></div>

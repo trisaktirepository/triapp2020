@@ -1,0 +1,200 @@
+<script type="text/javascript">
+
+$(document).ready(function() {
+
+	/*init*/
+	feedCourse( $('#program_id') );
+
+	feedVenue( $('#exam_center2') );
+
+	/*selected value*/
+	var selected_course = "<?php foreach ($this->schedule['course'] as $course){ echo $course['course_id'].",";}?>";
+	selected_course = selected_course.split(',');
+	$('#course_id').val(selected_course);
+
+	var selected_venue = "<?php foreach ($this->schedule['venue'] as $venue){ echo $venue['venue_id'].",";}?>";
+	selected_venue = selected_venue.split(',');
+	$('#venue_id').val(selected_venue);
+		
+	/*Date Picker*/
+	var dtFormat = 'dd-mm-yy';
+	
+	$("#date").datepicker({
+		dateFormat: dtFormat,
+		minDate: 0,
+		onClose:function(dateText, inst){
+			setWeeklyDay();
+		}
+	});
+
+	$("#date_end").datepicker({
+		dateFormat: dtFormat,
+		minDate: 0
+	});
+
+	/*Timepicker*/
+	$(".timepicker,.timepicker2").timePicker({
+		  startTime: "08:30",  // Using string. Can take string or Date object.
+		  endTime: new Date(0, 0, 0, 17, 30, 0),  // Using Date object here.
+		  show24Hours: true,
+		  separator:':',
+		  step: 15
+	});
+	
+	
+    // Keep the duration between the two inputs.
+    $(".timepicker").change(function() {
+    	
+    	var time = $.timePicker(".timepicker").getTime();
+    	
+    	$.timePicker(".timepicker2").setTime(new Date(time.getTime()+2*3600*1000)); //add 1hour multiplication
+    	
+    });
+    
+    // Validate.
+    $(".timepicker2").change(function() {
+      if($.timePicker(".timepicker").getTime() > $.timePicker(this).getTime()) {
+        $(this).addClass("error");
+      }
+      else {
+        $(this).removeClass("error");
+      }
+    });
+});
+
+function feedCourse(program){
+	var program_id = $(program).val();
+
+	/*$('#course_id').empty().append('<option value="0"> -- Select Course -- </option>');*/
+	$('#course_id').empty();
+	
+	$.ajax({
+		  url: '<?php echo $this->url(array('module'=>'schedule','controller'=>'index', 'action'=>'ajax-get-course'),'default',true); ?>',
+		  dataType: "json",
+		  type: "POST",
+		  data: {id : program_id},
+		  cache:false,
+		  async: false,
+		  success: function(data) {
+			$.each(data, function(index) {
+            	var course_id = data[index].course_id;
+            	var course_name = data[index].course_name;
+
+            	$('#course_id').append('<option value="' + course_id + '">' + course_name + '</option>');
+        	});
+		  }
+	});
+}
+
+function feedVenue(exam_center){
+	var exam_center_id = $(exam_center).val();
+
+	$('#venue_id').empty();
+	
+	$.ajax({
+		  url: "<?php echo $this->url(array('module'=>'schedule','controller'=>'index', 'action'=>'ajax-get-venue-detail'),'default', true); ?>",
+		  dataType: 'json',
+		  type: "POST",
+		  cache:false,
+		  async: false,
+		  data: {id : exam_center_id},
+		  success: function(data) {
+			$.each(data, function(index) {
+	        	var venue_id = data[index].id;
+	        	var venue_name = data[index].name;
+	        	var venue_type_name = data[index].type_name;
+	        	var venue_capacity = data[index].capacity;
+
+        	$('#venue_id').append('<option value="'+venue_id+'">'+venue_name+' ('+venue_type_name+': capacity:'+venue_capacity+')'+'</option>');
+    		});
+		  }
+	});
+}
+</script>
+
+<style type="text/css">
+	table#schedule_tbl select{
+			width: 260px;
+	}
+	
+	table#schedule_tbl input[name="date"]{
+		width: 250px	
+	}
+	
+	table#schedule_tbl input[name="start"], table#schedule_tbl input[name="end"]{
+		width: 110px;	
+	}
+	
+	.ui-datepicker{
+		z-index: 9999;
+	}
+	
+	div.time-picker {
+		z-index: 99999;
+	}
+	
+</style>
+<form id="schedule_form" action="<?php echo $this->url(array('module'=>'schedule','controller'=>'index', 'action'=>'edit', 'id'=>$this->schedule['id'])); ?>" method="post" enctype="application/x-www-form-urlencoded">
+<table id="schedule_tbl" width="100%">
+	<tr>
+		<td>Program</td>
+		<td>
+			<select name="program_id" id="program_id" onChange="feedCourse(this)">
+				<option value="0"> -- Select Program -- </option>
+				<?php
+				foreach ($this->programlist as $program) {
+					$select = "";
+					if($this->schedule['program_id'] == $program['id'] ){
+						$select="selected='selected'";
+					} 
+					echo "<option value='".$program['id']."' ".$select.">".$program['program_name']."</option>";
+				}
+				?>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">Course</td>
+		<td>
+			<select name="course_id[]" id="course_id" multiple="multiple"></select>
+		</td>
+	</tr>
+	<tr>
+		<td>Date</td>
+		<td>
+			<input id="date" type="text" name="exam_date" class="date" value="<?php echo date('d-m-Y',strtotime($this->schedule['exam_date']) );  ?>" />
+		</td>
+	</tr>
+	<tr>
+		<td>Time</td>
+		<td>
+			<input class="timepicker" type="text" value="<?php echo date('h:i', strtotime($this->schedule['exam_time_start']) );?>" name="start" />
+			to
+			<input class="timepicker2" type="text" value="<?php echo date('h:i', strtotime($this->schedule['exam_time_end']) );?>" name="end" />
+		</td>
+	</tr>
+	<tr>
+		<td>Exam Center</td>
+		<td>
+			<select name="exam_center" id="exam_center2" onchange="feedVenue(this)">
+				<option value="0"> -- Select Exam Center -- </option>
+				<?php
+				foreach ($this->examcenter as $center) {
+					$select = "";
+					if($this->schedule['exam_center_id'] == $center['id'] ){
+						$select="selected='selected'";
+					} 
+					echo "<option value='".$center['id']."' ".$select." >".$center['name']."</option>";
+				}
+				?>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">Venue</td>
+		<td>
+			<select name="venue_id[]" id="venue_id" multiple="multiple"></select>
+		</td>
+	</tr>
+</table>
+</form>

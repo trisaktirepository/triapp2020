@@ -1,0 +1,220 @@
+<script type="text/javascript"><!--
+function addRowToTable(curtotal)
+{
+	
+  var tbl = document.getElementById('tblGrade');
+  var lastRow = tbl.rows.length; 
+  // if there's no header row in the table, then iteration = lastRow + 1
+  var iteration = lastRow;
+  var row = tbl.insertRow(lastRow);
+
+  document.getElementById('iteration').value = iteration
+
+  // left cell
+  var cellLeft = row.insertCell(0);
+  var textNode = document.createTextNode(iteration);
+  cellLeft.appendChild(textNode);
+  
+    // delete cell
+  var cellLeft2 = row.insertCell(1);
+  var textNode2 = document.createTextNode('');
+  cellLeft2.appendChild(textNode2);
+  
+  var grade_level  = document.createElement('input');
+  grade_level.type = 'hidden';
+  grade_level.name = 'level' + iteration;
+  grade_level.id   = 'level'+ iteration;
+  grade_level.size = 20;
+  grade_level.value = iteration;
+  cellLeft2.appendChild(grade_level);
+
+  
+  // symbol
+  var symbol = row.insertCell(2);
+  var grade_symbol  = document.createElement('input');
+  grade_symbol.type = 'text';
+  grade_symbol.name = 'symbol' + iteration;
+  grade_symbol.id   = 'symbol'+ iteration;
+  grade_symbol.size = 20;
+  
+  //cn.onkeypress = keyPressTest;
+  symbol.appendChild(grade_symbol);
+  
+  
+  // point
+  var point = row.insertCell(3);
+  var grade_point  = document.createElement('input');
+  grade_point.type = 'text';
+  grade_point.name = 'point' + iteration;
+  grade_point.id   = 'point'+ iteration;
+  grade_point.size = 20;
+  
+  //cn.onkeypress = keyPressTest;
+  point.appendChild(grade_point);
+  
+  
+ // status
+  var status = row.insertCell(4);
+  var grade_status  = document.createElement('input');
+  grade_status.type = 'text';
+  grade_status.name = 'status' + iteration;
+  grade_status.id   = 'status'+ iteration;
+  grade_status.size = 20;
+  
+  //cn.onkeypress = keyPressTest;
+  status.appendChild(grade_status);
+  
+  // min_mark
+  var min_mark = row.insertCell(5);
+  var grade_min_mark  = document.createElement('input');
+  grade_min_mark.type = 'text';
+  grade_min_mark.name = 'min_mark' + iteration;
+  grade_min_mark.id   = 'min_mark'+ iteration;
+  grade_min_mark.size = 20;
+  
+  //cn.onkeypress = keyPressTest;
+  min_mark.appendChild(grade_min_mark);
+  
+    
+  // max_mark
+  var max_mark = row.insertCell(6);
+  var grade_max_mark  = document.createElement('input');
+  grade_max_mark.type = 'text';
+  grade_max_mark.name = 'max_mark' + iteration;
+  grade_max_mark.id   = 'max_mark'+ iteration;
+  grade_max_mark.size = 20;
+  
+  //cn.onkeypress = keyPressTest;
+  max_mark.appendChild(grade_max_mark);
+ 
+}
+
+
+function removeRowFromTable(total)
+{
+	
+  var curval=1;
+  newtotal=Math.abs(total)+Math.abs(curval);
+  
+  var tbl = document.getElementById('tblGrade');
+  var lastRow = tbl.rows.length;
+  
+  curval = document.getElementById('iteration').value;
+  if (lastRow > newtotal) {
+	  tbl.deleteRow(lastRow - 1);  
+      document.getElementById('iteration').value = curval-1;
+  }else{
+      alert('Sorry you cannot remove this grade. Click on checkbox then click delete button to delete.');
+  }
+}
+
+
+function save(action){
+		
+	document.form1.action="<?php echo $this->url(array('module'=>'exam','controller'=>'grade','action'=>'editgrade'),'default',true)?>";
+	document.form1.submit();		
+}
+
+function del(){
+	
+	document.form1.action="<?php echo $this->url(array('module'=>'exam','controller'=>'grade','action'=>'deletegrade'),'default',true)?>";
+	document.form1.submit();		
+}
+
+
+function back(id){
+	window.location="<?php echo $this->url(array('module'=>'exam','controller'=>'grade','action'=>'indexgrade'),'default',true)?>/id/"+id;
+}
+
+
+
+</script>
+<?php   $total_grade = count($this->rs_grade); ?>
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>	
+		   <li>
+				
+				   <a href="#" onClick="save();">
+					<span class='save'></span>
+					Save
+				</a>
+			</li>
+			<li>
+				<a href="#" onClick="del();">
+					<span class='delete'></span>
+					Delete
+				</a>
+			</li>
+			<li>
+				<a href="#" onClick="back('<?php echo $this->groupID?>');">
+					<span class='back'></span>
+					Back
+				</a>
+			</li>	
+			<li class="divider"></li>		
+			
+			<li>
+				<a href="#" onClick="addRowToTable('<?php echo $total_grade;?>');">
+					<span class='add'></span>
+					Add Row
+				</a>
+			</li>
+			<li>
+				<a href="#" onClick="removeRowFromTable('<?php echo $total_grade;?>');">
+					<span class='remove' align="center"></span>
+					Remove Row
+				</a>
+			</li>
+			
+			</ul>
+			
+	</div>
+</div>
+
+
+<br>
+<h2>Instruction</h2>
+<ul style="1">
+	<li>To add grade, click on "Add Row" button.</li>
+	<li>To remove row, click on "Remove Row" button.</li>
+	<li>Fill in the information required then click "Save" button to save.</li>
+</ul>
+<br>
+
+<form name="form1" action="" method="post">
+ <table id="tblGrade"  class="table3" width="100%" cellpadding="5" cellspacing="1" >
+   
+  <tr>
+        <th><?php echo $this->translate("No");?></th>
+        <th><?php echo $this->translate("Delete");?></th>
+   	    <th><?php echo $this->translate("Grade Symbol");?></th>
+		<th><?php echo $this->translate("Point Grade");?></th>
+		<th><?php echo $this->translate("Grade Status");?></th>
+		<th><?php echo $this->translate("Min Mark");?></th>
+		<th><?php echo $this->translate("Max Mark");?></th>
+  </tr>
+  
+  <?php 
+	  $no=1;		
+	  foreach ($this->rs_grade as $grade){?>
+		  
+  <tr align="center">
+        <td><?php echo $no;?></td>
+        <td>
+            <input type="hidden" name="level<?php echo $no;?>" value="<?php echo $no;?>"></input>
+		    <input type="hidden" name="id<?php echo $no;?>" value="<?php echo $grade["id"];?>"></input>
+		    <input type="checkbox" name="id[]" id="id[]" value="<?php echo $grade["id"]?>"></input></td>
+  		<td><input type="text" name="symbol<?php echo $no;?>" value="<?php echo $grade["symbol"]?>"></td>
+		<td><input type="text" name="point<?php echo $no;?>" value="<?php echo $grade["point"]?>"></td>
+		<td><input type="text" name="status<?php echo $no;?>" value="<?php echo $grade["status"]?>"></td>
+		<td><input type="text" name="min_mark<?php echo $no;?>" value="<?php echo $grade["min_mark"]?>"></td>
+		<td><input type="text" name="max_mark<?php echo $no;?>" value="<?php echo $grade["max_mark"]?>"></td>
+  </tr>
+  
+  <? $no++;} ?>
+ </table>
+<input type="hidden" name="iteration" id="iteration" value="<?php echo $total_grade ?>"></input>
+<input type="hidden" value="<?php echo $this->groupID?>"  name="grade_group_id" id="grade_group_id"></input>
+</form>

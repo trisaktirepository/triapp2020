@@ -1,0 +1,122 @@
+<script type="text/javascript">
+$(function() {
+	
+});
+
+function back(){
+	window.location="<?php echo $this->url(array('module'=>'application','controller'=>'placement-test','action'=>'index'), 'default', true);?>";
+}
+</script>
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li class="divider"></li>	
+			<li>							
+				<a href="#" onClick="back()"><span class='back'></span>Back</a>				
+			</li>
+		</ul>
+	</div>
+</div>
+
+<div align="center" style="background:#ebebeb; height:30px;">
+	<ul class="steps">
+	    <li class="current">
+			<span>1</span> <?php echo $this->translate('Program Setup')?>
+		</li>
+	    <li class="next">
+			<span>2</span> <?php echo $this->translate('Component Weightage')?>
+		</li>
+		<li class="empty">
+			<span>3</span> <?php echo $this->translate('Schedule Setup')?> 
+		</li>
+		<li class="empty">
+			<span>4</span> <?php echo $this->translate('Verification')?>
+		</li>
+		<li class="empty">
+			<span>5</span> <?php echo $this->translate('Submit')?>
+		</li>
+	</ul>
+	<br class="clear" />
+</div>
+
+<br>
+<h1><?php echo $this->translate("Placement Test Info"); ?></h1>
+<div width="500px">
+		<table class="table2" width="100%" cellpadding="3" cellspacing="1">
+			<tr>
+				<th width="150px"><? echo $this->translate("Placement Test Name"); ?></th>
+				<td><?php echo $this->placement_test['aph_placement_name']; ?></td>
+			</tr>
+			<tr>
+				<th width="150px"><? echo $this->translate("Code"); ?></th>
+				<td><?php echo $this->placement_test['aph_placement_code']; ?></td>
+			</tr>
+			<tr>
+				<th><? echo $this->translate("Start Date"); ?></th>
+				<td><?php echo date("l, dS F Y", strtotime($this->placement_test['aph_start_date'])); ?></td>
+			</tr>
+			<tr>
+				<th><? echo $this->translate("End Date"); ?></th>
+				<td><?php echo date("l, dS F Y", strtotime($this->placement_test['aph_end_date'])); ?></td>
+			</tr>
+			<tr>
+				<th><? echo $this->translate("Efective Date"); ?></th>
+				<td><?php echo date("l, dS F Y", strtotime($this->placement_test['aph_effective_date'])); ?></td>
+			</tr>
+			<tr>
+				<th><? echo $this->translate("Created by"); ?></th>
+				<td><?php echo $this->placement_test['aph_create_by_name']; ?></td>
+			</tr>
+			<tr>
+				<th><? echo $this->translate("Created Date"); ?></th>
+				<td><?php echo date("d/m/Y g:ia", strtotime($this->placement_test['aph_create_date'])); ?></td>
+			</tr>
+		</table>	
+</div>
+<br />
+
+<?php 
+	if($this->step == 1){
+?>
+		<div class="span-7 buttons">
+		    <a class="positive addLink" href="#" onclick="javascript:addProgram();">
+		    	<?php echo $this->translate("Add Program"); ?>       
+		    </a>
+		</div>
+		<div id="add_program">
+			
+		</div>
+		<table width="100%" class="table">
+			<tr>
+				<th>Program Name</th>
+				<th>Program Code</th>
+			</tr>
+			<tr>
+				<th></th>
+				<th></th>
+			</tr>
+		</table>
+<?php 
+	}else
+	if($this->step == 2){
+?>
+<?php 
+	}else
+	if($this->step == 3){
+?>
+<?php 
+	}else
+	if($this->step == 4){
+?>
+<?php 
+	}else
+	if($this->step == 5){
+?>
+<?php 
+	}
+?>
+
+

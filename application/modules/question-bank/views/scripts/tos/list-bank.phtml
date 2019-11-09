@@ -1,0 +1,46 @@
+
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>						
+			
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+<table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		<th>Name</th>
+		<th width="100px">Status</th>
+	</tr>
+	
+	<?php 
+	$i=0;
+	foreach ($this->paginator as $entry): 
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<td><a href="<?php echo $this->url(array('module'=>'question-bank','controller'=>'tos', 'action'=>'list-tos','pool_id'=>$entry['id']));?>"><?php echo $entry['name']; ?></a></td>
+		<td align="center"><?php echo $entry['status']==1?"Active":"Not Active"; ?></td>
+	</tr>
+	<?php 
+	$i++;
+	endforeach 
+	?>
+
+</table>
+
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>

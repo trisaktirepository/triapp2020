@@ -1,0 +1,58 @@
+
+<script type="text/javascript">
+
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li class="divider"></li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+	<tr>
+		<th width="90%"><?php echo $this->translate('Discipline Name'); ?></th>
+		<th width="10%"><?php echo $this->translate('Discipline Code'); ?></th>
+	</tr>
+	
+	<?php 
+	$i=0;
+	foreach ($this->paginator as $entry): 
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<td>
+			<a href="<?php echo $this->url(array('module'=>'general-setup','controller'=>'highschool-discipline-programme', 'action'=>'detail','code'=>$entry['smd_code']),'default',true); ?>">
+			<?php echo $entry['smd_desc']; ?>
+			</a>
+		</td>
+		<td align="center">
+			<a href="<?php echo $this->url(array('module'=>'general-setup','controller'=>'highschool-discipline-programme', 'action'=>'detail','code'=>$entry['smd_code']),'default',true); ?>">
+			<?php echo $entry['smd_code']; ?>
+			</a>
+		</td>
+	</tr>
+	<?php 
+	$i++;
+	endforeach 
+	?>
+
+</table>
+
+<?php 
+
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>
+<div id="view-dialog" title="Office Details"></div>

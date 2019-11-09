@@ -1,0 +1,185 @@
+ 
+<script>
+	$(function(){
+		
+		$('#check_all').change(function(){
+			if( $(this).prop('checked') ){
+				$('.check').prop('checked',true);
+			}else{
+				$('.check').prop('checked',false);
+			}
+		});
+		
+		$( ".dateexam" ).datepicker({
+			dateFormat: "yy-mm-dd",
+            //defaultDate: "+1w",
+            changeMonth: true,
+            numberOfMonths: 2, 
+            onClose: function( selectedDate ) {
+                $( ".dtnodean" ).datepicker( "option", "minDate", selectedDate );
+            }
+        });
+        
+		$("#time_exam").timePicker({
+		  	  startTime: "06:00", // Using string. Can take string or Date object.
+		  	  endTime: new Date(0, 0, 0, 23, 30, 0), // Using Date object here.
+		  	  show24Hours: true,
+		  	  separator: ':',
+		  	  step: 10});
+		
+	});
+
+	
+ 
+	function cetakpdf(){
+		window.location="<?php echo $this->url(array('module'=>'finalassignment','controller'=>'examination','action'=>'exam-application-pdf','proposedby'=>$this->proposal['IdStudentRegistration'],'idtaapplication'=>$this->proposal['IdTAApplication']), 'default', true);?>";
+	}
+</script>
+
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			 
+		 <li>
+			<a href="#" onclick="cetakpdf();">
+				<span class='print'></span>
+				Print Pdf
+			</a>
+			
+		</li>
+		</ul>
+	</div>
+</div>
+<?php if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+
+<br /> 
+<?php }?>
+<br />
+<fieldset><legend ><?php echo $this->translate('Student Info');?></legend>
+<table>
+<tr><td><?php echo $this->translate('NIM');?></td><td>:</td><td><?php echo $this->student['registrationId'];?></td>
+<tr><td><?php echo $this->translate('Name');?></td><td>:</td><td><?php echo $this->student['appl_fname'].' '.$this->student['appl_mname'].' '.$this->student['appl_lname'];?></td>
+<tr><td><?php echo $this->translate('Majoring');?></td><td>:</td><td><?php echo $this->student['majoring'];?></td>
+<tr><td><?php echo $this->translate('Credit Hours Transcript/All');?></td><td>:</td><td><?php echo $this->student['credithours'].'/'.$this->student['credithoursall'];?></td>
+<tr><td><?php echo $this->translate('CGPA Transcript/All');?></td><td>:</td><td><?php echo $this->student['cgpa'].'/'.$this->student['cgpaall'];?></td>
+</tr>
+<tr><td></td><td></td><td>&nbsp;</td></tr>
+<tr><td width="25%"><?php echo $this->translate("Title in Bahasa");?></td><td>:</td>
+<td><?php echo $this->proposal['title_bahasa']; ?></td>  </tr> 
+<tr><td width="20%"><?php echo $this->translate("Title in English");?></td><td>:</td>
+<td> <?php echo $this->proposal['title']; ?></td></tr>
+<tr><td></td><td></td><td>&nbsp;</td></tr>
+<?php foreach ($this->supervisor as $item) {?>
+<tr><td><?php echo $this->translate('Supervisor');?></td><td>:</td><td><?php 
+							$staffname=$item["staffname"];
+							if ($item["FS"]!='-')  $item["FS"]." ".$staffname;
+							if ($item["BS"]!='-')  $staffname.", ".$item["BS"];
+								echo $staffname;?> </td>
+<tr><td><?php echo $this->translate('Address');?></td><td>:</td><td><?php echo $item['Add1'].' '.$item['Add2'];?></td>
+<tr><td><?php echo $this->translate('Phone');?></td><td>:</td><td><?php echo $item['Phone'];?>/<?php echo $item['Mobile'];?></td>
+<?php }?>
+</table>
+
+</fieldset>
+<fieldset><legend><?php echo $this->translate('Propose Exam Schedulle');?></legend>
+<form name="exam" method="post" action="/finalassignment/examination/exam-application">
+<input type="hidden" id="IdStudentRegistration" name="IdStudentRegistration" value="<?php echo $this->proposedBy;?>">
+<input type="hidden" id="idtaapplication" name="idtaapplication" value="<?php echo $this->idtaapplication;?>">
+<input type="hidden" id="IdTAExamination" name="IdTAExamination" value="<?php echo $this->exam['IdTAExamination'];?>">
+<table  width="60%" cellpadding="5" cellspacing="0" border="0">
+<tr><td width="30%"><?php echo $this->translate('Date of Exam');?></td><td>:</td><td><input type="text" id="dt_exam" name="dt_exam" class="dateexam" ></td>
+<tr><td><?php echo $this->translate('Time of exam');?></td><td>:</td><td><input type="text" id="time_exam" name="time_exam" class="timeexam" ></td>
+<tr>
+			<td>
+				<?php echo $this->translate("Exam")?>
+			</td>
+			<td width="5px">:</td>
+			<td>				
+				<select name="exam_ke" id="exam_ke">
+					<option value=""> <?php echo $this->translate('--Please Select--')?> </option>
+					<option value="1" <?php if ($this->exam['Ujian_ke']=="1") echo "selected";?>> <?php echo $this->translate('Utama')?> </option>
+					<option value="2" <?php if ($this->exam['Ujian_ke']=="2") echo "selected";?>> <?php echo $this->translate('Mengulang')?> </option> 
+				</select>
+			</td>
+		</tr>
+
+<tr><td colspan="3" align="center"><input type="submit" value="<?php echo $this->translate('Submit');?>"></td></tr>
+</table>
+</form>
+<h3>Examination Schedule</h3>
+<table class="table" width="100%">
+	<tr><th><?php echo $this->translate('Date')?></th><th><?php echo $this->translate('time')?></th><th><?php echo $this->translate('Exam Experience')?></th><th><?php echo $this->translate('Approval')?></th><th><?php echo $this->translate('date of approval')?></th><th><?php echo $this->translate('document')?></th>
+	<?php foreach ($this->exam as $value) { ?>
+	 	<tr><td><?php echo $value['dt_exam']?></td>
+	 	<td><?php echo $value['time_exam']?></td>
+	 	<td><?php if ($value['Ujian_ke']=='1') echo "Pertama"; else echo 'Mengulang';?></td>
+	 	<td><?php echo $value['Approval_by']?></td>
+	 	<td><?php echo $value['dt_approval']?></td>
+	 	<td><?php if ($value['propose_doc']!='' ) {
+			 
+			$path = $value['propose_doc'];
+			$path ="<a target='_blank' href=http://".APP_HOSTNAME.$path.">" ;
+		
+		  	echo $path;?><img src='<?php echo $this->baseUrl();?>/images/document.png' border=0 width='20' height='20' title="Download Application Letter" ></a></td>
+			<?php 
+			} ?>
+		</td></tr>
+	<?php }?>
+</table>
+</fieldset>
+<fieldset><legend><?php echo $this->translate('Status of Process');?></legend>
+<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+<tr>
+	<th><?php echo $this->translate('Name of Process');?></th>
+	<th><?php echo $this->translate('Authority of');?></th>
+	<th><?php echo $this->translate('PIC');?></th>
+	<th><?php echo $this->translate('Status of Process');?></th>
+	<th><?php echo $this->translate('Date of entry');?></th>
+	<th><?php echo $this->translate('Latest Date of Approval');?></th>
+	<th><?php echo $this->translate('Date of Approval');?></th>
+	<th><?php echo $this->translate('Documents');?></th>
+</tr>
+<?php  if ($this->process_status) {
+	foreach ($this->process_status as $status) {
+		if ($status['ApprovalStatus']==0) 
+			$statusApp="Waiting for Approval";
+		else if ($status['ApprovalStatus']==1) 
+			$statusApp="Approved";
+		else if ($status['ApprovalStatus']==2) 
+			$statusApp="Pending";
+		else  if ($status['ApprovalStatus']==3) 
+			$statusApp="Rejected";
+		?>
+	<tr>
+	<td><?php echo $status['ProcessName'];?></td>
+	<td><?php echo $status['StaffAs'];?></td>
+	<td><?php echo $status['FullName'];?></td>
+	<td><?php echo $this->translate($statusApp);?></td>
+	<td><?php echo $status['dt_entry'];?></td>
+	<td><?php echo $status['dt_latest'];?></td>
+	<td><?php echo $status['dt_Approved'];?></td>
+	<?php if (isset($status['doc_url']) && $status['doc_url']!='') {?>
+		<td><?php echo 'download document';?></td>
+	<?php } else  {?>
+		<td><?php echo $this->translate('no document');?></td>
+	<?php }?>
+</tr>
+<?php }
+} else echo '<tr><td> No Status of Process </td></tr>'?>
+ 
+ 
+</table>
+</fieldset>
+ 

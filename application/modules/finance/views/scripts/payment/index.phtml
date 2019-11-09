@@ -1,0 +1,84 @@
+<script type="text/javascript">
+	function del(title, id){
+		if(confirm('Are you sure to delete '+title+'?')){
+			window.location = "<?php echo $this->url(array('module'=>'finance','controller'=>'payment', 'action'=>'delete')); ?>/id/"+id;
+		}
+	}
+	
+	function add(){
+		window.location="<?php echo $this->url(array('module'=>'finance','controller'=>'payment', 'action'=>'add'));?>";
+	}
+
+	function view(id){
+		window.location="<?php echo $this->url(array('module'=>'finance','controller'=>'payment', 'action'=>'view-new'));?>/id/"+id;
+	}
+
+</script>
+<?php 
+	echo "<h1>". $this->title ."</h1>";
+	
+?>
+
+<div style="width: 600px;">
+<fieldset style="width:450px; margin:0 0">
+	<legend>Search Options</legend>
+<form name="f1" action="" method="post">
+	<table width="100%">
+		<tr>
+			<td>
+				Student IC
+			</td>
+			<td width="5px">:</td>
+			<td>
+				<input type="text" name="ic" id="ic">
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">&nbsp;</td>
+			<td><input type="submit" value="Search" /></td>
+		</tr>
+	</table>
+</form>
+</fieldset>
+</div>
+<br>
+
+	<div class="span-7 buttons">
+		<a class="positive addLink" href="#" onClick="add()">Add Category</a>
+	</div>
+	<br />
+<?php 
+	//echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+	<tr>
+		<th></th>
+		<th>IC</th>
+		<th>Student Name</th>
+		<th>Programme Name</th>
+		<th width="70px"><i>options</i></th>
+	</tr>
+	
+	<?php 
+	$i=1;
+	foreach ($this->list as $entry): 
+	?>
+	<tr <?php echo $i%2!=0?"class='shade'":""; ?>>
+		<td><?php echo $i; ?>)</td>
+		<td><?php echo $entry['detail']['ARD_IC']; ?></td>
+		<td><?php echo $entry['detail']['ARD_NAME']; ?></td>
+		<td><?php echo $entry['detail']['ARD_NAME']; ?></td>
+		<td>
+			<a class="viewLink" href="#" onClick="view(<?php echo $entry['detail']['ID']; ?>)">View</a>&nbsp;
+		</td>
+	</tr>
+	<?php 
+	$i++;
+	endforeach 
+	?>
+
+</table>
+
+<?php 
+	//echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>

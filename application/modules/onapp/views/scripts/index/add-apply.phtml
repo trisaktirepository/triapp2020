@@ -1,0 +1,200 @@
+<?php
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/css/layout.css' );
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/css/default/style.css' );
+?>
+
+<script type="text/javascript">
+	function del(title, id){
+		if(confirm('Are you sure to delete '+id+'?')){
+			window.location = "<?php echo $this->url(array('module'=>'onapp','controller'=>'index', 'action'=>'delete')); ?>/id/"+id;
+		}
+	}
+</script>
+
+<script type="text/javascript">
+
+    function addRowToTable(tbl_name)
+	{
+	  var tbl = document.getElementById(tbl_name);
+	  var lastRow = tbl.rows.length;
+	  // if there's no header row in the table, then iteration = lastRow + 1
+	  var iteration = lastRow;
+	  var row = tbl.insertRow(lastRow);
+	  
+	  var cellLeft = row.insertCell(0);
+	  var textNode = document.createTextNode(iteration);
+	  cellLeft.appendChild(textNode);
+	  
+	  for(i=1;i<5;i++){
+		  var cellRight = row.insertCell(i);
+		  var el = document.createElement("input");
+		  el.type = 'text';
+		  el.name = 'txtRow' + iteration+i;
+		  el.size = 10;
+		  cellRight.appendChild(el);
+		//alert(el.name);
+	  
+	  }  
+	}
+
+</SCRIPT>
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<?php
+	//echo "<h1>". $this->title ."</h1>";
+	//echo "<h1>". $this->id ."</h1>";
+	
+$applyDB = new Onapp_Model_DbTable_Apply();
+$apply = $applyDB->getData($this->id);
+
+?>
+<p><h1>A. PERSONAL PARTICULARS</b></h1>
+	<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+		<tr bgcolor="#ffffff">
+			<td width="20%"><?php echo $this->translate("FULLNAME"); ?></td>
+			<td width="2%">:</td>
+			<td><?php echo $apply["ARD_NAME"];?></td>
+		</tr>
+		<tr bgcolor="#ffffff">
+			<td ><?php echo $this->translate("PERSONAL ID"); ?></td>
+			<td >:</td>
+			<td><?php echo $apply["ARD_IC"];?></td>
+		</tr>
+		<tr bgcolor="#ffffff">
+			<td><?php echo $this->translate("CONTACT NUMBER"); ?></td>
+			<td>:</td>
+			<td><?php echo $apply["ARD_HPHONE"];?></td>
+		</tr>
+		<tr bgcolor="#ffffff">
+			<td><?php echo $this->translate("EMAIL ADDRESS"); ?></td>
+			<td>:</td>
+			<td><?php echo $apply["ARD_EMAIL"]; ?></td>
+		</tr>
+		<tr bgcolor="#ffffff">
+			<td><?php echo $this->translate("AWARD"); ?></td>
+			<td>:</td>
+			<td>
+			<?php 
+			$awardDB = new Onapp_Model_DbTable_Award();
+			$this->award = $awardDB->getData($apply["ARD_PROGRAM"]);
+			
+			echo $this->award["award_desc"]; ?>
+			</td>
+		</tr>
+	</table>
+	
+	<!-- $prog_qua = $_POST["prog_qua"];
+	  	$n= count($prog_qua);
+		$i= 0;
+		
+		while ($i < $n)
+		{
+			if ($pq["id"] == $prog_qua[$i]) {
+				$select = "disabled";
+				break;
+			}
+			else 
+				$select = "";
+			$i++;
+		}-->
+	
+
+		
+		
+<BR>
+	<p><h1>B. ENTRY REQUIREMENTS</b></h1>
+	
+	<form name="f1" method="POST" action="/onapp/index/add-req/id/<?php echo $this->id;?>">
+	
+	<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+		<tr align="center" bgcolor="#f2f2f2">
+		
+			<td><b>Bil</b></td>
+			<td width="10%"><b>Year Graduate</b></td>
+			<td align="center" width="15%"><b>Programme Level</b></td>
+			<td align="center" width="25%"><b>Programme Name</b></td>
+			<td align="center" width="40%"><b>School/College/University</b></td>
+			<td align="center" width="5%"><b>Grade</b></td>
+			<td align="center" width="5"><b>Delete</b></td>
+		</tr>
+		
+		<?php //echo $this->translate("Bachelor Degree"); 
+		$entryDB = new Onapp_Model_DbTable_Applyreq();
+		$this->entry = $entryDB->getEntry($this->id);
+		$n = 1;
+		foreach ($this->entry as $ent){
+	
+		?> 
+		<tr bgcolor="#ffffff">
+			<td><?=$n?>)</td>
+			<td><?=$ent["APP_YEAR"];?></td>
+			<td>
+				<?php 
+				
+				$program_name = $applyDB->getList("*","sc001_program","sc001_program_id = ".$ent["APP_ENTRY"]);
+				foreach ($program_name as $prog) {
+					echo strtoupper($prog["sc001_name"]); 
+				}?>
+			</td>
+			<td><?=$ent["APP_QUA"];?></td>
+			<td><?=$ent["APP_SCHOOL"];?></td>
+			<td><?=$ent["APP_GRADE"];?></td>
+			<td align="center"><a class="delLink2" href="#" onClick="del('<?php echo $ent['ID']; ?>',<?php echo $ent['ID']; ?>)"></a></td>
+		</tr>
+		<?$n++;
+		 } ?>
+		
+		
+		<tr bgcolor="#ffffff">
+		
+			<td><?=$n?>)</td>
+			<td>
+				<select name="APP_YEAR" id="APP_YEAR">
+				<? for ($i=2010;$i>1950;$i--){ ?>
+				 <option value="<?=$i?>"><?=$i?></option>
+				 <? } ?>
+				</select>
+			</td>
+			<td>
+			<select name="APP_ENTRY" id="APP_ENTRY">
+			<option value="0"> -- Please select -- </option>
+			<?php 
+			
+				foreach ($this->programlist as $programlist) {
+					echo "<option value='".$programlist['sc001_program_id']."'>".$programlist['sc001_name']."</option>";
+				}
+			?>
+		</select>
+		</td>
+			<td><input type="text" name="APP_QUA" id="APP_QUA" style="width:100%;"></td>
+			<td><input type="text" name="APP_SCHOOL" id="APP_SCHOOL" style="width:100%;"></td>
+			<td><input type="text" name="APP_GRADE" id="APP_GRADE" style="width:100%;"></td>
+			<td></td>
+		</tr>
+		
+		<input type="hidden" name="APP_STAT" id="APP_STAT" value="0">
+		<input type="hidden" name="APP_ID" id="APP_ID" value="<?=$this->id;?>">
+	</table>
+	
+
+		
+<br>
+<!--	<form name="f2" method="POST"">-->
+	<table width="100%">
+		<tr>
+			<td align="center"><input type="submit" value="Add More" onclick="addRowToTable('tbl_name');" />
+			<input type="submit" value="Save & Next" onclick="form.action='<? echo $this->url(array('module'=>'onapp','controller'=>'index','action'=>'add-detail','app_id'=>$this->id),'default',true) ?>'"/></td>
+<!--			<td><input type="submit" value="Reset" /></td>-->
+		</tr>
+	</table>
+	
+	</form>

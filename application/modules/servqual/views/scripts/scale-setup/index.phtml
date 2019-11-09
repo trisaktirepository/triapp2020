@@ -1,0 +1,82 @@
+<div class="message toolbar">
+	<h2><?php echo $this->titles; ?></h2>
+	<div class="toolbar-button">
+	</div>
+</div>
+<br />
+
+<?php if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+<br />
+<?php }?>
+<form method='post' name="form-question">
+<input type="hidden" name="IdScaleDetail" value=<?php echo $this->id;?>>
+<table>
+
+<tr>
+	<td><?php echo $this->translate('Scale')?></td><td>:</td><td>
+	<select name="IdScale">
+				<?php 
+				foreach ($this->scales as $list):
+					$select = "";
+					if( isset($this->scales) && $this->idscale==$list['idDefinition'] ){
+						$select = 'selected="selected"';
+					}
+				?>
+					<option value="<?php echo $list['idDefinition'];?>" <?php echo $select; ?>><?php echo $list['BahasaIndonesia'].' (',$list['Description'].')';?></option>
+				<?php 
+				endforeach;
+				?>
+			</select>
+	</td>
+</tr>
+<tr>
+	<td><?php echo $this->translate('Title')?></td><td>:</td><td><textarea name="Title" cols="50" rows="5"><?php echo $this->title?></textarea></td>
+</tr>
+<tr>
+	<td><?php echo $this->translate('Score')?></td><td>:</td><td><input type="text" name="Score"  value="<?php echo $this->score?>"> </td>
+</tr>
+<tr>
+	<td><?php echo $this->translate('Active')?></td><td>:</td><td><input type="checkbox" name="Active" <?php if ($this->active=='1') echo 'checked';?> value="1"></td>
+</tr>
+<tr><td></td><td></td><td><input type="submit" name="submit"></td>
+</tr>
+</table>
+</form>
+<h2><?php echo $this->translate('List of Scale Detail');?></h2>
+
+<table width="100%" class="table">
+	<tr>
+		<th><?php echo $this->translate('No');?></th>
+		<th><?php echo $this->translate('title');?></th>
+		<th><?php echo $this->translate('score');?></th>
+		<th><?php echo $this->translate('Status');?></th>
+		<th></th>
+	</tr>
+	<?php 
+	if($this->scalesdetail){
+      foreach($this->scalesdetail as $index => $batch){
+	?>
+	<tr <?php echo $index%2==0?"class='shade'":""?> >
+		<td><?php echo $index+1;?></td>
+		<td><?php echo $batch['title']; ?></td>
+		<td><?php echo $batch['scalename']; ?></td>
+		<td><?php echo $batch['score']; ?></td>
+		<td><?php echo $batch['Active']; ?> </td>
+		<td align="center">
+		  <a href="/servqual/scale-setup/index/id/<?php echo $batch['IdScaleDetail'];?>">Edit</a> |
+		 </td>
+	</tr>
+	<?php 
+	  }
+	}
+	?>
+</table>

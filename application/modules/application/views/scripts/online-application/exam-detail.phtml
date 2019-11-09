@@ -1,0 +1,431 @@
+<?php 
+		echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery/plugin/fullcalendar/fullcalendar.min.js');
+		echo $this->headLink()->prependStylesheet($this->baseUrl().'/js/jquery/plugin/fullcalendar/fullcalendar.css');
+?>
+<script type="text/javascript">
+
+//.fullCalendar( 'gotoDate', year [, month, [ date ]] )
+
+$(document).ready(function() {
+    $('#calendar').fullCalendar({
+    	header: {
+			left: 'prev,next today',
+			center: 'title',
+			right: 'month,agendaWeek,agendaDay'
+		},
+		
+		defaultView: 'month',
+        'theme' : true,
+        'firstDay': 1,
+        'weekMode': 'variable',
+        'height': 650,
+        
+        editable: false,
+        events: {
+            url: '<?php echo $this->url(array('module'=>'application','controller'=>'online-application', 'action'=>'ajax-get-schedule')); ?>',
+            type: 'POST',
+            data: {
+                'exam_center_id': $('#exam_center').val(),
+                'course_id': $('#program').val()
+            },
+            error: function(a) {
+                alert('there was an error while fetching events!');
+            }
+ 		},
+ 		eventClick: function(event) {
+ 	 		
+ 	 		var course = <?php echo $this->courseSelect;?>;
+ 	 		var idApp = <?php echo $this->idApp;?>;
+
+ 			var detail_url = '<?php echo $this->url(array('module'=>'application','controller'=>'online-application', 'action'=>'view')); ?>/id/'+event.id+'/course_id/'+course+'/idApp/'+idApp
+
+ 			$('#dialog-event').empty();
+    		$('#dialog-event').load(detail_url).dialog('open');
+    		$('#dialog-event').dialog( "option", "position", ['center','top'] );
+    		
+
+    		//hook to edit button
+
+        },
+       
+    });
+
+    //checking 14 days
+    var myDate=new Date();
+    myDate.setDate(myDate.getDate()+14);
+
+    var d = myDate.getDate();
+    var y = myDate.getFullYear();
+    var m = myDate.getMonth();
+	
+    $('#calendar').fullCalendar('gotoDate', y,m);
+
+    //end calendar
+
+    $( "#tabs" ).tabs();
+
+    $( "#dialog-schedule" ).dialog({
+        'autoOpen': false,
+        'modal': true,
+        'width': 600,
+        'buttons': { 
+            'Close': function() { 
+                	$(this).dialog('close'); 
+            		},
+            'Submit': function() { 
+				var msg = 'Confirm to submit this exam schedule?';
+
+				/*validate*/
+				if( $('#program_id').val()==0 ){
+					alert('Please select program');
+					return false;
+				}else
+				if( $('#course_id').val()==null ){
+					alert('Please select course');
+					return false;
+				}else
+				if( $('#date').val()==0 ){
+					alert('Please select date');
+					return false;
+				}else
+				if( $('input[name=start]').val()=="" || $('input[name=end]').val()=="" ){
+					alert('Please select time');
+					return false;
+				}else
+				if( $('select[name=exam_center]').val()==null ){
+					alert('Please select exam center');
+					return false;
+				}else
+				if( $('#venue_id').val()==null ){
+					alert('Please select venue');
+					return false;
+				}else{
+					if(confirm(msg)){
+						$('#schedule_form').submit();
+					} 
+				}
+            } 
+    	}
+    });
+
+    $( "#dialog-event" ).dialog({
+        'autoOpen': false,
+        'modal': true,
+        'width': 600
+    });
+});
+
+
+function reloadpage(element){
+	var center_id = $(element).val();
+
+	var course_id = document.getElementById("program").value;
+	
+
+	var idApp = <?php echo $this->idApp;?>;
+
+//	alert(center_id);
+//	alert(course_id);
+//	
+
+	
+	window.location="<?php echo $this->url(array('module'=>'application', 'controller'=>'online-application','action'=>'exam-detail'),'default',true); ?>/exam_center_id/"+center_id+"/course_id/"+course_id+"/idApp/"+idApp;
+
+	
+}
+
+
+function tableEdit(id){
+	$( "#dialog-schedule" ).dialog( "option", "title", "Edit Exam Schedule" );
+	$("#dialog-schedule").html("");
+	$("#dialog-schedule").load('<?php echo $this->url(array('module'=>'application','controller'=>'online-application', 'action'=>'personal'),'default',true); ?>/id/'+id).dialog('open');
+}
+</script>
+
+<script>
+function changeVenue(id){
+	document.getElementById('venue').options.length = 0;
+	
+	$.ajax({ 
+		type: "POST",
+		url: "<?php echo $this->url(array('module'=>'application','controller'=>'online-application','action'=>'ajax-get-venue'),'default',true);?>/idApp/"+<?php echo $this->idApp;?>, 
+		data: "id=" + id,
+		context: document.body, 
+		success: function(data){
+			if(data == 1){
+				document.getElementById('venue').disabled = true;
+				alert('You already applied for this course. Please select other course.');
+				
+			}else{
+				response = eval(data);
+				document.getElementById('venue').disabled = false;
+				var venue = document.getElementById('venue');
+				venue.options.length = 0;
+				venue.options[0]=new Option('-- Please select --','');
+				
+				for(var i=0; i<response.length; i++){
+					venue.options[i+1]=new Option(response[i].center_name,response[i].exam_center);
+				}		
+	    	}
+		}
+	});
+	
+}
+
+
+</script>
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<!--<ul>
+			<li>
+				<a href="#" onclick="javascript:searchbox()">
+					<span class='search'></span>
+					Search
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>-->
+	</div>
+</div>
+
+<div align="center" style="background:#ebebeb; height:30px;">
+<ul class="steps">
+	<li class="prevDone">
+		<span>1</span> Personal Identity Number
+	</li>
+    <li class="prevDone">
+		<a href="<?php echo $this->url(array('module'=>'application','controller'=>'online-application','action'=>'personal','id'=>$this->idApp),'default',true) ?>"><span>2</span> Personal Particular</a>
+	</li>
+    <li class="current">
+		<span>3</span> Examination Details
+	</li>
+	<li class="next">
+		<span>4</span> Payment 
+	</li>
+	<li class="empty">
+		<span>5</span> Confirmation of Registration
+	</li>
+</ul>
+<br class="clear" />
+</div>
+<BR>
+<p><h1>Registration/Examination History</b></h1>
+<table width="100%" class="table4" border="0" cellpadding="5" cellspacing="1" bgcolor="" align="">
+	<tr bgcolor="#ffffff">
+		<th colspan="2">Course Name</th>
+		<th>Examination Date</th>
+		<th>Start to End Time</th>
+		<th>Exam Center</th>
+		<th>Examination Status</th>
+		<th>Payment Mode</th>
+		<th>Payment Status</th>
+		<th>Application Date</th>
+		<th>Action</th>
+	</tr>
+	<?php 
+if($this->register){
+	$i=1;
+	foreach($this->register as $regis){?>
+	<tr bgcolor="#ffffff">
+		<td><?php echo $i;?>)</td>
+		<td><?php echo $regis['course_name'];?></td>
+		
+		<td><?php echo date('d-M-Y',strtotime($regis['exam_date'])); ?></td>
+		<td><?php echo $regis['exam_time_start'];?> to <?php echo $regis['exam_time_end'];?></td>
+		<td><?php echo $regis['venue_name'];?></td>
+		<td><?php 
+		if($regis['course_grade'] == null){echo "<font color=red><B>INCOMPLETE</B></FONT>";}else{echo "COMPLETE";}
+		?></td>
+		<td><?php echo $regis['paymentmode'];?></td>
+		<td bgcolor='#f2f2f2'><?php if($regis['paymentStatus'] == 0)echo "<font color=red><b>PENDING</b></font>";elseif($regis['paymentStatus'] == 1) echo "<font color=green>COMPLETED</font>"; ?></td>
+		<td><?php echo $regis['dateApplied'];?></td>
+		<td align="center">[ <a href="">Edit</a> ] [ <a href="">Continue</a> ]</td>
+	</tr>
+	<?php 
+	$i++;
+	}
+	}else{
+		echo "<tr><td colspan=10>No data.</td></tr>";
+	}?>
+</table>
+		
+<br>
+
+		
+<p><h1>Note *: </b></h1>
+<ol>
+<li>Exam location and date may be changed. We will inform candidates at least two days before any changes by email and sms</li>
+<li>Last date of registration is 14 days prior to the choosen examination date</li>
+</ol>
+
+<input type="hidden" name="idApp" id="idApp" size="60" value="<?php echo $this->idApp;?>"/>
+<br>
+<table width="100%" border="0" cellpadding="3" cellspacing="1" bgcolor="" align="">
+<tr bgcolor="#ffffff">
+	<td colspan="2"><font color="Red"><i>Instruction : Please select course and examination location.</i></font></td>
+</tr>
+	<tr bgcolor="#ffffff">
+		<td width="25%">Please Choose Your Course * :</td>
+		<td width="75%">
+		<select name="program" id="program" onchange="changeVenue(this.options[this.selectedIndex].value);">
+			<option value="0"> -- Please select -- </option>
+			<?php 
+				foreach ($this->program as $data) {
+					
+					if ($data['id'] == $this->courseSelect) {
+						$selected = "selected";
+					}else{
+						$selected ="";
+					}
+			
+					echo "<option value='".$data['id']."' $selected>".$data['name']."</option>";
+				}
+			?>
+		</select>
+		<input type="hidden" name="courseSelect" id="courseSelect" value="<?php echo  $this->courseSelect?>">
+		</td>
+	</tr>
+	<tr bgcolor="#ffffff">
+		<td>Please select your examination location :</td>
+		<td>
+		<select name="venue" id="venue"  onChange="reloadpage(this)">
+			<option value="0"> -- Please select -- </option>
+			<?php 
+				foreach ($this->listVenue as $data) {
+					
+					if ($data['exam_center'] == $this->exam_center_id) {
+						$selected = "selected";
+					}else{
+						$selected ="";
+					}
+			
+					echo "<option value='".$data['exam_center']."' $selected>".$data['center_name']."</option>";
+				}
+			?>
+			
+		</select>
+		</td>
+	</tr>
+	</table>
+	<br>
+<?php 
+echo $this->checkRegister;
+
+	if($this->courseSelect == 0){
+	
+
+	}else{
+		
+		if($this->checkRegister==1){
+	?>
+	<font color="Red"><i>You have registered for this course. Please select different course.</i></font> 
+
+<br><br>
+
+<table width="100%" cellspacing="0" cellpadding="5" border="0">
+ <tr bgcolor ="#cccccc">
+    <td colspan="3">Application Details</td>
+  </tr>
+  <tr>
+    <td>Program</td>
+    <td>:</td>
+    <td><?php echo $this->checkRegister["program_name"];?></td>
+  </tr>
+  <tr>
+    <td>Course</td>
+    <td>:</td>
+    <td><?php echo $this->checkRegister["course_name"];?></td>
+  </tr>
+  <tr>
+    <td>Location</td>
+    <td>:</td>
+    <td><?php echo $this->checkRegister["venue_name"];?></td>
+  </tr>
+  <tr>
+    <td>Exam Date</td>
+    <td>:</td>
+    <td><?php echo $this->checkRegister["exam_date"];?></td>
+  </tr>
+  <tr>
+    <td>Session</td>
+    <td>:</td>
+    <td><?php echo $this->checkRegister["exam_time_start"];?> to <?php echo $this->checkRegister["exam_time_end"];?></td>
+  </tr>
+  <tr>
+    <td>Date Application</td>
+    <td>:</td>
+    <td><?php echo $this->checkRegister["dateApplied"];?></td>
+  </tr>
+  <tr bgcolor ="#cccccc">
+    <td colspan="3">Payment</td>
+  </tr>
+  <tr>
+    <td>Payment Mode</td>
+    <td>:</td>
+    <td><?php echo $this->checkRegister["paymentmode"];?></td>
+  </tr>
+  <tr>
+    <td>Payment Amount</td>
+    <td>:</td>
+    <td><?php echo $this->checkRegister["currency"];?> <?php echo $this->checkRegister["amount"];?></td>
+  </tr>
+  <tr>
+    <td>Payment Status</td>
+    <td>:</td>
+    <td><?php echo $this->checkRegister["paymentStatus"];?></td>
+  </tr>
+
+</table>
+<?php 
+	}else{
+		?>
+		<div id ='displayDate' style="display:block;border:1px #cccccc solid;padding:10px;">
+
+<font color="Red"><i>Instruction : Click on the date to view details and proceed.</i></font> 
+
+<table>
+<tr>
+    <td colspan="3"> <u>Legends</u></td>
+  </tr>
+<tr>
+    <td bgcolor="026510" width="20"></td>
+    <td></td>
+    <td>Available</td>
+  </tr>
+  <tr>
+    <td bgcolor="e10404"></td>
+    <td></td>
+    <td>Full</td>
+  </tr>
+  </table>
+  <br><br>
+	<div id='calendar'></div>	
+</div>
+		<?php 
+	}
+	}
+
+	?>
+
+
+
+	</form>
+	<div id="dialog-schedule" title="Add Exam Schedule"></div>
+	<div id="dialog-event" title="Examination Details Info"></div>
+	

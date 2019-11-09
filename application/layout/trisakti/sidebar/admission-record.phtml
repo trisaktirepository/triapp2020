@@ -1,0 +1,26 @@
+<?php
+/*
+ *  @author Suliana
+ *  @created May 16, 20101
+ */
+?>
+<div id="vertmenu">
+	<ul>  
+	    <li><h1>Registration</h1></li>  
+	   <!-- <li><a href="<?php echo $this->url(array('module'=>'admission-record','controller'=>'registration','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Auto Registration"); ?></a></li>-->
+	    <li><a href="<?php echo $this->url(array('module'=>'admission-record','controller'=>'registration','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Student Registration"); ?></a></li>  
+	    <li><a href="<?php echo $this->url(array('module'=>'admission-record','controller'=>'add-drop','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Add & Drop Course"); ?></a></li>    
+	    <li><a href="<?php echo $this->url(array('module'=>'admission-record','controller'=>'credit-transfer','action'=>'index-student'),'default',true) ?>"><?php echo $this->translate("Credit Transfer (Student)"); ?></a></li>    
+	    <li><a href="<?php echo $this->url(array('module'=>'admission-record','controller'=>'credit-transfer','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Credit Transfer (Admin)"); ?></a></li>    
+	</ul> 
+</div>
+<br>
+<!--<div id="vertmenu">
+	<ul>  
+	    <li><h1>Record Menu</h1></li>  
+	    <li><a href="<?php echo $this->url(array('module'=>'admission-record','controller'=>'student','action'=>'profile'),'default',true) ?>"><?php echo $this->translate("Student Profile"); ?></a></li>  
+	    <li><a href="<?php echo $this->url(array('module'=>'admission-record','controller'=>'change-program','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Change Program"); ?></a></li>  
+	    <li><a href="<?php echo $this->url(array('module'=>'admission-record','controller'=>'change-status','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Change Status"); ?></a></li>
+	    <li><a href="<?php echo $this->url(array('module'=>'admission-record','controller'=>'credit-transfer','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Credit Transfer"); ?></a></li>     
+	</ul> 
+</div>-->

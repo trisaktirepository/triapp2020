@@ -1,0 +1,343 @@
+<?php //echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery/plugin/perifer-timePicker/jquery.timePicker.js');?>
+<?php //echo $this->headLink()->prependStylesheet($this->baseUrl().'/js/jquery/plugin/perifer-timePicker/timePicker.css'); ?>
+
+<script>
+
+$(function(){
+	
+});
+
+
+function getStudent(element,targetElement){
+	var idCollege = $(element).val();
+	var nama =$(element).val();
+	 
+	$.ajax({
+		url: "<?php echo $this->url(array('module'=>'assistant','controller'=>'course-group', 'action'=>'ajax-get-student'),'default',true);?>",
+		data: {'nama':$(element).val()},
+		type: 'POST',
+		dataType: 'json',	
+		beforeSend: function(){
+			$(targetElement).hide();
+			$(targetElement).parent().append('<div class="loading"><img src="/images/ajax-loader-bar.gif" /></div>');
+		}	
+	}).done(function ( data ) {
+
+		$('.loading').remove();
+		$(targetElement).show();
+		
+		$(targetElement).empty().append('<option value="0"> <?php echo $this->translate("Please Select"); ?> </option>');
+	
+		$.each(data, function(index) {
+			$(targetElement).append('<option value="'+data[index].IdStaff+'"> '+data[index].FullName+' </option>');
+		});
+	});
+}
+
+function addSchedule(){
+	//isAnyStudent();
+	//if ($('#statusedit').val()=='0') {
+		url = "<?php echo $this->url(array('module'=>'assistant','controller'=>'course-group','action'=>'add-schedule','idSubject'=>$this->idSubject,'idSemester'=>$this->idSemester,'idGroup'=>$this->idGroup),'default',true);?>";
+		$("#dialog-form").load(url);
+		$("#dialog-form").slideDown("slow");
+	//} else alert('Tidak boleh ditambah jadwalnya, '+$("#msg").val());
+}
+
+
+function delSchedule(){
+	
+	var idSchedule = $('input[name=sc_id]:checked').val();
+	
+	if(!idSchedule){
+		alert("Please select schedule first");
+	}else{
+		//isAnyStudent();
+		//if ($('#statusedit').val()=='0') {
+		if (confirm("Benar akan mencoret jadwal ini!")) 
+			window.location="<?php echo $this->url(array('module'=>'assistant','controller'=>'course-group','action'=>'delete-schedule','idSubject'=>$this->idSubject,'idSemester'=>$this->idSemester,'idGroup'=>$this->idGroup),'default',true);?>/idSchedule/"+idSchedule;
+		//} else alert('Tidak boleh dicoret jadwalnya, '+$("#msg").val());
+	}
+}
+
+function editSchedule(){
+	
+	var idSchedule = $('input[name=sc_id]:checked').val();
+	isAnyStudent();
+	if(!idSchedule){
+		alert("Please select schedule first");
+	}else{
+		
+		if ($('#statusedit').val()=='1') {
+			//alert($("#msg").val());
+			disabled="1"; }
+		 else disabled="0";
+		//alert($('#statusedit').val());
+	
+		url = "<?php echo $this->url(array('module'=>'assistant','controller'=>'course-group','action'=>'edit-schedule','idSubject'=>$this->idSubject,'idSemester'=>$this->idSemester,'idGroup'=>$this->idGroup),'default',true);?>/idSchedule/"+idSchedule+'/disabled/'+disabled;
+		
+		$("#dialog-form").load(url);
+		$("#dialog-form").slideDown("slow");
+		 
+		
+		
+	}
+}
+
+
+
+
+
+function printAttendance(){
+
+	var idSchedule = $('input[name=sc_id]:checked').val();
+
+	if(!idSchedule){
+		alert("Please select schedule first");	}else{
+		
+		url = "<?php echo $this->url(array('module'=>'assistant','controller'=>'course-group','action'=>'attendance-list','idSubject'=>$this->idSubject,'idSemester'=>$this->idSemester),'default',true);?>/idSchedule/"+idSchedule;
+		window.open(url, "Attendance List", "width=500,height=500,menubar=1");
+	}
+	
+}
+
+function export_pdf(){
+
+	var idSchedule = $('input[name=sc_id]:checked').val();
+
+	if(!idSchedule){
+		alert("Please select schedule first");	}
+	else{
+		
+		var data = {'idSchedule':idSchedule}
+	
+		$('body').append($('<form/>', {
+	      id: 'jQueryPostItForm',
+	      method: 'POST',
+	      action: "/assistant/course-group/attendance-list-pdf",
+	      target: '_BLANK'
+	    }));
+		
+	    for(var i in data){
+	      $('#jQueryPostItForm').append($('<input/>', {
+	        type: 'hidden',
+	        name: i,
+	        value: data[i]
+	      }));
+	    }
+		
+	    $('#jQueryPostItForm').submit();
+	    $('#jQueryPostItForm').remove();
+	}
+
+    return false;
+}
+
+function isClassLecture(){
+
+	var origin = $('#ori').val();
+	 
+	if($('#idLecturer').val()!="" ){
+		var day=$('#sc_day').val();
+		var groupid = $('#idGroup').val();
+		var schid=$('#idSchedule').val(); 
+		//alert($('#idLecturer').val()+'-'+day);
+		$.ajax({
+			url: "<?php echo $this->url(array('module'=>'generalsetup','controller'=>'course-group', 'action'=>'ajax-get-lecturerclash'),'default',true);?>",
+			data: {'IdLecturer':$('#idLecturer').val(),'IdGroup' : groupid,'IdSchedule':schid,'ori':origin,'sc_date': $('#sc_date').val(),'sc_day':day,'sc_start_time':$('#sc_start_time').val(),'sc_end_time':$('#sc_end_time').val(),'idSemester':$('#idSemester').val()},
+			type: 'POST',
+			async: false,
+			dataType: 'json' 
+		}).done(function ( data ) {
+			//alert(data.status);
+			document.getElementById("status").value=data.status; 
+
+			$('#msgtbl').empty();
+			document.getElementById("msg").innerHTML='';
+			if ($('#statusedit').val()=='0') {
+				html='<font color="red">'+data.message+'</font><br><br>';  
+				document.getElementById("msg").innerHTML=html;
+				var html='<table class="table" ><tr><td>Subject Code</td><td>Subject Name</td><td>Klas</td><td>Hari</td><td>Mulai</td><td>Selesai</td></tr>';
+				
+				$.each(data.list, function(index) {
+					html=html+'<tr><td>'+data.list[index].subject_code+'</td><td>'+data.list[index].subject_name+'</td><td>'+data.list[index].GroupName+'</td><td>'+data.list[index].sc_day+'</td><td>'+data.list[index].sc_start_time+'</td><td>'+data.list[index].sc_end_time+' </td></tr>';
+				});
+				html=html+'</table>';
+				$('#msgtbl').append(html);
+				$('#idLecturer').val("0");
+				
+			}
+		
+		});
+	}
+}
+
+function isAnyStudent(){
+
+	 	
+		var groupid = $('#idGroup').val();
+		 
+		$.ajax({
+			url: "<?php echo $this->url(array('module'=>'assistant','controller'=>'course-group', 'action'=>'ajax-check-contraint'),'default',true);?>",
+			data: { 'IdGroup' : groupid},
+			type: 'POST',
+			async: false,
+			dataType: 'json' 
+		}).done(function ( data ) {
+			//alert(data.status);
+			document.getElementById("statusedit").value=data.status; 
+			document.getElementById("msg").value=data.message; 
+			 
+		
+		});
+	 
+}
+
+</script> 
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		
+		<ul>	
+			<?php if ($this->edit=="1") { ?>		
+			<li>
+				<a href="#" onclick="addSchedule();" >
+					<span class='add'></span>
+					Add 
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="editSchedule();" >
+					<span class='edit'></span>
+					Edit 
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="delSchedule();" >
+					<span class='delete'></span>
+					Delete 
+				</a>
+			</li>
+			<?php }?>
+			<li>
+				<a href="#" onclick="printAttendance();" >
+					<span class='print'></span>
+					Print 
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="export_pdf();">
+					<span class='pdf'></span>
+					Attendance PDF
+				</a>
+			</li>
+			<li class="seperator"></li>
+			
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'assistant','controller'=>'course-group','action'=>'group-list','idGroup'=>$this->idGroup,'idSemester'=>$this->idSemester,'idSubject'=>$this->idSubject),'default',true);?>" >
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<br>
+<?php if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+<?php }?>
+
+
+
+<br>
+<div id="dialog-form" style="display:none" >
+</div>
+
+<br>
+<div style="width:100%;">
+
+
+<fieldset>
+
+<legend><?php echo $this->translate("Group Info")?></legend>
+<input type="hidden" id="statusedit">
+<input type="hidden" id="msg">
+<input type="hidden" id="idGroup" value="<?php echo $this->group["IdCourseTaggingGroup"] ?>">
+<table class="" width="50%" cellpadding="5" cellspacing="5" border="0">
+	<tr>
+		<td width="100px"><?php echo $this->translate("Group Name")?></td>
+		<td width="5px">:</td>
+		<td><?php echo $this->group["GroupCode"]?></td>
+	</tr>
+		<tr>
+		<td><?php echo $this->translate("Coordinator")?></td>
+		<td width="5px">:</td>
+		<td><?php echo ($this->group["IdLecturer"]!=0 ?  $this->group["FullName"]:$this->translate("-"));?></td>
+	</tr>
+	<tr>
+		<td width="100px"><?php echo $this->translate("Subject Name")?></td>
+		<td width="5px">:</td>
+		<td><?php echo $this->group["subject_name"];  ?></td>
+	</tr>
+	<tr>
+		<td><?php echo $this->translate("Subject Code")?></td>
+		<td width="5px">:</td>
+		<td><?php echo $this->group["subject_code"];?></td>
+	</tr>
+</table>
+
+<br>
+
+<table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+	<tr>
+		<th width="25px">&nbsp;</th>
+		<th><?php echo $this->translate("Date")?></th>
+		<th><?php echo $this->translate("Day")?></th>
+		<th><?php echo $this->translate("Start Time")?></th>
+		<th><?php echo $this->translate("End Time")?></th>
+		<th><?php echo $this->translate("Venue")?></th>	
+		<th><?php echo $this->translate("Lecturer")?></th>
+		<th><?php echo $this->translate("Remark")?></th>	
+		<th><?php echo $this->translate("Created Date")?></th>	
+	</tr>
+	<?php 
+	//strftime($format, strtotime($time))
+	setlocale(LC_TIME, "id_ID");
+	$i=1;
+	if(count($this->schedule)>0){
+	foreach($this->schedule as $sch){
+		if($sch["FullName"]==""){
+			$sch["FullName"]=$this->group["FullName"];
+		}
+	?>
+	<tr>
+		<td align="center"><input type="radio" name="sc_id" id="sc_id" value="<?php echo $sch["sc_id"]?>"></td>
+		<td><?php echo $sch["sc_date"]!=null?date('d/m/Y', strtotime($sch["sc_date"])):"-";?></td>
+		<td><?php 
+			$timestamp = strtotime($sch["sc_day"]);			
+			echo strftime('%A', $timestamp);
+			?>
+		</td>
+		<td><?php echo $sch["sc_start_time"]?></td>
+		<td><?php echo $sch["sc_end_time"]?></td>
+		<td><?php echo $sch["sc_venue"]?></td>
+		<td><?php echo $sch["FullName"]?></td>
+		<td><?php echo $sch["sc_remark"]?></td>
+		<td><?php echo date("d-m-Y",strtotime($sch["sc_createddt"]));?></td>
+	</tr>
+	<?php }} ?>
+</table>
+
+</div> 

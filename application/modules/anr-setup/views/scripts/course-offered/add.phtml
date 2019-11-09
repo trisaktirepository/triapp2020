@@ -1,0 +1,261 @@
+<script type="text/javascript">
+
+	/** add remove function **/
+	$(document).ready(function() {
+
+		// a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
+		$( "#dialog:ui-dialog" ).dialog( "destroy" );
+	
+		$( "#dialog-add" ).dialog({
+			autoOpen: false,
+			width: 500,
+			height: 300,
+			modal: true,
+			buttons: {
+				Add: function() {
+					var course = new Array();
+					
+					$("input[name='course']:checked").each(
+					  function(index, item) {
+						preaddcourse(item.value);
+					  }
+					);
+
+					
+					$( this ).dialog( "close" );
+				},
+				Cancel: function() {
+					$( this ).dialog( "close" );
+				}
+			}
+		});
+
+	});
+
+	function addcourse(){
+		$('#faculty').val(0);
+		$('#department').val(0);
+		getCourse();
+		
+		$( "#dialog-add" ).dialog('open');
+	}
+
+	function getDepartment(){
+		var fac_id = $('#faculty').val();
+		
+		$.ajax({
+		  url: "<?php echo $this->url(array('module'=>'anr-setup','controller'=>'course-offered', 'action'=>'ajax-get-department'),'default',true);?>",
+		  data:{fid:fac_id},
+		  dataType: 'json',
+		  async: false,
+		  context: document.body,
+		  success: function(data){
+			  var options = '<option value="0">All Department</option>';
+		      for (var i = 0; i < data.length; i++) {
+		        options += '<option value="' + data[i].id + '">' + data[i].name+ '</option>';
+		      }
+		      $("#department").html(options);
+		  }
+		});
+
+		getCourse();
+	}
+
+	function getCourse(){
+		var fac_id = $('#faculty').val();
+		var dep_id = $('#department').val();
+
+		//get course
+		$.ajax({
+		  url: "<?php echo $this->url(array('module'=>'anr-setup','controller'=>'course-offered', 'action'=>'ajax-get-course'),'default',true);?>",
+		  data:{fid:fac_id, did:dep_id},
+		  dataType: 'json',
+		  async: false,
+		  context: document.body,
+		  success: function(data){
+			  $('#course').empty();
+			  
+			  for (var i = 0; i < data.length; i++) {
+				  $('#course').append('<tr><td>' + data[i].code +' - '+ data[i].name + '</td><td><input type="checkbox" name="course" value="'+data[i].id+'" /></td></tr>');
+		      }
+		  }
+		});
+	}
+
+	function preaddcourse(course_id){
+		if(course_id!=""){
+			var course_data = null;
+			$.ajax({
+			  url: "<?php echo $this->url(array('module'=>'anr-setup','controller'=>'course-offered', 'action'=>'ajax-get-course-detail'),'default',true);?>",
+			  data:{cid:course_id},
+			  dataType: 'json',
+			  async: false,
+			  context: document.body,
+			  success: function(data){
+				  course_data = data;
+			  }
+			});
+			
+			var department_name = course_data.department_name;
+			if(department_name==null){
+				department_name="";
+			}
+			
+			var row = '<tr id=\''+course_data.id+'\'><td>'+course_data.name+'</td><td align=\'center\'>'+course_data.code+'</td><td>'+department_name+'</td><td align=\'center\'><a href=\'#\' onclick=\'remove_course('+course_data.id+')\' class=\'remove\'></a><input type=\'hidden\' name=\'courses[]\' value=\''+course_data.id+'\' /></td></tr>';
+			$('#pre_course tr:last').after(row);
+			
+		}
+	}
+
+	function remove_course(course_id){
+		$('#'+course_id).remove();
+	}
+
+</script>
+
+<style type="text/css">
+	.table td{
+		line-height: 25px;	
+	}
+	
+	.table th{
+		line-height: 35px;	
+	}
+</style>
+
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="addcourse()" >
+					<span class='add-course'></span>
+					Add Course
+				</a>
+			</li>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'anr-setup','controller'=>'course-offered', 'action'=>'index'),'default',true);?>" >
+					<span class='back'></span>
+					back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+
+<form id="country_form" enctype="application/x-www-form-urlencoded" method="post" action="">
+	
+	<div style="width: 600px;">
+		<fieldset style="width:450px; margin:10px 0">
+			<legend>Search Infomation</legend>
+			<table width="100%">
+				<tr>
+					<td width="50px">
+						Semester
+					</td>
+					<td width="5px">:</td>
+					<td>
+						<?php echo $this->semester['name']; ?>
+					</td>
+				</tr>
+			</table>
+		</fieldset>
+	</div>
+
+	<table id="pre_course" class="table" width="95%" cellpadding="2" cellspacing="1">
+		<tr>
+			<th colspan="4">Course Offered</th>
+		</tr>
+		<tr>
+			<th>Course</th>
+			<th width="90px">Code</th>
+			<th>Department</th>
+			<th width="25px">&nbsp;</th>
+		</tr>
+		<?php
+		if(isset($this->courseoffered)) {  
+			$i=0;
+			foreach ($this->courseoffered as $course){
+		?>
+			<tr <?php echo $i%2==0?"class='shade'":""; ?> id="<?php echo $course['course_id']; ?>">
+				<td><?php echo $course['course_name']; ?></td>
+				<td align="center"><?php echo $course['course_code']; ?></td>
+				<td><?php echo $course['department_name']; ?></td>
+				<td align="center">
+					<a href="#" onclick="remove_course(<?php echo $course['course_id']; ?>)" class="remove"></a>
+					<input type="hidden" name="courses[]" value="<?php echo $course['course_id']; ?>" />
+				</td>
+			</tr>
+		<?php
+			$i++; 
+			}
+		}else
+		if(isset($this->semesterID) && $this->semesterID!=0) {
+		?>
+			<tr>
+				<td colspan="3" align="center">
+					No Course Offered
+				</td>
+			</tr>
+		<?php 
+		}
+		?>
+	</table>
+
+	<div align="center">
+		<br />
+		<input type="submit" value="save" />
+		<input type="button" value="Cancel" onClick="window.location = '<?php echo $this->url(array('module'=>'anr-setup','controller'=>'course-offered', 'action'=>'index'));?>'" />
+	</div>
+</form>
+
+<div id="dialog-add" title="Add Course Offer">
+	<table>
+		<tr>
+			<td>Faculty</td>
+			<td>:</td>
+			<td>
+				<select id="faculty" style="width:250px" onchange="getDepartment()">
+					<option value="0">All Faculty</option>
+					<?php foreach ($this->faculty as $faculty){?>
+					<option value="<?php echo $faculty['id']; ?>"><?php echo $faculty['name']; ?> - <?php echo $faculty['code']; ?></option>
+					<?php }?>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>Department</td>
+			<td>:</td>
+			<td>
+				<select id="department" style="width:250px" onchange="getCourse()">
+					<option value="0">All Department</option>
+					<?php foreach ($this->departmentList as $department){?>
+					<option value="<?php echo $department['id']; ?>"><?php echo $department['name']; ?> - <?php echo $department['code']; ?></option>
+					<?php }?>
+				</select>
+			</td>
+		</tr>
+	</table>
+	<hr />
+	<table id="course" width="100%">
+	</table>
+</div>

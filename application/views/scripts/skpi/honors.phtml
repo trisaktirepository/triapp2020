@@ -1,0 +1,216 @@
+<style type="text/css">
+.zend_form dt {
+    width: 177px;
+}
+.zend_form dd {
+    padding: 2px 187px;
+}
+</style>
+<script type="text/javascript">
+ 
+function edit_Honor(n) {
+	 
+	var x = document.getElementById("data").rows[n].cells;
+	
+	document.getElementById("title_bahasa").value=x[2].innerHTML;
+	document.getElementById("title").value=x[3].innerHTML;
+ 
+	document.getElementById("given_by").value=x[4].innerHTML;
+	document.getElementById("idHonor").value=document.getElementById("idhonors["+n+"]").value;
+	document.getElementById("date_of_honor").value= x[5].innerHTML;
+	 
+	document.getElementById("level").value=document.getElementById("level["+n+"]").value;
+	document.getElementById("field").value=document.getElementById("field["+n+"]").value;
+	
+}
+ 
+
+function onclickUpload(n,doc,path) {
+	 
+	document.getElementById("items_id").value=n;
+	document.getElementById("document_name").value=doc;
+	document.getElementById("redirect_path").value=path;
+	$('#dialog-upload-certificate').dialog('open');
+}
+
+$(function() {
+	$( "#dialog-upload-certificate" ).dialog({
+		autoOpen: false,
+    	resizable: false,
+      	height:140,
+      	modal: true,
+      	buttons: {
+        	"Upload certificate": function() {
+        		$('#form_certificate').submit();
+        	},
+        	Cancel: function() {
+          		$( this ).dialog( "close" );
+        	}
+      	}
+    });
+
+	$( ".datepicker" ).datepicker({
+		maxDate: "0",
+		"dateFormat" : 'yy-mm-dd',
+		changeMonth: true,
+	    changeYear: true 
+	});
+});
+ 
+    
+ 
+ 
+</script>
+
+
+
+<?php echo $this->idHonors;?>
+<div style="width:100%;">
+<fieldset>
+<form id="honors" method="post" action="<?php echo $this->baseUrl()?>/skpi/honors" >
+<input type="hidden" name="idHonor" id="idHonor">
+<table  width="80%" cellpadding="5" cellspacing="0" border="0">
+	<tr>	<td width="20%"><?php echo $this->translate("Name of Award in Bahasa");?></td><td>:</td>
+			<td> <textarea rows="4" cols="50" id="title_bahasa" name="title_bahasa">    
+			</textarea></tr> 
+	<tr>	<td width="20%"><?php echo $this->translate("Name Of Award");?></td><td>:</td>
+			<td> <textarea rows="4" cols="50" id="title" name="title">     
+			</textarea></tr>
+	
+	<tr>	<td width="20%"><?php echo $this->translate("Provided By");?></td><td>:</td>
+			<td><input type="text" id="given_by" name="given_by" size="50"></td>	</tr>		
+	<tr>	<td width="20%"><?php echo $this->translate("Awarded date");?></td><td>:</td>
+			<td><input type="date" id="date_of_honor" name="date_of_honor" ></td></tr>
+	<tr>	<td width="20%"><?php echo $this->translate("Level");?></td><td>:</td>
+			<td>
+		 
+			<select id="level" name="level">
+			    <option value="0"><?php echo $this->translate("Please Select");?></option>
+			    <?php 
+			    	foreach ($this->level_list as $level):
+			    ?>
+			    		<option value="<?php echo $level["key"];?>"<?php if($this->levelId == $level["key"]){ echo 'selected';}?>><?php echo $level["value"];?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select>
+		 
+			</td></tr>
+	<tr>	<td width="20%"><?php echo $this->translate("Field");?></td><td>:</td>
+			<td>
+			 
+			<select id="field" name="field">
+			    <option value="0"><?php echo $this->translate("Please Select");?></option>
+			    <?php 
+			    	foreach ($this->field_list as $semester):
+			    ?>
+			    		<option value="<?php echo $semester["key"];?>" <?php if($this->fieldId == $semester["key"]){ echo 'selected';}?>><?php echo $semester["value"];?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select>
+		 
+			</td></tr>
+	
+	<tr><td colspan="3" align="right"><input type="submit" name="submit" value="<?php echo $this->translate('Save')?>" ></td>
+	
+	</tr>
+</table>
+
+</form>
+</fieldset>
+<br>
+ 
+ 
+<table class="table" id="data" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		<th width="5%"><?php echo $this->translate("Status");?></th> 
+		<th width="5%"><?php echo $this->translate("No");?></th>
+		
+		<th width="35%"><?php echo $this->translate("Award in Bahasa");?></th>
+		<th width="10%"><?php echo $this->translate("Award");?></th>
+		<th width="10%"><?php echo $this->translate("Provided By");?></th>			
+		<th width="10%"><?php echo $this->translate("Provided date");?></th>
+		<th width="10%"><?php echo $this->translate("Level");?></th>
+		<th width="10%"><?php echo $this->translate("Field");?></th>
+		<th width="10%"><?php echo $this->translate("Certificate");?></th>
+		<th width="10%"><?php echo $this->translate("Action");?></th>
+	</tr>
+	<?php  
+	if (count($this->honors)>0) {
+	foreach($this->honors as $index=>$honor){ 
+		$id=$honor['idHonors'];
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<input type="hidden" id="idhonors[<?php echo $index+1;?>]" value="<?php echo $honor['idHonors'];?>">
+		<input type="hidden" id="level[<?php echo $index+1;?>]" value="<?php echo $honor['Level'];?>">
+		<input type="hidden" id="field[<?php echo $index+1;?>]" value="<?php echo $honor['fieldid'];?>">
+		 
+		
+		<td align="center">
+		<?php if ($honor['idUser']!=$this->IdStudentRegistration && $honor['approved']=='2' ) {
+					 
+					?>
+						<a href="<?php echo $this->url(array('module'=>'default','controller'=>'skpi', 'action'=>'honors-approved','idhonor'=>$honor['idHonors']),'default',true)?>"><img src='<?php echo $this->baseUrl();?>/images/reject.png' border=0 width='20' height='20' title="do you want to acept" ></a>
+			  
+				<?php } ?>
+		<?php if ($honor['idUser']!=$this->IdStudentRegistration && $honor['approved']=='1') {
+					 
+					?>
+					 
+						<a href="<?php echo $this->url(array('module'=>'default','controller'=>'skpi', 'action'=>'honors-reject','idhonor'=>$honor['idHonors']),'default',true)?>"><img src='<?php echo $this->baseUrl();?>/images/accept.png' border=0 width='20' height='20' title="do you want to reject" ></a>
+			<?php }?> 
+						
+		<?php if ($honor['approved']=='0' ||$honor['approved']=='') {
+					 
+					?>
+					 
+						 <img src='<?php echo $this->baseUrl();?>/images/prohibit.png' border=0 width='20' height='20' title="Not Approved yet" ></a>
+			<?php }?>
+		 
+			 
+		</td>
+		<td><?php echo $index+1;?></td> 
+		
+		<td><?php  echo $honor['title_bahasa'];?> </td>
+		<td><?php echo $honor['title']; ?>
+		<td><?php echo $honor["given_by"];?></td>
+		<td><?php echo $honor["date_of_honor"];?></td>
+		<td><?php echo $honor["level"];?></td>
+		<td><?php echo $honor["field"];?></td>
+		<?php 
+		$pathupload=$honor['path'];
+		if($pathupload!=''){
+			$dt = explode("triapp",$pathupload);
+			//echo var_dump($dt);exit;
+			$path = $dt[1];
+			$path ="<a target='_blank' href=http://".APP_HOSTNAME.$path.">" ;
+		
+		?> <td align="center"><?php  echo $path;?><img src='<?php echo $this->baseUrl();?>/images/document.png' border=0 width='20' height='20' title="Download" ></a></td><?php 
+		} else {?>
+		<td align="center"><img src='<?php echo $this->baseUrl();?>/images/upload.png' border=0 width='20' height='20' title="Upload"  onclick="onclickUpload(<?php echo $honor['idHonors']?>,'Honors','/default/skpi/#Tab1')" /></td>
+		<?php }?>
+		<td align="center">
+		<?php if ($honor['idUser']==$this->IdStudentRegistration) {?>
+		<img src='<?php echo $this->baseUrl();?>/images/edit.png' border=0 width='16' height='16' title="Edit"  onclick="edit_Honor(<?php echo $index+1;?>)" >
+			<a href="<?php echo $this->url(array('module'=>'default','controller'=>'skpi', 'action'=>'delete-honors','idhonor'=>$honor['idHonors']),'default',true)?>"><img src='<?php echo $this->baseUrl();?>/images/trash.png' border=0 width='16' height='16' title="Delete" ></a>
+			<?php }?></td>
+	
+	</tr>
+	<?php }
+} ?>
+
+</table>
+ 
+<br>
+ 
+</div> 
+<div id="dialog-upload-certificate" title="<?php echo $this->translate("Upload Student's Certificate");?>">
+  	<form name="form_certificate" id="form_certificate" method="post" action="/default/skpi/upload-certificate" enctype="multipart/form-data">
+  		<input type="file" name="file" />
+  		<input type="hidden" name="document_name" id="document_name">
+  		<input type="hidden" id="items_id" name="items_id" />
+  		<input type="hidden" name="redirect_path" id="redirect_path">
+  		
+  	</form>
+</div> 

@@ -1,0 +1,96 @@
+<script type="text/javascript">
+function onclickUpload(n,doc,path) {
+	 
+	document.getElementById("items_id").value=n;
+	document.getElementById("document_name").value=doc;
+	document.getElementById("redirect_path").value=path;
+	$('#dialog-upload-certificate').dialog('open');
+}
+
+$(function() {
+	$( "#dialog-upload-certificate" ).dialog({
+		autoOpen: false,
+    	resizable: false,
+      	height:140,
+      	modal: true,
+      	buttons: {
+        	"Upload certificate": function() {
+        		$('#form_certificate').submit();
+        	},
+        	Cancel: function() {
+          		$( this ).dialog( "close" );
+        	}
+      	}
+    });
+
+	$( ".datepicker" ).datepicker({
+		maxDate: "0",
+		"dateFormat" : 'yy-mm-dd',
+		changeMonth: true,
+	    changeYear: true 
+	});
+});
+ 
+$(function() {
+	 $( "#ResultTabs").tabs();
+	//var idHonor=document.getElementById("IdHonors") ;
+	 url1="<?php echo $this->url(array('module'=>'default','controller'=>'skpi','action'=>'honors'),'default',true);?>";
+	 $( "#Tab1" ).load( url1 );
+	 
+     url2="<?php echo $this->url(array('module'=>'default','controller'=>'skpi','action'=>'organisasi'),'default',true);?>";
+	 $( "#Tab2" ).load( url2 );
+     
+     url3="<?php echo $this->url(array('module'=>'default','controller'=>'skpi','action'=>'language'),'default',true);?>";
+	 $( "#Tab3" ).load( url3 );
+	 
+	 url4="<?php echo $this->url(array('module'=>'default','controller'=>'skpi','action'=>'softskill'),'default',true);?>";
+	 $( "#Tab4" ).load( url4 );
+
+	 url5="<?php echo $this->url(array('module'=>'default','controller'=>'skpi','action'=>'internship'),'default',true);?>";
+	 $( "#Tab5" ).load( url5 );
+	 
+});
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		
+	</div>
+</div>
+<br />
+<input type="hidden" id="IdHonors" value="<?php echo $this->idhonors;?>">
+<div style="width:100%;">
+	<div id="ResultTabs">
+
+		<ul >
+			<li><a href="#Tab1"><?php echo $this->translate("Awards");?></a></li>
+			<li><a href="#Tab2"><?php echo $this->translate("Organization");?></a></li>	
+			<li><a href="#Tab3"><?php echo $this->translate("International Language");?></a></li>	
+			<li><a href="#Tab4"><?php echo $this->translate("Character Building");?></a></li>	
+			<li><a href="#Tab5"><?php echo $this->translate("Professional Practices");?></a></li>	
+		</ul>
+
+
+		<div id="Tab1"> 			
+		</div>
+		<div id="Tab2"> 		
+		</div>
+		<div id="Tab3"> 		
+		</div>
+		<div id="Tab4"> 		
+		</div>
+		<div id="Tab5"> 		
+		</div>
+	
+	</div>
+</div>
+<div id="dialog-upload-certificate" title="<?php echo $this->translate("Upload Student's Certificate");?>">
+  	<form name="form_certificate" id="form_certificate" method="post" action="/default/skpi/upload-certificate" enctype="multipart/form-data">
+  		<input type="file" name="file" />
+  		<input type="hidden" name="document_name" id="document_name">
+  		<input type="hidden" id="items_id" name="items_id" />
+  		<input type="hidden" name="redirect_path" id="redirect_path">
+  		
+  	</form>
+</div>

@@ -1,0 +1,93 @@
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		
+			<li>
+				<a href="#" onclick="window.print();">
+					<span class='print'></span>
+					Print
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<br>
+<fieldset>
+<?php 
+setlocale(LC_TIME, "id_ID");
+$timestamp = strtotime($this->schedule["sc_day"]);	
+?>
+<table class="" width="50%" cellpadding="5" cellspacing="5" border="0">
+	<tr>
+		<td width="100px"><?php echo $this->translate("Subject Name")?></td>
+		<td width="5px">:</td>
+		<td>
+		<?php echo $this->schedule["SubCode"];?>&nbsp;
+		<?php echo ($this->schedule["subjectMainDefaultLanguage"]!='') ? $this->schedule["subjectMainDefaultLanguage"]:$this->schedule["SubjectName"];  ?></td>
+	</tr>
+	<tr>
+		<td><?php echo $this->translate("Place")?></td>
+		<td width="5px">:</td>
+		<td><?php echo $this->schedule["sc_venue"]?> </td>
+	</tr>
+	<tr>
+		<td><?php echo $this->translate("Day")?></td>
+		<td width="5px">:</td>
+		<td><?php echo strftime('%A', $timestamp);?> </td>
+	</tr>	
+	<tr>
+		<td width="100px"><?php echo $this->translate("Time")?></td>
+		<td width="5px">:</td>
+		<td><?php echo $this->schedule["sc_start_time"]?> -  <?php echo $this->schedule["sc_end_time"]?></td>
+	</tr>
+	<tr>
+		<td width="100px"><?php echo $this->translate("Class")?></td>
+		<td width="5px">:</td>
+		<td><?php echo $this->schedule["GroupCode"]?></td>
+	</tr>
+		<tr>
+		<td><?php echo $this->translate("Lecturer Name")?></td>
+		<td width="5px">:</td>
+		<td><?php echo ($this->schedule["IdLecturer"]!=0 ?  $this->schedule["FullName"]:$this->translate("-"));?></td>
+	</tr>
+	<tr>
+		<td><?php echo $this->translate("Periode")?></td>
+		<td width="5px">:</td>
+		<td><?php echo $this->schedule["semester"]?></td>
+	</tr>
+</table>
+</fieldset>
+
+<br>
+
+<table border=1 class="" width="100%" cellpadding="5" cellspacing="2" border="0">
+	<tr>
+		<th width="25px"><?php echo $this->translate("No")?></th>
+		<th width="150px"><?php echo $this->translate("NIM")?></th>
+		<th width=40%><?php echo $this->translate("Student Name")?></th>		
+		<?php for($i=1; $i<=8; $i++){?>
+		<th align="center"><?php echo $i; ?></th>		
+		<?php } ?>			
+	</tr>
+	<?php 
+	$x=1;
+	if(count($this->list_student)>0){
+	foreach($this->list_student as $student){
+	?>	
+	<tr>
+		<td><?php echo $x;?></td>
+		<td><?php echo $student["registrationId"];?></td>	
+		<td><?php echo $student["appl_fname"].' '.$student["appl_mname"].' '.$student["appl_lname"];?></td>			
+		<?php for($i=1; $i<=8; $i++){?>	
+		<td>&nbsp;</td>
+		<?php } ?>
+	</tr>
+	<?php $x++; } }?>
+	<tr>
+		<td colspan="3" align="right"><?php echo $this->translate("Jumlah Hadir")?></td>
+		<?php for($i=1; $i<=8; $i++){?>
+		<td>&nbsp;</td>	
+		<?php } ?>			
+	</tr>
+</table>

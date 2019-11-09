@@ -1,0 +1,151 @@
+<style type="text/css">
+	input[type=text]{
+		width: 250px;
+	}
+	
+	select{
+		width: 200px;
+	}
+</style>
+
+<script type="text/javascript">
+	function search_candidate(){
+		var name = $('#candidate_name').val()!=""?"/name/"+$('#candidate_name').val():"";
+		var ic = $('#candidate_ic').val()!=""?"/ic/"+$('#candidate_ic').val():"";
+
+		$('#cboxLoadedContent').load("<?php echo $this->url(array('module'=>'company','controller'=>'application', 'action'=>'ajax-select-candidate'),'default',true);?>"+name+ic);
+	}
+
+	function clear_form(){
+		var name = $('#candidate_name').val("");
+		var ic = $('#candidate_ic').val("");
+	}
+
+	function select_candidate(student_id, element){
+		var course = $(element).parent().prev().prev().children('select').val();
+		
+		if(course==0){
+			alert("Please select course to register");
+		}else{
+			var data = new Object();
+			data.student_id = student_id;
+			data.course_id = course;
+
+			window.parent.candidate.push(data);
+			
+			$(element).parents("tr").empty();
+		}
+	}
+</script>
+<div style="padding: 20px 10px 10px">
+	<p>*:Close this window when done.</p>
+	<div style="width: 100%">
+	<fieldset>
+		<legend>Search Option</legend>
+		<div align="center">
+		<form>
+		<table width="100%" border="0">
+			<tr>
+				<td width="100px">Name</td>
+				<td width="5px">:</td>
+				<td>
+					<input type="text" id="candidate_name" value="<?php echo $this->name; ?>" />
+				</td>
+			</tr>
+			<tr>
+				<td>IC</td>
+				<td>:</td>
+				<td><input type="text" id="candidate_ic" value="<?php echo $this->ic; ?>" placeholder="without dash (-)" /></td>
+			</tr>
+			<tr>
+				<td colspan="3" align="center">
+					<div style="padding: 10px 0 0 0;">
+						<input type="button" name="search" value="Search" onClick="search_candidate();" />
+						<input type="button" name="clear" value="Clear" onClick="clear_form();" />
+					</div>
+				</td>
+			</tr>
+		</table>
+		</form>
+		</div>
+	</fieldset>
+	</div>
+	<table class="table" width="100%">
+		<tr>
+			<th>Name</th>
+			<th>IC</th>
+			<th width="200px">Course</th>
+			<th width="80px">Discplinary Case</th>
+			<th width="30px">&nbsp;</th>
+		</tr>
+		<?php foreach ($this->studentList as $student):
+		$studentCaseDB = new App_Model_Discipline_DbTable_StudentCase();
+		$condition = array("keyword"=>$student['ARD_IC']);
+		$searchcase = $studentCaseDB->search_studentCase($condition);
+		?>
+		<tr>
+			<td><?php echo $student['ARD_NAME']?></td>
+			<td align="center"><?php echo $student['ARD_IC']?></td>
+			<td>
+			
+			<?
+			//to get which courses has taken by candidate 
+			$registrationDB = new App_Model_Record_DbTable_Registrationdetails();
+			$checkRegister = $registrationDB->checkRegister($student['ID']);
+			
+			$countgr = count($checkRegister);
+			$dataCourse = array();
+			foreach($checkRegister as $ck){
+				 $dataCourse[] = $ck['idCourse'];
+			}
+			
+			//tp get remaining courses to be taken by candidate
+			$programDB = new App_Model_Record_DbTable_Course();
+			$programData = $programDB->getRemainCourse($dataCourse);
+			?>
+				<select>
+					<option value="0"> -- Select Course -- </option>
+					<?php foreach ($programData as $course):?>
+					<option value="<?php echo $course['id']?>"> <?php echo $course['name']?> </option>
+					<?php endforeach;?>
+				</select>
+			</td>
+			<td>
+			<?php 
+			if ($searchcase){
+				if ($searchcase["case_status"]=="0"){
+					$case="<font color='Red'>Not Released</font>";
+				}else{
+					$case="<font color='Blue'>Released</font>";
+				}				
+			}else{
+				$case = "-";
+			}
+			echo $case;
+			?>
+			</td>
+			<td>
+			<?php 
+			if ($searchcase){
+				if ($searchcase["case_status"]=="0"){
+					$case="<font color='Red'>Not Released</font>";
+				}else{?>
+				<a class="icon ui-state-default ui-corner-all" title="Add candidate to batch application" onClick="select_candidate('<?php echo $student['ID']?>', this)"><span class="ui-icon ui-icon-plus"></span></a>	
+				<?}				
+			}else{
+				?>
+				<a class="icon ui-state-default ui-corner-all" title="Add candidate to batch application" onClick="select_candidate('<?php echo $student['ID']?>', this)"><span class="ui-icon ui-icon-plus"></span></a>	
+				<?
+			}
+			?>
+				
+			</td>
+		</tr>
+		<?php endforeach;
+		
+		if($this->studentList==null){
+			echo "<tr><td colspan='4' align='center'>No record found</td></tr>";
+		}
+		?>
+	</table>
+</div>

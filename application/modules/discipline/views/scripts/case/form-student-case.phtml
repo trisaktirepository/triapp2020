@@ -1,0 +1,156 @@
+<script>
+
+$(document).ready(function(){
+	
+	
+	
+	 $("#start_date").datepicker({
+				"dateFormat":"yy-mm-dd",
+				"changeMonth":"true",
+				beforeShow: function(input, inst) { 
+					if ($("#end_date").val()) { // Only update when has a value.
+							$( "#start_date" ).datepicker( "option", "maxDate", $("#end_date").datepicker("getDate") );
+					}
+				}
+			
+				
+		});
+		
+		$("#end_date").datepicker({
+				"dateFormat":"yy-mm-dd",
+				"changeMonth":"true",
+				beforeShow: function(input, inst) { 
+					if ($("#start_date").val()) { // Only update when has a value.
+							$( "#end_date" ).datepicker( "option", "minDate", $("#start_date").datepicker("getDate") );
+					}
+				}
+				
+		});
+		
+		$("#incident_date").datepicker({
+				"dateFormat":"yy-mm-dd",
+				"changeMonth":"true"
+				
+		});
+	
+		
+		
+	
+});
+
+function EnableDate(val){	
+	
+	if(val==1){
+	    document.getElementById("start_date").disabled=false;
+	    document.getElementById("end_date").disabled=false;
+	}else{
+		document.getElementById("start_date").disabled=true;
+	    document.getElementById("end_date").disabled=true;
+	}
+}
+</script>
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>		
+		   <li>
+				<a href="<?php echo $this->url(array('module'=>'discipline','controller'=>'case', 'action'=>'student-case'),'default',true);?>">
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<div style="width:100%;">
+
+
+
+<fieldset style="width:450px;">
+<legend>Please enter ICNO :-</legend>
+<form name="searchfrm" action="" method="post">
+	<table width="100%">
+		<tr>
+			<td>ICNO</td>
+			<td width="5px">:</td>
+			<td><input type="text" name="ICNO" value="" size=40></input></td>
+		</tr>
+		
+		<tr>
+			<td colspan="2">&nbsp;</td>
+			<td><input type="submit" value="search" /></td>
+		</tr>
+	</table>
+</form>
+</fieldset>
+
+
+<? if($this->student_icno){?>
+<br>
+<h4>Case Info</h4>
+<form id="form1" method="POST" action="<?php echo $this->url(array('module'=>'discipline','controller'=>'case', 'action'=>'add-student-case'),'default',true);?>">
+<table width="100%" cellpadding="5" cellspacing="2" border="0">
+	<tr>
+		<td width="20%">Student Name</td>
+		<td width="2px">:</td>
+		<td><input type="text" value="<?php  echo $this->student_name;?>" size="30" name="student_name" ></td>
+	</tr>
+	<tr>
+		<td>Student ICNO</td>
+		<td width="2px">:</td>
+		<td><input type="text" value="<?php  echo $this->student_icno;?>" size="30" name="student_icno" readonly></td>
+	</tr>
+	
+	<tr>
+		<td>Case</td>
+		<td width="2px">:</td>
+		<td>
+		
+		<select name="case_id">
+			<option value=" ">-- Please Select --</option>
+			<? foreach ($this->case as $case){?>
+				<option value="<?php echo $case["id"]?>"><?php echo $case["case_name"]?></option>
+			<? } ?>
+		</select>
+		</td>
+	</tr>
+	<tr>
+		<td>Penalty</td>
+		<td width="2px">:</td>
+		<td><select name="penalty_id" id="penalty_id">
+			<option value=" ">-- Please Select --</option>
+			<? foreach ($this->penalty as $penalty){?>
+				<option value="<?php echo $penalty["id"]?>"><?php echo $penalty["penalty_name"]?></option>
+			<? } ?>
+		</select></td>
+	</tr>
+	<!--<tr>
+		<td>&nbsp;</td>
+		<td width="2px">:</td>
+		<td>From <input type="text" size="10" id="start_date" name="start_date" value="" disabled="disabled"> &nbsp; to <input type="text" size="10" id="end_date" name="end_date" value="" disabled="disabled"></td>
+	</tr>-->
+	<tr>
+		<td>Incident Date</td>
+		<td width="2px">:</td>
+		<td><input type="text" size="10" id="incident_date" name="incident_date" value=""></td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td width="2px"></td>
+		<td><input type="submit" value="Save"></td>
+	</tr>
+</table>
+</form>
+<?  } ?>
+
+</div>

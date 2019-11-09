@@ -1,0 +1,124 @@
+<script type="text/javascript">
+	function del(){
+		var id = $('input[name=program_id]:checked').val();
+
+		if(!id){
+			alert('Please select any program first');
+		}else{
+			if(confirm('Are you sure to delete this program?')){
+				window.location = "<?php echo $this->url(array('module'=>'anr-setup','controller'=>'program', 'action'=>'delete'),'default',true); ?>/id/"+id;
+			}
+		}
+	}
+	
+	function add(){
+		window.location="<?php echo $this->url(array('module'=>'anr-setup','controller'=>'program', 'action'=>'add'),'default',true);?>";
+	}
+
+	function edit(){
+		var id = $('input[name=program_id]:checked').val();
+
+		if(!id){
+			alert('Please select any program first');
+		}else{
+			window.location="<?php echo $this->url(array('module'=>'anr-setup','controller'=>'program', 'action'=>'edit'),'default',true);?>/id/"+id;
+		}
+	}
+
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="javascript:add()">
+					<span class='add'></span>
+					Add
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:edit()">
+					<span class='edit'></span>
+					Edit
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:del()">
+					<span class='delete'></span>
+					Delete
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+<form method="POST" action="">
+<div style="width:100%;" align="right">
+<select name="selProgram" id="selProgram" onChange="form.submit()">
+<option value="0">--Select Department--</option>
+<?php foreach ($this->faculty as $fac):
+
+if ($this->programSelected == $fac['id']) {
+	$selected = "selected";
+}else {
+	$selected = "";
+}
+
+?>
+<option value="<?php echo $fac['id']?>" <?php echo $selected;?>><?php echo $fac['name']?></option>
+<?php endforeach;?>
+</select>
+</div>
+
+<div style="width:100%;">
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+<table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		<th width="1%">&nbsp;</th>
+		<th width="50%">Programme</th>
+		<th width="15%">Code</th>
+		<th width="19%">Department</th>
+		<th width="15%">status</th>
+	</tr>
+	
+	<?php 
+	$i=0;
+	foreach ($this->paginator as $entry): 
+	
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<td>
+			<input type="radio" name="program_id" value="<?php echo $entry['id']; ?>">
+		</td>
+		<td><a href="<?php echo $this->url(array('module'=>'anr-setup','controller'=>'program', 'action'=>'view','id'=>$entry['id']),'default',true); ?>"><?php echo $entry['program_name']; ?></a></td>
+		<td align="center"><?php echo $entry['program_code']; ?></td>
+		<td><?php echo $entry['faculty']; ?></td>
+		<td align="center">
+		<?php echo $entry['status']==1?"<span class='state publish'>&nbsp;</span>":"<span class='state unpublish'>&nbsp;</span>"; ?>
+		</td>
+	</tr>
+	<?php 
+	
+	$i++;
+	endforeach; 
+	
+	
+	?>
+
+</table>
+</div>
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>
+
+</form>

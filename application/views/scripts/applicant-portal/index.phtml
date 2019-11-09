@@ -1,0 +1,535 @@
+<script>
+
+function DownloadBuktiReservasi(txn_id){
+	
+	window.location = "<?php echo $this->url(array('module'=>'default','controller'=>'applicant-portal','action'=>'download-bukti-reservasi'), 'default', true);?>/txn_id/"+txn_id;
+}
+function DownloadAppVerifikasi(txn_id){
+	
+	window.location = "<?php echo $this->url(array('module'=>'default','controller'=>'applicant-portal','action'=>'download-burekol-verification'), 'default', true);?>/txn_id/"+txn_id;
+}
+
+function UpdateRegistrasi(txn_id){
+	
+	window.location = "<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'applicant-burekol-verification'), 'default', true);?>/txn_id/"+txn_id;
+} 
+
+
+function jadwal(txn_id){
+	//open dialog box
+	
+	$( "#txn_id" ).val(txn_id);
+	$( "#dialog-box" ).dialog('open');	
+}
+
+$(function() {
+
+	$( "#dialog-box" ).dialog({
+	    autoOpen: false,
+	    width: 500,
+	    height: 300,
+	    modal: true,
+	    buttons: {          
+	        "Tutup": function() {
+	            $( this ).dialog( "close" );
+	        },
+	        "Simpan": function() {
+	        	$( "#form1" ).submit(); 
+	        	$( this ).dialog( "close" );
+	        }
+	    }
+	});
+    
+    $( "#dialog-grade" ).dialog({
+	    autoOpen: false,
+	    width: 500,
+	    height: 300,
+	    modal: true,
+	    buttons: {          
+	        "Tutup": function() {
+	            $( this ).dialog( "close" );
+	        }   
+	    }
+	});
+    
+    $(".popupGrade").click(function(e){
+        e.preventDefault();
+        gradeUrl = $(this).attr('href');
+        
+        $("#dialog-grade").load(gradeUrl).dialog('open');
+    })
+});
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		
+	</div>
+</div>
+<?php if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+<?php }?>
+<br />
+
+<div style="width:100%;">
+<fieldset style="width:30%;">
+<legend><?php echo $this->translate("Legend")?>:</legend>
+<table>
+	<tr valign="middle">
+	<td bgcolor="green" width="10px">&nbsp;</td>
+	<td><?php echo $this->translate("Apply for Change Program")?></td></tr>
+	<tr valign="middle">
+	<td bgcolor="red">&nbsp;</td>
+	<td><?php echo $this->translate("Apply for QUIT")?></td></tr>
+</table>
+ 
+
+</fieldset>
+<?php 
+$pdb = new App_Model_Application_DbTable_ApplicantPtest();
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+// echo '<pre>';
+// print_r($this->paginator);
+// echo '</pre>';
+    ?>
+<table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		<th><?php echo $this->translate("Intake"); ?></th>
+		<th><?php echo $this->translate("Periode"); ?></th>
+		<th><?php echo $this->translate("Jenis Pendaftaran"); ?></th>
+		<th><?php echo $this->translate("Programe Study"); ?></th>
+		<th width="100px"><?php echo $this->translate("Tanggal Pendaftaran"); ?></th>
+		<th><?php echo $this->translate("No Pendaftaran"); ?></th>
+		<th><?php echo $this->translate("Status"); ?></th>		
+		<th><?php echo $this->translate("Download"); ?></th>
+		<th><?php echo $this->translate("Tanggal Pengumuman Hasil"); ?></th>
+	</tr>
+	
+	<?php 
+	if( sizeof($this->paginator) >0 ){
+	$i=0;
+	foreach ($this->paginator as $entry): 
+	
+		//GET DECREE DATE
+		if($entry['at_appl_type']==1){
+			$assessmentDB = new App_Model_Application_DbTable_ApplicantAssessmentUsm();
+			$selection = $assessmentDB->getData($entry['at_trans_id']);
+		    $decree_date = $selection["aaud_decree_date"];
+		    $reg_start_date = $selection["aaud_reg_start_date"];
+		}
+		
+		if($entry['at_appl_type']==2){
+			$assessmentDB = new App_Model_Application_DbTable_ApplicantAssessment();
+			$selection = $assessmentDB->getData($entry['at_trans_id']);
+		    $decree_date = $selection["asd_decree_date"];
+		    $reg_start_date = $selection["aar_reg_start_date"];
+		}else
+        
+        if($entry['at_appl_type']==3){
+			$assessmentDB = new App_Model_Application_DbTable_ApplicantAssessment();
+			$selection = $assessmentDB->getData($entry['at_trans_id']);
+            $decree_date = $selection["asd_decree_date"];
+		    $reg_start_date = $selection["aar_reg_start_date"];
+		} else
+		if($entry['at_appl_type']==4){
+			$assessmentDB = new App_Model_Application_DbTable_ApplicantAssessment();
+			$selection = $assessmentDB->getData($entry['at_trans_id']);
+			$decree_date = $selection["asd_decree_date"];
+			$reg_start_date = $selection["aar_reg_start_date"];
+		} else
+		if($entry['at_appl_type']==5){
+			$assessmentDB = new App_Model_Application_DbTable_ApplicantAssessment();
+			$selection = $assessmentDB->getData($entry['at_trans_id']);
+			$decree_date = $selection["asd_decree_date"];
+			$reg_start_date = $selection["aar_reg_start_date"];
+		}else
+		if($entry['at_appl_type']==6){
+			$assessmentDB = new App_Model_Application_DbTable_ApplicantAssessment();
+			$selection = $assessmentDB->getData($entry['at_trans_id']);
+			$decree_date = $selection["asd_decree_date"];
+			$reg_start_date = $selection["aar_reg_start_date"];
+		} else if($entry['at_appl_type']==7){
+			$assessmentDB = new App_Model_Application_DbTable_ApplicantAssessment();
+			$selection = $assessmentDB->getData($entry['at_trans_id']);
+			$decree_date = $selection["asd_decree_date"];
+			$reg_start_date = $selection["aar_reg_start_date"];
+		}
+		
+		$bgcolor=''; 
+		
+		if($entry["at_move_id"]!=0){
+			$bgcolor = "bgcolor='green'";
+		}
+		
+		if($entry["at_quit_status"]!=0 && $entry["at_quit_status"]!=3){
+			$bgcolor = "bgcolor='red'";
+		}
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<td align="center"><?php echo $entry['IntakeDefaultLanguage']; ?></td>
+		<td align="center"><?php echo $entry['ap_code']; ?></td>
+		<td>
+			<?php 
+			$chgurl="";
+				if( $entry['at_appl_type']==1 ){
+					echo $this->translate("USM");
+					$ptest = $pdb->getScheduleInfo($entry['at_trans_id']);
+					echo "<br>".date("d-m-Y",strtotime($ptest["aps_test_date"]));					
+					if($entry['at_status']=="PROCESS"){
+						$ptdate=strtotime($ptest["aps_test_date"]." ".$ptest["aps_start_time"]);
+						$curdate =time();
+						$beza = ($ptdate -$curdate)/86400;
+						if($beza > 2){		
+							$chgurl = "<br><a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'change-date','id'=>$entry['at_trans_id']),'default',true)."'>".$this->translate("Change Date")."</a>";
+						}
+					}
+				}
+                elseif( $entry['at_appl_type'] == 3)
+                {
+                    echo $this->translate("Credit Transfer");
+                } elseif( $entry['at_appl_type'] == 5)
+                {
+                    echo $this->translate("Portfolio");
+                } elseif( $entry['at_appl_type'] == 6)
+                {
+                    echo $this->translate("Scholarship");
+                } elseif( $entry['at_appl_type'] == 7)
+                {
+                    echo $this->translate("UTBK");
+                } else 
+				if(  $entry['at_appl_type']==2 ){ 
+					echo $this->translate("PSSB (Raport)");
+				} else if(  $entry['at_appl_type']==4 ){ 
+					echo $this->translate("INVITATION (Raport)");
+				}else{
+					echo "-";
+				}
+				?>
+				<?=$chgurl?></td>
+		<td >
+			<ol>
+			<?php
+			if($this->txnProgram[$i]){ 
+				foreach ($this->txnProgram[$i] as $program): ?>
+					<li><?php echo $program['program_name_indonesia']; ?></li>
+				<?php 
+				endforeach;
+			}
+			?>
+			</ol>
+		</td>
+		<td align="center"><?php echo $entry['at_create_date']!=null?date('d-m-Y', strtotime( $entry['at_create_date']) ) ."<br />". date('H:i a', strtotime( $entry['at_create_date']) ) : "-"; ?></a></td>
+		<td align="center"><?php echo $entry['at_pes_id'];?></td>
+		<td align="center" <?php echo $bgcolor; ?>>
+			<?php 
+				if($entry['at_status']=="APPLY"){
+					echo $this->translate("Not Complete");
+					echo "<br />";
+					echo "<small><a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'continue-application','id'=>$entry['at_trans_id']),'default',true)."'>".$this->translate("Continue")."</a></small>";
+					
+				}elseif($entry['at_status']=="CLOSE"){
+					echo $this->translate("Pending Payment");
+					echo "<br />";
+					echo "<small><a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'bank-pin-entry','id'=>$entry['at_trans_id']),'default',true)."'>".$this->translate("Enter Bank Pin")."</a></small>";
+				}elseif($entry['at_status']=="PROCESS"){
+						if($entry['at_selection_status']==5){
+							echo $this->translate("Lulus tahap pertama");
+							echo "<br />";
+												
+						}else if($entry['at_selection_status']==7){
+								echo $this->translate("Lulus Cadangan");
+								echo "<br />";
+							
+							} else{
+								echo $this->translate("Submitted");
+						}
+				}elseif($entry['at_status']=="OFFER"){
+					
+					/*if(date('Y-m-d') >= $decree_date){
+							echo $this->translate("Success");
+							if($entry["at_appl_type"]==1){
+								echo '<br>';
+								$appProgDb =  new App_Model_Application_DbTable_ApplicantProgram();
+								$app_program = $appProgDb->getUsmOfferProgram($entry['at_trans_id']);
+								echo $app_program["program_name_indonesia"];
+							}
+					}else{
+						echo $this->translate("Process");
+					}*/
+					
+					$paymentDb = new Studentfinance_Model_DbTable_PaymentMain();
+					$payment = $paymentDb->getApplicantPaymentTotalAmount($entry["at_pes_id"]);
+					
+					   if(date('Y-m-d') >= $reg_start_date){
+							
+							if($entry["at_move_id"]!=0){
+								echo $this->translate("Change Program");
+							}elseif($entry["at_quit_status"]!=0){
+								if($entry["at_quit_status"]==1 || $entry["at_quit_status"]==4){
+									echo $this->translate("Apply Quit");	
+								}elseif($entry["at_quit_status"]==2){
+									echo $this->translate("Approved Quit");	
+								}elseif($entry["at_quit_status"]==3){
+									echo $this->translate("Offer").'<br>';	
+									echo "<small><font color='red'>".$this->translate("Reject Quit")."</font></small>";	
+								}
+							}else{								
+								echo $this->translate("Offer");									
+							}//end if move
+							
+							if($entry["at_appl_type"]==1 || $entry["at_appl_type"]==4 || $entry["at_appl_type"]==7 ){
+									echo '<br>';
+									$appProgDb =  new App_Model_Application_DbTable_ApplicantProgram();
+									$app_program = $appProgDb->getUsmOfferProgram($entry['at_trans_id']);
+									echo $app_program["program_name_indonesia"];
+							}//end if admission type
+								
+						}else{
+							echo $this->translate("Process");
+						}
+						
+						if($payment!=0){
+							setlocale(LC_MONETARY, 'id_ID');
+							echo '<br>'.sprintf('%0.2f', $payment)	;	
+						}
+					
+				}elseif($entry['at_status']=="REJECT"){
+					echo $this->translate("Unsuccessful");
+				}
+                elseif($entry['at_status'] == 'APPROVAL')
+                {
+                    echo $this->translate("Waiting for Student Approval");
+                }
+				
+			?>
+		</td>
+		<td align="center">
+			<?php 
+				$applicant_ptestDb = new App_Model_Application_DbTable_ApplicantPtest();
+			
+			
+				if($entry['at_status']=="APPLY"){
+					
+				}else
+				if($entry['at_status']=="CLOSE"){
+					echo "<a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'get-document','id'=>$entry['at_trans_id'],'typeId'=>32),'default',true)."'>".$this->translate("Download Bank Validation")."</a>";
+				}else 
+				if( $entry['at_status']=="PROCESS" && $entry['at_appl_type']==1 ){
+					//echo $entry['at_appl_type'].$entry['at_selection_status'];
+					if($entry['at_selection_status']==5 && $applicant_ptestDb->tpaExamToAttend($entry['at_trans_id'])){
+						echo "<a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'get-document','id'=>$entry['at_trans_id'],'typeId'=>63),'default',true)."'>".$this->translate("Surat Lulus Tahap Pertama")."</a>";
+						echo "<br />";
+					}else{
+						echo "<a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'get-document','id'=>$entry['at_trans_id'],'typeId'=>30),'default',true)."'>".$this->translate("USM Card")."</a>";
+					}
+					
+					echo "<br />";
+					echo "<a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'get-document','id'=>$entry['at_trans_id'],'typeId'=>42),'default',true)."'>".$this->translate("Parent Invitation Card")."</a>";
+				}else 
+				if( $entry['at_status']=="PROCESS" && $entry['at_appl_type']==2 ){
+						
+						if($entry['at_selection_status']==5 && $applicant_ptestDb->tpaExamToAttend($entry['at_trans_id'])){
+							echo "<a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'get-document','id'=>$entry['at_trans_id'],'typeId'=>63),'default',true)."'>".$this->translate("Surat Lulus Tahap Pertama")."</a>";
+							echo "<br />";
+						}
+						
+						echo "<a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'get-document','id'=>$entry['at_trans_id'],'typeId'=>31),'default',true)."'>".$this->translate("Bukti Daftar PSSB")."</a>";
+						
+				}else 
+				if( $entry['at_status']=="PROCESS" && $entry['at_appl_type']==3 ){
+						
+						//if($entry['at_selection_status']==5 && $applicant_ptestDb->tpaExamToAttend($entry['at_trans_id'])){
+						//	echo "<a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'get-document','id'=>$entry['at_trans_id'],'typeId'=>63),'default',true)."'>".$this->translate("Surat Lulus Tahap Pertama")."</a>";
+						//	echo "<br />";
+						//}
+						
+						echo "<a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'get-document','id'=>$entry['at_trans_id'],'typeId'=>75),'default',true)."'>".$this->translate("Bukti Aplikasi Credit Transfer")."</a>";
+						
+				}else 
+				if( $entry['at_status']=="PROCESS" && $entry['at_appl_type']==4 ){
+						
+						if($entry['at_selection_status']==5 && $applicant_ptestDb->tpaExamToAttend($entry['at_trans_id'])){
+							echo "<a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'get-document','id'=>$entry['at_trans_id'],'typeId'=>63),'default',true)."'>".$this->translate("Surat Lulus Tahap Pertama")."</a>";
+							echo "<br />";
+						}
+						
+						echo "<a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'get-document','id'=>$entry['at_trans_id'],'typeId'=>76),'default',true)."'>".$this->translate("Bukti Daftar Jalur Undangan")."</a>";
+						
+				}else 
+				if( $entry['at_status']=="PROCESS" && $entry['at_appl_type']==5 ){
+						
+						if($entry['at_selection_status']==5 && $applicant_ptestDb->tpaExamToAttend($entry['at_trans_id'])){
+							echo "<a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'get-document','id'=>$entry['at_trans_id'],'typeId'=>63),'default',true)."'>".$this->translate("Surat Lulus Tahap Pertama")."</a>";
+							echo "<br />";
+						}
+						
+						echo "<a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'get-document','id'=>$entry['at_trans_id'],'typeId'=>83),'default',true)."'>".$this->translate("Bukti Daftar Jalur Portofolio")."</a>";
+						
+				}else 
+				if( $entry['at_status']=="PROCESS" && $entry['at_appl_type']==6 ){
+						
+						if($entry['at_selection_status']==5 && $applicant_ptestDb->tpaExamToAttend($entry['at_trans_id'])){
+							echo "<a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'get-document','id'=>$entry['at_trans_id'],'typeId'=>63),'default',true)."'>".$this->translate("Surat Lulus Tahap Pertama")."</a>";
+							echo "<br />";
+						}
+						
+						echo "<a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'get-document','id'=>$entry['at_trans_id'],'typeId'=>84),'default',true)."'>".$this->translate("Bukti Daftar Jalur Beasiswa")."</a>";
+						
+				}else if( $entry['at_status']=="PROCESS" && $entry['at_appl_type']==7 ){
+						
+						if($entry['at_selection_status']==5 && $applicant_ptestDb->tpaExamToAttend($entry['at_trans_id'])){
+							echo "<a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'get-document','id'=>$entry['at_trans_id'],'typeId'=>63),'default',true)."'>".$this->translate("Surat Lulus Tahap Pertama")."</a>";
+							echo "<br />";
+						}
+						
+						echo "<a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'get-document','id'=>$entry['at_trans_id'],'typeId'=>87),'default',true)."'>".$this->translate("Bukti Daftar Jalur UTBK")."</a>";
+						
+				}else
+				if( $entry['at_status']=="OFFER"){
+					
+				 
+					
+					if($entry["at_move_id"]==0 && $entry["at_quit_status"]==0 || $entry["at_quit_status"]==3){								
+                        //paid status
+						$paymentMainDb = new Studentfinance_Model_DbTable_PaymentMain();
+						$payment = $paymentMainDb->getApplicantPaymentInfo($entry['at_pes_id']);
+
+						If ($entry['at_appl_type']!=3)
+                        {
+                            if(date('Y-m-d') >= $reg_start_date){
+                            
+
+							
+                            //display offer letter
+                            echo "<a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'get-document','id'=>$entry['at_trans_id'],'typeId'=>45),'default',true)."'>".$this->translate("Surat Panggilan")."</a>";	
+                        
+                            /* display agreement letter */		
+                                                                
+                                if($payment || $entry['at_appl_type']==5){											 
+                                    echo "<br><br><a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'get-document','id'=>$entry['at_trans_id'],'typeId'=>50),'default',true)."'>".$this->translate("Surat Perjanjian")."</a>";	
+	                                echo '<br><br>';	
+	                                if($entry["rds_id"]!=''){
+	                                    echo "<a href='#' onclick='DownloadBuktiReservasi(".$entry['at_trans_id'].")'>Bukti Reservasi</a>";	
+	                                    echo "<br>";
+	                                    echo "<a href='#' onclick='UpdateRegistrasi(".$entry['at_trans_id'].")'>Update data Kelengkapan Registrasi</a>";
+	                                    
+	                                    echo "<br>";
+	                                    echo "<a href='#' onclick='DownloadAppVerifikasi(".$entry['at_trans_id'].")'>Data Verifikasi</a>";
+	                                     
+									}else{
+	                                    echo "<a href='#' onclick='jadwal(".$entry['at_trans_id'].")'>Pesan tanggal pendaftaran ulang</a>";		
+	                                }	
+                                }
+                            
+                            }else{										
+                                if($entry["at_appl_type"]==1){
+                                    echo "<a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'get-document','id'=>$entry['at_trans_id'],'typeId'=>30),'default',true)."'>".$this->translate("USM Card")."</a>";
+                                    echo "<br />";
+                                    echo "<a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'get-document','id'=>$entry['at_trans_id'],'typeId'=>42),'default',true)."'>".$this->translate("Parent Invitation Card")."</a>";
+                                }elseif($entry["at_appl_type"]==2){
+                                    echo "<a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'get-document','id'=>$entry['at_trans_id'],'typeId'=>31),'default',true)."'>".$this->translate("Raport")."</a>";	
+                                } 
+                            }	
+                        }
+                        elseif($entry['at_appl_type']==3)
+                        {
+                            ?>
+                            <a class="popupGrade" href="<?php echo $this->baseUrl().'/applicant-portal/approve-grade/trans_id/'.$entry['at_trans_id']; ?>"><?php echo $this->translate("View Credit Approved");?></a>   
+                            <?php
+                            
+                            echo "<a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'get-document','id'=>$entry['at_trans_id'],'typeId'=>45),'default',true)."'>".$this->translate("Surat Panggilan")."</a>";
+                            
+                            /* display agreement letter */
+                            
+                            //paid status
+                            $paymentMainDb = new Studentfinance_Model_DbTable_PaymentMain();
+                            $payment = $paymentMainDb->getApplicantPaymentInfo($entry['at_pes_id']);
+                            if($payment){
+                            	echo "<br><br><a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'get-document','id'=>$entry['at_trans_id'],'typeId'=>50),'default',true)."'>".$this->translate("Surat Perjanjian")."</a>";
+                                echo '<br><br>';
+	                            if($entry["rds_id"]!=''){
+	                            	echo "<a href='#' onclick='DownloadBuktiReservasi(".$entry['at_trans_id'].")'>Bukti Reservasi</a>";
+	                            	echo "<br>";
+	                            	echo "<a href='#' onclick='UpdateRegistrasi(".$entry['at_trans_id'].")'>Update data Kelengkapan Registrasi</a>";
+	                            	echo "<br>";
+	                            	echo "<a href='#' onclick='DownloadAppVerifikasi(".$entry['at_trans_id'].")'>Data Verifikasi</a>";
+	                            	 
+	                            }else{
+	                            	echo "<a href='#' onclick='jadwal(".$entry['at_trans_id'].")'>Pesan tanggal pendaftaran ulang</a>";
+	                            }
+                            }//end if payment
+                        }  
+                        				
+					}//end if move
+					
+					
+					
+				}
+				
+			?>
+		</td>
+		<td>&nbsp;</td>
+	</tr>
+	<?php 
+	$i++;
+	endforeach; 
+	}else{
+	?>
+	<tr>
+		<td colspan="5" align="center"><?php echo $this->translate("No application data available"); ?></td>
+	</tr>
+	<?php 
+	}
+	?>
+
+</table>
+</div>
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>
+
+
+<div id="dialog-box" title="Jadwal Pendaftaran">
+<form name="form1" id="form1" method="post" action="<?php echo $this->url(array('module'=>'default','controller'=>'applicant-portal','action'=>'jadwal-pendaftaran'), 'default', true);?>">
+<input type='hidden' name='txn_id' id='txn_id' value=''>
+
+<h2><?php echo $this->translate("Silahkan pilih tanggal pendaftaran")?></h2>
+Perhatian: <strong>Silahkan lakukan pembayaran kewajiban keuangan cicilan pertama atau pembayaran lunas seperti yang tercantum dalam surat panggilan, sebelum memesan tanggal registrasi ulang </strong>
+Pastikan semua kelengkapan dokumen daftar ulang dapat dipenuhi sebelum tanggal yang anda pilih
+
+<br>
+	<table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
+		<tr>
+		    <th>&nbsp;</th>
+			<th><?php echo $this->translate("Tanggal Pendaftaran")?></th>
+			<th><?php echo $this->translate("Jam Buka")?></th>
+			<th><?php echo $this->translate("Jam Tutup")?></th>
+			<th><?php echo $this->translate("Kursi Tersisa")?></th>
+		</tr>
+		<?php 
+		if(count($this->schedule)>0){
+			foreach($this->schedule as $schedule){
+		?>
+		<tr>
+			<td align='center'><input type='radio' name='rds_id' id='rds_id' value='<?php echo $schedule['rds_id']?>'></td>
+			<td align='center'><?php echo $schedule['rds_date']?></td>
+			<td align='center'><?php echo $schedule['rds_start_time']?></td>
+			<td align='center'><?php echo $schedule['rds_end_time']?></td>
+			<td align='center'><?php echo $schedule['available']?></td>
+		</tr>
+		<?php } }else{
+			echo '<tr><td>'.$this->translate("There are currently no registration schedule available").'</td></tr>';
+		} ?>
+	</table>
+</form>
+</div>
+
+<div id="dialog-grade">
+</div>

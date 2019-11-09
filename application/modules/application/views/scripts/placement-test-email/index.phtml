@@ -1,0 +1,100 @@
+<script type="text/javascript">
+$(function() {
+	
+});
+</script>
+
+<script type="text/javascript">
+	function del(){
+
+		var id = $('input[name=id]:checked').val();
+		
+		if(confirm('Are you sure to delete?')){
+			window.location = "<?php echo $this->url(array('module'=>'application','controller'=>'placement-test-email', 'action'=>'delete'),'default',true); ?>/id/"+id;
+		}
+	}
+	
+	function add(){
+		window.location="<?php echo $this->url(array('module'=>'application','controller'=>'placement-test-email', 'action'=>'add'),'default',true);?>";
+	}
+
+	function edit(){
+		var id = $('input[name=id]:checked').val();
+		window.location="<?php echo $this->url(array('module'=>'application','controller'=>'placement-test-email', 'action'=>'edit'),'default',true);?>/id/"+id;
+	}
+
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<!--
+			<li>
+				<a href="#" onclick="javascript:add()">
+					<span class='add'></span>
+					Add
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:edit()">
+					<span class='edit'></span>
+					Edit
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:del()">
+					<span class='delete'></span>
+					Delete
+				</a>
+			</li>
+			-->
+			<li class="divider"></li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+
+<div style="width:100%;">
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+<table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		<!--
+		<th width="2"></th>
+		-->
+		<th><?php echo $this->translate("Template Name"); ?></th>
+		<th><?php echo $this->translate("Created By"); ?></th>
+		<th width="80px"><?php echo $this->translate("Created Date"); ?></th>
+	</tr>
+	
+	<?php 
+	$i=0;
+	foreach ($this->paginator as $entry): 
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<!--
+		<td> <input type="radio" name="id" value="<?php echo $entry['eth_id']; ?>"></td>
+		-->
+		<td><a href="<?php echo $this->url(array('module'=>'application','controller'=>'placement-test-email', 'action'=>'detail','id'=>$entry['eth_id']),'default',true); ?>"><?php echo $entry['eth_template_name']; ?></a></td>
+		<td><?php echo $entry['eth_create_by_name']; ?></td>
+		<td align="center"><?php echo date("d-m-Y", strtotime($entry['eth_create_date'])); ?></td>
+	</tr>
+	<?php 
+	$i++;
+	endforeach 
+	?>
+
+</table>
+</div>
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>

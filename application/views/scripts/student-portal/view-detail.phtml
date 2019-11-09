@@ -1,0 +1,173 @@
+
+<script>
+function appeal(id){
+	  $('#dialog-mark').dialog('destroy');
+	    view_dialog(id);
+}
+
+function view_dialog(id) {
+	url = "<?php echo $this->url(array('module'=>'default','controller'=>'student-portal','action'=>'appeal','semester'=>$this->idSemester,'program'=>$this->idProgram,'subject'=>$this->idSubject), 'default', true);?>/id/"+id;
+    $('#dialog-mark').load(url).dialog({
+        title: '<?php echo $this->translate("Remarking Application");?>',
+        modal: 'true',
+        width: '50%',
+        height: '350',
+        position: 'center',
+        show: 'scale',
+        hide: 'scale',
+        cache: false });
+}
+
+
+function resit(id){
+	  $('#dialog-box').dialog('destroy');
+	    view_dialog_resit(id);
+}
+
+function view_dialog_resit(id) {
+	url = "<?php echo $this->url(array('module'=>'default','controller'=>'student-portal','action'=>'resit','semester'=>$this->idSemester,'program'=>$this->idProgram,'subject'=>$this->idSubject), 'default', true);?>/id/"+id;
+    $('#dialog-mark').load(url).dialog({
+        title: '<?php echo $this->translate("Resit Application");?>',
+        modal: 'true',
+        width: '50%',
+        height: '350',
+        position: 'center',
+        show: 'scale',
+        hide: 'scale',
+        cache: false });
+}
+
+</script>
+<div style="width:100%;">
+<?php setlocale(LC_TIME, 'id_ID') ;?>
+<fieldset><legend><?php echo $this->translate("Subject Info");?></legend>
+<table>
+	<tr><td><?php echo $this->translate("Semester");?></td><td>: <?php echo $this->semester["SemesterMainName"]?></td></tr>
+	<tr><td><?php echo $this->translate("Subject");?></td><td>: <?php echo $this->subject["BahasaIndonesia"];?> ( <?php echo $this->subject["SubCode"];?> )</td></tr>
+</table>
+</fieldset>
+<br>
+<table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		<th width="20%"><?php echo $this->translate("Coursework Name");?></th>
+		<th width="10%"><?php echo $this->translate("Student Mark");?></th>
+		<th width="10%"><?php echo $this->translate("Percentage");?> (%)</th>		
+		<th width="30%"><?php echo $this->translate("Resit");?></th>
+		<th width="30%"><?php echo $this->translate("Remarking");?></th>
+	</tr>
+	<?php 
+	$publish=0;
+	if(count($this->component)>0){
+	$today = date("d-m-Y");
+	$total=0; 	
+	foreach($this->component as $comp){
+	
+		if(isset($comp["publish_date"])){
+			if(strtotime($comp["publish_date"]) <= strtotime($today)) {	
+			$publish++;			
+			$total = $total + $comp["FinalTotalMarkObtained"];
+	?>
+			<tr>
+				<td width="20%"><?php echo $comp["component_name"];?></td>
+				<td width="10%" align="center"><?php echo $comp["TotalMarkObtained"];?></td>
+				<td width="10%" align="center"><?php echo $comp["FinalTotalMarkObtained"];?></td>
+				<td width="30%" align="center">
+				<?php  
+				if(is_array($comp["resit"])){ 
+					if($comp["resit"]["sr_status"]==1)		{
+							echo  $this->translate("Applied").'<br>'.date("d-m-Y",strtotime($comp["resit"]["sr_applyDate"])); 
+					}else if($comp["resit"]["sr_status"]==2){
+							echo  $this->translate("Approved").'<br>'.date("d-m-Y",strtotime($comp["resit"]["sr_approvedDate"]));  	
+					}else if($comp["resit"]["sr_status"]==3){
+							echo  $this->translate("Rejected"); 
+					}					
+				}else{
+					if($comp["allow_resit"]==1){					
+				?>
+				<a href="#" onclick="resit('<?php echo $comp["IdMarksDistributionMaster"];?>')">
+				<?php echo $this->translate("Apply Resit");?></a>
+				<?php } } ?>
+				</td>
+				<td width="30%" align="center">
+				<?php  
+				if(is_array($comp["appeal"])){ 
+					if($comp["appeal"]["sa_status"]==1)		{
+							echo  $this->translate("Applied").'<br>'.date("d-m-Y",strtotime($comp["appeal"]["sa_applyDate"])); 
+					}else if($comp["appeal"]["sa_status"]==2){
+						    echo '<small>';						  
+							echo  $this->translate("Tanggal Pertemuan").' : '.date("d-m-Y",strtotime($comp["appeal"]["sa_meeting_date"])).', '.strftime("%I:%M %P",strtotime($comp["appeal"]["sa_meeting_time"]));
+							echo  '<br>'.$this->translate("Dosen Penilai").' : '.$comp["appeal"]["dosen_penilai"];
+							echo  '<br>'.$this->translate("Ruang").' : '.$comp["appeal"]["sa_location"];
+							echo '</small>';
+					}else if($comp["appeal"]["sa_status"]==3){
+							echo  $this->translate("Rejected"); 
+					}					
+				}else{
+					if($comp["allow_appeal"]==1){	
+				?>
+				<a href="#" onclick="appeal('<?php echo $comp["IdMarksDistributionMaster"];?>')">
+				<?php echo $this->translate("Apply Remarking");?>
+				</a>
+				<?php } } ?>
+				</td>
+			</tr>
+	<?php }else{?>
+			<tr>
+				<td width="20%"><?php echo $comp["component_name"];?></td>
+				<td width="10%" align="center">&nbsp;</td>
+				<td width="10%" align="center">&nbsp;</td>
+				<td width="30%" align="center">&nbsp;</td>
+				<td width="30%" align="center">&nbsp;</td>
+			</tr>
+	<?php }  }  } ?>
+	
+	<?php if($publish>0){?>
+		<tr><th colspan="2"><?php echo $this->translate("Total");?></th><td align="center"><?php echo number_format($total, 2, '.', ''); ?></td><td colspan=2>&nbsp;</td></tr>
+	<?php }//end publish
+	 }//end count component 
+	 ?>
+	 
+	<?php 
+	if($publish==0 || count($this->component)==0){
+		echo '<tr><td colspan=5>'.$this->translate("No coursework to be published").'</td></tr>';
+	}
+	?>
+	
+</table>
+<br>
+<?php  echo $this->translate("Student Attendance Status"); ?>
+<br>
+<table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		<th width="20%"><?php echo $this->translate("Lecturer Session");?></th>
+		<th width="10%"><?php echo $this->translate("Attend");?></th>		
+		<th width="30%"><?php echo $this->translate("Sick");?></th>
+		
+		<th width="10%"><?php echo $this->translate("Permission");?></th>
+		<th width="30%"><?php echo $this->translate("Absent");?></th>
+		<th width="30%"><?php echo $this->translate("Percentage");?></th>
+	</tr> 
+	<?php $attendances=$this->component['Attendance'];
+	  
+	  if (count($attendances) > 0) {?>
+	<tr align="center">
+		<td width="20%"><?php echo $attendances["Lecture"];?></td>
+		<td width="10%"><?php echo $attendances["Attend"];?></td>
+		<td width="10%"><?php echo $attendances["Sick"];?></td>
+		
+		<td width="10%"><?php echo $attendances["Permission"];?></td>
+		<td width="10%"><?php echo $attendances["Absent"];?></td> 
+		<td width="30%"><?php echo $attendances["Percentage"];?></td>
+	</tr> 
+	<?php  	
+	//echo 'grup='.$attendances["grup"];
+	//		echo 'std='.$attendances["idstd"];
+	//		echo 'subject='.$attendances["idsubject"];
+
+} else {?>
+	<tr><td colspan="5"><?php echo "Tidak ada data absensi"; ?></td></tr>
+	<?php }?>
+</table>
+
+</div>
+

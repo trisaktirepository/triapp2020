@@ -1,0 +1,33 @@
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>		
+			
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'application','controller'=>'selection-highschool', 'action'=>'batch-dean-rating'),'default',true);?>" >
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+		
+			
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					<?php echo $this->translate("info")?>
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>

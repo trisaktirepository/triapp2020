@@ -1,0 +1,35 @@
+<div id="vertmenu">
+	<ul>  
+		<li><h1><?php echo $this->translate("Menu Navigation"); ?></h1></li>
+		<li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'student-portal','action'=>'home'),'default',true) ?>"><?php echo $this->translate("Home"); ?></a></li>
+		<li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'student-portal','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Academic Info"); ?></a></li>
+		<!--
+			<?php if ($this->appl_id==94){?>
+		<li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'student-portal','action'=>'schedule'),'default',true) ?>"><?php echo $this->translate("Schedule"); ?></a></li>
+	    <?php } ?>	   
+	    -->
+	    <li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'applicant-portal','action'=>'biodata'),'default',true) ?>"><?php echo $this->translate("Biodata"); ?></a></li>
+	    <li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'skpm','action'=>'skpm'),'default',true) ?>"><?php echo $this->translate("SKPM-FK"); ?></a></li>
+	    <li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'skpi','action'=>'index'),'default',true) ?>"><?php echo $this->translate("SKPI"); ?></a></li>
+		
+		<li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'applicant-portal','action'=>'contact-info'),'default',true) ?>"><?php echo $this->translate("contact_info"); ?></a></li>
+		<li><a href="<?php echo $this->url(array('module'=>'counseling','controller'=>'index','action'=>'student-view'),'default',true) ?>"><?php echo $this->translate("Academic Advising"); ?></a></li>
+		<li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'conversion','action'=>'student-list'),'default',true) ?>"><?php echo $this->translate("Conversion Result"); ?></a></li>
+		<li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'course-registration','action'=>'course-register'),'default',true) ?>"><?php echo $this->translate("Register Course"); ?></a></li>
+		<!-- 
+		<li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'student-portal','action'=>'add-drop'),'default',true) ?>"><?php echo $this->translate("Add & Drop"); ?></a></li>
+		<li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'student-portal','action'=>'withdrawal'),'default',true) ?>"><?php echo $this->translate("Withdrawal"); ?></a></li>-->
+		<li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'student-portal','action'=>'result'),'default',true) ?>"><?php echo $this->translate("Examination Result"); ?></a></li>
+		<li><a href="<?php echo $this->url(array('module'=>'finalassignment','controller'=>'proposal','action'=>'student-proposal-list'),'default',true) ?>"><?php echo $this->translate("TA/Skripsi"); ?></a></li>
+		<li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'applicant-portal','action'=>'account'),'default',true) ?>"><?php echo $this->translate("Account Statement"); ?></a></li>
+		
+		<li><a href="<?php echo $this->url(array('module'=>'exam','controller'=>'exam-slip','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Exam Slip"); ?></a></li>
+		
+		<li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'student-portal','action'=>'graduation-process'),'default',true) ?>"><?php echo $this->translate("Graduation"); ?></a></li>
+		<li><a href="<?php echo $this->url(array('module'=>'assistant','controller'=>'mark-entry','action'=>'group-list-assistant'),'default',true) ?>"><?php echo $this->translate("Assistant"); ?></a></li>
+		
+		<li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'student-portal','action'=>'activity-list'),'default',true) ?>"><?php echo $this->translate("Activity Application"); ?></a></li>
+		<li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'student-portal','action'=>'change-password'),'default',true) ?>"><?php echo $this->translate("Change Password"); ?></a></li>
+		<li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'student-portal','action'=>'logout'),'default',true) ?>"><?php echo $this->translate("Logout"); ?></a></li>
+	</ul>
+</div>

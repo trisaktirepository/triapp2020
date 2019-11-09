@@ -1,0 +1,103 @@
+<script type="text/javascript">
+	function del(title,id){
+		var id = $('input[name=semester_id]:checked').val();
+
+		if(!id){
+			alert('Please select any semester first');
+		}else{
+			if(confirm('Confirm to delete this semester?')){
+				window.location = "<?php echo $this->url(array('module'=>'anr-setup','controller'=>'semester', 'action'=>'delete'));?>/id/"+id
+			}
+		}
+	}
+
+	function edit(){
+		var id = $('input[name=semester_id]:checked').val();
+
+		if(!id){
+			alert('Please select any semester first');
+		}else{
+			window.location="<?php echo $this->url(array('module'=>'anr-setup','controller'=>'semester','action'=>'edit'),'default',true) ?>/id/"+id;
+		}
+	}
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'anr-setup', 'controller' => 'semester', 'action' => 'add')); ?>">
+					<span class='add'></span>
+					Add
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:edit()">
+					<span class='edit'></span>
+					Edit
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:del()">
+					<span class='delete'></span>
+					Delete
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+   
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+<table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+	<tr>
+		<th width="25px">&nbsp;</th>
+        <th>Semester</th>
+        <th style="width:150px">Semester Code</th>
+        <th style="width:150px">Start Date</th>
+        <th style="width:150px">Expire Date</th>
+    </tr>
+    <?php 
+	$i=0;
+	foreach ($this->paginator as $semester):
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<td>
+			<input type="radio" name="semester_id" value="<?php echo $semester['id']; ?>">
+		</td>
+		<td><a href="<?php echo $this->url(array('module'=>'anr-setup','controller'=>'semester','action'=>'view', 'id'=>$semester['id']),'default',true) ?>"><?php echo $semester['name']."&nbsp;".$semester['year']; ?></a></td>
+		<td align="center"><?php echo $semester['code']; ?></td>
+		<td align="center"><?php echo date('d/m/Y',strtotime($semester['start_date'])); ?></td>
+		<td align="center"><?php echo date('d/m/Y',strtotime($semester['end_date'])); ?></td>
+	</tr>
+	<?php 
+	$i++;
+	endforeach 
+	?>
+</table>
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>
+</div>
+                        

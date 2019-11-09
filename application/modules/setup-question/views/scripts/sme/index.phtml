@@ -1,0 +1,135 @@
+<script>
+function changeCourse(faculty_id){
+ 	
+	$.ajax({ 
+		type: "POST",
+		url: "<?php echo $this->url(array('module'=>'question','controller'=>'sme','action'=>'ajax-get-course'),'default',true);?>/faculty_id/"+faculty_id, 
+		data: "faculty_id=" + faculty_id,
+		context: document.body, 
+		success:		   
+			function(data){
+				
+				response = eval(data);
+				var course = document.getElementById('course_id');
+				course.options.length = 0;
+				course.options[0]=new Option('-- Please select --','0');
+				
+				for(var i=0; i<response.length; i++){
+					course.options[i+1]=new Option(response[i].courseid+' - '+response[i].coursename,response[i].courseid);
+				}		
+	    	}
+	    	
+	});
+	
+	
+}
+</script>
+
+<table width="90%" border="0" align="center" cellpadding="1" cellspacing="1">
+  <tr> 
+    <td ><strong> 
+      <h1><?php echo $this->title;?></h1>
+      </strong> This page is designed to enable user to search for assessment component.</td>
+  </tr>
+  <tr> 
+    <td height="154">  
+
+    <br>
+   <form name="searchfrm" action="<?php echo $this->url(array('module'=>'question','controller'=>'sme','action'=>'index'),'default',true);?>" method="post">
+    <table width="50" cellspacing="1" cellpadding="5" id="mtable"  align="center">
+    <tr>             
+    <td width="15%">Faculty</td>
+            <td width="85%" >             
+           <select name="faculty_id" id="faculty_id" onchange="changeCourse(this.options[this.selectedIndex].value)">
+			<option value="0">-- Please select --</option>
+			<?php 
+			foreach($this->faculty as $f){
+				if($this->faculty_id==$f[id])
+				  $sel = "selected";
+				else
+				  $sel = "";
+			 	echo "<option value='$f[id]' $sel>$f[faculty_name]</option>";
+			 } ?>
+			</select></td>
+          </tr>
+          <tr> 
+            
+    <td>Course</td>
+    <td><select name="course_id" id="course_id" >
+        <option>-- Please Select --</option>
+        <?php 
+			foreach($this->course as $c){
+				if($this->course_id==$c[courseid])
+				  $sel = "selected";
+				else
+				  $sel = "";
+			 	echo "<option value='$c[courseid]' $sel>$c[courseid] - $c[coursename]</option>";
+			 } ?>
+      </select>
+      
+      
+      </td>
+          </tr>
+          <tr>
+          <td></td>
+          <td><input type="submit" name="submit" class="button" value="Search"></td>
+          </tr>
+		  </table>
+		  </form>
+	 
+		  <br>
+		  
+		  
+  
+		   	 		   
+     <table id="mtable">
+        
+         <tr align="center" bgcolor="#CCFFFF"> 
+          <th width="15%" height="30" bgcolor="#D7EBFF"><strong>Assessment Type</strong></th>
+          <th width="18%" bgcolor="#D7EBFF"><strong>Assessment Item</strong></th>
+          <th width="18%" bgcolor="#D7EBFF"><strong>Question Type</strong></th>
+          <th width="50%" bgcolor="#D7EBFF"><strong>Action</strong></th>
+        </tr>
+          <?php 
+           if(count($this->component)>0){
+            foreach ($this->component as $component){ ?>
+        <tr> 
+          <td bgcolor="#EAEAEA"><? echo $component["component_name"];?></td>
+          <td bgcolor="#EAEAEA">&nbsp;</td>
+          <td bgcolor="#EAEAEA">&nbsp;</td>
+          <td align="center" bgcolor="#EAEAEA">&nbsp; </td>
+        </tr>
+              <?php 
+                 //get assessment component item
+    		     $assessment_item = new GeneralSetup_Model_Assessmenttype();
+    		     $item_list = $assessment_item->getComponentItem($component["id"]);
+    		   
+                 foreach ($item_list as $item){ ?>
+             	 <tr> 
+		          <td>&nbsp;</td>
+		          <td><? echo $item["component_name"]?></td>
+		          <td align="center">
+		          <? 
+		          if($item["question_type"]==1) echo 'ESSAY'; 
+		          if($item["question_type"]==2) echo 'MCQ'; 		          
+		          ?></td>
+		          <td align="center">
+		             <input type="button" name="button" value="Add Question" class="button" onclick="window.location='<?php echo $this->url(array('module'=>'question','controller'=>'sme','action'=>'addfrm','course_id'=>''.$this->course_id.'','atype'=>''.$item[id].'','qtype'=>''.$item["question_type"].''),'default',true);?>'"> 
+		             <input type="button" name="button" value="List of question" class="button" onclick="window.location='<?php echo $this->url(array(module=>question ,controller => sme, action => searchtype,'course_id'=>''.$this->course_id.'','atype'=>''.$item[id].'','qtype'=>''.$item["question_type"].''),'default',true)?>'">
+                    <!-- <input name="Submit55" type="button" class="button" onclick="window.location='question_report_status.php'" value="No of Question">--> </td>
+		        </tr>
+              <? } ?>
+          
+          <? }  }else {//end if?>
+            <tr> 
+	          <td colspan="4">No data found.</td>	         
+	        </tr>
+        <? } ?>
+      </table>
+       
+       
+     
+
+    </td>
+  </tr>
+</table> 

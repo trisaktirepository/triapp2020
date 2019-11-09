@@ -1,0 +1,174 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+		
+		$("#exam_date").datepicker({
+				"dateFormat":"yy-mm-dd",
+				"changeMonth":"true",
+		});
+
+		$("#application_date").datepicker({
+			"dateFormat":"yy-mm-dd",
+			"changeMonth":"true",
+		});
+		
+	});
+
+	
+
+	/*//To remove flash MSG*/
+	setTimeout(function() {
+		$( "#msg" ).hide( 'blind',null, 1000);
+	}, 5000 );
+
+
+</script>
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+<!--			<li>
+				<a href="#" onclick="javascript:add()">
+					<span class='add'></span>
+					Add
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:edit()">
+					<span class='edit'></span>
+					Edit
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:del()">
+					<span class='delete'></span>
+					Delete
+				</a>
+			</li>
+			<li class="divider"></li>-->
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<?if(isset($this->noticeMessage)){?>
+<div id="msg" class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+<fieldset>
+<legend>Search Candidate</legend>
+<table width="100%" border="0">
+  <tr>
+    <td>Exam Date :</td>
+    <td><label for="textfield"></label>
+    <input type="text" name="exam_date" id="exam_date"></td>
+    <td>Application Date :</td>
+    <td><input type="text" name="application_date" id="application_date"></td>
+  </tr>
+  <tr>
+    <td>IC No : </td>
+    <td><input type="text" name="textfield2" id="textfield2"></td>
+    <td>Candidate Name :</td>
+    <td><input type="text" name="textfield4" id="textfield4"></td>
+  </tr>
+  <tr>
+    <td>Course : </td>
+    <td colspan="3">
+    <select name="course" id="course">
+    <option value="">-- Please select -- </option>
+    <?php foreach($this->courseList as $course){?>
+    <option value="<?php echo $course['id'];?>"><?php echo $course['name'];?></option>
+    <?php }?>
+    </select>
+    </td>
+    
+  </tr>
+  <tr>
+    <td colspan="4"><input type="submit" value="Search"></td>
+  </tr>
+</table>
+
+</fieldset>
+<br>
+
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+	
+?>
+<table class="table4" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		
+		<th colspan='2'>CANDIDATE NAME</th>
+		<th>ICNO</th>
+		<th>COURSE NAME</th>
+		<th>STATUS</th>
+		<th>PAYMENT MODE</th>
+		<th>PAYMENT STATUS</th>
+		<th>APPLICATION DATE</th>
+		<th>EXAMINATION DATE</th>
+		<th>ACTION</th>
+	</tr>
+	
+	<?php 
+	$i=0;
+	$bil=0;
+	$page = $this->page;
+	if($page != 1){
+		echo $bil = $page + 20;
+	}else{
+		$bil=1;
+	}
+	
+	foreach ($this->paginator as $entry): 
+	
+	$id = $entry['ID'];
+	
+	$registrationDB = new App_Model_Record_DbTable_Registrationdetails();
+	$registrationData = $registrationDB->listStudent($id);
+	
+	$totArrayStud = count($registrationData);
+	if($totArrayStud != 1){
+		$rowspan = "rowspan = '$totArrayStud'";
+	}else{
+		$rowspan = "";
+	}
+
+	echo "<tr valign='top' bgcolor='#f2f2f2'><td $rowspan>$bil)</td>";
+	echo "<td $rowspan>".strtoupper($entry['ARD_NAME'])."</td>";
+	echo "<td $rowspan>$entry[ARD_IC]</td>";
+	
+		foreach ($registrationData as $data){
+	
+	?>
+			<td bgcolor='#f2f2f2'><?php echo $data['course_name']; ?></td>
+			<td bgcolor='#f2f2f2'><?php echo $data['course_name']; ?></td>
+			<td bgcolor='#f2f2f2'><?php echo $data['paymentMode']; ?></td>
+			<td bgcolor='#f2f2f2'><?php if($data['paymentStatus'] == 0)echo "Pending";elseif($data['paymentStatus'] == 1) echo "Completed"; ?></td>
+			<td bgcolor='#f2f2f2'><?php echo date('d-M-Y',strtotime($data['dateApplied'])); ?></td>
+			<td bgcolor='#f2f2f2'><?php echo date('d-M-Y',strtotime($data['exam_date'])); ?></td>
+			<td bgcolor='#f2f2f2'><a href='<?php echo $this->url(array('module'=>'finance','controller'=>'individual', 'action'=>'payment-detail','idApp'=>$data['ID'],'id'=>$data['id'])); ?>'>Click</a> <?php echo $data['id'];?></td>
+		</tr>
+	<?php 
+		}
+	$i++;
+	$bil++;
+	endforeach 
+	?>
+
+</table>
+
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>

@@ -1,0 +1,53 @@
+<div class="message toolbar">
+    <h2><?php echo $this->translate('Counseling'); ?></h2>
+    <div class="toolbar-button">
+        <ul>
+            <li>
+                <a href="/counseling/index/create" >
+                    <span class='add'></span>
+                    <?php echo $this->translate('New Issue');?>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+<br />
+
+<table class="table" width="100%">
+    <tr>
+        <th><?php echo $this->translate('Problem Type'); ?></th>
+        <th><?php echo $this->translate('Summary'); ?></th>
+        <th><?php echo $this->translate('Status'); ?></th>
+        <th></th>
+    </tr>
+    <?php
+    $status = array(
+        0 => $this->translate('cancelled'),
+        1 => $this->translate('new'),
+        2 => $this->translate('replied')
+    );
+    foreach ($this->issues as $issue) {
+        $problem_type = $issue->findParentRow('Counseling_Model_IssueType');
+        if(!empty($problem_type)) {
+            $prob_name = $problem_type->name;
+        } else {
+            $prob_name = "";
+        }
+        ?>
+        <tr>
+            <td><?php echo $prob_name; ?></td>
+            <td><?php echo $issue->summary; ?></td>
+            <td><?php echo $status[$issue->status]; ?></td>
+            <td>
+                <a href="/counseling/index/view/id/<?php echo $issue->id; ?>"><?php echo $this->translate('View'); ?></a>
+            </td>
+        </tr>
+    <?php
+    }
+    ?>
+    <?php if (count($this->issues)== 0) { ?>
+        <tr>
+            <td colspan="4"><?php echo $this->translate('No Issues'); ?></td>
+        </tr>
+    <?php } ?>
+</table>

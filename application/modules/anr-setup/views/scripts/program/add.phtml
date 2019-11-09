@@ -1,0 +1,89 @@
+<script type="text/javascript">
+$(document).ready(function() {
+	//initial
+	var departmentList = document.getElementById('department_id');
+	departmentList.options.length = 0;
+	departmentList.options[0]=new Option('','');
+
+	$('#department_id').attr("disabled", true); 
+  	
+	$('#faculty_id').change(function() {
+		var id = $('#faculty_id').val();
+	  	changeFaculty(id);
+	  	$('#department_id').removeAttr("disabled"); 
+	});
+
+});
+
+function changeFaculty(id){
+	document.getElementById('department_id').options.length = 0;
+	
+	$.ajax({ 
+		type: "POST",
+		url: "<?php echo $this->url(array('module'=>'general-setup','controller'=>'department','action'=>'ajax-get-department'),'default',true);?>", 
+		data: "id=" + id,
+		dataType: 'json',
+		context: document.body, 
+		success: function(data){
+			
+			var departmentList = document.getElementById('department_id');
+			departmentList.options.length = 0;
+			departmentList.options[0]=new Option('-- Select Department --','');
+			
+			$.each(data, function(i,data){
+				departmentList.options[i+1]=new Option(data.name,data.id); 	
+			});	
+    	}
+	});
+}
+</script>
+
+<link rel="stylesheet" type="text/css" href="/js/jquery/plugin/lib/blueprint/screen.css" media="screen, projection" />
+<link rel="stylesheet" type="text/css" href="/js/jquery/plugin/lib/blueprint/print.css" media="print" />
+<!--[if lt IE 8]><link rel="stylesheet" href="/js/jquery/plugin/lib/blueprint/ie.css" type="text/css" media="screen, projection" /><![endif]-->
+<link rel="stylesheet" href="/js/jquery/plugin/jwysiwyg/jquery.wysiwyg.css" type="text/css"/>
+
+<script type="text/javascript" src="/js/jquery/plugin/jwysiwyg/jquery.wysiwyg.js"></script>
+<script type="text/javascript" src="/js/jquery/plugin/jwysiwyg/controls/wysiwyg.image.js"></script>
+<script type="text/javascript" src="/js/jquery/plugin/jwysiwyg/controls/wysiwyg.link.js"></script>
+<script type="text/javascript" src="/js/jquery/plugin/jwysiwyg/controls/wysiwyg.table.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#synopsis').wysiwyg({
+			formWidth: 400,
+			formHeight: 400
+		});
+	});
+</script>
+
+<style type="text/css">
+#synopsis{
+	width: 400px;		
+}
+</style>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'anr-setup','controller'=>'program', 'action'=>'index'),'default',true);?>">
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<?php 
+	$this->form->setAction($this->url());
+	echo  $this->form;
+?>

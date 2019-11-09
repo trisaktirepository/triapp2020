@@ -1,0 +1,279 @@
+<script type="text/javascript">
+function del(title, id){
+	if(confirm('Are you sure to delete course '+title+' from this program?')){
+		window.location = "<?php echo $this->url(array('module'=>'setup','controller'=>'academic-landscape', 'action'=>'delete', 'program-id'=>$this->program_id),'default',true); ?>/id/"+id;
+	}
+}
+
+function edit(id){
+	window.location="<?php echo $this->url(array('module'=>'setup','controller'=>'academic-landscape', 'action'=>'edit', 'program-id'=>$this->program_id),'default',true);?>/id/"+id;
+}
+
+function cal1(compamt){
+	
+	var total = "total_a";
+	var add = "add_charge";
+	var plana = "a";
+	var add_val = parseInt(document.forms.form1[add].value);
+	var grand = 0;
+	
+	if (isNaN(add_val)){
+			add_val = 0;
+		}
+		
+	grand= parseInt(compamt) + add_val;
+	document.forms.form1[plana].value=grand;
+}
+
+function cal2(compamt,totalsem){
+	var add = "add_charge2";
+	var planb = "b";
+	var add_val = parseInt(document.forms.form1[add].value);
+	
+	if (isNaN(add_val)){
+			add_val = 0;
+		}
+		
+	a = (compamt + add_val)/totalsem; //total + add charge/totalmonth = each month
+	a_s = Math.round(a,0);
+	
+	for(i=1;i<=totalsem;i++){
+		var total = 'total_b'+i;
+	document.forms.form1[total].value=a_s;
+	}
+	document.forms.form1[planb].value=compamt + add_val;
+}
+
+function cal3(compamt, admin_fee){
+	var total = "total_c";
+	var add = "add_charge3";
+	var planc = "c";
+	var add_val = parseInt(document.forms.form1[add].value);
+	
+	if (isNaN(add_val)){
+			add_val = 0;
+		}
+	a = (compamt - admin_fee)+add_val;
+	a_s = Math.round(a,0);
+	
+//	alert("admin = "+admin_fee+"total"+compamt+"a"+a);
+	
+	document.forms.form1[total].value=a_s;
+	document.forms.form1[planc].value=compamt + add_val;
+}
+
+</script>
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<h1>Fee Structure</h1>
+
+<?php
+$promDB = new Finance_Model_DbTable_Billfee();
+$this->prom = $promDB->getPaginateData($this->id);
+?>
+
+<form name="form1" method="post">
+<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+<?foreach ($this->prom as $pr) { ?>
+	<tr class="shade">
+		<td colspan="3" bgcolor="#F2F2F2"><u>Fee Structure Info</u></td>
+	</tr>
+	<tr>
+		<td bgcolor="#F2F2F2" width="20%">Promotion Type </td>
+		<td width="2%" bgcolor="#F2F2F2">:</td>
+		<td align="left" bgcolor="#F2F2F2"><?php echo $pr["group_code"];?></td>
+	</tr>
+	<tr class="shade">
+		<td bgcolor="#F2F2F2">Promotion Code </td>
+		<td bgcolor="#F2F2F2">:</td>
+		<td bgcolor="#F2F2F2"><?php echo $pr["group_desc"];?></td>
+	</tr>                                                                                                 
+  <?}?>
+ </table>
+
+ <br>
+ <h1>Payment Plan</h1>
+ 
+ <?php
+ $this->component = $promDB->getFeeData("fr_promotion_component","fr_charging_main","fr_charge_period = fr_charging_main.id","fr_component_group","fr_comp_group = fr_component_group.id","fr_component","fr_comp_desc = fr_component.id","semester","fr_semid = semesterID",$this->id); 
+	$i=1;
+	$total = 0;
+	foreach ($this->component as $comfee): 
+		$amount = $comfee["fr_amount"];
+		$i++;
+		$total += $amount;
+	endforeach ;
+	
+	//admin fee
+	$admin = $promDB->getFeeData("fr_promotion_component","fr_charging_main","fr_charge_period = fr_charging_main.id and fr_promotion_component.fr_comp_group = 1","fr_component_group","fr_comp_group = fr_component_group.id","fr_component","fr_comp_desc = fr_component.id","semester","fr_semid = semesterID",$this->id); 
+	$total_admin = 0;
+	foreach ($admin as $adm): 
+		$admin_fee = $adm["fr_amount"];
+		$total_admin += $admin_fee;
+	endforeach ;
+	
+	$this->semesterlist = $promDB->getCount("semester");
+	foreach ($this->semesterlist as $semList){
+		$total_sem = $semList["total"];
+	}
+	
+	?>
+<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+	<tr bgcolor="#F2F2F2">    
+		<td>Payment Terms <br> <br><br> Tuition/Examination Fees</td>
+		<td align="center">PLAN A<br>Full Payment <br><br>RM <input type="text" name="aa" id="aa" size="8" class="textInput" value="<?=$total?>" readonly disabled></td>
+		<td align="center">PLAN B<br>Installment <br><br>RM <input type="text" name="b" id="b" size="8" class="textInput" value="<?=$total?>" readonly disabled></td>
+		<td align="center">PLAN C <br>Paid by Monthly<br><br>RM <input type="text" name="c" id="c" size="8" class="textInput" value="<?=$total?>" readonly disabled></td>
+	</tr>
+	<tr class="shade">    
+		<td>Additional Charges</td>
+		<td align="center">RM <input type="text" name="add_charge" id="add_charge" size="8" onkeyup="javascript:cal1(<?=$total?>);" value="0"></td>
+		<td align="center">RM <input type="text" name="add_charge2" id="add_charge2" size="8" onkeyup="javascript:cal2(<?=$total?>,<?=$total_sem?>);" value="0"></td>
+		<td align="center">RM <input type="text" name="add_charge3" id="add_charge3" size="8" onkeyup="javascript:cal3(<?=$total?>,<?=$total_admin?>);" value="0"></td>
+	</tr>
+	
+<?php
+$semDB = new Finance_Model_DbTable_Billfee();
+$this->semester = $semDB->getListData("semester",1,"semesterID");
+$i=1;
+$count_month_all = 0;
+$other_all = 0;
+	foreach ($this->semester as $sem): 
+	
+		$fee_sema = $total/$total_sem;
+		$fee_sem = round($fee_sema,0);
+		
+		$month_all = countmonth($i,$total_admin,$total);
+		$fee_month = ($total-$total_admin)/$month_all;
+		
+		$startDate = date('d/m/Y', strtotime($sem["startDate"]));
+		$endDate = date('d/m/Y', strtotime($sem["expireDate"]));
+		
+		$asDate = explode('/', $startDate);
+		
+		$day = $asDate[0];
+		$month = $asDate[1];
+		$year = $asDate[2];
+		
+		$edDate = explode('/', $endDate);
+		
+		$eday = $edDate[0];
+		$emonth = $edDate[1];
+		$eyear = $edDate[2];
+	
+?>
+
+	<tr bgcolor="#ffffff">    
+		<td valign="top"><?=$i?>) <?=$sem["semester"];?></td>
+		<td align="center" valign="top">N/A</td>
+		<td align="center" valign="top">RM <input type="text" name="total_b<?=$i?>" id="total_b<?=$i?>" size="8" value="<?=$fee_sem?>"></td>
+		<td align="center">
+		
+		<?php
+//		echo $startDate." - ".$endDate."+";
+//		echo $month."-".$emonth;
+//		echo "<br>";
+		if ($year == $eyear) {
+			$count_month = ($emonth - $month)+1;
+		}else {
+			$count_month = (12 - $month)+$emonth+1;
+		}
+		
+		$count_month_all += $count_month;
+		
+		if ($i == 1) {
+			$count_month = $count_month - 1;
+			$first = round($total_admin + $fee_month,0);
+			$other = round($fee_month * $count_month,0);
+			$sem1 = $other + $first;
+			echo "<u> 1st Month</u> <br> RM ".$total_admin." + ( RM ".$fee_month." x 1 month ) = RM".$first;
+			echo "<br><br>RM ".$fee_month." x ".$count_month." months = RM ".$other;
+			echo "<br>----------------------------------------------<br>RM ".$sem1;
+		}
+		else {
+			$other = round($fee_month * $count_month,0);
+			echo "<br>RM ".$fee_month." x ".$count_month." months = RM ".$other;
+		}
+		
+		$other_all +=$other;
+		?>
+		</td>
+	</tr>
+	<?php
+	$i++;
+	endforeach ;
+	$other_all = $other_all + $first;
+	
+	?>
+
+	<tr bgcolor="#F2F2F2">    
+		<tD>GRAND TOTAL</td>
+		<td align="center">RM <input type="text" name="a" id="a" size="8" class="textInput" value="<?=$total?>" readonly></td>
+		<td align="center">RM <input type="text" name="bb" id="bb" size="8" class="textInput" value="<?=$total?>" readonly></td>
+		<td align="center">RM <input type="text" name="cc" id="cc" size="8" class="textInput" value="<?=$other_all?>" readonly></td>
+	</tr>
+	<tr bgcolor="#ffffff">    
+		<td colspan="4" align="center">
+		 <input type="hidden" name="id_fee" id="id_fee" value="<?=$this->id?>">
+		 <input type="hidden" name="id_plan" id="id_plan" value="3">
+		 <input type="hidden" name="item" id="item" value="8">
+		 <input type="hidden" name="add_charge" id="add_charge" value="10">
+		 <input type="hidden" name="amount" id="amount" value="<?=$total?>">
+		 </td>
+	</tr>
+	<tr bgcolor="#ffffff">    
+		<td colspan="4" align="center"><input type="submit" name="Submit" value="Set Payment Plan" onclick="form.action='<?php echo $this->url(array('module'=>'finance','controller'=>'billfee','action'=>'plan','id'=>$this->id));?>/'"></td>
+	</tr>
+	
+</table>
+
+</form>
+
+<?php
+
+function countmonth ($total_sem,$total_admin,$total){
+	$semDB = new Finance_Model_DbTable_Billfee();
+	$semester = $semDB->getListData("semester",1,"semesterID");
+	$count_month_all = 0;
+	
+	foreach ($semester as $sem): 
+	
+		$startDate = date('d/m/Y', strtotime($sem["startDate"]));
+		$endDate = date('d/m/Y', strtotime($sem["expireDate"]));
+		
+		$asDate = explode('/', $startDate);
+		
+		$day = $asDate[0];
+		$month = $asDate[1];
+		$year = $asDate[2];
+		
+		$edDate = explode('/', $endDate);
+		
+		$eday = $edDate[0];
+		$emonth = $edDate[1];
+		$eyear = $edDate[2];
+		
+			if ($year == $eyear) {
+				$count_month = ($emonth - $month)+1;
+			}else {
+				$count_month = (12 - $month)+$emonth+1;
+			}
+			
+			$count_month_all += $count_month;
+	endforeach;
+	
+	return $count_month_all;
+	
+}
+
+
+?>

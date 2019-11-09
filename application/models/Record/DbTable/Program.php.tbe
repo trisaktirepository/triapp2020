@@ -1,0 +1,280 @@
+<?php 
+class App_Model_Record_DbTable_Program extends Zend_Db_Table_Abstract
+{
+    protected $_name = 'r006_program';
+	protected $_primary = "id";
+	
+	public function getData($id=0){
+		
+		$db = Zend_Db_Table::getDefaultAdapter();
+		
+		$id = (int)$id;
+		
+		if($id!=0){
+
+	        $select = $db ->select()
+						->from(array('program'=>$this->_name))
+						->where('program.'.$this->_primary.' = ' .$id)
+						//->join(array('main_program'=>'r005_program_main'),'program.program_main_id = main_program.id',array('main_name'=>'name'))
+						//->join(array('market'=>'r004_market'),'market.id = program.market_id',array('market'=>'name'))
+						->joinLeft(array('faculty'=>'g005_faculty'),'faculty.id = program.faculty_id',array('faculty'=>'name'))
+						//->joinLeft(array('department'=>'g008_department'),'department.id = program.department_id',array('department'=>'name'))
+						//->joinLeft(array('intake'=>'r014_intake'),'intake.id = program.first_intake_id',array('intake_name'=>'name'))
+						->join(array('award'=>'r003_award'),'award.id = program.award_id',array('award'=>'name'));
+
+			//echo $select;
+			
+	        $stmt = $db->query($select);
+	        $row = $stmt->fetch();
+        
+		}else{
+			$select = $db ->select()
+						->from(array('program'=>$this->_name))
+						//->join(array('main_program'=>'r005_program_main'),'program.program_main_id = main_program.id',array('main_name'=>'name'))
+						//->join(array('market'=>'r004_market'),'market.id = program.market_id',array('market'=>'name'))
+						->join(array('faculty'=>'g005_faculty'),'faculty.id = program.faculty_id',array('faculty'=>'name'))
+						//->joinLeft(array('department'=>'g008_department'),'department.id = program.department_id',array('department'=>'name'))
+						->join(array('award'=>'r003_award'),'award.id = program.award_id',array('award'=>'name'));
+
+			//echo $select;
+									
+	        $stmt = $db->query($select);
+	        $row = $stmt->fetchAll();
+		}
+		
+//		if(!$row){
+//			throw new Exception("There is No Program");
+//		}
+		
+		return $row;
+	}
+	
+	public function getPaginateData($name="",$code=""){
+		$db = Zend_Db_Table::getDefaultAdapter();
+		
+		$selectData = $db ->select()
+						->from(array('program'=>$this->_name))
+						->join(array('main_program'=>'r005_program_main'),'program.program_main_id = main_program.id',array('main_name'=>'name'))
+						->join(array('market'=>'r004_market'),'market.id = program.market_id',array('market'=>'name'))
+						->joinLeft(array('faculty'=>'g005_faculty'),'faculty.id = program.faculty_id',array('faculty'=>'name'))
+						->joinLeft(array('department'=>'g008_department'),'department.id = program.department_id',array('department'=>'name'))
+						->join(array('award'=>'r003_award'),'award.id = program.award_id',array('award'=>'name'))
+						->order(array('program.status desc','program.award_id desc'));
+						
+		if($code!=""){
+			$selectData->where("program.code like '%".$code."%'");
+		}
+
+		if($name!=""){
+			$selectData->where("main_program.name like '%".$name."%'");
+		}
+		return $selectData;
+	}
+	
+	public function getDataFaculty($facID){
+		$db = Zend_Db_Table::getDefaultAdapter();
+		if($facID!=0){
+		$selectData = $db ->select()
+						->from(array('program'=>$this->_name))
+						->where('program.faculty_id = ' .$facID)
+						->joinLeft(array('main_program'=>'r005_program_main'),'program.program_main_id = main_program.id',array('main_name'=>'name'))
+						->joinLeft(array('market'=>'r004_market'),'market.id = program.market_id',array('market'=>'name'))
+						->join(array('faculty'=>'g005_faculty'),'faculty.id = program.faculty_id',array('faculty'=>'name'))
+						->joinLeft(array('department'=>'g008_department'),'department.id = program.department_id',array('department'=>'name'))
+						->join(array('award'=>'r003_award'),'award.id = program.award_id',array('award'=>'name'))
+						->order(array('program.status desc','program.award_id desc'));
+						
+		}else {
+			$selectData = $db ->select()
+						->from(array('program'=>$this->_name))
+						//->joinLeft(array('main_program'=>'r005_program_main'),'program.program_main_id = main_program.id',array('main_name'=>'name'))
+						//->joinLeft(array('market'=>'r004_market'),'market.id = program.market_id',array('market'=>'name'))
+						->joinLeft(array('faculty'=>'g005_faculty'),'faculty.id = program.faculty_id',array('faculty'=>'name'))
+						//->joinLeft(array('department'=>'g008_department'),'department.id = program.department_id',array('department'=>'name'))
+						->joinleft(array('award'=>'r003_award'),'award.id = program.award_id',array('award'=>'name'))
+						->order(array('program.status desc','program.award_id desc'));
+						
+		}
+						
+		return $selectData;
+	}
+	
+	public function addData($postData){
+		$data = array(
+		        'program_main_id' => $postData['program_main_id'],
+				'code' => $postData['code'],
+				'market_id' => $postData['market_id'],
+				'faculty_id' => $postData['faculty_id'],
+				'award_id' => $postData['award_id'],
+				'duration' => $postData['duration'],
+				'status' => $postData['status'],
+				'department_id' => $postData['department_id'],
+				'min_student' => $postData['min_student'],
+				'synopsis' => $postData['synopsis'],
+				'first_intake_id' => $postData['first_intake_id']
+				);
+			
+		$this->insert($data);
+	}
+	
+	public function updateData($postData,$id){
+		$data = array(
+		        'program_main_id' => $postData['program_main_id'],
+				'code' => $postData['code'],
+				'market_id' => $postData['market_id'],
+				'faculty_id' => $postData['faculty_id'],
+				'award_id' => $postData['award_id'],
+				'duration' => $postData['duration'],
+				'status' => $postData['status'],
+				'department_id' => $postData['department_id'],
+				'min_student' => $postData['min_student'],
+				'synopsis' => $postData['synopsis'],
+				'first_intake_id' => $postData['first_intake_id']
+				);
+			
+		$this->update($data, $this->_primary .' = '. (int)$id);
+	}
+	
+	public function deleteData($id){
+		$this->delete('id =' . (int)$id);
+	}
+	
+	public function getProgramList()	{
+		
+		$db = Zend_Db_Table::getDefaultAdapter();
+	
+		$select = $db ->select()
+						->from(array('program'=>$this->_name))
+						->join(array('main_program'=>'r005_program_main'),'program.program_main_id = main_program.id',array('main_name'=>'name'))
+						->join(array('market'=>'r004_market'),'market.id = program.market_id',array('market'=>'name'))
+						->join(array('faculty'=>'g005_faculty'),'faculty.id = program.faculty_id',array('faculty'=>'name'))
+						->joinLeft(array('department'=>'g008_department'),'department.id = program.department_id',array('department'=>'name'))
+						->join(array('award'=>'r003_award'),'award.id = program.award_id',array('award'=>'name'));
+			                     
+	  
+        $result = $db->fetchAll($select);  
+        $list = array("Please Select..");
+		foreach ($result as $value) {
+			$list[$value['program_main_id']] = $value['main_name'];
+		}
+        return $list;
+	    
+	}
+	
+	public function getActiveProgram()	{
+		
+		$db = Zend_Db_Table::getDefaultAdapter();
+	
+		$select = $db ->select()
+						->from(array('program'=>$this->_name))
+						->where('program.status = 1')
+						->join(array('main_program'=>'r005_program_main'),'program.program_main_id = main_program.id',array('main_name'=>'name'))
+						->join(array('market'=>'r004_market'),'market.id = program.market_id',array('market'=>'name'))
+						->joinLeft(array('faculty'=>'g005_faculty'),'faculty.id = program.faculty_id',array('faculty'=>'name'))
+						->joinLeft(array('department'=>'g008_department'),'department.id = program.department_id',array('department'=>'name'))
+						->join(array('award'=>'r003_award'),'award.id = program.award_id',array('award'=>'name'));
+			                     
+	  
+        $result = $db->fetchAll($select);  
+        
+		
+        return $result;
+	    
+	}
+	
+	//EXAM
+	public function selectProgram(){   
+
+	  $db = Zend_Db_Table::getDefaultAdapter();
+	  
+	  
+	  //get session user id
+	  $auth = Zend_Auth::getInstance(); 
+	  $user_id = $auth->getIdentity()->id; 
+	  
+	   $selectIn =  $db ->select()
+    	             ->from('e010_exam_user',array('program_id'=>'program_id'))
+    	             ->where('user_id = ?',$user_id);
+    	
+       $select = $db ->select()
+						->from(array('program'=>$this->_name))
+						->join(array('main_program'=>'r005_program_main'),'program.program_main_id = main_program.id',array('main_name'=>'name'))
+						->join(array('market'=>'r004_market'),'market.id = program.market_id',array('market'=>'name'))
+						->join(array('faculty'=>'g005_faculty'),'faculty.id = program.faculty_id',array('faculty'=>'name'))
+						->joinLeft(array('department'=>'g008_department'),'department.id = program.department_id',array('department'=>'name'))
+						->join(array('award'=>'r003_award'),'award.id = program.award_id',array('award'=>'name'))
+						->where('program.id IN (?)', $selectIn);
+						
+					
+    	$rowSet = $db->fetchAll($select);   
+    	
+    	return $rowSet;
+    }
+    
+    
+    
+    
+    public function selectSemProgram($semester_id){
+    	
+    	  $db = Zend_Db_Table::getDefaultAdapter();
+    	  
+    	  $select = $db ->select()
+						->from(array('program'=>$this->_name))
+						->join(array('main_program'=>'r005_program_main'),'program.program_main_id = main_program.id',array('main_name'=>'name'))
+						->join(array('market'=>'r004_market'),'market.id = program.market_id',array('market'=>'name'))
+						->join(array('faculty'=>'g005_faculty'),'faculty.id = program.faculty_id',array('faculty'=>'name'))
+						->joinLeft(array('department'=>'g008_department'),'department.id = program.department_id',array('department'=>'name'))
+						->join(array('award'=>'r003_award'),'award.id = program.award_id',array('award'=>'name'))
+						->join(array('semprog' => 'r002_semester_program'),'semprog.program_id = program.id')
+						->where('semprog.semester_id = ?',$semester_id);
+	
+						
+    	$rowSet = $db->fetchAll($select);    	
+    	return $rowSet;
+    }
+    
+    public function getExamUser($user_id,$type){
+    	
+    	$db = Zend_Db_Table::getDefaultAdapter();
+    	  
+    		
+    	$select = $db ->select()
+						->from(array('program'=>$this->_name))
+						->join(array('main_program'=>'r005_program_main'),'program.program_main_id = main_program.id',array('main_name'=>'name'))
+						->join(array('market'=>'r004_market'),'market.id = program.market_id',array('market'=>'name'))
+						->join(array('faculty'=>'g005_faculty'),'faculty.id = program.faculty_id',array('faculty'=>'name'))
+						->joinLeft(array('department'=>'g008_department'),'department.id = program.department_id',array('department'=>'name'))
+						->join(array('award'=>'r003_award'),'award.id = program.award_id',array('award'=>'name'));
+			
+		              
+	        $stmt = $db->query($select);
+	        $row = $stmt->fetchAll();
+	     
+	        return $row;
+    }
+    
+    //online application
+    public function getProgramOffered($award_id)	{
+		
+		$db = Zend_Db_Table::getDefaultAdapter();
+	
+		$select = $db ->select()
+						->from(array('program'=>$this->_name))
+						->where('program.status = 1 and program.award_id = '.$award_id)
+						->join(array('main_program'=>'r005_program_main'),'program.program_main_id = main_program.id',array('main_name'=>'name'))
+						->join(array('market'=>'r004_market'),'market.id = program.market_id',array('market'=>'name'))
+						->joinLeft(array('faculty'=>'g005_faculty'),'faculty.id = program.faculty_id',array('faculty'=>'name'))
+						->joinLeft(array('department'=>'g008_department'),'department.id = program.department_id',array('department'=>'name'))
+						->join(array('award'=>'r003_award'),'award.id = program.award_id',array('award'=>'name'))
+						->order(array('main_program.name'));
+			                     
+        $stmt = $db->query($select);
+	    $result = $stmt->fetchAll();
+	    
+	    $count = $db->query($select)->rowCount();
+	    
+        return array($result,$count);
+	}
+	
+}
+?>

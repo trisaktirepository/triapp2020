@@ -1,0 +1,213 @@
+<script type="text/javascript">
+function delete_tagging(title,id){
+	var id = $('input[name=tagging_id]:checked').val();
+
+	if(!id){
+		alert('Please select any tagging data');
+	}else{
+		if(confirm('Confirm to delete this tagging data?')){
+			window.location = "<?php echo $this->url(array('module'=>'exam','controller'=>'user-setup', 'action'=>'tagging-detail-examiner-delete'));?>/id/"+id
+		}
+	}
+}
+
+function edit_tagging(){
+	var id = $('input[name=tagging_id]:checked').val();
+
+	if(!id){
+		alert('Please select any tag data');
+	}else{
+
+		$('#dialog-edit').load('<?php echo $this->url(array('module'=>'exam','controller'=>'user-setup', 'action'=>'tagging-detail-examiner-edit'),'default',true);?>/id/'+id);
+		$('#dialog-edit').dialog('open');
+	}
+}
+
+$(function() {
+	// a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
+	$( "#dialog:ui-dialog" ).dialog( "destroy" );
+
+	$( "#dialog-add" ).dialog({
+		resizable: true,
+		width:640,
+		modal: true,
+		autoOpen: false,
+		buttons: {
+			"Tag Examiner to Course": function() {
+				$('#exam_examiner_tagging_form').submit();
+			},
+			"Cancel": function() {
+				$( this ).dialog( "close" );
+			}
+		},
+		open: function ()
+        {
+            $(this).load('<?php echo $this->url(array('module'=>'exam','controller'=>'user-setup', 'action'=>'tagging-detail-examiner-add', 'semester_id'=>$this->semester_id, 'uid'=>$this->uid),'default',true);?>');
+        }
+	});
+
+	$( "#dialog-edit" ).dialog({
+		resizable: true,
+		width:640,
+		modal: true,
+		autoOpen: false,
+		buttons: {
+			"Update": function() {
+				$('#exam_examiner_tagging_edit_form').submit();
+			},
+			"Cancel": function() {
+				$( this ).dialog( "close" );
+			}
+		}
+	});
+
+});
+</script>
+	
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<?php if($this->semester_id!=0){?>
+			<li>
+				<a href="#" onClick="javascript:$('#dialog-add').dialog('open');">
+					<span class='add'></span>
+					Add
+				</a>
+			</li>
+			<li>
+				<a href="#" onClick="edit_tagging();">
+					<span class='edit'></span>
+					Edit
+				</a>
+			</li>
+			<li>
+				<a href="#" onClick="delete_tagging();">
+					<span class='delete'></span>
+					Delete
+				</a>
+			</li>
+			<li class="divider"></li>
+			<?php }?>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'exam','controller'=>'user-setup', 'action'=>'tagging'),'default',true);?>">
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<fieldset>
+	<table>
+		<tr>
+			<td width="60px">Name</td>
+			<td width="5px">:</td>
+			<td><?php echo $this->examiner['name']; ?></td>
+		</tr>
+		<tr>
+			<td>Email</td>
+			<td>:</td>
+			<td><?php echo $this->examiner['email']; ?></td>
+		</tr>
+		<tr>
+			<td>Branch</td>
+			<td>:</td>
+			<td>
+				<?php
+					if($this->examiner['branch_id']==0){
+						echo $this->translate("USTY HQ");
+					}else{
+						echo $this->examiner['branch_name'];		
+					} 
+				?>
+			</td>
+		</tr>
+		<tr>
+			<td>Semester</td>
+			<td>:</td>
+			<td>
+				<form name="semester_form" method="post">
+				<select name="semester_id" id="semester_id" style="width:250px" onChange="semester_form.submit()">
+					<option><?php echo $this->translate(" -- Select Semester -- "); ?></option>
+					<?php 
+						foreach ($this->semester_list as $semester){
+							$select = "";
+							if($semester['id'] == $this->semester_id){
+								$select = "selected='selected'";
+							}
+					?>
+						<option value="<?php echo $semester['id']?>" <?php echo $select; ?>><?php echo $semester['name']?> <?php echo $semester['year']?></option>
+					<?php 
+						}
+					?>
+				</select>
+				</form>
+			</td>
+		</tr>
+	</table>
+</fieldset>
+
+<?php if($this->semester_id!=0){?>
+<table class="table" width="100%">
+	<tr>
+		<th width="5px">&nbsp;</th>
+		<th>Course</th>
+		<th width="250px">Course Code</th>
+		<th width="250px">Examiner Component</th>
+	</tr>
+	<?php 
+		if(isset($this->data) && empty($this->data)){
+	?>
+		<tr>
+			<td colspan="4" align="center">
+				<?php echo $this->translate("No Course Assigned");?>
+			</td>
+		</tr>
+	<?php 
+		}else{
+			foreach ($this->data as $data):
+	?>
+		<tr>
+			<td align="center"><input type="radio" name="tagging_id" value="<?php echo $data['id']?>" /></td>
+			<td><?php echo $data['course_name']?></td>
+			<td align="center"><?php echo $data['course_code']?></td>
+			<td align="center">
+				<?php
+					if($data['component_id']==0){
+						echo $this->translate("All Component");
+					}else{
+						echo $data['component_name'];	
+					}
+				?>
+			</td>
+		</tr>
+	<?php 
+			endforeach;
+		}
+	?>
+</table>
+<?php }?>
+
+<div id="dialog-add" title="Examiner Tagging"></div>
+
+<div id="dialog-edit" title="Edit Examiner Tagging"></div>

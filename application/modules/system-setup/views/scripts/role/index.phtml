@@ -1,0 +1,210 @@
+<script type="text/javascript">
+	$(function() {
+		$( "#add_dialog" ).dialog({
+			autoOpen: false,
+			width: 400,
+			modal: true,
+			draggable: false,
+			buttons: { 
+				"Save": function() { 
+					$('#add_form').submit(); 
+				},
+				"Cancel": function() { 
+					$(this).dialog("close"); 
+				}
+			}
+		});
+
+		$( "#edit_dialog" ).dialog({
+			autoOpen: false,
+			width: 400,
+			modal: true,
+			draggable: false,
+			buttons: { 
+				"Save": function() { 
+					$('#edit_form').submit(); 
+				},
+				"Cancel": function() { 
+					$(this).dialog("close"); 
+				}
+			}
+		});
+	});
+
+	function add(){
+		$('input#name').val("");
+		$( "#add_dialog" ).dialog('open');
+	}
+
+	function edit(){
+		var role_id = $('input[name=role_id]:checked').val();
+
+		if(!role_id){
+			alert('Please select any role first');
+		}else{
+		
+			/* AJAX for loading id & name */
+			$.ajax({
+			      url: "<?php echo $this->url(array('module'=>'system-setup','controller'=>'role', 'action'=>'ajax-get-info'),'default',true);?>",
+			      global: false,
+			      type: "POST",
+			      data: ({id : role_id}),
+			      dataType: "json",
+			      async:false,
+			      success: function(data){
+			         id = data;
+			         $.each(data, function(key, value) {
+		        	 	
+		        	 	if(key == "id"){
+			        		document.edit_form.id.value = value;
+		        	 	} 	
+	
+		        	 	if(key == "name"){
+			        		document.edit_form.name.value = value;
+		        	 	}
+		        	 });
+			        			         
+			      }
+			   }
+			);
+	
+			$( "#edit_dialog" ).dialog('open');
+		}
+	}
+
+	function del(){
+		var role_id = $('input[name=role_id]:checked').val();
+
+		if(!role_id){
+			alert('Please select any role first');
+		}else{
+			if(confirm('Are you sure to delete this role?')){
+
+				$.ajax({
+				      url: "<?php echo $this->url(array('module'=>'system-setup','controller'=>'role', 'action'=>'delete'),'default',true);?>",
+				      global: false,
+				      type: "POST",
+				      data: ({id : role_id}),
+				      dataType: "html",
+				      async:false,
+				      complete: function(jqXRX,status){
+				        
+				        if(status=='success'){
+							window.location = "<?php echo $this->url(array('module'=>'system-setup','controller'=>'role', 'action'=>'index'),'default',true);?>" 
+				        }else{
+							alert("error. status:"+status);
+				        }
+				      }
+				   }
+				);
+			}
+		}
+	}
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="javascript:add()">
+					<span class='add'></span>
+					Add
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:edit()">
+					<span class='edit'></span>
+					Edit
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:del()">
+					<span class='delete'></span>
+					Delete
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<br />
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<br />
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<br />
+<?}?>
+
+<table class="table" width="500px" cellpadding="5" cellspacing="2">
+	<tr>
+		<th width="25px">&nbsp;</th>
+		<th>Role Name</th>
+	</tr>
+	<?php
+		if(isset($this->roles)){
+		$i=0;
+			foreach($this->roles as $role){
+	?>
+		<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+			<td>
+			    <? 
+			    if($role['id']!=1 && $role['id']!=2){ //to make sure role Super Admin & System admin will not be deleted.?> 
+				<input type="radio" name="role_id" value="<?php echo $role['id']; ?>">
+				<? } ?>
+			</td>
+			<td><a href="<?php echo $this->url(array('module'=>'system-setup','controller'=>'role', 'action'=>'view','id'=>$role['id']),'default',true);?>"><?php echo $role['name']; ?></a></td>
+		</tr>		
+	<?php 
+			$i++;
+			} 
+		}
+	?>
+</table>
+
+<!-- Add dialog -->
+<div id="add_dialog" title="Add New Role">
+	<p>
+	<form id="add_form" method="post" action="<?php echo $this->url(array('module'=>'system-setup','controller'=>'role', 'action'=>'add'),'default',true);?>">
+		<table>
+			<tr>
+				<td>Role's Name</td>
+				<td>:</td>
+				<td>
+					<input id="name" class="text ui-widget-content ui-corner-all" type="text" name="name" style="width:250px;"/>
+				</td>
+			</tr>
+		</table>
+	</form>
+	</p>
+</div>
+
+<!-- Edit Dialog -->
+<div id="edit_dialog" title="Edit Role Name">
+	<p>
+	<form id="edit_form" name="edit_form" method="post" action="<?php echo $this->url(array('module'=>'system-setup','controller'=>'role', 'action'=>'edit'),'default',true);?>">
+		<input type="hidden" id="id" name="id" value="0" />
+		<table>
+			<tr>
+				<td>Role's Name</td>
+				<td>:</td>
+				<td>
+					<input id="edit_name" class="text ui-widget-content ui-corner-all" type="text" name="name" style="width:250px;"/>
+				</td>
+			</tr>
+		</table>
+	</form>
+	</p>
+</div>

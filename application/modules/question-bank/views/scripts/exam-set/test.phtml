@@ -1,0 +1,7 @@
+function checkAll(field) {
+	for (i = 0; i < field.length; i++)
+	field[i].checked = true;
+}
+
+<input name="CheckAll" type="button" value="Select All" 
+onclick="checkAll(document.myform['personselected[]'])" />

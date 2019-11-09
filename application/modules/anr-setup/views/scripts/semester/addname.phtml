@@ -1,0 +1,65 @@
+<script type="text/javascript">
+$(document).ready(function() {
+	//initial
+	var departmentList = document.getElementById('department_id');
+	departmentList.options.length = 0;
+	departmentList.options[0]=new Option('','');
+
+	$('#department_id').attr("disabled", true); 
+  	
+	$('#faculty_id').change(function() {
+		var id = $('#faculty_id').val();
+	  	changeFaculty(id);
+	  	$('#department_id').removeAttr("disabled"); 
+	});
+
+});
+
+function changeFaculty(id){
+	document.getElementById('department_id').options.length = 0;
+	
+	$.ajax({ 
+		type: "POST",
+		url: "<?php echo $this->url(array('module'=>'general-setup','controller'=>'department','action'=>'ajax-get-department'),'default',true);?>", 
+		data: "id=" + id,
+		dataType: 'json',
+		context: document.body, 
+		success: function(data){
+			
+			var departmentList = document.getElementById('department_id');
+			departmentList.options.length = 0;
+			departmentList.options[0]=new Option('-- Select Department --','');
+			
+			$.each(data, function(i,data){
+				departmentList.options[i+1]=new Option(data.name,data.id); 	
+			});	
+    	}
+	});
+}
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'anr-setup','controller'=>'program', 'action'=>'index'),'default',true);?>">
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<?php 
+	$this->form->setAction($this->url());
+	echo  $this->form;
+?>

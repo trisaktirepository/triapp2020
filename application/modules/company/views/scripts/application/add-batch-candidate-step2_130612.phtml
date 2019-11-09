@@ -1,0 +1,281 @@
+<?php 
+	echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery/plugin/colorbox/jquery.colorbox-min.js');
+	echo $this->headLink()->prependStylesheet($this->baseUrl().'/js/jquery/plugin/colorbox/colorbox.css');
+?>
+
+<style type="text/css">
+	.table tfoot td, .table tfoot tr{
+		background: #FFF;
+		border: none;	
+	}
+	
+	.table tfoot td#total{
+		border-top: 4px  double #AAAAAA;
+	}
+</style>
+
+<script type="text/javascript"><!--
+
+if(typeof(Storage)!=="undefined"){
+	
+}
+else{
+	alert("your browser doesn't support html5");
+}
+
+var list_count = 0;
+var candidate = new Array();
+var total_amt = 0;
+var schedule = null;
+
+$(function() {
+	
+});
+
+function get_schedule(course_id, element){
+	$.colorbox({
+		href:"<?php echo $this->url(array('module'=>'company','controller'=>'application', 'action'=>'ajax-select-schedule'),'default',true);?>",
+		data: {'course_id':course_id, 'exam_center_id': $('#exam_center').val()},
+		height: '90%',
+		width: '90%',
+		opacity: 0.5,
+		cache: false,
+        async: false,
+        onComplete: function(){
+        	$('#calendar').fullCalendar( 'render' );
+        },
+        onClosed: function(){
+            var row = schedule.examdate +", " +
+            	
+            	"("+schedule.examtimestart+" - "+schedule.examtimeend+") @ "+
+            	schedule.venue +
+            	"<input type='hidden' name='schedule_id[]' value='"+schedule.id+"' />";
+            	
+            if(schedule!=null){
+				$(element).parent().parent().prev().html(row );
+            }
+
+            schedule = null;
+        }
+	});
+}
+
+function get_schedule_all(){
+	var course_id = $('form#form_candidate :input[name$="course_id[]"]').serializeArray();
+	var course_arr = new Array();
+	
+	console.log(course_id);
+	
+	for (var key in course_id) {
+		var obj = course_id[key];
+		course_arr.push(obj['value']);
+	}
+
+	$.colorbox({
+		href:"<?php echo $this->url(array('module'=>'company','controller'=>'application', 'action'=>'ajax-select-schedule'),'default',true);?>",
+		data: {'course_id':course_id, 'exam_center_id': $('#exam_center').val()},
+		height: '90%',
+		width: '90%',
+		opacity: 0.5,
+		cache: false,
+        async: false,
+        onComplete: function(){
+        	$('#calendar').fullCalendar( 'render' );
+        },
+        onClosed: function(){
+        	var rows = $("#candidate tr:gt(0)");
+
+        	rows.each(function(index) {
+                var schedule_input = $("td:nth-child(4)", this);
+
+				var row = schedule.examdate +", " +
+            			"("+schedule.examtimestart+" - "+schedule.examtimeend+") @ "+
+            			schedule.venue +
+            			"<input type='hidden' name='schedule_id[]' value='"+schedule.id+"' />";
+            	
+	            if(schedule!=null){
+	            	$(schedule_input).html(row)
+	            }
+        	});
+        	
+        	schedule = null;
+        }
+	});
+	
+}
+
+function setCalendar(){
+	
+}
+
+function bring_me_back(){
+	$("#backform").submit();
+}
+
+function validate(element){
+	var status = false;
+	var cnt_student = parseInt(0);
+	var cnt_schedule = parseInt(0);
+	
+	var fields = $(element).serializeArray();
+	
+	for(var i in fields) {
+		var value = fields[i];
+		
+		if(value.name == 'student_id[]'){
+				cnt_student++;
+		}
+
+		if(value.name == 'schedule_id[]'){
+			cnt_schedule++;
+	}
+	}
+
+	if( cnt_student != cnt_schedule ){
+		alert("Please select schdule for all candidate");
+	}else{
+		status = true;
+	}
+	
+	return status;
+}
+
+--></script>
+
+		
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="javascript:bring_me_back()">
+					<span class='back'></span>
+					back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<div align="center" style="background:#ebebeb; height:30px;">
+<ul class="steps">
+	<li class="prevDone">
+		<span>1.</span> Select Candidate & Course
+	</li>
+    <li class="current">
+		<span>2.</span> Select Schedule
+	</li>
+	<li class="next">
+		<span>3.</span> Payment Selection
+	</li>
+	<li class="empty">
+		<span>4.</span> Confirmation
+	</li>
+	<li class="empty">
+		<span>5.</span> Receipt
+	</li>
+</ul>
+<br class="clear" />
+</div>
+<br />
+<p>*Please dont use your browser's back button</p>
+<form id="form_candidate" method="post" action="<?php echo $this->url(array('module'=>'company','controller'=>'application', 'action'=>'add-batch-candidate-step3'),'default',true);?>" onsubmit="return validate(this)">
+<table id="candidate" class="table" width="100%" cellpadding="5" cellspacing="2">
+	<thead>
+		<tr>
+			<th width="5px">&nbsp;</th>
+			<th width="40%">Candidate Name</th>
+			<th width="20%">Course</th>
+			<th width="40%">Schedule</th>
+			<th width="100px">
+				<div style="height: 20px">
+					<select name="exam_center" id="exam_center">
+						<option value="0">All Exam Center</option>
+						<?php
+						foreach ($this->examcenter as $center) {
+							$select ="";
+							if($this->exam_center == $center['id']){
+								$select = "selected='seledted'";
+							}
+							
+							echo "<option value='".$center['id']."' ".$select.">".$center['name']."</option>";
+						}
+						?>
+					</select>
+				</div>
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+	<?php foreach ($this->data as $key=>$application):?>
+	<tr>
+		<td><?php echo ($key+1); ?>.</td>
+		<td>
+			<?php echo $application['student_info']['ARD_NAME'] ?> (<?php echo $application['student_info']['ARD_IC'] ?>)
+			<input type="hidden" name="student_id[]" value="<?php echo $application['student_info']['ID'] ?>" />
+		</td>
+		<td>
+			<?php echo $application['course_info']['name'] ?> (<?php echo $application['course_info']['code'] ?>)
+			<input type="hidden" name="course_id[]" value="<?php echo $application['course_info']['id'] ?>" />
+		</td>
+		<td>
+			<?php 
+				if( isset($application['schedule_info']) ){
+			?>
+				
+					<?php echo date('d/m/Y', strtotime($application['schedule_info']['exam_date']) ); ?> (<?php echo date('G:ia', strtotime($application['schedule_info']['exam_time_start']) ); ?> - <?php echo date('G:ia', strtotime($application['schedule_info']['exam_time_end']) ); ?>) @ <?php echo $application['schedule_info']['exam_center_name'] ?> 
+					<input type="hidden" name="schedule_id[]" value="<?php echo $application['schedule_info']['id'] ?>" />
+			<?php 
+				}
+			?>
+		</td>
+		<td>
+			<div class="buttons">
+				<input type="button" value="Select Schedule" name="select_schedule" onclick="get_schedule('<?php echo $application['course_info']['id'] ?>', this);"  />
+			</div>
+		</td>
+	</tr>
+	<?php endforeach;?>
+	</tbody>
+</table>
+<div align="center" style="margin-top: 20px; padding: 5px; background: #EEEEEE;">
+	<div class="buttons">
+		<input type="button" value="Back" name="back" onclick="javascript:bring_me_back()" />
+		<input type="button" value="Select Schedule For All" name="schedule_all" onclick="javascript:get_schedule_all()" />
+		<input type="submit" value="Next" name="submit"  />
+	</div>
+</div>
+</form>
+
+<!-- for back purpose -->
+<div>
+	<form id="backform" method="post" action="<?php echo $this->url(array('module'=>'company','controller'=>'application', 'action'=>'add-batch-candidate-step1'),'default',true);?>">
+		<?php foreach ($this->data as $key=>$application):?>
+		<input type="hidden" name="student_id[]" value="<?php echo $application['student_info']['ID'] ?>" />
+		<input type="hidden" name="course_id[]" value="<?php echo $application['course_info']['id'] ?>" />
+		<?php 
+			if( isset($application['schedule_info']) ){
+		?>
+		<input type="hidden" name="schedule_id[]" value="<?php echo $application['schedule_info']['id'] ?>" />
+		<?php 
+			}
+		?>
+		<?php endforeach;?>
+	</form>
+</div>

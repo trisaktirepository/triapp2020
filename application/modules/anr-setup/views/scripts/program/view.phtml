@@ -1,0 +1,70 @@
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'anr-setup','controller'=>'program', 'action'=>'index'),'default',true);?>">
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<div width="100%">
+	<table class="table2" width="70%" cellpadding="5" cellspacing="2">
+		<tr>
+			<th width="150px">Program Name</th>
+			<td><?php echo $this->data['program_name']; ?></td>
+		</tr>
+		<tr>
+			<th>Program Code</th>
+			<td><?php echo $this->data['code']; ?></td>
+		</tr>
+		<!-- 
+		<tr>
+			<th>Learning Mode</th>
+			<td><?php //echo $this->data['market']; ?></td>
+		</tr>
+		 -->
+		<tr>
+			<th>Award Given</th>
+			<td><?php echo $this->data['award']; ?></td>
+		</tr>
+		<tr>
+			<th>Department</th>
+			<td><?php echo $this->data['faculty']; ?></td>
+		</tr>
+		<tr>
+			<th>Status</th>
+			<td><?php echo $this->data['status']==1?"Active":"Inactive"; ?></td>
+		</tr>
+		<tr>
+			<th>Synopsis</th>
+			<td><?php echo $this->data['synopsis']; ?></td>
+		</tr>
+	</table>
+</div>
+<div width="200px">
+	<br />
+	<input type="button" value="edit" onClick="window.location = '<?php echo $this->url(array('module'=>'anr-setup','controller'=>'program', 'action'=>'edit','id'=>$this->data['id']),'default',true);?>'"/>
+	<input type="button" value="back" onClick="window.location = '<?php echo $this->url(array('module'=>'anr-setup','controller'=>'program', 'action'=>'index'),'default',true);?>'" />
+</div>

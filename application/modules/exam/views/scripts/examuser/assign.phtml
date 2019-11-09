@@ -1,0 +1,77 @@
+<script>
+function add(){
+	document.f2.action='<?php echo $this->url(array('module'=>'exam','controller'=>'examuser','action'=>'add'))?>';
+	document.f2.submit();
+}
+function remove(){
+	document.f2.action='<?php echo $this->url(array('module'=>'exam','controller'=>'examuser','action'=>'remove'))?>';
+	document.f2.submit();
+}
+function goback(){
+	window.location="<?php echo $this->url(array('module'=>'exam','controller'=>'examuser','action'=>'index'))?>";
+}
+</script>
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="goback()">
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			
+			<li>
+				<a href="#" onclick="javascript:add()">
+					<span class='add'></span>
+					Add
+				</a>
+			</li>
+			
+		</ul>
+	</div>
+</div>
+<br></br>
+<div style="width: 100%;">
+<fieldset style="width:450px;">
+<form name="f1" method="post" action="">
+<input type="hidden" name="id" value="<?php echo $this->user_id?>"></input>
+	<table class="" cellpadding=5 cellspacing=0 width=100%>
+		<tr><td>Program:</td><td>
+		<select name="program_id" id="program_id" onchange="form.submit()">
+				<option value="">Please select</option>
+				<?php 
+				foreach($this->program as $p){
+					if($this->program_id==$p[id])
+					  $sel = "selected";
+					else
+					  $sel = "";
+				 	echo "<option value='$p[id]' $sel>$p[main_name]</option>";
+				 } ?>
+				</select></td></tr>
+		<tr><td>&nbsp;</td><td><input type="submit" name="submit" value="Search"></input></td></tr>
+	</table>
+</form>
+</fieldset>
+</div>	
+<br></br>
+<?php if($this->list_course ){?>
+<form name="f2" method="post" action="">
+<input type="hidden" name="user_id" value="<?php echo $this->user_id?>"></input>
+<input type="hidden" name="program_id" value="<?php echo $this->program_id?>"></input>
+<table class="table" width="50%" cellpadding="5" cellspacing="2">
+    <tr>   	
+    	<th width="5%">&nbsp;</th>    
+    	<th width="50%">Course Name</th>
+    </tr>
+<?php $i=0; foreach($this->list_course as $course){ ?>
+     <tr valign="top" <?php echo $i%2==0?"class='shade'":""; ?>>   	
+    	<td width="5%"><input type="checkbox" name="course_id[]" value="<?php echo $course["id"]?>" ></input></td>
+    	<td><?php echo $course["name"]?></td>
+    	 		
+    </tr>
+<?php $i++;} ?>
+</table>
+</form>
+<?php } ?>

@@ -1,0 +1,180 @@
+<script type="text/javascript">
+$(function() {
+	$( "#search-dialog" ).dialog({ 
+		autoOpen: false,
+		width: 400,
+		modal: true,
+		buttons: { 
+			"Search": function() {
+				 
+				$("#course_form").submit();
+				$(this).dialog("close"); 
+			},
+			"Close": function() { 
+				$(this).dialog("close"); 
+			} 
+		} 
+	});
+
+	$( "#dialog-upload" ).dialog({
+        autoOpen: false,
+        width: 650,
+        modal: true,
+        buttons: {
+            "Upload": function() {
+                //$( this ).dialog( "close" );
+                $('#upload').submit();
+
+            	/*var data = new FormData($('input[name^="file"]'));     
+            	jQuery.each($('input[name^="file"]')[0].files, function(i, file) {
+            	    data.append(i, file);
+            	});
+
+            	console.log(data);*/
+            	              	
+            },
+            Cancel: function() {
+                $( this ).dialog( "close" );
+            }
+        }
+    });
+	
+});
+
+function searchbox(){
+	$( "#search-dialog" ).dialog('open');
+}
+
+function uploadOMR(){
+	$( "#dialog-upload" ).dialog('open');
+	//window.location = "<?php echo $this->url(array('module'=>'application','controller'=>'batch-agent', 'action'=>'upload-omr'),'default',true); ?>";
+}
+
+function changeMapping(element){
+	$('input:checkbox').removeAttr('checked');
+
+	 $(element).attr('checked','checked');
+}
+</script>
+
+<style type="text/css">
+	.zend_form input[type="text"].num{
+		width: 50px;	
+	}
+	
+	#name_start-label, #name_end-label, 
+	#id_start-label, #id_end-label,
+	#pt_code_start-label, #pt_code_end-label,
+	#q_code_start-label, #q_code_end-label,
+	#q_start-label, #q_end-label,
+	#key_mapping_name-label, #key_mapping_id-label,
+	.zend_form dt{
+		width: 85px	
+	}
+	
+	#name_start-element, #name_end-element, 
+	#id_start-element, #id_end-element,
+	#pt_code_start-element, #pt_code_end-element,
+	#q_code_start-element, #q_code_end-element,
+	#q_start-element, #q_end-element,
+	#key_mapping_name-element, #key_mapping_id-element,
+	.zend_form dd{
+		padding: 0 0 0 90px;
+    	width: 70px;
+	}
+	
+	div.left{
+		width: 145px; float:left;
+	}
+	div.right{
+		width: 145px; float:left;
+	}
+	
+	.hint{
+		clear: both;
+		margin: 15px 0 0;
+	}
+	h1{
+		font-size: 11px;
+		font-weight: 200;
+		font-style: italic;		
+	}
+</style>
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a id="search" href="#" onclick="javascript:uploadOMR()">
+					<span class='upload_omr'></span>
+					<?php echo $this->translate("Upload OMR"); ?>
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a id="search" href="#" onclick="javascript:searchbox()">
+					<span class='search'></span>
+					<?php echo $this->translate("Search"); ?>
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					<?php echo $this->translate("Info"); ?>
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+
+
+<div id="search-dialog" title="Search Program">
+<form name="course_form" id="course_form" action="" method="post">
+	<table width="100%">
+		<tr>
+			<td>
+				<?php echo $this->translate('Date Generate'); ?>
+			</td>
+			<td width="5px">:</td>
+			<td>
+				<input type="text" name="date" class="datepicker" value="<?php echo $this->search_date; ?>" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<?php echo $this->translate("Placement Test Code"); ?>
+			</td>
+			<td width="5px">:</td>
+			<td>
+				<input type="text" name="ptcode" value="<?php echo $this->search_ptcode; ?>" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<?php echo $this->translate("Applicant's Name"); ?>
+			</td>
+			<td width="5px">:</td>
+			<td>
+				<input type="text" name="name" value="<?php echo $this->search_name; ?>" />
+			</td>
+		</tr>
+	</table>
+</form>
+</div>
+
+<div id="dialog-upload" title="<?php echo $this->translate("Upload Application OMR"); ?>">
+    <?php echo $this->form; ?>
+</div>

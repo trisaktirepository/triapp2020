@@ -1,0 +1,120 @@
+
+
+<!--IF REQUIRE TRANSLATED LANGUAGE ENABLE TAB PANE-->
+
+<?php if($this->course["total_language"]>1){?>
+
+<div class="tab-pane" id="tabPane1">
+
+<script type="text/javascript">
+tp1 = new WebFXTabPane( document.getElementById( "tabPane1" ) );
+</script>
+
+
+    <? 
+     $j=1; 
+     foreach ($this->question as $q){ 
+     	
+     	$answer = new Question_Model_QuestionMcqAnswer();
+	    $answers = $answer->getAnswers($q["id"]);
+    	
+    ?>
+	<div class="tab-page" id="tabPage<?=$j?>">
+		<h2 class="tab">Language <?=$j?></h2>
+		
+		<script type="text/javascript">tp1.addTabPage( document.getElementById( "tabPage<?=$j?>" ) );</script>
+		
+		 <table width="95%" cellspacing="1" cellpadding="5" id="mtable"  align="center">
+		  <tr bgcolor="#D7EBFF"> 
+		    <td bgcolor="#D7EBFF">Question</td>
+		    <td><textarea name="question<?=$j?>" cols="80"><? echo $q["question"]?></textarea><input type="hidden" name="qid<?=$j?>" id="qid<?=$j?>" value="<? echo $q["id"]?>"></td>
+		  </tr>
+		  <tr> 
+		    <td colspan="2" class="thd">Answer</td>
+		  </tr>
+		  <? $i=1; foreach ($answers as $a){
+          		
+          		switch ($i){
+          			case 1: $no = "a)";break;
+          			case 2: $no = "b)";break;
+          			case 3: $no = "c)";break;
+          			case 4: $no = "d)";break;
+          		}
+          		?>            
+	    <tr bgcolor="#FFFFFF"> 
+	   	 <td><?php echo $no;?><input type="hidden" name="aid<?=$j.$i?>" id="aid<?=$j.$i?>" value="<?php echo $a["id"]?>"></td>
+	     <td> 
+	      <textarea name="answer<?=$j.$i?>" cols="80" ><?php echo stripslashes($a["answer"])?></textarea> <p> 
+	        <input type="radio" name="correct<?=$j?>" value="<?=$i?>" <? if($a["correct_answer"]==1) echo 'checked'; ?>>
+	        Accept as correct</p></td>
+	  </tr>
+  
+   		<? $i++;} ?>
+ 
+		</table>
+		
+	</div>	
+	
+	<? $j++;} ?>
+</div> 
+  
+   <script type="text/javascript">
+    CKEDITOR.replace( 'question1',{ filebrowserBrowseUrl: '<?php echo $this->baseUrl(); ?>/kfm/',  height: 80, width: 800 } );
+    CKEDITOR.replace( 'question2',{ filebrowserBrowseUrl: '<?php echo $this->baseUrl(); ?>/kfm/',  height: 80, width: 800 } );
+    CKEDITOR.replace( 'answer11',{ filebrowserBrowseUrl: '<?php echo $this->baseUrl(); ?>/kfm/',  height: 80, width: 800 } );
+    CKEDITOR.replace( 'answer12',{ filebrowserBrowseUrl: '<?php echo $this->baseUrl(); ?>/kfm/',  height: 80, width: 800 } );
+    CKEDITOR.replace( 'answer13',{ filebrowserBrowseUrl: '<?php echo $this->baseUrl(); ?>/kfm/',  height: 80, width: 800 } );
+    CKEDITOR.replace( 'answer14',{ filebrowserBrowseUrl: '<?php echo $this->baseUrl(); ?>/kfm/',  height: 80, width: 800 } );
+    CKEDITOR.replace( 'answer21',{ filebrowserBrowseUrl: '<?php echo $this->baseUrl(); ?>/kfm/',  height: 80, width: 800 } );
+    CKEDITOR.replace( 'answer22',{ filebrowserBrowseUrl: '<?php echo $this->baseUrl(); ?>/kfm/',  height: 80, width: 800 } );
+    CKEDITOR.replace( 'answer23',{ filebrowserBrowseUrl: '<?php echo $this->baseUrl(); ?>/kfm/',  height: 80, width: 800 } );
+    CKEDITOR.replace( 'answer24',{ filebrowserBrowseUrl: '<?php echo $this->baseUrl(); ?>/kfm/',  height: 80, width: 800 } );  
+    </script>
+    
+    
+ <? }else{ ?> 
+ 
+ 
+ 
+ 
+ 
+ <table width="95%" cellspacing="1" cellpadding="5" id="mtable"  align="center">
+  <tr bgcolor="#D7EBFF"> 
+    <td bgcolor="#D7EBFF">Question</td>
+    <td><textarea name="question1" cols="80"><? echo $this->question1?></textarea><input type="hidden" name="qid1" id="qid1" value="<?php echo $this->qid1;?>"></td>
+  </tr>
+   <tr> 
+    <td colspan="2" class="thd">Answer</td>
+  </tr>
+  <? $i=1; foreach ($this->answers as $a){
+          		
+          		switch ($i){
+          			case 1: $no = "a)";break;
+          			case 2: $no = "b)";break;
+          			case 3: $no = "c)";break;
+          			case 4: $no = "d)";break;
+          		}
+          		?>            
+   <tr bgcolor="#FFFFFF"> 
+    <td><?php echo $no;?><input type="hidden" name="aid1<?=$i?>" id="aid1<?=$i?>" value="<?php echo $a["id"]?>"></td>
+    <td> 
+      <textarea name="answer1<?=$i?>" cols="80" ><?php echo stripslashes($a["answer"])?></textarea> <p> 
+        <input type="radio" name="correct1" value="<?=$i?>" <? if($a["correct_answer"]==1) echo 'checked'; ?>>
+        Accept as correct</p></td>
+  </tr>
+  
+   <? $i++;} ?>
+   
+ 
+ 
+</table>
+
+    <script type="text/javascript">
+    CKEDITOR.replace( 'question1',{ filebrowserBrowseUrl: '<?php echo $this->baseUrl(); ?>/kfm/',  height: 80, width: 800 } );
+    CKEDITOR.replace( 'answer11', { filebrowserBrowseUrl: '<?php echo $this->baseUrl(); ?>/kfm/',  height: 80, width: 800 } );
+    CKEDITOR.replace( 'answer12', { filebrowserBrowseUrl: '<?php echo $this->baseUrl(); ?>/kfm/',  height: 80, width: 800 } );
+    CKEDITOR.replace( 'answer13', { filebrowserBrowseUrl: '<?php echo $this->baseUrl(); ?>/kfm/',  height: 80, width: 800 } );
+    CKEDITOR.replace( 'answer14', { filebrowserBrowseUrl: '<?php echo $this->baseUrl(); ?>/kfm/',  height: 80, width: 800 } );
+    </script>
+ 
+ <? } ?>

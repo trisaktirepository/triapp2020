@@ -1,0 +1,172 @@
+<script>
+$(document).ready(function()
+{   
+    $("#from").datepicker({
+        dateFormat: 'MM yy',
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: true,
+
+        onClose: function(dateText, inst) {
+            var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+            $("#from").val($.datepicker.formatDate('MM yy', new Date(year, month, 1)));
+
+            //$( "#to" ).datepicker( "option", "minDate", new Date(year, month));
+        }
+    });
+
+    $("#from").focus(function () {
+        $(".ui-datepicker-calendar").hide();
+        $("#ui-datepicker-div").position({
+            my: "center top",
+            at: "center bottom",
+            of: $(this)
+        });
+    });
+
+    $("#to").datepicker({
+        dateFormat: 'MM yy',
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: true,
+        
+        onClose: function(dateText, inst) {
+            var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+            $("#to").val($.datepicker.formatDate('MM yy', new Date(year, month, 1)));
+
+            //$( "#from" ).datepicker( "option", "maxDate", new Date(year, month) );
+        }
+    });
+
+    $("#to").focus(function () {
+        $(".ui-datepicker-calendar").hide();
+        $("#ui-datepicker-div").position({
+            my: "center top",
+            at: "center bottom",
+            of: $(this)
+        });
+    });    
+});
+
+
+function changeDiscipline(element){
+	
+	$.ajax({
+		url: "<?php echo $this->url(array('module'=>'default','controller'=>'online-application', 'action'=>'ajax-get-discipline'),'default',true);?>",
+		data: {'school_type_id':$(element).val()},
+		type: 'POST',
+		dataType: 'json'	
+	}).done(function ( data ) {
+		
+		$('#ae_discpline').empty().append('<option value=""> <?php echo $this->translate('please_select'); ?> </option>');
+	
+		$.each(data, function(index) {
+			$('#ae_discpline').append('<option value="'+data[index].smd_code+'"> '+data[index].smd_desc+' </option>');
+		});
+	});
+}
+
+
+function changeSchool(element){
+	var type_id = $('#type').val();
+	var state_id = $('#state').val();
+	
+	$.ajax({
+		url: "<?php echo $this->url(array('module'=>'default','controller'=>'online-application', 'action'=>'ajax-get-school'),'default',true);?>",
+		data: {'school_type_id':type_id,'school_state_id':state_id},
+		type: 'POST',
+		dataType: 'json'	
+	}).done(function ( data ) {
+		
+		$('#ae_institution').empty().append('<option value=""> <?php echo $this->translate('please_select'); ?> </option>');
+	
+		$.each(data, function(index) {
+			$('#ae_institution').append('<option value="'+data[index].sm_id+'"> '+data[index].sm_name+' </option>');
+		});
+	});
+
+	changeDiscipline(element)
+}
+
+
+function changeProgramme(element){
+	$.ajax({
+		url: "<?php echo $this->url(array('module'=>'default','controller'=>'online-application', 'action'=>'ajax-get-programme-pt'),'default',true);?>",
+		data: {'discipline_code':$(element).val()},
+		type: 'POST',
+		dataType: 'json'	
+	}).done(function ( data ) {
+		
+		$('#app_id').empty().append('<option value=""> <?php echo $this->translate('please_select'); ?> </option>');
+		$('#app_id2').empty().append('<option value=""> <?php echo $this->translate('please_select'); ?> </option>');
+		
+		<?php
+			//this is to display programme name based on current locale
+			$registry = Zend_Registry::getInstance();
+			$locale = $registry->get('Zend_Locale');
+			if ($locale=="en_US"){
+		?>
+		$.each(data, function(index) {
+			$('#app_id').append('<option value="'+data[index].app_id+'"> '+data[index].ProgramName+' </option>');
+		});
+
+		$.each(data, function(index) {
+			$('#app_id2').append('<option value="'+data[index].app_id+'"> '+data[index].ProgramName+' </option>');
+		});
+		<?php 
+			}else if ($locale=="id_ID"){
+		?>
+		$.each(data, function(index) {
+			$('#app_id').append('<option value="'+data[index].app_id+'"> '+data[index].ArabicName+' </option>');
+		});
+
+		$.each(data, function(index) {
+			$('#app_id2').append('<option value="'+data[index].app_id+'"> '+data[index].ArabicName+' </option>');
+		});
+		
+		<?php }?>
+		
+	});
+}
+</script>
+
+<div class="breadcrum">
+	<ul class="tri-steps">
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'biodata'),'default',true);?>"><?php echo $this->translate("biodata"); ?></a></div></li>
+		<?php if($this->applicant['appl_admission_type']=='1'){?>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'contactinfo'),'default',true);?>"><?php echo $this->translate("contact_info"); ?></a></div></li>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'admission'),'default',true);?>"><?php echo $this->translate("Admission Type"); ?></a></div></li>
+		<li class="prevDone"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'placement-test'),'default',true);?>"><?php echo $this->translate("test_schedule"); ?></a></div></li>
+		<?php }else{?>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'contactinfo'),'default',true);?>"><?php echo $this->translate("contact_info"); ?></a></div></li>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'admission'),'default',true);?>"><?php echo $this->translate("Admission Type"); ?></a></div></li>
+		<li class="prevDone"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'placement-test'),'default',true);?>"><?php echo $this->translate("test_schedule"); ?></a></div></li>
+		<?php }?>
+		<li class="current"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'programme'),'default',true);?>"><?php echo $this->translate("programme"); ?></a></div></li>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'uploaddocument'),'default',true);?>"><?php echo $this->translate("upload_document"); ?></a></div></li>
+		<li class="last"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'uploaddocument'),'default',true);?>"><?php echo $this->translate("confirmation"); ?></a></div></li>	
+	</ul>
+	<div class="clear"></div>
+</div>
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		
+	</div>
+</div>
+
+<?php echo $this->form; ?>

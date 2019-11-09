@@ -1,0 +1,175 @@
+
+<script type="text/javascript">
+	$(function() {
+		// a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
+		$( "#dialog:ui-dialog" ).dialog( "destroy" );
+	
+		$( "#dialog-search" ).dialog({
+			modal: true,
+			autoOpen: false,
+			width: 600,
+			buttons: {
+				"Search": function() { 
+					$("#search_form").submit(); 
+				}, 
+				"Cancel": function() { 
+					$(this).dialog("close"); 
+				}
+				
+			}
+		});
+	});
+
+	function searchbox(){
+		$( "#dialog-search" ).dialog('open');
+	}
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			
+			<li class="divider"></li>
+			<li>
+				<a href="#" onclick="javascript:searchbox()">
+					<span class='search'></span>
+					Search
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+
+<div style="width:100%;">
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+<table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+	<tr>
+		<th  rowspan='2'><?php echo $this->translate("faculty");?></th>		
+		<th  rowspan='2'><?php echo $this->translate("programme");?></th>
+		<th colspan=2><?php echo $this->translate("quota");?></th>		
+		<th rowspan='2'><?php echo $this->translate("min_mark");?></th>
+		<th colspan=2><?php echo $this->translate("application");?></th>
+		<th  colspan=2><?php echo $this->translate("qualified");?></th>
+		<th  colspan=2><?php echo $this->translate("not_qualified");?></th>
+		
+	</tr>
+	<tr>		
+		<th><?php echo $this->translate("local");?></th>
+		<th><?php echo $this->translate("others");?></th>
+		<th><?php echo $this->translate("local");?></th>
+		<th><?php echo $this->translate("others");?></th>
+		<th><?php echo $this->translate("local");?></th>
+		<th><?php echo $this->translate("others");?></th>
+		<th><?php echo $this->translate("local");?></th>
+		<th><?php echo $this->translate("others");?></th>
+	</tr>
+	<?php 
+	if(isset($this->paginator)){
+	foreach ($this->paginator as $entry){
+	
+	//get total application for each program
+	$appProgramDB = new App_Model_Application_DbTable_ApplicantProgram();
+	$condition = array('program_code'=>$entry["ProgramCode"],'academic_year'=>$this->ac_year,'nationality'=>1,'status'=>'PROCESS');
+	$appl_local  = $appProgramDB->getApplicantProgram($condition);
+	$condition2 = array('program_code'=>$entry["ProgramCode"],'academic_year'=>$this->ac_year,'nationality'=>'','status'=>'PROCESS');
+	$appl_others = $appProgramDB->getApplicantProgram($condition2);
+	
+	?>
+	<tr>
+		<td><?php echo $entry["faculty"]?></td>
+		<td><?php echo $entry["ProgramCode"].'-'.$entry["ProgramName"];?></td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td align='center'><a href='<?php echo $this->url(array('module'=>'application','controller'=>'selection-highschool','action'=>'batch-dean-rating','faculty_id'=>$entry["idFaculty"],'program_code'=>$entry["ProgramCode"]),'default',true);?>'><?php echo count($appl_local);?></a></td>
+		<td align='center'><?php echo count($appl_others);?></td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+	</tr>
+	<?php }//end paginator 
+	}?>
+		
+</table>
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+</div>
+
+<div id="dialog-search" title="<?php echo $this->translate("search")?>">
+<form name="search_form" id="search_form" action="" method="post">
+	<table width="100%" class="table5">
+		<tr>
+			<td>
+				<?php echo $this->translate("academic_year");?>
+			</td>
+			<td width="5px">:</td>
+			<td>
+				<select name="academic_year">
+					<option value=''><?php echo $this->translate("please_select")?></option>
+					<?php foreach($this->academic_year as $ay){
+						echo "<option value='".$ay['ay_id']."'>".$ay['ay_code'].'-'.$ay['ay_id']."</option>";
+					}?>
+				</select>
+			</td>
+		</tr>
+		<!--<tr>
+			<td>
+				<?php echo $this->translate("period");?>
+			</td>
+			<td width="5px">:</td>
+			<td>
+				<select name="period">
+					<option value=''><?php echo $this->translate("please_select")?></option>
+					<?php foreach($this->period as $p){
+						echo "<option value='".$p['ap_id']."'>".$p['ap_desc']."</option>";
+					}?>
+				</select>
+			</td>
+		</tr>
+		--><!--<tr>
+			<td>
+				<?php echo $this->translate("branch");?>
+			</td>
+			<td width="5px">:</td>
+			<td>
+				<select name="branch">
+					<option value=''><?php echo $this->translate("all")?></option>
+					<?php foreach($this->period as $p){
+						echo "<option value='".$p['ap_id']."'>".$p['ap_desc']."</option>";
+					}?>
+				</select>
+			</td>
+		</tr>
+		-->
+		
+		<tr>
+			<td>
+				<?php echo $this->translate("programme");?>
+			</td>
+			<td width="5px">:</td>
+			<td>
+				<select name="programme">
+					<option value=''><?php echo $this->translate("all")?></option>
+					<?php foreach($this->program as $program){
+						echo "<option value='".$program['IdProgram']."'>".$program['ProgramName']."</option>";
+					}?>
+				</select>
+			</td>
+		</tr>
+				
+	</table>
+</form>
+</div>

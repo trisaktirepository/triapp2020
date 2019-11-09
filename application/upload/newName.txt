@@ -1,0 +1,19 @@
+ADMIN
+ 
+-send notification tu applicant after been approve as candidate (mase htr email include
+skali slip xm in pdf format)
+-function for template message
+-setup schedule tambah time picker
+-part approve: kene ade payment mode,payment slip
+-combine applicant session
+
+
+
+APPLICANT
+-tuka table plh exam tu kepada table bese taknak month kaler hijau tu
+
+
+
+HOMEPAGE
+-content for about tbe
+-content for contact us

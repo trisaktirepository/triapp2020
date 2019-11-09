@@ -1,0 +1,103 @@
+<script type="text/javascript">
+	function del(){
+		if(confirm('Confirm to delete this semester?')){
+			window.location = "<?php echo $this->url(array('module'=>'anr-setup','controller'=>'semester', 'action'=>'delete','id'=>$this->id));?>";
+		}
+	}
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'anr-setup','controller'=>'semester', 'action'=>'edit','id'=>$this->id));?>">
+					<span class='edit'></span>
+					Edit
+				</a>
+			</li>
+			<li>
+				<a href="#" onClick="del();">
+					<span class='delete'></span>
+					Delete
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'anr-setup','controller'=>'semester', 'action'=>'index'),'default',true);?>">
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<table class="table" width="100%" cellpadding="5" cellspacing="1">
+	<tr>
+		<th width="20%">Semester Name</th>
+		<td bgcolor="#ffffff"><?php echo $this->semester['name']; ?> <?php echo $this->semester['year']; ?></td>
+	</tr>
+	<tr>
+		<th>Semester Code</th>
+		<td bgcolor="#ffffff"><?php echo $this->semester['code']; ?></td>
+	</tr>
+	<tr>
+		<th>Start Date</th>
+		<td bgcolor="#ffffff"><?php echo date('d/m/Y',strtotime($this->semester['start_date'])); ?></td>
+	</tr>
+	<tr>
+		<th>End Date</th>
+		<td bgcolor="#ffffff"><?php echo date('d/m/Y',strtotime($this->semester['end_date'])); ?></td>
+	</tr>
+	<tr>
+		<th valign="top">
+			Programme Offered
+		</th>
+		<td bgcolor="#ffffff">
+			<div style="padding:5px;">
+			<input type="button" value="Manage Course Offer" onClick="window.location = '<?php echo $this->url(array('module'=>'anr-setup','controller'=>'course-offered', 'action'=>'add','semester-id'=>$this->id));?>'" />
+			<table width="100%" border="0" cellpadding="5" cellspacing="1" class="table">
+				<tr>
+					<th align="center" colspan="2"><b>Programme name</b></th>
+					<th align="center"><b>Code</b></th>
+					<th align="center"><b>Market</b></th>
+					<th align="center"><b>Faculty</b></th>
+				</tr>
+				<?php 
+					if(isset($this->program)){
+						$i=1;
+						foreach ($this->program as $program) {
+							echo "<tr bgcolor='#ffffff'>";
+							echo "<td>".$i.") </td>";
+							echo "<td>".$program['main_name']."</td>";
+							echo "<td>".$program['program_code']."</td>";
+							echo "<td>".$program['market']."</td>";
+							echo "<td>".$program['faculty']."</td>";
+							echo "</tr>";
+							$i++;
+						}
+					}
+				?>
+			</table>
+			</div>
+		</td>
+	</tr>
+</table>

@@ -1,0 +1,56 @@
+<script>
+$(function() {
+
+	//init
+	$.ajax({
+    	url: "<?php echo $this->url(array('module'=>'exam','controller'=>'user-setup', 'action'=>'ajax-get-component'),'default',true);?>",
+      	type: "POST",
+      	data: {cid : $('#course_id').val()},
+      	dataType: "json",
+      	async:false,
+      	success: function(data, status){
+      		$("#component_id option:gt(0)").remove();
+
+      		if(data!=""){
+      			$("#component_id").append('<option value="0">All Component</option>');
+      		}else{
+				alert('<?php echo $this->translate("No Component Setup"); ?>');
+      		}
+      		
+      		$.each(data, function(i,item){
+               $("#component_id").append('<option value="'+item.component_id+'">'+item.component_name+'</option>');
+        	});
+      	}
+   });
+
+	$('#component_id option[value=<?php echo $this->component_id; ?>]').attr('selected', 'selected');	
+	   
+	$('#course_id').change(function() {
+		$.ajax({
+	    	url: "<?php echo $this->url(array('module'=>'exam','controller'=>'user-setup', 'action'=>'ajax-get-component'),'default',true);?>",
+	      	type: "POST",
+	      	data: {cid : $('#course_id').val()},
+	      	dataType: "json",
+	      	async:false,
+	      	success: function(data, status){
+	      		$("#component_id option:gt(0)").remove();
+
+	      		if(data!=""){
+	      			$("#component_id").append('<option value="0">All Component</option>');
+	      		}else{
+					alert('<?php echo $this->translate("No Component Setup"); ?>');
+	      		}
+	      		
+	      		$.each(data, function(i,item){
+	               $("#component_id").append('<option value="'+item.component_id+'">'+item.component_name+'</option>');
+	        	});
+	      	}
+	   });
+	});
+});
+</script>
+	
+<?php 
+	$this->form->setAction($this->url());
+	echo  $this->form;
+?>

@@ -1,0 +1,193 @@
+<script>
+$(document).ready(function(){
+
+	 $( "#appl_dob" ).datepicker({
+	     	dateFormat: "dd-mm-yy",
+	     	changeMonth: true,
+	     	numberOfMonths: 2,
+	     });
+   
+});
+
+$(window).load(function() {
+	if( $('#appl_marital_status').val() == 4 || $('#appl_marital_status').val() == 38 || $('#appl_marital_status').val() == 39){
+		$('#appl_no_of_child').removeAttr('disabled');
+	}else{
+		$('#appl_no_of_child').attr('disabled','disabled');
+		$('#appl_no_of_child').val("");
+	}
+});
+</script>
+
+<script type="text/javascript">
+	function changeOrigin(element,targetElement,targetElement2){
+		var country_id = 96;
+		
+		$.ajax({
+			url: "<?php echo $this->url(array('module'=>'default','controller'=>'ajax-utility', 'action'=>'get-state'),'default',true);?>",
+			data: {'country_id':country_id},
+			type: 'POST',
+			dataType: 'json'	
+		}).done(function ( data ) {
+			
+			$(targetElement).empty().append('<option value=""> <?php echo $this->translate("please_select"); ?> </option>');
+			$(targetElement2).empty().append('<option value=""> <?php echo $this->translate("please_select"); ?> </option>');
+		
+			
+			$.each(data, function(index) {
+				$(targetElement).append('<option value="'+data[index].idState+'"> '+data[index].StateName+' </option>');
+				$(targetElement2).append('<option value="'+data[index].idState+'"> '+data[index].StateName+' </option>');
+			});
+			
+			
+		});
+		
+		if( $(element).val() == 0 ){
+			$('#country_origin').removeAttr('disabled');
+			$('#admission').hide();
+			$('#divparent').hide();		
+		}else{
+			$('#country_origin').attr('disabled','disabled');
+			$('#country_origin').val("");	
+			$('#admission').show();	
+			$('#divparent').show();		
+		}
+
+	}
+
+	function showdiv(element){
+		if( $(element).val() ==2 ){
+		 	$('#placement').show();
+		}else{
+			$('#placement').hide();
+		}
+	}
+
+	function enableChildren(element){
+		
+		if( $(element).val() == 4 || $(element).val() == 38 || $(element).val() == 39 ){
+			$('#appl_no_of_child').removeAttr('disabled');
+		}else{
+			$('#appl_no_of_child').attr('disabled','disabled');
+			$('#appl_no_of_child').val('0');
+		}
+	}
+</script>
+<script type="text/javascript">
+
+	function filladdress(element){
+
+		if($(element).is(':checked')){
+			
+			var address1 = $('#appl_address1').val();
+			var address2 = $('#appl_address2').val();
+			var state = $('#appl_state').val();
+			var city = $('#appl_city').val();
+			var postcode = $('#appl_postcode').val();
+
+			
+		}else{
+			var address1 = '';
+			var address2 = '';
+			var state = null;
+			var city = null;
+			var postcode = '';	
+		}
+		
+		$('#mappl_address1').val(address1);
+		$('#mappl_address2').val(address2);
+		$('#mappl_state').val(state);
+		$('#mappl_city').val(city);
+		$('#mappl_postcode').val(postcode);
+	}
+
+	function changeState(element,targetElement){
+		var country_id = $(element).val();
+		
+		$.ajax({
+			url: "<?php echo $this->url(array('module'=>'default','controller'=>'ajax-utility', 'action'=>'get-state'),'default',true);?>",
+			data: {'country_id':$(element).val()},
+			type: 'POST',
+			dataType: 'json'	
+		}).done(function ( data ) {
+			
+			$(targetElement).empty().append('<option value=""> <?php echo $this->translate("please_select"); ?> </option>');
+		
+			$.each(data, function(index) {
+				$(targetElement).append('<option value="'+data[index].idState+'"> '+data[index].StateName+' </option>');
+			});
+		});
+	}
+	
+	function changeCity(element, targetElement){
+		$.ajax({
+			url: "<?php echo $this->url(array('module'=>'default','controller'=>'ajax-utility', 'action'=>'get-city'),'default',true);?>",
+			data: {'state_id':$(element).val()},
+			type: 'POST',
+			dataType: 'json'	
+		}).done(function ( data ) {
+			
+			$(targetElement).empty().append('<option value=""> <?php echo $this->translate("please_select"); ?> </option>');
+		
+			$.each(data, function(index) {
+				$(targetElement).append('<option value="'+data[index].idCity+'"> '+data[index].CityName+' </option>');
+			});
+		});
+	}	
+</script>
+<style type="text/css">
+select, input[type='text']{
+	width:250px;
+}
+select#appl_dob-day{
+	width:50px;
+}
+select#appl_dob-month{
+	width:100px;
+}
+select#appl_dob-year{
+	width:80px;
+}
+input#appl_no_of_child{
+	width: 20px;
+}
+</style>
+
+
+
+<div class="breadcrum">
+	<ul class="tri-steps">
+		<li class="current"><div class="text"><a href="<?php echo $this->url(array('module'=>'agent','controller'=>'index','action'=>'biodata'),'default',true);?>"><?php echo $this->translate("biodata"); ?></a></div></li>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'agent','controller'=>'index','action'=>'contactinfo'),'default',true);?>"><?php echo $this->translate("contact_info"); ?></a></div></li>
+		
+		<?php if($this->transaction["entry_type"]!=2){ //case agent(manual entry- which is already have no peserta/choose admission type)?>
+			<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'agent','controller'=>'index','action'=>'admission'),'default',true);?>"><?php echo $this->translate("Admission Type"); ?></a></div></li>
+		<?php }//end admission ?>
+		<?php if($this->transaction['at_appl_type']=='1'){?>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'agent','controller'=>'index','action'=>'placement-test'),'default',true);?>"><?php echo $this->translate("test_schedule"); ?></a></div></li>	
+		<?php } ?>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'agent','controller'=>'index','action'=>'programme'),'default',true);?>"><?php echo $this->translate("programme"); ?></a></div></li>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'agent','controller'=>'index','action'=>'uploaddocument'),'default',true);?>"><?php echo $this->translate("upload_document"); ?></a></div></li>
+		<li class="last"><div class="text"><a href="<?php echo $this->url(array('module'=>'agent','controller'=>'index','action'=>'uploaddocument'),'default',true);?>"><?php echo $this->translate("confirmation"); ?></a></div></li>	
+	</ul>
+	<div class="clear"></div>
+</div>
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		
+	</div>
+</div>
+
+<?php echo $this->form; ?>

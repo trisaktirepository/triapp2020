@@ -1,0 +1,113 @@
+<?php 
+	//get locale
+	$registry = Zend_Registry::getInstance();
+	$locale = $registry->get('Zend_Locale');
+	$this->locale = $locale->toString();
+	
+	if($locale == 'ar_YE'){
+		$this->direction = "rtl";	
+	}else{
+		$this->direction = "ltr";
+	}
+
+	//get locale
+	$registry = Zend_Registry::getInstance();
+	$locale = $registry->get('Zend_Locale');
+	$this->locale = $locale->toString();
+	
+	if($locale == 'ar_YE'){
+		$this->direction = "rtl";	
+	}else{
+		$this->direction = "ltr";
+	}
+?>
+<? echo $this->doctype(); ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->locale; ?>" dir="<?php echo $this->direction; ?>">
+<head>
+	<?php echo $this->headMeta(); ?>
+	<?php echo $this->headTitle(); ?>
+	
+	
+	<?php
+		$this->jQuery()->enable();
+		 
+		$this->jQuery()->addStylesheet($this->baseUrl().'/js/jquery/themes/smoothness/jquery-ui.css');
+	 	$this->jQuery()->setLocalPath($this->baseUrl().'/js/jquery/jquery-1.4.1.min.js');
+		$this->jQuery()->setUiLocalPath($this->baseUrl().'/js/jquery/ui/jquery-ui.js');
+	
+		echo $this->jQuery(); 
+	?>
+	
+	<?php echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery/ui/jquery-ui.js'); ?>	
+	<?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/js/jquery/plugin/potato.menu/jquery.ui.potato.menu.css'); ?>
+	
+	<?php 
+	 	if($this->direction == 'rtl'){
+	 		echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery/plugin/potato.menu/jquery.ui.potato.menu.rtl.js');
+	 		echo "<style>";
+	 		echo "ul.potato-menu li.potato-menu-item {
+	 				float:right;
+				}";
+	 		echo "#language{
+	 				left:0px;
+	 			}";
+	 		
+	 		echo "#appTitle{
+	 				left: 15px;
+					top: 25px;
+	 			}";
+	 		
+	 		echo "</style>";
+	 	}else{
+	 		echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery/plugin/potato.menu/jquery.ui.potato.menu.js');
+	 		
+	 		echo "<style>";
+	 		echo "ul.potato-menu li.potato-menu-item {
+	 				float:left;
+				}";
+	 		echo "#language{
+	 				right:0px;
+	 			}";
+	 		
+	 		echo "#appTitle{
+	 				right: 15px;
+					top: 25px;
+	 			}";
+	 		echo "</style>";
+	 	}
+	 
+	 ?>
+	 	
+	<!--[if lt IE 7]>
+	<style media="screen" type="text/css">
+	#container {
+		height:100%;
+	}
+	</style>
+	<![endif]-->
+	
+	<script type="text/javascript">
+	 $(document).ready(function() {
+	        $('#mainMenu').ptMenu();
+	        $('#mainMenu').show();
+	        
+	 });
+	</script>
+</head>
+<body>
+<div id="container">
+	
+		<!-- Header end -->
+	
+	<div id="body">
+		<div style="width:1024px; margin:0 auto;">
+			<!-- Begin Section Content-->
+			<br><br>
+			<?php echo $this->layout()->content ?>
+			<!-- End Section Content-->
+		</div>
+	</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,158 @@
+
+<style type="text/css">
+	.table tfoot td, .table tfoot tr{
+		background: #FFF;
+		border: none;	
+	}
+	
+	.table tfoot td#total{
+		border-top: 4px  double #AAAAAA;
+	}
+</style>
+
+<script type="text/javascript">
+function bring_me_back(){
+	$("#backform").submit();
+}
+
+function validate(element){
+	var status = false;
+	var msg = "Are you sure to submit this batch application";
+
+	if( confirm(msg) ){
+		status = true;
+	}
+	
+	return status;
+}
+</script>
+
+		
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="javascript:bring_me_back()">
+					<span class='back'></span>
+					back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<div align="center" style="background:#ebebeb; height:30px;">
+<ul class="steps">
+	<li class="prevDone">
+		<span>1.</span> Select Candidate & Course
+	</li>
+    <li class="prevDone">
+		<span>2.</span> Select Schedule
+	</li>
+	<li class="prevDone">
+		<span>3.</span> Payment Selection
+	</li>
+	<li class="current">
+		<span>4.</span> Confirmation
+	</li>
+	<li class="next">
+		<span>5.</span> Receipt
+	</li>
+</ul>
+<br class="clear" />
+</div>
+<br />
+<p>*Please dont use your browser's back button</p>
+<form method="post" action="<?php echo $this->url(array('module'=>'company','controller'=>'application', 'action'=>'add-batch-candidate-step5'),'default',true);?>" onSubmit="return validate(this);">
+<table id="candidate" class="table" width="100%" cellpadding="5" cellspacing="2">
+	<thead>
+		<tr>
+			<th width="5px">&nbsp;</th>
+			<th width="40%">Candidate Name</th>
+			<th width="20%">Course</th>
+			<th width="40%">Schedule</th>
+		</tr>
+	</thead>
+	<tbody>
+	<?php foreach ($this->data as $key=>$application):?>
+	<tr>
+		<td><?php echo ($key+1); ?>.</td>
+		<td>
+			<?php echo $application['student_info']['ARD_NAME'] ?> (<?php echo $application['student_info']['ARD_IC'] ?>)
+			<input type="hidden" name="student_id[]" value="<?php echo $application['student_info']['ID'] ?>" />
+		</td>
+		<td>
+			<?php echo $application['course_info']['name'] ?> (<?php echo $application['course_info']['code'] ?>)
+			<input type="hidden" name="course_id[]" value="<?php echo $application['course_info']['id'] ?>" />
+		</td>
+		<td>
+			<?php echo date('d/m/Y', strtotime($application['schedule_info']['exam_date']) ); ?> (<?php echo date('G:ia', strtotime($application['schedule_info']['exam_time_start']) ); ?> - <?php echo date('G:ia', strtotime($application['schedule_info']['exam_time_end']) ); ?>) @ <?php echo $application['schedule_info']['exam_center_name'] ?> 
+			<input type="hidden" name="schedule_id[]" value="<?php echo $application['schedule_info']['id'] ?>" />
+		</td>
+	</tr>
+	<?php endforeach;?>
+	</tbody>
+</table>
+<!-- PAYMENT MODE -->
+<div align="center" style="margin-top: 20px; padding: 10px; background: #EEEEEE;">
+	<table id="candidate" class="table" width="50%" cellpadding="5" cellspacing="2">
+		<tr>
+			<th colspan="3">
+				Payment Detail
+			</th>
+		</tr>
+		<tr>
+			<td width="100px;">Payment Mode</td>
+			<td width="5px">:</td>
+			<td>
+				<?php echo $this->payment_mode['name']; ?>
+				<input type="hidden" name="payment_mode_id" value="<?php echo $this->payment_mode['id']; ?>" />
+			</td>
+		</tr>
+		<tr>
+			<td>Total Amount</td>
+			<td>:</td>
+			<td>
+				MYR <?php echo $this->payment_amount; ?>
+			</td>
+		</tr>
+	</table>
+	
+	<div align="center" style="margin: 10px 0;">
+		<div class="buttons">
+			<input type="button" value="Back" name="back" onclick="javascript:bring_me_back()" />
+			<input type="submit" value="Confirm" name="submit"  />
+		</div>
+	</div>
+</div>
+<!-- END PAYMENT MODE -->
+</form>
+
+<!-- for back purpose -->
+<div>
+	<form id="backform" method="post" action="<?php echo $this->url(array('module'=>'company','controller'=>'application', 'action'=>'add-batch-candidate-step3'),'default',true);?>">
+		<?php foreach ($this->data as $key=>$application):?>
+		<input type="hidden" name="student_id[]" value="<?php echo $application['student_info']['ID'] ?>" />
+		<input type="hidden" name="course_id[]" value="<?php echo $application['course_info']['id'] ?>" />
+		<input type="hidden" name="schedule_id[]" value="<?php echo $application['schedule_info']['id'] ?>" />
+		<?php endforeach;?>
+		<input type="hidden" name="payment_mode_id" value="<?php echo $this->data['payment_mode_id'] ?>" />
+	</form>
+</div>

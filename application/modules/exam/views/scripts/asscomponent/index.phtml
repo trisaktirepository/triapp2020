@@ -1,0 +1,164 @@
+<script>
+function add(program_id,course_id){
+	
+	window.location="<?php echo $this->url(array('module'=>'exam','controller'=>'asscomponent','action'=>'addform'),'default',true);?>/program_id/" + program_id + "/course_id/" +  course_id;
+}
+
+function manage(program_id,course_id){
+	
+	window.location="<?php echo $this->url(array('module'=>'exam','controller'=>'asscomponent','action'=>'manage'),'default',true)?>/program_id/" + program_id + "/course_id/" +  course_id;
+}
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<?php if($this->program_id && $this->course_id && !$this->rs_component){?>								
+					<a href="#" onClick="add('<?php echo $this->program_id?>','<?php echo $this->course_id?>')">
+						<span class='add'></span>Add</a>
+				<?php } ?>
+			</li>
+			<?php 	if($this->program_id && $this->course_id && $this->rs_component){		?>
+			<li>
+				<a href="#" onClick="manage('<?php echo $this->program_id?>','<?php echo $this->course_id?>')">
+					<span class='edit'></span>
+					Edit
+				</a>
+			</li>
+		<?php }?>
+			</ul>
+			
+			
+	</div>
+</div>
+
+	
+<div style="width: 100%;">	
+			
+			<fieldset style="width:450px;" >
+				<legend>Search</legend>
+			<form name="searchfrm" action="" method="post">
+				<table width="100%">
+					<tr>
+						<td>
+							Program 
+						</td>
+						<td width="5px">:</td>
+						<td>			
+							<select name="program_id">
+							
+							<?php 
+							foreach($this->program as $p){
+								if($this->program_id==$p[id])
+								  $sel = "selected";
+								else
+								  $sel = "";
+							 	echo "<option value='$p[id]' $sel>$p[program_name]</option>";
+							 } ?>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Course
+						</td>
+						<td width="5px">:</td>
+						<td>
+						
+							<select name="course_id" onChange="form.submit()">
+							<option value="0">Please select</option>
+							<?php 
+							foreach($this->courses as $course){
+								if($this->course_id==$course[id])
+								  $sel = "selected";
+								else
+								  $sel = "";
+							 	echo "<option value='$course[id]' $sel>$course[name]</option>";
+							 } ?>
+							</select>
+						</td>
+					</tr>
+										
+					
+				</table>
+			</form>
+			</fieldset>
+	
+	<br></br>
+	<?php 
+	if($this->program_id && $this->course_id){
+	  if($this->rs_component){			
+	?>
+	
+	<table  class="table" width="100%" cellpadding="5" cellspacing="1" >
+		  <tr>
+		    <th colspan="6">Assessment Component List</th>
+		  </tr>
+		  <tr>
+		   
+		    <th  width="15%">Component Name</th>
+		    <th>Component Item</th>
+		 <th width="10%">Item Weightage</th> 
+		    <th width="10%">Total Weightage</th>
+		  <!--  <th width="10%">Passing Mark</th>-->
+		    <th width="10%">Total Mark</th>	
+		   <th width="15%">Action</th>
+		  </tr>
+		  <?php 
+		  $no=1;
+		  foreach ($this->rs_component as $component){
+		  ?>
+		   <tr>		    
+		    <td>&nbsp;<?php echo $component["component_name"]?></td>
+		   <td>&nbsp;</td>  
+		   <td>&nbsp;</td> 
+		    <td align="center">&nbsp;<?php echo $component["component_weightage"]?></td>
+		  <!--  <td align="center">&nbsp;<?php echo $component["component_passing_mark"]?></td>-->
+		    <td align="center">&nbsp;<?php echo $component["component_total_mark"]?></td>		
+		  <td align="center">		       
+		        <a class="editLink" href="#" onClick="edititem('<?php echo $component['id']; ?>','<?php echo $this->program_id?>','<?php echo $this->course_id?>')">Manage Item</a>&nbsp;		    	
+			</td> 
+		   </tr>
+		   
+		   <? 
+		       //get component item 
+		  	   $oCompitem = new App_Model_Exam_DbTable_Asscompitem();	
+		  	   $component_item = $oCompitem->getCompitemByCompId($component["id"]);
+		  	   if($component_item){
+		  	   	foreach ($component_item as $item){
+		   ?>
+			    <tr bgcolor="#FFFFF0">
+				 
+				    <td>&nbsp;</td>
+				    <td>&nbsp;<?php echo $item["component_name"]?></td>				    
+				    <td align="center">&nbsp;<?php echo $item["component_item_weightage"]?></td>
+				    <td>&nbsp;</td> 
+				<!--    <td align="center">&nbsp;<?php echo $item["component_item_passing_mark"]?></td>-->
+				    <td align="center">&nbsp;<?php echo $item["component_item_total_mark"]?></td>
+				      <td>&nbsp;</td> 				     
+			    </tr>
+		   <? }   }//end if item?>
+		   
+		   
+		  <?php $no++; } ?>
+  </table>
+  
+  
+
+<?php 	}else{//end program?>
+<div class="message notice"><strong>There are no assessment component has been set up. Please click on "Add" button to add.</strong></div>
+<? } }?>
+</div>
+
+
+<script>
+function additem(id){
+	window.location="<?php echo $this->url(array('module'=>'exam','controller'=>'asscompitem', 'action'=>'additemform'),'default',true);?>/id/"+id;
+}
+
+function edititem(id,program_id,course_id){
+	window.location="<?php echo $this->url(array('module'=>'exam','controller'=>'asscompitem', 'action'=>'manageitem'),'default',true);?>/id/"+id+"/program_id/"+program_id+"/course_id/"+course_id;
+}
+</script>

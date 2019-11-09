@@ -1,0 +1,124 @@
+<script>
+function printSchedule(){
+			
+		url = "<?php echo $this->url(array('module'=>'default','controller'=>'student-portal','action'=>'print-schedule','idGroup'=>$this->idGroup),'default',true);?>";
+		window.open(url, "Schedule", "width=500,height=500,menubar=1");
+	
+	
+}
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<li>
+				<a href="#" onclick="printSchedule();" >
+					<span class='print'></span>
+					<?php echo $this->translate("Print")?> 
+				</a>
+			</li>
+	</div>
+</div>
+<br />
+
+<div style="width:100%;">
+
+<fieldset>
+<legend><?php echo $this->translate("Group Info")?></legend>
+
+
+<table class="" width="50%" cellpadding="5" cellspacing="5" border="0">
+	<tr>
+		<td width="100px"><?php echo $this->translate("Group Name")?></td>
+		<td width="5px">:</td>
+		<td><?php echo $this->group["GroupCode"]?></td>
+	</tr>
+		<tr>
+		<td><?php echo $this->translate("Lecturer Name")?></td>
+		<td width="5px">:</td>
+		<td><?php if ($this->hidelecturer=="1" && $this->open=="1") echo "-"; else echo ($this->group["IdLecturer"]!=0 ?  $this->group["FullName"]:$this->translate("-"));
+			 ?></td>
+	</tr>
+	<tr>
+		<td width="100px"><?php echo $this->translate("Subject Name")?></td>
+		<td width="5px">:</td>
+		<td><?php echo $this->group["subject_name"];  ?></td>
+	</tr>
+	<tr>
+		<td><?php echo $this->translate("Subject Code")?></td>
+		<td width="5px">:</td>
+		<td><?php echo $this->group["subject_code"];?></td>
+	</tr>
+</table>
+</fieldset>
+
+<br>
+
+<h4><?php echo $this->translate("Schedule")?></h4>
+<table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+	<tr>		
+		<th><?php echo $this->translate("Day")?></th>
+		<th><?php echo $this->translate("Start Time")?></th>
+		<th><?php echo $this->translate("End Time")?></th>
+		<th><?php echo $this->translate("Venue")?></th>				
+	</tr>
+	<?php 
+	//strftime($format, strtotime($time))
+	setlocale(LC_TIME, "id_ID");
+	$i=1;
+	if(count($this->schedule)>0){
+	foreach($this->schedule as $sch){
+	?>
+	<tr>
+		
+		<td><?php 
+			$timestamp = strtotime($sch["sc_day"]);			
+			echo strftime('%A', $timestamp);
+			?>
+			<?php echo isset($sch["sc_date"]) && $sch["sc_date"]!=null?" - ".date('d/m/Y',strtotime($sch["sc_date"])):"" ;?>
+		</td>
+		<td><?php echo $sch["sc_start_time"]?></td>
+		<td><?php echo $sch["sc_end_time"]?></td>
+		<td><?php echo $sch["sc_venue"]?></td>
+		
+	</tr>
+	<?php }} ?>
+</table>
+
+<?php if (count($this->scheduleminor)>0) {?>
+
+<h4><?php echo $this->translate("Micro Class Schedule ")?></h4>
+<table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+	<tr>		
+		<th><?php echo $this->translate("Group Code")?></th>
+		<th><?php echo $this->translate("Group Name")?></th>
+		<th><?php echo $this->translate("Day")?></th>
+		<th><?php echo $this->translate("Start Time")?></th>
+		<th><?php echo $this->translate("End Time")?></th>
+		<th><?php echo $this->translate("Venue")?></th>				
+	</tr>
+	<?php 
+	//strftime($format, strtotime($time))
+	setlocale(LC_TIME, "id_ID");
+	$i=1;
+	if(count($this->scheduleminor)>0){
+	foreach($this->scheduleminor as $sch){
+	?>
+	<tr>
+		<td><?php echo $sch["GroupCode"]?></td>
+		<td><?php echo $sch["GroupName"]?></td>
+		<td><?php 
+			$timestamp = strtotime($sch["sc_day"]);			
+			echo strftime('%A', $timestamp);
+			?>
+			<?php echo isset($sch["sc_date"]) && $sch["sc_date"]!=null?" - ".date('d/m/Y',strtotime($sch["sc_date"])):"" ;?>
+		</td>
+		<td><?php echo $sch["sc_start_time"]?></td>
+		<td><?php echo $sch["sc_end_time"]?></td>
+		<td><?php echo $sch["sc_venue"]?></td>
+		
+	</tr>
+	<?php }} ?>
+</table>
+<?php }?>
+</div>

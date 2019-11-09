@@ -1,0 +1,1198 @@
+<script><!--
+function validate(){
+
+	var strconfirm = confirm("Anda yakin jadwal kuliah dan ujian yang anda pilih tidak bentrok.  Sistem hanya akan mengambil salah satu Matakuliah yang tidak bentrok");
+
+ 	if (strconfirm == true){
+		var isChecked = $('.chk').is(':checked');
+		
+		 if(isChecked==true){
+				$("#registerSubjectForm").submit();
+		 }else{
+			alert("Anda belum memilih jadwal kuliah, silahkan pilih");
+		 }
+ 	}
+}
+function CekRule() {
+	 
+}
+function drop(sregid,semid){
+	 	var strconfirm = confirm("Are you sure you want to drop this subject?");
+	 	if (strconfirm == true){
+		 	document.location="/course-registration/course-register/idSemester/"+semid+"/dp/"+sregid;
+	                 
+	     }
+}
+
+function openDialog(){	
+	$( "#dialog-search-course" ).dialog('open');	
+}
+
+$(function() {
+
+	$( "#dialog-search-course" ).dialog({
+	    autoOpen: false,
+	    width: 750,
+	    height: 550,
+	    modal: true,
+	    buttons: {          
+	        "Close": function() {
+	            $( this ).dialog( "close" );
+	        }
+	    }
+	});
+});
+
+function ajaxSearchCourse(){
+	
+	var course_code = $('#course_code').val();
+	var landscape_id = '<?php echo $this->student["IdLandscape"];?>';	
+	var landscape_type = '<?php echo $this->landscape["LandscapeType"];?>';	
+	var level = '<?php echo $this->semester_level; ?>';
+	var current_level = '<?php echo $this->current_level; ?>';
+	var idSemester = '<?php echo $this->idSemester; ?>';
+	var idStudent = '<?php echo $this->IdStudentRegistration; ?>';
+	
+	
+	var table = $("#result tbody");	
+	$(table).empty();
+	 
+	$.ajax({
+		url: "/default/course-registration/ajax-search-course",
+	    type: "post",
+	    async : false,
+	    data: {'landscape_id':landscape_id,'course_code':course_code,'level':level,'current_level':current_level,'idSemester':idSemester,'idStudent':idStudent,'landscape_type':landscape_type},
+	    dataType: 'json',
+	    success: function(data){
+	   
+	    	
+	    	 if(data.length>0){
+	        	  for(var i=0; i<data.length; i++){
+
+	        		  if(data[i].register==2){
+
+			             if(landscape_type==43){ 
+		        	 	 	var onc ='<a href="#" onclick="addToRow(\''+data[i].IdSubject+'\',\''+data[i].BahasaIndonesia+'\',\''+data[i].SubCode+'\',\''+data[i].SubjectType+'\',\''+data[i].CreditHours+'\',\''+data[i].register_status+'\',\''+data[i].IdLandscapeSub+'\')"><img src="/images/add.png"  border=0 width=16 height=16></a>';
+			             }
+			             if(landscape_type==44){ 
+				             if(current_level==0){
+			            	 	var onc ='<a href="#" onclick="addToRow2(\''+data[i].IdLandscapeblocksubject+'\')"><img src="/images/add.png"  border=0 width=16 height=16></a>';
+				             }else{
+				            	 var onc ='<a href="#" onclick="addToRow(\''+data[i].IdSubject+'\',\''+data[i].BahasaIndonesia+'\',\''+data[i].SubCode+'\',\''+data[i].SubjectType+'\',\''+data[i].CreditHours+'\',\''+data[i].register_status+'\',\''+data[i].IdLandscapeSub+'\',\''+data[i].block_level+'\')"><img src="/images/add.png"  border=0 width=16 height=16></a>';
+				             }
+			             }
+			             
+	        		  }else{
+						 var onc = '';	        			 
+	        		  }
+
+	        		  
+			          var content = "<tr>" +
+  				       			    "<td>"+data[i].BahasaIndonesia+"</td>"+
+			          				"<td align='center'>"+data[i].SubCode+"</td>"+
+			          				"<td align='center'>"+data[i].SubjectType+"</td>"+
+			          				"<td align='center'>"+data[i].CreditHours+"</td>"+
+			          				"<td align='center'>"+data[i].register_status+"</td>"+	
+				          			'<td align="center">'+onc+'</td>'+		
+			          				"</tr>"
+					          		$(table).append(content);		
+
+			         if(data[i].child.length>0){
+				         
+			        	  for(var x=0; x<data[i].child.length; x++){
+				        	  			        		
+			        		  	 if(data[i].child[x].child_register==2){
+					        	 	 var oncx ='<a href="#" onclick="addToRow(\''+data[i].child[x].IdSubject+'\',\''+data[i].child[x].BahasaIndonesia+'\',\''+data[i].child[x].SubCode+'\',\''+data[i].child[x].SubjectType+'\',\''+data[i].child[x].CreditHours+'\',\''+data[i].child[x].child_register_status+'\',\''+data[i].child[x].IdLandscapeSub+'\')"><img src="/images/add.png"  border=0 width=16 height=16></a>';
+				        		 }else{
+									 var oncx = '';
+				        		 }
+			        		  
+			        	  var contentz = "<tr  bgcolor='#F7F8E0'>" +
+						       			    "<td>&nbsp;&nbsp;&nbsp;"+data[i].child[x].BahasaIndonesia+"</td>"+
+					          				"<td align='center'>"+data[i].child[x].SubCode+"</td>"+
+					          				"<td align='center'>"+data[i].child[x].SubjectType+"</td>"+
+					          				"<td align='center'>"+data[i].child[x].CreditHours+"</td>"+
+					          				"<td align='center'>"+data[i].child[x].child_register_status+"</td>"+	
+						          			'<td align="center">'+oncx+'</td>'+		
+					          			"</tr>"	
+						          		$(table).append(contentz);	
+			        	  }//end
+			          }    	 	        	  
+		          }
+	          }else{
+	        	  var contentx = "<tr>" +
+	        	 			    "<td colspan='6'>Data tidak dijumpai.</td>"+
+	        		            "</tr>"
+		          $(table).append(contentx);				   
+	          }
+	    	
+		},
+		error:function(){
+	          alert("failure");
+		},
+		beforeSend: function() {
+			//showLoading('subject','subject','loading');		       
+		},
+		complete: function() {
+			//hideLoading('loading','subject');
+		}   
+	});
+		
+	
+}
+
+
+
+
+function addToRow(idSubject,SubjectName,SubjectCode,SubjectType,CreditHour,register,idlandscapesub,block_level){
+	 var contentrow = "<tr>" +
+	 				     "<td align='center'><input class='chk'' type='checkbox' name='idSubject[]' value='"+idSubject+"'><input type='hidden' name='idLandscapeSub["+idSubject+"]' value='"+idlandscapesub+"'><input type='hidden' name='block_level["+idSubject+"]' value='"+block_level+"'></td>" +
+		 				 "<td>"+SubjectName+"</td>" +
+		 				 "<td align='center'>"+SubjectCode+"</td>" +
+		 				 "<td align='center'>"+SubjectType+"</td>" +
+		 				 "<td align='center'>"+CreditHour+"</td>" +
+		 				 "<td align='center'>"+register+"</td>" +
+	 				  "</tr>"
+	 $('#addTable tbody').append(contentrow);
+	 $("#dialog-search-course" ).dialog('close');
+}
+
+
+
+function addToRow2(idLandscapeBlockSubject){
+
+	$.ajax({
+		url: "/default/course-registration/ajax-search-child",
+	    type: "post",
+	    async : false,
+	    data: {'idLandscapeBlockSubject':idLandscapeBlockSubject},
+	    dataType: 'json',
+	    success: function(data){
+
+	    	
+	    	 if(data.length>0){
+	        	  for(var i=0; i<data.length; i++){
+		        	  
+	        		  var contentrow = "<tr>" +
+	 				     "<td align='center'>"+
+	 				     "<input class='chk'' type='checkbox' name='idSubject[]' value='"+data[i].IdSubject+"'>"+
+	 				     "<input type='hidden' name='idLandscapeSub["+data[i].IdSubject+"]' value='"+data[i].IdLandscapeSub+"'>"+
+		 				 "<input type='text' name='block_level["+data[i].IdSubject+"]' value='"+data[i].block_level+"'>"+
+	 				     "</td>" +
+		 				 "<td>"+data[i].BahasaIndonesia+"</td>" +
+		 				 "<td align='center'>"+data[i].SubCode+"</td>" +
+		 				 "<td align='center'>"+data[i].SubjectType+"</td>" +
+		 				 "<td align='center'>"+data[i].CreditHours+"</td>" +
+		 				 "<td align='center'>"+data[i].CreditHours+"</td>" +
+	 				  "</tr>"
+	 				  $('#addTable tbody').append(contentrow);
+	        	  }
+	    	 }
+	    }
+	}); 
+}
+
+ $(function() {
+    $( "#tabs" ).tabs({
+    collapsible: true
+    });
+     $( "#dialog-form" ).dialog({
+        autoOpen: false,
+        height: 500,
+        width: 700,
+        modal: true
+     });
+    $( ".scheduleLink" ).click(function(e) {
+        e.preventDefault();
+         idSubject = $(this).attr('href');
+        $.get('/course-registration/ajax-get-schedule/idLandscape/<?php echo $this->student["IdLandscape"];?>/idSubject/'+idSubject,function(data){
+            $( "#dialog-form" ).html(data);
+            $( "#dialog-form" ).dialog( "open" );
+            
+        });
+       
+        //return false;
+    });
+    
+    $(".chk").click(function(){
+        checkboxId = $(this).attr('id');
+        classRadio = '.'+checkboxId;
+        if($(this).is(':checked'))
+        {
+            firstRadio = '#'+checkboxId+'_1';
+            $(classRadio).attr('disabled',false);
+            $(firstRadio).attr('checked',true);
+            
+        }
+        else
+        {
+            $(classRadio).attr('disabled',true);
+            $(classRadio).attr('checked',false);
+        }
+    });
+    
+});
+
+ $(function() {
+		// a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
+		$( "#dialog:ui-dialog" ).dialog( "destroy" );
+
+		$( "#dialog-approval" ).dialog({
+			modal: true,
+			autoOpen: false,
+			width: 600,
+			buttons: {
+				"Save": function() { 
+						confirm=$("#ConfirmationCode").val();
+						idstudent=$("#IdStudentRegistration").val();
+						$("#confirm").val(confirm);
+						$("#hp").val($("#diaghp").val());
+						 
+						if ($("#valid").val()=="1") {
+							 	$("#coursefrm").submit(); 
+						 }
+						 
+						 
+					 }
+				, 
+				"Cancel": function() { 
+					$(this).dialog("close"); 
+				}
+				
+			}
+		});
+		
+		
+	});
+
+	function checkconfirm() {
+
+		confirm=$("#ConfirmationCode").val();
+		idstudent=$("#IdStudentRegistration").val();
+		document.getElementById("confirmmsg").innerHTML='';
+		$.ajax({
+			url: "<?php echo $this->url(array('module'=>'default','controller'=>'course-registration', 'action'=>'ajax-check-confirm'),'default',true);?>",
+			data: {'idstudent':idstudent,'confirm':confirm},
+			type: 'POST',
+			dataType: 'json' 
+		}).done(function ( data ) {
+			 
+			if (data=="Valid") { 
+				document.getElementById("confirmmsg").innerHTML = "Kode Konfirmasi Ok";
+				$("#valid").val("1");
+				confirm=$("#ConfirmationCode").val();
+				idstudent=$("#IdStudentRegistration").val();
+				$("#confirm").val(confirm);
+				$("#hp").val($("#diaghp").val());
+				$("#coursefrm").submit();
+		} else {
+			   
+				document.getElementById("confirmmsg").innerHTML = "Kode Konfirmasi Salah "+data+"X";
+				document.getElementById("valid").value="0";
+				if (data > "4") $("#dialog-approval").dialog("close"); 
+		} 
+		});
+	}
+
+	function approveIt(iduser){
+
+			 
+			//send confirmation number
+			var hp=$("#diaghp").val();
+			$("#iduser").val(iduser);
+			$("#IdStudentRegistration").val($("#idStudentRegistration").val());
+			idstudent=$("#IdStudentRegistration").val();
+			$.ajax({
+				url: "<?php echo $this->url(array('module'=>'default','controller'=>'course-registration', 'action'=>'ajax-send-sms'),'default',true);?>",
+				data: {'hp':hp,'idstudent':idstudent,'iduser':iduser},
+				type: 'POST',
+				dataType: 'json' 
+			}).done(function ( data ) {
+				 
+				 if (data=='Success Send') {
+					 document.getElementById("demo").innerHTML = "Kode Konfirmasi telah dikirim ke";
+				 } else {
+					 document.getElementById("demo").innerHTML = "Tolong periksa Nomor HP anda karena kode Konfirmasi gagal dikirim ke";
+					 
+				 }
+				 //data pesan
+			});
+			
+			var table = document.getElementById("approval_tbl");
+			table.innerHTML='';
+			var j=1;
+			var count=$("#coun").val();
+			var row = table.insertRow(0);
+			var cell1 = row.insertCell(0);
+			var cell2 = row.insertCell(1);
+			 
+			// Add some text to the new cells:
+			cell1.innerHTML = "Matakuliah";
+			cell2.innerHTML = "Status Proses";
+			
+			 
+			for (i=0;i<count;i++) {
+				drop=document.getElementById("drop"+i);
+				if (drop!=null) {
+					dropval=drop.value;
+					if (drop.checked==1)  {
+						
+						var row = table.insertRow(j);
+						var cell1 = row.insertCell(0);
+						var cell2 = row.insertCell(1);
+						 
+						// Add some text to the new cells:
+						cell1.innerHTML = dropval;
+						cell2.innerHTML = "Coret/Batal";
+						 
+						j++;
+					} 
+				}
+			}
+		
+		$( "#dialog-approval" ).dialog('open');
+	}
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		   
+	</div>
+</div>
+
+<br />
+<?php if($this->errMsg == 1):?>
+
+	<div class="error">
+		<?php echo 'Your reach your credit hour limit';?> 
+	</div>
+
+<br />
+<?php elseif($this->errMsg == 2):?>
+    
+	<div class="error">
+		<?php echo 'Your Credit is more than 9';?> 
+	</div>
+
+<br />
+
+<?php elseif($this->errMsg == 3):?>
+
+	<div class="error">
+		<?php echo 'Your Registered Subject is more than 3';?> 
+	</div>
+
+<br />
+<?php elseif($this->errMsg !=''):;?>
+	
+	<div class="error">
+		<strong><?php echo $this->errMsg;?> </strong>
+	</div>
+
+
+<br />
+<?php endif;?>
+<div id="dialog-form" title="Schedule">
+</div>
+
+<div style="width:100%;">
+<fieldset>
+<form id="formSearch" method="post" action="/course-registration/course-register">
+<table width="100%"> <tr><td><table>
+	
+	<tr>
+		<td><?php echo $this->translate("Semester to register"); ?></td>
+		<td>:
+			<select id="idSemester" name="idSemester" onchange="form.submit();">
+				<option value="0"><?php echo $this->translate("-- Silahkan Pilih --"); ?></option>
+				<?php 
+				foreach ($this->semester as $sem){
+					if($this->idSemester==$sem["IdSemesterMaster"]){
+						$selected = 'selected';
+					}else{
+						$selected = '';
+					}
+				?>
+					<option value="<?php echo $sem["IdSemesterMaster"]; ?>" <?php echo $selected; ?>><?php echo $sem["SemesterMainName"];?></option>
+				<?php } ?>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td><?php echo $this->translate("Semester Level"); ?></td>
+		<td>: <?php echo $this->current_level;?></td>
+	</tr>
+    <tr>
+		<td><?php echo $this->translate("Total Credit"); ?></td>
+		<td>: <?php echo $this->total_credit;?>/<?php echo $this->crlimit;?></td>
+	</tr>
+</table>
+</td><td align="right" width="30%">
+<?php if (count($this->rule)>0) {?>
+	<table class="table" width="100%" id="tablerule">
+	<tr><th colspan="2" ><?php echo $this->translate('Aturan')?></th></tr>
+	<th><?php echo $this->translate('Owner Class')?></th> 
+	<th><?php echo $this->translate('# of Courses Allowed')?></th></tr>
+	<?php foreach ($this->rule as $value) { ?>
+		<tr><td><?php echo $value['BranchMng']?></td><td align="center"><?php echo $value['batas']?></td></tr>
+	<?php 
+	}?> 
+	</table>
+	<?php }?>
+</td>
+<td align="right" width="30%">
+<?php if (count($this->rule)>0) {?>
+	<table class="table" width="100%" id="tableregister">
+	<tr><th colspan="2" ><?php echo $this->translate('Realisasi')?></th></tr>
+	
+	<tr>
+	<th><?php echo $this->translate('Owner Class')?></th> 
+	<th><?php echo $this->translate('# of Registered Course')?></th></tr>
+	<?php foreach ($this->registedclass as $value) { ?>
+		<tr><td><?php echo $value['BranchMng']?></td><td align="center"><?php echo $value['nCourse']?></td></tr>
+	<?php 
+	}?> 
+	</table>
+	<?php }?>
+</td>
+</tr></table>
+</form>
+
+<div id="tabs">
+<ul>
+<li><a href="#tabs-2"><?php echo $this->translate('Normal Schedule');?></a></li>
+<li><a href="#tabs-1"><?php echo $this->translate('Date Schedule');?></a></li>
+<li><a href="#tabs-3"><?php echo $this->translate('Examination Schedule');?></a></li>
+
+
+</ul>
+
+<div id="tabs-1">
+
+<table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+    <thead>
+    <tr>
+        <th rowspan="2">Date</th>
+        <th colspan="15">Time</th>
+    </tr>
+    <tr>
+     	<th>07:00</th>
+        <th>08:00</th>
+        <th>09:00</th>
+        <th>10:00</th>
+        <th>11:00</th>
+        <th>12:00</th>
+        <th>13:00</th>
+        <th>14:00</th>
+        <th>15:00</th>
+        <th>16:00</th>
+        <th>17:00</th>
+        <th>18:00</th>
+        <th>19:00</th>
+         <th>20:00</th>
+          <th>21:00</th>
+    </tr>
+    </thead>
+    <tbody>
+        
+        <?php if(!empty($this->dateSchedule)):?>
+            <?php foreach ($this->dateSchedule as $key => $value) :?>
+            <tr>
+                <td><?php echo $key;?><br />(<?php echo $value['sc_day'];?>)</td>
+                <?php 
+                    
+                    for($i=7;$i<=21;$i++)
+                    {
+                        $arrKey = sprintf("%02d", $i);
+                        if(isset($value[$arrKey]))
+                        {
+                            $explode = explode('<br />',$value[$arrKey]);
+                            if(isset($explode[1])) :
+                                $color = 'red';
+                            else :
+                                $color = 'green';
+                            endif;
+                        ?>
+                    <td style="background-color:<?php echo $color;?>"><font color="white"><?php echo $value[$arrKey];?></font></td>
+                   <?php 
+                        }
+                        else 
+                        {
+                    ?>
+                     <td style="background-color:white">&nbsp;</td>
+                    <?php
+                        }
+                    }
+                    ?>
+                
+            </tr>
+            <?php endforeach;?>
+        <?php else: ?>
+            <tr><td colspan="15"><?php echo $this->translate('No Record Found');?></td>
+        <?php endif;?>
+    </tbody>
+</table>
+</div>
+
+<div id="tabs-2">
+    <table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+        <thead>
+        <tr>
+            <th rowspan="2">Day</th>
+            <th colspan="15">Time</th>
+        </tr>
+        <tr>
+        <th>07:00</th>
+        <th>08:00</th>
+        <th>09:00</th>
+        <th>10:00</th>
+        <th>11:00</th>
+        <th>12:00</th>
+        <th>13:00</th>
+        <th>14:00</th>
+        <th>15:00</th>
+        <th>16:00</th>
+        <th>17:00</th>
+        <th>18:00</th>
+        <th>19:00</th>
+        <th>20:00</th>
+         <th>21:00</th>
+        </tr>
+        </thead>
+        <?php if(!empty($this->normalSchedule)):?>
+        <tbody>
+        <?php 
+        
+        //rearrange array for display purpose
+        $dayTime = array(
+            'Monday' => array(),
+            'Tuesday' => array(),
+            'Wednesday' => array(),
+            'Thursday' => array(),
+            'Friday' => array(),
+			'Saturday' => array()
+        );
+        //print_r($this->normalSchedule);
+        // foreach ($this->normalSchedule as $key => $value) 
+        // {  
+            // $dayTime[$key][$start] = $value[$start];
+        // }
+        ?>
+        <tr>
+            <?php foreach ($dayTime as $a => $b) :?>    
+                <td><?php echo $a;?></td>
+                <?php for($i=7;$i<=21;$i++):?>
+                    <?php $arrKey = sprintf("%02d", $i);?>
+                    <?php if(isset($this->normalSchedule[$a][$arrKey])):
+                        $explode = explode('<br />',$this->normalSchedule[$a][$arrKey]);
+                        if(isset($explode[1])) :
+                            $color = 'red';
+                        else :
+                            $color = 'green';
+                        endif;
+                    ?>
+                <td style="background-color:<?php echo $color;?>"><font color="white"><?php echo $this->normalSchedule[$a][$arrKey];?></font></td>
+                    <?php else :?>
+                <td style="background-color:white">&nbsp;</td>
+                    <?php endif;?>
+                <?php endfor;?>
+            </tr>
+        <?php endforeach;
+            //print_r($value);
+        ?>
+        <?php else: ?>
+            <tr><td colspan="11"><?php echo $this->translate('No Record Found');?></td>
+        <?php endif;?>
+        </tbody>
+       </table>
+</div>
+<div id="tabs-3">
+<table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+    <?php if(!empty($this->dateExam)):?>
+    <tr>
+        <td>&nbsp;</td>
+        <?php
+            $countDate = 0;
+            foreach($this->dateExam as $e => $f) :?>
+            <th><?php echo $e?></th>
+        <?php 
+            $countDate++;
+            endforeach;?>
+    </tr>
+    <?php
+        $start = strtotime("8:00:00");
+        $end   = strtotime("24:00:00");
+    
+        $firstColumn = true;
+        while ($start < $end):
+            echo '<tr>';
+            echo '<td>'.date("H:i:s",$start).'</td>';
+            
+            foreach($this->dateExam as $g => $h):
+                $keyTime = date("H:i:s",$start);
+                
+                if(isset($h[$keyTime])):
+                    
+                    $explode = explode('<br />',$h[$keyTime]);
+                    if(isset($explode[1])) :
+                        $color = 'red';
+                    else :
+                        $color = 'green';
+                    endif;
+                    
+                    echo '<td style="background-color:'.$color.'">'.$h[$keyTime].'</td>';
+                else :
+                    echo '<td>&nbsp;</td>';
+                endif;
+            endforeach;
+        
+            echo '</tr>';
+            $start = $start + 600;
+            
+        endwhile;
+    else:    
+    ?>
+        No record found
+    <?php endif;?>
+</table>
+</div>  
+<br /> 
+<?php 
+if(isset($this->sel_semester)){
+	$allowreg=1;	
+	if($this->paymentstatus==0){
+		echo "- <font color='red'>Silahkan melunasi pembayaran yang telah ditetapkan. Terima Kasih</font><br>";
+		$allowreg=0;
+	}
+	
+	if(count($this->barred)>0){
+		echo "- <font color='red'>Proses registrasi anda di blok, Silahkan hubungi fakultas. Terima Kasih</font>";
+		$allowreg=0;
+	}
+	
+	if($allowreg==1){
+?>
+<?php 
+if(isset($this->registeredcourses)){
+	?>
+ <form name="coursefrm" id="coursefrm" method="post" action="/default/course-registration/drop-course">
+   <input type="hidden" id="hp" name="hp">
+  <input type="hidden" id="iduser" name="iduser">
+  <input type="hidden" id="confirm" name="confirm">
+  <input type="hidden" id="valid" name="valid">
+  <input type="hidden" id="IdStudentRegistration" name="IdStudentRegistration">
+   <table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+		<tr>					
+			<th colspan=6><?php echo $this->translate("Course Registered for this semester");?></th>
+		</tr>   
+		<tr>					
+			<th width="50px"><?php echo $this->translate("Drop"); ?>?</th>
+			<th width="200"><?php echo $this->translate("Course Name"); ?></th>
+			<th width="50px"><?php echo $this->translate("Course Code"); ?></th>					
+			<th width="50px"><?php echo $this->translate("Credit Hour"); ?></th>
+			<th width="50px"><?php echo $this->translate("Status"); ?></th>					
+			<th width="50px"><?php echo $this->translate("Advisor Approval"); ?></th>	
+		</tr>	
+	<?php 
+	$coun=0;
+	$dropsts="0";
+	foreach ($this->registeredcourses as $courseregs){
+	?>
+	  	<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+				
+	  				<td align="center"><?php if ($courseregs['ApprovedBy']==0) {
+	  												$dropsts="1";?>
+	  				<input type="checkbox" name="drop[<?php echo $courseregs['IdStudentRegSubjects']?>]" id="drop<?php echo $coun;?>" value="<?php echo $courseregs["SubCode"]." - ".$courseregs["BahasaIndonesia"]; ?>"></td>	  			  	
+			  		<?php }?>
+			  		<td><?php echo ($courseregs["BahasaIndonesia"]!='' ? $courseregs["BahasaIndonesia"]:$courseregs["SubjectName"]); ?></td>
+			  		<td><?php echo $courseregs["SubCode"]; ?></td>
+			  		<td align="center"><?php echo $courseregs["CreditHours"]; ?></td>
+			  		<td><?php 
+			  		        if($courseregs["Active"]==0) echo $this->translate("Not Register");
+			  				if($courseregs["Active"]==1) echo $this->translate("Register"); 
+			  				if($courseregs["Active"]==2) echo $this->translate("Drop");
+			  				if($courseregs["Active"]==3) echo $this->translate("Withdraw"); 
+			  				if($courseregs["Active"]==4) echo $this->translate("Repeat"); 
+			  				if($courseregs["Active"]==5) echo $this->translate("Refer"); 
+			  				
+			  			?></td>
+			  		<?php if ($courseregs["ApprovedBy"]==0) {?>
+			  			<td align="center"><?php echo $this->translate("Not Yet") ?></td>
+			  		<?php } else {?>
+			  			<td align="center"><?php echo $this->translate("Approved") ?></td>
+			  		<?php }?>
+			  </tr>	
+	<?php 
+	$coun++;}
+	if ($dropsts=="1") {?>
+	<tr><td colspan="6" align="center"><input type="button" name="dropcourse" id="dropcourse" value="<?php echo $this->translate("drop");?>" onclick="approveIt(<?php echo $this->appl_id;?>)"></td>
+	<?php }?>
+	
+	</table>
+	<input type="hidden" name="coun" id="coun" value="<?php echo $coun;?>">
+	<?php
+}
+?>
+</form>
+</fieldset>
+<br>
+<br>
+
+<?php if (isset($this->idSemester) && $this->idSemester!=0){?>
+
+<form id="registerSubjectForm" method="post" action="<?php echo $this->url(array('module'=>'default','controller'=>'course-registration', 'action'=>'register'),'default',true);?>">
+<input type='hidden' name="idLandscape" id="idLandscape" value='<?php echo $this->student["IdLandscape"]?>'>
+<input type='hidden' name="landscape_type" id="landscape_type" value='<?php echo $this->landscape["LandscapeType"]?>'>
+<input type='hidden' name="idSemester" id="idSemester" value='<?php echo $this->idSemester; ?>'>
+<input type='hidden' name="semester_level" id="semester_level" value='<?php echo $this->semester_level; ?>'>
+<input type='hidden' name="idStudentRegistration" id="idStudentRegistration" value='<?php echo $this->IdStudentRegistration; ?>'>
+<input type='hidden' name="crlimit" id="crlimit" value='<?php echo $this->crlimit; ?>'>
+ <?php  if($this->sel_semester["IsCountable"]=="2"){?>
+
+
+<fieldset><legend><?php echo $this->translate("Common Courses"); ?></legend>
+   <h2><?php echo $this->translate("Compulsory Courses"); ?></h2>   
+   <table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+				<tr>					
+					<th width="50px"><?php echo $this->translate("Register"); ?>?</th>
+					<th width="200"><?php echo $this->translate("Course Name"); ?></th>
+					
+					<th width="50px"><?php echo $this->translate("Course Code"); ?></th>
+					<th width="100px"><?php echo $this->translate("Course Type"); ?></th>					
+					<th width="50px"><?php echo $this->translate("Credit Hour"); ?></th>
+					<th width="50px"><?php echo $this->translate("Status"); ?></th>					
+				</tr>
+				<?php 
+				if(count($this->common_compulsory_subject)>0){
+				foreach($this->common_compulsory_subject as $common_compulsory){?>
+				<tr>
+					<td align="center">
+					<?php 					
+					if($common_compulsory["register"]!=1){ ?>
+						<input type='hidden' name="idSubject[]" id="idSubject" value='<?php echo $common_compulsory["IdSubject"]; ?>'>
+						<input type='hidden' name="idLandscapeSub[<?php echo $common_compulsory["IdSubject"]; ?>]" value='<?php echo $common_compulsory["IdLandscapeSub"]; ?>'>
+						<input type='hidden' name="block_level[<?php echo $common_compulsory["IdSubject"]; ?>]" value='<?php echo $common_compulsory["block_level"]; ?>'>
+						<input class="chk" type='checkbox' name="x" id="x" disabled='disabled' checked>
+					<?php } ?>
+					</td>
+					<td><?php echo $common_compulsory["BahasaIndonesia"]; ?></td>
+                   
+					<td align="center"><?php echo $common_compulsory["SubCode"]; ?></td>
+					<td align="center"><?php echo $common_compulsory["SubjectType"]; ?></td>
+					<td align="center"><?php echo $common_compulsory["CreditHours"]; ?></td>	
+					<td align="center">
+					<?php if($common_compulsory["type"]==1){?>
+					<?php echo $common_compulsory["status_name"]; ?><br><small><font color="green"><?php echo $common_compulsory["register_status"]; ?></font></small>
+					<?php } //end if type?>
+					</td>					
+				</tr>
+				
+				<?php 
+				if(isset($common_compulsory["child"])){
+					foreach ($common_compulsory["child"] as $key=>$child){ ?>
+					<tr bgcolor="#F7F8E0">
+					<td align="center">		
+					<?php if($child["child_register"]!=1){ ?> 			
+						<input type='hidden' name="idSubject[]" id="idSubject" value='<?php echo $child["IdSubject"]; ?>'>
+						<input type='hidden' name="idLandscapeSub[<?php echo $child["IdSubject"]; ?>]" value='<?php echo $child["IdLandscapeSub"]; ?>'>
+						<input type='hidden' name="block_level[<?php echo $child["IdSubject"]; ?>]" value='<?php echo $child["block_level"]; ?>'>
+						<input class="chk" type='checkbox' name="x" id="x" disabled='disabled' checked>					
+					<?php } ?>
+					</td>
+					<td><?php echo $child["BahasaIndonesia"]; ?></td>
+                    
+					<td align="center"><?php echo $child["SubCode"]; ?></td>
+					<td align="center"><?php echo $child["SubjectType"]; ?></td>
+					<td align="center"><?php echo $child["CreditHours"]; ?></td>	
+					<td align="center"><small><font color="green"><?php echo $child["child_register_status"]; ?></font></small></td>					
+				</tr>
+				<?php 
+							}
+						} //end foreach child
+					}//end parent foreach
+
+				}else{ echo '<tr><td  colspan="6">Tidak ada Matakuliah Ditawarkan</td></tr>';} ?>
+	</table>
+	<br>
+	<h2><?php echo $this->translate("Not Compulsory Courses"); ?></h2> 
+    <table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+				<tr>					
+					<th width="50px"><?php echo $this->translate("Register"); ?>?</th>
+					<th width="200"><?php echo $this->translate("Course Name"); ?></th>
+                  
+					<th width="50px"><?php echo $this->translate("Course Code"); ?></th>
+					<th width="100px"><?php echo $this->translate("Course Type"); ?></th>					
+					<th width="50px"><?php echo $this->translate("Credit Hour"); ?></th>
+					<th width="50px"><?php echo $this->translate("Status"); ?></th>					
+				</tr>
+				<?php 
+				if(count($this->common_notcompulsory_subject)>0){
+				foreach($this->common_notcompulsory_subject as $common_notcompulsory){?>
+				<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+		
+					<td align="center">
+					<?php if($common_notcompulsory["register"]!=1){ ?>
+					<input class="chk" type='checkbox' name="idSubject[]" id="idSubject" value='<?php echo $common_notcompulsory["IdSubject"]; ?>'>
+					<input type='hidden' name="idLandscapeSub[<?php echo $common_notcompulsory["IdSubject"]; ?>]" value='<?php echo $common_notcompulsory["IdLandscapeSub"]; ?>'>
+					<input type='hidden' name="block_level[<?php echo $common_notcompulsory["IdSubject"]; ?>]" value='<?php echo $common_notcompulsory["block_level"]; ?>'>
+					<?php } ?>
+					</td>
+					<td><?php echo $common_notcompulsory["BahasaIndonesia"]; ?></td>
+					<td align="center"><?php echo $common_notcompulsory["SubCode"]; ?></td>
+					<td align="center"><?php echo $common_notcompulsory["SubjectType"]; ?></td>
+					<td align="center"><?php echo $common_notcompulsory["CreditHours"]; ?></td>	
+					<td align="center"><small><font color="green"><?php echo $common_notcompulsory["register_status"]; ?></font></small></td>					
+			   </tr>
+			   
+			   <?php 
+				if(isset($common_notcompulsory["child"])){
+					foreach ($common_notcompulsory["child"] as $key=>$child){ ?>
+			   <tr bgcolor="#F7F8E0">
+					<td align="center">					
+						<input class="chk" type='checkbox' name="idSubject" id="idSubject" value='<?php echo $major_notcompulsory["IdSubject"]; ?>'>
+						<input type='hidden' name="idLandscapeSub[<?php echo $child["IdSubject"]; ?>]" value='<?php echo $child["IdLandscapeSub"]; ?>'>
+						<input type='hidden' name="block_level[<?php echo $child["IdSubject"]; ?>]" value='<?php echo $child["block_level"]; ?>'>
+										
+					</td>
+					<td><?php echo $child["BahasaIndonesia"]; ?></td>
+                    <td><a href="<?php echo $child["IdSubject"]?>">View</a></td>
+					<td align="center"><?php echo $child["SubCode"]; ?></td>
+					<td align="center"><?php echo $child["SubjectType"]; ?></td>
+					<td align="center"><?php echo $child["CreditHours"]; ?></td>	
+					<td align="center"><small><font color="green"><?php echo $child["child_register_status"]; ?></font></small></td>					
+				</tr>							
+				<?php 		} 
+						} 
+					}				
+				} else { echo '<tr><td  colspan="6">Tidak ada  Matakuliah Ditawarkan</td></tr>'; } ?>
+	</table>
+</fieldset>
+
+
+
+
+<?php if($this->landscape["LandscapeType"]==43){?>
+<br>
+<br>
+<fieldset><legend><?php echo $this->translate("Majoring Courses"); ?></legend>
+   <h2><?php echo $this->translate("Compulsory Courses"); ?></h2>
+   <table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+				<tr>					
+					<th width="50px"><?php echo $this->translate("Register"); ?>?</th>
+					<th width="200"><?php echo $this->translate("Course Name"); ?></th>
+					<th width="50px"><?php echo $this->translate("Course Code"); ?></th>
+					<th width="100px"><?php echo $this->translate("Course Type"); ?></th>					
+					<th width="50px"><?php echo $this->translate("Credit Hour"); ?></th>
+					<th width="50px"><?php echo $this->translate("Status"); ?></th>					
+				</tr>
+				<?php 
+				if(count($this->major_compulsory_subject)>0){
+				foreach($this->major_compulsory_subject as $major_compulsory){?>
+				<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+		
+					<td align="center">
+					<?php if($major_compulsory["register"]!=1){ ?>
+					<input type='hidden' name="idSubject[]" id="idSubject" value='<?php echo $major_compulsory["IdSubject"]; ?>'>
+					<input type='hidden' name="idLandscapeSub[<?php echo $major_compulsory["IdSubject"]; ?>]" id="idLandscapeSub" value='<?php echo $major_compulsory["IdLandscapeSub"]; ?>'>
+					<input class="chk" type='checkbox' name="x" id="x" disabled='disabled' checked>
+					<?php } ?>
+					</td>
+					<td><?php echo $major_compulsory["BahasaIndonesia"]; ?></td>
+					<td align="center"><?php echo $major_compulsory["SubCode"]; ?></td>
+					<td align="center"><?php echo $major_compulsory["SubjectType"]; ?></td>
+					<td align="center"><?php echo $major_compulsory["CreditHours"]; ?></td>	
+					<td align="center"><?php echo $major_compulsory["status_name"]; ?><br><small><font color="green"><?php echo $major_compulsory["register_status"]; ?></font></small></td>					
+				</tr>
+				<?php } }else{ echo '<tr><td  colspan="6">Tidak ada  Matakuliah Ditawarkan</td></tr>';} ?>
+	</table>
+	<br>
+	<h2><?php echo $this->translate("Not Compulsory Courses"); ?></h2>
+    <table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+				<tr>					
+					<th width="50px"><?php echo $this->translate("Register"); ?>?</th>
+					<th width="200"><?php echo $this->translate("Course Name"); ?></th>
+					<th width="50px"><?php echo $this->translate("Course Code"); ?></th>
+					<th width="100px"><?php echo $this->translate("Course Type"); ?></th>					
+					<th width="50px"><?php echo $this->translate("Credit Hour"); ?></th>
+					<th width="50px"><?php echo $this->translate("Status"); ?></th>					
+				</tr>
+				<?php 
+				if(count($this->major_notcompulsory_subject)>0){
+				foreach($this->major_notcompulsory_subject as $major_notcompulsory){?>
+				<tr>
+					<td align="center">
+					<?php if($major_notcompulsory["status"]==1 && $major_notcompulsory["register"]!=1){ ?>
+					<input class="chk" type='checkbox' name="idSubject" id="idSubject" value='<?php echo $major_notcompulsory["IdSubject"]; ?>'>
+					<input type='hidden' name="idLandscapeSub[<?php echo $major_notcompulsory["IdSubject"]; ?>]" id="idLandscapeSub" value='<?php echo $major_notcompulsory["IdLandscapeSub"]; ?>'>
+					<?php } ?>
+					</td>
+					<td><?php echo $major_notcompulsory["BahasaIndonesia"]; ?></td>
+					<td align="center"><?php echo $major_notcompulsory["SubCode"]; ?></td>
+					<td align="center"><?php echo $major_notcompulsory["SubjectType"]; ?></td>
+					<td align="center"><?php echo $major_notcompulsory["CreditHours"]; ?></td>	
+					<td align="center"><?php echo $major_notcompulsory["status_name"]; ?><br><small><font color="green"><?php echo $major_notcompulsory["register_status"]; ?></font></small></td>					
+				</tr>
+				<?php } }else{ echo '<tr><td  colspan="6">Tidak ada  Matakuliah Ditawarkan</td></tr>';} ?>
+	</table>
+</fieldset>
+<?php } //end display majoring courses?>
+<br>
+<?php } //end if iscountable?>
+
+
+<fieldset><legend><?php echo $this->translate("Courses Offered"); ?></legend>
+<!--<div class="span-7 buttons">
+   	<a class="positive addLink" href="#" onClick="javascript:openDialog();">Search & Add Course  </a> 
+</div>  
+-->
+<table class="table" width="100%" cellpadding="5" cellspacing="2" border="0" id="addTable">
+   <thead>
+	<tr>					
+		<th width="50px"><?php echo $this->translate("Register"); ?>?</th>
+		<th width="200"><?php echo $this->translate("Course Name"); ?></th>
+		<th width="200"><?php echo $this->translate("Group"); ?></th>
+		<th width="50px"><?php echo $this->translate("Course Code"); ?></th>
+		<th width="100px"><?php echo $this->translate("Course Type"); ?></th>					
+		<th width="50px"><?php echo $this->translate("Credit Hour"); ?></th>
+		<th width="50px"><?php echo $this->translate("Status"); ?></th>					
+	</tr>
+	</thead>
+
+	<tbody>
+	<?php 
+	foreach($this->offeredsubject as $soffered){
+		if($soffered["register"]==2){
+	?>
+		<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+		<td align='center'>
+		<?php 
+		if(isset($soffered["preqstatus"])){
+			if($soffered["preqstatus"]==0){
+		?><img src="/images/icon/red.ico"  style="width:20px;height:20px;" title="Course Prerequisites Not Met">
+		 
+		<?php 
+			}else{
+                if(@$soffered['show'] == 'yes'){?>
+				<input class='chk' type='checkbox' name='idSubject[]' value="<?php echo $soffered["IdSubject"]?>" id="<?php echo $soffered["IdSubject"]; ?>">
+        
+		<?php 
+                }
+                else
+                {
+                ?>
+                   <!--  <input class='chk' type='checkbox' name='idSubject[]' value="<?php echo $soffered["IdSubject"]?>" id="<?php echo $soffered["IdSubject"]; ?>" disabled /> -->
+                   <img src="/images/icon/red.ico"  style="width:20px;height:20px;" title="This subject either fully seated or no group assign">
+		  
+                <?php
+                }
+			}						
+		}else{
+            if(@$soffered['show'] == 'yes'){?>
+        <input class='chk' type='checkbox' name='idSubject[]' value="<?php echo $soffered["IdSubject"]?>" id="<?php echo $soffered["IdSubject"]; ?>">
+        <?php 
+            }
+            else
+            {
+            ?>
+              <!--   <input class='chk' type='checkbox' name='idSubject[]' value="<?php echo $soffered["IdSubject"]?>" id="<?php echo $soffered["IdSubject"]; ?>" disabled />  -->
+               <img src="/images/icon/red.ico"  style="width:20px;height:20px;" title="This subject either fully seated or no group assign">
+		   		
+                <?php
+            }
+		}
+        ?>
+        <input type='hidden' name='idLandscapeSub[<?php echo $soffered["IdSubject"]?>]' value='<?php echo $soffered["IdLandscapeSub"]?>'>
+        <?php 
+        if($this->landscape["LandscapeType"]==44){
+        ?>
+        <input type='hidden' name='block_level[<?php echo $soffered["IdSubject"]?>]' value='<?php echo $soffered["block_level"]?>'>
+        <?php 
+		}
+        ?>
+        </td>
+		<td><?php echo $soffered["BahasaIndonesia"]?></td>
+       <?php if ($this->modul=="1") {?>
+        <td> 
+            <!-- Start radiobutton untuk group subject -->
+            <?php if (isset($soffered['group'])) : ?>
+            <?php $z = 1;?>
+            <?php foreach ($soffered['group'] as $group) { 
+            		if ( $group['minor']==array()) {
+		            		$sch=$group['sch'];?>
+		                <?php if($group['currentStud'] < $group['maxstud']) {?>
+		                 <input type="radio" name="radio_<?php echo $soffered["IdSubject"];?>" value="<?php echo $group['IdCourseTaggingGroup'];?>" id="<?php echo $soffered["IdSubject"].'_'.$z;?>" class="<?php echo $soffered["IdSubject"];?>" disabled  onclick="CekRule()"/> 
+		                <a href="<?php echo $soffered["IdSubject"].'/idgroup/'.$group['IdCourseTaggingGroup'].'/idLandscapeSub/'.$soffered['IdLandscapeSub'];?>" class="scheduleLink"> <?php echo $group['GroupName']?> </a>
+		               	 <br>
+		               	 <?php $i=1;
+		               	 	foreach ($sch as $sc) {
+		               	 		?>
+		               	 		<?php  echo 'Tanggal : '. date('d-m-Y',strtotime($sc['sc_date'])).' s/d '.date('d-m-Y',strtotime($sc['sc_date_end']))?><br> 
+		               	 		 <?php echo 'Waktu   : '.$sc['sc_start_time'].' s/d '.$sc['sc_end_time']?><br>
+		                <?php 	if ($i>2) {
+		                			echo '.......<br>';
+		                			break;
+		                		}
+		                		$i++;
+		            		} ?>
+		                 <?php 
+		                }else { ?>
+		                <img src="/images/icon/red.ico"  style="width:20px;height:20px;" title="This group has been fully seated">
+				   		
+		                <?php }
+                } else {
+						
+						$groupminor=$group['minor'];
+						foreach ($groupminor as $grpminor) {
+							//echo var_dump($group);
+							$sch=$grpminor['sch'];?>
+			                <?php if($grpminor['currentStud'] < $grpminor['maxstud']) {?>
+			                 <input type="radio" name="radiominor_<?php echo $soffered["IdSubject"];?>" value="<?php echo $grpminor['IdCourseTaggingGroupMinor'];?>" id="<?php echo $soffered["IdSubject"].'_'.$z;?>" class="<?php echo $soffered["IdSubject"];?>" disabled /> 
+			                <a href="<?php echo $soffered["IdSubject"].'/idgroupminor/'.$grpminor['IdCourseTaggingGroupMinor'].'/idLandscapeSub/'.$soffered['IdLandscapeSub'];?>" class="scheduleLink"> <?php echo $grpminor['GroupName']?> </a>
+			               	 <br>
+			               	 <?php foreach ($sch as $sc) {?>
+			               	 		<?php  echo 'Tanggal : '. date('d-m-Y',strtotime($sc['sc_date'])).' s/d '.date('d-m-Y',strtotime($sc['sc_date_end']))?><br> 
+			               	 		 <?php echo 'Waktu   : '.$sc['sc_start_time'].' s/d '.$sc['sc_end_time']?><br>
+			                <?php } 
+							?>
+			                 <?php 
+			                }else { ?>
+			                <img src="/images/icon/red.ico"  style="width:20px;height:20px;" title="This group has been fully seated">
+					   		 <?php if ($sch) { foreach ($sch as $sc) {?>
+			               	 		<?php  echo 'Tanggal : '. date('d-m-Y',strtotime($sc['sc_date'])).' s/d '.date('d-m-Y',strtotime($sc['sc_date_end']))?><br> 
+			               	 		 <?php echo 'Waktu   : '.$sc['sc_start_time'].' s/d '.$sc['sc_end_time']?><br>
+			                <?php }
+			                } ?>
+			                <?php }
+		                }
+				};?></li>
+                
+                
+
+                <!--<div style="float:right">
+                    <a href="<?php echo $soffered["IdSubject"].'/idgroup/'.$group['IdCourseTaggingGroup'];?>" class="scheduleLink">View Schedule</a>
+                </div><br />-->
+
+                 <!--<div style="float:right">
+                    <a href="<?php echo $soffered["IdSubject"].'/idgroup/'.$group['IdCourseTaggingGroup'].'/idLandscapeSub/'.$soffered['IdLandscapeSub'];?>" class="scheduleLink">View Schedule</a>
+                </div><br />-->
+
+            <?php $z++;?>
+            <?php }//end forech; ?>
+            <?php else :?>
+           		 <img src="/images/icon/red.ico"  style="width:20px;height:20px;" title="No group assign for this subject">
+		    
+            <?php endif;?>
+            
+        </td>    
+        <?php } else {?>
+         <td> 
+            <!-- Start radiobutton untuk group subject -->
+            <?php if (isset($soffered['group'])) : ?>
+            <?php $z = 1;?>
+            <?php foreach ($soffered['group'] as $group) { 
+            			?>
+                <?php if($group['currentStud'] < $group['maxstud']) {?>
+                <li><input type="radio" name="radio_<?php echo $soffered["IdSubject"];?>" value="<?php echo $group['IdCourseTaggingGroup'];?>" id="<?php echo $soffered["IdSubject"].'_'.$z;?>" class="<?php echo $soffered["IdSubject"];?>" disabled  onclick="CekRule()"/> 
+                <a href="<?php echo $soffered["IdSubject"].'/idgroup/'.$group['IdCourseTaggingGroup'].'/idLandscapeSub/'.$soffered['IdLandscapeSub'];?>" class="scheduleLink"><?php if ($group['Owner']!='') echo $group['GroupName'].' ('.$group['Owner'].')'; else echo $group['GroupName'];?> </a>
+               	  <?php 
+                }else { ?>
+                <img src="/images/icon/red.ico"  style="width:20px;height:20px;" title="This group has been fully seated">
+		   		
+                <?php };?></li>
+                
+                
+
+                <!--<div style="float:right">
+                    <a href="<?php echo $soffered["IdSubject"].'/idgroup/'.$group['IdCourseTaggingGroup'];?>" class="scheduleLink">View Schedule</a>
+                </div><br />-->
+
+                 <!--<div style="float:right">
+                    <a href="<?php echo $soffered["IdSubject"].'/idgroup/'.$group['IdCourseTaggingGroup'].'/idLandscapeSub/'.$soffered['IdLandscapeSub'];?>" class="scheduleLink">View Schedule</a>
+                </div><br />-->
+
+            <?php $z++;?>
+            <?php }//end forech; ?>
+            <?php else :?>
+           		 <img src="/images/icon/red.ico"  style="width:20px;height:20px;" title="No group assign for this subject">
+		    
+            <?php endif;?>
+            </ol>
+        </td>  
+        <?php }?>
+        <!-- End radiobutton untuk group subject -->
+        <td align='center'><?php echo $soffered["SubCode"]?></td>
+		<td align='center'><?php echo $soffered["SubjectType"]?></td>
+		<td align='center'><?php echo $soffered["CreditHours"]?></td>
+		<td align='center'><?php echo $soffered["register_status"]?></td>
+	 	</tr>
+	 <?php 
+		}
+	}
+	 ?>
+	</tbody>				
+</table>	
+</fieldset>  
+
+
+<br>
+
+<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+<tr><td align='center'><input type="button" name="button" value=<?php echo $this->translate("Register"); ?> onclick="validate();"></td></tr>
+</table>
+</form>
+		<?php } ?>
+	<?php } //payment ?>
+<?php } //dah select semester?>
+
+
+</div>
+
+
+
+<div id="dialog-search-course" title="<?php echo $this->translate("Search & Add Course"); ?>">
+<fieldset><legend><?php echo $this->translate("Search Options"); ?></legend>
+<table>
+	<tr>
+	    <td><?php echo $this->translate("Course Code"); ?></td>
+		<td>: 
+		<input type="text" name="course_code" id="course_code" value=""> 
+		<input type="button" name="searchButton" onclick="ajaxSearchCourse();" value=<?php echo $this->translate("Search"); ?>>
+		</td>
+	</tr>
+</table>
+</fieldset>
+<br>
+<table class="table" width="100%" cellpadding="5" cellspacing="2" border="0" id='result' >
+<thead>
+	<tr>
+		<th width="200"><?php echo $this->translate("Course Name"); ?></th>
+		<th width="50px"><?php echo $this->translate("Course Code"); ?></th>
+		<th width="100px"><?php echo $this->translate("Course Type"); ?></th>					
+		<th width="50px"><?php echo $this->translate("Credit Hour"); ?></th>
+		<th width="50px"><?php echo $this->translate("Registration Status"); ?></th>	
+		<th width="50px"><?php echo $this->translate("Add"); ?>?</th>					
+	</tr>
+	</thead>	
+	<tbody>
+	
+	</tbody>
+</table>
+</div>
+
+<div id="dialog-approval" title="Approval by Confirmation Code sent to Mobile Phone">
+<h2>Daftar Matakuliah</h2>
+<table name="approval_tbl" id="approval_tbl" class="table">
+</table>
+<br>
+<br>
+<table width="100%">
+<?php $hp=$this->student['appl_phone_hp'];
+	  if (substr($this->student['appl_phone_hp'],0,1)=="8") $hp='62'.$this->student['appl_phone_hp'];
+	  if (substr($this->student['appl_phone_hp'],0,1)=="0") $hp='62'.substr($this->student['appl_phone_hp'],1);
+  ?>
+ <input type="hidden" id="diaghp" name="diaghp" value="<?php echo $hp?>">
+<tr><td colspan="3"><span id="demo"></span><?php echo ' '.substr($hp,0,strlen($hp)-4)."xxxx". ' Jika nomor Handphone salah silahkan hubungi Admin Fakultas'?></td></tr>
+<tr><td width="40%"><?php echo $this->translate('Masukan Kode Konfirmasi (4 kali gagal kode dibatalkan)')?></td><td width="5px">:</td><td><input type="text" size="6" name="ConfirmationCode" id="ConfirmationCode" onchange="checkconfirm()"><font color="red"><span id="confirmmsg"></span></font></td></tr>
+</table>
+</div>

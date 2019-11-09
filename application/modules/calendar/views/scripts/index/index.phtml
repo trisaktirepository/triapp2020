@@ -1,0 +1,265 @@
+<?php $identity = Zend_Auth::getInstance()->getIdentity(); ?>
+<?php $acl = Zend_Registry::get('acl'); ?>
+
+<script type="text/javascript">
+<?php $this->headScript()->captureStart() ?>
+
+$.scoutrank = {
+    groups: [
+<?php 
+    $group_size = count($this->groups); 
+    $i = 0;
+?>
+<?php foreach ($this->groups as $group): ?>
+<?php $i++; ?>
+"/calendar/event/get/format/json/groupid/<?= $group['id']; ?>"<?= $group_size == $i ? "" : ","; ?>    
+<?php endforeach; ?>
+            ],
+    dialog: {
+        buttons: {
+            ok: function() {
+                $(this).dialog("close");
+            },
+            cancel: function() {
+                $(this).dialog("close");
+            },
+            edit: function() {
+                editEvent(this);
+            },
+            update: function() {
+                updateEvent(this);
+                
+            },
+            add: function() {
+                addEvent(this);
+                
+            },
+            'delete': function() {
+                deleteConfirm(this);
+            },
+            deleteevent: function() {
+                var id = $('#eventbox').data('event_id');
+                deleteEvent(id);
+            }
+        }
+    }
+};
+
+
+$(function(){
+
+    $('#eventbox').dialog({
+        autoOpen: false,
+        width: 700,
+        position: ['center', 100],
+        beforeClose: function() {
+            $(this).empty();
+        },
+        modal: true
+    });
+
+    $('#open-addevent').click(function(e){
+        e.preventDefault();
+        openAddBox();
+    });
+
+    $("#fullpage-calendar").fullCalendar({
+        header: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'agendaDay,agendaWeek,month'
+	},
+        eventClick: function( event, jsEvent, view ) {
+            viewEvent(event);
+        },
+        theme: true,
+        eventSources: getSources(),
+        eventDrop: function(event, dayDelta, minuteDelta, allday, revertFunc) {
+            data = { event_id: event.id, daydelta: dayDelta, minutedelta: minuteDelta, type: "move"};
+            $.post('/calendar/event/change', data);
+
+        },
+        eventResize: function( event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view ) {
+            data = { event_id: event.id, daydelta: dayDelta, minutedelta: minuteDelta, type: "resize"};
+            $.post('/calendar/event/change', data);
+        },
+
+        eventMouseover: function( event, jsEvent, view ) {
+            $('#here').html(event.description);
+        }
+        <?php if ($acl->isAllowed($identity['role'], 'calendar_index', 'change')) : ?>
+        ,
+        dayClick: function(date, allDay, jsEvent, view) {
+            openAddBox(date);
+        },
+        editable: true
+        <?php endif; ?>
+
+    });
+
+    $('.group-calendar-checkbox').change(function(){
+        var $this = $(this);
+        feed_state = $this.is(':checked');
+        group_id = $this.attr('id').replace("group-calendar-", "");
+        toggleGroup(group_id, feed_state);
+    })
+});
+
+// Return the json urls for the group calendars
+function getSources() {
+
+    return $.scoutrank.groups;
+
+}
+
+function openAddBox(date) {
+    var $eventbox = $('#eventbox');
+    $eventbox.dialog('option', 'title', "Add an event");
+    $('#eventbox').load('/calendar/event/add/format/html/date/' + $.fullCalendar.formatDate(date, 'yyyy-MM-dd'));
+    $eventbox.dialog('option', 'buttons',  {"Cancel": $.scoutrank.dialog.buttons.cancel, "Add" : $.scoutrank.dialog.buttons.add});
+    $eventbox.find('#title').focus();
+    $eventbox.dialog('open');
+
+}
+
+function toggleGroup(group_id, feed_state) {
+
+    if (feed_state) {
+        $('#fullpage-calendar').fullCalendar('addEventSource', $.scoutrank.groups[group_id]);
+    } else {
+        $('#fullpage-calendar').fullCalendar('removeEventSource', $.scoutrank.groups[group_id]);
+    }
+
+}
+
+function viewEvent(event) {
+    var $eventbox = $('#eventbox');
+    $eventbox.data('event_id', event.id);
+    $eventbox.data('event', event);
+    $eventbox.dialog('option', 'title', event.title);
+
+    $eventbox.load('/calendar/event/detail/format/html/id/' + event.id)
+             .dialog('option', 'buttons', {
+                 "OK" : $.scoutrank.dialog.buttons.ok
+                <?php echo $acl->isAllowed($identity['role'], 'calendar_index', 'change') ? ',"Edit": $.scoutrank.dialog.buttons.edit,"Delete": $.scoutrank.dialog.buttons.delete' : NULL ;?>
+             })
+             .dialog('open');
+}
+
+function updateEvent(dialogbox) {
+    var $dialogbox = $(dialogbox);
+    $('#updateevent').ajaxSubmit({
+            dataType: 'json',
+            success: function(data){
+                $dialogbox.dialog('close');
+                setTopMessage(data.message);
+                updateEventData($dialogbox.data('event'), data)
+            }
+    });
+}
+
+function editEvent(dialogbox) {
+     var $dialogbox = $(dialogbox);
+     $dialogbox.load('/calendar/event/edit/format/html/id/' + $dialogbox.data('event_id'));
+     $dialogbox.dialog('option', 'buttons',  {"Cancel": $.scoutrank.dialog.buttons.cancel, "Update": $.scoutrank.dialog.buttons.update});
+     $('updateevent').ajaxForm();
+}
+
+function deleteConfirm(dialogbox) {
+    var $dialogbox = $(dialogbox);
+    $('#eventbox').html("<h1>Are you sure you want to delete this event?");
+    $dialogbox.dialog('option', 'title', "Confirm Delete")
+              .dialog('option', 'buttons', {"Yes": $.scoutrank.dialog.buttons.deleteevent, "No": $.scoutrank.dialog.buttons.cancel});
+}
+
+function deleteEvent(event_id) {
+    $('#eventbox').dialog('close');
+    
+    $.post(
+        '/calendar/event/delete/format/json',
+        {id: event_id},
+        function(data) {
+            // Remove from calendar?            
+            setTopMessage(data.message);
+            if (data.result == 1) {
+                $('#fullpage-calendar').fullCalendar('removeEvents', event_id);
+            }
+
+        }
+    );
+}
+
+function addEvent(dialogbox) {
+    var $dialogbox = $(dialogbox);    
+    
+    $('#addevent').ajaxSubmit({
+            dataType: 'json',
+            success: function(data){
+                $dialogbox.dialog('close');
+                setTopMessage(data.message);
+                event = {};
+                event.id = data.id;
+                event.title = data.title;
+                event.start = $.fullCalendar.parseDate(data.start);
+                $('#fullpage-calendar').fullCalendar('renderEvent', event);
+            }
+
+    });
+
+}
+
+function updateEventData(event, data) {
+
+    if (typeof data.event.title != 'undefined') {
+        event.title = data.event.title;
+    }
+
+    if (typeof data.event.start != 'undefined') {
+        event.start = $.fullCalendar.parseDate(data.event.start);
+    }
+
+    if (typeof data.event.end != 'undefined') {
+        event.end = $.fullCalendar.parseDate(data.event.end);
+    }
+
+
+    $('#fullpage-calendar').fullCalendar('updateEvent', event);
+
+}
+
+
+<?php $this->headScript()->captureEnd() ?>
+</script>
+
+<div id="fullpage-calendar"></div>
+<div id="fullpage-calendar-sidebar">
+<?php if ($acl->isAllowed($identity['role'], 'calendar_index', 'add')) : ?>
+    <div id="fullpage-calendar-addevent">
+        <button id="open-addevent" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Add Event</button>
+    </div>
+<?php endif; ?>
+    <div id="fullpage-calendar-groups">
+
+    <?php if ($this->groups): ?>
+    <h2>Groups</h2>
+    <?php $level = 0; ?>
+    <ul class="level0">
+        <?php foreach($this->groups as $key => $group): ?>
+        <?php
+            if ($level > $group['level']) {
+                $level--;
+                print "</ul>\n";
+            } elseif ($level < $group['level']) {
+                $level++;
+                print '<ul class="level' . $group['level'] . '">' . "\n";
+            }
+        ?>
+        <li><label for="group-calendar-<?= $key + 1; ?>" class="<?= $group['style_id']; ?> ui-corner-all"><input id="group-calendar-<?= $key + 1; ?>" type="checkbox" name="<?= $this->escape(strtolower($group['group_name'])); ?>" checked="checked" class="group-calendar-checkbox" /><?= $this->escape($group['group_name']); ?></label></li>
+        <?php endforeach; ?>
+        <?php echo str_repeat("</ul>\n", $level); ?>
+    </ul>
+    </div>
+    <?php endif; ?>
+</div>
+<div id="event-details"></div>
+<div id="eventbox"></div>

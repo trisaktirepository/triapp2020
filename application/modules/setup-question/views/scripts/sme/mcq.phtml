@@ -1,0 +1,195 @@
+
+
+<!--IF REQUIRE TRANSLATED LANGUAGE ENABLE TAB PANE-->
+
+<?php if($this->course["total_language"]>1){?>
+
+<div class="tab-pane" id="tabPane1">
+
+<script type="text/javascript">
+tp1 = new WebFXTabPane( document.getElementById( "tabPane1" ) );
+</script>
+
+	<div class="tab-page" id="tabPage1">
+		<h2 class="tab">Language 1</h2>
+		
+		<script type="text/javascript">tp1.addTabPage( document.getElementById( "tabPage1" ) );</script>
+		
+		 <table width="95%" cellspacing="1" cellpadding="5" id="mtable"  align="center">
+  <tr bgcolor="#D7EBFF"> 
+    <td bgcolor="#D7EBFF">Question</td>
+    <td><textarea name="question1" cols="80"></textarea></td>
+  </tr>
+   <tr> 
+    <td colspan="2" class="thd">Answer</td>
+  </tr>
+  <tr bgcolor="#FFFFFF"> 
+    <td>a)</td>
+    <td> 
+      <textarea name="answer11" cols="80" ></textarea> <p> 
+        <input type="radio" name="correct1" value="1">
+        Accept as correct</p></td>
+  </tr>
+ 
+  <tr bgcolor="#D7EBFF"> 
+    <td>b)</td>
+    <td> 
+      <textarea name="answer12" cols="80"></textarea> <p> 
+        <input type="radio" name="correct1" value="2">
+        Accept as correct</p></td>
+  </tr>
+ 
+  
+ 
+  <tr bgcolor="#FFFFFF"> 
+    <td>c)</td>
+    <td> 
+      <textarea name="answer13" cols="80"></textarea> <p> 
+        <input type="radio" name="correct1" value="3">
+        Accept as correct</p></td>
+  </tr>
+ 
+  <tr bgcolor="#D7EBFF"> 
+    <td>d)</td>
+    <td> 
+      <p> 
+        <textarea name="answer14" cols="80"></textarea>
+      </p>
+      <p> 
+        <input type="radio" name="correct1" value="4">
+        Accept as correct</p></td>
+  </tr>
+  
+ 
+</table>
+		
+	</div>
+
+	
+	<div class="tab-page" id="tabPage2">
+		<h2 class="tab">Language 2</h2>
+		
+		<script type="text/javascript">tp1.addTabPage( document.getElementById( "tabPage2" ) );</script>
+		
+		 <table width="95%" cellspacing="1" cellpadding="5" id="mtable"  align="center">
+	  
+  <tr bgcolor="#D7EBFF"> 
+    <td bgcolor="#D7EBFF">Question</td>
+    <td><textarea name="question2" cols="80"></textarea></td>
+  </tr>
+   <tr> 
+    <td colspan="2" class="thd">Answer</td>
+  </tr>
+  <tr bgcolor="#FFFFFF"> 
+    <td>a)</td>
+    <td> 
+      <textarea name="answer21" cols="80" ></textarea> <p> 
+        <input type="radio" name="correct2" value="1">
+        Accept as correct</p></td>
+  </tr>
+ 
+  <tr bgcolor="#D7EBFF"> 
+    <td>b)</td>
+    <td> 
+      <textarea name="answer22" cols="80"></textarea> <p> 
+        <input type="radio" name="correct2" value="2">
+        Accept as correct</p></td>
+  </tr>
+  
+  
+ 
+  <tr bgcolor="#FFFFFF"> 
+    <td>c)</td>
+    <td> 
+      <textarea name="answer23" cols="80"></textarea> <p> 
+        <input type="radio" name="correct2" value="3">
+        Accept as correct</p></td>
+  </tr>
+ 
+  <tr bgcolor="#D7EBFF"> 
+    <td>d)</td>
+    <td> 
+      <p> 
+        <textarea name="answer24" cols="80"></textarea>
+      </p>
+      <p> 
+        <input type="radio" name="correct2" value="4">
+        Accept as correct</p></td>
+  </tr>
+ 
+ 
+</table>
+	</div>
+</div> 
+  
+   <script type="text/javascript">
+    CKEDITOR.replace( 'question1',{ filebrowserBrowseUrl: '<?php echo $this->baseUrl(); ?>/kfm/',  height: 80, width: 800 } );
+    CKEDITOR.replace( 'question2',{ filebrowserBrowseUrl: '<?php echo $this->baseUrl(); ?>/kfm/',  height: 80, width: 800 } );
+    CKEDITOR.replace( 'answer11',{ filebrowserBrowseUrl: '<?php echo $this->baseUrl(); ?>/kfm/',  height: 80, width: 800 } );
+    CKEDITOR.replace( 'answer12',{ filebrowserBrowseUrl: '<?php echo $this->baseUrl(); ?>/kfm/',  height: 80, width: 800 } );
+    CKEDITOR.replace( 'answer13',{ filebrowserBrowseUrl: '<?php echo $this->baseUrl(); ?>/kfm/',  height: 80, width: 800 } );
+    CKEDITOR.replace( 'answer14',{ filebrowserBrowseUrl: '<?php echo $this->baseUrl(); ?>/kfm/',  height: 80, width: 800 } );
+    CKEDITOR.replace( 'answer21',{ filebrowserBrowseUrl: '<?php echo $this->baseUrl(); ?>/kfm/',  height: 80, width: 800 } );
+    CKEDITOR.replace( 'answer22',{ filebrowserBrowseUrl: '<?php echo $this->baseUrl(); ?>/kfm/',  height: 80, width: 800 } );
+    CKEDITOR.replace( 'answer23',{ filebrowserBrowseUrl: '<?php echo $this->baseUrl(); ?>/kfm/',  height: 80, width: 800 } );
+    CKEDITOR.replace( 'answer24',{ filebrowserBrowseUrl: '<?php echo $this->baseUrl(); ?>/kfm/',  height: 80, width: 800 } );  
+    </script>
+  
+ <? }else{ ?> 
+ 
+  <table width="95%" cellspacing="1" cellpadding="5" id="mtable"  align="center">
+  <tr bgcolor="#D7EBFF"> 
+    <td bgcolor="#D7EBFF">Question</td>
+    <td><textarea name="question1" cols="80"></textarea></td>
+  </tr>
+   <tr> 
+    <td colspan="2" class="thd">Answer</td>
+  </tr>
+  <tr bgcolor="#FFFFFF"> 
+    <td>a)</td>
+    <td> 
+      <textarea name="answer11" cols="80" ></textarea> <p> 
+        <input type="radio" name="correct1" value="1">
+        Accept as correct</p></td>
+  </tr>
+ 
+  <tr bgcolor="#D7EBFF"> 
+    <td>b)</td>
+    <td> 
+      <textarea name="answer12" cols="80"></textarea> <p> 
+        <input type="radio" name="correct1" value="2">
+        Accept as correct</p></td>
+  </tr>
+ 
+  
+ 
+  <tr bgcolor="#FFFFFF"> 
+    <td>c)</td>
+    <td> 
+      <textarea name="answer13" cols="80"></textarea> <p> 
+        <input type="radio" name="correct1" value="3">
+        Accept as correct</p></td>
+  </tr>
+ 
+  <tr bgcolor="#D7EBFF"> 
+    <td>d)</td>
+    <td> 
+      <p> 
+        <textarea name="answer14" cols="80"></textarea>
+      </p>
+      <p> 
+        <input type="radio" name="correct1" value="4">
+        Accept as correct</p></td>
+  </tr>
+ 
+</table>
+
+    <script type="text/javascript">
+    CKEDITOR.replace( 'question1',{ filebrowserBrowseUrl: '<?php echo $this->baseUrl(); ?>/kfm/',  height: 80, width: 800 } );
+    CKEDITOR.replace( 'answer11',{ filebrowserBrowseUrl: '<?php echo $this->baseUrl(); ?>/kfm/',  height: 80, width: 800 } );
+    CKEDITOR.replace( 'answer12',{ filebrowserBrowseUrl: '<?php echo $this->baseUrl(); ?>/kfm/',  height: 80, width: 800 } );
+    CKEDITOR.replace( 'answer13',{ filebrowserBrowseUrl: '<?php echo $this->baseUrl(); ?>/kfm/',  height: 80, width: 800 } );
+    CKEDITOR.replace( 'answer14',{ filebrowserBrowseUrl: '<?php echo $this->baseUrl(); ?>/kfm/',  height: 80, width: 800 } );
+    </script>
+ 
+ <? } ?>

@@ -1,0 +1,145 @@
+<script type="text/javascript">
+function del(){
+	var id = $('input[name=course_id]:checked').val();
+
+	if(!id){
+		alert('Please select any course first');
+	}else{
+		if(confirm('Are you sure to delete course this course from this Academic landscape?')){
+			window.location = "<?php echo $this->url(array('module'=>'anr-setup','controller'=>'academic-landscape', 'action'=>'delete-course', 'program-id'=>$this->program_id,'aid'=>$this->id),'default',true); ?>/id/"+id;
+		}
+	}
+}
+
+function edit(){
+	var id = $('input[name=course_id]:checked').val();
+
+	if(!id){
+		alert('Please select any course first');
+	}else{
+		window.location="<?php echo $this->url(array('module'=>'anr-setup','controller'=>'academic-landscape', 'action'=>'edit-course', 'program-id'=>$this->program_id,'aid'=>$this->id),'default',true);?>/id/"+id;
+	}
+}
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'anr-setup', 'controller' => 'academic-landscape', 'action' => 'add-course', 'program-id'=>$this->program_id, 'id'=>$this->id),'default',true); ?>">
+					<span class='add'></span>
+					Add
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:edit()">
+					<span class='edit'></span>
+					Edit
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:del()">
+					<span class='delete'></span>
+					Delete
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'anr-setup', 'controller' => 'academic-landscape', 'action' => 'view', 'program-id'=>$this->program_id),'default',true); ?>">
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<br />
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<br />
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<br />
+<?}?>
+
+
+<div width="500px">
+	<table class="table2" width="500px">
+		<tr>
+			<th width="150px">Program Name</th>
+			<td><?php echo $this->program['main_name']; ?></td>
+		</tr>
+		<tr>
+			<th>Program Code</th>
+			<td><?php echo $this->program['code']; ?></td>
+		</tr>
+		<tr>
+			<th>Market</th>
+			<td><?php echo $this->program['market']; ?></td>
+		</tr>
+	</table>
+</div>
+<br />
+<fieldset style="width:300px">
+	<legend>Program Requirement Detail</legend>
+	<div width="300px">
+		<table class="" width="300px">
+			<?php foreach($this->programRequirement_data as $data){?>
+			<tr>
+				<th width="180px"><?php echo $data['course_type_name']; ?> courses</th>
+				<td>:</td>
+				<td><?php echo $data['credit_hour']; ?> credit hours</td>
+			</tr>
+			<?php }?>
+		</table>
+	</div>
+</fieldset>
+
+<br />
+<table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+	<tr>
+		<th width="25px">&nbsp;</th>
+		<th width="200">Course Name</th>
+		<th width="50px">Course Code</th>
+		<th width="50px">Course Level</th>
+		<th width="100px">Course Type</th>
+		<th width="50px">Credit Hour</th>
+		<th width="50px">is Transferable</th>
+	</tr>
+	
+	<?php 
+	if(isset($this->courses)){
+		
+		$i=0;
+		foreach ($this->courses as $course): 
+		?>
+		<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+			<td>
+				<input type="radio" name="course_id" value="<?php echo $course['id']; ?>">
+			</td>
+			<td><?php echo $course['course_name']; ?></td>
+			<td align="center"><?php echo $course['course_code']; ?></td>
+			<td align="center"><?php echo $course['level']; ?></td>
+			<td align="center"><?php echo $course['course_type']; ?></td>
+			<td align="center"><?php echo $course['course_credit_hour']; ?></td>
+			<td align="center"><?php echo $course['is_transferable']==1?"Yes":"No"; ?></td>
+		</tr>
+		<?php 
+		$i++;
+		endforeach; 
+	}
+	?>
+</table>

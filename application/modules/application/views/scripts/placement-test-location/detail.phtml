@@ -1,0 +1,212 @@
+<script type="text/javascript">
+
+$(function() {
+    $( "#dialog_room" ).dialog({
+        'autoOpen':false,
+        'width': 650       
+    });
+});
+
+
+function back(){
+	window.location="<?php echo $this->url(array('module'=>'application','controller'=>'placement-test-location','action'=>'index'), 'default', true);?>";
+}
+function editData(){
+	window.location="<?php echo $this->url(array('module'=>'application','controller'=>'placement-test-location', 'action'=>'edit', 'id'=>$this->id),'default',true);?>";
+}
+function deleteData(){
+	if( confirm("<?php echo $this->translate("Are you sure to delete?"); ?>") ){
+		window.location = "<?php echo $this->url(array('module'=>'application','controller'=>'placement-test-location', 'action'=>'delete', 'id'=>$this->id),'default',true); ?>";
+	}
+}
+function addRoom(){
+	$('#dialog_room').html("");
+	$('#dialog_room').load("<?php echo $this->url(array('module'=>'application','controller'=>'placement-test-location', 'action'=>'add-room', 'location_id'=>$this->id),'default',true); ?>");
+	
+	var execute = function() {
+		$('#placementTestRoom').submit();
+	}
+	
+	var cancel = function() {
+		$( "#dialog_room" ).dialog('close');
+	}
+	
+	var dialogOpts = {
+		buttons: {
+			"Cancel": cancel,
+			"Add": execute
+		}
+	};
+	
+	$("#dialog_room").dialog(dialogOpts);
+	$( "#dialog_room" ).dialog('open');
+
+	return false;
+}
+
+function editRoom(id){
+	$('#dialog_room').html("");
+	$('#dialog_room').load("<?php echo $this->url(array('module'=>'application','controller'=>'placement-test-location', 'action'=>'edit-room'),'default',true); ?>/id/"+id);
+	
+	var execute = function() {
+		$('#placementTestRoom').submit();
+	}
+	
+	var cancel = function() {
+		$( "#dialog_room" ).dialog('close');
+	}
+	
+	var dialogOpts = {
+		buttons: {
+			"Cancel": cancel,
+			"Save": execute
+		}
+	};
+	
+	$("#dialog_room").dialog(dialogOpts);
+	$( "#dialog_room" ).dialog('open');
+
+	return false;
+}
+
+function deleteRoom(id){
+	if( confirm("<?php echo $this->translate("Are you sure to delete?"); ?>") ){
+		window.location = "<?php echo $this->url(array('module'=>'application','controller'=>'placement-test-location', 'action'=>'delete-room'),'default',true); ?>/id/"+id;
+	}
+}
+</script>
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onClick="editData();" >
+					<span class='edit'></span>
+					Edit
+				</a>
+			</li>
+			<li>
+				<a href="#" onClick="deleteData();" >
+					<span class='delete'></span>
+					Delete
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>							
+					<a href="#" onClick="back()">
+					<span class='back'></span>Back</a>				
+			</li>
+		</ul>
+	</div>
+</div>
+<br>
+
+<div width="500px">
+	
+	<table class="table2" width="100%" cellpadding="3" cellspacing="1">
+		<tr>
+			<th width="150px"><? echo $this->translate("Location Name"); ?></th>
+			<td><?php echo $this->data['al_location_name']; ?></td>
+		</tr>
+		<tr>
+			<th width="150px"><? echo $this->translate("Code"); ?></th>
+			<td><?php echo $this->data['al_location_code']; ?></td>
+		</tr>
+		<tr>
+			<th width="150px"><? echo $this->translate("Address"); ?></th>
+			<td>
+				<?php echo $this->data['al_address1']!=null?$this->data['al_address1']."<br />":""; ?>
+				<?php echo $this->data['al_address2']!=null?$this->data['al_address2']."<br />":""; ?>
+				<?php echo $this->data['al_city_name']!=null?$this->data['al_city_name']."<br />":""; ?>
+				<?php echo $this->data['al_state_name']!=null?$this->data['al_state_name']."<br />":""; ?>
+				<?php echo $this->data['al_country_name']!=null?$this->data['al_country_name']."<br />":""; ?>
+			</td>
+		</tr>
+		<tr>
+			<th width="150px"><? echo $this->translate("Contact Person"); ?></th>
+			<td><?php echo $this->data['al_contact_person']; ?></td>
+		</tr>
+		<tr>
+			<th width="150px"><? echo $this->translate("Phone"); ?></th>
+			<td><?php echo $this->data['al_phone']; ?></td>
+		</tr>
+		<tr>
+			<th width="150px"><? echo $this->translate("Last Update By"); ?></th>
+			<td><?php echo $this->data['al_update_by_name']; ?></td>
+		</tr>
+		<tr>
+			<th width="150px"><? echo $this->translate("Last Update Date"); ?></th>
+			<td><?php echo date('d-M-y', strtotime($this->data['al_update_date'])); ?></td>
+		</tr>
+	</table>	
+</div>
+
+<br />
+<h1><?php echo $this->translate("Venue / Room"); ?></h1>
+<div class="span-7 buttons">
+    <a onclick="javascript:addRoom();" href="#" class="positive addLink">
+    	<?php echo $this->translate("Add Venue / Room"); ?>       
+    </a>
+</div>
+
+<table width="100%" class="table">
+	<tr>
+		<th><?php echo $this->translate("Name");?></th>
+		<th><?php echo $this->translate("Name Short");?></th>
+		<th><?php echo $this->translate("Code");?></th>
+		<th><?php echo $this->translate("Building");?></th>
+		<th width="80px"><?php echo $this->translate("Capacity Tutorial");?></th>
+		<th width="80px"><?php echo $this->translate("Capacity Exam");?></th>
+		<th><?php echo $this->translate("Test Type");?></th>
+		<th width="80px"><?php echo $this->translate("Room Filling Priority");?></th>
+		<th>&nbsp;</th>
+	</tr>
+	<?php
+	if($this->roomList!=null){
+	$i=0;	
+	foreach ($this->roomList as $room):?>
+	<tr <?php echo $i%2==0?'class="shade"':''; ?>>
+		<td valign="top"><?php echo $room['av_room_name']; ?></td>
+		<td valign="top"><?php echo $room['av_room_name_short']; ?></td>
+		<td valign="top" align="center"><?php echo $room['av_room_code']; ?></td>
+		<td valign="top"><?php echo $room['av_building']; ?></td>
+		<td valign="top" align="center"><?php echo $room['av_tutorial_capacity']; ?></td>
+		<td valign="top" align="center"><?php echo $room['av_exam_capacity']; ?></td>
+		<td align="left">
+			<?php
+			if($room['type']){
+				echo "<ul>"; 
+				foreach ($room['type'] as $type) {
+					echo "<li>";
+					echo $type['test_name'];
+					echo "</li>";
+				}
+				echo "</ul>";
+			}
+			?>
+		</td>
+		<td align="center"><?php echo $room['av_seq']; ?></td>
+		<td width="100px">
+			<a onclick="return editRoom('<?php echo $room['av_id']; ?>')" href="#" class="editLink">Edit</a>
+			<a onclick="deleteRoom('<?php echo $room['av_id']; ?>')" href="#" class="delLink2">Delete</a>
+		</td>
+	</tr>
+	<?php
+	$i++;
+	endforeach;
+	}else{
+	?>
+	<tr>
+		<td colspan="8" align="center"><?php echo $this->translate("There are no room in this location"); ?></td>
+	</tr>
+	<?php 	
+	}
+	?>
+</table>
+
+<div id="dialog_room">
+</div>
+
+

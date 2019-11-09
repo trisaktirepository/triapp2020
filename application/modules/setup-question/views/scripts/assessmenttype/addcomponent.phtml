@@ -1,0 +1,26 @@
+<table width="90%" border="0" cellspacing="1" cellpadding="1">
+  <tr> 
+    <td height="69"><strong> 
+      <h1><?php echo $this->title?></h1>
+      </strong>
+      
+   
+
+   <form id="myform" method="POST" action="<?php echo $this->url(array('module'=>'setup-question','controller'=> 'assessmenttype','action'=>'addcomponent')); ?>">
+  <table id="mtable"   width="100%" cellpadding="5" cellspacing="1" >
+   <tr>
+   	<td>Component Name</td>
+   	<td><input type="text" size="50" name="component_name" value=""></td>
+   </tr>
+    <tr>
+   	<td>&nbsp;</td>
+   	<td><input type="submit" class="button" name="Save" value="Add Component">
+   	<input type="button" class="button" name="Cancel" value="Cancel" onclick="window.location='<?php echo $this->url(array('module'=>'setup-question','controller'=> 'assessmenttype','action'=>'index')); ?>'"></td>
+   </tr>
+  </table>
+  <input type="hidden" size="50" name="courseid" value="<?php echo $this->courseid?>">
+   </form>  
+      
+      </td>
+  </tr>
+</table>

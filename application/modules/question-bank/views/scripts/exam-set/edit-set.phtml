@@ -1,0 +1,187 @@
+<script type="text/javascript">
+	
+	
+	function save(){		
+		document.addfrm.action="<?php echo $this->url(array('module'=>'question-bank','controller'=>'exam-set', 'action'=>'edit-set'),'default',true);?>";
+		document.addfrm.submit();
+	}
+
+	$(document).ready(function(){
+	
+	
+	
+	 $("#startdate").datepicker({
+				"dateFormat":"yy-mm-dd",
+				"changeMonth":"true",
+				beforeShow: function(input, inst) { 
+					if ($("#enddate").val()) { // Only update when has a value.
+						 
+							$( "#startdate" ).datepicker( "option", "maxDate", $("#enddate").datepicker("getDate") );
+					}
+				}
+			
+				
+		});
+		
+		$("#enddate").datepicker({
+				"dateFormat":"yy-mm-dd",
+				"changeMonth":"true",
+				beforeShow: function(input, inst) { 
+					if ($("#startdate").val()) { // Only update when has a value.
+							$( "#enddate" ).datepicker( "option", "minDate", $("#startdate").datepicker("getDate") );
+					}
+				}
+				
+		});
+	
+	});
+
+</script>
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+		<li>
+				<a href="#" onclick="javascript:save()">
+					<span class='save'></span>
+					Save
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'question-bank','controller'=>'exam-set', 'action'=>'list-set'),'default',true);?>" >
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br>
+
+<div style="width:900px;">
+
+<form name="addfrm" method="POST" action="">
+<input type="hidden" name="sid" size="50" value="<?php echo $this->sid?>">
+
+<table width="100%" border="0" cellpadding=" 5" cellspacing="1">
+ <tr>
+    <td>Course</td>
+    <td>:</td>
+    <td>
+    <select name="courseid" id="courseid">
+		<option> --Select Course-- </option>	
+		<? foreach ($this->course as $c){
+			if($c["id"]==$this->set["courseid"]){
+				$sel = 'selected';
+			}else{
+				$sel ='';
+			}
+			?>	
+		<option value="<?php echo $c["id"]?>" <?php echo $sel;?>><?php echo $c["code"].'-'.$c["name"]?></option>		
+		<? } ?>
+	</select>
+	
+	</td>
+  </tr>
+  <tr>
+    <td>Set Name</td>
+    <td width="5px">:</td>
+    <td><input type="text" name="setname" size="50" value="<?php echo $this->set["setname"]?>"></td>
+  </tr>
+ <tr>
+    <td>Instruction</td>
+    <td width="5px">:</td>
+    <td><textarea name="instruction" cols="50" rows="10"><?php echo $this->set["instruction"]?></textarea></td>
+  </tr>
+  <tr>
+    <td>Description</td>
+    <td width="5px">:</td>
+    <td><textarea name="description" cols="50" rows="10"><?php echo $this->set["description"]?></textarea></td>
+   
+  </tr>
+ <tr>
+    <td>Date</td>
+    <td width="5px">:</td>
+    <td>Start Date <input type="text" name="startdate" id="startdate" size="10" value="<?php echo $this->set["startdate"]?>"> End Date <input type="text" name="enddate" id="enddate" size="10" value="<?php echo $this->set["enddate"]?>"></td>
+  </tr>
+  
+ 
+  <tr>
+    <td>Bank/Pool</td>
+    <td width="5px">:</td>
+    <td>
+    
+    <select name="pool_id[]" id="pool_id" multiple>		
+		<? foreach ($this->pool as $p){	?>	
+		<option value="<?php echo $p["id"]?>" <?php echo $sel;?>><?php echo $p["name"]?></option>		
+		<? } ?>
+   </select>
+   * You may select multiple bank/pool name.
+    </td>
+  </tr>
+   <tr>
+    <td>Time Limit</td>
+    <td width="5px">:</td>
+    <td><input type="text" name="TimeLimit" size="10" value="<?php echo $this->set["TimeLimit"]?>"></td>
+  </tr>
+   <tr>
+    <td>Alert Time</td>
+    <td width="5px">:</td>
+    <td><input type="text" name="AlertTime" size="10" value="<?php echo $this->set["AlertTime"]?>"></td>
+  </tr>
+   <tr>
+    <td>Pass Mark</td>
+    <td width="5px">:</td>
+    <td><input type="text" name="passMark" size="10" value="<?php echo $this->set["passMark"]?>"></td>
+  </tr>
+  
+   <tr>
+    <td>Status</td>
+    <td>:</td>
+    <td>
+    <select name="status" id="status">
+		<option> --Select Status-- </option>
+		<option value="1" <?php if($this->set["status"]==1) echo 'selected';?> >Active</option>
+		<option value="2" <?php if($this->set["status"]==2) echo 'selected';?>>Not Active</option>		
+	</select>
+	
+	</td>
+  </tr>
+  </table>
+  </form>
+</div>
+
+<script>
+CKEDITOR.replace( 'description',
+				{
+					height: 100, 
+					toolbar :
+					[
+					    { name: 'basicstyles', items : [ 'Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat' ] },
+					    { name: 'paragraph',   items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote','CreateDiv','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','BidiLtr','BidiRtl' ] },
+					  
+					]
+					
+				});
+				
+				CKEDITOR.replace( 'instruction',
+				{
+					height: 100, 
+					toolbar :
+					[
+					    { name: 'basicstyles', items : [ 'Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat' ] },
+					    { name: 'paragraph',   items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote','CreateDiv','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','BidiLtr','BidiRtl' ] },
+					  
+					]
+					
+				});
+				</script>

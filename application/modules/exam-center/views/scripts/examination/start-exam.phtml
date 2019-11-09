@@ -1,0 +1,124 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+		
+		$("#start_date").datepicker({
+				"dateFormat":"yy-mm-dd",
+				"changeMonth":"true",
+		});
+	});
+
+	
+</script>
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="javascript:searchbox()">
+					<span class='search'></span>
+					Search
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+ <br>
+ <form id='date' method="post" action="<?php echo $this->url(array('module'=>'exam-center','controller'=>'examination', 'action'=>'start-exam'),'default',true);?>">
+ Select Examination Date :  <input id="start_date" type="text" value="<?php echo $this->datepicker;?>" name="start_date" size="30">
+ <button id="button" type="submit">View</button>
+ </form>
+ 
+<br>
+<form id="f1" method="post">
+<table class="table" width="100%" cellpadding="5" cellspacing="1">	
+<?php
+if($this->schedule) {
+?>
+
+<tr>
+		<th width="100px">Course Name</th>
+		<th width="100px">Start Time</th>
+		<th width="50px">End time</th>
+		<th width="50px">Start Exam</th>
+	</tr>
+<?php 
+	foreach ($this->schedule as $sche){
+		$idSchedule = $sche['id'];
+		$idCourse = $sche['course_id'];
+		$idCenter = $sche['exam_center'];
+?>
+  <tr bgcolor="#ffffff">
+    <td><?php echo $sche['course_name'];?></td>
+    <td><?php echo $sche['exam_time_start'];?></td>
+    <td><?php echo $sche['exam_time_end'];?></td>
+    <td>
+    <?php 
+    $startDB = new App_Model_Exam_DbTable_StartExam();
+    $checkStart = $startDB->checkStart($idSchedule,$idCourse,$idCenter);
+    if($checkStart){
+    	$idStart = $checkStart['id'];
+    ?>
+    <input type="button" name="start" value="Close Exam" onclick="closeExam(<?php echo $idStart?>);">
+    <?php 
+    echo $checkStart['startTime'];
+    }else{?>
+    <input type="button" name="start" value="Start Exam" onclick="startExam(<?php echo $idSchedule?>,<?php echo $idCourse;?>,<?php echo $idCenter;?>);">
+    <?php }?>
+    </td>
+  </tr>
+  <?php 
+	}
+}?>
+</table>
+</form>
+
+
+<script type="text/javascript">
+
+function startExam(idSchedule, idCourse, idCenter){
+
+	var id =1;//start exam
+	$.ajax({ 
+		type: "POST",
+		url: "<?php echo $this->url(array('module'=>'exam-center','controller'=>'examination','action'=>'ajax-save-start-exam'),'default',true);?>/idSche/"+idSchedule+"/idCourse/"+idCourse+"/idCenter/"+idCenter, 
+		data: "id=" + id,
+		context: document.body, 
+		success: function(data){
+			alert('Exam has been started.');
+    	}
+	});
+	
+}
+
+function closeExam(idStart){
+
+	var id = 2;//close exam
+	$.ajax({ 
+		type: "POST",
+		url: "<?php echo $this->url(array('module'=>'exam-center','controller'=>'examination','action'=>'ajax-save-start-exam'),'default',true);?>/idStart/"+idStart,
+		data: "id=" + id, 
+		context: document.body, 
+		success: function(data){
+			alert('Exam has been closed.');
+    	}
+	});
+	
+}
+</script>
+

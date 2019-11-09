@@ -1,0 +1,379 @@
+<style type="text/css">
+
+.zend_form input[type="text"].mark {
+    width: 30px;
+}
+
+</style>
+
+<script>
+$(document).ready(function()
+{   
+    $("#from").datepicker({
+        dateFormat: 'MM yy',
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: true,
+
+        onClose: function(dateText, inst) {
+            var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+            $("#from").val($.datepicker.formatDate('MM yy', new Date(year, month, 1)));
+
+            //$( "#to" ).datepicker( "option", "minDate", new Date(year, month));
+        }
+    });
+
+    $("#from").focus(function () {
+        $(".ui-datepicker-calendar").hide();
+        $("#ui-datepicker-div").position({
+            my: "center top",
+            at: "center bottom",
+            of: $(this)
+        });
+    });
+
+    $("#to").datepicker({
+        dateFormat: 'MM yy',
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: true,
+        
+        onClose: function(dateText, inst) {
+            var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+            $("#to").val($.datepicker.formatDate('MM yy', new Date(year, month, 1)));
+
+            //$( "#from" ).datepicker( "option", "maxDate", new Date(year, month) );
+        }
+    });
+
+    $("#to").focus(function () {
+        $(".ui-datepicker-calendar").hide();
+        $("#ui-datepicker-div").position({
+            my: "center top",
+            at: "center bottom",
+            of: $(this)
+        });
+    });
+
+    //init
+    <?php
+    if( isset($this->educationData['ae_discipline_code']) ){
+    	?>
+    	initSubject('<?php echo $this->educationData['ae_discipline_code']; ?>');
+    	<?php	
+    }
+    ?>
+    
+});
+		
+function changeSchool(element){
+	var type_id = $('#type').val();
+	var state_id = $('#state').val();
+	
+	$.ajax({
+		url: "<?php echo $this->url(array('module'=>'default','controller'=>'ajax-utility', 'action'=>'ajax-get-school'),'default',true);?>",
+		data: {'school_state_id':state_id, 'keyvalue':1},
+		type: 'POST',
+		dataType: 'json',
+		beforeSend: function() {
+			showLoading('ae_institution','ae_institution-element','loading');
+		},
+		complete: function() {
+			hideLoading('loading','ae_institution');
+		} 	
+	}).done(function ( data ) {
+		
+		$('#ae_institution').empty().append('<option value=""> <?php echo $this->translate('please_select'); ?> </option>');
+		
+		 
+		var institution = $('#ae_institution');
+		var append_html = "";
+		
+		for (var index = 0; index < data.length; index++) {
+			append_html += '<option value="'+data[index].sm_id+'"> '+data[index].sm_name+' </option>';
+		}	
+
+		institution.append(append_html);
+
+	});
+}
+
+function showLoading(target,target_div,loading_id){
+	$('#'+target).hide();
+	$('#'+target_div).append("<div id='"+loading_id+"'><img src='/images/ajax-loader-bar.gif' /></div>");
+}
+
+function hideLoading(loading_id,target){
+	$('#'+loading_id).remove();
+	$('#'+target).show();
+}
+
+function changeDiscipline(element){
+	
+	
+	$.ajax({
+		url: "<?php echo $this->url(array('module'=>'default','controller'=>'ajax-utility', 'action'=>'ajax-get-discipline'),'default',true);?>",
+		data: {'school_type_id':$(element).val()},
+		type: 'POST',
+		dataType: 'json',
+		beforeSend: function() {
+			showLoading('ae_discpline','ae_discpline-element','loading');
+		},
+		complete: function() {
+			hideLoading('loading','ae_discpline');
+		} 		
+	}).done(function ( data ) {
+		
+		$('#ae_discpline').empty().append('<option value=""> <?php echo $this->translate('please_select'); ?> </option>');
+	
+		$.each(data, function(index) {
+			$('#ae_discpline').append('<option value="'+data[index].smd_code+'"> '+data[index].smd_desc+' </option>');
+		});
+	});
+}
+
+function validateSchool(element){
+	$('#subject_list').show();
+
+	$('#subject_list').empty();
+	
+	$('#subject_list').append(	
+		$('<table id="subject" class="table" width="100%">')
+			.append($('<thead>')
+				.append($('<tr>')
+	        		.append($('<th rowspan="2">').text("<?php echo $this->translate("Subjects"); ?>"))
+	            	.append($('<th colspan="2">').text("<?php echo $this->translate("Class 1"); ?>"))
+	            	.append($('<th colspan="2">').text("<?php echo $this->translate("Class 2"); ?>"))
+	            	.append($('<th colspan="2">').text("<?php echo $this->translate("Class 3"); ?>"))
+	            	.append($('<th rowspan="2">').text("<?php echo $this->translate("Average"); ?>"))
+	        	)
+	        	.append($('<tr>')
+	        		.append($('<th>').text("<?php echo $this->translate("Semester"); ?> 1"))
+	                .append($('<th>').text("<?php echo $this->translate("Semester"); ?> 2"))
+	                .append($('<th>').text("<?php echo $this->translate("Semester"); ?> 1"))
+	                .append($('<th>').text("<?php echo $this->translate("Semester"); ?> 2"))
+	                .append($('<th>').text("<?php echo $this->translate("Semester"); ?> 1"))
+	                .append($('<th>').text("<?php echo $this->translate("Semester"); ?> 2"))	
+	            )
+	        )
+            .append($('<tbody>'))
+	);
+
+	$.ajax({
+		url: "<?php echo $this->url(array('module'=>'default','controller'=>'ajax-utility', 'action'=>'ajax-get-discipline-subject','appl_id'=>$this->appl_id),'default',true);?>",
+		data: {'discipline_code':$(element).val()},
+		type: 'POST',
+		dataType: 'json'	
+	}).done(function ( data ) {
+		$('#subject').find('tbody').html("");
+		
+		$.each(data, function(index) {
+			var compulsary = "";
+
+			if(data[index].ss_core_subject==1){
+				compulsary = "*";
+			}
+				
+			$('#subject').find('tbody')
+				.append($('<tr>')
+					.append($('<td>').html('<input type="hidden" name="aed_subject_id[]" value="'+data[index].sds_subject+'" />'+data[index].ss_subject+compulsary))
+	        		.append($('<td align="center">').html('<input type="text" class="mark" onkeyup="calculate_average();" maxlength="3" name="aed_sem1[]" value="'+ (data[index].aed_sem1 ? data[index].aed_sem1 : "") +'" />'))
+	                .append($('<td align="center">').html('<input type="text" class="mark" onkeyup="calculate_average();" maxlength="3" name="aed_sem2[]" value="'+ (data[index].aed_sem2 ? data[index].aed_sem2 : "") +'" />'))
+	                .append($('<td align="center">').html('<input type="text" class="mark" onkeyup="calculate_average();" maxlength="3" name="aed_sem3[]" value="'+ (data[index].aed_sem3 ? data[index].aed_sem3 : "") +'" />'))
+	                .append($('<td align="center">').html('<input type="text" class="mark" onkeyup="calculate_average();" maxlength="3" name="aed_sem4[]" value="'+ (data[index].aed_sem4 ? data[index].aed_sem4 : "") +'" />'))
+	                .append($('<td align="center">').html('<input type="text" class="mark" onkeyup="calculate_average();" maxlength="3" name="aed_sem5[]" value="'+ (data[index].aed_sem5 ? data[index].aed_sem5 : "") +'" />'))
+	                .append($('<td align="center">').html('<input type="text" class="mark" onkeyup="calculate_average();" maxlength="3" name="aed_sem6[]" value="'+ (data[index].aed_sem6 ? data[index].aed_sem6 : "") +'" />'))
+	                .append($('<td align="center">').html('<input type="hidden" name="aed_average[]" class="aed_average" value="'+ (data[index].aed_average? data[index].aed_average : "") +'" /> <span class="average">'+ (data[index].aed_average? data[index].aed_average : "") +'</span>'))
+	            )
+		});
+	});
+
+	changeProgram($(element).val());
+}
+
+function initSubject(discipline_code){
+	$('#subject_list').append(	
+		$('<table id="subject" class="table" width="100%">')
+			.append($('<thead>')
+				.append($('<tr>')
+	        		.append($('<th rowspan="2">').text("<?php echo $this->translate("Subjects"); ?>"))
+	            	.append($('<th colspan="2">').text("<?php echo $this->translate("Class 1"); ?>"))
+	            	.append($('<th colspan="2">').text("<?php echo $this->translate("Class 2"); ?>"))
+	            	.append($('<th colspan="2">').text("<?php echo $this->translate("Class 3"); ?>"))
+	            	.append($('<th rowspan="2">').text("<?php echo $this->translate("Average"); ?>"))
+	        	)
+	        	.append($('<tr>')
+	        		.append($('<th>').text("<?php echo $this->translate("Semester"); ?> 1"))
+	                .append($('<th>').text("<?php echo $this->translate("Semester"); ?> 2"))
+	                .append($('<th>').text("<?php echo $this->translate("Semester"); ?> 1"))
+	                .append($('<th>').text("<?php echo $this->translate("Semester"); ?> 2"))
+	                .append($('<th>').text("<?php echo $this->translate("Semester"); ?> 1"))
+	                .append($('<th>').text("<?php echo $this->translate("Semester"); ?> 2"))	
+	            )
+	        )
+            .append($('<tbody>'))
+	);
+	
+	$.ajax({
+		url: "<?php echo $this->url(array('module'=>'default','controller'=>'ajax-utility', 'action'=>'ajax-get-discipline-subject'),'default',true);?>",
+		data: {'discipline_code':discipline_code},
+		type: 'POST',
+		dataType: 'json'	
+	}).done(function ( data ) {
+		$('#subject').find('tbody').html("");
+		
+		$.each(data, function(index) {
+			var compulsary = "";
+
+			if(data[index].ss_core_subject==1){
+				compulsary = "*";
+			}
+				
+			$('#subject').find('tbody')
+				.append($('<tr>')
+					.append($('<td>').html('<input type="hidden" name="aed_subject_id[]" value="'+data[index].sds_subject+'" />'+data[index].ss_subject+compulsary))
+	        		.append($('<td align="center">').html('<input type="text" class="mark" onkeyup="calculate_average();" maxlength="3" name="aed_sem1[]" value="'+ (data[index].aed_sem1 ? data[index].aed_sem1 : "") +'" />'))
+	                .append($('<td align="center">').html('<input type="text" class="mark" onkeyup="calculate_average();" maxlength="3" name="aed_sem2[]" value="'+ (data[index].aed_sem2 ? data[index].aed_sem2 : "") +'" />'))
+	                .append($('<td align="center">').html('<input type="text" class="mark" onkeyup="calculate_average();" maxlength="3" name="aed_sem3[]" value="'+ (data[index].aed_sem3 ? data[index].aed_sem3 : "") +'" />'))
+	                .append($('<td align="center">').html('<input type="text" class="mark" onkeyup="calculate_average();" maxlength="3" name="aed_sem4[]" value="'+ (data[index].aed_sem4 ? data[index].aed_sem4 : "") +'" />'))
+	                .append($('<td align="center">').html('<input type="text" class="mark" onkeyup="calculate_average();" maxlength="3" name="aed_sem5[]" value="'+ (data[index].aed_sem5 ? data[index].aed_sem5 : "") +'" />'))
+	                .append($('<td align="center">').html('<input type="text" class="mark" onkeyup="calculate_average();" maxlength="3" name="aed_sem6[]" value="'+ (data[index].aed_sem6 ? data[index].aed_sem6 : "") +'" />'))
+	                .append($('<td align="center">').html('<input type="hidden" name="aed_average[]" class="aed_average" value="" /><span class="average"></span>'))	
+	            )
+		});
+
+		calculate_average();
+	});
+
+	$('#subject_list').show();
+}
+
+function calculate_average(){
+	var tbody = $('#subject').find('tbody');
+
+	$(tbody).find('tr').each(function(){
+		var subject_row = $(this);
+		
+		var sem1 = $(subject_row).find('input[name="aed_sem1[]"]').val();
+		var sem2 = $(subject_row).find('input[name="aed_sem2[]"]').val();
+		var sem3 = $(subject_row).find('input[name="aed_sem3[]"]').val();
+		var sem4 = $(subject_row).find('input[name="aed_sem4[]"]').val();
+		var sem5 = $(subject_row).find('input[name="aed_sem5[]"]').val();
+		var sem6 = $(subject_row).find('input[name="aed_sem6[]"]').val();
+
+		var sum = 0;
+		var cnt = 0;
+		
+		if(sem1!="" && sem1!=0){
+			sum += parseInt(sem1)
+			cnt++;
+		}
+		if(sem2!="" && sem2!=0){
+			sum += parseInt(sem2)
+			cnt++;
+		}
+		if(sem3!="" && sem3!=0){
+			sum += parseInt(sem3)
+			cnt++;
+		} 
+		if(sem4!="" && sem4!=0){
+			sum += parseInt(sem4)
+			cnt++;
+		}
+		if(sem5!="" && sem5!=0){
+			sum += parseInt(sem5)
+			cnt++;
+		}
+		if(sem6!="" && sem6!=0){
+			sum += parseInt(sem6)
+			cnt++;
+		}
+
+		if(sum){
+			$(subject_row).find('.average').html(roundNumber(sum/cnt, 1));
+			$(subject_row).find('.aed_average').val(roundNumber(sum/cnt, 1));
+		}else{
+			$(subject_row).find('.average').html("");
+			$(subject_row).find('.aed_average').val("");
+		}
+	});
+}
+
+function roundNumber(num, dec) {
+	var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
+	return result;
+}
+
+function changeProgram(discipline){
+	$.ajax({
+		url: "<?php echo $this->url(array('module'=>'default','controller'=>'online-application', 'action'=>'ajax-get-programme-hs'),'default',true);?>",
+		data: {'discipline_code':discipline},
+		type: 'POST',
+		dataType: 'json'	
+	}).done(function ( data ) {
+		
+		$('#ap_prog_code').empty().append('<option value=""> <?php echo $this->translate('please_select'); ?> </option>');
+
+		<?php 
+		$registry = Zend_Registry::getInstance();
+		$locale = $registry->get('Zend_Locale');
+		
+		if ($locale=="en_US"){
+		?>
+			$.each(data, function(index) {
+				$('#ap_prog_code').append('<option value="'+data[index].ProgramCode+'"> '+data[index].ProgramName+' </option>');
+			});
+		<?php 	
+		}else 
+		if ($locale=="id_ID"){
+		?>
+			$.each(data, function(index) {
+				$('#ap_prog_code').append('<option value="'+data[index].ProgramCode+'"> '+data[index].ArabicName+' </option>');
+			});
+		<?php 
+		}
+		?>
+	});
+}
+</script>
+
+<div class="breadcrum">
+	<ul class="tri-steps">
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'agent','controller'=>'index','action'=>'biodata'),'default',true);?>"><?php echo $this->translate("biodata"); ?></a></div></li>
+		
+		<?php if($this->transaction["entry_type"]!=2){ //case agent(manual entry- which is already have no peserta/choose admission type)?>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'agent','controller'=>'index','action'=>'contactinfo'),'default',true);?>"><?php echo $this->translate("contact_info"); ?></a></div></li>
+		<li class="prevDone"><div class="text"><a href="<?php echo $this->url(array('module'=>'agent','controller'=>'index','action'=>'admission'),'default',true);?>"><?php echo $this->translate("Admission Type"); ?></a></div></li>
+		<?php }else{ //end admission?>
+		<li class="prevDone"><div class="text"><a href="<?php echo $this->url(array('module'=>'agent','controller'=>'index','action'=>'contactinfo'),'default',true);?>"><?php echo $this->translate("contact_info"); ?></a></div></li>
+		<?php }//end else?>
+		<li class="current"><div class="text"><a href="<?php echo $this->url(array('module'=>'agent','controller'=>'index','action'=>'programme'),'default',true);?>"><?php echo $this->translate("programme"); ?></a></div></li>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'agent','controller'=>'index','action'=>'uploaddocument'),'default',true);?>"><?php echo $this->translate("upload_document"); ?></a></div></li>
+		<?php if($this->transaction['at_appl_type']=='1'){?>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'agent','controller'=>'index','action'=>'uploaddocument'),'default',true);?>"><?php echo $this->translate("test_schedule"); ?></a></div></li>
+		<?php }?>
+		<li class="last"><div class="text"><a href="<?php echo $this->url(array('module'=>'agent','controller'=>'index','action'=>'confirmation'),'default',true);?>"><?php echo $this->translate("confirmation"); ?></a></div></li>	
+	</ul>
+	<div class="clear"></div>
+</div>
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		
+	</div>
+</div>
+
+<?php echo $this->form; ?>

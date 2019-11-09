@@ -1,0 +1,108 @@
+<script type="text/javascript">
+	function del(){
+
+		var code = $('input[name=code]:checked').val();
+		
+		if(confirm('Are you sure to delete?')){
+			window.location = "<?php echo $this->url(array('module'=>'general-setup','controller'=>'highschool-discipline', 'action'=>'delete'),'default',true); ?>/code/"+code;
+		}
+	}
+	
+	function add(){
+		window.location="<?php echo $this->url(array('module'=>'general-setup','controller'=>'highschool-discipline', 'action'=>'add'),'default',true);?>";
+	}
+
+	function edit(){
+		var code = $('input[name=code]:checked').val();
+
+		if(!code){
+			alert('<?php echo $this->translate("Please select item first"); ?>');
+		}else{
+			window.location="<?php echo $this->url(array('module'=>'general-setup','controller'=>'highschool-discipline', 'action'=>'edit'),'default',true);?>/code/"+code;
+		}
+	}
+
+	function searchbox(){
+		$('#div_search').show();
+	}
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="javascript:add()">
+					<span class='add'></span>
+					Add
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:edit()">
+					<span class='edit'></span>
+					Edit
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:del()">
+					<span class='delete'></span>
+					Delete
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a id="search" href="#" onclick="javascript:searchbox()">
+					<span class='search'></span>
+					Search
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<div id="div_search" style="display:none;">
+	<fieldset>
+		<legend>Search</legend>
+		<?php echo $this->searchForm; ?>
+	</fieldset>
+</div>
+
+<div style="width:100%;">
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+<table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		<th width="2"></th>
+		<th><?php echo $this->translate("Discipline Name")?></th>
+		<th><?php echo $this->translate("Discipline Code")?></th>
+		<th><?php echo $this->translate("School Type")?></th>
+	</tr>
+	
+	<?php 
+	$i=0;
+	foreach ($this->paginator as $entry): 
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<td> <input type="radio" name="code" value="<?php echo $entry['smd_code']; ?>"></td>
+		<td><a href="<?php echo $this->url(array('module'=>'general-setup','controller'=>'highschool-discipline', 'action'=>'detail','code'=>$entry['smd_code']),'default',true); ?>"><?php echo $entry['smd_desc']; ?></a></td>
+		<td align="center"><?php echo $entry['smd_code']; ?></td>
+		<td align="center"><?php echo $entry['smd_school_type_name']; ?> <?php echo $entry['smd_school_type_code']!=null?" (".$entry['smd_school_type_code'].")":"-"; ?></td>
+	</tr>
+	<?php 
+	$i++;
+	endforeach 
+	?>
+
+</table>
+</div>
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>

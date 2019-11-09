@@ -1,0 +1,11 @@
+<div id="paginatorTop">
+<?php 
+	if(isset($this->previous)){
+		echo "&nbsp; <a href='".$this->url(array('page'=>$this->previous))."'>Previous</a>";
+	}
+	
+	if(isset($this->next)){
+		echo "&nbsp; <a href='".$this->url(array('page'=>$this->next))."'>Next</a>";
+	}
+?>
+</div>

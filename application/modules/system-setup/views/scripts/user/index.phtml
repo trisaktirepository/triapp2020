@@ -1,0 +1,171 @@
+<script type="text/javascript">
+	$(function() {
+		$( "#dialog:ui-dialog" ).dialog( "destroy" );
+		
+		
+		$( "#dialog_user" ).dialog({ 
+			autoOpen: false,
+			modal: true,
+			width: 615 ,
+			open: function() {
+	        	$(this).load("<?php echo $this->url(array('module'=>'system-setup','controller'=>'user', 'action'=>'add'),'default',true);?>");
+	        },
+	        buttons: { 
+		        "Add": function() { 
+		        	$('#user_form').submit(); 
+	        	},
+	        	"Cancel": function() { 
+		        	$(this).dialog("close"); 
+	        	}
+        	}
+	        
+		});
+
+		$( "#dialog_user_edit" ).dialog({ 
+			autoOpen: false,
+			modal: true,
+			width: 615,
+	        buttons: { 
+	        
+		        "Save Changes": function() { 
+		        	$('#user_form').submit(); 
+	        	},
+	        	"Cancel": function() { 
+		        	$(this).dialog("close"); 
+	        	},
+	        	"Reset Password": function() {
+		        	if(confirm('Are you sure to reset this user\'s password?')){
+		        		var user_id = $('input[name=user_id]:checked').val();
+		        		
+		        		window.location = "<?php echo $this->url(array('module'=>'system-setup','controller'=>'user', 'action'=>'reset'),'default',true);?>/id/"+user_id;
+		        	} 
+	        	}
+        	}
+	        
+		});
+	});
+
+	function add(){
+		$("#dialog_user").html("<p><center><img src='/images/icon/ajax-loader.gif' style='margin: 5px 0 0 0;' />&nbsp;&nbsp;Loading...</center></p>");
+		$( "#dialog_user" ).dialog('open');
+	}
+
+	function edit(){
+		var user_id = $('input[name=user_id]:checked').val();
+
+		if(!user_id){
+			alert('Please select any user first');
+		}else{
+			$("#dialog_user_edit").html("<p><center><img src='/images/icon/ajax-loader.gif' style='margin: 5px 0 0 0;' />&nbsp;&nbsp;Loading...</center></p>");
+			$("#dialog_user_edit").load("<?php echo $this->url(array('module'=>'system-setup','controller'=>'user', 'action'=>'edit'),'default',true);?>/id/" + user_id);
+			$( "#dialog_user_edit" ).dialog('open');
+		}
+	}
+
+	function del(){
+		var user_id = $('input[name=user_id]:checked').val();
+
+		if(!user_id){
+			alert('Please select any user first');
+		}else{
+			if(confirm("Are you sure to delete this user?")){
+				window.location = "<?php echo $this->url(array('module'=>'system-setup','controller'=>'user', 'action'=>'delete'),'default',true);?>/id/"+user_id;
+			}
+		}
+	}
+
+	/*//To remove flash MSG*/
+	setTimeout(function() {
+		$( "#msg" ).hide( 'blind',null, 1000);
+	}, 5000 );
+
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="javascript:add()">
+					<span class='add'></span>
+					Add
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:edit()">
+					<span class='edit'></span>
+					Edit
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:del()">
+					<span class='delete'></span>
+					Delete
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+<?if(isset($this->noticeMessage)){?>
+<div id="msg" class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+<table class="table" width="100%" cellpadding="5" cellspacing="2">
+	<tr>
+		<th width="25px">&nbsp;</th>
+		<th>Full Name</th>
+		<th>Username</th>
+		<th width="150px">Staff ID</th>
+		<th width="150px">Date Created</th>
+	</tr>
+	<?php
+		if(isset($this->paginator)){
+
+		$i=0;
+		foreach ($this->paginator as $user): 
+	?>
+		<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+			<td>
+				<input type="radio" name="user_id" value="<?php echo $user['id']; ?>">
+			</td>
+			<td><?php echo $user['fullname']; ?></td>
+			<td><?php echo $user['username']; ?></td>
+			<td><?php echo $user['staff_id']; ?></td>
+			<td><?php echo date('d/m/Y  h:i a', strtotime($user['date_created'])); ?></td>
+		</tr>		
+	<?php 
+		$i++;
+		endforeach;
+	 
+		}
+	?>
+</table>
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>
+
+<!-- New user dialog -->
+<div id="dialog_user" title="Add New User">
+</div>
+
+<!-- Edit user dialog -->
+<div id="dialog_user_edit" title="Edit User">
+</div>

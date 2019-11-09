@@ -1,0 +1,153 @@
+<script type="text/javascript">
+$(function() {
+	$( "#search-dialog" ).dialog({ 
+		autoOpen: false,
+		width: 600,
+		modal: true,
+		buttons: { 
+			"Search": function() {
+				 
+				$("#search_form").submit();
+				$(this).dialog("close"); 
+			},
+			"Close": function() { 
+				$(this).dialog("close"); 
+			} 
+		} 
+	});
+	
+});
+
+function searchbox(){
+	$( "#search-dialog" ).dialog('open');
+}
+
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a id="search" href="#" onclick="javascript:searchbox()">
+					<span class='search'></span>
+					Search
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+<table class="table" width="100%" cellpadding="5" cellspacing="1">	
+	<tr>
+		<th width="100px">ID</th>
+		<th width="100px">Matrix</th>
+		<th>Student Name</th>
+		<th width="350px">Current Program</th>
+	</tr>
+	<?php
+	if(isset($this->paginator)){
+		$i=0; 
+		foreach ($this->paginator as $student):
+		?>	
+		<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+			<td align="left"><?php echo $student['ic_no']; ?></td>
+			<td align="left"><?php echo $student['matric_no']; ?></td>
+			<td>
+				<a href="<?php echo $this->url(array('module'=>'admission-record','controller'=>'change-program', 'action'=>'view', 'id'=>$student['id']),'default',true);?>"><?php echo $student['fullname']; ?></a>
+			</td>
+			<td align="left"><?php echo $student['main_name']; ?></td>
+		</tr>
+		<?php 
+		$i++;
+		endforeach; 
+	}
+	?>
+</table>
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>
+<div id="search-dialog" title="Search Student Profile">
+	<form name="search_form" id="search_form" action="" method="post">
+		<table class="table5" width="100%">
+			<tr>
+				<th>
+					Matrix No.
+				</th>
+				<td width="5px">:</td>
+				<td>
+					<input type="text" name="matrix_no" value="<?php echo $this->search_matrix_no; ?>" style="width:250px" />
+				</td>
+			</tr>
+			<tr>
+				<th>
+					ID Number
+				</th>
+				<td width="5px">:</td>
+				<td>
+					<input type="text" name="ic_no" value="<?php echo $this->search_ic_no; ?>" style="width:250px" />
+				</td>
+			</tr>
+			<tr>
+				<th>
+					Type Of ID
+				</th>
+				<td width="5px">:</td>
+				<td>
+					
+					<input type="radio" name="id_type" value="1" <? echo $this->search_id_type==1?"checked='checked'":""; ?> /> Personal ID
+					<input type="radio" name="id_type" value="2" <? echo $this->search_id_type==2?"checked='checked'":""; ?> /> Family ID
+					<input type="radio" name="id_type" value="3" <? echo $this->search_id_type==3?"checked='checked'":""; ?> /> Passport
+				</td>
+			</tr>
+			<tr>
+				<th>
+					Name
+				</th>
+				<td width="5px">:</td>
+				<td>
+					<input type="text" name="fullname" value="<?php echo $this->search_fullname; ?>" style="width:250px" />
+				</td>
+			</tr>
+			<tr>
+				<th>
+					Program
+				</th>
+				<td width="5px">:</td>
+				<td>
+					<select name="program_id">
+						<option value="0"> -- Select Program --</option>
+						<?php
+							foreach ($this->programlist as $programlist) {
+								if($programlist['id'] == $this->$search_program_id){
+									$selected="selected='selected'";
+								}
+								echo "<option value=".$programlist['id'] .$selected." >".$programlist['main_name']."</option>";
+							}
+						?>
+					</select>
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>

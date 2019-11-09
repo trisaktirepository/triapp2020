@@ -1,0 +1,16 @@
+<?php
+/*
+ *  @author Suliana
+ *  @created May 16, 2011
+ */
+?>
+
+
+<div align="center" style="background:#fff; height:30px;">
+	<ul class="stepsmenu">
+		<li class="first"><a href="<?php echo $this->url(array('module'=>'anr-setup','controller'=>'semester','action'=>'semestername'),'default',true) ?>"><?php echo $this->translate("Semester Name"); ?></a></li>
+		<li class="second"><a href="<?php echo $this->url(array('module'=>'anr-setup','controller'=>'semester','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Semester"); ?></a></li>
+	    <li class="third"><a href="<?php echo $this->url(array('module'=>'anr-setup','controller'=>'activity','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Activity"); ?></a></li>
+	    <li class="fourth"><a href="<?php echo $this->url(array('module'=>'anr-setup','controller'=>'calendar','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Calendar"); ?></a></li>
+	</ul>
+</div>

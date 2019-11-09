@@ -1,0 +1,105 @@
+<script>
+function applyResit(){
+
+   var msg = confirm("Are you sure you want to apply for resit?");
+  //	charge=$("#charge").val();
+  // alert(msg);
+   if(msg){	
+	   $("#appealForm").submit();
+   }
+    
+}
+
+
+
+
+</script>
+
+<div style="width:100%;">
+
+<fieldset><legend><?php echo $this->translate("Subject Info");?></legend>
+<?php if ($this->mark["TotalMarkObtained"]=="") $this->mark["TotalMarkObtained"]=0;?>
+<form name="appealForm" id="appealForm" method="post" action="">
+<input type="hidden" name="IdSemester" value="<?php echo $this->idSemester;?>">
+<input type="hidden" name="IdComponent" value="<?php echo $this->idComponent;?>">
+<input type="hidden" name="IdSubject" value="<?php echo $this->idSubject;?>">
+<input type="hidden" name="IdStudentRegistration" value="<?php echo $this->IdStudentRegistration;?>">
+<input type="hidden" name="Component" value="<?php echo $this->component['IdComponentType']?>">
+<input type="hidden" name="idHead" value="<?php echo $this->idHead?>">
+<table>
+	<tr><td><?php echo $this->translate("Semester");?></td><td>: <?php echo $this->semester["SemesterMainName"]?></td></tr>
+	<tr><td><?php echo $this->translate("Subject");?></td><td>: <?php echo $this->subject["BahasaIndonesia"];?> ( <?php echo $this->subject["SubCode"];?> )</td></tr>
+	<tr><td><?php echo $this->translate("Grade");?></td><td>: <?php echo $this->course["grade_name"]; ?></td></tr>
+	<tr><td><?php echo $this->translate("Component");?></td><td>: <?php echo $this->component["component_name"]; ?></td></tr>
+	<tr><td><?php echo $this->translate("Mark");?></td><td>: <?php echo $this->mark["TotalMarkObtained"]; ?></td></tr>
+	<tr><td>Charges</td><td>: 
+		<?php if ($this->fee) {?>
+		<?php echo 'Rp. '.$this->fee['amount'];?> (Lihat Peraturan) <input type="hidden" name="charge" id="charge" value="<?php echo $this->fee['amount']?>">
+		<?php } else echo $this->translate('Free of Charge'); ?></td></tr>
+</table>
+
+<br>
+<h2>Peraturan Resit</h2>
+<?php if (count($this->config)>0) {?>
+<table>
+	<tr><td><?php echo $this->translate("Minimum Mark");?></td><td>: <?php echo $this->config["MinimumMark"]?></td></tr>
+	<tr><td><?php echo $this->translate("Maksimum Mark");?></td><td>: <?php echo $this->config["FinalMarks"];?></td></tr>
+	<tr><td><?php echo $this->translate("Maksimum Pengajuan");?></td><td>: <?php echo $this->config["ApplicationCount"].' kali'; ?></td></tr>
+	 
+</table>
+<?php 
+
+/*if ($this->config["MinimumMark"]<=$this->mark["TotalMarkObtained"]) 
+	$button="";
+else $button="disabled";
+} else {
+	echo 'Peraturan Belum dimasukan ke sistem';
+	$button="disabled";
+}
+if ($button=="disabled") echo '<strong>Ujian Ulang (resit) tidak dapat dilaksanakan karena tidak sesuai aturan</strong>';
+*/ 
+?>
+<?php if ( $this->resit=='') {?>
+<table width="100%" id="loadButton">
+	<tr bgcolor="#CBC7C7">
+		<td align="center"><input type="button" name="apply" onclick="applyResit();" value="<?php echo $this->translate("Apply Resit");?>" <?php echo $button?>></td>		
+	</tr>
+</table>
+<?php }?>
+ 
+</form>
+<?php if ($this->resit!='') {?>
+</fieldset>
+<fieldset><legend><?php echo $this->translate('Resit Info')?></legend>
+<table>
+	<tr><td><?php echo $this->translate("Semester");?></td><td>: <?php echo $this->semester["SemesterMainName"]?></td></tr>
+	<tr><td><?php echo $this->translate("Subject");?></td><td>: <?php echo $this->subject["BahasaIndonesia"];?> ( <?php echo $this->subject["SubCode"];?> )</td></tr>
+	<tr><td><?php echo $this->translate("Status");?></td><td>: <?php if ($this->resit['sr_status']==1 ) echo 'Apply'; else if ($this->resit['sr_status']==2) echo 'Approved';else echo "Rejected";?></td></tr>
+	
+	<tr><td><?php echo $this->translate("Schedule");?></td><td>: 
+		<?php if ($this->resitschedule) {
+			//view schedule here
+			?><table><tr>
+			<th><?php echo $this->translate('Date of Exam')?></th>
+			<th><?php echo $this->translate('Time')?></th>
+			<th><?php echo $this->translate('Venue')?></th>
+			</tr><?php
+			foreach ($this->resitschedule as $value) {
+ 				?>
+ 			<tr>
+ 				<td><?php echo $value['eg_date']?></td>
+				<td><?php echo $value['eg_start_time'].' - '.$value['eg_end_time']?></td>
+				<td><?php echo $value['av_room_code']?></td>
+			</tr>
+ 				<?php 
+			}
+			?></table><?php 
+		} else echo $this->translate('Wait for scheduling');
+		?></td></tr>
+	<tr><td><?php echo $this->translate("Component");?></td><td>: <?php echo $this->resitmark["component_name"]; ?></td></tr>
+	<tr><td><?php echo $this->translate("Resit Mark");?></td><td>: <?php echo $this->resitmark["TotalMarkObtained"]; ?></td></tr>
+</table>
+</fieldset>
+<?php }
+}?>
+</div>

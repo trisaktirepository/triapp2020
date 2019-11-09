@@ -1,0 +1,127 @@
+<script type="text/javascript">
+	function reload(departmentID){
+		window.location = "<?php echo $this->url(array('module'=>'anr-setup','controller'=>'course-offered', 'action'=>'add', 'semester-id'=>$this->semesterID),'default',true); ?>/departmentID/" + departmentID;
+	}
+
+	/** add remove function **/
+	$(document).ready(function() {
+		$('#add').click(function() {
+			return !$('#select1 option:selected').remove().appendTo('#select2');
+		});
+
+		$('#remove').click(function() {
+			return !$('#select2 option:selected').remove().appendTo('#select1');
+		});
+
+		$('form').submit(function() {
+			var selProgram = "";
+			
+			$('#select2 option').each(function(i) {
+				$(this).attr("selected", "selected");
+				if(selProgram==""){
+					selProgram += this.value;
+				}else{
+					selProgram += "," + this.value;
+				}
+			});
+
+			$('#selProgram').attr("value", selProgram);
+		});
+
+	});
+</script>
+
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'anr-setup','controller'=>'course-offered', 'action'=>'index'),'default',true);?>" >
+					<span class='back'></span>
+					back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+
+<form id="country_form" enctype="application/x-www-form-urlencoded" method="post" action="">
+	<input type="hidden" name="selProgram" id="selProgram" value="" />
+<dl class="zend_form">
+	<dt id="course_offered_semesterID-label">
+		<label for="course_offered_semesterID" class="required">Semester</label>
+	</dt>
+	<dd id="course_offered_semesterID-element">
+		<input type="text" name="course_offered_semesterID" value="<?php echo $this->semester['name']; ?>" disabled="disabled" />
+	</dd>
+	<dt id="course_offered_departmentID-label">
+		<label for="course_offered_departmentID" class="required">Department</label>
+	</dt>
+	<dd id="course_offered_departmentID-element">
+		<select name="course_offered_departmentID" id="course_offered_departmentID" onChange="javascript:reload(this.options[this.selectedIndex].value)">
+		    <option value="0" label="-- Select Semester --" >-- All Department --</option>
+		    <?php 
+		    	foreach ($this->departmentList as $dept){
+		    		$selected = "";
+		    		if($dept['id']==$this->departmentID){
+		    			$selected = "selected='selected'";	
+		    		}
+		    		echo "<option value='" . $dept['id'] . "' ".$selected." >" . $dept['name'] . "</option>";	
+		    	}
+		    ?>	
+		</select>
+	</dd>
+</dl>
+<table width="100%" border="0">
+		<tr>
+			<td width="45%">
+				<h4>Course List</h4>
+				<select id="select1" name="courselist" size="20" style="width:100%;" multiple="multiple" >
+					<?php foreach ($this->courseList as $course):?>
+						<option value="<?php echo $course['id']; ?>"><?php echo $course['code']; ?> - <?php echo $course['name']; ?> </option>
+					<?php endforeach;?>
+				</select>
+			</td>
+			<td align="middle" valign="middle" width="10px">
+				<input id="add" type="button" class="buttonLink" value="Add" />
+				<input id="remove" type="button" class="buttonLink" value="Remove" />
+			</td>
+			<td width="45%">
+				<h4>Offered</h4>
+				<select id="select2" name="select2" size="20" style="width:100%;" multiple="multiple" >
+					<?php foreach ($this->courseoffered as $course):?>
+						<option value="<?php echo $course['course_id']; ?>"><?php echo $course['course_code']; ?> - <?php echo $course['course_name']; ?></option>
+					<?php endforeach;?>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3" align="left">
+				<div width="200px">
+					<br />
+					<input type="submit" value="save" />
+					<input type="button" value="Cancel" onClick="window.location = '<?php echo $this->url(array('module'=>'anr-setup','controller'=>'course-offered', 'action'=>'index'));?>'" />
+				</div>
+			</td>
+		</tr>
+	</table>
+</form>

@@ -1,0 +1,15 @@
+<?php if($this->status == 'success'):?>
+<div class="message success">
+	<h2><?php echo $this->translate('Your Email has been verified'); ?></h2>
+	<div class="toolbar-button">
+		
+	</div>
+</div>
+<?php else :?>
+<div class="message success">
+	<h2><?php echo $this->translate('Verify key not exist'); ?></h2>
+	<div class="toolbar-button">
+		
+	</div>
+</div>
+<?php endif;?>

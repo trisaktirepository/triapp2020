@@ -1,0 +1,61 @@
+<script>
+function openDialog(semester,program,subject){
+	url = "<?php echo $this->url(array('module'=>'default','controller'=>'student-portal','action'=>'get-course-detail'), 'default', true);?>/semester/"+semester+"/program/"+program+"/subject/"+subject;
+	$( "#dialog-mark" ).load(url).dialog('open');	
+}
+
+$(function() {
+
+	$( "#dialog-mark" ).dialog({
+	    autoOpen: false,
+	    width: 750,
+	    height: 350,
+	    modal: true,
+	    buttons: {          
+	        "Close": function() {
+	            $( this ).dialog( "close" );
+	        }
+	    }
+	});
+});
+
+
+</script>
+
+
+<div style="width:100%;">
+
+<?php foreach($this->semester as $semester){?>
+
+<h2><?php echo $semester["SemesterMainName"]; ?>&nbsp;&nbsp;&nbsp;<?php echo (isset($semester["blockname"])) ? '('.$semester["blockname"].')':''; ?></h2>
+
+<table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		<th width="5%"><?php echo $this->translate("No");?></th>
+		<th width="10%"><?php echo $this->translate("Kode");?></th>
+		<th width="35%"><?php echo $this->translate("Matakuliah");?></th>
+		<th width="10%"><?php echo $this->translate("SKS");?></th>			
+	</tr>
+	<?php  
+	
+	foreach($semester["courses"] as $index=>$course){ 
+	
+	?>
+	<tr>
+		<td><?php echo $index+1;?></td>
+		<td><a href="#" onclick="openDialog('<?php echo $semester["IdSemesterMain"];?>','<?php echo $this->student["IdProgram"];?>','<?php echo $course["IdSubject"];?>');"><?php echo $course["SubCode"];?></a></td>
+		<td><?php echo $course["BahasaIndonesia"];?></td>
+		<td align='center'><?php echo $course["CreditHours"];?></td>		
+		
+	</tr>
+	<?php } ?>
+	
+</table>
+<br>
+
+<?php } //end loop?>
+
+</div>
+
+<div id="dialog-mark" title="Detail Mark">
+</div>

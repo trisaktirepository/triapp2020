@@ -1,0 +1,65 @@
+
+<script type="text/javascript">
+	function del(){
+		var code = $('input[name=code]:checked').val();
+
+		if(!code){
+			alert('<?php echo $this->translate("Please select item first"); ?>');
+		}else{
+			if(confirm('<?php echo $this->translate("Confirm to delete?"); ?>')){
+				window.location = "<?php echo $this->url(array('module'=>'general-setup','controller'=>'highschool-discipline', 'action'=>'delete'),'default',true); ?>/code/"+code;
+			}
+		}
+	}
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="window.location='<?php echo $this->url(array('module'=>'general-setup','controller'=>'highschool-discipline', 'action'=>'edit', 'code'=>$this->discipline['smd_code']),'default',true);?>'">
+					<span class='edit'></span>
+					Edit
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:del()">
+					<span class='delete'></span>
+					Delete
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'general-setup','controller'=>'highschool-discipline', 'action'=>'index'),'default',true);?>" >
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<div width="500px">
+	<table class="table2" width="100%" cellpadding="3" cellspacing="1">
+		<tr>
+			<th width="150px"><? echo $this->translate("Discipline Name"); ?></th>
+			<td><?php echo $this->discipline['smd_desc']; ?></td>
+		</tr>
+		<tr>
+			<th><? echo $this->translate("Discipline Code"); ?></th>
+			<td><?php echo $this->discipline['smd_code']; ?></td>
+		</tr>
+		<tr>
+			<th><? echo $this->translate("Type"); ?></th>
+			<td><?php echo $this->discipline['smd_school_type_name']; ?> (<?php echo $this->discipline['smd_school_type_code']; ?>)</td>
+		</tr>
+	</table>	
+</div>

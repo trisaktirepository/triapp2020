@@ -1,0 +1,28 @@
+<?php echo $this->faculty_code.' '.$this->faculty_name?>
+<br>
+<?php echo $this->program_code.' '.$this->program_name?>
+<table class="" width="20%" cellpadding="5" cellspacing="2" border="0">
+	<tr>
+		<th><?php echo $this->translate("no");?></th>
+		<th><?php echo $this->translate("mark");?></th>	
+	</tr>
+	
+	<?php 
+	if(isset($this->applicant)){
+	$no=1;
+	foreach ($this->applicant as $entry){
+		
+	//get education average mark
+	$educationDB = new App_Model_Application_DbTable_ApplicantEducation();
+	//$education = $educationDB->getEducationDetail($entry["appl_id"]);
+	$everage_mark = $educationDB->getAverageMark($entry["appl_id"]);		
+	
+	?>
+	<tr>
+	   <td width="50%" align="center"><?php echo $no;?></td>			
+	   <td width="50%"align="center"><?php echo round($everage_mark,2);?></td>	
+	</tr>
+	<?php $no++;}//end paginator 
+	}?>
+		
+</table>

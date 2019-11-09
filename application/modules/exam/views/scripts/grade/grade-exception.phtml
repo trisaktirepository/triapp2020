@@ -1,0 +1,133 @@
+<script>
+$(document).ready(function() {
+	
+		if ($('#semester').is(':checked')) { 
+				alert("Checked");
+ 
+		} else { 
+				alert("unChecked");
+
+		}
+		
+		if($("#program").attr("checked")==true)
+		{
+		    alert("Checked");
+		}
+		else
+		{
+		    alert("Unchecked");
+		}
+
+
+		
+}
+
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			 <li> 
+				<a href="#" onClick="back()">
+				<span class='back'></span><?php echo $this->translate("Back");?></a> 
+				</li> 
+				<li>
+				<a href="#" onclick="javascript:request()" title="Click here to print request form.">
+					<span class='print'></span>
+					Print
+				</a>
+				</li>
+				 <li> 
+				<a href="#" onClick="assign()">
+				<span class='save'></span><?php echo $this->translate("Save");?></a> 
+				</li> 
+
+				<!--<?php if($this->grade_list){?>	
+			 <li> 
+				<a href="#" onClick="edit('<?php echo $this->group_id?>')" title="Click here to change/assign to a new grade.">
+				<span class='edit'></span><?php echo $this->translate("Change");?></a> 
+				</li> 
+				<?php }?>
+			</ul>-->
+	</div>
+</div>
+
+<br>
+<div class="message notice">
+<strong>Important Notes</strong>
+<ul>
+	<li>By default grade akan follow university grade.</li>
+</ul>
+</div>
+<br>
+<div class="notification">         
+<?php echo $this->translate("Please be informed. Any changes must been verified by authorised personal only.
+Please print request form to get signature from authorised personal before any changes made. !")?> 
+</div>
+<br>
+
+
+	<table class="table" width="60%" cellpadding="5" cellspacing="1" border="0">
+		<tr>
+			<th width="30%">New Grade Exception</th>
+			<td>
+				 <select name="group_id" id="group_id" >
+				 <option value="0"><?php echo $this->translate("-- Please select --" );?></option>
+					<?php 
+					  foreach($this->group_list as $group){
+						if($this->group_id==$group[id])
+						  $sel = "selected";
+						else
+						  $sel = "";
+					 	echo "<option value='$group[id]' $sel>$group[group_name]</option>";
+					 } ?>
+					</select>
+				
+			</td>
+		</tr>
+		<tr>
+			<th width="30%" border=0  cellpadding="5" cellspacing="0">Apply to</th>
+			<td>
+			     <table width="100%">
+			     	<tr>
+			     		<td width="30%"><input type="checkbox" id="semester" name="semester" value=""> <?php echo $this->translate("Semester");?> </td>
+			     		<td>
+			     			<select name="semester_id" id="semester_id" disabled>
+								<option value="0"><?php echo $this->translate("Please select");?></option>
+								<?php 
+								foreach($this->semester as $s){
+									if($this->semester_id==$s[id])
+									  $sel = "selected";
+									else
+									  $sel = "";
+								 	echo "<option value='$s[id]' $sel>$s[name] $s[year]</option>";
+								 } ?>
+							</select>
+						</td>
+			     	</tr>
+
+			     	
+			     	<tr>
+			     		<td width="30%"><input type="checkbox" id="program" value=""> <?php echo $this->translate("Program");?> </td>
+			     		<td>
+			     			<select name="program_id"  id="program_id" >
+								<option value="0"><?php echo $this->translate("Please select");?></option>
+								<?php 
+								foreach($this->program as $p){
+									if($this->program_id==$p[program_id])
+									  $sel = "selected";
+									else
+									  $sel = "";
+								 	echo "<option value='$p[program_id]' $sel>$p[main_name]</option>";
+								 } ?>
+							</select>
+			     		</td>
+			     	</tr>			     
+			     </table>
+				 
+				
+			</td>
+		</tr>
+				
+	</table>

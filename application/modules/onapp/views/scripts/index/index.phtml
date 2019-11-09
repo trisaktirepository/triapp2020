@@ -1,0 +1,178 @@
+<?php
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/css/layout.css' );
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/css/default/style.css' );
+?>
+
+<style type="text/css">
+.hide {display: none}
+</style>
+
+<script type="text/javascript">
+function hideDivArea(str_area_hide){
+	tag = document.getElementsByTagName("div");
+	for(x=0;x<tag.length; x++){
+		if(tag[x].getAttribute('id').indexOf(str_area_hide) != -1){
+			tag[x].style.display = "none";
+		}
+	}
+}
+
+function showDivArea(areas_show, areas_hide){
+	for (var i = 0; i < areas_show.length; i++){
+		ge = document.getElementById(areas_show[i]);
+		ge.style.display = "block";
+	}
+	for (var i = 0; i < areas_hide.length; i++){
+		hideDivArea(areas_hide[i]);
+	}
+}
+
+function validate_email(field,alerttxt)
+{
+with (field)
+  {
+  apos=value.indexOf("@");
+  dotpos=value.lastIndexOf(".");
+  if (apos<1||dotpos-apos<2)
+    {alert(alerttxt);return false;}
+  else {return true;}
+  }
+}
+
+function form_Validator(f1)
+{
+	if (f1.sa001_ic.value == '')
+	{
+		alert('Please enter your Personal ID!');
+		f1.sa001_ic.focus();
+		return (false);
+	}
+	if (f1.sa001_name.value == '')
+	{
+		alert('Please enter your name!');
+		f1.sa001_name.focus();
+		return (false);
+	}
+	if (f1.sa001_name_arab.value == '')
+	{
+		alert('Please enter your name (in arabic)!');
+		f1.sa001_name_arab.focus();
+		return (false);
+	}
+	if (f1.sa001_contact.value == '')
+	{
+		alert('Please enter your contact number!');
+		f1.sa001_contact.focus();
+		return (false);
+	}
+	if (f1.sc001_program_id.selectedIndex == 0)
+	{
+		alert('Please select programme level!');
+		f1.sc001_program_id.focus();
+		return (false);
+	}
+	
+	if (validate_email(f1.sa001_email,"Please enter valid email address!")==false)
+	    {
+	    	f1.sa001_email.focus();
+	    	return false;
+	    }
+}
+</script>
+
+
+<form name="f1" method="post" action="<?php echo $this->url(array('module'=>'onapp','controller'=>'index','action'=>'add-apply','sa001_ic'=>$this->formData['sa001_ic']),'default',true) ?>" onsubmit="return form_Validator(this);">
+
+
+<!--<form name="searchUser" action="<?php echo $this->url(array('module'=>'onapp','controller'=>'index','action'=>'index'),'default',true) ?>" method="post">-->
+
+<p><h1>A. PERSONAL PARTICULARS</b></h1>
+
+<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">	
+	
+	
+    <tr  bgcolor="#ffffff">
+		<td width="20%" valign="top" class="shade"><?php echo $this->translate("Personal ID"); ?></td>
+		<td width="2%" valign="top">:</td>
+		<td width="80%" valign="top"><input type="text" name="sa001_ic" id="sa001_ic" size="60">&nbsp;
+		<font color="Red">*</font> &nbsp;<font color="#666666">(<?php echo $this->translate("Example"); ?> : 901258905134)</font></td>
+	</tr>
+	  <tr  bgcolor="#ffffff">
+		<td width="20%" valign="top" class="shade"><?php echo $this->translate("Type of ID"); ?></td>
+		<td width="2%" valign="top">:</td>
+		<td width="80%" valign="top">
+			<input name="type_id" type="radio" value="1" onclick="javascript:showDivArea(['prog_div_hide'], ['prog_div'])"> Personal ID
+			<input name="type_id" type="radio" value="2" onclick="javascript:showDivArea('', ['prog_div'])"> Family ID
+			<input name="type_id" type="radio" value="3" onclick="javascript:showDivArea(['prog_div'], ['prog_div_hide'])"> Passport
+			
+			<div class="hide" id="prog_div">
+			<table width="100%"  border="0" cellpadding="5">
+			  <tr  bgcolor="#ffffff">
+			    <td width="15%"> Place of Issue </td>
+			    <td>
+			      <input type="text" name="ARD_IC_PLACE" id="ARD_IC_PLACE">
+			  </td>
+			  </tr>
+			  <tr  bgcolor="#ffffff">
+			    <td>Date of Issue </td>
+			    <td><input type="text" name="ARD_IC_DATE" id="ARD_IC_DATE"></td>
+			  </tr>
+			  <tr  bgcolor="#ffffff">
+			    <td>Date of Expiry </td>
+			    <td><input type="text" name="ARD_IC_EXPIRE" id="ARD_IC_EXPIRE"></td>
+			  </tr>
+			</table>
+			</div>
+			<div class="hide" id="prog_div_hide"></div>
+		</td>
+	</tr>
+    <tr  bgcolor="#ffffff">
+		<td valign="top" class="shade"><?php echo $this->translate("Fullname"); ?></td>
+		<td valign="top">:</td>
+		<td valign="top"><input type="text" name="sa001_name" id="sa001_name" size="60" /></td>
+	</tr>
+	 <tr  bgcolor="#ffffff">
+		<td valign="top" class="shade"><?php echo $this->translate("Fullname (In Arabic)"); ?></td>
+		<td valign="top">:</td>
+		<td valign="top"><input type="text" name="sa001_name_arab" id="sa001_name_arab" size="60" /></td>
+	</tr>
+	<tr  bgcolor="#ffffff">
+		<td valign="top" class="shade"><?php echo $this->translate("Contact Number"); ?></td>
+		<td valign="top">:</td>
+		<td valign="top"><input type="text" name="sa001_contact" id="sa001_contact" size="40" /></td>
+	</tr>
+	<tr  bgcolor="#ffffff">
+		<td valign="top" class="shade"><?php echo $this->translate("Email"); ?></td>
+		<td valign="top">:</td>
+		<td valign="top"><input type="text" name="sa001_email" id="sa001_email" size="60"></td>
+	</tr>
+	<tr  bgcolor="#ffffff">
+		<td valign="top" class="shade"><?php echo $this->translate("Programme Level"); ?></td>
+		<td valign="top">:</td>
+		<td valign="top">
+		<select name="sc001_program_id" id="sc001_program_id">
+			<option value="0"> -- Please select -- </option>
+			<?php 
+			$programDB = new Onapp_Model_DbTable_Award();
+			$this->program = $programDB->getData();
+			
+				foreach ($this->program as $program) {
+					echo "<option value='".$program['award_id']."'>".$program['award_desc']."</option>";
+				}
+			?>
+		</select>
+				</td>
+	</tr>
+	<tr bgcolor="#ffffff">
+		<td valign="top" colspan="3">* Please enter your personal particulars. </td>
+	</tr>
+	</table>
+	<br>
+	<table width="100%" align="center">
+	<tr  bgcolor="#ffffff" align="center">
+		<td valign="top" colspan="3" > <input type="submit" name="Submit" value="Next"> <input type="submit" name="Reset" value="Cancel"></td>
+		
+	</tr>
+</table>
+
+</form>

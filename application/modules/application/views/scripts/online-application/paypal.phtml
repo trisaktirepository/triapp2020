@@ -1,0 +1,43 @@
+<form action="https://www.paypal.com/cgi-bin/webscr" name="frm" id="frm" method="post">
+<input type="hidden" name=USER value="<?php echo $InitialConfigDetails['PayPalUserid'];?>"> 
+<input type="hidden" name="cmd" value="_xclick">
+<input type="hidden" name="upload" value="1">
+<input type="hidden" name="business" value="suliana@meteor.com.my">
+<input type="hidden" name="item_name" value="Registration Fee TBE-NEW">
+<input type="hidden" name="amount" value="0.01">
+<input type="hidden" name="currency_code" value="MYR">
+<input type="hidden" name="country" value="MY" >
+<input type="hidden" name="charset" value="utf-8">
+<input type="hidden" name="rm" value="2" >  
+<input type="hidden" name="return" id="return" value="http://ibfim.oum.edu.my/onapp/paythanx.php?status=paid&idstud=6" />
+<input type="hidden" name="cancel_return" value="http://ibfim.oum.edu.my/onapp/paythanx.php?status=paid&idstud=6">
+<!-- <input type="hidden" name="notify_url" value="http://<?php //echo $_SERVER['SERVER_NAME']?><?php  //echo $this->baseUrl();?>/registration/confirmpayment/insertedId/<?php //echo $this->idstudent;?>"">
+ --><input type="hidden" name="first_name" value="Firdaus" />
+<input type="hidden" name="last_name" value="Jaafar" />
+<div align="left"><font color="black"><b><?php echo $this->mess; ?></b></font></div>
+<input type="hidden" name="notify_url" value="http://ibfimsis.oum.edu.my/application/ipn">
+
+<input type="submit" value="submit" name="submit">
+<fieldset>
+
+
+<table class="table" width="40%" align="left">
+<tr>
+	<td colspan="2" align ="left"><?php if(!$this->mess){?><?php }?>&nbsp;<input type="button" value="Back" name="btn1" onClick="window.location.href='<?php  echo $this->baseUrl();?>/index'" /></td>
+</tr>
+</table>
+<?php if(!$this->mess){?>
+<table class="table" width="40%" align="center">
+
+<tr>
+	<td>Please wait while you are redirected to the payment gateway.</td>
+	
+</tr>
+<tr>
+<td><font color="Red">After completing of payment please click on Return to oum payment in confirmation page to complete the transaction.</font></td>
+</tr>
+
+</table>
+
+<?php }?>
+</form> 

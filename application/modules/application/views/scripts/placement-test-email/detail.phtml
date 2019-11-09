@@ -1,0 +1,125 @@
+<?php
+    //$this->ckeditor = 'ckeditor'; //To tell the layout ckeditor must be loaded .
+    echo $this->headScript()->appendFile( $this->baseUrl().'/js/ckeditor/ckeditor.js'); 
+?>
+
+<script type="text/javascript">
+
+$(function() {
+	CKEDITOR.replace( '1',{
+		removePlugins : 'resize',
+		toolbar : 'Basic'
+	} );
+
+	CKEDITOR.replace( '2',{
+		removePlugins : 'resize',
+		toolbar : 'Basic'
+	} );
+});
+
+
+function back(){
+	window.location="<?php echo $this->url(array('module'=>'application','controller'=>'placement-test-email','action'=>'index'), 'default', true);?>";
+}
+
+</script>
+
+<style type="text/css">
+	input[type='text']{
+		width: 250px;	
+	}
+		
+	.cke_skin_kama .cke_button_fn_app_name span.cke_label{display:inline;}
+	.cke_skin_kama .cke_button_fn_app_email span.cke_label{display:inline;}
+	.cke_skin_kama .cke_button_fn_app_password span.cke_label{display:inline;}
+	.cke_skin_kama .cke_button_fn_app_fname span.cke_label{display:inline;}
+	.cke_skin_kama .cke_button_fn_app_mname span.cke_label{display:inline;}
+	.cke_skin_kama .cke_button_fn_app_lname span.cke_label{display:inline;}
+</style>
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li class="divider"></li>	
+			<li>							
+				<a href="#" onClick="back()"><span class='back'></span>Back</a>				
+			</li>
+		</ul>
+	</div>
+</div>
+<br>
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<h1><?php echo $this->translate("Email Info"); ?></h1>
+<div width="500px">
+		<table class="table2" width="100%" cellpadding="3" cellspacing="1">
+			<tr>
+				<th width="150px"><? echo $this->translate("Template Name"); ?></th>
+				<td><?php echo $this->email_head['eth_template_name']; ?></td>
+			</tr>
+			<tr>
+				<th width="150px"><? echo $this->translate("Email From"); ?></th>
+				<td><?php echo $this->email_head['eth_email_from']; ?></td>
+			</tr>
+			<tr>
+				<th width="150px"><? echo $this->translate("Email From Name"); ?></th>
+				<td><?php echo $this->email_head['eth_email_from_name']==1?"Yes":"No"; ?></td>
+			</tr>
+			<tr>
+				<th width="150px"><? echo $this->translate("Created By"); ?></th>
+				<td><?php echo $this->email_head['eth_create_by_name']; ?></td>
+			</tr>
+			<tr>
+				<th><? echo $this->translate("Created Date"); ?></th>
+				<td><?php echo date("l, dS F Y", strtotime($this->email_head['eth_create_date'])); ?></td>
+			</tr>
+		</table>	
+</div>
+
+<br />
+
+<h1><?php echo $this->translate("Content"); ?></h1>
+
+<form method="post">
+	<input type="hidden" name="etd_eth_id" value="<?php echo $this->emailTemplate['head']['eth_id']; ?>" />
+	
+	
+	<?php foreach ($this->emailTemplate['detail'] as $template):?>
+	<input type="hidden" name="etd_id[]" value="<?php echo $template['etd_id']; ?>" />
+	<input type="hidden" name="etd_language[]" value="<?php echo $template['etd_language']; ?>" />
+	<h2><?php echo $this->translate("Language"); ?>: <?php echo $template['al_language']; ?></h2>
+	
+	<div style="margin: 10px 0;">
+		<table width="100%" style="">
+			<tr>
+				<td><?php echo $this->translate("Subject"); ?>: </td>
+				<td>
+					<input type="text" name="subject[]" value="<?php echo $template['etd_subject']; ?>" />
+				</td>
+			</tr>
+			<tr>
+				<td valign="top">Content: </td>
+				<td>
+					<textarea name="content[]" id="<?php echo $template['al_id']; ?>"><?php echo $template['etd_body']; ?></textarea>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<?php endforeach; ?>
+	
+	<div align="center" style="margin: 20px 0; padding: 5px; background: #EEEEEE; border: 1px solid #333333;">
+		<input type="submit" value="Save">
+	</div>
+</form>
+

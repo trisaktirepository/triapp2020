@@ -1,0 +1,131 @@
+<script type="text/javascript">
+$(function() {
+	 $( "#ProfileTabs").tabs();
+});
+
+function getNameTag(idac,idgrp){
+	
+	$('#form_print_kpu').remove();
+	$('body').append(
+		$('<form />')
+		.attr('id','form_print_kpu')
+		.attr('action','/default/applicant-portal/print-name-tag/')
+		.attr('method','post')
+		.attr('target','_BLANK')
+		.append(
+			'<input type="hidden" name="idactivity" value="'+idac+'" />' +
+			'<input type="hidden" name="idgrp" value="'+idgrp+'" />'	
+		)
+	);
+
+	$('#form_print_kpu').submit();
+	
+}
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		
+	</div>
+</div>
+<br />  
+ <form name="activity" method="post">
+ <input type="hidden" name="IdStudentRegistration" value="<?php echo $this->student['IdStudentRegistration'];?>">
+ <input type="hidden" name="name" value="<?php echo $this->student["appl_fname"].' '.$this->student["appl_mname"].' '.$this->student["appl_lname"]?>">
+ 
+ <table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		<th width="30%"><?php echo $this->translate("Student ID"); ?></th>
+		<td><?php echo $this->student["registrationId"]?></td>
+	</tr>
+	<tr>
+		<th width="30%"><?php echo $this->translate("Name"); ?></th>
+		<td><?php echo $this->student["appl_fname"].' '.$this->student["appl_mname"].' '.$this->student["appl_lname"]?></td>
+	</tr>
+	 
+	
+</table>
+
+<br> 
+<table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
+	 
+	<?php 
+	//print_r($this->registered_semester);
+	if(count($this->activitylist)>0){
+		foreach($this->activitylist as $activity){
+			$grp=$activity['group'];
+			
+	?>
+	<tr>
+		<td colspan="4">
+			<?php echo $activity["ActivityTitle"]?><br>
+			<?php echo $activity["ActivityTitleBahasa"]?><br>
+		</td>
+	</tr>
+	<tr>
+		<td><?php echo $this->translate('Registration Fee').' : Rp '.$activity['RegistrationFee']?></td>
+		<td><?php echo $this->translate('Activity Fee').' : Rp '.$activity['ActivityFee']?></td>
+		<td><?php echo $this->translate('Certificate Fee').' : Rp '.$activity['CertificateFee']?></td>
+		<td><?php echo $this->translate('Document Fee').' : Rp '.$activity['DocumentFee']?></td>
+	</tr>
+	<tr>
+		<td><?php echo $this->translate('Started Date').' : '.$activity['started_date']?></td>
+		<td><?php echo $this->translate('Ended Date').' : '.$activity['ended_date']?></td>
+		<td colspan="2"><?php echo $this->translate('Url').' : '.$activity['url_site']?></td> 
+	</tr>
+	 <tr>
+	 <td colspan="4">
+	 	<table class="table" width="100%" bgcolor="lightgreen">
+	 	<?php foreach ($grp as $itemgrp) {
+	 			if ($itemgrp['check']=="1") {
+					$check="checked";
+						?><input type="hidden" name="grpTagged[<?php echo $activity['IdActivity']?>][<?php echo $itemgrp['IdCourseTaggingGroup']?>]"> <?php 
+					} else $check="";
+	 			$sch=$itemgrp['schedule'];
+	 			
+	 		?>
+	 		<tr>
+	 			<td><input type="checkbox" name="grp[<?php echo $activity['IdActivity']?>][<?php echo $itemgrp['IdCourseTaggingGroup']?>]" <?php echo $check?>></td>
+	 			<td><?php echo $itemgrp['category']?></td>
+	 			<td><?php echo $itemgrp['activity_title']?></td>
+	 			<td><?php echo $itemgrp['remark']?></td>
+	 		</tr>
+	 		<tr><td colspan="4"><table   width="100%">
+	 		<?php foreach ($sch as $schitem) {
+	 				$lec=$schitem['speaker'];
+		 			?>
+		 		<tr>
+		 			<td><?php echo date('d-M-Y',strtotime($schitem['sc_date'])).' - '.date('d-M-Y',strtotime($schitem['sc_date_end']))?></td>
+					<td><?php echo date('h:s:i',strtotime($schitem['sc_start_time'])).' - '.date('h:s:i',strtotime($schitem['sc_end_time']))?></td>
+					<td><?php echo $schitem['sc_venue']?></td>
+					<td><ol>
+					<?php foreach ($lec as $lecitem) {?>
+					<li><?php echo $lecitem['speaker_name'].' '.$lecitem['remark']?>
+					</li>
+					<?php }?>
+					</ol></td>
+		 		</tr>
+		 		<?php }
+		 		?>
+	 		</table>
+	 		</td>
+	 		</tr>
+	 		<tr><td colspan="3" align="center" bgcolor="lightgreen"><?php if ($check=="checked") {?>
+	 			<a href="#" onclick="getNameTag(<?php echo $activity['IdActivity'];?>,<?php echo $itemgrp['IdCourseTaggingGroup'];?>);"><?php echo $this->translate("Download").' Name Tag';?></a> 
+	 		<?php  }
+	 	}?>
+	 	</td></tr>
+	 		 
+	 	</table>
+	 </td>
+	 </tr>
+		<?php } 
+	 ?>
+	 
+		<tr><td colspan="4" ><input type="submit" value="Save" name="Save"></td></tr>
+	 <?php 
+	}?>
+</table>
+ 
+ </form>

@@ -1,0 +1,340 @@
+<?php 
+    $registry = Zend_Registry::getInstance();
+	$locale = $registry->get('Zend_Locale');
+	$this->locale = $locale->toString();
+    
+    //$this->locale=="id_ID"
+?>
+<style type="text/css">
+
+.zend_form input[type="text"].mark {
+    width: 30px;
+}
+
+#ui-datepicker-div
+{
+    display: none;
+}
+</style>
+
+<script>
+
+function getTranscript(){
+	
+	nim=$('#nim_asal').val();
+	$.ajax({
+		url: "<?php echo $this->url(array('module'=>'default','controller'=>'online-application', 'action'=>'ajax-get-transcript'),'default',true);?>",
+		data: {'nim':nim},
+		type: 'POST',
+		dataType: 'json',
+		 
+	}).done(function ( data ) {
+		//alert(data.length);
+		var tables=$('#table_subject');
+		append_html='';
+		 
+		for (var index = 0; index < data.length; index++) {
+			append_html += '<tr><td>'+index+'</td><td><input type="text" name="subjectcode['+index+']" size="15" value="'+data[index].ShortName+'"> </td>';
+			append_html += '<td><input type="text" name="subjectname['+index+']" size="60" value="'+data[index].NamaSubjek+'"> </td>';
+			append_html += '<td><input type="text" name="sks['+index+']" size="4"  value="'+data[index].CreditHours+'"> </td>';
+			append_html += '<td><input type="text" name="grade['+index+']" size="4" value="'+data[index].grade_name+'"> </td></tr>';
+				
+    	}	
+		tables.append(append_html);
+		 
+
+	});
+}
+
+function getProgram(element){
+    	
+    	var pt = $('#pt_asal').val();
+    	
+    	$.ajax({
+    		url: "<?php echo $this->url(array('module'=>'default','controller'=>'online-application', 'action'=>'ajax-get-prodi-pdpt'),'default',true);?>",
+    		data: {'id_pt':pt},
+    		type: 'POST',
+    		dataType: 'json',
+    		 
+    	}).done(function ( data ) {
+    		//alert(data.length);
+    		$('#prodi_asal').empty().append('<option value=""> <?php echo $this->translate('pleaseselect'); ?> </option>');
+    		var kelas = $('#prodi_asal');
+    		var append_html = "";
+    		var jenjang="";
+    		for (var index = 0; index < data.length; index++) {
+        		if (data[index].nm_jenjang=="") jenjang="-";
+        		else jenjang=data[index].nm_jenjang;
+    			append_html += '<option value="'+data[index].key+'"> '+data[index].value+' ('+jenjang+') </option>';
+    		}	
+			
+    		kelas.append(append_html);
+
+    	});
+    }
+
+function getPt(){
+	
+	var pt = $('#search_pt_asal').val();
+	 
+	$.ajax({
+		url: "<?php echo $this->url(array('module'=>'default','controller'=>'online-application', 'action'=>'ajax-get-pt-pdpt'),'default',true);?>",
+		data: {'pt':pt},
+		type: 'POST',
+		dataType: 'json' 
+	}).done(function ( data ) {
+		$('#pt_asal').empty().append('<option value=""> <?php echo $this->translate('pleaseselect'); ?> </option>');
+		var kelas = $('#pt_asal');
+		var append_html = "";
+		
+		for (var index = 0; index < data.length; index++) {
+			append_html += '<option value="'+data[index].key+'"> '+data[index].value+' </option>';
+		}	
+		//alert(append_html);
+		kelas.append(append_html);
+	});
+	 
+} 
+
+function getGroup(){
+	var program_id = $('#ap_prog_code').val();
+	
+	$.ajax({
+		url: "<?php echo $this->url(array('module'=>'default','controller'=>'online-application', 'action'=>'ajax-get-branch'),'default',true);?>",
+		data: {'program_id':program_id,'type':'transfer'},
+		type: 'POST',
+		dataType: 'json',
+		 
+	}).done(function ( data ) {
+		 
+		$('#grouppssb').empty().append('<option value=""> <?php echo $this->translate('please_select'); ?> </option>');
+		
+		 
+		var grouppssb = $('#grouppssb');
+		var append_html = "";
+		
+		for (var index = 0; index < data.length; index++) {
+			append_html += '<option value="'+data[index].IdProgramBranch+'"> '+data[index].GrpMhs+' </option>';
+		}	
+
+		grouppssb.append(append_html);
+
+	});
+}
+ 
+
+function setSubject(){
+	var n=$('#nofsubject').val();
+	var nofrow=$('#nofrow').val();
+	var tables=$('#table_subject');
+	nofrow=nofrow*1;
+	n=n*1;
+	//alert(n);
+	append_html="";
+	for (var index = nofrow+1; index < nofrow+n+1; index++) {
+		append_html += '<tr><td>'+index+'</td><td><input type="text" name="subjectcode['+index+']" size="15"> </td>';
+		append_html += '<td><input type="text" name="subjectname['+index+']" size="60"> </td>';
+		append_html += '<td><input type="text" name="sks['+index+']" size="4"> </td>';
+		append_html += '<td><input type="text" name="grade['+index+']" size="4" > </td></tr>';
+	}	
+	//alert(append_html);
+	tables.append(append_html);
+	$('#nofrow').val(nofrow+n);
+}
+
+function continues(){
+	alert("upload");
+	window.location = "<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'uploaddocument'), 'default', true);?>";
+}
+
+
+</script>
+
+<body >
+<div class="breadcrum">
+	<ul class="tri-steps">
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'biodata'),'default',true);?>"><?php echo $this->translate("biodata"); ?></a></div></li>
+		
+		<?php if($this->transaction["entry_type"]!=2){ //case agent(manual entry- which is already have no peserta/choose admission type)?>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'contactinfo'),'default',true);?>"><?php echo $this->translate("contact_info"); ?></a></div></li>
+		<li class="prevDone"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'admission'),'default',true);?>"><?php echo $this->translate("Admission Type"); ?></a></div></li>
+		<?php }else{ //end admission?>
+		<li class="prevDone"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'contactinfo'),'default',true);?>"><?php echo $this->translate("contact_info"); ?></a></div></li>
+		<?php }//end else?>
+		<li class="current"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'programme'),'default',true);?>"><?php echo $this->translate("programme"); ?></a></div></li>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'uploaddocument'),'default',true);?>"><?php echo $this->translate("upload_document"); ?></a></div></li>
+		<?php if($this->transaction['at_appl_type']=='1'){?>
+			<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'uploaddocument'),'default',true);?>"><?php echo $this->translate("test_schedule"); ?></a></div></li>
+		<?php }?>
+		<li class="last"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'confirmation'),'default',true);?>"><?php echo $this->translate("confirmation"); ?></a></div></li>	
+	</ul>
+	<div class="clear"></div>
+</div>
+<?php if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+<?php }?>
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		
+	</div>
+</div>
+
+<?php if ($this->application) {?>
+<fieldset><legend><?php echo $this->translate('Credit Transfer Program')?></legend>
+<table class="table">
+<tr><th><?php echo $this->translate("Destination Program")?></th><td><?php echo $this->application['programdest']?></td></tr>
+<tr><th><?php echo $this->translate("Institution From")?></th><td><?php echo $this->application['ptasal']?></td></tr>
+<tr><th><?php echo $this->translate("Program From")?></th><td><?php echo $this->application['programasal'].'('.$this->application['nm_jenjang'].')'?></td></tr>
+<tr><th><?php echo $this->translate("NIM/NPM")?></th><td><?php echo $this->application['nim_asal']?></td></tr>
+<tr><th><?php echo $this->translate("Intake")?></th><td><?php echo $this->application['IntakeId']?></td></tr>
+</table>
+</fieldset>
+<br>
+<?php }?>
+<fieldset><legend><?php echo $this->translate("Program Detail")?></legend>
+<form name="credittransfer" action="" method="post">
+<input type="hidden" name="transactionId" value="<?php echo $this->transaction_id;?>">
+
+<fieldset><legend><?php echo $this->translate('Program Destination')?></legend>
+<table>
+ 
+<tr><td>
+<dt id="ap_prog_code-label">
+<label class="required" for="ap_prog_code"><?php echo $this->translate('Program Preference')?> </label>
+</dt></td>
+<td>
+<dd id="ap_prog_code-element">
+<select id="ap_prog_code" name="ap_prog_code" onchange="getGroup()">
+    <option value=""><?php $this->translate('please_select');?></option>
+    <?php  
+     foreach ($this->programs as $key => $value):?>
+    <?php if($value['key'] == $this->application['IdProgram']):?>
+    <option value="<?php echo $value['key'];?>" selected><?php echo $value['value'];?></option>
+    <?php else:?>
+    <option value="<?php echo $value['key'];?>"><?php echo $value['value'];?></option>
+    <?php endif;?>
+    <?php endforeach;?>
+</select>
+</dd></td>
+</tr>
+
+<tr><td>
+<dt id="ap_class_code-label">
+<label class="required" for="ap_class_code"><?php echo $this->translate('Class')?> </label>
+</dt></td>
+<td>
+<dd id="ap_class_code-element">
+<select id="grouppssb" name="grouppssb" >
+    <option value=""><?php $this->translate('please_select');?></option>
+</select>
+</dd></td>
+</tr>
+
+<tr><td>
+<dt id="intake_id-label">
+<label class="required" for="intake_id"><?php echo $this->translate('Intake')?> </label>
+</dt></td>
+<td>
+<dd id="intake_id-element">
+<select id="intake_id" name="intake_id" ">
+    <option value=""><?php $this->translate('please_select');?></option>
+    <?php  
+     foreach ($this->intake as $key => $value):?>
+    <?php if($value['key'] == $this->application['at_intake']):?>
+    <option value="<?php echo $value['key'];?>" selected><?php echo $value['value'];?></option>
+    <?php else:?>
+    <option value="<?php echo $value['key'];?>"><?php echo $value['value'];?></option>
+    <?php endif;?>
+    <?php endforeach;?>
+</select>
+</dd></td>
+</tr>
+</table>
+</fieldset>
+<fieldset><legend><?php echo $this->translate("Program From")?></legend>
+
+<table> 
+<tr><td>
+<dt id="search_pt_asal-label">
+<label class="required" for="search_pt_asal"><?php echo $this->translate('Search Institution')?> </label>
+</dt></td>
+<td>
+<dd id="search_pt_asal-element">
+ <input type="text" id="search_pt_asal" name="search_pt_asal" onchange="getPt()">
+</dd>
+</td></tr>
+<tr><td>
+<dt id="pt_asal-label">
+<label class="required" for="pt_asal"><?php echo $this->translate('Institution')?> </label>
+</dt></td>
+<td>
+<dd id="pt_asal-element">
+<select id="pt_asal" name="pt_asal" onchange="getProgram(this)" >
+</select>
+</dd>
+</td></tr>
+<tr><td>
+<dt id="prodi_asal-label">
+<label class="required" for="prodi_asal"><?php echo $this->translate('Program')?> </label>
+</dt></td>
+<td>
+<dd id="prodi_asal-element">
+<select id="prodi_asal" name="prodi_asal" >
+     
+</select>
+</dd>
+</td></tr>
+<tr><td>
+<dt id="nim_asal-label">
+<label class="required" for="nim_asal"><?php echo $this->translate('NIM/NPM')?> </label>
+</dt></td>
+
+<td>
+<dd id="nim_asal-element">
+ <input type="text" id="nim_asal"  name="nim_asal" size="15" onblur="getTranscript()">
+</dd>
+</td></tr>
+ 
+</table>
+</fieldset> 
+<fieldset><legend><?php echo $this->translate("Subject List")?></legend>
+<?php echo $this->translate('Add Number of Subject:')?> <input type="text" id="nofsubject" onchange="setSubject()" size="5">
+<input type="hidden" id="nofrow" value="<?php echo count($this->subjects);?>">
+<table class="table" id="table_subject">
+<tr><th><?php echo $this->translate("No")?></th>
+<th><?php echo $this->translate("Subject Code")?></th>
+<th><?php echo $this->translate("Subject Name")?></th>
+<th><?php echo $this->translate("Credit Hour")?></th>
+<th><?php echo $this->translate("Grade")?></th>
+<th><?php echo $this->translate("Drop")?></th>
+</tr>
+<?php if (count($this->subjects)>0) {
+	$i=1;
+	foreach ($this->subjects as $subject) {
+		?>
+	<tr><td><?php echo $i?></td>
+	<td><input type="text" name="subjectcode[<?php echo $i?>]" value="<?php echo $subject['SubjectCode']?>" size="15"></td>
+	<td><input type="text" name="subjectname[<?php echo $i?>]" value="<?php echo $subject['SubjectName']?>" size="60"></td>
+	<td><input type="text" name="sks[<?php echo $i?>]" value="<?php echo $subject['sks'] ?>" size="4"></td>
+	<td><input type="text" name="grade[<?php echo $i?>]" value="<?php echo $subject['Grade'] ?>" size="4"></td>
+	<td><input type="checkbox" name="drop[]" value="<?php echo $subject['SubjectCode'] ?>" ></td>
+</tr>
+<?php $i++;}
+ }?>
+</table>
+</fieldset>
+ 
+ <input type="submit" value="Kirim"> <input type="button" value="Teruskan" onclick="window.location = '<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'uploaddocument'),'default',true);?>' "> 
+</fieldset>
+
+ </form> 
+</body>

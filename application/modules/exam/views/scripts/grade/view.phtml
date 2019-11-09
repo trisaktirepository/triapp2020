@@ -1,0 +1,218 @@
+<script>
+function back(){
+	window.location="<?php echo $this->url(array('module'=>'exam','controller'=>'grade','action'=>'index'), 'default', true);?>";
+	}
+/*function edit(group_id){
+	
+	window.location="<?php echo $this->url(array('module'=>'exam','controller'=>'grade','action'=>'change'), 'default', true);?>/group_id/"+group_id;
+	}*/
+function request(){
+
+		// var group_id    =  $('#group_id:selected').val();
+		 var group_id    = $("#group_id").val();			
+		 var semester_id =  $("input#semester_id").val(); 
+		 var program_id  =  $("input#program_id").val(); 
+			
+
+		var pageURL = "<?php echo $this->url(array('module'=>'exam','controller'=>'grade', 'action'=>'changerequest'),'default',true); ?>/program_id/" + program_id + "/semester_id/" +  semester_id+ "/group_id/" +  group_id;
+		var w = 800;
+		var h = 600;	
+		var left = (screen.width/2)-(w/2);
+		var top = (screen.height/2)-(h/2);
+		var targetWin = window.open (pageURL, 'Change Grade Verification Form', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
+		
+	}
+
+	
+	function assign(){
+	
+		if(confirm('Are you sure you want to verify this grade. Once the grade has been verified, changes will not be allowed.')){
+
+			 var group_id    = $("#group_id").val();	
+			 var semester_id =  $("input#semester_id").val(); 
+			 var program_id  =  $("input#program_id").val(); 
+			 			
+			 
+			var pageURL = "<?php echo $this->url(array('module'=>'exam','controller'=>'grade', 'action'=>'confirm'),'default',true); ?>/program_id/" + program_id + "/semester_id/" +  semester_id+ "/group_id/" +  group_id;
+
+		    var w = 400;
+			var h = 150;
+			var left = (screen.width/2)-(w/2);
+			var top  = (screen.height/2)-(h/2);
+			var targetWin = window.open (pageURL, 'Grade Verification', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=yes, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
+			
+		}
+	}
+	
+</script>
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			 <li> 
+				<a href="#" onClick="back()">
+				<span class='back'></span><?php echo $this->translate("Back");?></a> 
+				</li> 
+				<li>
+				<a href="#" onclick="javascript:request()" title="Click here to print request form.">
+					<span class='print'></span>
+					Print
+				</a>
+				</li>
+				 <li> 
+				<a href="#" onClick="assign()">
+				<span class='save'></span><?php echo $this->translate("Save");?></a> 
+				</li> 
+
+				<!--<?php if($this->grade_list){?>	
+			 <li> 
+				<a href="#" onClick="edit('<?php echo $this->group_id?>')" title="Click here to change/assign to a new grade.">
+				<span class='edit'></span><?php echo $this->translate("Change");?></a> 
+				</li> 
+				<?php }?>
+			</ul>-->
+	</div>
+</div>
+<br>
+<?if(isset($this->noticeMessage)){?>
+<div class="message success"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<br />
+<?}?>
+<br></br>
+<div class="message notice">
+<strong>Important Notes</strong>
+<ul>
+	<li>By default grade akan follow university grade. Kalo nak ikut grade sendiri based on Program and Semester kene buat change Request.</li>
+</ul>
+</div>
+<br>
+<div class="notification">         
+   		<?php echo $this->translate("Please be informed. Any changes must been verified by authorised personal only.
+   		Please print request form to get signature from authorised personal before any changes made. !")?> 
+   		</div>
+<br></br>
+<fieldset style="width:450px;">
+	<legend><?php echo $this->translate("Please select Semester & Program below:-");?></legend>
+	
+<form name="gradefrm" action="" method="post">
+	<table width="100%">	
+		
+		<tr>
+			<td>
+				<?php echo $this->translate("Semester");?> 
+			</td>
+			<td width="5px">:</td>
+			<td>			
+				<select name="semester_id" id="semester_id" onchange="form.submit()" >
+				<option value="0"><?php echo $this->translate("Please select");?></option>
+				<?php 
+				foreach($this->semester as $s){
+					if($this->semester_id==$s[id])
+					  $sel = "selected";
+					else
+					  $sel = "";
+				 	echo "<option value='$s[id]' $sel>$s[name] $s[year]</option>";
+				 } ?>
+				</select>
+			</td>
+		</tr>
+	<tr>
+			<td>
+				<?php echo $this->translate("Program");?> 
+			</td>
+			<td width="5px">:</td>
+			<td>			
+				<select name="program_id"  id="program_id" onchange="form.submit()">
+				<option value="0"><?php echo $this->translate("Please select");?></option>
+				<?php 
+				foreach($this->program as $p){
+					if($this->program_id==$p[program_id])
+					  $sel = "selected";
+					else
+					  $sel = "";
+				 	echo "<option value='$p[program_id]' $sel>$p[main_name]</option>";
+				 } ?>
+				</select>
+			</td>
+		</tr>
+			
+		
+		
+	</table>
+</form>
+</fieldset>
+<br></br>
+
+
+
+<?php if($this->grade_list){?>	
+<form name="gradefrm" action="" method="post">
+
+<input type="hidden" name="semester_id" id="semester_id" value="<?php echo $this->semester_id;?>">
+<input type="hidden" name="program_id" id="program_id" value="<?php echo $this->program_id;?>"></input>	
+ 
+<table class="table" width="60%" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		<th width="25%"><?php echo $this->translate("Last Changes By");?></th>
+		<td><?php echo $this->modifyby;?></td>
+	</tr>
+	<tr>
+		<th width="25%"><?php echo $this->translate("Last Changes Date");?></th>
+		<td><?php echo $this->modifydt?></td>
+	</tr>
+	<tr>
+		<th width="25%"><?php echo $this->translate("Current Group");?></th>
+		<td><?php echo $this->group_name;?></td>
+	</tr>
+	<tr>
+		<th width="25%"><?php echo $this->translate("Group Scheme");?></th>
+		<td>
+		       <select name="group_id" id="group_id" >
+				<option value="0">Please select</option>
+				<?php 
+				foreach($this->group as $g){
+					if($this->group_id==$g[id])
+					  $sel = "selected";
+					else
+					  $sel = "";
+				 	echo "<option value='$g[id]' $sel>$g[group_name]</option>";
+				 } ?>
+				</select>
+				
+			
+				</td>
+	</tr>
+</table>
+</form>
+
+
+<br></br>
+
+<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+	<tr>	   
+		<th><?php echo $this->translate("Grade Symbol");?></th>
+		<th><?php echo $this->translate("Point Grade");?></th>
+		<th><?php echo $this->translate("Grade Status");?></th>
+		<th><?php echo $this->translate("Min Mark");?></th>
+		<th><?php echo $this->translate("Max Mark");?></th>		
+	</tr>
+	
+	<?php 
+	$i=0;
+	foreach ($this->grade_list as $entry): 
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?> align="center">
+	    
+		<td><?php echo $entry['symbol']; ?></td>
+		<td><?php echo $entry['point']; ?></td>
+		<td><?php echo $entry['status']; ?></td>
+		<td><?php echo $entry['min_mark']; ?></td>
+		<td><?php echo $entry['max_mark']; ?></td>		
+	</tr>
+	<?php 
+	$i++;
+	endforeach 
+	?>
+
+</table>
+<?php } ?>

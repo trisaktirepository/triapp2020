@@ -1,0 +1,109 @@
+
+
+<script type="text/javascript">
+
+	function fillmotheraddress(element){		
+			
+		if($(element).is(':checked')){
+
+			//get mother address
+			$.ajax({
+				url: "<?php echo $this->url(array('module'=>'default','controller'=>'ajaxutility', 'action'=>'get-family-info','relation'=>'21'),'default',true);?>",
+				data: {'appl_id':$('#appl_id').val()},
+				type: 'POST',
+				dataType: 'json'	
+			}).done(function ( data ) {
+				
+				 $('#appl_address1').val(data.af_address1);
+				 $('#appl_address2').val(data.af_address2);	
+				 $('#appl_province').val(data.af_province);				
+				 $('#appl_state').val(data.af_state);
+				 $('#appl_city').val(data.af_city);
+				 $('#appl_postcode').val(data.af_postcode);			
+				 
+			});
+		}
+	}
+	
+	function filladdress(element){
+
+		if($(element).is(':checked')){
+			
+			var address1 = $('#appl_address1').val();
+			var address2 = $('#appl_address2').val();
+			var appl_postcode = $('#appl_postcode').val();
+			var country_id = $('#appl_province').val();
+			var appl_state = $('#appl_state').val();
+			var appl_city = $('#appl_city').val();
+			
+		}else{
+			var address1 = '';
+			var address2 = '';
+			var appl_postcode = '';
+			var country_id = null;
+			var appl_state = null;
+			var appl_city = null;	
+		}
+		
+		$('#appl_caddress1').val(address1);
+		$('#appl_caddress2').val(address2);
+		$('#appl_cpostcode').val(appl_postcode);
+
+		$('#appl_cprovince').val(country_id);
+		$('#appl_cstate').val(appl_state);
+		$('#appl_ccity').val(appl_city);
+	}
+
+	function changeState(element,targetElement){
+		var country_id = $(element).val();
+		
+		$.ajax({
+			url: "<?php echo $this->url(array('module'=>'default','controller'=>'ajax-utility', 'action'=>'get-state'),'default',true);?>",
+			data: {'country_id':$(element).val()},
+			type: 'POST',
+			dataType: 'json'	
+		}).done(function ( data ) {
+			
+			$(targetElement).empty().append('<option value=""> <?php echo $this->translate("please_select"); ?> </option>');
+		
+			$.each(data, function(index) {
+				$(targetElement).append('<option value="'+data[index].idState+'"> '+data[index].StateName+' </option>');
+			});
+		});
+	}
+
+	function changeCity(element, targetElement){
+		$.ajax({
+			url: "<?php echo $this->url(array('module'=>'default','controller'=>'ajax-utility', 'action'=>'get-city'),'default',true);?>",
+			data: {'state_id':$(element).val()},
+			type: 'POST',
+			dataType: 'json'	
+		}).done(function ( data ) {
+			
+			$(targetElement).empty().append('<option value=""> <?php echo $this->translate("please_select"); ?> </option>');
+		
+			$.each(data, function(index) {
+				$(targetElement).append('<option value="'+data[index].idCity+'"> '+data[index].CityName+' </option>');
+			});
+		});
+	}	
+</script>
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		
+	</div>
+</div>
+
+<?php echo $this->form; ?>

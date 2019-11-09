@@ -1,0 +1,78 @@
+<?php
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/css/layout.css' );
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/css/default/style.css' );
+?>
+
+<script type="text/javascript">
+	$(function() {
+		$("#entitlement").dialog({
+			autoOpen: false,
+			width: 670,
+			height: 300,
+			buttons: { 
+				"Close": function() { $(this).dialog("close"); },
+				"Save": function() {
+					document.manual_entitlement.submit();
+				} 
+			}		
+		});
+	});
+
+	function calculate_balance(leaveType){
+		var cf = parseInt($("#cf_"+leaveType).val());
+		var ent = parseInt($("#ent_"+leaveType).val());
+		var tkn = parseInt($("#taken_"+leaveType).val());
+
+		var bal = 0;
+
+		if(cf!=NaN && ent!=NaN && tkn!=NaN){
+			bal = (cf+ent)-tkn;
+		}
+		
+		$("#balance_"+leaveType).html(bal);
+	}
+</script>
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<?php
+	echo "<h1>". $this->title ."</h1>";
+?>
+
+		<table width="100%" border="0" cellpadding="5" align="center" bgcolor="#cccccc" cellspacing="1">
+		<tr bgcolor="#f2f2f2">
+			<td>BIL</td>
+			<td align="center">APPLICANT NAME</td>
+			<td align="center">PERSONAL ID</td>
+		</tr>
+		
+		<?php 
+					$applyDB = new Onapp_Model_DbTable_Apply();
+    				$apply = $applyDB->getData();
+					$bil = 1;
+						foreach ($apply as $app){
+						?>
+						<tr bgcolor="#ffffff">
+							<td><?php echo $bil; ?></td>
+							<td><?php echo $app['ARD_NAME']; ?></td>
+							<td><?php echo $app['ARD_IC']?></td>
+						</tr>
+						<?php
+						$bil++;
+							} 
+					?>
+					
+		
+	</table>
+
+
+
+	

@@ -1,0 +1,167 @@
+<script type="text/javascript">
+	function del(title, id){
+		if(confirm('Are you sure to delete '+title+'?')){
+			window.location = "<?php echo $this->url(array('module'=>'exam','controller'=>'markadjsetup', 'action'=>'delete')); ?>/id/"+id;
+		}
+	}
+	
+	function add(){			
+		window.location="<?php echo $this->url(array('module'=>'exam','controller'=>'markadjsetup', 'action'=>'add'));?>";
+	}
+
+	function edit(id){	
+		window.location="<?php echo $this->url(array('module'=>'exam','controller'=>'markadjsetup', 'action'=>'edit'));?>/id/"+id;
+	}
+
+
+	function subForm(action){
+
+		for (index=0; index < document.myform.myID.length; index++) {
+			if (document.myform.myID[index].checked) {
+				var id = document.myform.myID[index].value;		
+			}
+		}
+		
+		if(action==1){
+			window.location="<?php echo $this->url(array('module'=>'exam','controller'=>'markadjsetup','action'=>'edit'));?>/id/"+id;
+		}
+
+			
+		if(action==2){//delete
+			if(confirm('Are you sure to delete this item?')){
+				window.location = "<?php echo $this->url(array('module'=>'exam','controller'=>'markadjsetup', 'action'=>'delete')); ?>/id/"+id;
+			}
+		}
+
+		
+	}
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>							
+					<a href="#" onClick="add()">
+						<span class='add'></span>Add</a>
+				
+			</li>
+			<li>							
+					<a href="#" onClick="subForm(1)">
+						<span class='edit'></span>Edit</a>
+				
+			</li>
+			<li>							
+					<a href="#" onClick="subForm(2)">
+						<span class='delete'></span>Delete</a>
+				
+			</li>		
+					
+					
+		</ul>
+	</div>
+</div>
+<br></br>
+
+<fieldset style="width:450px;">
+	<legend>Search Options:-</legend>
+<form name="gradefrm" action="" method="post">
+	<table width="100%">
+		<tr>
+			<td>
+				<?php echo $this->translate("Semester");?> 
+			</td>
+			<td width="5px">:</td>
+			<td>			
+				<select name="semester_id" onchange="form.submit()">
+				<option value="0"><?php echo $this->translate("Please select");?></option>
+				<?php 
+				foreach($this->semester as $s){
+					if($this->semester_id==$s[id])
+					  $sel = "selected";
+					else
+					  $sel = "";
+				 	echo "<option value='$s[id]' $sel>$s[name] $s[year]</option>";
+				 } ?>
+				</select>
+			</td>
+		</tr>	
+		<tr>
+			<td>
+				<?php echo $this->translate("Program");?> 
+			</td>
+			<td width="5px">:</td>
+			<td>			
+				<select name="program_id" onchange="form.submit()">
+				<option value="0"><?php echo $this->translate("Please select");?></option>
+				<?php 
+				foreach($this->program as $p){
+					if($this->program_id==$p[id])
+					  $sel = "selected";
+					else
+					  $sel = "";
+				 	echo "<option value='$p[id]' $sel>$p[main_name]</option>";
+				 } ?>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<?php echo $this->translate("Course");?> 
+			</td>
+			<td width="5px">:</td>
+			<td>			
+				<select name="course_id" >
+				<option value="0"><?php echo $this->translate("Please select");?></option>
+				<?php 
+				foreach($this->course_list as $c){
+					if($this->course_id==$c[id])
+					  $sel = "selected";
+					else
+					  $sel = "";
+				 	echo "<option value='$c[id]' $sel>$c[code] - $c[name]</option>";
+				 } ?>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">&nbsp;</td>
+			<td><input type="submit" value="search" /></td>
+		</tr>
+	</table>
+</form>
+</fieldset>
+
+<br />
+
+<form name="myform" method="post" action="">
+
+<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+	<tr>
+		<th>&nbsp;</th>
+		<th>Min Mark</th>
+		<th>Max Mark</th>
+		<th>Value</th>
+		
+	</tr>	
+	<?php 
+	$i=0;
+	foreach ($this->paginator as $entry): 
+
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?> align="center">		
+	    <td>
+	     <input type="radio" name="myID" id="myID" value="<?php echo $entry["id"]?>"></input>
+	    </td>
+		<td><?php echo $entry['min_mark']; ?></td>
+		<td><?php echo $entry['max_mark']; ?></td>
+		<td><?php echo $entry['value']; ?></td>
+		
+	</tr>
+	<?php 
+	$i++;
+	endforeach 
+	?>
+
+</table>
+</form>

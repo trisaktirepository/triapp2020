@@ -1,0 +1,74 @@
+<script>
+function apply(){
+		
+	window.location = "<?php echo $this->url(array('module'=>'default','controller'=>'change-program', 'action'=>'apply'),'default',true); ?>";
+		
+}
+
+
+function changeProgram(element){
+
+	if($(element).val()!=''){
+
+		$.ajax({
+			url: "<?php echo $this->url(array('module'=>'default','controller'=>'change-program', 'action'=>'ajax-get-change-program'),'default',true);?>",
+			data: {'txn_id':$(element).val()},
+			type: 'POST',
+			dataType: 'json'	
+		}).done(function ( data ) {
+
+			
+			$("#acp_trans_id_to").empty().append('<option value=""> <?php echo $this->translate("-- Please Select --"); ?> </option>');
+		
+			$.each(data, function(index) {
+				$("#acp_trans_id_to").append('<option value="'+data[index].at_trans_id+'">('+data[index].ap_prog_code+')'+data[index].ArabicName+' - '+data[index].at_pes_id+' - '+data[index].rank+' </option>');
+			});
+		});
+	}
+		
+	
+}
+
+function confirmSubmit(){
+
+	var msg = confirm("<?php echo $this->translate('Are sure you want to do Change Program. Once submitted any reversal will not be allowed');?>");
+
+	if(msg){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+</script>
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<?if(isset($this->noticeMessage)){?>
+	<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+	<?}?>
+	<?if(isset($this->noticeSuccess)){?>
+	<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+	<?}?>
+	<?if(isset($this->noticeError)){?>
+	<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+	<?}?>
+
+<div style="width:100%;">
+
+<?php  echo $this->form; ?>
+	
+</div>

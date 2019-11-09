@@ -1,0 +1,200 @@
+<?php
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/css/layout.css' );
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/css/default/style.css' );
+?>
+
+<script type="text/javascript">
+
+    function addRowToTable(tbl_name)
+	{
+	  var tbl = document.getElementById(tbl_name);
+	  var lastRow = tbl.rows.length;
+	  // if there's no header row in the table, then iteration = lastRow + 1
+	  var iteration = lastRow;
+	  var row = tbl.insertRow(lastRow);
+	  
+	  var cellLeft = row.insertCell(0);
+	  var textNode = document.createTextNode(iteration);
+	  cellLeft.appendChild(textNode);
+	  
+	  for(i=1;i<5;i++){
+		  var cellRight = row.insertCell(i);
+		  var el = document.createElement("input");
+		  el.type = 'text';
+		  el.name = 'txtRow' + iteration+i;
+		  el.size = 10;
+		  cellRight.appendChild(el);
+		//alert(el.name);
+	  
+	  }  
+	}
+
+
+</SCRIPT>
+
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<?php
+	echo "<h1>". $this->title ."</h1>";
+	//echo "<h1>". $this->id ."</h1>";
+	
+$applyDB = new Onapp_Model_DbTable_Apply();
+$apply = $applyDB->getData($this->id);
+
+?>
+
+
+	<p><b>A. PERSONAL PARTICULARS</b></p>
+	<table width="100%" border="0" cellpadding="5" align="center" bgcolor="#fff" cellspacing="1">
+		<tr>
+			<td width="20%" bgcolor="#f2f2f2"><?php echo $this->translate("Fullname"); ?></td>
+			<td width="2%">:</td>
+			<td><?php echo $apply["ARD_NAME"];?></td>
+		</tr>
+		<tr>
+			<td bgcolor="#f2f2f2"><?php echo $this->translate("Personal ID"); ?></td>
+			<td>:</td>
+			<td><?php echo $apply["ARD_IC"];?></td>
+		</tr>
+		<tr>
+			<td bgcolor="#f2f2f2"><?php echo $this->translate("Contact Number"); ?></td>
+			<td>:</td>
+			<td><?php echo $apply["ARD_HPHONE"];?></td>
+		</tr>
+		<tr>
+			<td bgcolor="#f2f2f2"><?php echo $this->translate("Email"); ?></td>
+			<td>:</td>
+			<td><?php echo $apply["ARD_EMAIL"]; ?></td>
+		</tr>
+		<tr>
+			<td bgcolor="#f2f2f2"><?php echo $this->translate("Programme Level"); ?></td>
+			<td>:</td>
+			<td>
+			
+			<?php echo $apply["ARD_PROGRAM"]; ?>
+			<?php 
+			$programDB = new Onapp_Model_DbTable_Program();
+			$this->program = $programDB->getData($apply["ARD_PROGRAM"]);
+			
+			echo $this->program["sc001_name"]; ?>
+			</td>
+		</tr>
+		
+		<!--<tr>
+			<td bgcolor="#f2f2f2"><?php echo $this->translate("Required Qualification"); ?></td>
+			<td>:</td>
+			<td><?php 
+//			$quaDB = new Onapp_Model_DbTable_Qualification();
+//			$this->qua = $quaDB->getData($_POST["sc003_qualification_id"]);
+//			
+//			echo $this->qua["sc003_name"]; ?></td>
+		</tr>-->
+	</table>
+	
+	
+	<!-- $prog_qua = $_POST["prog_qua"];
+	  	$n= count($prog_qua);
+		$i= 0;
+		
+		while ($i < $n)
+		{
+			if ($pq["id"] == $prog_qua[$i]) {
+				$select = "disabled";
+				break;
+			}
+			else 
+				$select = "";
+			$i++;
+		}-->
+	
+
+		
+		
+<BR>
+	<p><b>B. ENTRY REQUIREMENTS</b></p>
+	
+
+	
+	<?php //echo $this->translate("Bachelor Degree"); 
+	$programDB = new Onapp_Model_DbTable_Program();
+	$this->program2 = $programDB->getProgram($apply["ARD_PROGRAM"]);
+	
+	$m=1;
+	foreach ($this->program2 as $prog){
+//$prog["sc001_program_id"]
+	?> 
+	
+	<form name="f1" method="POST" action="/onapp/index/add-req/id/<?php echo $this->id;?>">
+	<table width="100%">
+		<tr>
+			<td width="80%"><?php echo $m.") ".strtoupper($prog["sc001_name"]); ?></td>
+			<td align="right"><input type="submit" value="Add More" onclick="addRowToTable('<?=$prog["sc001_name"]?>');" /></td>
+		</tr>
+	</table>
+	<table class="table4" width="90%" cellpadding="5" cellspacing="1" id="<?=$prog["sc001_name"]?>">
+		<tr>
+			<th>Bil</th>
+			<th>Year Graduate</th>
+			<th align="center">School/College/University</th>
+			<th align="center">Programme</th>
+			<th align="center">Grade</th>
+		</tr>
+		
+		<?php //echo $this->translate("Bachelor Degree"); 
+		$entryDB = new Onapp_Model_DbTable_Applyreq();
+		$this->entry = $entryDB->getEntry($this->id,$prog["sc001_program_id"]);
+		$n = 1;
+		foreach ($this->entry as $ent){
+	
+		?> 
+		<tr>
+			<td><?=$n?></td>
+			<td><?=$ent["APP_YEAR"];?></td>
+			<td><?=$ent["APP_SCHOOL"];?></td>
+			<td><?=$ent["APP_QUA"];?></td>
+			<td><?=$ent["APP_GRADE"];?></td>
+		</tr>
+		<?$n++;
+		 } ?>
+		
+		
+		<tr>
+			<td><?=$n?></td>
+			<td><input type="text" name="APP_YEAR" id="APP_YEAR" size="5"></td>
+			<td><input type="text" name="APP_SCHOOL" id="APP_SCHOOL" size="10"></td>
+			<td><input type="text" name="APP_QUA" id="APP_QUA" size="10"></td>
+			<td><input type="text" name="APP_GRADE" id="APP_GRADE" size="10"></td>
+		</tr>
+		
+		<input type="hidden" name="APP_STAT" id="APP_STAT" value="0">
+		<input type="hidden" name="APP_ID" id="APP_ID" value="<?=$this->id;?>">
+		<input type="hidden" name="APP_ENTRY" id="APP_ENTRY" value="<?=$prog["sc001_program_id"]?>">
+	</table>
+	
+
+	
+	
+	<?php
+	$m++;
+	}
+	?>
+		
+<br>
+<!--	<form name="f2" method="POST"">-->
+	<table>
+		<tr>
+			<td><input type="submit" value="Save & Next" onclick="form.action='<? echo $this->url(array('module'=>'onapp','controller'=>'index','action'=>'add-detail','app_id'=>$this->id),'default',true) ?>'"/></td>
+			<td><input type="submit" value="Reset" /></td>
+		</tr>
+	</table>
+	
+	</form>

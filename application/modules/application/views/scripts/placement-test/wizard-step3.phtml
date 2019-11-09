@@ -1,0 +1,193 @@
+
+<?php echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery/plugin/jquery.rotateTableCellContent/jquery.rotateTableCellContent.js');?>
+<?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/js/jquery/plugin/jquery.rotateTableCellContent/jquery.rotateTableCellContent.css'); ?>
+	
+<script type="text/javascript">
+$(function() {
+	$('table').rotateTableCellContent();
+});
+
+function back(){
+	window.location="<?php echo $this->url(array('module'=>'application','controller'=>'placement-test','action'=>'index'), 'default', true);?>";
+}
+
+
+</script>
+
+<style type="text/css">
+.table tr th{
+	width: 10px;
+}
+
+.weightage{
+	width:30px;
+}
+</style>
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li class="divider"></li>	
+			<li>							
+				<a href="#" onClick="back()"><span class='back'></span>Back</a>				
+			</li>
+		</ul>
+	</div>
+</div>
+
+<div align="center" style="background:#ebebeb; height:30px;">
+	<ul class="steps">
+	    <li class="prevDone">
+			<span>1</span> <a href="<?php echo $this->url(array('module'=>'application','controller'=>'placement-test','action'=>'wizard-step1'));?>"><?php echo $this->translate('Component Setup')?></a>
+		</li>
+	    <li class="prevDone">
+			<span>2</span> <a href="<?php echo $this->url(array('module'=>'application','controller'=>'placement-test','action'=>'wizard-step2'));?>"><?php echo $this->translate('Program Setup')?></a>
+		</li>
+		<li class="current">
+			<span>3</span> <a href="<?php echo $this->url(array('module'=>'application','controller'=>'placement-test','action'=>'wizard-step3'));?>"><?php echo $this->translate('Component Weightage')?></a> 
+		</li>
+		<li class="next">
+			<span>4</span> <a href="<?php echo $this->url(array('module'=>'application','controller'=>'placement-test','action'=>'wizard-step4'));?>"><?php echo $this->translate('Schedule')?></a>
+		</li>
+		<li class="empty">
+			<span>5</span> <?php echo $this->translate('Submit')?>
+		</li>
+	</ul>
+	<br class="clear" />
+</div>
+
+<br>
+<h1><?php echo $this->translate("Placement Test Info"); ?></h1>
+<div width="500px">
+		<table class="table2" width="100%" cellpadding="3" cellspacing="1">
+			<tr>
+				<th width="150px"><? echo $this->translate("Placement Test Name"); ?></th>
+				<td><?php echo $this->placement_test['aph_placement_name']; ?></td>
+			</tr>
+			<tr>
+				<th width="150px"><? echo $this->translate("Code"); ?></th>
+				<td><?php echo $this->placement_test['aph_placement_code']; ?></td>
+			</tr>
+			<tr>
+				<th width="150px"><? echo $this->translate("Fees By Program"); ?></th>
+				<td><?php echo $this->placement_test['aph_fees_program']==1?"Yes":"No"; ?></td>
+			</tr>
+			<tr>
+				<th width="150px"><? echo $this->translate("Fees By Location"); ?></th>
+				<td><?php echo $this->placement_test['aph_fees_location']==1?"Yes":"No"; ?></td>
+			</tr>
+			<tr>
+				<th><? echo $this->translate("Start Date"); ?></th>
+				<td><?php echo date("l, dS F Y", strtotime($this->placement_test['aph_start_date'])); ?></td>
+			</tr>
+			<tr>
+				<th><? echo $this->translate("End Date"); ?></th>
+				<td><?php echo date("l, dS F Y", strtotime($this->placement_test['aph_end_date'])); ?></td>
+			</tr>
+			<tr>
+				<th><? echo $this->translate("Efective Date"); ?></th>
+				<td><?php echo date("l, dS F Y", strtotime($this->placement_test['aph_effective_date'])); ?></td>
+			</tr>
+			<tr>
+				<th><? echo $this->translate("Created by"); ?></th>
+				<td><?php echo $this->placement_test['aph_create_by_name']; ?></td>
+			</tr>
+			<tr>
+				<th><? echo $this->translate("Created Date"); ?></th>
+				<td><?php echo date("d/m/Y g:ia", strtotime($this->placement_test['aph_create_date'])); ?></td>
+			</tr>
+		</table>	
+</div>
+<br />
+
+<h1><?php echo $this->translate("Component Weightage"); ?></h1>
+<?php if($this->placementtestProgramList){?>
+<form method="post">
+<table class="component table">
+	<thead>
+		<tr>
+			<th style="width:200px">&nbsp;</th>
+			<th style="width:30px" class="vertical"><?php echo $this->translate("First Question Number");?></th>
+			<th style="width:30px" class="vertical"><?php echo $this->translate("Last Question Number");?></th>
+			<th style="width:30px" class="vertical"><?php echo $this->translate("Total Questions");?></th>
+			<?php
+			$p_count = 0; 
+			foreach ($this->placementtestProgramList as $program):
+			?>
+			
+			<td class="vertical"><?php echo $program['ProgramName'] ?> (<?php echo $program['app_program_code'] ?>)</td>
+			
+			<?php 
+			$p_count++;
+			endforeach;
+			?>
+		</tr>
+	</thead>
+	<tbody>
+	<?php 
+	foreach ($this->componentList as $component):
+	?>
+	<tr>
+		<td><?php echo $component['ac_comp_name']; ?></td>
+		<td align="center"><?php echo $component['detail']['apd_questno_start']; ?></td>
+		<td align="center"><?php echo $component['detail']['apd_questno_end']; ?></td>
+		<td align="center"><b><?php echo $component['detail']['apd_total_question']; ?></b></td>
+		<?php 
+			for($i=0; $i<$p_count; $i++){
+				$programcomponent = false;
+				
+				if( $this->placementtestProgramList[$i]['component'] != null ){
+					foreach ( $this->placementtestProgramList[$i]['component'] as $p_component){
+						if( $p_component['apps_comp_code'] == $component['ac_comp_code'] ){
+							
+							$val = "";
+							if( isset($p_component['weightage']) ){
+								$val = $p_component['weightage']['apw_weightage'];
+							}
+							
+							echo '<td align="center">';
+							echo '<input type="hidden" name="apw_id[]" class="weightage" value="'.$p_component['weightage']['apw_id'].'" />';
+							echo '<input type="hidden" name="apw_app_id[]" class="weightage" value="'.$this->placementtestProgramList[$i]['app_id'].'" />';
+							echo '<input type="hidden" name="apw_apd_id[]" class="weightage" value="'.$component['detail']['apd_id'].'" />';
+							echo '<input type="text" name="apw_weightage[]" class="weightage" value="'.$val.'" maxlength="3" />';
+							echo '</td>';
+							$programcomponent = true;						
+						}
+					}
+				}
+
+				if(!$programcomponent){
+					echo '<td align="center"> - </td>';
+				}
+			}
+		?>
+	</tr>
+	<?php 
+	endforeach;
+	?>
+	<tr>
+		<th colspan="4">&nbsp;</th>
+		<?php 
+			for($i=0; $i<$p_count; $i++){
+		?>
+			<td align="center">100%</td>
+		<?php 
+			}
+		?>
+	</tr>
+	</tbody>
+</table>
+
+<?php if($this->placementtestProgramList){?>
+<div align="center" style="margin: 20px 0; padding: 5px; background: #EEEEEE; border: 1px solid #333333;">
+	<input type="submit" value="<?php echo $this->translate("Save & Proceed Next Process"); ?>" onclick="javascript:nextProcess()" />
+</div>
+<?php }?>
+</form>
+<?php }else{?>
+	<div class="message error">
+		<?php echo $this->translate("Please Complete program & component setup first"); ?>
+	</div>
+<?php }?>

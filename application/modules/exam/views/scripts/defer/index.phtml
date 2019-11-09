@@ -1,0 +1,175 @@
+<script type="text/javascript">
+	$(function() {
+		// a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
+		$( "#dialog:ui-dialog" ).dialog( "destroy" );
+	
+		$( "#dialog-search" ).dialog({
+			modal: true,
+			autoOpen: false,
+			width: 600,
+			buttons: {
+				"Search": function() { 
+					$("#search_form").submit(); 
+				}, 
+				"Cancel": function() { 
+					$(this).dialog("close"); 
+				}
+				
+			}
+		});
+	});
+</script>
+
+
+<script type="text/javascript">
+	
+	function searchbox(){
+		$( "#dialog-search" ).dialog('open');
+	}
+
+</script>
+
+
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			
+			<li class="divider"></li>
+			<li>
+				<a id="search" href="#" onclick="javascript:searchbox()">
+					<span class='search'></span>
+					Search
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<div align="center" style="background:#ebebeb; height:30px;">
+<ul class="steps">
+	<li class="current">
+		<span>1</span> Student Selection
+	</li>
+    <li class="next">
+		<span>2</span> Exam Defer
+	</li>
+	<li class="empty">
+		<span>3</span> Completed
+	</li>
+
+</ul>
+<br class="clear" />
+</div>
+
+
+
+
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+
+<table class="table" width="100%" cellpadding="5" cellspacing="1">	
+	<tr>
+		<th width="100px">Matric No</th>
+		<th width="100px">ID No</th>
+		<th width="250px">Student Name</th>
+		<th width="250px">Program</th>
+		<th width="50px">Program Code</th>
+		<th width="50px">Semester</th>		
+	</tr>
+	<?php 
+	$i=0;
+	foreach ($this->paginator as $student):
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<td align="left"><?php echo $student['matric_no']; ?></td>
+		<td><?php echo $student['ic_no']; ?></td>
+		<td align="left">
+		<? if($student['defer_status']!=0){ ?>
+			<a href="<?php echo $this->url(array('module'=>'exam','controller'=>'defer', 'action'=>'view-approval', 'stud_id'=>$student['student_id']),'default',true);?>"><?php echo $student['fullname']; ?></a>
+		<? }else{?>
+			<a href="<?php echo $this->url(array('module'=>'exam','controller'=>'defer', 'action'=>'approval', 'stud_id'=>$student['student_id']),'default',true);?>"><?php echo $student['fullname']; ?></a>
+		<? } ?>
+		</td>
+		<td align="left"><?php echo $student['main_name']; ?></td>
+		<td align="center"><?php echo $student['program_code']; ?></td>
+		<td align="left"><?php echo $student['semester_name'].' '.$student['semester_year']; ?></td>
+	</tr>
+	<?php 
+	$i++;
+	endforeach 
+	?>
+	
+</table>
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>
+
+
+
+
+
+<div id="dialog-search" title="Search Student">
+<form name="search_form" id="search_form" action="" method="post">
+	<table width="100%" class="table5">
+		<tr>
+			<td>
+				ID Number
+			</td>
+			<td width="5px">:</td>
+			<td>
+				<input type="text" name="id" style="width:250px" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Type Of ID
+			</td>
+			<td width="5px">:</td>
+			<td>
+				
+				<input type="radio" name="id_type" value="1" /> Personal ID
+				<input type="radio" name="id_type" value="2" /> Family ID
+				<input type="radio" name="id_type" value="3" /> Passport
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Matric Number
+			</td>
+			<td width="5px">:</td>
+			<td>
+				<input type="text" name="matric_no" style="width:250px" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Name
+			</td>
+			<td width="5px">:</td>
+			<td>
+				<input type="text" name="name" style="width:250px" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Program
+			</td>
+			<td width="5px">:</td>
+			<td>
+				<select name="program_id">
+					<option value="0"> -- Select Program --</option>
+					<?php
+						foreach ($this->programList as $programlist) {
+							echo "<option value=".$programlist['id'] .$selected." >".$programlist['main_name']."</option>";
+						}
+					?>
+				</select>
+			</td>
+		</tr>
+	</table>
+</form>
+</div>

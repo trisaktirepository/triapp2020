@@ -1,0 +1,156 @@
+<style type="text/css">
+	table td ul{
+		padding: 0 0 0 10px;
+		margin: 0;	
+	}
+}
+</style>
+<form name="f1" method="post" action="">
+<table class="table6" width="100%" cellspacing="0" cellpadding="5" border="0">
+	<tr bgcolor ="#cccccc">
+		<th colspan="3">Examination Details</th>
+	</tr>
+	<tr>
+		<td width="120px">Exam Center</td>
+		<td width="5px">:</td>
+		<td><?php echo $this->schedule['exam_center_name']; ?><input type="hidden" name="ccenter" id="ccenter" value = "<?php echo $this->schedule['exam_center_name']; ?>"></td>
+	</tr>
+	<tr>
+		<td valign="top">Course</td>
+		<td valign="top">:</td>
+		<td>
+			<?php 
+				foreach ($this->course as $course){
+					echo $course['course_name'];
+				}
+			?>
+			<input type="hidden" name="ccourse" id="ccourse" value = "<?php echo $course['course_name']; ?>">
+			
+		</td>
+	</tr>
+	<tr>
+		<td>Date</td>
+		<td>:</td>
+		<td><?php echo date('D jS F Y',strtotime($this->schedule['exam_date'])); ?><input type="hidden" name="ddate" d="ddate" value = "<?php echo date('D jS F Y',strtotime($this->schedule['exam_date'])); ?>"></td>
+	</tr>
+	<tr>
+		<td>Start Time</td>
+		<td>:</td>
+		<td><?php echo $this->schedule['exam_time_start']; ?><input type="hidden" name="sstart" d="sstart" value = "<?php echo $this->schedule['exam_time_start']; ?>"></td>
+	</tr>
+	<tr>
+		<td>End Time</td>
+		<td>:</td>
+		<td><?php echo $this->schedule['exam_time_end']; ?><input type="hidden" name="send" id="send" value = "<?php echo $this->schedule['exam_time_end']; ?>"></td>
+	</tr>
+	
+	<tr>
+		<td>Available Seat(s)</td>
+		<td>:</td>
+		<td><?php echo $this->seat?></td>
+	</tr>
+	<tr>
+		<td colspan="3">&nbsp;</td>
+	</tr>
+	
+	<?php if ($this->seat != "Seats are full."){?>
+	<tr bgcolor ="#cccccc">
+		<th colspan="3">Payment</th>
+	</tr>
+	<tr>
+		<td>Amount</td>
+		<td>:</td>
+		<td><?php echo $this->fee["currency"];?> <?php echo $this->fee["amount"];?>
+		<input type="hidden" name="currency" id="currency" value = "<?php echo $this->fee["currency"]; ?>">
+		<input type="hidden" name="amount" id="amount" value = "<?php echo $this->fee["amount"]; ?>"></td>
+	</tr>
+	<tr>
+		<td>Payment Mode</td>
+		<td>:</td>
+		<td>
+		<select name="paymentmode" id="paymentmode" onchange="popupAlert(this.options[this.selectedIndex].value);">
+			<option value="0"> -- Please select -- </option>
+			<?php 
+				foreach ($this->paymentmode as $data) {
+					
+					echo "<option value='".$data['id']."'>".$data['name']."</option>";
+				}
+			?>
+		</select>
+		</td>
+	</tr>
+	<?php }?>
+	
+	<!--<tr>
+		<td valign="top">Venue</td>
+		<td valign="top">:</td>
+		<td>
+			<ul>
+			<?php 
+				foreach ($this->venue as $venue){
+					echo "<li>".$venue['venue_name']." capacity:".$venue['venue_capacity']."</li>";
+				}
+			?>
+			</ul>
+	</tr>
+--></table>
+<br>
+<table align="center" width="100%">
+		<tr>
+			<td colspan="2" align="center">
+			
+			<?php if ($this->seat != "Seats are full."){?>
+			<input type="button" value="Proceed to Payment" onclick="javascript:form_Validator()">
+			<?php } ?></td>
+		</tr>
+		</table>
+		
+		</form>
+		
+		
+<script>
+
+function popupAlert(id){
+	if(id == 6){
+		alert('This payment method is only applicable to applicant that walk in into IBFIM Office.');
+	}
+	
+}
+
+function form_Validator()
+{
+
+
+	var ddate = document.forms["f1"]["ddate"].value;
+	var ccourse = document.forms["f1"]["ccourse"].value;
+	var ven = document.forms["f1"]["ccenter"].value;
+	var sess = document.forms["f1"]["sstart"].value;
+	var sesend = document.forms["f1"]["send"].value;
+	var mode = document.forms["f1"]["paymentmode"];
+
+
+	if (mode.selectedIndex == 0 || mode.selectedIndex=="" ||mode.selectedIndex==null)
+	{
+		alert("Please select payment mode");
+		mode.style.border = "1px solid red";
+		return false;
+	}
+	
+	
+	var msg= "Are you sure to register for "+"\n\nCOURSE : "+ccourse+"\n\nDATE : "+ddate+"\n\nSESSION : "+sess+" to "+sesend+"\n\nLOCATION : "+ven;
+
+	if(confirm(msg)){
+		document.forms["f1"].action = "<? echo $this->url(array('module'=>'application','controller'=>'online-application','action'=>'payment','id'=>$this->id,'course_id'=>$this->courseid,'idApp'=>$this->idApp),'default',true) ?>";
+		document.forms["f1"].submit();
+	}
+	
+
+
+
+	
+}
+</script>
+
+
+
+	

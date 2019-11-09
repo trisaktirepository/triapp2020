@@ -1,0 +1,116 @@
+<?php
+/**
+ * Checkout Page. This is our starting point before sending off 
+ * a request for the authorization token needed to authorize and
+ * capture funds for this order. 
+ */
+ 
+// Assume we are displaying US dollars.
+setlocale(LC_MONETARY, 'en_US');
+ 
+$items = array(
+	1001 => array(
+		'name' => 'Dog Bowl',
+		'quantity' => 1,
+		'cost_per_unit' => 5.00,
+		'weight_per_unit' => 0.5
+	),
+	1013 => array(
+		'name' => 'Chew Toy',
+		'quantity' => 3,
+		'cost_per_unit' => 0.99,
+		'weight_per_unit' => 1
+	),
+	201 => array(
+		'name' => 'Doggy Mints',
+		'quantity' => 1,
+		'cost_per_unit' => 4.99,
+		'weight_per_unit' => 2
+	)
+);
+ 
+// ...Did the user submit the form?
+if (!empty($_REQUEST['submit']) {
+	// Great! They've confirmed their order.
+	// Let's try out our new checkout code.
+ 
+	// First off, we need to obtain an
+	// authorization token.
+ 
+	$adapter = new PayPal_Adapter();
+ 
+	$amount = 0.0;
+ 
+	foreach($items as $item) {
+		$amount += $item['quantity'] * $item['cost_per_unit'];
+	}
+ 
+	$returnURL = 'https://www.yoursite.com/payment-complete.php';
+	$cancelURL = 'https://www.yoursite.com/payment-cancelled.php';
+ 
+	$currency_code = 'USD'; // Assuming we're using the US Dollar.
+ 
+	// Let's ask for a token.
+	$reply = $adapter->ecSetExpressCheckout(
+		$amount, 
+		$returnURL, 
+		$cancelURL, 
+		$currency_code
+	);
+ 
+	// ...If we succeed, we must redirected to PayPal at this point.
+	if ($reply->isSuccessfull()) {
+		// Let's turn that message body into something we can use...
+		$replyData = $adapter->parse($reply->getBody());
+ 
+		// If we did in fact succeed, we will now have a token to use
+		if ($replyData->ACK == 'SUCCESS' || $replyData->ACK == 'SUCCESSWITHWARNING') {
+ 
+			$token = $data->TOKEN; // ...It's already URL encoded for us.
+ 
+			// Save the amount total... We must use this when we capture the funds.
+			$_SESSION['CHECKOUT_AMOUNT'] = $amount;
+ 
+			// Redirect to the PayPal express checkout page, using the token.
+			header(
+				'Location: ' . 
+				$adapter->api_expresscheckout_uri . 
+				'?&cmd=_express-checkout&token=' . $token
+			);
+		}
+	} else {
+		// Something went wrong.
+		throw new Exception('ECSetExpressCheckout: We failed to get a successfull response from PayPal.');
+	}
+}
+?>
+ 
+<h1>Checkout</h1>
+ 
+Here is your order. Please confirm your order by clicking the SUBMIT button.
+ 
+<h2>Cart Items</h2>
+<!-- This form will just submit to itself, and then our token request begins. -->
+<form>
+	<ul>
+ 
+	<?php foreach($items as $sku => $item): ?>
+		<?php 
+		// Get each item's properties, and list them one item per row.
+		$name = $item['name'];	
+		$cpu = $item['cost_per_unit'];
+		$quantity = $item['quantity'];
+ 
+		$total_cost = $cpu * $quantity;
+ 
+		?>
+		<li>
+			SKU <?php echo $sku; ?> - <?php echo $name; ?> (<?php echo money_format('%i', $total_cost); ?>)<br />
+			<span style="font-size: xx-small"><?php echo $quantity; ?> @ <?php echo money_format('%i', $cpu); ?>each</span>
+		</li>
+	<?php endforeach; ?>
+ 
+	</ul>
+ 
+	<input type="submit" name="submit" value="SUBMIT" />
+</form>

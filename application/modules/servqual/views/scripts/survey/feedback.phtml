@@ -1,0 +1,147 @@
+<html>
+<script><!--
+function validate(){
+
+	var strconfirm = confirm("Anda yakin sudah diisi semua?");
+	 //Make groups
+    var names = []
+    $('input:radio').each(function () {
+        var rname = $(this).attr('name');
+        if ($.inArray(rname, names) == -1) names.push(rname);
+    });
+
+    //do validation for each group
+    var $status=1;
+    $.each(names, function (i, name) {
+        if ($('input[name="' + name + '"]:checked').length == 0) {
+            //alert('Please check ' + name);
+            $status=0;
+        }
+    });
+	       
+    if ($status==1) document.getElementById("form_feedback").submit(); else
+        alert('Pls answer all question') ;
+ }
+</script>
+<style>
+.next_bar{
+	width: 100%;
+	background: #EEE;
+	margin: 10px 0;
+	padding: 2px 0;
+	text-align: center;
+}
+.save_bar{
+	width: 100%;
+	background: #EBF;
+	margin: 8px 0;
+	padding: 1px 0;
+	text-align: center;
+}
+.answer{
+	background: #ABF;
+	padding: 2px 0;
+	text-align: center;
+}
+select{
+	width: 250px;
+}
+</style>
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+</div>
+<br />
+<form name="form_feedback" id="form_feedback" method="post" >
+<fieldset><legend><?php echo $this->translate('Survey Name')?></legend>
+<table>
+	<tr><td><?php echo $this->translate('Title')?></td><td>:</td><td><?php echo $this->survey['SurveyName'];?></td>
+	<tr><td><?php echo $this->translate('Remark')?></td><td>:</td><td><?php echo $this->survey['Remark'];?></td>
+	<tr><td><?php echo $this->translate('Type of Survey')?></td><td>:</td><td><?php echo $this->survey['surveytype'];?></td>
+	<tr><td><?php echo $this->translate('Semester')?></td><td>:</td><td><?php echo $this->surveytarget['SemesterName'];?></td>
+</table>
+<fieldset><legend><?php echo $this->translate('Responden')?></legend>
+<table>
+	<tr><td><?php echo $this->translate('Name')?></td><td>:</td><td><?php echo $this->responden['StudentName'];?></td>
+	<tr><td><?php echo $this->translate('Id')?></td><td>:</td><td><?php echo $this->responden['registrationId'];?></td>
+	<tr><td><?php echo $this->translate('Program')?></td><td>:</td><td><?php echo $this->responden['ProgramName'];?></td>
+</table>
+</fieldset>
+<?php if ($this->type=='0') { ?>
+<fieldset><legend><?php echo $this->translate('Object of Assesment')?></legend>
+<table>
+	<tr><td><?php echo $this->translate('Learning Process in ').$this->surveytarget['ProgramName'];?></td>
+</table>
+</fieldset>
+<?php } else {?>
+<fieldset><legend><?php echo $this->translate('Object of Assesment')?></legend>
+<table>
+	<tr><td><?php echo $this->translate('Name')?></td><td>:</td><td><?php echo $this->surveytarget['SubjectName'];?></td>
+	<tr><td><?php echo $this->translate('Code')?></td><td>:</td><td><?php echo $this->surveytarget['SubjectCode'];?></td>
+	<tr><td><?php echo $this->translate('Program')?></td><td>:</td><td><?php echo $this->surveytarget['ProgramName'];?></td>
+</table>
+</fieldset>
+<?php }?>
+<fieldset><legend><?php echo $this->headQuistioner['Title'];?></legend>
+	<p>
+	<?php echo $this->headQuistioner['Direction'];?>
+	</p>
+
+<input type="hidden" name="IdSurvey" value="<?php echo  $this->survey['IdSurvey']?>">
+<input type="hidden" name="IdSemester" value="<?php echo  $this->surveytarget['IdSemester']?>">
+<input type="hidden" name="IdProgram" value="<?php echo  $this->surveytarget['IdProgram']?>">
+<input type="hidden" name="IdSubject" value="<?php echo  $this->surveytarget['IdSubject']?>">
+<input type="hidden" name="IdGroupCourse" value="<?php echo  $this->surveytarget['IdGroup']?>">
+<input type="hidden" name="IdResponden" value="<?php echo  $this->idresponden;?>">
+<input type="hidden" name="Responden_type" value="<?php echo  "Student"?>">
+<table class="table" id="result" width="100%">
+		<thead>
+			<tr >
+				<th rowspan="2" ></th>
+				<th rowspan="2" align="center"></th>
+				<th align="center" colspan="5"><?php echo $this->translate('Answer');?></th>
+			</tr>
+		</thead>
+<?php 
+$coun=1;
+$head='0';
+$dbScale=new Servqual_Model_DbTable_ServqualScale();
+foreach ($this->quistioner as $key=>$question): 
+	   	$scaleid=$question['Scale_id'];
+		$scalename=$dbScale->getDataPerScale($scaleid);
+		if ($head=='0') {
+			$head='1';
+?>			<thead>
+			<tr >
+				<th ><?php echo $this->translate('No');?></th>
+				<th align="center"><?php echo $this->translate('Question');?></th>
+				<?php 
+	   				foreach ($scalename as $name):
+	   					 echo '<th>'.(int)$name['score'].'. '.$name['title'].'</th>';
+	   				endforeach;
+	   			?>
+				
+			</tr>
+		</thead>
+	
+	<?php }?>
+	<tr>
+	   <td width="5%"><?php echo $coun;?></td>
+	   <td ><?php echo $question['Question']?></td>
+	   <?php 
+	   	foreach ($scalename as $name):
+	   		?>
+	   		<td align="center"><input type="radio" name="answer[<?php echo $question['idquestion'];?>]" value="<?php echo $name['score']?>"></td> 
+	   		<?php 
+	   	endforeach;
+	   	?></td></tr><?php 
+	   	$coun++;
+	  endforeach;
+	   ?>
+
+	</table>
+	<div class="save_bar">
+	<input type="button" value="<?php echo $this->translate("Save");?>"  onclick="validate()"/>
+	</div>
+</form>
+</fieldset>
+</div>

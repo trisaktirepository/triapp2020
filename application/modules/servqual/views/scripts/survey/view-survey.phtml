@@ -1,0 +1,79 @@
+<html>
+<style>
+.next_bar{
+	width: 100%;
+	background: #EEE;
+	margin: 10px 0;
+	padding: 2px 0;
+	text-align: center;
+}
+select{
+	width: 250px;
+}
+</style>
+
+
+<fieldset><legend><?php echo $this->servqual['Title'];?></legend>
+	<?php echo $this->servqual['Direction'];?>
+</fieldset>
+<table class="table" id="result" width="100%">
+		<thead>
+			<tr >
+				
+				<th colspan="3" align="center"></th>
+				
+				<th colspan="5" align="center"><?php echo $this->translate('Answer');?></th>
+			</tr>
+		</thead>
+<?php 
+$coun=1;
+$head='0';
+foreach ($this->dimension_list as $key=>$grp):
+	   $db=new Servqual_Model_DbTable_ServqualDetail();
+	   $dbScale=new Servqual_Model_DbTable_ServqualScale();
+	   $grp_question=$db->getDataDetail($this->servqual['IdServqual'], $grp['IdDimension']);
+	  // echo $this->servqual['IdServqual'].'-'. $grp['IdDimension'];
+	   if (count($grp_question)>0) {
+			
+			foreach ($grp_question as $question):
+				$scaleid=$question['Scale_id'];
+				$scalename=$dbScale->getDataPerScale($scaleid);
+				if ($head=='0') {
+			$head='1';
+?>			<thead>
+			<tr >
+				<th ><?php echo $this->translate('No');?></th>
+				<th align="center"><?php echo $this->translate('Question');?></th>
+				<th><?php echo $this->translate('Order'); ?></th>
+				<?php 
+	   				foreach ($scalename as $name):
+	   					 echo '<th>'.(int)$name['score'].'. '.$name['title'].'</th>';
+	   				endforeach;
+	   			?>
+				
+			</tr>
+		</thead>
+	
+	<?php }?>
+	   			<tr>
+	   			<td width="5%"><?php echo $coun;?></td>
+	   			<td ><?php echo $question['Question']?></td>
+	   			<td width="5%"><?php echo $question['Question_seq']?></td>
+	   			<?php 
+	   				foreach ($scalename as $name):
+	   			?>
+	   			
+	   			<td><input type="radio" name="answer[<?php echo $key;?>]"></td>
+	   					
+	   			<?php 
+	   			endforeach;
+	   			?></td></tr><?php 
+	   			$coun++;
+	   		endforeach;
+	   }?>
+	  
+	
+	<?php 
+	endforeach;?>
+	</table>
+</div>

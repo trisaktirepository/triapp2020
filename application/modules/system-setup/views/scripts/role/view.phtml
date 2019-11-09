@@ -1,0 +1,158 @@
+<script type="text/javascript">
+	function toggle(module,controller,role,privilege){
+		
+		$.ajax({
+		      url: "<?php echo $this->url(array('module'=>'system-setup','controller'=>'role', 'action'=>'ajax-toggle-privilege'),'default',true);?>",
+		      global: false,
+		      type: "POST",
+		      data: ({'module_id' : module,'role_id':role, 'privilege': privilege, 'controller_id': controller} ),
+		      dataType: "json",
+		      async:true,
+		      context: document.body,
+		      success: function(data){
+
+				$.each(data, function(key, value) {
+					
+					if(key == privilege){
+						if(value=='0'){
+							$("#" + module + "_" + controller + "_" + privilege).removeClass();
+				      		$('#' + module + "_" + controller + '_' + privilege).attr('class','state unpublish');
+						}else
+						if(value=='1'){
+							$("#" + module + "_" + controller + "_" + privilege).removeClass();
+				      		$('#' + module + "_" + controller + '_' + privilege).attr('class','state publish');
+						}	
+					}
+				});
+		      }
+		   }
+		);
+	}
+</script>
+
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<br />
+<?}?>
+
+<?php if($this->role){?>
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'system-setup','controller'=>'role', 'action'=>'index'),'default',true);?>" >
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<br />
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<br />
+<?}?>
+
+<fieldset style="width:400px;
+">
+	<table>
+		<tr>
+			<td>Role Name</td>
+			<td>:</td>
+			<td><?php echo $this->role['name']; ?></td>
+		</tr>
+	</table>
+</fieldset>
+<br />
+<table class="table" width="100%" cellpadding="5" cellspacing="2">
+	<tr>
+		<th>Module</th>
+		<th width="50px">View</th>
+		<th width="50px">Add</th>
+		<th width="50px">Edit</th>
+		<th width="50px">Delete</th>
+	</tr>
+	<?php
+		$i=0;
+		foreach($this->modules as $module){
+	?>
+		<tr class='shade'>
+			<td>
+				<b style='padding: 0 20px;'><?php echo $module['module']['alias']!="-"?$module['module']['alias']:$module['module']['name']; ?></b>
+			</td>
+			<?php 
+				if(!isset($module['module']['status']) || $module['module']['status']==0){
+					echo "<td colspan='4' align='center'>";
+					echo "Module Disabled";
+					echo "</td>";
+				}else{
+			?>
+			<td align="center" colspan="4">
+				&nbsp;
+			</td>
+			
+			<!-- CONTOLLER SETUP -->
+			<?php 
+				if($module['controller']!=null){
+					echo "</tr>";
+					
+					
+					foreach($module['controller'] as $controller_data){
+						echo "<tr>";
+							echo "<td>";
+							echo "<span style='padding: 0 20%;'>".$controller_data['name']."</span>";
+							echo "</td>";
+							?>
+							<td align="center">
+								<span id='<?php echo $module['module']['id']."_".$controller_data['id']; ?>_view' style="cursor:pointer" onclick="toggle(<?php echo $module['module']['id'];?>,<?php echo $controller_data['id']; ?>,<?php echo $this->role_id; ?>, 'view');" <?php echo $controller_data['privilege']['view']==1?"class='state publish'":"class='state unpublish'"; ?>>
+									&nbsp;
+								</span>
+							</td>
+							<td align="center">
+								<span id='<?php echo $module['module']['id']."_".$controller_data['id']; ?>_add' style="cursor:pointer" onclick="toggle(<?php echo $module['module']['id'];?>,<?php echo $controller_data['id']; ?>,<?php echo $this->role_id; ?>, 'add');" <?php echo $controller_data['privilege']['add']==1?"class='state publish'":"class='state unpublish'"; ?>>
+									&nbsp;
+								</span>
+							</td>
+							<td align="center">
+								<span id='<?php echo $module['module']['id']."_".$controller_data['id']; ?>_edit' style="cursor:pointer" onclick="toggle(<?php echo $module['module']['id'];?>,<?php echo $controller_data['id']; ?>,<?php echo $this->role_id; ?>, 'edit');" <?php echo $controller_data['privilege']['edit']==1?"class='state publish'":"class='state unpublish'"; ?>>
+									&nbsp;
+								</span>
+							</td>
+							<td align="center">
+								<span id='<?php echo $module['module']['id']."_".$controller_data['id']; ?>_delete' style="cursor:pointer" onclick="toggle(<?php echo $module['module']['id'];?>,<?php echo $controller_data['id']; ?>,<?php echo $this->role_id; ?>, 'delete');" <?php echo $controller_data['privilege']['delete']==1?"class='state publish'":"class='state unpublish'"; ?>>
+									&nbsp;
+								</span>
+							</td>
+							<?php 
+						echo "</tr>";						 						
+					}
+					
+					echo "<tr><td colspan='5'></td>";
+				}
+			?>
+			
+			<?php }?>
+		</tr>
+		<tr>
+			<td style="background-color:#CCC; line-height:1px" colspan="5">&nbsp;</td>
+		</tr>		
+	<?php 
+			$i++;
+		} 
+	?>
+</table>
+
+<?php };?>

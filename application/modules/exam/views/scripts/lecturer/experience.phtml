@@ -1,0 +1,128 @@
+<script>
+	$(function() {	
+		$( "#dialog-add-experience" ).dialog({
+			width: 650,
+			modal: true,
+			autoOpen: false,
+			buttons: { 
+				"Add": function() { 
+					//$(this).dialog("close"); 
+					$("#exam_lecturer_experience_form").submit()
+				},
+				"Close": function() { $(this).dialog("close"); } 
+			},
+			open: function() {
+				$(this).dialog().load("<?php echo $this->url(array('module'=>'exam','controller'=>'lecturer', 'action'=>'experience-add','id'=>$this->lid),'default',true);?>");
+			}
+		});
+		
+		$( "#dialog-edit-experience" ).dialog({
+			width: 650,
+			modal: true,
+			autoOpen: false,
+			buttons: { 
+				"Save": function() { 
+					//$(this).dialog("close"); 
+					$("#exam_lecturer_experience_form").submit()
+				},
+				"Close": function() { $(this).dialog("close"); } 
+			}
+		});
+	});
+
+	function edit(){
+		var id = $('input[name=experience_id]:checked').val();
+
+		if(!id){
+			alert('Please select any record first');
+		}else{
+			$('#dialog-edit-academic').dialog('open').load('<?php echo $this->url(array('module'=>'exam','controller'=>'lecturer', 'action'=>'experience-edit'),'default',true);?>/id/' + id);
+		}
+	}
+
+	function delete_contact(){
+		var id = $('input[name=academic_id]:checked').val();
+
+		if(!id){
+			alert('Please select any record first');
+		}else{
+			if( confirm("Are you sure to delete selected experience record?") ){
+				window.location = '<?php echo $this->url(array('module'=>'exam','controller'=>'lecturer', 'action'=>'experience-delete','id'=>$this->studentID),'default',true);?>/id/' + id;
+			}
+		}
+	}
+</script>
+<table class="table3" width="100%" border="0" cellpadding="5" cellspacing="1" >
+	<tr>
+		<th colspan="8">
+			<div class="message toolbar toolbar-clear">
+				<h2><?php echo $this->translate($this->title); ?></h2>
+				<div class="toolbar-button">
+					<ul>
+						<li>
+							<a href="#" onclick="javascript:$( '#dialog-add-experience' ).dialog('open');">
+								<span class='add'></span>
+								Add
+							</a>
+						</li>
+						<li>
+							<a href="#"  onclick="edit();">
+								<span class='edit'></span>
+								Edit
+							</a>
+						</li>
+						<li>
+							<a href="#" onclick="javascript:delete_contact();">
+								<span class='delete'></span>
+								Delete
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</th>
+	</tr>
+	<tr>
+		<th width="5px">&nbsp;</th>
+		<th width="5px">&nbsp;</th>
+		<th><?php echo $this->translate("Organization");?></th>
+		<th width="80px"><?php echo $this->translate("Position");?></th>
+		<th><?php echo $this->translate("Subject Taught");?></th>
+		<th><?php echo $this->translate("Student Level");?></th>
+		<th width="30px"><?php echo $this->translate("From");?></th>
+		<th width="30px"><?php echo $this->translate("To");?></th>
+	</tr>
+	<?php 
+	if(!empty($this->data) ){
+	$i=0;
+	foreach ($this->data as $data):
+	?>
+    <tr>
+    	<th style="background-color: #EEE; color:#111">
+    		<input type="radio" name="experience_id" value="<?php echo $data['id']; ?>" />
+    	</th>
+    	<td><?php echo $i+1 . "."; ?></td>
+    	<td><?php echo $data['organization']; ?></td>
+    	<td><?php echo $data['position']; ?></td>
+    	<td><?php echo $data['subject_taught']; ?></td>
+    	<td><?php echo $data['academic_level_name']; ?></td>
+    	<td align="center"><?php echo $data['year_from']; ?></td>
+    	<td align="center"><?php echo $data['year_to']; ?></td>
+    </tr>
+    <?php
+    $i++; 
+    endforeach;
+	}else{
+	?>
+		<tr>
+			<td colspan="8" align="center">
+				No Experience Record
+			</td>
+		</tr>
+	<?php 
+	}
+    ?>
+</table>
+
+<div id="dialog-add-experience" title="Add New Experience Record" style="padding:0; margin:0;"></div>
+<div id="dialog-edit-experience" title="Edit Experience Record" style="padding:0; margin:0;"></div>

@@ -1,0 +1,99 @@
+
+<script type="text/javascript">
+	function del(){
+		var id = $('input[name=id]:checked').val();
+
+		if(!id){
+			alert('<?php echo $this->translate("Please select item first"); ?>');
+		}else{
+			if(confirm('<?php echo $this->translate("Confirm to delete?"); ?>')){
+				window.location = "<?php echo $this->url(array('module'=>'general-setup','controller'=>'highschool-discipline-programme', 'action'=>'delete'),'default',true); ?>/id/"+id;
+			}
+		}
+	}
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="window.location='<?php echo $this->url(array('module'=>'general-setup','controller'=>'highschool', 'action'=>'edit', 'id'=>$this->school['sm_id']),'default',true);?>'">
+					<span class='edit'></span>
+					Edit
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:del()">
+					<span class='delete'></span>
+					Delete
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'general-setup','controller'=>'highschool', 'action'=>'index'),'default',true);?>" >
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<div width="500px">
+	<table class="table2" width="100%" cellpadding="3" cellspacing="1">
+		<tr>
+			<th width="150px"><? echo $this->translate("Name"); ?></th>
+			<td><?php echo $this->school['sm_name']; ?></td>
+		</tr>
+		<tr>
+			<th><? echo $this->translate("Name"); ?> (Indonesia)</th>
+			<td><?php echo $this->school['sm_name_bahasa']; ?></td>
+		</tr>
+		<tr>
+			<th><? echo $this->translate("School Code"); ?></th>
+			<td><?php echo $this->school['sm_school_code']; ?></td>
+		</tr>
+		<tr>
+			<th><? echo $this->translate("Type"); ?></th>
+			<td><?php echo $this->school['st_name']; ?> (<?php echo $this->school['st_code']; ?>)</td>
+		</tr>
+		<tr>
+			<th><? echo $this->translate("Address"); ?></th>
+			<td>
+				<?php echo $this->school['sm_address1']; ?>
+				<?php echo $this->school['sm_address2']!=null?"<br />".$this->school['sm_address2']:""; ?>
+				<?php echo $this->school['sm_city']!=null?"<br />".$this->school['CityName']:""; ?>
+				<?php echo $this->school['sm_state']!=null?"<br />".$this->school['StateName']:""; ?>
+				<?php echo $this->school['sm_country']!=null?"<br />".$this->school['CountryName']:""; ?>
+			</td>
+		</tr>
+		<tr>
+			<th><? echo $this->translate("Phone"); ?></th>
+			<td><?php echo $this->school['sm_phone_o']; ?></td>
+		</tr>
+		<tr>
+			<th><? echo $this->translate("Email"); ?></th>
+			<td><?php echo $this->school['sm_email']; ?></td>
+		</tr>
+		<tr>
+			<th><? echo $this->translate("URL"); ?></th>
+			<td><?php echo $this->school['sm_url']; ?></td>
+		</tr>
+		<tr>
+			<th><? echo $this->translate("Created Date"); ?></th>
+			<td><?php echo date('d-m-Y h:ia', strtotime($this->school['sm_create_date'])); ?></td>
+		</tr>
+		<tr>
+			<th><? echo $this->translate("Created By"); ?></th>
+			<td><?php echo $this->school['sm_create_by_name']; ?></td>
+		</tr>
+	</table>	
+</div>

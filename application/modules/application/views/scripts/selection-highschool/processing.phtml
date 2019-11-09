@@ -1,0 +1,122 @@
+<script>
+
+	$(window).load(function() {   
+	    if($("input[name='rector_verification']:checked").val()==2){ //reject dean rate
+	    	$('#rector').show();
+		}else{
+			$('#rector').hide();
+		}
+	});
+	
+	function getvalue(element){
+
+		if( $(element).val() ==2 ){
+		 	$('#rector').show();
+		}else{
+			$('#rector').hide();
+		}
+
+		setFinalRate();
+		
+	}
+
+	function setFinalRate(){
+
+		if($("input[name='rector_verification']:checked").val()==1){ //accept dean rate
+			
+			var dean_rating = $("input[name='dean_rating']:checked").val()
+			$('#acceptance_rank').val(dean_rating);
+			
+		}else{
+			
+			var rector_rating = $("input[name='rector_rating']:checked").val()
+			$('#acceptance_rank').val(rector_rating);
+		}
+	}
+
+	
+
+</script>
+
+
+<div class="breadcrum">
+	<ul class="tri-steps">
+		<li class="prevDone"><div class="text"><a href="<?php echo $this->url(array('module'=>'application','controller'=>'selection-highschool','action'=>'document','program_code'=>$this->program_code,'id'=>$this->transaction_id),'default',true);?>"><?php echo $this->translate("upload_document"); ?></a></div></li>
+		<li class="lastCurrent"><div class="text"><a href="<?php echo $this->url(array('module'=>'application','controller'=>'selection-highschool','action'=>'processing','program_code'=>$this->program_code,'id'=>$this->transaction_id),'default',true);?>"><?php echo $this->translate("processing"); ?></a></div></li>	
+	</ul>
+	<div class="clear"></div>
+</div>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			
+			<li class="divider"></li>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'application','controller'=>'selection-highschool', 'action'=>'list-applicant'),'default',true);?>" >
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+
+<h2><?php echo $this->translate("applicant_info")?></h2>
+<div style="width:50%;">
+
+
+<table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+	<tr>
+		<th width="200px"><?php echo $this->translate("date_applied");?></th>	
+		<td><?php echo date('j M Y',strtotime($this->applicant["submit_date"]));?></td>
+	</tr>	
+	<tr>
+		<th><?php echo $this->translate("applicantID");?></th>
+		<td><?php echo $this->applicant["applicantID"]?></td>
+	</tr>	
+	<tr>
+		<th><?php echo $this->translate("name");?></th>	
+		<td><?php echo $this->applicant["appl_fname"].' '.$this->applicant["appl_mname"].' '.$this->applicant["appl_lname"]?></td>	
+	</tr>	
+		
+	<tr>
+		<th><?php echo $this->translate("programme");?></th>
+		<td><?php echo $this->applicant["program_name"]?></td>
+	</tr>	
+	<tr>
+		<th><?php echo $this->translate("mark");?></th>
+		<td><?php echo round($this->everage_mark,2);?></td>
+	</tr>	
+	<tr>
+		<th><?php echo $this->translate("status");?></th>
+		<td><?php echo $this->applicant["status"]?></td>		
+	</tr>
+</table>
+</div>
+
+
+<div style="width:100%;">
+<?php echo $this->form; ?>
+</div>
+

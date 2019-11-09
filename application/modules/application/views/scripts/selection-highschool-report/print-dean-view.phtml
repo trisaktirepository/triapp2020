@@ -1,0 +1,98 @@
+
+
+
+<table   width="100%" cellpadding="5" cellspacing="2" border=0>
+	<tr >
+		<td valign="top" align="center"><img src="<?php echo $this->baseUrl(); ?>/images/logo.png"></td>
+		<td align="center">
+			PENGUMUMAN HASIL SELEKSI<br>
+			CALON MAHASISWA BARU UNIVERSITAS TRISAKTI<BR>
+			TAHUN AKADEMIK <?php echo $this->current_academic_year?><BR>
+			PERIODE   <?php echo ($this->period_name);?><BR>
+			SK Rektor No:
+		</td>
+	</tr>
+		
+	
+	
+	<tr>
+	
+	<td colspan=2>
+	<br>
+	
+	
+	
+	<table class="table4" width="100%" cellpadding="5" cellspacing="2" border="0">
+	<tr>
+	   <th><?php echo $this->translate("no");?></th>	
+		<!--<th><?php echo $this->translate("no fomulir");?></th>		
+		--><th><?php echo $this->translate("applicantID");?></th>
+		<th><?php echo $this->translate("name");?></th>				
+		<th><?php echo $this->translate("faculty");?></th>
+		<th><?php echo $this->translate("programme");?></th>
+	    <th><?php echo $this->translate("rank");?></th>		
+		
+		
+	</tr>
+	
+	<?php 
+	if(isset($this->applicant)){
+		$no=1;
+	foreach ($this->applicant as $entry){
+			
+	//get dean rating
+	$assessmentDB=new App_Model_Application_DbTable_ApplicantAssessment();
+	$rate = $assessmentDB->getData($entry["transaction_id"]);
+	?>
+	<tr>
+	   <td><?php echo $no;?></td>
+		<!--<td><?php echo '';?></td>
+		--><td><?php echo $entry["applicantID"]?>&nbsp;</td>
+		<td><?php echo $entry["appl_fname"].' '.$entry["appl_mname"].' '.$entry["appl_lname"]?></td>
+		<td><?php echo $entry["faculty"];?></td>
+		<td><?php echo $entry["program_name"]?></td>
+		<td><?php echo $rate["aar_rating_final"];?></td>
+	</tr>
+	<?php $no++;}//end paginator 
+	}?>
+		
+</table>
+<br>
+<br>
+<br>
+<br>
+  </td></tr>
+	<tr align="center" valign=top> 
+	<td>Mengetahui : <br>
+	Rektor<br>
+	<br>
+	<br>
+	<br>
+	ttd
+	<br>
+	<br>
+	<br>
+	</td>
+	
+	<td>Jakarta,<?php echo date('j M Y'); ?><br>Wakil Rektor 1 selaku Ketua/<br>
+	Penangungjawab Penyelenggara<br>
+	Penerimaan Mahasiswa Baru
+	</td>
+	</tr>
+	
+	<tr align="center">
+	<td>
+	Prof. Dr Thoby Mutif
+	</td>
+	
+	<td>Prof. Dr. H. Yuswar Zainul Basri, Ak.MBA.
+	</td>
+	</tr>
+
+</table>
+
+
+
+
+	
+

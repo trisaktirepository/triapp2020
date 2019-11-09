@@ -1,0 +1,187 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+		
+		$("#defer_date").datepicker({
+				"dateFormat":"yy-mm-dd",
+				"changeMonth":"true",
+				beforeShow: function(input, inst) { 
+					/*if ($("#end_date").val()) { // Only update when has a value.
+							$( "#start_date" ).datepicker( "option", "maxDate", $("#end_date").datepicker("getDate") );
+					}*/
+				}
+			
+				
+		});
+		
+		
+
+
+	});
+	
+	function showConfirm(){
+		var id = $('input[name=scr_id[]]:checked').val();
+
+		if(!id){
+			alert('Please tick on the particular course to defer exam.');
+		}else{
+			if(confirm('Are you sure to apply Exam Defer?')){
+			
+				document.defer_form.action ="<?php echo $this->url(array('module'=>'exam','controller'=>'defer', 'action'=>'defer-course'),'default',true); ?>";
+				document.defer_form.submit();
+	
+			}
+		}
+	}
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'exam','controller'=>'defer', 'action'=>'index-student'),'default',true);?>">
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+
+<div align="center" style="background:#ebebeb; height:30px;">
+<ul class="steps">
+	<li class="previous">
+		<span>1</span> Student Selection
+	</li>
+    <li class="current">
+		<span>2</span> Exam Defer 
+	</li>
+	<li class="next">
+		<span>3</span> Completed
+	</li>
+
+</ul>
+<br class="clear" />
+</div>
+
+
+
+<br />
+<h4>Student Details</h4>
+<table width="100%">
+	<tr>
+		<td width="110px">NAME</td>
+		<td width="5px">:</td>
+		<td><?php echo $this->student['fullname']; ?></td>
+		<td>PROGRAM</td>
+		<td>:</td>
+		<td><?php echo $this->program['main_name']?></td>
+	</tr>
+	<tr>
+		<td>MATRIC NUM</td>
+		<td>:</td>
+		<td><?php echo $this->student['matric_no']; ?></td>
+		<td>ACADEMIC STATUS</td>
+		<td>:</td>
+		<td><input type="hidden" name="academic_status" id="academic_status" value="1">GOOD</td>
+	</tr>
+	<tr>
+		<td>BRANCH</td>
+		<td>:</td>
+		<td><?php echo $this->student['branch_name']?></td>
+		<td>INTAKE</td>
+		<td>:</td>
+		<td><?php echo $this->student['intake_name']?></td>
+	</tr>
+	<tr>
+		<td>SEMESTER</td>
+		<td>:</td>
+		<td colspan="3"><?php echo $this->currentsemester["name"].'&nbsp;'.$this->currentsemester["year"];?>
+		</td>
+	</tr>
+</table>
+
+
+
+
+<div>
+	<h2>Registered Course List</h2>
+	
+	<form name="defer_form" method="post" action="<?php echo $this->url(array('module'=>'exam','controller'=>'defer', 'action'=>''),'default',true);?>">
+	
+	<input type="hidden" name="student_id"  value="<?php echo $this->student['id']; ?>"></input>
+	<input type="hidden" name="semester_id" value="<?php echo $this->semester_id?>"></input>	
+	
+	<table width="100%" border="0" class="table3" cellpadding="5" cellspacing="1">
+	<tr>
+		<th>No</th>
+		<th>Course Name</th>
+		<th>Course Code</th>
+		<th>Reason</th>
+		<th>Defer Date</th>
+		<th>Action/Status</th>
+	</tr>
+	<?php 
+	$i=1;
+	foreach ($this->courses as $course):{
+		
+		//if dah apply x yah apply lagi
+		$deferDB = new App_Model_Exam_DbTable_ExamDefer();
+		$condition = array("student_id"=>$this->student['id'],"semester_id"=>$this->semester_id,"scr_id"=>$course['id']);
+		$list_app = $deferDB->getRowExamDefer($condition);
+		
+	?>
+	
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+	    <td align="center"><?php echo $i;?>.</td>	
+		<td align="left"><?php echo $course['course_name']; ?></td>
+		<td align="center"><?php echo $course['course_code']; ?></td>
+		<td align="center">
+		    <? if(!$list_app["id"]){?>
+		    <select id="defer_reason[]" name="defer_reason[]">
+				<option value="0">-- <?php echo $this->translate("Please Select")?> -- </option>
+				<option value="1">Maternity Leave</option>
+			</select>
+			<? }else{ echo $list_app["defer_reason"]; } ?>
+		</td>
+		<td align="center">
+		    <? if(!$list_app["id"]){?>
+			<input id="defer_date" type="text" value="" name="defer_date[]" size="10"/>
+			<? }else{ echo $list_app["defer_date"]; } ?>
+		</td>
+		<td align="center">
+		     <? if(!$list_app["id"]){?>
+		    <input type="checkbox" name="scr_id[]" id="scr_id[]" value="<?php echo $course['id']; ?>"></input>
+		    <? }else{ 
+		    			if($list_app['defer_status']==2) $status = "Approved";
+						if($list_app['defer_status']==1) $status = "Not Approved";
+						if($list_app['defer_status']==0) $status = "Waiting for Approval";				
+						echo $status;
+		    
+		      } ?>
+			</td>
+	</tr>
+	<?php 
+			$i++;
+		}
+	endforeach 
+	?>
+	
+</table>
+
+<div width="200px" align="right">
+					<br />
+					<input type="button" value="Apply Exam Defer"  onclick="javascript:showConfirm();">
+				</div>
+</form>
+
+</div>
+
+

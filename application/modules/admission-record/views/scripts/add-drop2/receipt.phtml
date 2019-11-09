@@ -1,0 +1,124 @@
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" >
+					<span class='print'></span>
+					Print
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<div align="center" style="background:#ebebeb; height:30px;">
+<ul class="steps">
+	<li class="prevDone">
+		<span>1</span> Student Selection
+	</li>
+    <li class="prevDone">
+		<span>2</span> Semester Selection
+	</li>
+    <li class="prevDone">
+		<span>3</span> Course Selection
+	</li>
+	<li class="current">
+		<span>3</span> Complete
+	</li>
+</ul>
+<br class="clear" />
+</div>
+
+<br />
+<h2>Student Details</h2>
+<table>
+	<tr>
+		<th>Name</th>
+		<td>:</td>
+		<td><?php echo $this->student['fullname']; ?></td>
+	</tr>
+	<tr>
+		<th>Matric No</th>
+		<td>:</td>
+		<td><?php echo $this->student['matric_no']; ?></td>
+	</tr>
+	<tr>
+		<th>Program</th>
+		<td>:</td>
+		<td><?php echo $this->program['main_name']; ?></td>
+	</tr>
+	<tr>
+		<th>Semester</th>
+		<td>:</td>
+		<td><?php echo $this->semester['name']; ?></td>
+	</tr>
+</table>
+<br />
+
+<h2>Course Registered</h2>
+<table class="table" width="100%" cellpadding="5" cellspacing="2">
+	<tr>
+		<th>Course Name</th>
+		<th>Course Code</th>
+		<th>Credit Hour</th>
+	</tr>
+	<?php 
+	$i=0;
+	foreach ($this->courses as $course):
+		if($course['course_status_id']==1){
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<td align="left"><?php echo $course['course_name']; ?></td>
+		<td align="center"><?php echo $course['course_code']; ?></td>
+		<td align="center"><?php echo $course['course_credit_hour']; ?></td>
+	</tr>
+	<?php 
+			$i++;
+		}
+	endforeach 
+	?>
+</table>
+<br />
+<h2>Course Registration History</h2>
+<table class="table" width="100%" cellpadding="5" cellspacing="2">
+	<tr>
+		<th>Course Name</th>
+		<th>Course Code</th>
+		<th>Credit Hour</th>
+		<th>Status</th>
+		<th>Date</th>
+	</tr>
+	<?php 
+	$i=0;
+	foreach ($this->history as $course_history):
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<td align="left"><?php echo $course_history['course_name']; ?></td>
+		<td align="center"><?php echo $course_history['course_code']; ?></td>
+		<td align="center"><?php echo $course_history['course_credit_hour']; ?></td>
+		<td align="center"><?php echo $course_history['status']; ?></td>
+		<td align="center"><?php echo date('Y-d-m H:i a',strtotime($course_history['entry_date'])); ?></td>
+	</tr>
+	<?php 
+	$i++;
+	endforeach 
+	?>
+</table>

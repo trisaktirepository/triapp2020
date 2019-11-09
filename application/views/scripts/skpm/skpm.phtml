@@ -1,0 +1,151 @@
+ 
+<script type="text/javascript">
+$(function() {
+	 
+	 $( "#ResultTabs").tabs();
+
+	 url6="<?php echo $this->url(array('module'=>'default','controller'=>'skpm','action'=>'studentinfo','id'=>$this->registrationId,'name'=>$this->studentname,'nim'=>$this->nim),'default',true);?>";
+	 $( "#Tab1" ).load( url6 );
+
+	 url1="<?php echo $this->url(array('module'=>'default','controller'=>'skpm','action'=>'academic','id'=>$this->registrationId,'name'=>$this->studentname,'nim'=>$this->nim),'default',true);?>";
+	 $( "#Tab2" ).load( url1 );
+	 
+     url2="<?php echo $this->url(array('module'=>'default','controller'=>'skpm','action'=>'talent','id'=>$this->registrationId,'name'=>$this->studentname,'nim'=>$this->nim),'default',true);?>";
+	 $( "#Tab3" ).load( url2 );
+     
+     url3="<?php echo $this->url(array('module'=>'default','controller'=>'skpm','action'=>'pkm','id'=>$this->registrationId,'name'=>$this->studentname,'nim'=>$this->nim),'default',true);?>";
+	 $( "#Tab4" ).load( url3 );
+	 
+	 url4="<?php echo $this->url(array('module'=>'default','controller'=>'skpm','action'=>'organisasi','id'=>$this->registrationId,'name'=>$this->studentname,'nim'=>$this->nim),'default',true);?>";
+	 $( "#Tab5" ).load( url4 );
+	 
+	 url5="<?php echo $this->url(array('module'=>'default','controller'=>'skpm','action'=>'other','id'=>$this->registrationId,'name'=>$this->studentname,'nim'=>$this->nim),'default',true);?>";
+	 $( "#Tab6" ).load( url5 );
+	 
+	 url7="<?php echo $this->url(array('module'=>'default','controller'=>'skpm','action'=>'view-result','id'=>$this->registrationId,'name'=>$this->studentname,'nim'=>$this->nim),'default',true);?>";
+	 $( "#Tab7" ).load( url7 );
+
+	
+	 
+});
+
+function cetak(){
+	var idsemester=document.getElementById("IdSemesterMain").value;
+	window.location="<?php echo $this->url(array('module'=>'default','controller'=>'skpm','action'=>'cetak-draft-skpm','id'=>$this->registrationId,'name'=>$this->studentname,'nim'=>$this->nim ), 'default', true);?>/IdSemesterMain/"+idsemester;
+}
+
+function getItem(){
+
+	var idsemester=document.getElementById("IdSemesterMain").value;
+	 $( "#ResultTabs").tabs();
+
+	 url6="<?php echo $this->url(array('module'=>'default','controller'=>'skpm','action'=>'studentinfo','id'=>$this->registrationId,'name'=>$this->studentname,'nim'=>$this->nim),'default',true);?>/IdSemesterMain/"+idsemester;
+	 $( "#Tab1" ).load( url6 );
+ 
+	 url1="<?php echo $this->url(array('module'=>'default','controller'=>'skpm','action'=>'academic','id'=>$this->registrationId,'name'=>$this->studentname,'nim'=>$this->nim),'default',true);?>/IdSemesterMain/"+idsemester;
+	 $( "#Tab2" ).load( url1 );
+	 
+     url2="<?php echo $this->url(array('module'=>'default','controller'=>'skpm','action'=>'talent','id'=>$this->registrationId,'name'=>$this->studentname,'nim'=>$this->nim ),'default',true);?>/IdSemesterMain/"+idsemester;
+	 $( "#Tab3" ).load( url2 );
+     
+     url3="<?php echo $this->url(array('module'=>'default','controller'=>'skpm','action'=>'pkm','id'=>$this->registrationId,'name'=>$this->studentname,'nim'=>$this->nim ),'default',true);?>/IdSemesterMain/"+idsemester;
+	 $( "#Tab4" ).load( url3 );
+	 
+	 url4="<?php echo $this->url(array('module'=>'default','controller'=>'skpm','action'=>'organisasi','id'=>$this->registrationId,'name'=>$this->studentname,'nim'=>$this->nim ),'default',true);?>/IdSemesterMain/"+idsemester;
+	 $( "#Tab5" ).load( url4 );
+	 
+	 url5="<?php echo $this->url(array('module'=>'default','controller'=>'skpm','action'=>'other','id'=>$this->registrationId,'name'=>$this->studentname,'nim'=>$this->nim ),'default',true);?>/IdSemesterMain/"+idsemester;
+	 $( "#Tab6" ).load( url5 );
+	 
+	 url7="<?php echo $this->url(array('module'=>'default','controller'=>'skpm','action'=>'view-result','id'=>$this->registrationId,'name'=>$this->studentname,'nim'=>$this->nim ),'default',true);?>/IdSemesterMain/"+idsemester;
+	 $( "#Tab7" ).load( url7 );
+	 
+}
+
+function cetakofficial(){
+	var idsemester=document.getElementById("IdSemesterMain").value;
+	window.location="<?php echo $this->url(array('module'=>'default','controller'=>'skpm','action'=>'cetak-skpm','id'=>$this->registrationId,'name'=>$this->studentname,'nim'=>$this->nim ), 'default', true);?>/IdSemesterMain/"+idsemester;
+}
+function cetaktranskrip(){
+	var idsemester=document.getElementById("IdSemesterMain").value;
+	window.location="<?php echo $this->url(array('module'=>'default','controller'=>'skpm','action'=>'cetak-skpm-transkrip','id'=>$this->registrationId,'name'=>$this->studentname,'nim'=>$this->nim ), 'default', true);?>/IdSemesterMain/"+idsemester;
+}
+
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+	 <li>
+				<a href="#"  onclick="cetak();">
+					<span class='print'></span>
+					Print Draft
+				</a>
+			</li>
+			<li>
+				<a href="#"  onclick="cetakofficial();">
+					<span class='print'></span>
+					Print Official
+				</a>
+			</li>
+			<li>
+				<a href="#"  onclick="cetaktranskrip();">
+					<span class='print'></span>
+					Print Transkrip
+				</a>
+			</li>
+	</div>
+</div>
+<br />
+<fieldset><legend><?php echo $this->translate('Search')?></legend>
+<table>
+<tr>	<td width="20%"><?php echo $this->translate("Semester");?></td><td>:</td>
+			<td>
+			 
+			<select id="IdSemesterMain" name="IdSemesterMain" onChange="getItem();">
+			    <option value=""><?php echo $this->translate("All");?></option>
+			    <?php 
+			    	foreach ($this->semester_list as $semester):
+			    ?>
+			    		<option value="<?php echo $semester["key"];?>" <?php if($this->semesterid == $semester["key"]){ echo 'selected';}?>><?php echo $semester["value"];?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select>
+		 
+			</td></tr>
+ </table>
+ </fieldset>
+ <br>
+<div style="width:100%;">
+	<div id="ResultTabs">
+
+		<ul >
+			<li><a href="#Tab1"><?php echo $this->translate("Student Info");?></a></li>
+			<li><a href="#Tab2"><?php echo $this->translate("Academic Activities");?></a></li>
+			<li><a href="#Tab3"><?php echo $this->translate("Group Interest");?></a></li>	
+			<li><a href="#Tab4"><?php echo $this->translate("Public Community Activities");?></a></li>
+			<li><a href="#Tab5"><?php echo $this->translate("Organization Experiences");?></a></li>	
+			<li><a href="#Tab6"><?php echo $this->translate("Other");?></a></li>	
+			<li><a href="#Tab7"><?php echo $this->translate("View Result");?></a></li>	
+		
+		</ul>
+
+		
+		<div id="Tab1"> 			
+		</div>
+		<div id="Tab2"> 		
+		</div>
+		<div id="Tab3"> 		
+		</div>
+		<div id="Tab4"> 		
+		</div>
+		<div id="Tab5"> 		
+		</div>
+		<div id="Tab6"> 		
+		</div>
+		<div id="Tab7"> 		
+		</div>
+		 
+	</div>
+</div>

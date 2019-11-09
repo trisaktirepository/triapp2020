@@ -1,0 +1,127 @@
+<script>
+function searchStudent(){
+	$("#search").toggle();
+}
+
+function unassignStudent(){
+
+	 var isChecked = $('.chk').is(':checked');
+
+	 if(isChecked==true){
+			$("#unassignForm").submit();
+	 }else{
+		alert("You did not select any student. Please select.");
+	 }
+}
+
+$(function () {
+	 
+	 var str = "";
+	 $('#checkall').click(function () {	
+
+		 var isChecked = $('#checkall').is(':checked');
+
+		 if(isChecked==true){			 
+			 $('.chk').prop('checked', true);
+		 }else{
+			 // Un-check
+			 $('.chk').prop('checked', false);
+		 }
+	 });
+	
+	 
+});
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>			
+			<li>
+				<a href="#" onclick="unassignStudent()">
+					<span class='save'></span>
+					Remove
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="searchStudent()">
+					<span class='search'></span>
+					Search
+				</a>
+			</li>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'course-group','action'=>'group-list','idGroup'=>$this->idGroup,'idSemester'=>$this->idSemester,'idSubject'=>$this->idSubject),'default',true);?>" >
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br>
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+
+<div style="width:100%;">
+
+<div id="search" style="display:none"><?php echo $this->form;?></div>
+<br>
+<fieldset>
+<legend><?php echo $this->translate("Group Info")?></legend>
+<table class="" width="50%" cellpadding="5" cellspacing="5" border="0">
+	<tr>
+		<td width="100px"><?php echo $this->translate("Group Name")?></td>
+		<td width="5px">:</td>
+		<td><?php echo $this->group["GroupCode"]?></td>
+	</tr>
+		<tr>
+		<td><?php echo $this->translate("Lecturer Name")?></td>
+		<td width="5px">:</td>
+		<td><?php echo ($this->group["IdLecturer"]!=0 ?  $this->group["FullName"]:$this->translate("-"));?></td>
+	</tr>
+</table>
+<br>
+<h2><?php echo $this->translate("Student List")?></h2>
+<form id="unassignForm" name="assignForm" method="post" action="">
+<input type="hidden" name="idGroup" value="<?php echo $this->idGroup; ?>">
+<table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+	<tr>
+		<th width="25px"><?php echo $this->translate("No")?></th>
+		<th><?php echo $this->translate("Student Name")?></th>
+		<th><?php echo $this->translate("Student ID")?></th>			
+		<th><input type="checkbox" name="checkall" id="checkall" >&nbsp;<?php echo $this->translate("Check All ?")?></th>
+	</tr>
+	<?php 
+	$i=1;
+	if(count($this->list_student)>0){
+	foreach($this->list_student as $student){
+	?>
+	<tr>
+		<td><?php echo $i;?></td>
+		<td><?php echo $student["appl_fname"].' '.$student["appl_mname"].' '.$student["appl_lname"];?></td>	
+		<td><?php echo $student["registrationId"];?></td>
+		<td>
+		<input type="hidden" name="IdStudentRegistration[<?php echo $student["IdStudentRegSubjects"];?>]" id="IdStudentRegistration[]" value="<?php echo $student["IdStudentRegistration"];?>">
+		<input class='chk' type="checkbox" name="IdStudentRegSubjects[]" id="IdStudentRegSubjects[]" value="<?php echo $student["IdStudentRegSubjects"];?>"></td>
+		
+	</tr>
+	<?php $i++; } }?>
+</table>
+</form>
+</fieldset>
+
+</div>

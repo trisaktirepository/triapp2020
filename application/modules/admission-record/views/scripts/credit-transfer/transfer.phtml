@@ -1,0 +1,166 @@
+<script type="text/javascript">
+	function showConfirm(){
+//		var id = $('input[name=selTransfer]:selected').val();
+//
+//		if(!id){
+//			alert('Please select course to submit');
+//		}else{
+			if(confirm('Are you sure to submit this student credit transfer application?')){
+				document.transfer_form.action ="<?php echo $this->url(array('module'=>'admission-record','controller'=>'credit-transfer', 'action'=>'view'),'default',true); ?>";
+				document.transfer_form.submit();
+	
+			}
+		//}
+	}
+</script>
+
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<br>
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'admission-record','controller'=>'credit-transfer', 'action'=>'index'),'default',true);?>">
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<div align="center" style="background:#ebebeb; height:30px;">
+<ul class="steps">
+	<li class="prevDone">
+		<span>1</span> Student Selection
+	</li>
+    <li class="current">
+		<span>2</span> Credit Transfer
+	</li>
+	<li class="next">
+		<span>3</span> Completed
+	</li>
+	
+</ul>
+<br class="clear" />
+</div>
+
+<br />
+<h4>Student Details</h4>
+<table>
+	<tr>
+		<td width="110px">Name</td>
+		<td width="5px">:</td>
+		<td><?php echo $this->student['fullname']; ?></td>
+	</tr>
+	<tr>
+		<td>Matric No</td>
+		<td>:</td>
+		<td><?php echo $this->student['matric_no']; ?></td>
+	</tr>
+	<tr>
+		<td width="110px">
+			Program
+		</td>
+		<td width="5px">:</td>
+		<td>
+			<?php echo $this->program['main_name']?>
+		</td>
+	</tr>
+	
+	<tr>
+		<td width="110px">
+			Semester
+		</td>
+		<td width="5px">:</td>
+		<td><?php echo strtoupper($this->semesterName["name"]);?> &nbsp;<?php echo $this->semesterName["year"]?>
+		</td>
+	</tr>
+</table>
+<br />
+
+
+</form>	
+
+<h4>Credit Transfer Applied</h4>
+<form name="transfer_form" action="<?php echo $this->url(array('module'=>'admission-record','controller'=>'credit-transfer', 'action'=>'view'),'default',true);?>" method="post">
+
+	<input type="hidden" name="student_id" value="<?php echo $this->student['id']?>" />
+	<input type="hidden" name="semester_id" value="<?php echo $this->semester_id?>" />
+	
+	
+	<table width="100%" border="0" cellspacing="1" cellpadding="5" class="table3">
+             <tr align="center">
+              <th colspan="2" width="10%">Course Code</th>
+              <th width="30%">Course Name</th>
+              <th width="10%">Course Type</th>
+              <th width="10%">Semester / Level</th>
+              <th width="5%">Credit Hours</th>
+              <th width="10%">Date Applied</th>
+              <th width="5%">Option</th>
+            </tr>
+            
+            <?
+            $i=1;
+            foreach ($this->transfer as $transfer){
+			?>
+            <tr>
+              <td width="2%"><?=$i;?>)</td>
+              <td><?=$transfer["course_code"];?></td>
+              <td><?=$transfer["course_name"];?></td>
+              
+              <?php
+//              
+              $academicDB = new App_Model_Record_DbTable_AcademicLandscape();
+			  $landscape = $academicDB->getAcademicTransfer($this->landscape,$transfer["course_id"]);  	 
+				
+		
+              ?>
+              
+              <td><?=$landscape["course_type_name"];?></td>
+              <td align="center"><?=$landscape["level"];?></td>
+              <td align="center"><?=$landscape["credit_hour"];?></td>
+              <td align="center"><?=$transfer["date"];?></td>
+              <td align="center"><input type="hidden" name="courseID[]" id="courseID[]" value="<?php echo $transfer["course_id"]?>"> 
+              <select name="selTransfer[]" id="selTransfer[]" <?php if ($transfer["status"] == 1 || $transfer["status"] == 2) { echo "disabled"; } ?>>
+				  <option value="0">Please select..</option>
+				  <option value="1" <?php if ($transfer["status"] == 1) { echo "selected"; } ?>>Approved</option>
+				  <option value="2" <?php if ($transfer["status"] == 2) { echo "selected"; } ?>>Disapproved</option>
+				  
+			  </select>
+</td>
+            </tr>
+            <? 
+            $i++;
+            } ?>
+          
+      </table>
+
+<div width="200px" align="right">
+					<br />
+					<input type="button" value="Submit"  onclick="javascript:showConfirm();">
+				</div>
+
+<br /><br /><br />
+</form>
+
+
+
+
+
+</div>
+
+

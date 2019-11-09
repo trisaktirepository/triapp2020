@@ -1,0 +1,338 @@
+<?php /* Set locale to Indonesia */
+	     setlocale(LC_TIME, "id_ID"); ?>
+		
+<!-----------------------
+	Name: Template Kartu Rencana Studi
+	version: 1.0
+	Author: Mardhiyati Ipin
+-->
+
+<html>
+<head>
+<style type="text/css">
+body{
+	font-family: "Trebuchet MS", Helvetica, sans-serif;
+	font-size: 11px;
+	padding:0;
+	margin:0;
+}
+.table{
+	width: 100%;
+   
+}
+
+/* Table */
+.table_header{
+	font-family: "Trebuchet MS", Helvetica, sans-serif;	
+    width: 100%;
+    cellspacing: 0px;
+    cellpadding: 5px;
+    border:0px;
+}
+.table2{
+	font-family: "Trebuchet MS", Helvetica, sans-serif;	
+    width: 100%;
+    cellspacing: 0px;
+    cellpadding: 5px;
+    border:1px solid #000;
+}
+.table_content{
+	font-family: "Trebuchet MS", Helvetica, sans-serif;	
+    width: 100%;
+    cellspacing: 2px;
+    cellpadding: 5px;
+    border:1px solid #000;
+}
+.table_content th{
+	background-color: #767676;
+	color:white;
+	line-height: 10px;
+}
+.table2 th{
+	background-color: #767676;
+	color:white;
+	line-height: 10px;
+}
+.table2 tr{
+	line-height: 5px;
+}
+.table2 td{
+	/*border-bottom:1px dotted gray;*/
+	border:1px solid #000;
+	line-height: 16px;
+}
+
+.header_title  {
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.header-top-notice{
+	font-size: 0.8em;
+	font-style: italic;
+	text-decoration: underline;
+	width: 100%";
+	margin: 5px 0;
+}
+
+.header-right-info{
+	width:100%;
+	margin: 0;
+	text-align: left;
+	font-size: 1.3em;
+	font-weight: bold;
+}
+.header-center-info h1{
+	font-size: 1.3em;
+}
+.header-pes-no{
+	border: 1px solid black;
+	font-size: 1.1em;
+	padding: 5px 5px;
+	width: 100px;
+}
+div.box{
+	border: 1px solid #111111;
+}
+
+
+td.border-top{
+	border-top: 1px solid #111111;
+}
+td.border-top-bottom{
+	border-top: 1px solid #111111;
+	border-bottom: 1px solid #111111;
+}
+td.bold-text{
+	font-weight: bold;
+}
+.style1 {
+	font-size: 18px;
+	font-weight: bold;
+}
+.style2 {
+	font-size: 16px;
+	font-weight: bold;
+}
+.style3 {
+	font-size: 14px;
+	font-weight: bold;
+}
+#footer {
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  height: 30px;
+  text-align: center;
+  /* background-color: lightgray;
+  border-top: 2px solid gray; */
+}
+</style>
+<script>
+function cetakpdf(){
+	window.location="<?php echo $this->url(array('module'=>'finalassignment','controller'=>'proposal','action'=>'student-application-pdf','proposedby'=>$this->proposal['IdStudentRegistration'],'idtaapplication'=>$this->proposal['IdTAApplication']), 'default', true);?>";
+}
+</script> 
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+			<a href="#" onclick="cetakpdf();">
+				<span class='print'></span>
+				Print Pdf
+			</a>
+			
+		</li>
+		</ul>
+	</div>
+</div> 
+<br />
+<fieldset> 
+<!-- Header -->
+	<table class="table_header">
+		<tr>
+			<td width="30%" align="center">
+				<img src="/var/www/html/triapp/public/images/trisakti_logo.jpg" width="100px" />
+			</td>
+			<td align="center">
+			
+			  <div class="header-center-info">				
+				<div align="left">
+				
+				<p>
+				<span class="style1"><?php echo $this->student['ArabicName'];?></span> <br>
+				<span class="style2">FAKULTAS <?php echo $this->student['NamaKolej'];?></span> <br>
+				<span class="style3">UNIVERSITAS TRISAKTI                </span></p>
+				
+			      <br>
+			      <?php echo $this->student['Add1'];?><br>
+				  Telp: <?php echo $this->student['Phone1'];?>
+				 
+				  <br>
+				  Email: <?php echo $this->student['Email'];?>
+				 
+			    </div>
+			  </div>
+			  
+		  </td>
+			
+	  </tr>
+		<tr><td colspan=2><hr></td></tr>
+</table>
+	<!-- End Header -->
+<table width="100%" border="0" cellpadding="5" cellspacing="0" class="table_head">
+	   <tr>
+	   	<td colspan=2 class="header_title" align="center">SURAT PERMOHONAN JUDUL SKRIPSI<BR><br><br></td>
+	   </tr>	  
+	   <tr>
+			<td width="20%">Perihal</td>
+			<td>: <?php echo $this->translate('Permohonan Judul Skripsi');?></td>	     
+	    </tr>
+	    <tr>
+			<td width="20%">Lampiran</td>
+			<td>: <?php echo $this->translate('1 (satu) slip pembayaran Skripsi');?></td>	     
+	    </tr>
+	    <?php if ($this->student['majoring']!='-') {?>
+	    <tr>
+			<td width="20%">&nbsp;</td><td>&nbsp;</td></tr>
+		<tr><td width="20%"><?php echo $this->translate('Kepada Yth.');?></td>
+			<td>: <?php echo $this->proposal['StaffAs'].' '.$this->student['majoring'];?></td>	     
+	    </tr>
+	    <?php } else {?>
+	    	 <tr>
+			<td width="20%">&nbsp;</td><td>&nbsp;</td></tr>
+			<tr><td width="20%"><?php echo $this->translate('Kepada Yth.');?></td>
+			<td>: <?php echo $this->proposal['StaffAs'].' '.$this->student['ArabicName'];?></td>	     
+	    </tr>
+	    <?php }?>
+	     <tr>
+			<td width="20%">&nbsp;</td>
+			<td>: <?php echo $this->translate('Fakultas ').$this->student['NamaKolej'].' Universitas Trisakti';?> </td>	     
+	    </tr>
+	     <tr>
+			<td width="20%">&nbsp;</td>
+			<td>: <?php echo $this->translate('di - ');?> </td>	     
+	    </tr>
+	    <tr>
+			<td width="20%">&nbsp;</td>
+			<td>: <?php echo $this->translate('Jakarta ');?> </td>	     
+	    </tr>
+	    
+</table>
+<br>
+<br>
+<br>
+<p><?php echo 'Yang bertanda tangan di bawah ini: '?></p>
+<table class="table_content">
+<tr><td><?php echo $this->translate('Name');?></td><td>:</td><td><?php echo $this->student['appl_fname'].' '.$this->student['appl_mname'].' '.$this->student['appl_lname'];?></td>
+<tr><td><?php echo $this->translate('NIM');?></td><td>:</td><td><?php echo $this->student['registrationId'];?></td>
+
+<tr><td><?php echo $this->translate('Majoring');?></td><td>:</td><td><?php echo $this->student['majoring'];?></td>
+<tr><td><?php echo $this->translate('Credit Hours Transcript/All');?></td><td>:</td><td><?php echo $this->student['credithours'].'/'.$this->student['credithoursall'];?></td>
+<tr><td><?php echo $this->translate('CGPA Transcript/All');?></td><td>:</td><td><?php echo $this->student['cgpa'].'/'.$this->student['cgpaall'];?></td>
+<tr><td><?php echo $this->translate('Prerequisite');?></td><td>:</td>
+		<td><table class="table_content" width="100%">
+		<tr>
+			<th><?php echo $this->translate('Prerequisite Type');?></th>
+			<th><?php echo $this->translate('Subject Name');?></th>
+			<th><?php echo $this->translate('Minimum Value');?></th>
+			<th><?php echo $this->translate('Grade');?></th>
+			<th><?php echo $this->translate('Status');?></th>
+		</tr>
+		<?php if (count($this->prerequisites) >0 ) {
+				foreach ($this->prerequisites as $item) {
+					if ($item['PrerequisiteType']=='2') {
+						$type='Credit Hours';
+						$item['SubjectName']='-';
+						$item['Grade']='-';
+					}
+					else if ($item['PrerequisiteType']=='3') $type='Co-Prerequisite';
+					else  $type='Subject';
+		?>
+			<tr><td><?php echo $type;?></td>
+			<td><?php echo $item['SubjectName'];?></td>
+			<td align="center"><?php echo $item['PrerequisiteGrade'];?> </td>
+			<td align="center"><?php echo $item['Grade'];?> </td>
+			<td align="center"><?php echo $item['Ok'];?> </td>
+			</tr>
+		<?php 	}
+		
+				
+			if ($this->prerequisiteStatus=='0') {
+				$disable="disabled";?>
+				<tr colspan="3"><td bgcolor="red"><strong><?php echo $this->translate('Prohibit to take this application')?></strong></td> 
+			<?php 
+			}
+		}  else { ?>
+			<tr><td><?php echo $this->translate("No Prerequisite");?></tr>
+		<?php } ?>
+		
+		</table></td>
+		
+</tr>
+<tr><td><?php echo $this->translate('Subject Related');?></td><td>:</td>
+		<td><table class="table_content" width="100%">
+		<tr>
+			<th><?php echo $this->translate('Subject Code');?></th>
+			<th><?php echo $this->translate('Subject Name');?></th>
+			<th><?php echo $this->translate('Credit Hours');?></th>
+			<th><?php echo $this->translate('Minimum Grade');?></th> 
+			<th><?php echo $this->translate('Grade');?></th> 
+		</tr>
+		<?php if (count($this->subject_list) >0 ) {
+				foreach ($this->subject_list as $item) {
+					 
+		?>
+			<tr><td><?php echo $item['ShortName'];?></td>
+			<td><?php echo $item['SubjectName'];?></td>
+			<td align="center"><?php echo $item['CreditHours'];?> </td>
+			<td align="center"> 
+			<?php if ($item['Grade_min']=='') echo 'N/A'; else echo $item['Grade_min'];?> </td>
+			<td align="center"><?php echo $item['Grade_name'];?> </td> 
+			</tr>
+		<?php 		
+				}  
+			}
+		  else { ?>
+			<tr><td><?php echo $this->translate("No subject related to");?></tr>
+		<?php } ?>
+		
+		</table></td>
+		
+</tr>
+</table>
+<p>Mengajukan permohonan penyusunan skripsi sebagai syarat kelulusan program <?php echo $this->student['StrataName']?> (<?php echo $this->student['strata'];?>) dengan judul dan pokok permasalahan sebagai berikut:
+</p>
+	<table class="table_content" >
+	<tr>	<td width="25%"><?php echo $this->translate("Title in Bahasa");?></td><td width="5px">:</td>
+			<td><?php echo $this->proposal['title_bahasa']; ?></td>  </tr> 
+	<tr>	<td width="20%"><?php echo $this->translate("Title in English");?></td><td>:</td>
+			<td> <?php echo $this->proposal['title']; ?></td></tr>
+	<tr>	<td width="20%"><?php echo $this->translate("First Problem Statement");?></td><td>:</td>
+			<td> <?php echo $this->proposal['problem1']; ?></td></tr>
+	<tr>	<td width="20%"><?php echo $this->translate("Second Problem Statement");?></td><td>:</td>
+			<td> <?php echo $this->proposal['problem2']; ?></td></tr>
+	<tr>	<td width="20%"><?php echo $this->translate("Third Problem Statement");?></td><td>:</td>
+			<td> <?php echo $this->proposal['problem3']; ?></td></tr>
+	<tr>	<td width="20%"><?php echo $this->translate("Abstract");?></td><td>:</td>
+			<td> <?php echo $this->proposal['abstrak']; ?></td></tr>
+	 
+</table>
+<br>
+<br>
+<table width="100%"><tr valign="center"><td width="40%" align="right"><img src="<?php echo $this->photo_url;?>" width="100px" /></td><td width="20%" >
+</td><td>
+<table class="body" width="100%" cellpadding="5" cellspacing="0" border="0">
+<tr><td align="left"><?php echo 'Jakarta, '?><?php echo date('d-M-Y',strtotime($this->proposal['dt_entry'])); ?></td>
+<tr><td align="left">&nbsp; </td>
+<tr><td align="left"> &nbsp;</td>
+<tr><td align="left"> &nbsp;</td>
+<tr><td align="left">&nbsp; </td>
+<tr><td align="left"><?php echo $this->student['appl_fname'].' '.$this->student['appl_mname'].' '.$this->student['appl_lname'];?></td>
+<tr><td align="left"><?php echo 'NIM : '.$this->student['registrationId'];?></td>
+</table>
+</td></tr></table>
+
+</fieldset> 

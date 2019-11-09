@@ -1,0 +1,406 @@
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<?if(isset($this->msgdiscipline)){?>
+<script>
+
+alert("<?php echo $this->msgdiscipline;?>");
+window.location ="<?php echo $this->url(array('module'=>'application','controller'=>'online-application','action'=>'index'),'default',true) ?>";
+</script>
+<?}?>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="javascript:back()">
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<div align="center" style="background:#ebebeb; height:30px;">
+<ul class="steps">
+	<li class="prevDone">
+		<span>1</span> Personal Identity Number
+	</li>
+    <li class="current">
+		<span>2</span> Personal Particular
+	</li>
+	<li class="next">
+		<span>3</span> Confirmation
+	</li>
+</ul>
+<br class="clear" />
+</div>
+<BR>
+
+<p>* <?php echo $this->translate("Please enter your details below."); ?></p>
+
+<div>
+
+<form name="onlineForm" method="post" action="<?php echo $this->url(array('module'=>'company','controller'=>'record','action'=>'add-profile-step3','idApp'=>$this->idApp),'default',true) ?>" onsubmit="return form_Validator()">
+
+<input type="hidden" name="ARD_ID" id="ARD_ID" size="60" value="<?php echo $this->student['ID'];?>"/>
+<table class="table6" width="100%" cellpadding="5" cellspacing="0" border="0">
+<tr bgcolor="#cccccc">
+		<td colspan="3"> Personal Particular</td>
+	</tr>	
+    <tr bgcolor="#ffffff">
+		<td valign="top" class="shade"><?php echo $this->translate("Full Name (as per NRIC)"); ?> *</td>
+		<td valign="top">:</td>
+		<td valign="top"><input type="text" name="ARD_NAME" id="ARD_NAME" size="60" value="<?php echo $this->student['ARD_NAME'];?>"/></td>
+	</tr>
+	
+	<tr bgcolor="#ffffff">
+		<td width="20%" valign="top" class="shade"><?php echo $this->translate("IC Number"); ?> *</td>
+		<td width="2%" valign="top">:</td>
+		<td width="80%" valign="top"><input type="text" name="ic" id="ic" size="60"  value="<?php echo $this->icno;?>" disabled> <input type=hidden name="ARD_IC" id="ARD_IC" size="60"  value="<?php echo $this->icno;?>"></td>
+	</tr>
+	
+	<tr bgcolor="#ffffff">
+		<td width="20%" valign="top" class="shade"><?php echo $this->translate("Date of Birth"); ?> *</td>
+		<td width="2%" valign="top">:</td>
+		<td width="80%" valign="top">
+		<?php 
+		$icno = $this->icno;
+		
+		$first = substr($icno,0);
+		$yeara = substr($icno, 0,2);
+		
+		if($first == 0){
+			$year = "20".$yeara; 
+		}else{
+			$year = "19".$yeara; 
+		}
+		
+		$month = substr($icno, 2,2);
+		$date = substr($icno, 4,2);
+		$dob2 = $year."-".$month."-".$date;
+		$dob = date('d-m-Y', strtotime($dob2));
+		
+		?>
+		<input type="text" name="dob" id="dob" size="60"  value="<?php echo $dob;?>" disabled><input type="hidden" name="ARD_DOB" id="ARD_DOB" size="60"  value="<?php echo $dob;?>"></td>
+	</tr>
+	 <tr bgcolor="#ffffff">
+		<td valign="top" class="shade"><?php echo $this->translate("Email Address");?> *<br> <?php echo $this->translate("(Please indicate valid email address because notification will be sent through email)"); ?> </td>
+		<td valign="top">:</td>
+		<td valign="top"><input type="text" name="ARD_EMAIL" id="ARD_EMAIL" size="60" value="<?php echo $this->student['ARD_EMAIL'];?>"></td>
+	</tr> 
+	<tr bgcolor="#ffffff">
+		<td valign="top" class="shade"><?php echo $this->translate("Mailing Address"); ?> *</td>
+		<td valign="top">:</td>
+		<td valign="top"><input type="text" name="ARD_ADDRESS1" id="ARD_ADDRESS1" size="60" value="<?php echo $this->student['ARD_ADDRESS1'];?>"></td>
+	</tr> 
+	<tr bgcolor="#ffffff">
+		<td valign="top" class="shade"><?php echo $this->translate("Address 2"); ?> </td>
+		<td valign="top">:</td>
+		<td valign="top"><input type="text" name="ARD_ADDRESS2" id="ARD_ADDRESS2" size="60" value="<?php echo $this->student['ARD_ADDRESS2'];?>"></td>
+	</tr>
+	<tr bgcolor="#ffffff">
+		<td valign="top" class="shade"><?php echo $this->translate("Postal Code"); ?> *</td>
+		<td valign="top">:</td>
+		<td valign="top"><input type="text" name="ARD_POSTCODE" id="ARD_POSTCODE" size="60" value="<?php echo $this->student['ARD_POSTCODE'];?>"></td>
+	</tr>
+	<tr bgcolor="#ffffff">
+		<td valign="top" class="shade"><?php echo $this->translate("City"); ?> *</td>
+		<td valign="top">:</td>
+		<td valign="top"><input type="text" name="ARD_CITY" id="ARD_CITY" size="60" value="<?php echo $this->student['ARD_CITY'];?>"></td>
+	</tr>
+	
+	<tr bgcolor="#ffffff">
+		<td valign="top" class="shade"><?php echo $this->translate("State"); ?> *</td>
+		<td valign="top">:</td>
+		<td valign="top">
+		<select name="ARD_STATE" id="ARD_STATE">
+			<option value="0"> -- Please select -- </option>
+			<?php 
+				foreach ($this->state as $data) {
+					
+					if ($data['id'] == $this->student['ARD_STATE']) {
+						$selected = "selected";
+					}else{
+						$selected ="";
+					}
+			
+					echo "<option value='".$data['id']."' $selected>".$data['name']."</option>";
+				}
+			?>
+		</select>
+		</td>
+	</tr>
+	<tr bgcolor="#ffffff">
+		<td valign="top" class="shade"><?php echo $this->translate("Country"); ?> *</td>
+		<td valign="top">:</td>
+		<td valign="top"><input type="text" name="ARD_COUNTRYNAME" id="ARD_COUNTRYNAME" size="60" value="MALAYSIA" disabled>
+		<input type="hidden" name="ARD_COUNTRY" id="ARD_COUNTRY" size="60" value="129">
+		</td>
+	</tr>
+	<tr bgcolor="#ffffff">
+		<td valign="top" class="shade"><?php echo $this->translate("Contact No"); ?> </td>
+		<td valign="top">:</td>
+		<td valign="top"><input type="text" name="ARD_PHONE" id="ARD_PHONE" size="60" value="<?php echo $this->student['ARD_PHONE'];?>"></td>
+	</tr>
+	<tr bgcolor="#ffffff">
+		<td valign="top" class="shade"><?php echo $this->translate("Mobile No"); ?> *</td>
+		<td valign="top">:</td>
+		<td valign="top"><input type="text" name="ARD_HPHONE" id="ARD_HPHONE" size="60" value="<?php echo $this->student['ARD_HPHONE'];?>"></td>
+	</tr>
+	<tr bgcolor="#ffffff">
+		<td valign="top" class="shade"><?php echo $this->translate("Race"); ?> *</td>
+		<td valign="top">:</td>
+		<td valign="top">
+		<select name="ARD_RACE" id="ARD_RACE">
+			<option value="0"> -- Please select -- </option>
+			<?php 
+				foreach ($this->race as $data) {
+					
+					if ($data['id'] == $this->student['ARD_RACE']) {
+						$selected = "selected";
+					}else{
+						$selected ="";
+					}
+			
+					echo "<option value='".$data['id']."' $selected>".$data['name']."</option>";
+				}
+			?>
+		</select>
+		
+		</td>
+	</tr>
+	<tr bgcolor="#ffffff">
+		<td valign="top" class="shade"><?php echo $this->translate("Religion"); ?> *</td>
+		<td valign="top">:</td>
+		<td valign="top">
+		<select name="ARD_RELIGION" id="ARD_RELIGION">
+			<option value="0"> -- Please select -- </option>
+			<?php 
+				foreach ($this->religion as $data) {
+					
+					if ($data['id'] == $this->student['ARD_RELIGION']) {
+						$selected = "selected";
+					}else{
+						$selected ="";
+					}
+			
+					echo "<option value='".$data['id']."' $selected>".$data['name']."</option>";
+				}
+			?>
+		</select>
+		
+		</td>
+	</tr>
+	<tr bgcolor="#ffffff">
+		<td valign="top" class="shade"><?php echo $this->translate("Gender"); ?> *</td>
+		<td valign="top">:</td>
+		<td valign="top">
+		<input name="ARD_SEX" type="radio" value="M" <? if ($this->student['ARD_SEX']=="M")echo "checked";?>><?php echo $this->translate("Male"); ?>
+		<input name="ARD_SEX" type="radio" value="F" <? if ($this->student['ARD_SEX']=="F")echo "checked";?>><?php echo $this->translate("Female"); ?>
+		</td>
+	</tr>
+	
+	<tr bgcolor="#ffffff">
+		<td valign="top" class="shade"><?php echo $this->translate("Qualification"); ?> *</td>
+		<td valign="top">:</td>
+		<td valign="top">
+		<select name="ARD_QUALIFICATION" id="ARD_QUALIFICATION">
+			<option value="0"> -- Please select -- </option>
+			<?php 
+				foreach ($this->qualification as $data) {
+					
+					if ($data['id'] == $this->student['ARD_QUALIFICATION']) {
+						$selected = "selected";
+					}else{
+						$selected ="";
+					}
+			
+					echo "<option value='".$data['id']."' $selected>".$data['name']."</option>";
+				}
+			?>
+		</select>
+		</td>
+	</tr>
+	<tr bgcolor="#cccccc">
+		<td colspan="3">E-Book Access</td>
+	</tr>
+	<tr bgcolor="#ffffff">
+		<td valign="top" class="shade"><?php echo $this->translate("Username"); ?> *</td>
+		<td valign="top">:</td>
+		<td valign="top"><input type="text" name="username" id="username" size="60" value="<?php echo $this->student['username'];?>" >
+		</td>
+	</tr>
+	<tr bgcolor="#ffffff">
+		<td valign="top" class="shade"><?php echo $this->translate("Password"); ?> *</td>
+		<td valign="top">:</td>
+		<td valign="top"><input type="text" name="clearpass" id=""clearpass"" size="60" value="<?php echo $this->student['clearpass'];?>" >
+		</td>
+	</tr>
+	<input type="hidden" name="id_app" id="id_app" value="<?php echo $this->student['ID'];?>">
+	</table>
+	<br>
+	<table width="100%" align="center">
+	<tr bgcolor="#ffffff" align="center">
+		<td valign="top" colspan="3" > 
+			<input type="button" name="Submit" value="Next" onclick="form_Validator();"> 
+			<input type="submit" name="Reset" value="Reset"> 
+			<input type="button" name="Back" value="Back" onClick="back();">
+		</td>
+		
+	</tr>
+	
+</table>
+
+</form>
+
+
+</div>
+
+<script type="text/javascript">
+
+function hide() //Hide function: hide the div
+{
+getResult = document.getElementById("txt").style.
+display = "none"; // hide the div
+}
+
+function show()
+{
+getResult = document.getElementById("txt").style.
+display = "block"; //make the div visible
+}
+
+
+function form_Validator()
+{
+	
+	var name = document.forms["onlineForm"]["ARD_NAME"].value;
+	var ic = document.forms["onlineForm"]["ARD_IC"].value;
+	var email = document.forms["onlineForm"]["ARD_EMAIL"].value;
+	var address = document.forms["onlineForm"]["ARD_ADDRESS1"].value;
+	var postcode = document.forms["onlineForm"]["ARD_POSTCODE"].value;
+	var state = document.forms["onlineForm"]["ARD_STATE"];
+	var race = document.forms["onlineForm"]["ARD_RACE"];
+	var religion = document.forms["onlineForm"]["ARD_RELIGION"];
+	var gender = document.forms["onlineForm"]["ARD_SEX"];
+	var qualification = document.forms["onlineForm"]["ARD_QUALIFICATION"];
+	var username = document.forms["onlineForm"]["username"].value;
+	var password = document.forms["onlineForm"]["clearpass"].value;
+	
+	
+	if (name==null || name=="")
+	{
+		alert("Please enter your name (as per NRIC)");
+		document.forms["onlineForm"]["ARD_NAME"].focus();
+		document.forms["onlineForm"]["ARD_NAME"].style.border = "1px solid red";
+		return false;
+	}
+	
+	if (email==null || email=="")
+	{
+		alert('Please enter your Email!');
+		document.forms["onlineForm"]["ARD_EMAIL"].focus();
+		document.forms["onlineForm"]["ARD_EMAIL"].style.border = "1px solid red";
+		return (false);
+	}else{
+		var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+		if (!filter.test(email)) {
+			alert('Please enter valid e-mail address!');
+			document.forms["onlineForm"]["ARD_EMAIL"].focus();
+			document.forms["onlineForm"]["ARD_EMAIL"].style.border = "1px solid red";
+			return (false);
+		} 
+	}
+
+	if (address==null || address=="")
+	{
+		alert("Please enter your Mailing Address");
+		document.forms["onlineForm"]["ARD_ADDRESS1"].focus();
+		document.forms["onlineForm"]["ARD_ADDRESS1"].style.border = "1px solid red";
+		return false;
+	}
+
+	if (postcode==null || postcode=="")
+	{
+		alert("Please enter your postcode");
+		document.forms["onlineForm"]["ARD_POSTCODE"].focus();
+		document.forms["onlineForm"]["ARD_POSTCODE"].style.border = "1px solid red";
+		return false;
+	}
+
+	if (state.selectedIndex == 0 || state.selectedIndex=="" || state.selectedIndex==null)
+	{
+		alert("Please select State");
+		state.style.border = "1px solid red";
+		return false;
+	}
+
+	if (race.selectedIndex == 0 || race.selectedIndex=="" ||race.selectedIndex==null)
+	{
+		alert("Please select Race");
+		race.style.border = "1px solid red";
+		return false;
+	}
+
+	if (religion.selectedIndex == 0 || religion.selectedIndex=="" ||religion.selectedIndex==null)
+	{
+		alert("Please select religion");
+		religion.style.border = "1px solid red";
+		return false;
+	}
+
+	if (!gender[0].checked && !gender[1].checked)
+	{
+		alert('Please choose Gender: Male or Female');
+		return false;
+	}
+
+	if (qualification.selectedIndex == 0 || qualification.selectedIndex=="" ||qualification.selectedIndex==null)
+	{
+		alert("Please select qualification");
+		qualification.style.border = "1px solid red";
+		return false;
+	}
+	if (username==null || username=="")
+	{
+		alert("Please enter your Username for E-Book Access");
+		document.forms["onlineForm"]["username"].focus();
+		document.forms["onlineForm"]["username"].style.border = "1px solid red";
+		return false;
+	}
+
+	if (password==null || password=="")
+	{
+		alert("Please enter your password");
+		document.forms["onlineForm"]["clearpass"].focus();
+		document.forms["onlineForm"]["clearpass"].style.border = "1px solid red";
+		return false;
+	}
+
+	var msg = "Are you sure to add this candidate?";
+
+	if( confirm(msg)){
+		document.forms["onlineForm"].submit();
+	}
+}
+
+</script>
+
+
+

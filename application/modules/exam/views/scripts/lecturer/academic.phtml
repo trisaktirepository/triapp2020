@@ -1,0 +1,152 @@
+<script>
+	$(function() {	
+		$( "#dialog-add-academic" ).dialog({
+			width: 650,
+			modal: true,
+			autoOpen: false,
+			buttons: { 
+				"Add": function() { 
+					//$(this).dialog("close"); 
+					$("#exam_lecturer_academic_form").submit()
+				},
+				"Close": function() { $(this).dialog("close"); } 
+			},
+			open: function() {
+				$(this).dialog().load("<?php echo $this->url(array('module'=>'exam','controller'=>'lecturer', 'action'=>'academic-add','id'=>$this->lid),'default',true);?>");
+			}
+		});
+		
+		$( "#dialog-edit-academic" ).dialog({
+			width: 650,
+			modal: true,
+			autoOpen: false,
+			buttons: { 
+				"Save": function() { 
+					//$(this).dialog("close"); 
+					$("#exam_lecturer_academic_form").submit()
+				},
+				"Close": function() { $(this).dialog("close"); } 
+			}
+		});
+	});
+
+	function edit(){
+		var id = $('input[name=academic_id]:checked').val();
+
+		if(!id){
+			alert('Please select any record first');
+		}else{
+			$('#dialog-edit-academic').dialog('open').load('<?php echo $this->url(array('module'=>'exam','controller'=>'lecturer', 'action'=>'academic-edit'),'default',true);?>/id/' + id);
+		}
+	}
+
+	function verify(){
+		var id = $('input[name=academic_id]:checked').val();
+
+		if(!id){
+			alert('Please select any record first');
+		}else{
+			if(confirm("<?php echo $this->translate("Confirm to verify this academic record?"); ?> ")){
+				window.location = '<?php echo $this->url(array('module'=>'exam','controller'=>'lecturer', 'action'=>'academic-verify'),'default',true);?>/id/' + id;
+			}
+		}
+	}
+
+	function delete_contact(){
+		var id = $('input[name=academic_id]:checked').val();
+
+		if(!id){
+			alert('Please select any record first');
+		}else{
+			if( confirm("Are you sure to delete selected academic record?") ){
+				window.location = '<?php echo $this->url(array('module'=>'exam','controller'=>'lecturer', 'action'=>'academic-delete','id'=>$this->studentID),'default',true);?>/id/' + id;
+			}
+		}
+	}
+</script>
+<table class="table3" width="100%" border="0" cellpadding="5" cellspacing="1" >
+	<tr>
+		<th colspan="7">
+			<div class="message toolbar toolbar-clear">
+				<h2><?php echo $this->translate($this->title); ?></h2>
+				<div class="toolbar-button">
+					<ul>
+						<li>
+							<a href="#" onclick="javascript:$( '#dialog-add-academic' ).dialog('open');">
+								<span class='add'></span>
+								Add
+							</a>
+						</li>
+						<li>
+							<a href="#"  onclick="edit();">
+								<span class='edit'></span>
+								Edit
+							</a>
+						</li>
+						<!--<li>
+							<a href="#"  onclick="verify();">
+								<span class='verify'></span>
+								Verify
+							</a>
+						</li>-->
+						<li>
+							<a href="#" onclick="javascript:delete_contact();">
+								<span class='delete'></span>
+								Delete
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</th>
+	</tr>
+	<tr>
+		<th width="5px">&nbsp;</th>
+		<th width="5px">&nbsp;</th>
+		<th><?php echo $this->translate("Level");?></th>
+		<th width="80px"><?php echo $this->translate("Year");?></th>
+		<th><?php echo $this->translate("Major");?></th>
+		<th><?php echo $this->translate("Institution");?></th>
+		<!--<th width="30px"><?php echo $this->translate("Verification");?></th>-->
+	</tr>
+	<?php 
+	if(!empty($this->data) ){
+	$i=0;
+	foreach ($this->data as $data):
+	?>
+    <tr>
+    	<th style="background-color: #EEE; color:#111">
+    		<input type="radio" name="academic_id" value="<?php echo $data['id']; ?>" />
+    	</th>
+    	<td><?php echo $i+1 . "."; ?></td>
+    	<td><?php echo $data['academic_level_name']; ?></td>
+    	<td align="center"><?php echo $data['year']; ?></td>
+    	<td><?php echo $data['major']; ?></td>
+    	<td><?php echo $data['institution']; ?></td>
+    	<!--<td align="center">
+    		<?php 
+//    			if($data['verified']==1){
+//    				echo "<span class='state publish'>&nbsp;</span>";
+//    			}else{
+//    				echo "<span class='state unpublish'>&nbsp;</span>";
+//    			}
+    		?>
+    	</td>-->
+    </tr>
+    <?php
+    $i++; 
+    endforeach;
+	}else{
+	?>
+		<tr>
+			<td colspan="7" align="center">
+				No Academic Record
+			</td>
+		</tr>
+	<?php 
+	}
+    ?>
+</table>
+
+<div id="dialog-add-academic" title="Add New Academic Record" style="padding:0; margin:0;"></div>
+<div id="dialog-edit-academic" title="Edit Academic Record" style="padding:0; margin:0;"></div>

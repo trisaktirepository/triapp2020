@@ -1,0 +1,17 @@
+<dl>
+    <dt>From</dt>
+    <dd><?= $this->getbytimezone($this->event->start); ?></dd>
+</dl>
+<dl>
+    <dt>To</dt>
+    <dd><?= $this->getbytimezone($this->event->end); ?></dd>
+</dl>
+<dl>
+    <dt>Location</dt>
+    <dd> <?= $this->escape($this->event->location); ?>&nbsp;</dd>
+</dl>
+<dl>
+    <dt>Details</dt>
+    <dd><?= $this->escape(nl2br($this->event->description)); ?></dd>
+</dl>
+

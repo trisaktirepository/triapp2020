@@ -1,0 +1,50 @@
+<script type="text/javascript">
+$(function() {
+	 $( "#ResultTabs").tabs();
+
+	 url1="<?php echo $this->url(array('module'=>'default','controller'=>'parent-portal','action'=>'assessment'),'default',true);?>";
+	 $( "#Tab1" ).load( url1 );
+	 
+     url2="<?php echo $this->url(array('module'=>'default','controller'=>'parent-portal','action'=>'khs'),'default',true);?>";
+	 $( "#Tab2" ).load( url2 );
+     
+     url3="<?php echo $this->url(array('module'=>'default','controller'=>'parent-portal','action'=>'view-temp-transcript'),'default',true);?>";
+	 $( "#Tab3" ).load( url3 );
+
+	 url4="<?php echo $this->url(array('module'=>'default','controller'=>'parent-portal','action'=>'view-all-transcript'),'default',true);?>";
+	 $( "#Tab4" ).load( url4 );
+	 
+});
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		
+	</div>
+</div>
+<br />
+
+<div style="width:100%;">
+	<div id="ResultTabs">
+
+		<ul>
+			<li><a href="#Tab1"><?php echo $this->translate("Coursework");?></a></li>
+			<li><a href="#Tab2"><?php echo $this->translate("Kartu Hasil Studi");?></a></li>	
+			<li><a href="#Tab3"><?php echo $this->translate("Passed Transcript");?></a></li>	
+			<li><a href="#Tab4"><?php echo $this->translate("All Transcript");?></a></li>	
+		
+		</ul>
+
+
+		<div id="Tab1"> 			
+		</div>
+		<div id="Tab2"> 		
+		</div>
+		<div id="Tab3"> 		
+		</div>
+	
+		<div id="Tab4"> 		
+		</div>
+	</div>
+</div>

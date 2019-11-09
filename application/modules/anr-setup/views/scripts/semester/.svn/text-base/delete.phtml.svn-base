@@ -1,0 +1,13 @@
+<p>Are you sure that you want to delete this Semester ?
+<!-- <br>Program : '<?php echo $this->escape($this->semester['programIDID']); ?>' -->
+<br>Semester : '<?php echo $this->escape($this->semester['semester']); ?>'
+<br>Start expire : '<?php echo $this->escape($this->semester['startDate']); ?>'
+<br>Expire expire : '<?php echo $this->escape($this->semester['expireDate']); ?>'
+</p>
+<form action="<?php echo $this->url(array('action'=>'delete')); ?>" method="post">
+<div>
+<input type="hidden" name="semesterID" value="<?php echo $this->semester['semesterID']; ?>" />
+<input class="deleteButton ui-button ui-state-default ui-corner-all ui-button-text-only" type="submit" name="del" value="Yes" />
+<input class="cancelButton ui-button ui-state-default ui-corner-all ui-button-text-only" type="submit" name="del" value="No" />
+</div>
+</form>

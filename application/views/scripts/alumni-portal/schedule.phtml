@@ -1,0 +1,44 @@
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		
+	</div>
+</div>
+<br />
+
+<div style="width:100%;">
+
+<?php echo $this->form;?>
+
+
+<table class="table" width="100%" cellpadding="5" cellspacing="1">
+			  	<tr>			  	  		  	   
+			  		<th><?php echo $this->translate("Course Name")?></th>
+			  		<th><?php echo $this->translate("Course Code")?></th>
+			  		<th><?php echo $this->translate("Course Type")?></th>
+			  		<th><?php echo $this->translate("Credit Hours")?></th>
+			  		<th><?php echo $this->translate("Status")?></th>
+			  	</tr>			  	
+			  	<?php   
+			  	foreach($this->courses as $course){  
+			  		
+			  	//get course type
+			  	$landscapeSubjectDb  = new App_Model_Record_DbTable_Landscape();
+			  	$subjectInfo = $landscapeSubjectDb->getCourseInfo($course["IdLandscapeSub"]);
+  			 	
+			  	?>
+			  	<tr>			  			  	
+			  		<td><?php echo ($course["BahasaIndonesia"]!='' ? $course["BahasaIndonesia"]:$course["SubjectName"]); ?></td>
+			  		<td><?php echo $course["SubCode"]; ?></td>
+			  		<td><?php echo $subjectInfo["DefinitionDesc"];?></td>
+			  		<td align="center"><?php echo $course["CreditHours"]; ?></td>
+			  		<td><?php 
+			  				if($course["Active"]==1) echo $this->translate("Register"); 
+			  				if($course["Active"]==0) echo $this->translate("Not Register"); 
+			  			?></td>
+			  	</tr>
+			  	<?php  } //end foreach ?>
+			  	
+			  </table>
+</div>

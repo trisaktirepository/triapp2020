@@ -1,0 +1,139 @@
+<script type="text/javascript">
+		
+	function showConfirm(){
+		
+		if(confirm('Are you sure to submit this application?')){		
+			document.defer_form.action ="<?php echo $this->url(array('module'=>'exam','controller'=>'defer', 'action'=>'approve-defer'),'default',true); ?>";
+			document.defer_form.submit();
+		}
+		
+	}
+</script>
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'exam','controller'=>'defer', 'action'=>'index'),'default',true);?>">
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<div align="center" style="background:#ebebeb; height:30px;">
+<ul class="steps">
+	<li class="previous">
+		<span>1</span> Student Selection
+	</li>
+    <li class="current">
+		<span>2</span> Exam Defer
+	</li>
+	<li class="next">
+		<span>3</span> Completed
+	</li>
+
+</ul>
+<br class="clear" />
+</div>
+
+
+
+<br />
+<h4>Student Details</h4>
+<table width="100%">
+	<tr>
+		<td width="110px">NAME</td>
+		<td width="5px">:</td>
+		<td><?php echo $this->student['fullname']; ?></td>
+		<td>PROGRAM</td>
+		<td>:</td>
+		<td><?php echo $this->program['main_name']?></td>
+	</tr>
+	<tr>
+		<td>MATRIC NUM</td>
+		<td>:</td>
+		<td><?php echo $this->student['matric_no']; ?></td>
+		<td>ACADEMIC STATUS</td>
+		<td>:</td>
+		<td><input type="hidden" name="academic_status" id="academic_status" value="1">GOOD</td>
+	</tr>
+	<tr>
+		<td>BRANCH</td>
+		<td>:</td>
+		<td><?php echo $this->student['branch_name']?></td>
+		<td>INTAKE</td>
+		<td>:</td>
+		<td><?php echo $this->student['intake_name']?></td>
+	</tr>
+	<tr>
+		<td>SEMESTER</td>
+		<td>:</td>
+		<td colspan="3"><?php echo $this->currentsemester["name"].'&nbsp;'.$this->currentsemester["year"];?>
+		</td>
+	</tr>
+</table>
+
+
+
+<div>
+	<h2>Exam Defer Applied</h2>
+	
+	<form name="defer_form" method="post" action="">
+	
+	<input type="hidden" name="student_id"  value="<?php echo $this->student['id']; ?>"></input>
+	<input type="hidden" name="semester_id" value="<?php echo $this->semester_id?>"></input>	
+	
+	<table width="100%" border="0" class="table3" cellpadding="5" cellspacing="1">
+	<tr>
+		<th>No</th>
+		<th>Course Name</th>
+		<th>Course Code</th>
+		<th>Reason</th>
+		<th>Defer Date</th>
+		<th>Action</th>
+	</tr>
+	<?php 
+	$i=1;
+	foreach ($this->list_application as $application):{
+		
+	?>
+	
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+	    <td align="center"><?php echo $i;?>. <input type="hidden" name="id" id="id" value="<?php echo $application['id']; ?>" ></td>	
+		<td align="left">  <?php echo $application['course_name']; ?></td>
+		<td align="center"><?php echo $application['course_code']; ?></td>
+		<td align="center"><?php echo $application['defer_reason'];?></td>
+		<td align="center"><?php echo $application['defer_date'];?></td>
+		<td align="center">
+		 	  
+			<select name="defer_status" id="defer_status">
+				<option value="0">-- <?php echo $this->translate("Please Select"); ?> --</option>
+				<option value="1"><?php echo $this->translate("Not Approved"); ?></option>
+				<option value="2"><?php echo $this->translate("Approved"); ?></option>
+			</select>    
+						
+		</td>
+	</tr>
+	<?php 
+			$i++;
+		}
+	endforeach 
+	?>
+	
+</table>
+
+<div width="200px" align="center">
+<br />
+<input type="button" value="Submit"  onclick="javascript:showConfirm();">
+</div>
+</form>
+
+</div>

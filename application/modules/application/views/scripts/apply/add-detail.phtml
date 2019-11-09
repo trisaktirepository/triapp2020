@@ -1,0 +1,410 @@
+<?php
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/css/layout.css' );
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/css/default/style.css' );
+
+?>
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<style type="text/css">
+.hide {display: none}
+</style>
+
+<SCRIPT language="javascript">
+
+function showDivArea(areas_show){
+	for (var i = 0; i < areas_show.length; i++)
+		{
+		ge = document.getElementById(areas_show[i]);
+		ge.style.display = "block";
+		}
+}
+</SCRIPT>
+
+<style>
+#fade { /*--Transparent background layer--*/
+	display: none; /*--hidden by default--*/
+	background: #F2F2F2;
+	position: fixed; left: 0; top: 0;
+	width: 100%; height: 100%;
+	opacity: .70;
+	z-index: 9999;
+}
+.popup_block{
+	display: none; /*--hidden by default--*/
+	background: #fff;
+	padding: 20px;
+	border: 20px solid #ddd;
+	float: left;
+	font-size: 1.2em;
+	position: fixed;
+	top: 50%; left: 50%;
+	z-index: 99999;
+	/*--CSS3 Box Shadows--*/
+	-webkit-box-shadow: 0px 0px 20px #000;
+	-moz-box-shadow: 0px 0px 20px #000;
+	box-shadow: 0px 0px 20px #000;
+	/*--CSS3 Rounded Corners--*/
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+}
+img.btn_close {
+	float: right;
+	margin: -55px -55px 0 0;
+}
+/*--Making IE6 Understand Fixed Positioning--*/
+*html #fade {
+	position: absolute;
+}
+*html .popup_block {
+	position: absolute;
+}
+</style>
+<script type="text/javascript"
+src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	//When you click on a link with class of poplight and the href starts with a # 
+$('a.poplight[href^=#]').click(function() {
+    var popID = $(this).attr('rel'); //Get Popup Name
+    var popURL = $(this).attr('href'); //Get Popup href to define size
+
+    //Pull Query & Variables from href URL
+    var query= popURL.split('?');
+    var dim= query[1].split('&');
+    var popWidth = dim[0].split('=')[1]; //Gets the first query string value
+
+    //Fade in the Popup and add close button
+    $('#' + popID).fadeIn().css({ 'width': Number( popWidth ) }).prepend('<a href="#" class="close"><img src="/images/icon/close_pop.png" border="0" class="btn_close" title="Close Window" alt="Close" /></a>');
+
+    //Define margin for center alignment (vertical   horizontal) - we add 80px to the height/width to accommodate for the padding  and border width defined in the css
+    var popMargTop = ($('#' + popID).height() + 80) / 2;
+    var popMargLeft = ($('#' + popID).width() + 80) / 2;
+
+    //Apply Margin to Popup
+    $('#' + popID).css({
+        'margin-top' : -popMargTop,
+        'margin-left' : -popMargLeft
+    });
+
+    //Fade in Background
+    $('body').append('<div id="fade"></div>'); //Add the fade layer to bottom of the body tag.
+    $('#fade').css({'filter' : 'alpha(opacity=80)'}).fadeIn(); //Fade in the fade layer - .css({'filter' : 'alpha(opacity=80)'}) is used to fix the IE Bug on fading transparencies 
+    
+    return false;
+});
+
+//Close Popups and Fade Layer
+$('a.close, #fade').live('click', function() { //When clicking on the close or fade layer...
+    $('#fade , .popup_block').fadeOut(function() {
+        $('#fade, a.close').remove();  //fade them both out
+    });
+    return false;
+});
+
+});
+
+</script>
+
+<?php
+	//echo "<h1>". $this->title ."</h1>";
+	
+$applyDB = new Onapp_Model_DbTable_Apply();
+$apply = $applyDB->getData($this->id);
+
+?>
+<p><h1>A. PERSONAL PARTICULARS</b></h1>
+	<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+		<tr bgcolor="#ffffff">
+			<td width="20%"><?php echo $this->translate("FULLNAME"); ?></td>
+			<td width="2%" >:</td>
+			<td><?php echo $apply["ARD_NAME"];?></td>
+		</tr>
+		<tr bgcolor="#ffffff">
+			<td ><?php echo $this->translate("PERSONAL ID"); ?></td>
+			<td >:</td>
+			<td><?php echo $apply["ARD_IC"];?></td>
+		</tr>
+		<tr bgcolor="#ffffff">
+			<td><?php echo $this->translate("CONTACT NUMBER"); ?></td>
+			<td>:</td>
+			<td><?php echo $apply["ARD_HPHONE"];?></td>
+		</tr>
+		<tr bgcolor="#ffffff">
+			<td><?php echo $this->translate("EMAIL ADDRESS"); ?></td>
+			<td>:</td>
+			<td><?php echo $apply["ARD_EMAIL"]; ?></td>
+		</tr>
+		<tr bgcolor="#ffffff">
+			<td><?php echo $this->translate("AWARD"); ?></td>
+			<td>:</td>
+			<td>
+			<?php 
+			$awardDB = new Onapp_Model_DbTable_Award();
+			$this->award = $awardDB->getData($apply["ARD_PROGRAM"]);
+			echo $this->award["award_desc"]; ?>
+			</td>
+		</tr>
+	</table>
+	
+<BR>
+	<h1><b>B. ENTRY REQUIREMENTS</b></h1>
+	
+	<form name="f2" method="POST"">
+	
+	<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+		<tr bgcolor="#f2f2f2">
+			<td><b>Bil</b></td>
+			<td width="10%"><b>Year Graduate</b></td>
+			<td align="center" width="15%"><b>Programme Level</b></td>
+			<td align="center" width="25%"><b>Programme Name</b></td>
+			<td align="center" width="40%"><b>School/College/University</b></td>
+			<td align="center" width="10%"><b>Grade</b></td>
+		</tr>
+		<?php //echo $this->translate("Bachelor Degree"); 
+		$entryDB = new Onapp_Model_DbTable_Applyreq();
+		$this->entry = $entryDB->getEntry($this->id);
+		$n = 1;
+		foreach ($this->entry as $ent){
+		?> 
+		<tr bgcolor="#ffffff">
+			<td><?=$n?>)</td>
+			<td><?=$ent["APP_YEAR"];?></td>
+			<td>
+				<?php 
+				$program_name = $applyDB->getList("*","sc001_program","sc001_program_id = ".$ent["APP_ENTRY"]);
+				foreach ($program_name as $prog) {
+					echo strtoupper($prog["sc001_name"]); 
+				}?>
+			</td>
+			<td><?=$ent["APP_QUA"];?></td>
+			<td><?=$ent["APP_SCHOOL"];?></td>
+			<td><?=$ent["APP_GRADE"];?></td>
+		</tr>
+		<?$n++;
+		 } ?>
+	</table><br>
+	<div class="span-7 buttons" >
+		<a class="positive addLink" href="<? echo $this->url(array('module'=>'onapp','controller'=>'index','action'=>'add-apply','id'=>$this->id),'default',true) ?>">Edit Entry Requirement </a>
+	</div><br>
+	
+<BR>
+<p><h1>C. PROGRAMME OFFERED</b></h1>
+
+	<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">	
+		<tr bgcolor="#F2F2F2">
+			<td width="5"><b>Bil</b></td>
+			<td align="center"><b>Programme Name</b></td>
+			<td align="center"><b>Placement Test</b></td>
+			<td align="center"><b>Credit Transfer</b></td>
+			<td align="center"><b>Tick (/) to apply</b></td>
+		</tr>
+		
+		<?php 
+		
+		$courseDB = new Onapp_Model_DbTable_Course();
+		$this->program = $courseDB->getPaginateData($apply["ARD_PROGRAM"]);
+		$bil = 1;
+			foreach ($this->program as $program){
+			?>
+			<tr bgcolor="#FFFFFF">
+				<td><?php echo $bil; ?>)</td>
+				<td>
+				
+				<a href="#?w=500" rel="<?=$program["masterProgramID"]?>" class="poplight"><?php echo strtoupper($program['masterProgram']);?></a>
+						<div id="<?=$program["masterProgramID"]?>" class="popup_block">
+						
+						<?
+						
+						echo "<h2>".$program["masterProgram"]."</h2>";
+
+						$lands_detail = $applyDB->getList("*","academic_landscape as a, course as b,masterprogram as c","a.programID = $program[masterProgramID] and a.courseID = b.courseid and a.programID = c.masterProgramID");
+						echo " <br>Credit Transfer Subject<br>";
+
+						foreach ($lands_detail as $lands){
+							
+							echo $lands["course_code"].$lands["course_name"]."<br>";
+						}
+						?>
+						</div>
+					</td>
+				<td align="center">
+				<?php
+				$placeDB = new Onapp_Model_DbTable_Placementtest();
+				$place = $placeDB->getList("placement_test","program","ID_PROG = program_id","masterprogram","program_master_id = masterProgramID","ID_PROG = ".$program['program_id']);
+				
+				foreach ($place as $pl){
+					//echo "/";
+					if (empty($pl["ID"])) {
+						echo "No";
+					} else {
+						echo $pl["DATE"];
+					}
+					echo "<input type=\"hidden\" name=\"ID_PROG\" id=\"ID_PROG\" value=\"$pl[ID]\">";
+				}
+				
+				?>
+				</td>
+				<td align="center">
+				<?php 
+				
+				$landscape = $applyDB->getCount("academic_landscape","programID = $program[masterProgramID]");
+				if ($landscape == 0 ) {
+					echo "No";
+				} else {
+					echo "Yes";
+				}
+
+				
+				?></td>
+				<td align="center"><input name="id_apply" id="id_apply" type="radio" onclick="javascript:showDivArea(['prog_div'])" value="<?=$program['program_id']?>"></td>
+			</tr>
+			<?php
+			$bil++;
+			} 
+		?>
+		<tr bgcolor="#F2F2F2">
+			<td colspan="5"><font color="red" size="1"><em>* Click on Programme Name to view details.</em></font></td>
+		</tr>
+	</table>
+
+<br>
+<div class="hide" id="prog_div" style="width:100%; margin: 10px auto;">
+<p><h1>D. ADDITIONAL INFO</b></h1>
+	<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">	
+  <tr>
+    <td width="20%" bgcolor="#f2f2f2">Sex</td>
+    <td width="2%" bgcolor="#ffffff">:</td>
+    <td bgcolor="#ffffff">
+		<input name="ARD_SEX" id="ARD_SEX" type="radio" value="M">Male
+		<input name="ARD_SEX" id="ARD_SEX" type="radio" value="F">Female
+    </td>
+  </tr>
+  <tr>
+    <td bgcolor="#f2f2f2">Date of Birth</td>
+    <td bgcolor="#ffffff">:</td>
+    <td bgcolor="#ffffff">
+    <select name="ARD_DAY" id="ARD_DAY">
+	<? for ($i=1;$i<32;$i++){ ?>
+	 	<option value="<?=$i?>"><?=$i?></option>
+	 <? } ?>
+	</select>
+	
+	<select name="ARD_MONTH" id="ARD_MONTH">
+	<? for ($i=1;$i<13;$i++){ ?>
+	 	<option value="<?=$i?>"><?=$i?></option>
+	 <? } ?>
+	</select>
+	
+	<select name="ARD_YEAR" id="ARD_YEAR">
+		<? for ($i=2010;$i>1950;$i--){ ?>
+		 <option value="<?=$i?>"><?=$i?></option>
+		 <? } ?>
+		</select>			
+    </td>
+  </tr>
+   <tr>
+    <td bgcolor="#f2f2f2">Race</td>
+    <td bgcolor="#ffffff">:</td>
+    <td bgcolor="#ffffff">
+    <select name="ARD_RACE" id="ARD_RACE">
+	<option value="0"> -- Please select -- </option>
+    <?php
+    $raceDB = new Onapp_Model_DbTable_Race();
+	$this->race = $raceDB->getData();
+		foreach ($this->race as $race) {
+			echo "<option value='".$race['hg004_race_id']."'>".$race['hg004_desc']."</option>";
+		}
+	?>
+	</select>
+    </td>
+  </tr>
+  <tr>
+    <td bgcolor="#f2f2f2">Religion</td>
+    <td bgcolor="#ffffff">:</td>
+    <td bgcolor="#ffffff">
+    <select name="ARD_RELIGION" id="ARD_RELIGION">
+	<option value="0"> -- Please select -- </option>
+    <?php
+    $religionDB = new Onapp_Model_DbTable_Religion();
+	$this->religion = $religionDB->getData();
+		foreach ($this->religion as $religion) {
+			echo "<option value='".$religion['hg003_religion_id']."'>".$religion['hg003_desc']."</option>";
+		}
+	?>
+	</select>
+    </td>
+  </tr>
+  <tr>
+    <td bgcolor="#f2f2f2">Marital Status </td>
+    <td bgcolor="#ffffff">:</td>
+    <td bgcolor="#ffffff">
+     <select name="ARD_MARITAL" id="ARD_MARITAL">
+	<option value="0"> -- Please select -- </option>
+    <?php
+    $maritalDB = new Onapp_Model_DbTable_Marital();
+	$this->marital = $maritalDB->getData();
+		foreach ($this->marital as $marital) {
+			echo "<option value='".$marital['hg002_marital_id']."'>".$marital['hg002_desc']."</option>";
+		}
+	?>
+	</select>
+    </td>
+  </tr>
+  <tr>
+    <td bgcolor="#f2f2f2">Citizen</td>
+    <td bgcolor="#ffffff">:</td>
+    <td bgcolor="#ffffff">
+      <input type="text" name="ARD_CITIZEN" id="ARD_CITIZEN">
+    </td>
+  </tr>
+  <tr>
+    <td bgcolor="#f2f2f2">Address</td>
+    <td bgcolor="#ffffff">:</td>
+    <td bgcolor="#ffffff">
+      <input name="ARD_ADDRESS1" type="text" id="ARD_ADDRESS1" size="50">
+    </td>
+  </tr>
+   <tr>
+    <td bgcolor="#f2f2f2"></td>
+    <td bgcolor="#ffffff"></td>
+    <td bgcolor="#ffffff">
+      <input name="ARD_ADDRESS2" type="text" id="ARD_ADDRESS2" size="50">
+    </td>
+  </tr>
+  <tr>
+    <td bgcolor="#f2f2f2">Poscode</td>
+    <td bgcolor="#ffffff">:</td>
+    <td bgcolor="#ffffff">
+      <input name="ARD_POSTCODE" type="text" id="ARD_POSTCODE" size="20">
+    </td>
+  </tr>
+  <tr>
+    <td bgcolor="#f2f2f2">State</td>
+    <td bgcolor="#ffffff">:</td>
+    <td bgcolor="#ffffff">
+      <input type="text" name="ARD_STATE" id="ARD_STATE">
+    </td>
+  </tr>
+</table>
+</div>
+
+	<table>
+		<tr>
+			<td><input type="submit" value="Save & Next" onclick="form.action='<? echo $this->url(array('module'=>'onapp','controller'=>'index','action'=>'edit','id'=>$this->id),'default',true) ?>'"/></td>
+<!--			<td><input type="submit" value="Save & Next" onclick="form.action='<? //echo $this->url(array('module'=>'onapp','controller'=>'index','action'=>'index'),'default',true) ?>'"/></td>-->
+			<td><input type="submit" value="Reset" /></td>
+		</tr>
+	</table>
+	
+	</form>

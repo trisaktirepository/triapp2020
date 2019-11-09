@@ -1,0 +1,234 @@
+<script>
+$(function() {
+	var tips = $( ".validateTips" );
+
+	
+	$( "#tabs" ).tabs();
+
+	$("#dialog:ui-dialog").dialog( "destroy" );
+
+	$("#dialog-credit-modal").dialog({
+		
+		width: 615,
+		modal: true,
+		autoOpen: false,
+		buttons: {
+			"Save": function() {
+				$("#creditForm").submit();
+				$( this ).dialog( "close" );
+			},
+			Cancel: function() {
+				$( this ).dialog( "close" );
+			}
+		}
+		
+	});
+
+	$("#dialog-detail-modal").dialog({
+		
+		width: 615,
+		modal: true,
+		autoOpen: false,
+		buttons: {
+			Cancel: function() {
+				$( this ).dialog( "close" );
+			},
+			"Add": function() {
+				//if(checkLength('#course_type_id', "Credit Hour", 1, 1 ) && checkLength('#credit_hour', "Credit Hour", 1, 10 )){
+					$("#detailForm").submit();
+				//}
+			}
+			
+		}
+		
+	});
+
+	$("#dialog-detail-edit-modal").dialog({
+		
+		width: 615,
+		modal: true,
+		autoOpen: false,
+		buttons: {
+			"Save": function() {
+					$("#detailForm").submit();
+			},
+			Cancel: function() {
+				$( this ).dialog( "close" );
+			}
+		}
+	});
+
+	function checkLength( o, n, min, max ) {
+		if ( $(o).val().length > max || $(o).val().length < min ) {
+			$(o).addClass( "ui-state-error" );
+			updateTips( "Length of " + n + " must be between " +
+				min + " and " + max + ".",$(o) );
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	function updateTips( t ) {
+		tips
+			.text( t )
+			.addClass( "ui-state-highlight" );
+		setTimeout(function() {
+			tips.removeClass( "ui-state-highlight", 1500 );
+		}, 500 );
+	}
+
+});
+
+function delDetail(title, id){
+	if(confirm('Are you sure to delete '+title+'?')){
+		window.location = "<?php echo $this->url(array('module'=>'application','controller'=>'entry-requirement', 'action'=>'deletedetail', 'programID'=>$this->program_id, 'entryID'=>$this->id),'default',true); ?>/id/"+id;
+	}
+}
+
+function addDetail(){
+	$('#dialog-detail-modal').load("<?php echo $this->url(array('module'=>'application', 'controller'=>'entry-requirement','action'=>'adddetail', 'programID'=>$this->program_id, 'entryID'=>$this->id),'default',true); ?>");
+	$('#dialog-detail-modal').dialog('open');
+}
+
+function editDetail(id){
+	$('#dialog-detail-edit-modal').load("<?php echo $this->url(array('module'=>'application', 'controller'=>'entry-requirement','action'=>'editdetail', 'programID'=>$this->program_id, 'entryID'=>$this->id),'default',true); ?>/id/"+id);
+	$('#dialog-detail-edit-modal').dialog('open');
+}
+</script>
+
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="javascript:addDetail()">
+					<span class='add'></span>
+					Add
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'application','controller'=>'entry-requirement', 'action'=>'index'),'default',true);?>" >
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<div width="500px">
+
+	<fieldset style="width:500px;">
+		<legend><? echo $this->translate("Programme Info"); ?></legend>
+		<table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
+			<tr>
+				<th width="150px"><? echo $this->translate("Programme Name"); ?> :</th>
+				<td><?php echo $this->program['program_name']; ?></td>
+			</tr>
+			<tr>
+				<th><? echo $this->translate("Program Code"); ?> :</th>
+				<td><?php echo $this->program['code']; ?></td>
+			</tr>
+		</table>	
+	</fieldset>
+</div>
+<br />
+<div id="tabs" style="padding: 0 20px;">
+	<ul>
+		<li><a href="#tabs-1"><? echo $this->translate("Education Requirement"); ?></a></li>
+		<li><a href="#tabs-2"><? echo $this->translate("Age Requirement"); ?></a></li>
+		<li><a href="#tabs-3"><? echo $this->translate("Citizenship Requirement"); ?></a></li>
+	</ul>
+	
+	<!-- Education Requirement -->
+	<div id="tabs-1">
+		<div class="span-7 buttons">
+		    <a class="positive addLink" href="#" onClick="javascript:addDetail();">
+		    	Add Education Requirement       
+		    </a>
+		</div>
+		<br />
+		<br />
+		<br />
+		<table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
+			<tr>
+				<th></th>
+				<th>Education Level</th>
+				<th>Entry Requirement</th>
+				<th>Condition</th>
+				<th>Compulsory?</th>
+				<th width="120px"><i>options</i></th>
+			</tr>
+			
+			<?php 
+			if(isset($this->prog_req_detail)){
+				
+				$i=1;
+				foreach ($this->prog_req_detail as $program_req_detail): 
+				?>
+				<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+					<td><?php echo $i; ?>)</td>
+					<td><?php echo $program_req_detail['education_level_name']; ?></td>
+					<td><?php echo $program_req_detail['desc']; ?></td>
+					<td>
+						<?php
+							if($program_req_detail['qualification_item_name']!=null){
+								echo $program_req_detail['qualification_item_name'] ." ". $program_req_detail['condition'] . " " .$program_req_detail['value'];
+							}else{
+								echo "Passed Only";
+							}
+							
+						?>
+					</td>
+					<td align="center"><?php echo $program_req_detail['compulsory']==1?"Yes":"no"; ?></td>
+					<td>
+						<a class="editLink" href="#" onClick="editDetail(<?php echo $program_req_detail['id']; ?>)">Edit</a>&nbsp;
+						<a class="delLink2" href="#" onClick="delDetail('<?php echo $program_req_detail['id']; ?>',<?php echo $program_req_detail['id']; ?>)">Delete</a>
+					</td>
+				</tr>
+				<?php 
+				$i++;
+				endforeach; 
+			}
+			?>
+		</table>
+	</div>
+	
+	<!-- Age Requirement -->
+	<div id="tabs-2">
+		More than 18 years old on date of application
+	</div>
+	
+	<!-- Citizenship Requirement  -->
+	<div id="tabs-3">
+		
+	</div>
+</div>
+
+
+
+<!--  Dialog for add entry requirement -->
+<div id="dialog-detail-modal" title="Entry Requirement - Add"></div>
+
+<!--  Dialog for edit entry requirement -->
+<div id="dialog-detail-edit-modal" title="Entry Requirement - Edit"></div>

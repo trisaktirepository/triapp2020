@@ -1,0 +1,82 @@
+
+<script type="text/javascript">
+	function del(title, id){
+		if(confirm('Are you sure to delete '+title+'?')){
+			window.location = "<?php echo $this->url(array('module'=>'setup','controller'=>'company', 'action'=>'delete')); ?>/id/"+id;
+		}
+	}
+	
+	function add(){
+		window.location="<?php echo $this->url(array('module'=>'setup','controller'=>'company', 'action'=>'add'));?>";
+	}
+
+	function edit(id){
+		window.location="<?php echo $this->url(array('module'=>'setup','controller'=>'company', 'action'=>'edit'));?>/id/"+id;
+	}
+
+</script>
+<?php 
+	echo "<h1>". $this->title ."</h1>";
+?>
+<div style="width:900px; margin: 0 auto;">
+	<div class="span-7 buttons">
+		<a class="positive addLink" href="#" onClick="add()">Add Company</a>
+	</div>
+	<br />
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+	<tr>
+		<th>Company</th>
+		<th width="110px"><i>options</i></th>
+	</tr>
+	
+	<?php 
+	$i=0;
+	foreach ($this->paginator as $entry): 
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<td>
+			<h3><?php echo $entry['hg010_desc']; ?></h3>
+			<?php echo $entry['hg010_add1']!=null?$entry['hg010_add1']."<br />":""; ?>
+			<?php echo $entry['hg010_add2']!=null?$entry['hg010_add2']."<br />":""; ?>
+			<?php echo $entry['hg010_add3']!=null?$entry['hg010_add3']."<br />":""; ?>
+			<?php echo $entry['hg010_city']!=null?$entry['hg010_city']."<br />":""; ?>
+			<?php echo $entry['hg005_desc']!=null?$entry['hg005_desc']."<br />":""; ?>
+			<?php echo $entry['hg001_desc']!=null?$entry['hg001_desc']."<br />":""; ?>
+			<?php echo $entry['hg010_postcode']!=null?$entry['hg010_postcode']."<br />":""; ?>
+		</td>
+		<td>
+			<a class="editLink" href="#" onClick="edit(<?php echo $entry['hg010_company_id']; ?>)">Edit</a>&nbsp;
+			<a class="delLink2" href="#" onClick="del('<?php echo $entry['hg010_desc']; ?>',<?php echo $entry['hg010_company_id']; ?>)">Delete</a>
+		</td>
+	</tr>
+	<?php 
+	$i++;
+	endforeach 
+	?>
+
+</table>
+</div>
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>
+<div id="addCountry2"></div>
+<?php 
+	echo $this->dialogContainer("addDialog", '', array(
+		'title'=> 'Add Company',
+		'autoOpen'=>false,
+		'modal'=>false,
+		'width'=>'480px', 
+		'height'=>'150'
+		));
+		
+	echo $this->dialogContainer("editDialog", '', array(
+		'title'=> 'Edit Company',
+		'autoOpen'=>false,
+		'modal'=>false,
+		'width'=>'480px', 
+		'height'=>'200'
+		));
+?>

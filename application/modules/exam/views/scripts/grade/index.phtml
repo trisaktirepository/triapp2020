@@ -1,0 +1,184 @@
+<script type="text/javascript">
+$(function() {
+	$( "#search-dialog" ).dialog({ 
+		autoOpen: false,
+		width: 400,
+		modal: true,
+		buttons: { 
+			"Search": function() {
+				 
+				$("#search_form").submit();
+				$(this).dialog("close"); 
+			},
+			"Close": function() { 
+				$(this).dialog("close"); 
+			} 
+		} 
+	});
+	
+});
+
+function searchbox(){
+	$( "#search-dialog" ).dialog('open');
+}
+
+</script>
+<script type="text/javascript">
+function del(){
+
+	var id = $('input[name=id]:checked').val();
+	
+	if(!id){
+			alert('Please select any group first.');
+	}else{
+	
+		if(confirm('Are you sure to delete?')){
+			window.location = "<?php echo $this->url(array('module'=>'exam','controller'=>'grade', 'action'=>'delete'),'default',true); ?>/id/"+id;
+		}
+	}
+}
+
+function add(){
+	window.location="<?php echo $this->url(array('module'=>'exam','controller'=>'grade', 'action'=>'addgroup'),'default',true);?>";
+}
+
+function edit(){
+	
+	var id = $('input[name=id]:checked').val();
+
+		if(!id){
+			alert('Please select any group first.');
+		}else{
+			window.location="<?php echo $this->url(array('module'=>'exam','controller'=>'grade', 'action'=>'editgroup'),'default',true);?>/id/"+id;
+		}
+		
+	
+}
+
+function assign(){
+	window.location="<?php echo $this->url(array('module'=>'exam','controller'=>'grade', 'action'=>'view'),'default',true);?>";
+}
+</script>
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>											
+					<a href="#" onClick="add()">
+						<span class='add'></span>Add</a>			
+			</li>
+			
+			<li>
+				<a href="#" onClick="edit()">
+					<span class='edit'></span>
+					Edit
+				</a>
+			</li>
+			
+			<li>
+				<a href="#" onclick="javascript:del()">
+					<span class='delete'></span>
+					Delete
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a id="search" href="#" onclick="javascript:searchbox()">
+					<span class='search'></span>
+					Search
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+
+<?php 
+/*if(!$this->group_info){
+	echo '<br><div class="error notice">
+			<strong>ATTENTION</strong>
+			<ul>
+				<li>Please set grade.</li>
+			</ul>
+		  </div>';
+}*/
+?>
+
+<br></br>
+<h2>Instruction</h2>
+<ul>
+	<li>Click on group name to manage and modify group properties.</li>
+	<li>There should be only one(01) university grade to be set at one time. Click the appropriate University Grade column to set. </li>
+</ul>
+
+
+<form name="myform" method="post" action="">
+	<table class="table" width="90%" cellpadding="5" cellspacing="0" border="0">
+	<tr>
+	    <th width="10%" >&nbsp</th>
+		<th>Group Name</th>	
+		<th>Status</th>	
+		<th>Created By</th>	
+		<th>Created Date</th>
+		<th>Main Grade?</th>	
+	</tr>
+	<?php foreach($this->group_list as $group){?>
+	<tr>
+		<td align="center">
+		    <?php  if($group["gv_status"]==1){ $disabled="disabled";}else{$disabled="";} ?>
+			<input type="radio" value="<?php echo $group["id"];?>" name="id" <?php echo $disabled?>></input>
+			
+		</td>
+		<td><a href="<?php echo $this->url(array('module'=>'exam','controller'=>'grade','action'=>'indexgrade','id'=>$group["id"]));?>"><?php echo $group["group_name"];?></a></td>
+		<td align="center">
+				<?php
+					 if($group["gv_status"]==1)    $status="Verified";
+					 if($group["gv_status"]==0)    $status="Waiting for verification"; 
+					 if($group["gv_status"]==null) $status="Not verified";  
+					 echo $status;
+			    ?>
+		</td>
+		<td><?php  
+		     $oUser = new SystemSetup_Model_DbTable_User();
+	    	 $user = $oUser->getData($group["createdby"]); 
+	    	 echo $user["fullname"];
+	    	 ?></td>
+		<td><?php echo $group["createddt"];?></td>
+		<td align="center">
+		
+		    <?php  if($group["gv_status"]==1) { 
+		    		 if($group["group_type"]==1) { ?>
+				<a href="<?php echo $this->url(array('module'=>'exam','controller'=>'grade','action'=>'deactivate','id'=>$group["id"]));?>" title="Click to unset.">Yes</a>
+			<?php }else{
+				  
+					if(isset($this->group_info)){
+						echo "No";
+					}else{
+						$link = $this->url(array('module'=>'exam','controller'=>'grade','action'=>'activate','id'=>$group['id']));
+						echo '<a href="'.$link.'">No</a>';
+					}
+				?>
+				
+			<?php } }?>
+		</td>
+	</tr>
+	<?php } ?>	
+	</table>
+</form>
+<br></br>
+
+<div id="search-dialog" title="Search Group">
+<form name="search_form" id="search_form" action="" method="post">
+	<table width="100%">
+		<tr>
+			<td>
+				Group Name
+			</td>
+			<td width="5px">:</td>
+			<td>
+				<input type="text" name="name" value="<?php echo $this->search_name; ?>" />
+			</td>
+		</tr>		
+	</table>
+</form>
+</div>

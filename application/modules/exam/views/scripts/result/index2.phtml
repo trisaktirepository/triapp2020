@@ -1,0 +1,91 @@
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	
+</div>
+
+<br></br>
+
+		
+
+<div style="width: 100%;">
+<fieldset style="width:450px;">
+	
+<form name="searchfrm" action="" method="post">
+	<table width="100%">	 
+		<tr>
+			<td>
+				Program 
+			</td>
+			<td width="5px">:</td>
+			<td>			
+				<select name="program_id" onchange="form.submit()">
+				<option value="0">Please select</option>
+				<?php 
+				foreach($this->program as $p){
+					if($this->program_id==$p[id])
+					  $sel = "selected";
+					else
+					  $sel = "";
+				 	echo "<option value='$p[id]' $sel>$p[main_name]</option>";
+				 } ?>
+				</select>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>Matric No</td>
+			<td width="5px">:</td>
+			<td><input type="text" name="matric_no" value="" size=40></input></td>
+		</tr>
+		<tr>
+			<td>Student Name</td>
+			<td width="5px">:</td>
+			<td><input type="text" name="fullname" value="" size=40></input></td>
+		</tr>
+		<tr>
+			<td colspan="2">&nbsp;</td>
+			<td><input type="submit" value="search" /></td>
+		</tr>
+	</table>
+</form>
+</fieldset>
+</div>
+<br>	
+
+<?php if($this->paginator){?>
+
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+
+<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+	<tr valign="top">
+		<th>No.</th>
+	    <th>Matric No</th>
+	    <th>Student Name</th>
+	    <th>IC No</th>
+	</tr>
+	<?php 	
+		$i=1; 
+		foreach($this->paginator as $list) {?>
+		<tr align="center" <?php echo $i%2==0?"class='shade'":""; ?>>
+			<td><?php echo $i;?>.</td>
+		    <td><a href="#" onclick="openwin('<?php echo $this->url(array('module'=>'exam','controller'=>'result','action'=>'full-transcript','id' => $list['id'],'semester_id' => $this->semester_id)); ?>',800,600);"><?php echo $list["matric_no"]?></a></td>
+		    <td><?php echo $list["fullname"]?></td>
+		    <td><?php echo $list["ic_no"]?></td>
+		</tr>
+	<?php $i++; } ?>
+</table>	
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>
+	<?php } ?>
+
+
+<script>
+function openwin(pageURL,w,h) {
+var left = (screen.width/2)-(w/2);
+var top = (screen.height/2)-(h/2);
+var targetWin = window.open (pageURL, 'Result', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
+} 
+</script>

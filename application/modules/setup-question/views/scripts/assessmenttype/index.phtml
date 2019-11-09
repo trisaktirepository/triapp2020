@@ -1,0 +1,116 @@
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><? echo $this->noticeMessage;?>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><? echo $this->noticeSuccess;?>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><? echo $this->noticeError;?>.</div>
+<?}?>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="javascript:searchbox()">
+					<span class='search'></span>
+					Search
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+    <br>
+  <form name="searchfrm" action="<?php echo $this->url(array('module'=>'setup-question','controller'=>'assessmenttype','action'=>'index'),'default',true);?>" method="post">
+    <table width="100%" cellspacing="1" cellpadding="5" id="mtable"  align="center">
+     <tr> 
+    <td width="10%">Course</td>
+    <td width="1%">:</td>
+    <td width="90%"><select name="course_id" id="course_id" >
+        <option value="">-- Please Select --</option>
+        <?php 
+			foreach($this->course as $c){
+				if($this->courseid==$c[id])
+				  $sel = "selected";
+				else
+				  $sel = "";
+			 	echo "<option value='$c[id]' $sel>$c[id] - $c[name]</option>";
+			 } ?>
+      </select>
+      </td>
+          </tr>
+          <tr>
+          <td colspan="3"><input type="submit" name="submit" class="button" value="Search"></td>
+          </tr>
+		  </table>
+		  </form>
+		  
+		  <br>
+		  
+<table width="100%" border="0" align="center" cellpadding="1" cellspacing="1" >
+         <tr valign="top">
+         <td><h3><?php //echo $this->courseSelect["name"].' ('.$this->courseSelect["id"].')';?></h3></td>
+         <td  align="right"><input type="button" name="button" class="button" value="Add New Assessment" 
+			 onclick="window.location='<?php echo $this->url(array('module'=>'setup-question','controller'=>'assessmenttype','action'=>'addcomponent','courseid'=>$this->courseid),'default',true);?>'"></td>
+         </tr>
+	    
+	 </table>
+       
+<? if(count($this->component)>0){ ?>
+     
+	 
+		   	 		   
+     <table class="table4" width="100%" cellpadding="5" cellspacing="1">
+       
+        <tr align="center"> 
+          <th colspan="2">Assessment Type</th>
+          <th >Assessment Item</th>
+          <th >Question Type</th>
+        </tr>
+          <?php 
+          
+          $bil=1;
+            foreach ($this->component as $component){ 
+            	
+             $assessment_item = new SetupQuestion_Model_Assessmenttype();
+    	     $item_list = $assessment_item->getComponentItem($component["id"]);
+    	     
+            $totArrayStud = count($item_list);
+			if($totArrayStud != 1){
+				$rowspan = "rowspan = '$totArrayStud'";
+			}else{
+				$rowspan = "";
+			}
+            
+		    echo "<tr valign='top' bgcolor='#f2f2f2'>";
+//		    <td $rowspan  width='1%'>$bil)</td>";
+		    echo "<td $rowspan width='5%'>
+		    <a href=".$this->url(array('module'=>'setup-question','controller'=>'assessmenttype','action'=>'additem','id'=>$component["id"],'courseid'=>$this->courseid),'default',true)."><img src='/images/edit.png' width='20' height='20' border='0'></a>
+		    <a href=".$this->url(array('module'=>'setup-question','controller'=>'assessmenttype','action'=>'del','id'=>$component["id"],'courseid'=>$this->courseid),'default',true)."><img src='/images/delete-icon41.gif' width='20' height='20' border='0'></a>
+		    </td>";
+			echo "<td $rowspan>$component[component_name]</td>";
+			
+                 foreach ($item_list as $item){ ?>
+             	
+		          <td><? echo $item["component_name"]?></td>
+		          <td align="center"><? echo $item["question_type"]?></td>
+		        </tr>
+              <? } ?>
+          
+          <? 
+            $bil++;
+            } ?>
+      
+      </table>
+       <? }//end if ?>
+       
+<!--<form name="form1" method="post" action="<?php echo $this->url(array('module'=>'setup-question','controller'=>'assessmenttype','action'=>'addcomponent'),'default',true);?>">
+<input type="submit" name="Submit">
+</form>-->

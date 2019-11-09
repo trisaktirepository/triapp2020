@@ -1,0 +1,49 @@
+<?php
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/css/layout.css' );
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/css/default/style.css' );
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/css/jquery-ui-1.8.5.custom.css' );
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/js/jquery-1.4.3.min.js' );
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/js/jquery.ui.core.js' );
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/js/jquery.ui.datepicker.j' );
+?><div style="width:900px; margin:0 auto;">
+<div id="dark_grey">
+<fieldset><legend>&nbsp;<?php echo $this->title; ?>&nbsp;&nbsp;</legend>
+	<?php 
+//		$this->form->setAction($this->url());
+//		echo  $this->form;
+	?>
+	
+	
+	<link rel="stylesheet" href="../demos.css">
+	
+	
+	<script>
+	$(function() {
+		$( "#datepicker" ).datepicker();
+	});
+	</script>
+	
+	
+	<!--<input type="text" value="" name="as_dtstart" onFocus="this.blur()" readonly><a href="javascript:void(0)" onClick="if(self.gfPop)gfPop.fStartPop(document.f1.as_dtstart,document.f1.as_dtend);return false;" HIDEFOCUS><img class="PopcalTrigger" align="absmiddle" src="DateRange/calbtn.gif" width="34" height="22" border="0" alt=""></a>-->
+	
+<form name="f1" method="POST">	
+	<table width="100%" cellpadding="5" cellspacing="1" bgcolor="#CCCCCC">
+  <tr>
+    <td bgcolor="#F2F2F2">Item</td>
+    <td bgcolor="#FFFFFF">:</td>
+    <td bgcolor="#FFFFFF"><input type="text" name="SECTION" id="SECTION"></td>
+  </tr>
+  
+</table>
+
+<table width="100%">
+		<tr>
+			<td align="center">
+			<input type="submit" value="Save & Next" onclick="form.action='<? echo $this->url(array('module'=>'onapp','controller'=>'offer','action'=>'add'),'default',true) ?>'"/></td>
+<!--			<td><input type="submit" value="Reset" /></td>-->
+		</tr>
+	</table>
+	</form>
+</fieldset>
+</div>
+</div>

@@ -1,0 +1,176 @@
+<link href="/css/trisakti/style.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="/css/trisakti/topmenu.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="/css/trisakti/simpletree.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="/css/layout.css" media="screen" rel="stylesheet" type="text/css" />
+<div id="body">
+<!-- Group Info Start -->
+<table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+    <tr>
+        <td><?php echo $this->translate('Subject Name');?> :</td>
+        <td><?php echo $this->groupSubject['subject_name'].'<br />'.$this->groupSubject['subject_code'];?></td>
+    </tr>
+    <tr>
+        <td><?php echo $this->translate('Group Name');?> :</td>
+        <td><?php echo $this->groupSubject['GroupName'];?></td>
+    </tr>
+    <tr>
+        <td><?php echo $this->translate('Lecturer Name');?> :</td>
+        <td><?php echo $this->groupSubject['FullName'];?></td>
+    </tr>
+</table>
+<!-- Group Info End -->
+<br />
+<!-- Prerequisite Start -->
+<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+    <tr>		  
+        <th ><?php echo $this->translate("Course Name")?></th>
+        <th ><?php echo $this->translate("Course Code")?></th>	
+        <th ><?php echo $this->translate("Prerequisite Type")?></th>	
+        <th ><?php echo $this->translate("Grade")?></th>
+    
+    </tr>
+    <?php 
+    if(count($this->subject_prerequisite)>0){
+        foreach($this->subject_prerequisite as $sp){			
+    ?>
+    <tr>
+        <td><?php echo $sp["BahasaIndonesia"]; ?></td>
+        <td><?php echo $sp["SubCode"]; ?></td>
+        <td><?php if($sp["PrerequisiteType"]==1) echo $this->translate('Complete Subject'); else echo $this->translate('Pass with Grade'); ?></td>
+        <td><?php if($sp["PrerequisiteType"]!=1) echo $sp["PrerequisiteGrade"]; else echo '-';?></td>
+        
+    </tr>
+    <?php } }else{ ?>
+    <tr>
+        <td colspan="5"><?php echo $this->translate("There is no data in the list")?></td>
+    </tr>
+    <?php }//end if else?>
+</table>
+<!-- Prerequisite Start -->
+<br />
+<!-- Schedule Start -->
+<?php if(isset($this->schedules[0]['sc_date'])) { ?>
+<!-- Date Schedule Start -->
+<table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+    <thead>
+    <tr>
+        <th rowspan="2">Date</th>
+        <th colspan="11">Time</th>
+    </tr>
+    <tr>
+        <th>08:00</th>
+        <th>09:00</th>
+        <th>10:00</th>
+        <th>11:00</th>
+        <th>12:00</th>
+        <th>13:00</th>
+        <th>14:00</th>
+        <th>15:00</th>
+        <th>16:00</th>
+        <th>17:00</th>
+        <th>18:00</th>
+    </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($this->schedules as $key => $value) :?>
+        <tr>
+            <td><?php echo $value['sc_date'];?><br />(<?php echo $value['sc_day'];?>)</td>
+            <?php 
+                $start_time = explode(':',$value['sc_start_time']);
+                $end_time   = explode(':',$value['sc_end_time']);
+                
+                $start = $start_time[0];
+                $end   = $end_time[0];
+                
+                $range = $end - $start;
+                $time_block = array();
+                for($i=8;$i<19;$i++)
+                {
+                    if ($i == $start)
+                    {
+                        $time_block[$i] = 'red';
+                    }
+                    elseif (($i > $start) && ($i < $end))
+                    {
+                        $time_block[$i] = 'red';
+                    }
+                    else
+                    {
+                        $time_block[$i] = 'white';
+                    }
+                }
+            
+                foreach($time_block as $time_color)
+                {
+            ?>
+            <td style="background-color:<?php echo $time_color;?>">&nbsp;</td>
+            <?php }?>
+        </tr>
+        <?php endforeach;?>
+    </tbody>
+</table>
+<?php }
+      else
+      {
+      ?>
+      <!-- Normal Schedule Start -->
+      <table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+        <thead>
+        <tr>
+            <th rowspan="2">Day</th>
+            <th colspan="11">Time</th>
+        </tr>
+        <tr>
+            <th>08:00</th>
+            <th>09:00</th>
+            <th>10:00</th>
+            <th>11:00</th>
+            <th>12:00</th>
+            <th>13:00</th>
+            <th>14:00</th>
+            <th>15:00</th>
+            <th>16:00</th>
+            <th>17:00</th>
+            <th>18:00</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php 
+        //rearrange array for display purpose
+        $dayTime = array(
+            'Monday' => array(),
+            'Tuesday' => array(),
+            'Wednesday' => array(),
+            'Thursday' => array(),
+            'Friday' => array()
+        );
+        
+        foreach ($this->schedules as $key => $value) 
+        {  
+            $start_time = explode(':',$value['sc_start_time']);
+            $start      = $start_time[0];
+            
+            $dayTime[$value['sc_day']][$start] = 'Red';
+        }
+        ?>
+        <tr>
+            <?php foreach ($dayTime as $a => $b) :?>    
+                <td><?php echo $a;?></td>
+                <?php for($i=8;$i<19;$i++):?>
+                    <?php $arrKey = sprintf("%02d", $i);?>
+                    <?php if(isset($dayTime[$a][$arrKey])):?>
+                <td style="background-color:red">&nbsp;</td>
+                    <?php else :?>
+                <td style="background-color:white">&nbsp;</td>
+                    <?php endif;?>
+                <?php endfor;?>
+            </tr>
+        <?php endforeach;?>
+        </tbody>
+       </table> 
+      <?php
+      }
+     //print_r($this->groupSubject);
+?>
+<!-- Schedule End -->
+</div>

@@ -1,0 +1,20 @@
+<p>Are you sure that you want to delete this Semester
+<dl>
+<?php
+$i =0;
+if (isset($this->session)){
+    foreach($this->session as $value) {
+        
+	echo "<dt>Semester ID: " . $value['semesterID'] . "</dt>";
+        echo "<dd>Semester : " . $value['data'] . "</dd>";
+    }
+}
+?>
+</dl>
+<form action="<?php echo $this->url(array('action'=>'multi-delete')); ?>" method="post">
+<div>
+<input type="hidden" name="mark" value="<?php echo $this->mark; ?>" />
+<input class="deleteButton ui-button ui-state-default ui-corner-all ui-button-text-only" type="submit" name="del" value="Yes" />
+<input class="cancelButton ui-button ui-state-default ui-corner-all ui-button-text-only" type="submit" name="del" value="No" />
+</div>
+</form>

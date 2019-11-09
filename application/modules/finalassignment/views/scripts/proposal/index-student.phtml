@@ -1,0 +1,66 @@
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>	
+		  
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br><br>
+
+	<fieldset>
+	<legend><?php echo $this->translate("Search Options");?></legend>
+    <?php echo $this->form;?>
+    </fieldset>
+    <br/>
+	<fieldset>
+		<table class="table" width="100%" cellpadding="5" cellspacing="1">
+		
+		  	<tr>
+	            <th><?php echo $this->translate("Student Name");?></th>
+	            <th><?php echo $this->translate("Nom Fomulir");?></th>    
+		    	<th><?php echo $this->translate("NIM");?></th>
+		    	<th><?php echo $this->translate("Program");?></th>
+		    	<th><?php echo $this->translate("Intake");?></th>
+		    	<th><?php echo $this->translate("Registration Date");?></th>
+		    	<th><?php echo $this->translate("Other NIM");?></th>
+		    	<th><?php echo $this->translate("Student Status");?></th>
+	    	</tr>
+
+	    	<?php 	    	
+	    	if (count($this->paginator)){	    		
+	        foreach ($this->paginator as $lobjstudents){
+	        ?>
+	  		<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">	  		
+	        	<td><a href="<?php echo $this->baseUrl();?>/finalassignment/proposal/student-proposal-list/proposedby/<?php echo $this->escape($lobjstudents['IdStudentRegistration']);?>"><?php echo $this->escape($lobjstudents['appl_fname'].' '.$lobjstudents['appl_mname'].' '.$lobjstudents['appl_lname']);?></a></td>
+	        	<td><?php echo $this->escape($lobjstudents['at_pes_id']);?></td>
+	        	<td><?php echo $this->escape($lobjstudents['registrationId']);?></td>
+                <td><?php echo $this->escape($lobjstudents['ArabicName']);?></td>
+	        	<td><?php echo $this->escape($lobjstudents['IntakeId']);?></td>
+	        	<td><?php echo $this->escape($lobjstudents['UpdDate']);?></td>
+	        	<td><?php echo $this->escape($lobjstudents['oldnim']);?></td>
+	        	<td><?php echo $this->escape($lobjstudents['DefinitionCode']);?></td>
+	       <?php 
+	        } } 
+	        ?>
+			</tr>
+			<?php 
+			if (count($this->paginator)){
+			?>
+			<tr>
+	        	<td colspan="8" align="right"><div class="pagination"><?php echo $this->paginationControl($this->lobjpaginator,'Sliding',
+	                                    '/partials/my_pagination_control.phtml'); ?></div></td>
+   			</tr>
+   			<?php 
+			}
+   			?>
+		</table>
+	</fieldset>
+

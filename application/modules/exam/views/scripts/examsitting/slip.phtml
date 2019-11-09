@@ -1,0 +1,132 @@
+<style type="text/css">
+#sliptbl
+{
+width:100%;
+border-collapse:collapse;
+}
+#sliptbl td, #sliptbl th 
+{
+font-size:1em;
+border:1px solid #98bf21;
+padding:3px 7px 2px 7px;
+}
+#sliptbl th 
+{
+font-size:1.1em;
+text-align:left;
+padding-top:5px;
+padding-bottom:4px;
+background-color:#A7C942;
+color:#ffffff;
+}
+
+.barcode {font-family: ccode39}
+
+</style>
+
+
+<p>
+<table id="printbl"><tr><td align="right">
+<input type="button" value="PRINT" onclick="goprint();"></input></td></tr></table>
+</p>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="5">
+<tr><td align=left>
+<img src="<?php //echo $this->baseURL();?>/images/ustlogo.png " alt="USTY LOGO"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="<?php //echo $this->baseURL();?>/images/ustyname.gif " alt="USTY NAME"/>
+</td></tr>
+<tr><td align=right><span class="barcode"><?php echo $this->exam_slip_no;?></span> </td></tr>
+ <tr>
+   
+    <td><div align="center">
+    
+    		<strong>UNIVERSITY OF SCIENCE AND TECHNOLOGY YEMEN</strong></div></td>
+  </tr>
+  <tr> 
+    <td><div align="center">
+    
+    		<strong>EXAMINATION SLIP </strong></div></td>
+  </tr>
+</table>
+
+<br>
+<br>
+<br>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="5">
+ 
+  <tr>
+    <td valign="middle" align="center"  rowspan=4 width="15%" >
+    	<img height="100" src="<?php echo $this->student_picture;?>" alt="Picture here"/>
+    </td>
+    <td><?php echo $this->translate("Name"); ?></td>
+    <td>: <?php echo $this->student["fullname"];?></td>
+    <td ><?php echo $this->translate("Programme"); ?></td>
+    <td >: <?php echo $this->student["main_name"];  ?></td>
+  </tr>
+  <tr>
+    <td><?php echo $this->translate("IC Number"); ?></td>
+    <td>: <?php echo $this->student["ic_no"]; ?></td>
+      <td ><?php echo $this->translate("Branch"); ?></td>
+    <td >: <?php echo $this->branch_name;?></td>
+  </tr>
+    <tr>
+    <td><?php echo $this->translate("Matric No"); ?></td>
+    <td>: <?php echo $this->student["matric_no"]; ?></td>
+      <td><?php echo $this->translate("Office"); ?></td>
+    <td >: <?php echo $this->office_name;?></td>
+  </tr>
+   <tr>
+    <td><?php echo $this->translate("Semester"); ?></td>
+    <td>: <?php echo $this->semester_name; ?></td>
+      <td>&nbsp</td>
+    <td >&nbsp;</td>
+  </tr>
+ 
+</table>
+
+<BR></BR>
+
+<table  width="100%" cellspacing="0" cellpadding="5" id="sliptbl">
+<tr>
+<th>No</td>
+<th><?php echo $this->translate("Course"); ?> <?php echo $this->translate("Code"); ?></th>
+<th><?php echo $this->translate("Course"); ?> <?php echo $this->translate("Name"); ?></th>
+<th><?php echo $this->translate("Credit"); ?> <?php echo $this->translate("Hour"); ?></th>
+<th><?php echo $this->translate("Venue"); ?></th>
+<th><?php echo $this->translate("Time"); ?></th>
+<th><?php echo $this->translate("Date"); ?></th>
+</tr>
+<?php 
+$i=1; 
+foreach($this->courses as $course) {
+?>
+<tr>
+<td><?php echo $i;?>.</td>
+<td><?php echo $course["course_code"]?></td>
+<td><?php echo $course["course_name"]?></td>
+<td><?php echo $course["credit_hour"]?></td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+
+<?php $i++;} ?>
+		
+</table>
+<br></br>
+
+<caption><STRONG><?php echo $this->translate("INSTRUCTION_FOR_STUDENTS"); ?></STRONG></caption>
+<table  width="100%" border="0" cellspacing="0" cellpadding="5">
+<tr><td WIDTH="70%" align="top">
+<ul type=1>
+	<li>Please clarify that all information inside this slip is correct.</li>
+	<li>Student are allowed to attend the examination only for registered courses inside this slip.</li>
+	<li>You are required to bring their student ID and this slip into the examination hall for inspection by the examination officer.</li>
+	<li>Student are reminded not to break the examination rules.<br><STRONG>MAXIMUM PENALTY: EXPELLED FROM THE UNIVERSITY.</STRONG></br></li>
+</ul>
+</td>
+<td align="right" valign="bottom">----------------------------------------<br></br>(STUDENT'S SIGNATURE & DATE)</td>
+</tr>
+
+</table>

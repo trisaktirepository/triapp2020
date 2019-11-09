@@ -1,0 +1,34 @@
+ 
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		
+	</div>
+</div>
+<br />
+<fieldset><legend><?php  echo $this->translate('Student Info')?></legend>
+<table width="100%">
+<tr><td width="20%"><?php  echo $this->translate('Name')?></td><td width="5px">:</td><td><?php echo $this->student['appl_fname']." ".$this->student['appl_mname']. ' '.$this->student['appl_lname'];?></td></tr>
+<tr><td><?php  echo $this->translate('NIM')?></td><td width="5px">:</td><td><?php echo $this->student['registrationId'];?></td></tr>
+<tr><td><?php  echo $this->translate('Program')?></td><td width="5px">:</td><td><?php echo $this->student['ArabicName'];?></td></tr>
+<tr><td><?php  echo $this->translate('Academic Advisor')?></td><td width="5px">:</td><td><?php echo $this->student['AcademicAdvisor'];?></td></tr>
+</table>
+</fieldset>
+
+<fieldset><legend> <?php  echo $this->translate('Barring Info')?></legend>
+<?php if ($this->errormsg=="2") {
+	echo "Untuk Pengisian KRS semester: ".$this->semester.'. '. $this->msg;
+} else {
+	foreach ($this->barring as $items) {?>
+<table width="100%" class="table">
+<th><?php  echo $this->translate("Barring on ")." ".$items['type']?></th>
+<tr><td><?php echo $items['tbr_reason'];?></td></tr> 
+</table>
+<?php }
+}?>
+</br>
+
+
+
+</fieldset>

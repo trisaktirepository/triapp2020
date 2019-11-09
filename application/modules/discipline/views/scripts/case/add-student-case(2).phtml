@@ -1,0 +1,127 @@
+
+<script type="text/javascript">
+	$(function() {
+		// a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
+		$( "#dialog:ui-dialog" ).dialog( "destroy" );
+	
+		$( "#dialog-search" ).dialog({
+			modal: true,
+			autoOpen: false,
+			width: 600,
+			buttons: {
+				"Search": function() { 
+					$("#search_form").submit(); 
+				}, 
+				"Cancel": function() { 
+					$(this).dialog("close"); 
+				}
+				
+			}
+		});
+	});
+	
+
+</script>
+
+<script type="text/javascript">
+
+    /*function add(){
+		var id = $('input[name=studentid]:checked').val();
+
+		if(!id){
+			alert('Please select any manual first');
+		}else{
+			window.location="<?php echo $this->url(array('module'=>'discipline','controller'=>'case', 'action'=>'form-student-case'),'default',true);?>/id/"+id;
+		}
+	}*/
+	
+	function searchbox(){
+		$( "#dialog-search" ).dialog('open');
+	}
+
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>		
+		   <li>
+				<a href="#" onclick="javascript:add()">
+					<span class='add'></span>
+					Add
+				</a>
+			</li>
+			
+				
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+
+
+<div style="width:100%;">
+
+<!--<h2>Instruction</h2>
+<ul style="1">
+	<li>For Student, please select from student list.</li>
+	<li>Click on Search button to search for student</li>
+	<li>For non Student, please click "Add Case for Non Student".</li>
+	
+</ul>
+<br>
+-->
+
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+<table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+	<tr>
+		
+		<th>Name</th>
+		<th>IC Number</th>
+		<th>Email Address</th>
+	</tr>
+	
+	<?php 
+	$i=0;
+	foreach ($this->paginator as $entry): 
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>		
+		<td><?php echo $entry['ARD_NAME']; ?></td>
+		<td><?php echo $entry['ARD_IC']; ?></td>
+		<td><?php echo $entry['ARD_EMAIL']; ?></td>
+	</tr>
+	<?php 
+	$i++;
+	endforeach 
+	?>
+</table>
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>
+</div>
+
+<div id="dialog-search" title="Search Student">
+<form name="search_form" id="search_form" action="" method="post">
+	<table width="100%" class="table5">
+		<tr>
+			<td>
+				Name / IC Number
+			</td>
+			<td width="5px">:</td>
+			<td>
+				<input type="text" name="keyword" style="width:250px" />
+			</td>
+		</tr>
+		
+		
+	</table>
+</form>
+</div>

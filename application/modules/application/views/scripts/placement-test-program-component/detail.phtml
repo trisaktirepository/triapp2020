@@ -1,0 +1,100 @@
+<script>
+function back(){
+	window.location="<?php echo $this->url(array('module'=>'application','controller'=>'placement-test-program-component','action'=>'index'), 'default', true);?>";
+}
+function addData(){
+	window.location="<?php echo $this->url(array('module'=>'application','controller'=>'placement-test-program-component', 'action'=>'add', 'program_id'=>$this->program_id),'default',true);?>";
+}
+function deleteData(){
+	var id = $('input[name=id]:checked').val();
+	if( confirm("<?php echo $this->translate("Are you sure to delete?"); ?>") ){
+		window.location = "<?php echo $this->url(array('module'=>'application','controller'=>'placement-test-program-component', 'action'=>'delete'),'default',true); ?>/id/"+id;
+	}
+}
+</script>
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onClick="addData();" >
+					<span class='add'></span>
+					Add
+				</a>
+			</li>
+			<li>
+				<a href="#" onClick="deleteData();" >
+					<span class='delete'></span>
+					Delete
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>							
+					<a href="#" onClick="back()">
+					<span class='back'></span>Back</a>				
+			</li>
+		</ul>
+	</div>
+</div>
+<br>
+
+<div width="500px">
+	
+	<table class="table2" width="100%" cellpadding="3" cellspacing="1">
+		<tr>
+			<th width="150px"><? echo $this->translate("Program Name"); ?></th>
+			<td><?php echo $this->program['ProgramName']; ?></td>
+		</tr>
+		<tr>
+			<th width="150px"><? echo $this->translate("Program Name (Indonesia)"); ?></th>
+			<td><?php echo $this->program['ArabicName']; ?></td>
+		</tr>
+		<tr>
+			<th width="150px"><? echo $this->translate("Code"); ?></th>
+			<td><?php echo $this->program['ProgramCode']; ?></td>
+		</tr>
+		<tr>
+			<th width="150px"><? echo $this->translate("Short Name"); ?></th>
+			<td><?php echo $this->program['ShortName']; ?></td>
+		</tr>
+	</table>	
+</div>
+<br />
+<h1>Component</h1>
+
+<table width="100%" class="table">
+	<tr>
+		<th>&nbsp;</th>
+		<th>Component Name</th>
+		<th>Component Code</th>
+		<th>Component Type</th>
+	</tr>
+	<?php 
+	if($this->component){
+		$i=0;
+		foreach ($this->component as $component):
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<td> <input type="radio" name="id" value="<?php echo $component['apps_id']; ?>"></td>
+		<td><?php echo $component['component_name']; ?></td>
+		<td align="center"><?php echo $component['component_code']; ?></td>
+		<td align="center"><?php echo $component['component_type']; ?></td>
+	</tr>
+	<?php 
+		$i++;
+		endforeach;
+	}else{
+	?>
+	<tr>
+		<td colspan="4" align="center"><?php echo $this->translate("No Component");?></td>
+	</tr>
+	<?php }?>
+</table>
+
+
+
+
+
+

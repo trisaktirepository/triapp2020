@@ -1,0 +1,235 @@
+<?php
+	//get locale
+	$registry = Zend_Registry::getInstance();
+	$locale = $registry->get('Zend_Locale');
+	$this->locale = $locale->toString();
+	
+	if($locale == 'ar_YE'){
+		$this->direction = "rtl";
+		$this->float = "right";	
+	}else{
+		$this->direction = "ltr";
+		$this->float = "left";
+	}
+?>
+<? echo $this->doctype(); ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->locale; ?>" dir="<?php echo $this->direction; ?>">
+<head>
+	<?php echo $this->headMeta(); ?>
+	<?php echo $this->headTitle(); ?>
+	<?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/layout.css'); ?>
+	<?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/trisakti/simpletree.css'); ?>
+	<?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/trisakti/topmenu.css'); ?>
+	<?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/trisakti/style.css'); ?>
+	<?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/trisakti/left-menu.css'); ?>
+	
+	<?php echo $this->headScript()->appendFile($this->baseUrl().'/ckeditor/ckeditor_basic.js');?>
+
+	
+	<?php
+		$this->jQuery()->enable();
+		$this->jQuery()->setVersion('1.7.2');
+		$this->jQuery()->useCdn(false);
+	 	$this->jQuery()->setLocalPath($this->baseUrl().'/js/jquery/jquery-1.5.0.min.js');
+		
+		$this->jQuery()->uiEnable();
+		$this->jQuery()->setUiVersion('1.8.18');
+		$this->jQuery()->useUiCdn(false);
+		$this->jQuery()->addStylesheet($this->baseUrl().'/js/jquery/themes/smoothness/jquery-ui.css');
+		$this->jQuery()->setUiLocalPath($this->baseUrl().'/js/jquery/jquery-ui-1.8.18.min.js');
+		
+		echo $this->jQuery();
+		
+		echo $this->headLink()->prependStylesheet($this->baseUrl().'/js/jquery/plugin/timepicker/timePicker.css');
+		echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery/plugin/timepicker/jquery.timepicker.js');
+		
+		
+		echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery/plugin/multiselect-1.12/jquery.multiselect.min.js');
+		echo $this->headLink()->prependStylesheet($this->baseUrl().'/js/jquery/plugin/multiselect-1.12/jquery.multiselect.css');
+	?>
+
+	
+	
+	<?php 
+	
+	
+	 	if($this->direction == 'rtl'){
+	 		echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery/plugin/potato.menu/jquery.ui.potato.menu.rtl.js');
+	 		echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/trisakti/dashboard_rtl.css');
+	 		echo $this->headLink()->prependStylesheet($this->baseUrl().'/js/jquery/plugin/potato.menu/jquery.ui.potato.menu.rtl.css');
+	 		echo "<style>";
+	 		echo "ul.potato-menu li.potato-menu-item {
+	 				float:right;
+				}";
+	 		echo "#language{
+	 				left:10px;
+	 			}";
+	 		
+	 		echo "#appTitle{
+	 				left: 15px;
+					top: 25px;
+	 			}";
+	 		
+	 		echo "#main-content{
+						margin-right: 200px;
+				}";
+	 		
+		 	echo "div.toolbar-button {
+				float:left;
+				text-align: left;
+				}";
+		 	
+	 		echo "</style>";
+	 	}else{
+	 		echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/trisakti/dashboard_ltr.css');
+	 		echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery/plugin/potato.menu/jquery.ui.potato.menu.js');
+	 		echo $this->headLink()->prependStylesheet($this->baseUrl().'/js/jquery/plugin/potato.menu/jquery.ui.potato.menu.css');
+	 		
+	 		echo "<style>";
+	 		echo "ul.potato-menu li.potato-menu-item {
+	 				float:left;
+				}";
+	 		echo "#language{
+	 				right:10px;
+	 			}";
+	 		
+	 		echo "#appTitle{
+	 				right: 15px;
+					top: 25px;
+	 			}";
+
+	 		echo "#main-content{
+						margin-left: 200px;
+				}";
+	 		
+	 		echo "div.toolbar-button {
+				float:right;
+				text-align: right;
+				}";
+	 		
+	 		echo "</style>";
+	 	}
+	 
+	 ?>
+	 	
+	<!--[if lt IE 7]>
+	<style media="screen" type="text/css">
+	#container {
+		height:100%;
+	}
+	</style>
+	<![endif]-->
+	
+	<script type="text/javascript">
+	 $(document).ready(function() {
+	        $('#mainMenu').ptMenu();
+	        $('#mainMenu').show();
+	        
+	 });
+	</script>
+	
+	<!-- sidebar menu -->
+	<script type="text/javascript">
+	function slide(navigation_id, pad_out, pad_in, time, multiplier)
+	{
+		// creates the target paths
+		var list_elements = navigation_id + " li.sliding-element";
+		var link_elements = list_elements + " a";
+
+		// initiates the timer used for the sliding animation
+		var timer = 0;
+
+		// creates the slide animation for all list elements
+		$(list_elements).each(function(i)
+		{
+			// margin left = - ([width of element] + [total vertical padding of element])
+			$(this).css("margin-left","-180px");
+			// updates timer
+			timer = (timer*multiplier + time);
+			$(this).animate({ marginLeft: "0" }, timer);
+			$(this).animate({ marginLeft: "15px" }, timer);
+			$(this).animate({ marginLeft: "0" }, timer);
+		});
+
+		// creates the hover-slide effect for all link elements
+		$(link_elements).each(function(i)
+		{
+			/*$(this).hover(
+			function()
+			{
+				$(this).animate({ paddingLeft: pad_out }, 150);
+			},
+			function()
+			{
+				$(this).animate({ paddingLeft: pad_in }, 150);
+			});*/
+		});
+	}
+
+	$(document).ready(function()
+	{
+		slide("#sliding-navigation", 25, 15, 0, .8);
+	});
+	</script>
+	
+	<style type="text/css">
+		
+	</style>
+	
+	<?if(isset($this->alertError)){?>
+		<script type="text/javascript">
+			alert('<? echo $this->alertError; ?>.');
+		</script>
+	<?}?>
+</head>
+<body>
+
+<div id="container">
+	<div id="header">
+		<!-- Header start -->
+		<div id="logo"><div id="name">&nbsp;</div></div>
+		<div id="appTitle">
+			<?php echo APPLICATION_ENTERPRISE; ?>
+			<br />
+			<i><?php echo APPLICATION_TITLE; ?></i>
+		</div>
+	</div>
+	<div id="menu">
+		<div id="language">
+			<select style="width:100px;" onChange="window.location = '?lang=' + this.options[this.selectedIndex].value">
+				<option value="en" <?php echo $this->locale=="en_US"?"selected='selected'":""; ?>>English</option>
+				<option value="id" <?php echo $this->locale=="id_ID"?"selected='selected'":""; ?>>Bahasa Indonesia</option>
+			<!--	<option value="ar" <?php echo $this->locale=="ar_YE"?"selected='selected'":""; ?>>Arabic</option>-->
+			</select>
+		</div>
+	</div>
+		<!-- Header end -->
+	
+	<div id="body">
+		<!-- Begin Section Content-->
+		<div style="width:650px; height:250px; margin:10% auto 0;">
+			<?php echo $this->form; ?>	
+		</div>
+		<div style="width:650px; height:250px; margin:10% auto 0;">
+			<?php echo "Page Info"; ?>	
+		</div>		
+		<!-- End Section Content-->
+	</div>
+	
+	<div id="footer">
+		<!-- Footer start -->
+		<div style="width: 1024px; margin: 0 auto;">
+			<div style="float:left; text-align: left; padding-top: 5px;">
+				Trisakti University<br />
+				Jalan Kyai Tapa No. 1 Grogol, Jakarta Barat, Indonesia<br />
+				Phone: (62-21) 566 3232 | Fax: (62-21) 564 4270	
+			</div>
+			<div align="right" style="text-align: right; padding-top: 18px;" >
+				Copyright &copy; <?php echo APPLICATION_ENTERPRISE; ?>. All rights reserved.
+			</div>
+		</div>
+		<!-- Footer end -->
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,56 @@
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="/servqual/servqual-setup/new-servqual/new/1" >
+					<span class='add'></span>
+					<?php echo $this->translate("Create SERVQUAL"); ?>
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<?php if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+<br />
+<?php }?>
+
+<h2><?php echo $this->translate('History');?></h2>
+<table width="100%" class="table">
+	<tr>
+		<th><?php echo $this->translate('Date');?></th>
+		<th><?php echo $this->translate('Title');?></th>
+		<th><?php echo $this->translate('Type of Survey');?></th>
+		<th><?php echo $this->translate('Status');?></th>
+	</tr>
+	<?php 
+	if($this->servqual_list){
+      foreach($this->servqual_list as $index => $batch){
+	?>
+	<tr <?php echo $index%2==0?"class='shade'":""?> >
+		<td><?php echo date('d-m-Y g:ia', strtotime($batch['update_date']));?></td>
+		<td><a href="/servqual/servqual-setup/view-serqual/id/<?php echo $batch['IdServqual'];?>"><?php echo $batch['Title']; ?></a></td>
+		<td><?php echo $batch['surveytype']; ?></td>
+		<td><?php echo $batch['active']; ?> </td>
+		<td align="center">
+		  <a href="/servqual/servqual-setup/new-servqual/id/<?php echo $batch['IdServqual'];?>">Edit</a>
+		 </td>
+	</tr>
+	<?php 
+	  }
+	}
+	?>
+</table>

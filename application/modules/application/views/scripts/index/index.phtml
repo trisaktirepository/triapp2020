@@ -1,0 +1,300 @@
+
+<script type="text/javascript">
+	$(function() {
+		// a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
+		$( "#dialog:ui-dialog" ).dialog( "destroy" );
+	
+		$( "#dialog-search" ).dialog({
+			modal: true,
+			autoOpen: false,
+			width: 600,
+			buttons: {
+				"Search": function() { 
+					$("#search_form").submit(); 
+				}, 
+				"Cancel": function() { 
+					$(this).dialog("close"); 
+				}
+				
+			}
+		});
+	});
+	
+	$(function() {
+	var tips = $( ".validateTips" );
+
+	
+	$( "#tabs" ).tabs();
+
+	$("#dialog:ui-dialog").dialog( "destroy" );
+
+	$("#dialog-credit-modal").dialog({
+		
+		width: 615,
+		modal: true,
+		autoOpen: false,
+		buttons: {
+			"Save": function() {
+				$("#creditForm").submit();
+				$( this ).dialog( "close" );
+			},
+			Cancel: function() {
+				$( this ).dialog( "close" );
+			}
+		}
+		
+	});
+
+	$("#dialog-detail-modal").dialog({
+		
+		width: 615,
+		modal: true,
+		autoOpen: false,
+		buttons: {
+			Cancel: function() {
+				$( this ).dialog( "close" );
+			},
+			"Add": function() {
+				//if(checkLength('#course_type_id', "Credit Hour", 1, 1 ) && checkLength('#credit_hour', "Credit Hour", 1, 10 )){
+					$("#detailForm").submit();
+				//}
+			}
+			
+		}
+		
+	});
+
+	$("#dialog-detail-edit-modal").dialog({
+		
+		width: 615,
+		modal: true,
+		autoOpen: false,
+//		buttons: {
+//			"Save": function() {
+//					$("#detailForm").submit();
+//			},
+//			Cancel: function() {
+//				$( this ).dialog( "close" );
+//			}
+//		}
+	});
+
+	function checkLength( o, n, min, max ) {
+		if ( $(o).val().length > max || $(o).val().length < min ) {
+			$(o).addClass( "ui-state-error" );
+			updateTips( "Length of " + n + " must be between " +
+				min + " and " + max + ".",$(o) );
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	function updateTips( t ) {
+		tips
+			.text( t )
+			.addClass( "ui-state-highlight" );
+		setTimeout(function() {
+			tips.removeClass( "ui-state-highlight", 1500 );
+		}, 500 );
+	}
+
+});
+	
+function editDetail(id){
+	$('#dialog-detail-edit-modal').load("<?php echo $this->url(array('module'=>'admission-record', 'controller'=>'registration','action'=>'edit-student'),'default',true); ?>/id/"+id);
+	$('#dialog-detail-edit-modal').dialog('open');
+}
+
+</script>
+
+<script type="text/javascript">
+	function del(){
+		var id = $('input[name=app_id]:checked').val();
+
+		if(!id){
+			alert('Please select any manual first');
+		}else{
+			if(confirm('Are you sure to delete this applicant?')){
+				//window.location = "<?php echo $this->url(array('module'=>'application','controller'=>'manual', 'action'=>'delete'),'default',true); ?>/id/"+id;
+			}
+		}
+	}
+	
+	function add(){
+		//window.location="<?php echo $this->url(array('module'=>'application','controller'=>'manual', 'action'=>'add'),'default',true);?>";
+	}
+
+	function edit(){
+		var id = $('input[name=app_id]:checked').val();
+
+		if(!id){
+			alert('Please select any manual first');
+		}else{
+			//window.location="<?php echo $this->url(array('module'=>'application','controller'=>'manual', 'action'=>'edit'),'default',true);?>/id/"+id;
+		}
+	}
+	
+	function searchbox(){
+		//$( "#dialog-search" ).dialog('open');
+	}
+
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<!--<li>
+				<a href="#" onclick="javascript:add()">
+					<span class='add'></span>
+					Add
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:edit()">
+					<span class='edit'></span>
+					Edit
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:del()">
+					<span class='delete'></span>
+					Delete
+				</a>
+			</li>
+			--><li class="divider"></li>
+			<li>
+				<a href="#" onclick="javascript:searchbox()">
+					<span class='search'></span>
+					Search
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<div style="width:100%;">
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+<table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+	<tr>
+		<th width="25px">&nbsp;</th>		
+		<th><?php echo $this->translate("applicant_name");?></th>
+		<th><?php echo $this->translate("applicantID");?></th>
+		<th><?php echo $this->translate("admission_type");?></th>
+		<th><?php echo $this->translate("programme");?></th>
+		<th><?php echo $this->translate("date_applied");?></th>
+		<th><?php echo $this->translate("status");?></th>
+		<th><?php echo $this->translate("action");?></th>
+	</tr>
+	
+	<?php 
+	$i=0;
+	foreach ($this->paginator as $entry): 
+	
+	$programDB =  new App_Model_Application_DbTable_ApplicantProgram();
+	$program_list = $programDB->getApplicantProgramByID($entry['at_trans_id']);
+	
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<td>
+			<input type="radio" name="app_id" value="<?php echo $entry['appl_id']; ?>">
+		</td>		
+		<td><?php echo $entry['appl_fname']." ".$entry['appl_mname']." ".$entry['appl_lname']; ?></td>
+		<td><?php echo $entry['at_pes_id']; ?></td>
+		<td><?php if($entry['appl_admission_type']==1) echo $this->translate("Placement Test"); else  echo  $this->translate("high_school_certificate"); ?></td>
+		<td>
+		<?php
+		if($program_list){
+		foreach($program_list as $p){
+				echo $p["program_name_indonesia"].'<br>';
+		} }?>
+		</td>
+		<td><?php echo date('d-m-Y',strtotime($entry['at_submit_date'])); ?></td>
+		<td><?php 
+
+		if($entry['at_status']=='APPLY')   echo $this->translate("incomplete_app");
+		if($entry['at_status']=='CLOSE')   echo $this->translate("complete_app");
+		if($entry['at_status']=='PROCESS') echo $this->translate("process_app");
+		?></td>
+		<td align="center">
+		<?php 
+		
+				$documentDB = new App_Model_Application_DbTable_ApplicantDocument();
+				
+				if($entry["appl_admission_type"]==1){//placement test					
+					$kartu = $documentDB->getData($entry["at_trans_id"],30); //kartu
+					$directory = "http://".APP_HOSTNAME."/documents/".$kartu["ad_filepath"].'/'.$kartu["ad_filename"];
+					
+				}
+				
+				if($entry["appl_admission_type"]==2){//highschool				
+					$confirmation = $documentDB->getData($entry["at_trans_id"],32); //confirmation output
+	    			$directory = "http://".APP_HOSTNAME."/documents/".$confirmation["ad_filepath"].'/'.$confirmation["ad_filename"];
+				}
+				
+				if($directory){
+					
+					echo "<a target='_blank' href='$directory'>".$this->translate('download')."</a>";
+				}
+				
+				
+	    		
+		?>
+				
+		
+		</td>
+	</tr>
+	<?php 
+	$i++;
+	endforeach 
+	?>
+</table>
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>
+</div>
+
+<div id="dialog-search" title="Search Applicant">
+<form name="search_form" id="search_form" action="" method="post">
+	<table width="100%" class="table5">
+		<tr>
+			<td>
+				<?php echo $this->translate("academic_semester");?>
+			</td>
+			<td width="5px">:</td>
+			<td>
+				<input type="text" name="academic_semester" style="width:250px" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<?php echo $this->translate("period");?>
+			</td>
+			<td width="5px">:</td>
+			<td>
+				<input type="text" name="period" style="width:250px" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<?php echo $this->translate("name");?>
+			</td>
+			<td width="5px">:</td>
+			<td>
+				<input type="text" name="name" style="width:250px" />
+			</td>
+		</tr>
+		
+	</table>
+</form>
+</div>

@@ -1,0 +1,272 @@
+
+<script type="text/javascript">
+	$(function() {
+		// a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
+		$( "#dialog:ui-dialog" ).dialog( "destroy" );
+	
+		$( "#dialog-search" ).dialog({
+			modal: true,
+			autoOpen: false,
+			width: 600,
+			buttons: {
+				"Search": function() { 
+					$("#search_form").submit(); 
+				}, 
+				"Cancel": function() { 
+					$(this).dialog("close"); 
+				}
+				
+			}
+		});
+	});
+	
+	$(function() {
+	var tips = $( ".validateTips" );
+
+	
+	$( "#tabs" ).tabs();
+
+	$("#dialog:ui-dialog").dialog( "destroy" );
+
+	$("#dialog-credit-modal").dialog({
+		
+		width: 615,
+		modal: true,
+		autoOpen: false,
+		buttons: {
+			"Save": function() {
+				$("#creditForm").submit();
+				$( this ).dialog( "close" );
+			},
+			Cancel: function() {
+				$( this ).dialog( "close" );
+			}
+		}
+		
+	});
+
+	$("#dialog-detail-modal").dialog({
+		
+		width: 615,
+		modal: true,
+		autoOpen: false,
+		buttons: {
+			Cancel: function() {
+				$( this ).dialog( "close" );
+			},
+			"Add": function() {
+				//if(checkLength('#course_type_id', "Credit Hour", 1, 1 ) && checkLength('#credit_hour', "Credit Hour", 1, 10 )){
+					$("#detailForm").submit();
+				//}
+			}
+			
+		}
+		
+	});
+
+	$("#dialog-detail-edit-modal").dialog({
+		
+		width: 615,
+		modal: true,
+		autoOpen: false,
+//		buttons: {
+//			"Save": function() {
+//					$("#detailForm").submit();
+//			},
+//			Cancel: function() {
+//				$( this ).dialog( "close" );
+//			}
+//		}
+	});
+
+	function checkLength( o, n, min, max ) {
+		if ( $(o).val().length > max || $(o).val().length < min ) {
+			$(o).addClass( "ui-state-error" );
+			updateTips( "Length of " + n + " must be between " +
+				min + " and " + max + ".",$(o) );
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	function updateTips( t ) {
+		tips
+			.text( t )
+			.addClass( "ui-state-highlight" );
+		setTimeout(function() {
+			tips.removeClass( "ui-state-highlight", 1500 );
+		}, 500 );
+	}
+
+});
+	
+function editDetail(id){
+	$('#dialog-detail-edit-modal').load("<?php echo $this->url(array('module'=>'admission-record', 'controller'=>'registration','action'=>'edit-student'),'default',true); ?>/id/"+id);
+	$('#dialog-detail-edit-modal').dialog('open');
+}
+
+</script>
+
+<script type="text/javascript">
+	function del(){
+		var id = $('input[name=app_id]:checked').val();
+
+		if(!id){
+			alert('Please select any manual first');
+		}else{
+			if(confirm('Are you sure to delete this applicant?')){
+				window.location = "<?php echo $this->url(array('module'=>'application','controller'=>'manual', 'action'=>'delete'),'default',true); ?>/id/"+id;
+			}
+		}
+	}
+	
+	function add(){
+		window.location="<?php echo $this->url(array('module'=>'application','controller'=>'manual', 'action'=>'add'),'default',true);?>";
+	}
+
+	function edit(){
+		var id = $('input[name=app_id]:checked').val();
+
+		if(!id){
+			alert('Please select any manual first');
+		}else{
+			window.location="<?php echo $this->url(array('module'=>'application','controller'=>'manual', 'action'=>'edit'),'default',true);?>/id/"+id;
+		}
+	}
+	
+	function searchbox(){
+		$( "#dialog-search" ).dialog('open');
+	}
+
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="javascript:add()">
+					<span class='add'></span>
+					Add
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:edit()">
+					<span class='edit'></span>
+					Edit
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:del()">
+					<span class='delete'></span>
+					Delete
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="#" onclick="javascript:searchbox()">
+					<span class='search'></span>
+					Search
+				</a>
+			</li>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'application','controller'=>'manual', 'action'=>'index'),'default',true);?>">
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<div style="width:100%;">
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+<table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+	<tr>
+		<th width="25px">&nbsp;</th>
+		<th>Applicant Name</th>
+		<th>IC Number</th>
+		<th>Program</th>
+		<th>Status</th>
+		<th>Migrated?</th>
+	</tr>
+	
+	<?php 
+	$i=0;
+	foreach ($this->paginator as $entry): 
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<td>
+			<input type="radio" name="app_id" value="<?php echo $entry['ID']; ?>">
+		</td>
+		<td><?php echo $entry['ARD_NAME']; ?></td>
+		<td><?php echo $entry['ARD_IC']; ?></td>
+		<td><?php 
+		$prog = $entry['ARD_PROGRAM'];
+		$programDB = new App_Model_Record_DbTable_Program();
+    	$program_data = $programDB->getData($prog);
+    	
+    	if ($prog !=0) {
+    		echo strtoupper($program_data['main_name']);
+    	}else echo "N/A";
+    	
+		
+		?></td>
+		<td><?php
+		if ($entry['ARD_OFFERED'] == 1) {
+		 	echo "OFFERED";
+		 }else {
+		 	echo "<font color=red>NOT OFFERED</font>";
+		 }
+		?></td>	
+		<td align="center"><?php 
+		
+		if ($entry['ARD_MIGRATED'] == 1) {
+			echo "Yes";
+		}else echo "<font color=red>No</font>"; ?></td>
+	</tr>
+	<?php 
+	$i++;
+	endforeach 
+	?>
+</table>
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>
+</div>
+
+<div id="dialog-search" title="Search Student">
+<form name="search_form" id="search_form" action="" method="post">
+	<table width="100%" class="table5">
+		<tr>
+			<td>
+				IC Number
+			</td>
+			<td width="5px">:</td>
+			<td>
+				<input type="text" name="id" style="width:250px" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Name
+			</td>
+			<td width="5px">:</td>
+			<td>
+				<input type="text" name="name" style="width:250px" />
+			</td>
+		</tr>
+		
+	</table>
+</form>
+</div>

@@ -1,0 +1,43 @@
+
+<div class="breadcrum">
+	<ul class="tri-steps">
+		<li class="current"><div class="text"><a href="<?php echo $this->url(array('module'=>'application','controller'=>'selection-highschool','action'=>'document','program_code'=>$this->program_code,'id'=>$this->transaction_id),'default',true);?>"><?php echo $this->translate("upload_document"); ?></a></div></li>
+		<li class="last"><div class="text"><a href="<?php echo $this->url(array('module'=>'application','controller'=>'selection-highschool','action'=>'processing','program_code'=>$this->program_code,'id'=>$this->transaction_id),'default',true);?>"><?php echo $this->translate("processing"); ?></a></div></li>	
+	</ul>
+	<div class="clear"></div>
+</div>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			
+			<li class="divider"></li>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'application','controller'=>'selection-highschool', 'action'=>'list-applicant'),'default',true);?>" >
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+
+<div style="width:100%;" align="center">
+<h3><?php echo $this->translate("high_school_certificate_form")?></h3>
+
+<table><tr><td>
+<?php echo $this->translate("click_here_to")?><a target="_blank" href="<?php echo $this->download_file ?>"> <?php echo $this->translate("download")?></a>
+</td></tr></table>
+<iframe src="http://docs.google.com/gview?url=<?php echo $this->download_file ?>&embedded=true" style="width:80%; height:1000px;" frameborder="0"></iframe>
+
+</div>
+

@@ -1,0 +1,77 @@
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+	</div>
+</div>
+<br />
+
+<?php if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+<br />
+<?php }?>
+<form method='post' name="form-question">
+<input type="hidden" name="IdServqualQuestion" value=<?php echo $this->id;?>>
+<table>
+<tr>
+	<td><?php echo $this->translate('Question')?></td><td>:</td><td><textarea name="Question" cols="50" rows="5"><?php echo $this->question?></textarea></td>
+</tr>
+<tr>
+	<td><?php echo $this->translate('Category')?></td><td>:</td><td>
+	<select name="Category">
+				<?php 
+				foreach ($this->categories as $list):
+					$select = "";
+					if( isset($this->category) && $this->category==$list['idDefinition'] ){
+						$select = 'selected="selected"';
+					}
+				?>
+					<option value="<?php echo $list['idDefinition'];?>" <?php echo $select; ?>><?php echo $list['BahasaIndonesia'].' (',$list['DefinitionDesc'].')';?></option>
+				<?php 
+				endforeach;
+				?>
+			</select>
+	</td>
+</tr>
+<tr>
+	<td><?php echo $this->translate('Active')?></td><td>:</td><td><input type="checkbox" name="active" <?php if ($this->active=='1') echo 'checked';?> value="1"></td>
+</tr>
+<tr><td></td><td></td><td><input type="submit" name="submit"></td>
+</tr>
+</table>
+</form>
+<h2><?php echo $this->translate('History of Questions');?></h2>
+
+<table width="100%" class="table">
+	<tr>
+		<th><?php echo $this->translate('No');?></th>
+		<th><?php echo $this->translate('Question');?></th>
+		<th><?php echo $this->translate('Category');?></th>
+		<th><?php echo $this->translate('Status');?></th>
+		<th></th>
+	</tr>
+	<?php 
+	if($this->questions){
+      foreach($this->questions as $index => $batch){
+	?>
+	<tr <?php echo $index%2==0?"class='shade'":""?> >
+		<td><?php echo $index+1;?></td>
+		<td><?php echo $batch['Question']; ?></td>
+		<td><?php echo $batch['Category']; ?></td>
+		<td><?php echo $batch['active']; ?> </td>
+		<td align="center">
+		  <a href="/servqual/question-entry/index/id/<?php echo $batch['IdServqualQuestion'];?>">Edit</a> |
+		 </td>
+	</tr>
+	<?php 
+	  }
+	}
+	?>
+</table>

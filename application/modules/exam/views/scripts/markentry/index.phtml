@@ -1,0 +1,456 @@
+
+<script>
+function changeCourse(program_id){
+ 	
+	$.ajax({ 
+		type: "POST",
+		url: "<?php echo $this->url(array('module'=>'exam','controller'=>'markentry','action'=>'ajax-get-course'),'default',true);?>/program_id/"+program_id, 
+		data: "program_id=" + program_id,
+		context: document.body, 
+		success:		   
+			function(data){
+				response = eval(data);
+				var course = document.getElementById('course_id');
+				course.options.length = 0;
+				course.options[0]=new Option('-- Please select --','');
+				
+				for(var i=0; i<response.length; i++){
+					course.options[i+1]=new Option(response[i].courseid+' - '+response[i].coursename,response[i].courseid);
+				}		
+	    	}
+	    	
+	});
+	
+	
+}
+
+
+
+	
+	$(document).ready(function() {
+		
+		$("#exam_date").datepicker({
+				"dateFormat":"yy-mm-dd",
+				"changeMonth":"true",
+		});					
+	});
+	
+	
+	 function validate(){
+    	
+	 	if (document.searchfrm.course_id.selectedIndex == 0 ) { 
+	 		alert ( "Please select course!" ); 
+	 		return false; 
+	    } 
+	    
+	    
+	    if (document.searchfrm.idVenue.selectedIndex == 0 ) { 
+	 		alert ( "Please select exam center!" ); 
+	 		return false; 
+	    }  
+	    
+	    if (document.searchfrm.exam_date.value == "" ) { 
+	 		alert ( "Please enter exam date!" ); 
+	 		document.searchfrm.exam_date.focus();
+	 		return false; 
+	    } 
+	    
+	    return true;
+    }
+	
+
+function add(){		
+	document.markfrm.action="<?php echo $this->url(array('module'=>'exam','controller'=>'markentry','action'=>'save-mark'))?>";
+	document.markfrm.submit();
+}
+
+function isNumberKey(evt)
+{
+        var charCode = (evt.which) ? evt.which : event.keyCode
+//                alert(charCode);
+        //allows only numeric and point
+        if ((charCode < 44 && charCode!=8)  || charCode > 57){
+           return false;
+        }
+           
+
+        return true;
+}
+
+function calcmark(i,n,total_item_component,student_id){
+
+	
+	//===========================================
+	//TO GET TOTAL TOTAL MARK FOR EACH CANDIDATE
+	//===========================================
+	
+
+ 	 /* ==== Calculate final mark ====
+ 	  --------------
+ 	  By Weightage
+ 	  --------------
+      Final Mark Part A =  (candidate_mark/total_mark)*weightage
+      Final Mark Part B =  (candidate_mark/total_mark)*weightage
+      $mark = Final Mark Part A + Final Mark Part B
+      
+      ------------
+      Overall mark
+      ------------
+      Final Mark  = (candidate_mark Part A + candidate_mark Part B)/ (total_mark Part A + total_mark Part B)
+      mark = Final Mark * 100
+      ===========================================================
+    */		       
+		
+	
+	var mark_distribution_type = document.getElementById('mark_distribution_type').value; 	
+	var overal_final_mark=0;
+	var final_mark=0;
+	var mark =0 ;
+	var all_total_mark=0;
+	var candidate_total_mark=0;
+	total_item_component =Math.round(total_item_component);
+	
+	
+	for(var t=0; t<total_item_component; t++){
+      
+	
+			var component_item_total_mark_id = 'component_item_total_mark['+i+']['+t+']';
+		    component_item_total_mark = document.getElementById(component_item_total_mark_id).value; 
+		    
+		    var component_item_weightage_id = 'component_item_weightage['+i+']['+t+']';
+		    component_item_weightage = document.getElementById(component_item_weightage_id).value; 
+			
+			var markID = 'mark['+i+']['+t+']';
+		    candidate_mark = document.getElementById(markID).value; 
+		    
+		    if(candidate_mark > component_item_total_mark){	
+				alert('Sorry, you have exceeded the total mark of '+component_item_total_mark+'!');
+				document.getElementById(markID).focus;
+				document.getElementById(markID).value=0;
+				candidate_mark = document.getElementById(markID).value; 
+		   }
+
+		  
+			 if(mark_distribution_type==1){
+			 	
+					    final_mark = ((candidate_mark/component_item_total_mark)*component_item_weightage);
+					    overal_final_mark = Math.round(overal_final_mark) + Math.round(final_mark);
+					
+			 }else{
+			 	
+			 		candidate_total_mark = ceil(candidate_total_mark) + (candidate_mark);
+			      	all_total_mark = ceil(all_total_mark) + ceil(component_item_total_mark);
+			      	overal_final_mark = (ceil(candidate_total_mark) / ceil(all_total_mark))*100;
+			 }		
+			 
+	}           
+		    var final_markID = 'final_mark['+i+']';
+		    document.getElementById(final_markID).value=overal_final_mark; 
+		    
+		    //get final grade cek dalam table grade
+		    getCandidateGrade(overal_final_mark,i,student_id);
+
+}
+
+function getCandidateGrade(overal_final_mark,i,student_id){
+ 	
+	$.ajax({ 
+		type: "POST",
+		url: "<?php echo $this->url(array('module'=>'exam','controller'=>'markentry','action'=>'ajax-get-grade'),'default',true);?>", 
+		data: "final_mark=" + overal_final_mark,
+		context: document.body, 
+		success:		   
+			function(data){
+				
+			   var obj = jQuery.parseJSON(data);				
+					
+				 var gradeID = 'grade['+i+']';
+		         document.getElementById(gradeID).value=obj.grade; 
+		         
+		         var studentID = 'student_grade['+student_id+']';		      
+		         document.getElementById(studentID).value=obj.grade; 
+		         
+		         var statusID = 'exam_status['+student_id+']';		      
+		         document.getElementById(statusID).value=obj.grade; 
+		         
+		         var symbolID = 'symbol['+i+']';		      
+		         document.getElementById(symbolID).value=obj.symbol; 
+		        	
+
+	    	}
+	    	
+	});
+	
+	
+}
+
+
+function select_all(name, value) {
+    	 
+    	var forminputs = document.markfrm['student_id[]'];
+    	
+	    for (i = 0; i < forminputs.length; i++) {
+	    	
+	    // regex here to check name attribute
+	    var regex = new RegExp(name, "i");
+	  
+	    
+		    if (regex.test(forminputs[i].getAttribute('name'))) {
+		        
+			    if (value == '1') {
+			    forminputs[i].checked = true;
+			    } else {
+			    forminputs[i].checked = false;
+			    }
+		    }
+	    }
+    }
+
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+	<?php 	if($this->component){?> 
+		<ul>				
+		    <?php if($this->student_list){?>
+			<li>							
+					<a href="#" onClick="add()" title="Save Mark">
+						<span class='save'></span>Save</a>				
+			</li>	
+			<?php } ?>	
+		</ul>
+				
+	<?php } ?>
+	</div>
+</div>
+
+<br></br>
+<div style="width: 100%;">
+
+<?if(isset($this->noticeMessage)){?>
+<div id="msg" class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+
+<fieldset style="width:450px;">
+
+
+
+<form name="searchfrm" action="" method="post" onsubmit="return validate();">
+	<table width="100%">	
+		<tr>
+			<td>
+				Program 
+			</td>
+			<td width="5px">:</td>
+			<td>			
+				<select name="program_id" onchange="changeCourse(this.options[this.selectedIndex].value)">
+							
+							<?php 
+							foreach($this->program as $p){
+								if($this->program_id==$p[id])
+								  $sel = "selected";
+								else
+								  $sel = "";
+							 	echo "<option value='$p[id]' $sel>$p[program_name]</option>";
+							 } ?>
+							</select>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Course
+			</td>
+			<td width="5px">:</td>
+			<td>
+			
+				<select name="course_id" id="course_id">
+				<option value="0">--Select Course--</option>
+				<?php 
+				foreach($this->courses as $course){
+					if($this->course_id==$course[id])
+					  $sel = "selected";
+					else
+					  $sel = "";
+				 	echo "<option value='$course[id]' $sel>$course[code] - $course[name]</option>";
+				 } ?>
+				</select>
+			</td>
+		</tr>	
+		<tr>
+    <td>Exam Center</td>
+    <td>:</td>
+    <td>
+    <select name="idVenue" id="idVenue">
+		<option value="0">--Select Exam Center-- </option>	
+		<? foreach ($this->venue as $v){
+			if($this->idVenue==$v["id"]){
+				$sel = "selected";
+			}else{
+				$sel = "";
+			}
+		?>	
+		<option value="<?php echo $v["id"]?>" <?php echo $sel;?>><?php echo $v["name"]?></option>		
+		<? } ?>
+	</select>
+	
+	</td>
+  </tr>	
+  <tr>
+			<td>Exam Date</td>
+			<td width="5px">:</td>
+			<td><input type="text" name="exam_date" id="exam_date" size="10" value="<?php echo $this->exam_date; ?>"></td>
+		</tr>		
+		<tr>
+			<td>Student Name / ICNO</td>
+			<td width="5px">:</td>
+			<td><input type="text" name="keyword" value="" size=40></input></td>
+		</tr>
+			
+		<tr>
+			<td colspan="2">&nbsp;</td>
+			<td><input type="submit" value="submit" /></td>
+		</tr>
+	</table>
+</form>
+</fieldset>
+</div>
+<br>
+
+
+
+<?php if($this->student_list){?>
+
+
+<?php if(!$this->component){?> 
+	<div class="notification">         
+   		<?php echo 'There is no assessment component has been setup.';?> 
+   		</div>
+<? }?>
+
+<h2>Student List</h2>
+
+<form name="markfrm" action="<?php echo $this->url(array('module'=>'exam','controller'=>'markentry','action'=>'save-mark'))?>" method="post" >
+<input type="hidden" value="<?php echo $this->program_id;?>" name="program_id"></input>
+<input type="hidden" value="<?php echo $this->course_id;?>" name="course_id"></input>
+<input type="hidden" value="<?php echo $this->type;?>" name="mark_distribution_type" id="mark_distribution_type"></input>
+
+<table class="table3" width="100%" cellpadding="5" cellspacing="1" >
+
+	<tr align="center">
+	    <th width="5%" rowspan="2" >&nbsp;</th>	
+	    <th width="5%" rowspan="2" colspan="2">ID</th>	
+	    <th width="10%" rowspan="2">IC No</th>
+		<th width="20%" rowspan="2">Student Name</th>			
+		<th width="10%" rowspan="2">Registration ID</th>
+		<th width="10%" rowspan="2">Course</th>
+		<th width="10%" rowspan="2">Exam Date</th>
+		<th width="10%" rowspan="2">Venue</th>
+		
+		<? 		
+		foreach ($this->component as $component){
+			$itemDB = new App_Model_Exam_DbTable_Asscompitem();
+			$item = $itemDB->getCompitemByCompId($component["id"]);
+			$column = count($item);			
+		?>
+			<th width="" colspan="<?=$column+3?>"><?php echo $component["component_name"]?> </th>
+		<? } ?>
+	</tr>
+	<tr align="center">
+	 
+		<? foreach ($this->component as $component){
+			$itemDB = new App_Model_Exam_DbTable_Asscompitem();
+			$item = $itemDB->getCompitemByCompId($component["id"]);
+			$column = count($item);
+				foreach ($item as $item){
+		?>
+			<th width=""><?php echo $item["component_name"]?> / <?php echo $item["component_item_total_mark"];?></th>
+		<? } //end item
+		}//end component ?>
+		<th >Total Mark</th>
+		<th >Grade</th>
+		<th >Status</th>
+	</tr>
+	
+	<?php 
+	$i=0;
+	$a=1;
+	foreach($this->student_list as $student){		
+	?>	
+	<tr>
+		<td>
+		<input type="checkbox" name="student_id[]" value="<?php echo $student["ID"];?>">
+		<input size="3" type="hidden" name="student_grade[<?php echo $student["ID"];?>]" id="student_grade[<?php echo $student["ID"];?>]" value="<?=$student["grade_symbol"]?>">		
+		<input size="3" type="hidden" name="exam_status[<?php echo $student["ID"];?>]" id="exam_status[<?php echo $student["ID"];?>]" value="<?=$student["course_grade"]?>">		
+		<input size="3" type="hidden" name="student_rdid[<?php echo $student["ID"];?>]" id="student_rdid[<?php echo $student["ID"];?>]" value="<?php echo $student["rd_id"];?>">		
+		<input size="3" type="hidden" name="exam_date[<?php echo $student["ID"];?>]" id="exam_date[<?php echo $student["ID"];?>]" value="<?php echo $student["exam_date"];?>">		
+		<input size="3" type="hidden" name="coursename[<?php echo $student["ID"];?>]" id="coursename[<?php echo $student["ID"];?>]" value="<?php echo $student["cname"];?>">		
+		</td>
+		<td><?php echo $a;?>)</td>
+		<td><?php echo $student["rd_id"];?><input type="hidden" size="3" name="rd_id[]" id="rd_id" value="<?php echo $student["rd_id"];?>"></td>
+		<td><?php echo $student["ARD_IC"];?></td>		
+		<td><?php echo strtoupper($student["ARD_NAME"]);?></td>		
+		<td><?php echo $student["regId"];?></td>
+		<td><?php echo $student["cname"];?></td>
+		<td><?php echo $student["exam_date"];?></td>
+		<td><?php echo $student["venue"]?></td>
+		
+		<? foreach ($this->component as $component){
+			$itemDB = new App_Model_Exam_DbTable_Asscompitem();
+			$item = $itemDB->getCompitemByCompId($component["id"]);
+			$total_item_component = count($item);
+			
+			  
+			   echo "<input type='hidden' name='component_id[$i][]' id='component_id[$i][]' value='$component[id]' size=3 ></td>";
+			   
+			   $m=0;
+			   foreach ($item as $item){
+			   	
+			   		 //cek mark component
+					 $markDB = new App_Model_Exam_DbTable_Markentry();	
+					 $smark = $markDB->getMarkByComponent($student["rd_id"],$component["id"],$item["component_item_id"]);
+					 
+					 if($smark["component_student_mark"]){
+					 	$scm_mark  =$smark["component_student_mark"];
+					 	$scm_id=$smark["id"];
+					 }else{
+					 	$scm_mark=0;
+					 	$scm_id="";
+					 }
+			   	
+			   	
+		?>
+			<td width="">
+			<input type="text" size="3" name="mark[<?=$i?>][<?=$m?>]" id="mark[<?=$i?>][<?=$m?>]" value="<?=$scm_mark;?>" onkeypress= "return isNumberKey(event);" onblur="javascript:calcmark(<?php echo $i;?>,<?php echo $m;?>,<?php echo $total_item_component; ?>,<?php echo $student["ID"];?>)">		
+			<input type='hidden' name='scm_id[<?=$i?>][]' value='<?=$scm_id?>' size=3 >
+			<input type='hidden' name='item_id[<?=$i?>][]' value='<?=$item["component_item_id"]?>' size=3 >
+			<input type='hidden' id='component_item_total_mark[<?=$i?>][<?=$m?>]' value='<?=$item["component_item_total_mark"]?>' size=3 >
+			<input type='hidden' id='component_item_weightage[<?=$i?>][<?=$m?>]' value='<?=$item["component_item_weightage"]?>' size=3 >
+		   </td>
+		<? $m++;} //end item
+		}//end component ?>
+		<td align="center"><input type="text" size="3" name="final_mark[<?=$i?>]" id="final_mark[<?=$i?>]" value="<?=$student["course_mark"]?>" readonly style="background-color:#D9D7D7"></td>
+		<td align="center"><input type="text" size="3" name="symbol[<?=$i?>]" id="symbol[<?=$i?>]" value="<?=$student["grade_symbol"]?>"  readonly style="background-color:#D9D7D7"></td>
+		<td align="center"><input type="text" size="3" name="grade[<?=$i?>]" id="grade[<?=$i?>]" value="<?=$student["course_grade"]?>"  readonly style="background-color:#D9D7D7"></td>
+	</tr>
+	<?php  $i++;
+	$a++;
+	} ?>
+	<tr><td colspan="14">
+	     <a href="#" onClick="select_all('student_id', '1');">Check All</a>  |
+		 <a href="#" onClick="select_all('student_id', '0');">Uncheck All</a>  <i>With Selected</i> &nbsp;to Verify and Send Email Notification </td></tr>
+</table>
+</form>
+
+
+<? } ?>
+
+
+

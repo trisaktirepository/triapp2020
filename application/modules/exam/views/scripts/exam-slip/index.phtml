@@ -1,0 +1,140 @@
+<script>
+function getExamSlip(sem,ass_type){
+	
+	$('#form_print_kpu').remove();
+	$('body').append(
+		$('<form />')
+		.attr('id','form_print_kpu')
+		.attr('action','/exam/exam-slip/print-exam-slip/')
+		.attr('method','post')
+		.attr('target','_BLANK')
+		.append(
+			'<input type="hidden" name="semid" value="'+sem+'" />' +
+			'<input type="hidden" name="ass_type" value="'+ass_type+'" />'	
+		)
+	);
+
+	$('#form_print_kpu').submit();
+	
+}
+
+function getExamSlipQr(sem,ass_type){
+	
+	$('#form_print_kpu').remove();
+	$('body').append(
+		$('<form />')
+		.attr('id','form_print_kpu')
+		.attr('action','/exam/exam-slip/print-exam-slip-qr/')
+		.attr('method','post')
+		.attr('target','_BLANK')
+		.append(
+			'<input type="hidden" name="semid" value="'+sem+'" />' +
+			'<input type="hidden" name="ass_type" value="'+ass_type+'" />'	
+		)
+	);
+
+	$('#form_print_kpu').submit();
+	
+}
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		
+	</div>
+</div>
+
+<?php if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+<?php }?>
+
+<table class="table" width="100%">
+	<thead>
+	<tr>
+		<th><?php echo $this->translate("Semester");?></th>
+		<th><?php echo $this->translate("Exam Type");?></th>
+		<th>&nbsp;</th>
+	</tr>
+	</thead>
+	<tbody>
+	<?php 
+	$having_exam_slip = false;
+	if($this->examslip && isset($this->examslip['release_data']) || true){
+
+		$auth = Zend_Auth::getInstance();
+		$registration_id = $auth->getIdentity()->registration_id;
+		
+		$sfhelper= new icampus_Function_Studentfinance_PaymentInfo();
+		$ExamSlipReleaseDb = new App_Model_Exam_DbTable_ExamSlipRelease();
+		foreach ($this->examslip['release_data'] as $exam){
+			
+			if($exam['esr_status']==1 || true){
+				$having_exam_slip = true;
+				
+				
+			//check for payment status
+			$paymentstatus = 0;
+			$pymtinfo=$sfhelper->getStudentOustandingInfo($registration_id,$exam['IdSemesterMaster']);
+			//echo var_dump($pymtinfo);exit;
+			if($pymtinfo["invoices"]== 0 ) {
+					$paymentstatus=1;
+				}
+                elseif ($pymtinfo["invoices"] < 0 ){
+                    $paymentstatus=1;
+                }
+                else{
+					$paymentstatus==0;
+				}
+			
+			
+			//kalau ada payment exception utk course registration
+			if(isset($pymtinfo["exception"][2])){
+				$paymentstatus=1;
+			}
+			//echo $paymentstatus;exit;
+	?>
+	<tr>
+		<td><?php echo $exam['SemesterMainDefaultLanguage'];?></td>
+		<td><?php echo $exam['DescriptionDefaultlang'];?></td>
+		<td align="center">
+			<?php 
+			if($paymentstatus==0){
+				echo $this->translate('Outstanding payment').' sebesar '.$pymtinfo["invoices"];
+			}else{
+				
+				if ($ExamSlipReleaseDb->idSlipOpenToDownload($this->program, $exam['IdSemesterMaster'], $exam['IdExaminationAssessmentType'])) {
+			
+			?>
+				<a href="#" onclick="getExamSlip(<?php echo $exam['IdSemesterMaster'];?>,<?php echo $exam['IdExaminationAssessmentType'];?>);"><?php echo $this->translate("Download");?></a>
+				| <a href="#" onclick="getExamSlipQr(<?php echo $exam['IdSemesterMaster'];?>,<?php echo $exam['IdExaminationAssessmentType'];?>);"><?php echo $this->translate("Download").' QR Code';?></a>
+			<?php 
+				}
+				else {
+					echo $this->translate('Exam Slip can not be download yet');
+			  
+				}
+			}
+			?>
+		</td>
+	</tr>
+	<?php 
+			}
+		}
+	}
+	if(!$having_exam_slip)
+	{?>
+	<tr>
+		<td colspan="3" align="center"><?php echo $this->translate("You have no exam slip to download");?></td>
+	</tr>
+	<?php 
+	}
+	?>
+	</tbody>
+</table>

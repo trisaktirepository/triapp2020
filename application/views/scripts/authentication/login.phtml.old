@@ -1,0 +1,348 @@
+<? echo $this->doctype(); ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB">
+<head>
+	<?php echo $this->headMeta(); ?>
+	<?php echo $this->headTitle(); ?>
+	<?php
+		$this->jQuery()->enable();
+		$this->jQuery()->setVersion('1.7.2');
+		$this->jQuery()->useCdn(false);
+	 	$this->jQuery()->setLocalPath($this->baseUrl().'/js/jquery/jquery-1.5.0.min.js');
+		
+		$this->jQuery()->uiEnable();
+		$this->jQuery()->setUiVersion('1.8.18');
+		$this->jQuery()->useUiCdn(false);
+		$this->jQuery()->addStylesheet($this->baseUrl().'/js/jquery/themes/smoothness/jquery-ui.css');
+		$this->jQuery()->setUiLocalPath($this->baseUrl().'/js/jquery/jquery-ui-1.8.18.min.js');
+		
+		echo $this->jQuery(); 
+		
+		echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/usakti.css');
+	?>
+	<style type="text/css">
+		.zend_form{
+			width:250px;
+			padding:0;
+			overflow:auto;
+		}
+		
+		.zend_form dt{
+			padding:0;
+			clear:both;
+			width:80px;
+			float:left;
+			text-align:right;
+			margin:5px 5px 5px 0;
+		}
+		
+		.zend_form dt label:after{
+			content: " : ";
+		}
+		
+		.zend_form dd{
+			padding:0;
+			float:left;
+			width:150px;
+			margin:5px 2px 5px 0;
+		}
+		
+		.zend_form p{
+			padding:0;
+			margin:0;
+		}
+		
+		.zend_form input, .zend_form textarea{
+			margin:0 0 2px 0;
+			padding:0;
+		}
+		
+		.zend_form label.view{
+			font-weight: bold;
+		}
+		
+		.submit{
+			float:right;
+		}
+		
+		.required {
+			font-weight: bold;
+		}
+		
+		.optional {
+			font-style: italic;	
+		}
+		
+		.zend_form .errors{
+			
+			margin-left:0px;
+			-moz-padding-start: 0px;
+			position: absolute;
+		}
+		
+		.zend_form .errors li{
+			color: red;
+			list-style: none;
+			margin-left:0px;
+		}
+		
+		input[type=text], input[type=password]{
+			width:150px;
+		}
+		
+		#header{
+			background: url(<?php echo $this->baseUrl(); ?>/images/background-unity.png) repeat-x;
+		}
+		
+		#logo {
+		    background-attachment: scroll;
+		    background-clip: border-box;
+		    background-color: transparent;
+		    background-image: url(<?php echo $this->baseUrl(); ?>/images/IBFIM-logo.png);
+		    background-origin: padding-box;
+		    background-position: 35px 9px;
+		    background-repeat: no-repeat;
+		    background-size: 81px 42px;
+		    height: 52px;
+		    margin: 0;
+		    width: 123px;
+		}
+			
+		#footer{
+			text-align: center;
+			background-color:#fff;
+			font-family:Verdana,Helvetica;
+			font-size: 10px;
+		}
+		
+		input[type=submit], button{
+			margin:5px 0;
+			background-color:#F5F5F5;
+			border-color:#EEEEEE #DEDEDE #DEDEDE #EEEEEE;
+			border-style:solid;
+			border-width:1px;
+			color:#565656;
+			cursor:pointer;
+			display:block;
+			/*float:left;*/
+			font-family:"Lucida Grande",Tahoma,Arial,Verdana,sans-serif;
+			font-size:100%;
+			font-weight:bold;
+			line-height:130%;
+			margin:2px 7px 2px 0;
+			padding:5px 10px 6px 7px;
+			text-decoration:none;
+		}
+		input[type=submit]:hover,  button:hover{
+			background-color:#E6EFC2;
+		}
+		
+		.type{
+			clear:both;	
+			margin: 0 0 0 35px;
+		}
+			
+		.kakidasar{
+			bottom: 0;
+		    height: 50px;
+		    position: absolute;
+		    width: 100%;
+		}
+		
+		.kepala, .badan{
+		    background: none;
+		 }   
+	</style>
+	
+	<?if(isset($this->alertError)){?>
+		<script type="text/javascript">
+			alert('<? echo $this->alertError; ?>.');
+		</script>
+	<?}?>
+	
+	<script type="text/javascript">
+		if(jQuery.browser.msie) {
+
+	      var this_browser = "Microsoft Internet Explorer";
+
+	      if(jQuery.browser.version<=7) {
+
+	          alert("You are using an older browser ("+this_browser+" "+jQuery.browser.version+").\nThis website is best viewed using the latest version of Firefox 3+ or Internet Explorer 8+ or Safari 3+ or Chrome 9+.\nPlease consider upgrading your web browser to the latest version to ensure full compatibilty and pleasant viewing experience.");
+
+	      }
+
+	    }
+	</script>
+</head>
+<body onLoad="document.getElementById('username').focus();">
+	<!--kepala -->
+	<div class="kepaladasar">
+		<div class="kepala">
+			<div class="kepalakiri">
+				<div class="logo"><a href="./"><img src="/images/tri/logo.gif" border="0" /></a></div>
+				<div class="logotext">
+					Trisakti<br>University</div>
+				</div>
+			<div class="kepalakanan">
+				<div class="navatas">
+					<!--inbox -->
+					<div class="clearit"></div>
+					<div class="linkadd"></div>
+					<div class="clearit"></div>
+					<div class="clearit"></div>
+				</div>
+				<div class="clearit"></div>
+			</div>
+		</div>
+	</div>
+
+	<!--badan atas-->
+	<div class="badan">
+		<div style="padding-top:10px;"></div>
+		
+
+		<div style="margin-top:10px;"></div>
+		<!-- marquee -->
+		<!-- 
+		<div id=marquee>
+		
+		<script language="JavaScript">document.write('<table align="center" border="0"><tr><td width='+wwidth+'px>');if(document.getElementById || document.all){document.write('<span style="width:'+wwidth+'px;"><div style="position:relative;overflow:hidden;width:'+wwidth+'px;height:'+wheight+'px;clip:rect(0 '+wwidth+'px '+wheight+'px 0);background-color:'+wbcolor+';" onMouseover="sspeed=0;" onMouseout="sspeed=restart">');if(operbr!=-1)document.write('<div id="operaslider" style="position:absolute;visibility:hidden;"></div>');document.write('<div id="wslider" style="position:absolute;height:'+wheight+'px;"></div></div></span>')}</script>
+		<ilayer width=&{wwidth}; height=&{wheight}; name="wslider1" bgcolor=&{wbcolor};><layer name="wslider2" width=&{wwidth}; height=&{wheight}; onMouseover="sspeed=0;" onMouseout="sspeed=restart"></layer></ilayer></td></tr></table>
+		
+		</div>
+		 -->
+		<div style="margin-top:2px;"></div>
+
+		<!--kolom 2-->
+		<!--beginkolomkiri -->
+
+		<div class="kolomkiri">
+			<div style="margin-top:-2px;"></div>
+
+			<!-- faculty area ends -->
+			<div class="clearit"></div>
+
+
+			<!--kalender -->
+			<!--<div class="box_head3" style="background:url(images/headbox_kalender.gif) no-repeat;">Kalendar<br />Kegiatan</div>-->
+			<div style="margin-top:5px;"></div>
+			<div>
+			<!--<div class="bulan"><a href="#">&lt;&lt;</a> Februari 2008 <a href="#">&gt;&gt;</a></div>-->
+			<!-- event area starts -->
+			
+			
+				<!-- event area ends -->
+					
+			<!--
+
+			comment perpustakaan 
+			<div class="box_head3" style="background:url(images/headbox_perpustakaan.gif) no-repeat;">Perpustakaan<br />Usakti</div>
+			<div style="margin-top:5px;"></div>
+			<div class="teks_judul"><a href="#">FORMULASI DAN EVALUASI TABLET SULFASOMIDIN</a></div>
+			<div class="teks_biasa">Abstrak: Telah dilakukan pembuatan tablet sulfasomidin dengan teknik </div>
+			<div class="batasputus"></div>
+			<div class="teks_judul"><a href="#">TEKTONIK SULAWESI SELATAN DENGAN ACUAN KHUSUS CIRI-CIRI HIMPUNAN BATUAN DAERAH BANTIMALA</a></div>
+			<div class="teks_biasa">Abstrak: Batuan yang tersingkap di daerah Bantimala dan sekitarnya merupakan</div>
+			<div class="box_foot2"><a href="#"><img src="images/icon_win.gif" border="0" /></a><a href="#"><img src="images/icon_rss.gif" border="0" /></a></div>
+			-->
+			</div>
+
+			<div style="margin-top:10px;"></div>
+			<!-- banner left starts -->
+
+		
+			<div style="margin-top:10px;"></div>
+			
+		</div><!-- banner left ends -->
+		<!--endkolomkiri -->
+
+<!--beginkolomtengah -->
+<div class="kolomtengah">
+
+<br class="clearit" />
+<div class="clearit"></div>
+<div style="margin-top:1px;"></div>
+
+<!--banner 468x60 -->
+<div align="center"><p>
+<div style='clear:both;'></div><div style='margin-top:20px;'></div></div>
+
+
+<table >
+<tr><td width='76' valign='top'>
+	<div style="width:425px; height:250px; margin:10% auto 0; background-image: url(/images/login.png); background-repeat: no-repeat;padding-top: 31px;">
+		
+		<div style="padding-left: 150px;">
+			<div style="margin-left: 10px;">
+				<?php echo $this->form; ?>
+			</div>
+		</div>
+	</div>	
+</td>
+</tr>
+</table>
+
+
+
+
+<div class="clearit"></div>
+<div style="margin-top:20px;"></div>
+
+<!--banner 468x60 -->
+
+
+<div class="clearit"></div>
+<div style="margin-top:20px;"></div>
+
+
+<div class="clearit"></div>
+
+
+<div class="clearit"></div>
+<div style="margin-top:20px;"></div>
+
+<!--banner 468x60 -->
+<div align="center">
+</div>
+
+<div class="clearit"></div>
+<div style="margin-top:20px;"></div>
+
+
+
+<!--profil guru besar -->
+<div style="float:left; width:240px;">
+
+<div style="margin-top:5px;"></div>
+</div>
+
+<!--profil alumnus -->
+<div style="float:right; width:240px;">
+<div class="box_head2" style="background:url(images/headprofilalumnus.gif) no-repeat;">Alumnae<br />Profile</div>
+<div style="margin-top:5px;"></div></div> 
+
+<br class="clearit" />
+<div class="clearit"></div>
+</div>
+<!--endkolomtengah -->
+
+
+<br class="clearit" />
+
+<div class="clearit"></div>
+</div>
+
+
+
+<!--kaki -->
+<div class="kakidasar">
+<div class="kaki">
+<div style="float:left;">Trisakti University<br />
+Jalan Kyai Tapa No. 1 Grogol, Jakarta Barat, Indonesia<br />
+Phone: (62-21) 566 3232 | Fax: (62-21) 564 4270</div>
+<div align="right" style="text-align:right;"></div>
+<div align="right" style="text-align:right; padding-top:15px;">Copyright &copy; <?php echo date('Y');?> UPT Multimedia Universitas Trisakti. All rights reserved.</div>
+</div>
+</div>
+</div>
+</body>
+</html>

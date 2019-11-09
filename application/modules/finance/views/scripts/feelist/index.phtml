@@ -1,0 +1,62 @@
+<?php
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/css/tabs/tabpane.css' );
+echo $this->headScript()->appendFile('/css/tabs/tabpane.js') 
+//echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/css/tabpane.js' );
+?>
+
+
+<script type="text/javascript">
+	function del(title, id){
+		if(confirm('Are you sure to delete '+title+'?')){
+			window.location = "<?php echo $this->url(array('module'=>'onapp','controller'=>'placementtest', 'action'=>'delete')); ?>/id/"+id;
+		}
+	}
+	
+	function add(){
+		window.location="<?php echo $this->url(array('module'=>'finance','controller'=>'fee', 'action'=>'add'));?>";
+	}
+
+	function edit(id){
+		window.location="<?php echo $this->url(array('module'=>'finance','controller'=>'promotion', 'action'=>'edit'));?>/id/"+id;
+	}
+
+</script>
+<?php 
+	echo "<h1>". $this->title ."</h1>";
+?>
+
+<br>
+<div class="tab-pane" id="tab-pane-1">
+<div class="tab-page" id="tabPage1" style="background-color: #FFFFF9;">
+<h2 class="tab">Entry List</h2>
+<table valign="top" height="100%" class="data" border="0" cellpadding="0" cellspacing="0" width="100%">
+	<tr>
+		<td align="left">
+		<iframe style="background-color: #FFFFF9;" scrolling="auto" frameborder="0" src="<?php echo $this->url(array('module'=>'finance','controller'=>'feelist', 'action'=>'view'));?>/id/1" height="800" width="100%"></iframe>		
+		</td>
+	</tr>	
+</table>
+</div>
+<? //if ($_GET['tab']=='component'){?>
+<div class="tab-page" id="component" style="background-color: #FFFFF9;">
+<h2 class="tab">Verified List</h2>
+<table valign="top" height="100%" class="data" border="0" cellpadding="0" cellspacing="0" width="100%">
+	<tr>
+		<td align="left">
+		<iframe style="background-color: #FFFFF9;" scrolling="auto" frameborder="0" src="<?php echo $this->url(array('module'=>'finance','controller'=>'feelist', 'action'=>'view'));?>/id/2" height="800" width="100%"></iframe>
+		</td>
+	</tr>	
+</table>
+</div>
+<?//}?>
+<div class="tab-page" id="component2" style="background-color: #FFFFF9;">
+<h2 class="tab">Approved List</h2>
+<table valign="top" height="100%" class="data" border="0" cellpadding="0" cellspacing="0" width="100%">
+	<tr>
+		<td align="left">
+		<iframe style="background-color: #FFFFF9;" scrolling="auto" frameborder="0" src="<?php echo $this->url(array('module'=>'finance','controller'=>'feelist', 'action'=>'view'));?>/id/3" height="800" width="100%"></iframe>		
+		</td>
+	</tr>	
+</table>
+</div>
+

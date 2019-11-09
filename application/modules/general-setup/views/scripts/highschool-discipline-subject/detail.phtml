@@ -1,0 +1,86 @@
+
+<script type="text/javascript">
+	function del(){
+		var id = $('input[name=id]:checked').val();
+
+		if(!id){
+			alert('<?php echo $this->translate("Please select item first"); ?>');
+		}else{
+			if(confirm('<?php echo $this->translate("Confirm to delete?"); ?>')){
+				window.location = "<?php echo $this->url(array('module'=>'general-setup','controller'=>'highschool-discipline-subject', 'action'=>'delete'),'default',true); ?>/id/"+id;
+			}
+		}
+	}
+	
+	function add(){
+		window.location="<?php echo $this->url(array('module'=>'general-setup','controller'=>'highschool-discipline-subject', 'action'=>'add', 'code'=>$this->code),'default',true);?>";
+	}
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="javascript:add();">
+					<span class='add'></span>
+					Add
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:del()">
+					<span class='delete'></span>
+					Delete
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'general-setup','controller'=>'highschool-discipline-subject', 'action'=>'index'),'default',true);?>" >
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<div width="500px">
+	<table class="table2" width="100%" cellpadding="3" cellspacing="1">
+		<tr>
+			<th width="150px"><? echo $this->translate("Discipline Name"); ?></th>
+			<td><?php echo $this->discipline['smd_desc']; ?></td>
+		</tr>
+		<tr>
+			<th width="150px"><? echo $this->translate("Discipline Code"); ?></th>
+			<td><?php echo $this->discipline['smd_code']; ?></td>
+		</tr>
+	</table>	
+</div>
+<br />
+<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+	<tr>
+		<th width="25px">&nbsp;</th>
+		<th><?php echo $this->translate("Subject Name"); ?>(<?php echo $this->translate("Indonesia"); ?>)</th>
+		<th><?php echo $this->translate("Subject Name"); ?></th>
+	</tr>
+	<?php 
+	if($this->disciplineSubject){
+		foreach ($this->disciplineSubject as $subject):
+	?>
+		<tr>
+			<td><input type="radio" name="id" value="<?php echo $subject['sds_id']; ?>" /></td>
+			<td><?php echo $subject['ss_subject_bahasa']; ?></td>
+			<td><?php echo $subject['ss_subject']; ?></td>
+		</tr>
+	<?php 
+		endforeach;
+	}
+	?>
+</table>

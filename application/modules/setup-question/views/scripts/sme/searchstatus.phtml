@@ -1,0 +1,128 @@
+<script>
+function changeCourse(faculty_id){
+ 	
+	$.ajax({ 
+		type: "POST",
+		url: "<?php echo $this->url(array('module'=>'question','controller'=>'sme','action'=>'ajax-get-course'),'default',true);?>/faculty_id/"+faculty_id, 
+		data: "faculty_id=" + faculty_id,
+		context: document.body, 
+		success:		   
+			function(data){
+				response = eval(data);
+				var course = document.getElementById('course_id');
+				course.options.length = 0;
+				course.options[0]=new Option('-- Please select --','0');
+				
+				for(var i=0; i<response.length; i++){
+					course.options[i+1]=new Option(response[i].courseid+' - '+response[i].coursename,response[i].courseid);
+				}		
+	    	}
+	    	
+	});
+	
+	
+}
+</script>
+
+<table width="90%" border="0" align="center" cellpadding="1" cellspacing="1">
+  <tr> 
+    <td ><strong> 
+      <h1><?php echo $this->title;?></h1>
+      </strong> This page is designed to enable user to view total no of questions.</td>
+  </tr>
+  <tr> 
+    <td height="154">  
+
+    <br>
+   <form name="searchfrm" action="<?php echo $this->url(array('module'=>'question','controller'=>'sme','action'=>'searchstatus'),'default',true);?>" method="post">
+	<table width="50" cellspacing="1" cellpadding="5" id="mtable"  align="center">
+	<tr>             
+		<td width="15%">Faculty</td>
+		<td width="85%" >             
+			<select name="faculty_id" id="faculty_id" onchange="changeCourse(this.options[this.selectedIndex].value)">
+				<option value="0">-- Please select --</option>
+				<?php 
+				foreach($this->faculty as $f){
+				if($this->faculty_id==$f[id])
+				$sel = "selected";
+				else
+				$sel = "";
+				echo "<option value='$f[id]' $sel>$f[faculty_name]</option>";
+				} ?>
+			</select>
+		</td>
+	</tr>
+	<tr> 	
+		<td>Course</td>
+		<td><select name="course_id" id="course_id" >
+        <option>-- Please Select --</option>
+        <?php 
+			foreach($this->course as $c){
+				if($this->course_id==$c[courseid])
+				  $sel = "selected";
+				else
+				  $sel = "";
+			 	echo "<option value='$c[courseid]' $sel>$c[courseid] - $c[coursename]</option>";
+			 } ?>
+      </select>
+		</td>
+	</tr>
+	<tr>
+	<td></td>
+	<td><input type="submit" name="submit" class="button" value="Search"></td>
+	</tr>
+	</table>
+   </form>
+	 
+	<br>
+	
+		<?  
+		if(count($this->syllabus)>0){ 
+			$bil = count($this->status); ?>
+		
+		 <table width="100%" align="center"  id="mtable">
+        <tr align="center" bgcolor="#CCFFFF"> 
+          <td width="17%" rowspan="2" bgcolor="#D7EBFF"><strong>Topic </strong></td>
+          <td height="30" colspan="<?=$bil?>" bgcolor="#D7EBFF"><strong>Question </strong></td>
+          <td width="12%" rowspan="2" bgcolor="#D7EBFF"><strong>Total</strong></td>
+        </tr>
+      
+        <tr align="center" bgcolor="#CCFFFF">           
+           <? foreach ($this->status as $s){?>
+              <td width="14%" height="30" bgcolor="#D7EBFF"><strong><?php echo $s["name"]?></strong></td>
+           <? } ?>
+        </tr>
+       
+        
+        <?           	    
+        	  
+	            foreach ($this->syllabus as $topic) { 
+	        	
+	        	$question = new Question_Model_QuestionMain();
+	        	//$condition = array('course_id'=>$this->course_id,'topic_id'=>$topic[id],'status'=>1);
+        ?>
+        <tr > 
+          <td><?php echo $topic["name"];?></td>
+          <td align="center"><? $condition = array('course_id'=>$this->course_id,'topic_id'=>$topic[id],'status'=>1); echo $total1 = $question->getData($condition); ?></td>
+          <td align="center"><? $condition = array('course_id'=>$this->course_id,'topic_id'=>$topic[id],'status'=>2); echo $total2 = $question->getData($condition); ?></td>
+          <td align="center"><? $condition = array('course_id'=>$this->course_id,'topic_id'=>$topic[id],'status'=>3); echo $total3 = $question->getData($condition); ?></td>
+          <td align="center"><? $condition = array('course_id'=>$this->course_id,'topic_id'=>$topic[id],'status'=>4); echo $total4 = $question->getData($condition); ?></td>
+          <td align="center"><? $condition = array('course_id'=>$this->course_id,'topic_id'=>$topic[id],'status'=>5); echo $total5 = $question->getData($condition); ?></td>
+          <td align="center" bgcolor="#EAEAEA"><strong><? echo  $row_total=ceil($total1)+ ceil($total2)+ ceil($total3)+ ceil($total4)+ ceil($total5); ?></strong></td>
+        </tr>
+        <? 
+          $sum_total1=ceil($sum_total1)+ ceil($row_total);
+	      } ?>
+      
+        <tr > 
+          <td bgcolor="#EAEAEA" colspan="6" align="right"><strong>Grand Total</strong></td>          
+          <td bgcolor="#EAEAEA" align="center"><strong><?=$sum_total1?></strong></td>
+        </tr>
+      </table>   	 		   
+    
+       <? } ?>
+     
+
+    </td>
+  </tr>
+</table> 

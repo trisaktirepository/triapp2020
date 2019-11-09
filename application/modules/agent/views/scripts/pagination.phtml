@@ -1,0 +1,47 @@
+    <?php if ($this->pageCount): ?>
+    
+     
+    <div>
+    <?php if ($this->last>1) { ?>
+    
+    <!-- First page link -->
+    <?php if (isset($this->previous)): ?>
+      <a href="<?php echo $this->url(array('page' => $this->first,'agent_id'=>$this->agent_id,'entry_type'=>$this->entry_type)); ?>">
+        <?php echo $this->translate('first'); ?>
+      </a> |
+    <?php else: ?>
+      <span class="disabled"><?php echo $this->translate('first'); ?></span> |
+    <?php endif; ?>
+     
+    <!-- Previous page link -->
+    <?php if (isset($this->previous)): ?>
+      <a href="<?php echo $this->url(array('page' => $this->previous,'agent_id'=>$this->agent_id,'entry_type'=>$this->entry_type)); ?>">
+        &lt; <?php echo $this->translate('previous'); ?>
+      </a> |
+    <?php else: ?>
+      <span class="disabled">&lt; <?php echo $this->translate('previous'); ?></span> |
+    <?php endif; ?>
+    
+      
+     
+    <!-- Next page link -->
+    <?php if (isset($this->next)): ?>
+      <a href="<?php echo $this->url(array('page' => $this->next,'agent_id'=>$this->agent_id,'entry_type'=>$this->entry_type)); ?>">
+        <?php echo $this->translate('next'); ?> >
+      </a> |
+    <?php else: ?>
+      <span class="disabled"><?php echo $this->translate('next'); ?> &gt;</span> |
+    <?php endif; ?>
+     
+    <!-- Last page link -->
+    <?php if (isset($this->next)): ?>
+      <a href="<?php echo $this->url(array('page' => $this->last,'agent_id'=>$this->agent_id,'entry_type'=>$this->entry_type)); ?>">
+        <?php echo $this->translate('last'); ?>
+      </a>
+    <?php else: ?>
+      <span class="disabled"> <?php echo $this->translate('last'); ?></span>
+    <?php endif; ?>
+    
+     <?php } ?>
+    </div>
+    <?php endif; ?>

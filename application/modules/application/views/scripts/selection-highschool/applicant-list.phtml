@@ -1,0 +1,59 @@
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			
+						
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					<?php echo $this->translate("info")?>
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+
+<div style="width:100%;">
+
+<table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+	<tr>
+		<th><?php echo $this->translate("date_applied");?></th>		
+		<th><?php echo $this->translate("applicantID");?></th>
+		<th><?php echo $this->translate("name");?></th>		
+		<th><?php echo $this->translate("school");?></th>
+		<th><?php echo $this->translate("programme");?></th>
+		<th><?php echo $this->translate("mark");?></th>
+		<th><?php echo $this->translate("status");?></th>
+		
+	</tr>
+	
+	<?php 
+	if(isset($this->paginator)){
+	foreach ($this->paginator as $entry){
+		
+	//get education average mark
+	$educationDB = new App_Model_Application_DbTable_ApplicantEducation();
+	//$education = $educationDB->getEducationDetail($entry["appl_id"]);
+	$everage_mark = $educationDB->getAverageMark($entry["appl_id"]);
+		
+	
+	?>
+	<tr>
+		<td><?php echo date('j M Y',strtotime($entry["submit_date"]));?></td>
+		<td><?php echo $entry["applicantID"]?></td>
+		<td><a href="<?php echo $this->url(array('module'=>'application','controller'=>'selection-highschool','action'=>'document','program_code'=>$this->program_code,'id'=>$entry["transaction_id"]),'default',true);?>"><?php echo $entry["appl_fname"].' '.$entry["appl_mname"].' '.$entry["appl_lname"]?></a></td>
+		<td><?php echo $entry["school"]?></td>
+		<td><?php echo $entry["program_name"]?></td>
+		<td><?php echo $everage_mark;?></td>
+		<td><?php echo $entry["status"]?></td>
+	</tr>
+	<?php }//end paginator 
+	}?>
+		
+</table>
+</div>

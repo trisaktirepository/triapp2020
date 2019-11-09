@@ -1,0 +1,9 @@
+<h1><?php echo $this->title; ?></h1>
+<?php 
+	$this->form->setAction($this->url());
+	echo  $this->form;
+	
+	if(isset($this->button)){
+		echo $this->button;
+	}
+?>

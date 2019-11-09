@@ -1,0 +1,91 @@
+<?php
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/css/layout.css' );
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/css/default/style.css' );
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/css/jquery-ui-1.8.5.custom.css' );
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/js/jquery-1.4.3.min.js' );
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/js/jquery.ui.core.js' );
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/js/jquery.ui.datepicker.j' );
+?>
+
+<form name="f1" method="POST">
+<div style="width:100%; margin:0 auto;">
+<div id="dark_grey">
+
+<h1><?=$this->title?></h1>
+<fieldset>
+	<?php 
+//		$this->form->setAction($this->url());
+//		echo  $this->form;
+	?>
+	
+	
+	<link rel="stylesheet" href="../demos.css">
+	
+	
+	<script>
+	$(function() {
+		$( "#datepicker" ).datepicker();
+	});
+	</script>
+	
+	
+	<!--<input type="text" value="" name="as_dtstart" onFocus="this.blur()" readonly><a href="javascript:void(0)" onClick="if(self.gfPop)gfPop.fStartPop(document.f1.as_dtstart,document.f1.as_dtend);return false;" HIDEFOCUS><img class="PopcalTrigger" align="absmiddle" src="DateRange/calbtn.gif" width="34" height="22" border="0" alt=""></a>-->
+	
+<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+  <tr class="shade">
+    <td bgcolor="#F2F2F2">Programme Name </td>
+    <td bgcolor="#FFFFFF">:</td>
+    <td bgcolor="#FFFFFF">
+    <select name="ID_PROG" id="ID_PROG">
+	<option value="0"> -- Please select -- </option>
+    <?php 
+	$courseDB = new Onapp_Model_DbTable_Course();
+	$this->course = $courseDB->getList("program","masterprogram","program_master_id = masterProgramID","award","program_award_id = award_id","1");
+	
+	foreach ($this->course as $course) {
+					echo "<option value='".$course['program_id']."'>".$course['masterProgram']."</option>";
+				}
+	?>
+	</select>
+	</td>
+  </tr>
+  <tr class="shade">
+    <td bgcolor="#F2F2F2">Date</td>
+    <td bgcolor="#FFFFFF">:</td>
+    <td bgcolor="#FFFFFF"><div class="demo">
+<input id="datepicker" name="datepicker" type="text">
+
+</div></td>
+  </tr>
+  <tr class="shade">
+    <td bgcolor="#F2F2F2">Venue</td>
+    <td bgcolor="#FFFFFF">:</td>
+    <td bgcolor="#FFFFFF">
+    <select name="VENUE" id="VENUE">
+	<option value="0"> -- Please select -- </option>
+    <?php 
+	$branchDB = new Onapp_Model_DbTable_Branch();
+	$this->branch = $branchDB->getData();
+	
+	foreach ($this->branch as $branch) {
+		echo "<option value='".$branch['branchID']."'>".$branch['branch']."</option>";
+	}
+	?>
+	</select>
+    </td>
+  </tr>
+</table>
+
+<table width="100%">
+		<tr>
+			<td align="center">
+			<input type="submit" value="Save" onclick="form.action='<? echo $this->url(array('module'=>'onapp','controller'=>'placementtest','action'=>'add'),'default',true) ?>'"/></td>
+<!--			<td><input type="submit" value="Reset" /></td>-->
+		</tr>
+	</table>
+	
+</fieldset>
+</div>
+</div>
+
+</form>

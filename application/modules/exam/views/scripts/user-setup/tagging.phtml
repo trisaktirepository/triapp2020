@@ -1,0 +1,42 @@
+<script type="text/javascript">
+$(function() {
+	$( "#tabs" ).tabs({
+		ajaxOptions: {
+			error: function( xhr, status, index, anchor ) {
+				$( anchor.hash ).html(
+					"Couldn't load this tab. We'll try to fix this as soon as possible. " +
+					"If this wouldn't be a demo." );
+			},
+			cache: false
+		}
+	});
+});
+</script>
+	
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			
+		</ul>
+	</div>
+</div>
+<br />
+
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<div id="tabs">
+	<ul>
+		<li><a href="<?php echo $this->url(array('module'=>'exam','controller'=>'user-setup','action'=>'tagging-examiner'),'default',true) ?>">User</a></li>
+		<li><a href="<?php echo $this->url(array('module'=>'exam','controller'=>'user-setup','action'=>'tagging-semester'),'default',true) ?>">Semester</a></li>
+	</ul>
+</div>

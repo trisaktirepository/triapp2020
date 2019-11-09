@@ -1,0 +1,172 @@
+<script type="text/javascript">
+$(function() {
+	$( "#tabs" ).tabs();
+});
+
+	function del(){
+		var id = $('input[name=type_id]:checked').val();
+
+		if(!id){
+			alert('Please select any takaful operator first');
+		}else{
+			if(confirm('Are you sure to delete this client type?')){
+				window.location = "<?php echo $this->url(array('module'=>'general-setup','controller'=>'takaful', 'action'=>'delete-type')); ?>/id/"+id;
+			}
+		}
+	}
+	
+	function add(){
+		window.location="<?php echo $this->url(array('module'=>'general-setup','controller'=>'takaful', 'action'=>'add-type'));?>";
+	}
+
+	function edit(){
+		var id = $('input[name=type_id]:checked').val();
+
+		if(!id){
+			alert('Please select any takaful operator first');
+		}else{
+			window.location="<?php echo $this->url(array('module'=>'general-setup','controller'=>'takaful', 'action'=>'edit-type'));?>/id/"+id;
+		}
+	}
+
+
+	/*//To remove flash MSG*/
+	setTimeout(function() {
+		$( "#msg" ).hide( 'blind',null, 1000);
+	}, 5000 );
+
+
+</script>
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+<!--			<li>
+				<a href="#" onclick="javascript:add()">
+					<span class='add'></span>
+					Add
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:edit()">
+					<span class='edit'></span>
+					Edit
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:del()">
+					<span class='delete'></span>
+					Delete
+				</a>
+			</li>
+			<li class="divider"></li>-->
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<?if(isset($this->noticeMessage)){?>
+<div id="msg" class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<div id="tabs">
+	<ul>
+		<li><a href="#tabs-1">Takaful Operator</a></li>
+		<li><a href="#tabs-2">Company</a></li>
+	</ul>
+<div id="tabs-1">
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+<table class="table4" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		<th colspan='2'>TAKAFUL OPERATOR NAME</th>
+		<th>CONTACT PERSON</th>
+		<th>PAYMENT TERM</th>
+		<th>OPTION</th>
+	</tr>
+	
+	<?php 
+	$i=0;
+	$bil=1;
+	
+	foreach ($this->paginator as $entry): 
+	
+	?>
+	<tr>
+	<td><?php echo $bil;?>) </td>
+			<td bgcolor='#f2f2f2'><?php echo $entry['name']; ?></td>
+			<td bgcolor='#f2f2f2'><?php echo strtoupper($entry['contactperson']);?></td>
+			<td bgcolor='#f2f2f2'><?php if(empty($entry['termName']))echo "-"; else echo strtoupper($entry['termName']);?></td>
+			<td bgcolor='#f2f2f2'><a href='<?php echo $this->url(array('module'=>'finance','controller'=>'batch-term', 'action'=>'setterm','id'=>$entry['id'])); ?>'>Click</a> <?php echo $entry['id'];?></td>
+		</tr>
+	<?php 
+	$i++;
+	$bil++;
+	endforeach 
+	?>
+
+</table>
+
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>
+
+</div>
+
+<div id="tabs-2">
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+<table class="table4" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		<th colspan='2'>COMPANY NAME</th>
+		<th>CONTACT PERSON</th>
+		<th>PAYMENT TERM</th>
+		<th>OPTION</th>
+	</tr>
+	
+	<?php 
+	$i=0;
+	$bil=1;
+	
+	foreach ($this->paginatorCompany as $entry2): 
+	
+	?>
+	<tr>
+	<td><?php echo $bil;?>) </td>
+			<td bgcolor='#f2f2f2'><?php echo $entry2['name']; ?></td>
+			<td bgcolor='#f2f2f2'><?php echo strtoupper($entry2['contactperson']);?></td>
+			<td bgcolor='#f2f2f2'><?php if(empty($entry2['termName']))echo "-"; else echo strtoupper($entry2['termName']);?></td>
+			<td bgcolor='#f2f2f2'><a href='<?php echo $this->url(array('module'=>'finance','controller'=>'batch-term', 'action'=>'setterm','id'=>$entry2['id'])); ?>'>Click</a> <?php echo $entry2['id'];?></td>
+		</tr>
+	<?php 
+	$i++;
+	$bil++;
+	endforeach 
+	?>
+
+</table>
+
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>
+
+</div>
+
+
+</div>

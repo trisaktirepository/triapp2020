@@ -1,0 +1,135 @@
+<script>
+function openwin(pageURL,w,h) {
+
+	
+		var left = (screen.width/2)-(w/2);
+		var top = (screen.height/2)-(h/2);
+		var targetWin = window.open (pageURL, 'Examination Slip', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
+	
+		
+} 
+
+
+</script>
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	
+</div>
+<br></br>		
+
+<div style="width: 100%;">
+<fieldset style="width:450px;">
+	
+<form name="searchfrm" action="" method="post">
+	<table width="100%">	
+		<tr>
+			<td>
+				Program 
+			</td>
+			<td width="5px">:</td>
+			<td>			
+				<select name="program_id" onchange="changeCourse(this.options[this.selectedIndex].value)">
+							
+							<?php 
+							foreach($this->program as $p){
+								if($this->program_id==$p[id])
+								  $sel = "selected";
+								else
+								  $sel = "";
+							 	echo "<option value='$p[id]' $sel>$p[program_name]</option>";
+							 } ?>
+							</select>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Course
+			</td>
+			<td width="5px">:</td>
+			<td>
+			
+				<select name="course_id">
+					<option value=""> --Select Course-- </option>	
+				<?php 
+				foreach($this->courses as $course){
+					if($this->course_id==$course[id])
+					  $sel = "selected";
+					else
+					  $sel = "";
+				 	echo "<option value='$course[id]' $sel>$course[code] - $course[name]</option>";
+				 } ?>
+				</select>
+			</td>
+		</tr>
+		<tr>
+    <td>Exam Center</td>
+    <td>:</td>
+    <td>
+    <select name="idVenue" id="idVenue">
+		<option value=""> --Select Venue-- </option>	
+		<? foreach ($this->venue as $v){
+			if($this->idVenue==$v["id"]){
+				$sel = "selected";
+			}else{
+				$sel = "";
+			}
+		?>	
+		<option value="<?php echo $v["id"]?>" <?php echo $sel;?>><?php echo $v["name"]?></option>		
+		<? } ?>
+	</select>
+	
+	</td>
+  </tr>		
+		<tr>
+			<td>Student Name / ICNO</td>
+			<td width="5px">:</td>
+			<td><input type="text" name="keyword" value="" size=40></input></td>
+		</tr>
+		<tr>
+			<td colspan="2">&nbsp;</td>
+			<td><input type="submit" value="submit" /></td>
+		</tr>
+	</table>
+</form>
+</fieldset>
+</div>
+
+<br>	
+<?php 
+
+	
+?>
+
+<? if(count($this->student_list)>0){ ?>
+<?php 
+	echo $this->paginationControl($this->student_list,'Sliding','paginationTop.phtml');
+?>
+<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+	<tr valign="top">
+		<th>No.</th>	   
+	    <th>Student Name</th>
+	    <th>IC No</th>	    
+	    <th>Venue</th>	    
+	</tr>
+	
+	<?php 		
+		
+		$i=1; 
+		foreach($this->student_list as $list) {?>
+		<tr  <?php echo $i%2==0?"class='shade'":""; ?>>
+			<td align="center"><?php echo $i;?>.</td>		    
+		    <td><a href="#" onclick="openwin('<?php echo $this->url(array('module'=>'application','controller'=>'online-application','action'=>'letter','type'=>'exam','id' => $list['id'],'idApp'=>$list['idApplication']));?>',800,600);"><?php echo $list["ARD_NAME"]?></a></td>
+		    <td><?php echo $list["ARD_IC"]?></td>
+		    <td><?php echo $list["venue"]?></td>
+		   
+		</tr>
+	<?php $i++; }?>
+</table>
+
+<?php 
+	echo $this->paginationControl($this->student_list,'Sliding','paginationBottom.phtml');
+?>
+<? } //end isset student?>
+
+
+

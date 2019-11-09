@@ -1,0 +1,67 @@
+
+<div class="breadcrum">
+	<ul class="tri-steps">
+		<!-- 
+		<li class="empty" ><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'logout'),'default',true);?>"><?php echo $this->translate("apply"); ?></a></div></li>
+		<li class="prevDone" ><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'logout'),'default',true);?>"><?php echo $this->translate("login"); ?></a></div></li>
+		 -->
+		<li class="current"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'verification'),'default',true);?>"><?php echo $this->translate("verification"); ?></a></div></li>
+		<li class="last"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'view'),'default',true);?>"><?php echo $this->translate("application_info"); ?></a></div></li>
+		
+			</ul>
+	<div class="clear"></div>
+</div>
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		
+	</div>
+</div>
+
+
+
+<?php if($this->applicant){?>
+
+<table>
+<tr>
+<td>
+
+<p>Untuk menyimpan Kartu Peserta Ujian, sila klik <a target="_blank" href="<?php echo $this->download_file ?>">Download</a>.</p>
+
+<p>Pada saat hadir Ujian Saringan Masuk, harap membawa:<p>
+<p>
+<ul>
+	<li>Surat Keterangan Bebas Buta Warna dari dokter Spesialis Negeri kecuali untuk Fakultas Hukum, 
+		Fakultas Ekonomi (Ilmu Ekonomi, Manajemen, Akuntasi) dan Teknik Sipil.</li>
+	<li>Kartu Identitas (KTP SIM Kartu Pelajar/Passport) asli.</li>
+	<li>Pensil 2B dan penghapus</li>
+	<li>Berpakaian rapi dan sopan dan wajib memakai sepatu.</li>
+</ul>
+</p>
+</td>
+</tr>
+
+</table>
+<div align="center">
+<h3><?php echo $this->translate("placement_test_pass");?></h3>
+
+<iframe src="http://docs.google.com/gview?url=<?php echo $this->download_file ?>&embedded=true" style="width:80%; height:1000px;" frameborder="0"></iframe>
+	</div>
+	
+	<?php } else {//end result
+		 echo $this->form;
+	}
+	?>

@@ -1,0 +1,125 @@
+
+<script type="text/javascript">
+	function del(title, id){
+		var id = $('input[name=branch_id]:checked').val();
+
+		if(!id){
+			alert('Please select any branch first');
+		}else{
+			if(confirm('Are you sure to delete this branch ?')){
+				window.location = "<?php echo $this->url(array('module'=>'general-setup','controller'=>'branch', 'action'=>'delete')); ?>/id/"+id;
+			}
+		}
+	}
+	
+	function add(){
+		window.location="<?php echo $this->url(array('module'=>'general-setup','controller'=>'branch', 'action'=>'add'));?>";
+	}
+
+	function edit(id){
+		var id = $('input[name=branch_id]:checked').val();
+
+		if(!id){
+			alert('Please select any branch first');
+		}else{
+			window.location="<?php echo $this->url(array('module'=>'general-setup','controller'=>'branch', 'action'=>'edit'));?>/id/"+id;
+		}
+	}
+
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="javascript:add()">
+					<span class='add'></span>
+					Add
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:edit()">
+					<span class='edit'></span>
+					Edit
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:del()">
+					<span class='delete'></span>
+					Delete
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+	<tr>
+		<th width="25px">&nbsp;</th>
+		<th>Branch</th>
+		<th>Address</th>
+	</tr>
+	
+	<?php 
+	$i=0;
+	foreach ($this->paginator as $entry): 
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<td>
+			<input type="radio" name="branch_id" value="<?php echo $entry['id']; ?>">
+		</td>
+		<td>
+			<?php echo $entry['name']; ?> (<?php echo $entry['code']; ?>)
+		</td>
+		<td>
+			<p style="margin: 0 5px;">
+			<?php echo $entry['address1']!=null?$entry['address1']."<br />":""; ?>
+			<?php echo $entry['address2']!=null?$entry['address2']."<br />":""; ?>
+			<?php echo $entry['postcode']!=null?$entry['postcode']."<br />":""; ?>
+			<?php echo $entry['city']!=null?$entry['city']."<br />":""; ?>
+			<?php echo $entry['state_name']!=null?$entry['state_name']."<br />":""; ?>
+			<?php echo $entry['country_name']!=null?$entry['country_name']."<br />":""; ?>
+			</p>
+		</td>
+	</tr>
+	<?php 
+	$i++;
+	endforeach 
+	?>
+
+</table>
+
+<?php 
+
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>
+<div id="addCountry2"></div>
+<?php 
+	echo $this->dialogContainer("addDialog", '', array(
+		'title'=> 'Add Branch',
+		'autoOpen'=>false,
+		'modal'=>false,
+		'width'=>'480px', 
+		'height'=>'150'
+		));
+		
+	echo $this->dialogContainer("editDialog", '', array(
+		'title'=> 'Edit Branch',
+		'autoOpen'=>false,
+		'modal'=>false,
+		'width'=>'480px', 
+		'height'=>'200'
+		));
+?>

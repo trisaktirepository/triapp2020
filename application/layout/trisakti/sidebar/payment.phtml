@@ -1,0 +1,14 @@
+<?php
+/*
+ *  @author Suliana
+ */
+?>
+<div id="sidebar">
+	<ul id="sliding-navigation">  
+		<li class="sliding-element"><h3>Payment Plan Setup</h3></li>  
+	    <li class="sliding-element"><a href="<?php echo $this->url(array('module'=>'finance','controller'=>'payment','action'=>'plan'),'default',true) ?>"><?php echo $this->translate("Plan Category"); ?></a></li>
+	    <li class="sliding-element"><a href="<?php echo $this->url(array('module'=>'finance','controller'=>'payment','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Payment (New Student)"); ?></a></li>
+	    <li class="sliding-element"><a href="<?php echo $this->url(array('module'=>'finance','controller'=>'payment','action'=>'existing'),'default',true) ?>"><?php echo $this->translate("Payment (Existing Student)"); ?></a></li>
+	</ul>
+</div>
+				    

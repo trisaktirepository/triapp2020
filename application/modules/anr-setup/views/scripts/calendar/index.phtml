@@ -1,0 +1,127 @@
+<script src="<?php echo $this->baseUrl(); ?>/js/jquery/plugin/tooltip/tooltip.js" type="text/javascript"></script>
+<link href="<?php echo $this->baseUrl(); ?>/js/jquery/plugin/tooltip/tooltip.css" rel="stylesheet" type="text/css" />
+
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<script type="text/javascript">
+	
+	function add(){
+		window.location="<?php echo $this->url(array('module'=>'anr-setup','controller'=>'calendar', 'action'=>'add'));?>";
+	}
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="javascript:add()">
+					<span class='add'></span>
+					Add
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<div width="500px">
+	<fieldset style="width:500px">
+		<legend>Activity Legend</legend>
+		<table class="table2">
+			<?php
+			$i=0; 
+			
+			//set color for each activity based on activity ID
+			$legend = array();
+			foreach ($this->activitylist as $activity){
+				$legend[$activity['id']] = $this->color[$i];
+			?>
+				
+			<tr>
+				<td style="background-color: <?php echo $this->color[$i]; ?>;" width="30px">&nbsp;</td>
+				<td><?php echo $activity['name']; ?></td>
+			</tr>
+			<?php 
+			$i++;
+			}?>
+		</table>
+	</fieldset>
+</div>
+<br />
+
+<table class="table" width="100%" cellpadding="2" cellspacing="2" border="0">
+	<tr>
+		<th width="200px">Semester</th>
+		<th>Jan</th>
+		<th>Feb</th>
+		<th>Mac</th>
+		<th>Apr</th>
+		<th>Mei</th>
+		<th>Jun</th>
+		<th>Jul</th>
+		<th>Aug</th>
+		<th>Sep</th>
+		<th>Oct</th>
+		<th>Nov</th>
+		<th>Dec</th>
+	</tr>
+	<?php foreach ($this->eventList as $event){?>
+	<tr>
+		<td align="center"><b><?php echo $event['name']; ?></b> <br />(<?php echo date("d/m/Y", strtotime($event['start_date'])); ?> - <?php echo date("d/m/Y", strtotime($event['end_date'])); ?>)</td>
+		<?php
+			if(count(array_filter($event['events'])) != 0){
+				
+				$month_loop = 0;
+				while ($month_loop<12) {
+					
+					echo "<td align='center'>";
+					foreach ($event['events'] as $evnt){
+						$mnt = date("m", strtotime($evnt['start_date']));
+						$mnt_end = date("m", strtotime($evnt['end_date']));
+						
+						//calculate span
+						$span = 1;
+						for($i=$mnt_end; $i>$mnt; $i--){
+							$span=$span+1;	
+						}
+						
+						if($month_loop+1==$mnt){
+							$tooltip = "<div>".$evnt['activity_name']."<br />".date("d/m/Y", strtotime($evnt['start_date']))." - ".date("d/m/Y", strtotime($evnt['end_date']))."</div>";
+							echo "<a href='".$this->url(array('module'=>'anr-setup','controller'=>'calendar', 'action'=>'view', 'id'=>$evnt['id']))."' class='tip_trigger'><span style='background-color:".$legend[$evnt['activity_id']]."'>&nbsp;&nbsp;</span> <small>".date("d/m", strtotime($evnt['start_date']))." - ".date("d/m", strtotime($evnt['end_date']))."</small><span class='tip'>".$tooltip."</span></a> <br />";
+						}else{
+							echo "&nbsp;";
+						}
+					}
+					$month_loop++;
+					
+					echo "</td>";
+				}
+			}else{
+			//print blank
+			$i=0;
+				while($i<12){
+					echo "<td>&nbsp;</td>";
+					$i++;
+				}	
+			}
+		?>
+	</tr>
+	<?php }?>
+</table>

@@ -1,0 +1,97 @@
+<script type="text/javascript">
+	function del(title, id){
+		if(confirm('Are you sure to delete '+title+'?')){
+			window.location = "<?php echo $this->url(array('module'=>'finance','controller'=>'payment', 'action'=>'delete')); ?>/id/"+id;
+		}
+	}
+	
+	function add(){
+		window.location="<?php echo $this->url(array('module'=>'finance','controller'=>'payment', 'action'=>'add'));?>";
+	}
+
+	function view(id){
+		window.location="<?php echo $this->url(array('module'=>'finance','controller'=>'payment', 'action'=>'view-new'));?>/id/"+id;
+	}
+
+</script>
+<?php 
+	echo "<h1>". $this->title ."</h1>";
+	
+?>
+
+
+<form name="f1" action="" method="post">
+
+<!--<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+		<tr class="shade">
+			<td>Promotion Type</td>
+			<td width="5px">:</td>
+			<td>
+			<select name="PLAN_ID" id="PLAN_ID">
+			<option value="0"> -- Please select -- </option>
+			<?php 
+			$promotionDB = new Finance_Model_DbTable_Promotion();
+			$this->promotion = $promotionDB->getProgram();
+			
+				foreach ($this->promotion as $promo) {
+					echo "<option value='".$promo['id']."'>".$promo['group_code']."</option>";
+				}
+			?>
+		</select>
+			</td>
+		</tr>
+		<tr class="shade">
+			<td colspan="2">&nbsp;</td>
+			<td><input type="submit" value="Search" /></td>
+		</tr>
+	</table>-->
+<br>
+	
+<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+	<tr class="shade">
+		<td>Promotion Type</td>
+		<td width="5px">:</td>
+		<td>
+		<select name="PLAN_ID" id="PLAN_ID">
+		<option value="0"> -- Please select -- </option>
+		<?php 
+		$promotionDB = new Finance_Model_DbTable_Promotion();
+		$this->promotion = $promotionDB->getProgram();
+		
+			foreach ($this->promotion as $promo) {
+				echo "<option value='".$promo['id']."'>".$promo['group_code']."</option>";
+			}
+		?>
+	</select>
+		</td>
+	</tr>
+	<tr class="shade">
+		<td>Charging </td>
+		<td width="5px">:</td>
+		<td>
+		<select name="PLAN_ID" id="PLAN_ID">
+		<option value="0"> -- Please select -- </option>
+		<?php 
+		$setupDB = new Finance_Model_DbTable_Setup();
+		$this->setup = $setupDB->getInfo("fr_charging_main","id");
+		
+			foreach ($this->setup as $rs) {
+				echo "<option value='".$rs['id']."'>".strtoupper($rs['charging_type'])."</option>";
+			}
+		?>
+	</select>
+		</td>
+	</tr>
+	<tr class="shade">
+		<td colspan="2">&nbsp;</td>
+		<td><input type="submit" value="Search" /></td>
+	</tr>
+</table>
+	
+	
+	
+
+	
+<?php 
+	//echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>

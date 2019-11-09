@@ -1,0 +1,77 @@
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		
+			<li>
+				<a href="#" onclick="window.print();">
+					<span class='print'></span>
+					Print
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<br>
+<fieldset>
+
+<legend><?php echo $this->translate("Group Info")?></legend>
+
+
+<table class="" width="50%" cellpadding="5" cellspacing="5" border="0">
+	<tr>
+		<td width="100px"><?php echo $this->translate("Group Name")?></td>
+		<td width="5px">:</td>
+		<td><?php echo $this->group["GroupCode"]?></td>
+	</tr>
+		<tr>
+		<td><?php echo $this->translate("Lecturer Name")?></td>
+		<td width="5px">:</td>
+		<td><?php if ($this->hidelecturer=="1" && $this->open=="1") echo "-"; else echo ($this->group["IdLecturer"]!=0 ?  $this->group["FullName"]:$this->translate("-"));?></td>
+	</tr>
+	<tr>
+		<td width="100px"><?php echo $this->translate("Subject Name")?></td>
+		<td width="5px">:</td>
+		<td><?php echo $this->group["subject_name"];  ?></td>
+	</tr>
+	<tr>
+		<td><?php echo $this->translate("Subject Code")?></td>
+		<td width="5px">:</td>
+		<td><?php echo $this->group["subject_code"];?></td>
+	</tr>
+</table>
+</fieldset>
+
+<br>
+
+<h4><?php echo $this->translate("Schedule")?></h4>
+<table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+	<tr>		
+		<th><?php echo $this->translate("Day")?></th>
+		<th><?php echo $this->translate("Start Time")?></th>
+		<th><?php echo $this->translate("End Time")?></th>
+		<th><?php echo $this->translate("Venue")?></th>				
+	</tr>
+	<?php 
+	//strftime($format, strtotime($time))
+	setlocale(LC_TIME, "id_ID");
+	$i=1;
+	if(count($this->schedule)>0){
+	foreach($this->schedule as $sch){
+	?>
+	<tr>
+		
+		<td><?php 
+			$timestamp = strtotime($sch["sc_day"]);			
+			echo strftime('%A', $timestamp);
+			?>
+			<?php echo isset($sch["sc_date"]) && $sch["sc_date"]!=null?" - ".date('d/m/Y',strtotime($sch["sc_date"])):"" ;?>
+		</td>
+		<td><?php echo $sch["sc_start_time"]?></td>
+		<td><?php echo $sch["sc_end_time"]?></td>
+		<td><?php echo $sch["sc_venue"]?></td>
+		
+	</tr>
+	<?php }} ?>
+</table>
+

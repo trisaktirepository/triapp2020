@@ -1,0 +1,57 @@
+<script>
+function back(){
+	window.location="<?php echo $this->url(array('module'=>'application','controller'=>'placement-test-type','action'=>'index'), 'default', true);?>";
+}
+function editData(){
+	window.location="<?php echo $this->url(array('module'=>'application','controller'=>'placement-test-type', 'action'=>'edit', 'id'=>$this->id),'default',true);?>";
+}
+function deleteData(){
+	if( confirm("<?php echo $this->translate("Are you sure to delete?"); ?>") ){
+		window.location = "<?php echo $this->url(array('module'=>'application','controller'=>'placement-test-type', 'action'=>'delete', 'id'=>$this->id),'default',true); ?>";
+	}
+}
+</script>
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onClick="editData();" >
+					<span class='edit'></span>
+					Edit
+				</a>
+			</li>
+			<li>
+				<a href="#" onClick="deleteData();" >
+					<span class='delete'></span>
+					Delete
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>							
+					<a href="#" onClick="back()">
+					<span class='back'></span>Back</a>				
+			</li>
+		</ul>
+	</div>
+</div>
+<br>
+
+<div width="500px">
+	
+	<table class="table2" width="100%" cellpadding="3" cellspacing="1">
+		<tr>
+			<th width="150px"><? echo $this->translate("Type Name"); ?></th>
+			<td><?php echo $this->placementTestType['act_name']; ?></td>
+		</tr>
+	</table>	
+</div>
+
+
+
+
+
+
+

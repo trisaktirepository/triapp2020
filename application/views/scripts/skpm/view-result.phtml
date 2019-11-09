@@ -1,0 +1,296 @@
+<style type="text/css">
+.zend_form dt {
+    width: 177px;
+}
+.zend_form dd {
+    padding: 2px 187px;
+}
+</style>
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>	
+		  
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br><br>
+<table class="table" id="data-view" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		<th width="5%"><?php echo $this->translate("No");?></th>
+		<th width="35%"><?php echo $this->translate("Acitivity in Bahasa");?></th>
+		<th width="10%"><?php echo $this->translate("Acitivity");?></th> 		
+		<th width="10%"><?php echo $this->translate("Acitivity date");?></th>
+		<th width="10%"><?php echo $this->translate("Level");?></th>
+		<th width="10%"><?php echo $this->translate("Field");?></th>
+		<th width="10%"><?php echo $this->translate("Role");?></th>
+		<th width="10%"><?php echo $this->translate("Achievment");?></th>
+		<th width="10%"><?php echo $this->translate("Bukti Fisik");?></th>
+		<th width="10%"><?php echo $this->translate("Nilai SKP");?></th>
+		<th width="10%"><?php echo $this->translate("Status");?></th>
+	
+	</tr>
+	<tr><td colspan="11" bgcolor="grey"><font color="white"><?php echo "KEGIATAN UTAMA"?></font></td></tr>
+	<?php 
+	$scoreminat=0;
+	$scoreacad=0;$scoreorg=0;$scoreother=0;$scorepkm=0;$scoreutama=0;
+	if (count($this->utama)>0) {
+			
+			$count=1;
+			foreach ($this->utama as $value) {?>
+				<tr><td width="5%"><?php echo $count;?></td>
+					<td width="35%"><?php echo $value['title_bahasa'];?></td>
+					<td width="10%"><?php echo $value['title'];;?></td> 			
+					<td width="10%"><?php echo $value['waktu'];;?></td>
+					<td width="10%"><?php echo $value['level'];;?></td>
+					<td width="10%"><?php echo $value['field'];;?></td>
+					<td width="10%"><?php echo $value['role'];;?></td>
+					<td width="10%"><?php echo $value['achievmentname'];;?></td>
+					<td align="center"><?php 
+						$pathupload=$value['pathupload'];
+						if($pathupload!=''){
+							$dt = explode("triapp",$pathupload);
+							//echo var_dump($dt);exit;
+							$path = $dt[1];
+							$path ="<a target='_blank' href=http://".APP_HOSTNAME.$path.">" ;
+						
+						?> 
+						<?php  echo $path;?><img src='<?php echo $this->baseUrl();?>/images/document.png' border=0 width='20' height='20' title="Download" ></a> <?php 
+						 } ?>
+					</td>
+					<td width="10%"><?php echo $value['score'];?></td>
+					<td width="10%"><?php
+					$status="not yet";
+					if ($value['Approved']=='1') $status="approved";
+						echo $this->translate($status);?>
+					</td>
+				</tr>
+	<?php 	$count++;
+			$scoreutama=$scoreutama+$value['score'];
+				}
+			?>
+			<tr> 
+				<td width="10%" colspan='9' align="right"><?php echo 'Jumlah SKP Utama'?>
+				<td width="10%"><?php echo $scoreutama;?></td>
+				</tr>
+		<?php 
+		}?>
+	<tr><td colspan="11" bgcolor="grey"><font color="white"><?php echo "KEGIATAN PENUNJANG"?></font></td></tr> 
+	<tr><td colspan="11" bgcolor="grey"><font color="white"><?php echo "Kegiatan Bidang Organisasi"?></font></td></tr> 
+	<?php if (count($this->org_list)>0) {
+			$count=1;
+			foreach ($this->org_list as $value) {?>
+				<tr><td width="5%"><?php echo $count;?></td>
+					<td width="35%"><?php echo $value['title_bahasa'];?></td>
+					<td width="10%"><?php echo $value['title'];;?></td> 			
+					<td width="10%"><?php echo $value['waktu'];;?></td>
+					<td width="10%"><?php echo $value['level'];;?></td>
+					<td width="10%"><?php echo $value['field'];;?></td>
+					<td width="10%"><?php echo $value['role'];;?></td>
+					<td width="10%"><?php echo $value['achievmentname'];;?></td>
+					<td align="center"><?php 
+						$pathupload=$value['pathupload'];
+						if($pathupload!=''){
+							$dt = explode("triapp",$pathupload);
+							//echo var_dump($dt);exit;
+							$path = $dt[1];
+							$path ="<a target='_blank' href=http://".APP_HOSTNAME.$path.">" ;
+						
+						?> 
+						<?php  echo $path;?><img src='<?php echo $this->baseUrl();?>/images/document.png' border=0 width='20' height='20' title="Download" ></a> <?php 
+						 } ?>
+					</td>
+					<td width="10%"><?php echo $value['score'];;?></td>
+				<td width="10%"><?php
+					$status="not yet";
+					if ($value['Approved']=='1') $status="approved";
+						echo $this->translate($status);?>
+					</td>
+				</tr>
+	<?php 	$count++;
+			$scoreorg=$scoreorg+$value['score'];
+				}
+			?>
+			<tr> 
+				<td width="10%" colspan='9' align="right"><?php echo 'Jumlah SKP'?>
+				<td width="10%"><?php echo $scoreorg;?></td>
+				</tr>
+		<?php 
+		}?>
+	<tr><td colspan="11" bgcolor="grey"><font color="white"><?php echo "Kegiatan Bidang Penalaran dan Ilmiah"?></font></td></tr> 
+	<?php if (count($this->academic_list)>0) {
+			$count=1;
+			foreach ($this->academic_list as $value) {?>
+				<tr><td width="5%"><?php echo $count;?></td>
+					<td width="35%"><?php echo $value['title_bahasa'];?></td>
+					<td width="10%"><?php echo $value['title'];;?></td> 			
+					<td width="10%"><?php echo $value['waktu'];;?></td>
+					<td width="10%"><?php echo $value['level'];;?></td>
+					<td width="10%"><?php echo $value['field'];;?></td>
+					<td width="10%"><?php echo $value['role'];;?></td>
+					<td width="10%"><?php echo $value['achievmentname'];;?></td>
+					<td align="center"><?php 
+						$pathupload=$value['pathupload'];
+						if($pathupload!=''){
+							$dt = explode("triapp",$pathupload);
+							//echo var_dump($dt);exit;
+							$path = $dt[1];
+							$path ="<a target='_blank' href=http://".APP_HOSTNAME.$path.">" ;
+						
+						?> 
+						<?php  echo $path;?><img src='<?php echo $this->baseUrl();?>/images/document.png' border=0 width='20' height='20' title="Download" ></a> <?php 
+						 } ?></td>
+					<td width="10%"><?php echo $value['score'];?></td>
+				<td width="10%"><?php
+					$status="not yet";
+					if ($value['Approved']=='1') $status="approved";
+						echo $this->translate($status);?>
+					</td>
+				</tr>
+	<?php 	$count++;
+			$scoreacad=$scoreacad+$value['score'];
+				}
+			?>
+			<tr>
+				<td width="10%" colspan='9' align="right"><?php echo 'Jumlah SKP'?>
+				<td width="10%"><?php echo $scoreacad;?></td>
+				
+				</tr>
+		<?php 
+		}?>
+	<tr><td colspan="11" bgcolor="grey"><font color="white"><?php echo "Kegiatan Bidang Minat,Bakat, dan Kemampuan"?></font></td></tr> 
+	<?php if (count($this->minat_list)>0) {
+			$count=1;
+			foreach ($this->minat_list as $value) {?>
+				<tr><td width="5%"><?php echo $count;?></td>
+					<td width="35%"><?php echo $value['title_bahasa'];?></td>
+					<td width="10%"><?php echo $value['title'];;?></td> 			
+					<td width="10%"><?php echo $value['waktu'];;?></td>
+					<td width="10%"><?php echo $value['level'];;?></td>
+					<td width="10%"><?php echo $value['field'];;?></td>
+					<td width="10%"><?php echo $value['role'];;?></td>
+					<td width="10%"><?php echo $value['achievmentname'];;?></td>
+					<td align="center">	<?php 
+						$pathupload=$value['pathupload'];
+						if($pathupload!=''){
+							$dt = explode("triapp",$pathupload);
+							//echo var_dump($dt);exit;
+							$path = $dt[1];
+							$path ="<a target='_blank' href=http://".APP_HOSTNAME.$path.">" ;
+						
+						?> 
+						<td align="center"><?php  echo $path;?><img src='<?php echo $this->baseUrl();?>/images/document.png' border=0 width='20' height='20' title="Download" ></a> <?php 
+						 } ?></td>
+					<td width="10%"><?php echo $value['score'];;?></td>
+				<td width="10%"><?php
+					$status="not yet";
+					if ($value['Approved']=='1') $status="approved";
+						echo $this->translate($status);?>
+					</td>
+				</tr>
+	<?php 	$count++;
+			$scoreminat=$scoreminat+$value['score'];
+				}
+			?>
+			<tr> 
+				<td width="10%" colspan='9' align="right"><?php echo 'Jumlah SKP'?>
+				<td width="10%"><?php echo $scoreminat;?></td>
+				</tr>
+		<?php 
+		}?>
+	<tr><td colspan="11" bgcolor="grey"><font color="white"><?php echo "Kegiatan Bidang Pengabdian pada Masyarakat dan Kegiatan Sosial"?></font></td></tr> 
+	<?php if (count($this->pkm_list)>0) {
+			$count=1;
+			foreach ($this->pkm_list as $value) {?>
+				<tr><td width="5%"><?php echo $count;?></td>
+					<td width="35%"><?php echo $value['title_bahasa'];?></td>
+					<td width="10%"><?php echo $value['title'];;?></td> 			
+					<td width="10%"><?php echo $value['waktu'];;?></td>
+					<td width="10%"><?php echo $value['level'];;?></td>
+					<td width="10%"><?php echo $value['field'];;?></td>
+					<td width="10%"><?php echo $value['role'];;?></td>
+					<td width="10%"><?php echo $value['achievmentname'];;?></td>
+					<td align="center">	<?php 
+						$pathupload=$value['pathupload'];
+						if($pathupload!=''){
+							$dt = explode("triapp",$pathupload);
+							//echo var_dump($dt);exit;
+							$path = $dt[1];
+							$path ="<a target='_blank' href=http://".APP_HOSTNAME.$path.">" ;
+						
+						?> 
+						<?php  echo $path;?><img src='<?php echo $this->baseUrl();?>/images/document.png' border=0 width='20' height='20' title="Download" ></a> <?php 
+						 } ?></td>
+					<td width="10%"><?php echo $value['score'];;?></td>
+				<td width="10%"><?php
+					$status="not yet";
+					if ($value['Approved']=='1') $status="approved";
+						echo $this->translate($status);?>
+					</td>
+				</tr>
+	<?php 	$count++;
+			$scorepkm=$scorepkm+$value['score'];
+				}
+			?>
+			<tr> 
+				<td width="10%" colspan='9' align="right"><?php echo 'Jumlah SKP Utama'?>
+				<td width="10%"><?php echo $scorepkm;?></td>
+				</tr>
+		<?php 
+		}?>
+	<tr><td colspan="11" bgcolor="grey"><font color="white"><?php echo "Kegiatan lain"?></font></td></tr> 
+	<?php if (count($this->other_list)>0) {
+			$count=1;
+			foreach ($this->other_list as $value) {?>
+				<tr><td width="5%"><?php echo $count;?></td>
+					<td width="35%"><?php echo $value['title_bahasa'];?></td>
+					<td width="10%"><?php echo $value['title'];;?></td> 			
+					<td width="10%"><?php echo $value['waktu'];;?></td>
+					<td width="10%"><?php echo $value['level'];;?></td>
+					<td width="10%"><?php echo $value['field'];;?></td>
+					<td width="10%"><?php echo $value['role'];;?></td>
+					<td width="10%"><?php echo $value['achievmentname'];;?></td>
+					<td align="center">	<?php 
+						$pathupload=$value['pathupload'];
+						if($pathupload!=''){
+							$dt = explode("triapp",$pathupload);
+							//echo var_dump($dt);exit;
+							$path = $dt[1];
+							$path ="<a target='_blank' href=http://".APP_HOSTNAME.$path.">" ;
+						
+						?> 
+						<?php  echo $path;?><img src='<?php echo $this->baseUrl();?>/images/document.png' border=0 width='20' height='20' title="Download" ></a> <?php 
+						 } ?></td>
+					<td width="10%"><?php echo $value['score'];;?></td>
+				<td width="10%"><?php
+					$status="not yet";
+					if ($value['Approved']=='1') $status="approved";
+						echo $this->translate($status);?>
+					</td>
+				</tr>
+	<?php 	$count++;
+			$scoreother=$scoreother+$value['score'];
+				}
+			?>
+			<tr> 
+				<td width="10%" colspan='9' align="right"><?php echo 'Jumlah SKP'?>
+				<td width="10%"><?php echo $scoreother;?></td>
+				</tr>
+		<?php 
+		}?>
+		<tr>
+				<td width="10%" colspan='9' align="right"><?php echo 'Jumlah Total SKP'?>
+				<td width="10%"><?php echo $scoreutama+$scoreacad+$scoreminat+$scoreorg+$scorepkm+$scoreother;?></td>
+				</tr>
+	
+	
+	
+</table>
+  
+ 

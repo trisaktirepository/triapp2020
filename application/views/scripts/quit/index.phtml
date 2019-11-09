@@ -1,0 +1,157 @@
+<script>
+function quit(){
+	var id = $('input[name=trans_id]:checked').val();
+
+	if(!id){
+		alert('Please select programme first');
+	}else{		
+		window.location = "<?php echo $this->url(array('module'=>'default','controller'=>'quit', 'action'=>'apply-quit'),'default',true); ?>/id/"+id;
+		
+	}
+}
+
+function toggle(){
+	
+	$('#prosedur').toggle();
+
+}
+
+</script>
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+		   <?php if( sizeof($this->paginator) >0 ){?>
+			<li>
+				<a href="#" onclick="javascript:quit()">
+					<span class='process'></span>
+					Apply Quit
+				</a>
+			</li>
+			<?php } ?>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<?if(isset($this->noticeMessage)){?>
+	<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+	<?}?>
+	<?if(isset($this->noticeSuccess)){?>
+	<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+	<?}?>
+	<?if(isset($this->noticeError)){?>
+	<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+	<?}?>
+
+<div style="width:100%;">
+
+<h3><img src="http://triapp.oum.edu.my/images/icon/business_user_info.png" onclick="toggle();" title="Click Here To Show & Hide Prosedur Pengunduran Diri"> &nbsp; <?php echo $this->translate("PROSEDUR PENGUNDURAN DIRI")?></h3>
+
+<?php echo $this->translate("Silahkan ketik icon di atas untuk menutup Prosedur Pengunduran Diri"); ?>
+
+<div id='prosedur' style='display:""'>
+<br><br>
+<?php   $url = "http://".APP_HOSTNAME."/resources/PENGUNDURAN_DIRI.pdf"; ?>
+<embed src="<?php echo $url; ?>" width="100%" height="375">
+
+</div>
+<br><br>
+
+	<h2><?php echo $this->translate("Select Programme to QUIT")?></h2>
+	<table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
+		<tr>
+		    <th>&nbsp;</th>
+			<th><?php echo $this->translate("Intake"); ?></th>
+			<th><?php echo $this->translate("Periode"); ?></th>
+			<th><?php echo $this->translate("Jenis Pendaftaran"); ?></th>
+			<th><?php echo $this->translate("Programme Offered"); ?></th>	
+			<th width="100px"><?php echo $this->translate("Tanggal Permohonan Quit"); ?></th>	
+			<th><?php echo $this->translate("Quit Status"); ?></th>		
+		</tr>
+		
+		<?php 
+		if( sizeof($this->paginator) >0 ){
+		$i=0;
+		foreach ($this->paginator as $entry){
+				
+			//get quit info
+			$quitDb = new App_Model_Application_DbTable_ApplicantQuit();
+			$quit = $quitDb->getInfo($entry['at_trans_id']);				
+				
+			if($entry["at_quit_status"]!=0) {				
+				$disabled="disabled";	
+			}else{
+				$disabled='';
+			}
+			
+			/*//get payment status
+	    	$financeDb =  new App_Model_Finance_DbTable_PaymentMain();
+	    	$payment = $financeDb->getApplicantPaymentTotalAmount($entry["at_pes_id"]); //
+	    	 */   	
+	    	//getintake
+	    	$intakeDB = new App_Model_Record_DbTable_Intake();
+	    	$intake = $intakeDB->getIntake($entry['at_intake']);
+	    	
+	    	//get period
+	    	$periodDB = new App_Model_Record_DbTable_AcademicPeriod();
+	    	$period = $periodDB->getData($entry['at_period']);
+		?>
+		<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		    <td><input type="radio" name="trans_id" id="trans_id" value="<?php echo $entry['at_trans_id']; ?>" <?php echo $disabled;?>></td>
+			<td align="center"><?php echo $intake['IntakeDefaultLanguage']; ?></td>
+			<td align="center"><?php echo $period['ap_code']; ?></td>
+			<td>
+			<?php 			
+				if( $entry['at_appl_type']==1 ){
+					echo $this->translate("USM");}
+				else{
+					echo $this->translate("PSSB (Raport)");
+				}?>
+			</td>
+			<td ><?php echo '('.$this->txnProgram[$i]['program_code'].')<br> '.$this->txnProgram[$i]['program_name_indonesia']; ?></td>		
+			
+		
+	
+		<td align="center"><?php if($quit["aq_createddt"]) echo date("d-m-Y",strtotime($quit["aq_createddt"]));?></td>
+		<td align="center">	
+				
+				
+				
+				
+		       <?php if($entry['at_quit_status']==1){ 		       	        
+						echo $this->translate("Applied");					
+						
+		            }elseif($entry['at_quit_status']==2){
+		            	
+		            	$url = $this->url(array("module"=>'default','controller'=>'quit','action'=>'download','id'=>$entry['at_trans_id']),'default',true);
+				  		echo $this->translate("Quit Approved").'<br>'.date("d-m-Y",strtotime($quit["aq_approvaldt"])).'<br>';
+				  		echo "<a href='".$url."' target='_blank'>".$this->translate("Download")."</a>";
+				  		
+		            }elseif($entry['at_quit_status']==3){
+		            	echo $this->translate("Quit Rejected").'<br>'.date("d-m-Y",strtotime($quit["aq_approvaldt"])).'<br>';
+		            	
+		            }elseif($entry['at_quit_status']==4){
+		            	$url = $this->url(array("module"=>'default','controller'=>'quit','action'=>'edit-quit','id'=>$entry['at_trans_id']),'default',true);
+		            	echo $this->translate("Incomplete Documents").'<br>'.date("d-m-Y",strtotime($quit["aq_processdt"])).'<br>';
+		            	echo "<a href='".$url."'>".$this->translate("Edit")."</a>";
+		            }
+				  	?>
+				  
+				  &nbsp;</td>
+		</tr>
+		<?php $i++;}//end foreach 
+		}else{?>
+		<tr>
+		<td colspan="7"><?php echo $this->translate("There are currently no programs available for QUIT.");?></td>
+		</tr>
+		<?php }?>
+	</table>
+	
+</div>

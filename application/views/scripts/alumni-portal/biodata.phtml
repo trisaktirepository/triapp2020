@@ -1,0 +1,217 @@
+<style>
+.required:after{
+	content: " *";
+	color: red;
+}
+</style>
+<script>
+$(document).ready(function(){
+
+	 $( "#appl_dob" ).datepicker({
+	     	dateFormat: "dd-mm-yy",
+	     	changeMonth: true,
+	     	numberOfMonths: 2,
+	     });
+   
+});
+
+$(window).load(function() {
+	if( $('#appl_marital_status').val() == 4 || $('#appl_marital_status').val() == 38 || $('#appl_marital_status').val() == 39){
+		$('#appl_no_of_child').removeAttr('disabled');
+	}else{
+		$('#appl_no_of_child').attr('disabled','disabled');
+		$('#appl_no_of_child').val("");
+	}
+
+	if( !$('#appl_nationality-96').is(':checked') ){
+		$('#country_origin').removeAttr('disabled');
+		$('#appl_nationality-0').attr('checked', 'checked');
+		$('#country_origin').val('<?php echo $this->data['appl_nationality'];?>');
+	}else{
+		$('#country_origin').attr("disabled", "disabled");
+	}
+});
+</script>
+
+<script type="text/javascript">
+	function changeOrigin(element,targetElement,targetElement2){
+		var country_id = 96;
+		
+		$.ajax({
+			url: "<?php echo $this->url(array('module'=>'default','controller'=>'ajax-utility', 'action'=>'get-state'),'default',true);?>",
+			data: {'country_id':country_id},
+			type: 'POST',
+			dataType: 'json'	
+		}).done(function ( data ) {
+			
+			$(targetElement).empty().append('<option value=""> <?php echo $this->translate("please_select"); ?> </option>');
+			$(targetElement2).empty().append('<option value=""> <?php echo $this->translate("please_select"); ?> </option>');
+		
+			
+			$.each(data, function(index) {
+				$(targetElement).append('<option value="'+data[index].idState+'"> '+data[index].StateName+' </option>');
+				$(targetElement2).append('<option value="'+data[index].idState+'"> '+data[index].StateName+' </option>');
+			});
+			
+			
+		});
+		
+		if( $(element).val() != 96 ){
+			$('#country_origin').removeAttr('disabled');
+			$('#admission').hide();
+			$('#divparent').hide();		
+		}else{
+			$('#country_origin').attr('disabled','disabled');
+			$('#country_origin').val("");	
+			$('#admission').show();	
+			$('#divparent').show();		
+		}
+
+	}
+
+	function showdiv(element){
+		if( $(element).val() ==2 ){
+		 	$('#placement').show();
+		}else{
+			$('#placement').hide();
+		}
+	}
+
+	function enableChildren(element){
+		
+		if( $(element).val() == 4 || $(element).val() == 38 || $(element).val() == 39 ){
+			$('#appl_no_of_child').removeAttr('disabled');
+		}else{
+			$('#appl_no_of_child').attr('disabled','disabled');
+			$('#appl_no_of_child').val('0');
+		}
+	}
+
+	function filladdress(element){
+
+		if($(element).is(':checked')){
+
+			$('#mappl_address_rt').val($('#appl_address_rt').val());
+			$('#mappl_address_rw').val($('#appl_address_rw').val());
+			$('#mappl_address1').val($('#appl_address1').val());
+			$('#mappl_address2').val($('#appl_address2').val());
+			$('#mappl_province').val($('#appl_province').val());
+			$('#mappl_state').val($('#appl_state').val());
+			$('#mappl_city').val($('#appl_city').val());
+			$('#mappl_kelurahan').val($('#appl_kelurahan').val());
+			$('#mappl_kecamatan').val($('#appl_kecamatan').val());
+			$('#mappl_postcode').val($('#appl_postcode').val());
+			
+		}else{
+			
+
+			$('#mappl_address_rt').val(' ');
+			$('#mappl_address_rw').val(' ');
+			$('#mappl_address1').val(' ');
+			$('#mappl_address2').val(' ');
+			$('#mappl_province').val(' ');
+			$('#mappl_state').val(' ');
+			$('#mappl_city').val(' ');
+			$('#mappl_kelurahan').val(' ');
+			$('#mappl_kecamatan').val(' ');
+			$('#mappl_postcode').val(' ');
+		}
+		
+		
+		
+	}
+	
+
+	function changeState(element,targetElement){
+		var country_id = $(element).val();
+		
+		$.ajax({
+			url: "<?php echo $this->url(array('module'=>'default','controller'=>'ajax-utility', 'action'=>'get-state'),'default',true);?>",
+			data: {'country_id':$(element).val()},
+			type: 'POST',
+			dataType: 'json',	
+			beforeSend: function() {
+				showLoading(targetElement,'loading');
+			},
+			complete: function() {
+				hideLoading(targetElement,'loading');
+			}	
+		}).done(function ( data ) {
+			
+			$(targetElement).empty().append('<option value=""> <?php echo $this->translate("please_select"); ?> </option>');
+		
+			$.each(data, function(index) {
+				$(targetElement).append('<option value="'+data[index].idState+'"> '+data[index].StateName+' </option>');
+			});
+		});
+	}
+	
+	function changeCity(element, targetElement){
+		$.ajax({
+			url: "<?php echo $this->url(array('module'=>'default','controller'=>'ajax-utility', 'action'=>'get-city'),'default',true);?>",
+			data: {'state_id':$(element).val()},
+			type: 'POST',
+			dataType: 'json',
+			beforeSend: function() {
+				showLoading(targetElement,'loading');
+			},
+			complete: function() {
+				hideLoading(targetElement,'loading');
+			}	
+		}).done(function ( data ) {
+			
+			$(targetElement).empty().append('<option value=""> <?php echo $this->translate("please_select"); ?> </option>');
+		
+			$.each(data, function(index) {
+				$(targetElement).append('<option value="'+data[index].idCity+'"> '+data[index].CityName+' </option>');
+			});
+		});
+	}
+
+	function showLoading(target,loading_id){
+		$(target).hide();
+		$(target).parent().append("<div id='"+loading_id+"'><img src='/images/ajax-loader-bar.gif' /></div>");
+	}
+
+	function hideLoading(target,loading_id){
+		$('#'+loading_id).remove();
+		$(target).show();
+	}
+		
+</script>
+<style type="text/css">
+select, input[type='text']{
+	width:250px;
+}
+select#appl_dob-day{
+	width:50px;
+}
+select#appl_dob-month{
+	width:100px;
+}
+select#appl_dob-year{
+	width:80px;
+}
+input#appl_no_of_child{
+	width: 20px;
+}
+</style>
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		
+	</div>
+</div>
+
+<?php echo $this->form; ?>

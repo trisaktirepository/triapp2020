@@ -1,0 +1,68 @@
+div#homeMenu {
+	line-height:normal;
+	margin:10px;
+	/*border-top:1px dotted #666;*/
+	width: 98%;
+}
+
+div#homeMenu ul.homeMenuList {
+	width:97%;
+	list-style:none;
+	border-bottom:1px dotted #666;
+}
+
+div#homeMenu ul.homeMenuList li {
+	float:left;
+	width:33%;
+	position:relative;
+}
+
+div#homeMenu ul.homeMenuList li a.wrap {
+	display:block;
+}
+
+div#homeMenu ul.homeMenuList li a.wrap:hover {
+	background:#f2f2f2;
+}
+
+div#homeMenu ul.homeMenuList li dl {
+	padding:5px;
+}
+div#homeMenu ul.homeMenuList li dt {
+	font-size:14px;
+	font-weight:bold;
+	margin-bottom:10px;
+}
+
+div#homeMenu ul.homeMenuList li dd {
+	font-size:11px;
+	margin-bottom:2px;
+}
+
+div#homeMenu ul.homeMenuList li a.wrap strong {
+	font-size:14px;
+	padding:15px 10px 0;
+	display:block;
+}
+
+div#homeMenu ul.homeMenuList li a.wrap em {
+	font-size:11px;
+	font-style:normal;
+	color:#333;
+	padding:0 10px 20px;
+	display:block;
+}
+
+span.stockExchange {
+	position:absolute;
+	top:-20px;
+	left:10px;
+}
+				
+/* clearfix */
+.clearfix:after {content:".";display:block;height:0;clear:both;visibility:hidden;}
+.clearfix {display:inline-table;min-height:1%;}
+/* Hides from IE-mac \*/
+* html .clearfix {height:1%;}
+.clearfix {display:block;}
+/* End hide from IE-mac */

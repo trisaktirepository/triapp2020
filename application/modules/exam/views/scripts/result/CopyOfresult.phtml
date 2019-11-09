@@ -1,0 +1,136 @@
+<style type="text/css">
+#sliptbl
+{
+width:100%;
+border-collapse:collapse;
+}
+#sliptbl td, #sliptbl th 
+{
+font-size:1em;
+border:1px solid #98bf21;
+padding:3px 7px 2px 7px;
+}
+#sliptbl th 
+{
+font-size:1.1em;
+text-align:left;
+padding-top:5px;
+padding-bottom:4px;
+background-color:#A7C942;
+color:#ffffff;
+}
+
+#headtbl
+{
+width:100%;
+border-collapse:collapse;
+}
+#headtbl td.head
+{
+font-weight:bold;
+}
+
+</style>
+<p>
+<table id="printbl"><tr><td align="right">
+<input type="button" value="PRINT" onclick="goprint();"></input></td></tr></table>
+</p>
+<table width="100%" border="0" cellspacing="0" cellpadding="5" id="headtbl">
+  <tr>
+    <td colspan="2"><div align="center"><strong>PARTIAL TRANSCRIPT </strong></div></td>
+  </tr>
+  <tr>
+    <td width="14%">&nbsp;</td>
+    <td width="86%">&nbsp;</td>
+  </tr>
+  <tr >
+    <td class="head">Name</td>
+    <td>: <?php echo $this->student["fullname"];?></td>
+  </tr>
+  <tr>
+    <td class="head">IC Number </td>
+    <td>: <?php echo $this->student["ic_no"]; ?></td>
+  </tr>
+  <tr>
+    <td class="head">Student ID </td>
+    <td>: <?php echo $this->student["matrix_no"]; ?></td>
+  </tr>
+  <tr>
+    <td class="head">Programme</td>
+    <td>: <?php echo $this->program["main_name"];?></td>
+  </tr>
+ 
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="5" id="sliptbl">
+  <tr>
+    <th width="84%" align="left">MODULE</th>
+    <th width="16%"><div align="center">GRADE</div></th>
+  </tr>
+  <?php 
+  $point=0;
+  $total_point=0;
+  $total_credit=0;
+   
+  foreach($this->courses as $crs){?>
+  <tr>
+    <td><?php echo $crs["course_name"]; ?></td>
+    <td>  <div align="center">
+    <?php 
+      //get finalmark
+        $oSCMark    = new  App_Model_Exam_DbTable_Markentry();
+        $total_mark = $oSCMark->totalFinalMark($crs["scr_id"]);       
+  
+   		$gradeTable = new App_Model_Exam_DbTable_Grade();       
+		$rs_grade= $gradeTable->getGradeInfo($crs["program_id"],$crs["admission_intake_id"],(int)$total_mark);  
+	    echo $rs_grade["grade"];
+	    
+    ?>
+    
+    </div></td>
+  </tr>
+  <?php 
+  		//to get CGPA = credit hour * point grade
+  		//dapatkan credit hour utk setiap course
+          
+          $point        = $crs["credit_hour"]*$rs_grade["value"];
+          $total_point  = $total_point+$point;
+          $total_credit = $total_credit + $crs["credit_hour"];
+      
+    }//end foreach
+  //end if  ?>
+  <tr>
+    <td><div align="right"><strong>CGPA</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div></td>
+    <td><div align="center"><strong>
+    <?php   
+     $cgpa = round(($total_point/$total_credit),2);
+     echo number_format($cgpa, 2, '.', '');
+    
+    ?></strong></div></td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+<table width="100%" border="0" cellspacing="0" cellpadding="1">
+  <tr>
+    <td><strong>REMARKS:</strong></td>
+  </tr>
+   <tr>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td> <strong><?php echo $this->student["fullname"];?> </strong> has been awarded the <strong><?php echo $this->program["main_name"];?>. </strong></td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+<script>
+
+function goprint(){
+	document.getElementById('printbl').style.display = 'none';
+	window.print();
+}
+</script>

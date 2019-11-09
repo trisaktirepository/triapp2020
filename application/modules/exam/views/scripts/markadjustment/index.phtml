@@ -1,0 +1,61 @@
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		
+	</div>
+</div>
+<br></br>
+<div style="width:900px; margin: 0 auto;">
+
+
+<div style="width: 100%;">
+<fieldset style="width:450px;">
+	<legend>Please select the information below:-</legend>
+<form name="searchfrm" action="" method="post">
+	<table width="100%">
+		<tr>
+			<td>
+				Semester 
+			</td>
+			<td width="5px">:</td>
+			<td>			
+				<select name="semester_id" onchange="form.submit()">
+				<option value="0">Please select</option>
+				<?php 
+				foreach($this->semester as $s){
+					if($this->semester_id==$s[id])
+					  $sel = "selected";
+					else
+					  $sel = "";
+				 	echo "<option value='$s[id]' $sel>$s[name]</option>";
+				 } ?>
+				</select>
+			</td>
+		</tr>	
+		<tr>
+			<td>
+				Program 
+			</td>
+			<td width="5px">:</td>
+			<td>			
+				<select name="program_id" onchange="form.submit()">
+				<option value="0">Please select</option>
+				<?php 
+				foreach($this->program as $p){
+					if($this->program_id==$p[id])
+					  $sel = "selected";
+					else
+					  $sel = "";
+				 	echo "<option value='$p[id]' $sel>$p[main_name]</option>";
+				 } ?>
+				</select>
+			</td>
+		</tr>			
+	</table>
+</form>
+</fieldset>
+</div>
+<br />
+
+</div>

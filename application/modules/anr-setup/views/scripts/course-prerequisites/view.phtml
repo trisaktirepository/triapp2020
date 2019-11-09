@@ -1,0 +1,110 @@
+<script type="text/javascript">
+$().ready(function() {
+	$('#add').click(function() {
+		return !$('#select1 option:selected').remove().appendTo('#select2');
+	});
+	$('#remove').click(function() {
+		return !$('#select2 option:selected').remove().appendTo('#select1');
+	});
+
+	$('form').submit(function() {
+		var precourse = "";
+		
+		$('#select2 option').each(function(i) {
+			$(this).attr("selected", "selected");
+			if(precourse==""){
+				precourse += this.value;
+			}else{
+				precourse += "," + this.value;
+			}
+		});
+
+		$('#precourse').attr("value", precourse);
+	});
+});
+</script>
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'anr-setup','controller'=>'course-prerequisites', 'action'=>'index'),'default',true);?>">
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<div width="500px">
+	<table class="table2" width="500px">
+		<tr>
+			<th width="150px">Course Name</th>
+			<td><?php echo $this->course['name']; ?></td>
+		</tr>
+		<tr>
+			<th>Course Code</th>
+			<td><?php echo $this->course['code']; ?></td>
+		</tr>
+		<tr>
+			<th>Credit Hour</th>
+			<td><?php echo $this->course['credit_hour']; ?></td>
+		</tr>
+	</table>
+</div>
+<form action="<?php echo $this->url(array('module'=>'anr-setup','controller'=>'course-prerequisites', 'action'=>'view', 'course'=>$this->courseid));?>" method="POST">
+	<input type="hidden" name="courseid" id ="courseid" value="<?php echo $this->courseid; ?>" />
+	<input type="hidden" name="precourse" id ="precourse" value="" />
+	<table width="900px" border="0">
+		<tr>
+			<td>
+				<h4>Courses List</h4>
+				<select id="select1" name="courselist" size="20" style="width:400px;" multiple="multiple" >
+					<?php foreach ($this->courselist as $course):?>
+						<option value="<?php echo $course['id']; ?>"><?php echo $course['code']; ?> - <?php echo $course['name']; ?></option>
+					<?php endforeach;?>
+				</select>
+			</td>
+			<td align="middle" valign="middle">
+				<input id="add" type="button" class="buttonLink" value="Add" />
+				<input id="remove" type="button" class="buttonLink" value="Remove" />
+			</td>
+			<td>
+				<h4>Prerequisites Courses</h4>
+				<select id="select2" name="select2" size="20" style="width:400px;" multiple="multiple" >
+					<?php foreach ($this->courseprerequisites as $course):?>
+						<option value="<?php echo $course['id']; ?>"><?php echo $course['code']; ?> - <?php echo $course['name']; ?></option>
+					<?php endforeach;?>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3" align="left">
+				<div width="200px">
+					<br />
+					<input type="submit" value="save" />
+					<input type="button" value="Cancel" onClick="window.location = '<?php echo $this->url(array('module'=>'anr-setup','controller'=>'course-prerequisites', 'action'=>'index'));?>'" />
+				</div>
+			</td>
+		</tr>
+	</table>
+</form>

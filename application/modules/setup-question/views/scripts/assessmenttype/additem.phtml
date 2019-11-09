@@ -1,0 +1,222 @@
+
+<script type="text/javascript">
+function addRowToTable(curtotal)
+{
+	
+  var tbl = document.getElementById('mtable');
+  var lastRow = tbl.rows.length; 
+  // if there's no header row in the table, then iteration = lastRow + 1
+  var iteration = lastRow;
+  var row = tbl.insertRow(lastRow);
+
+ 
+  iteration = lastRow-1;
+
+  document.getElementById('iteration').value = iteration
+
+  // left cell
+  var cellLeft = row.insertCell(0);
+  var textNode = document.createTextNode(iteration+".");
+  cellLeft.appendChild(textNode);
+
+  // left cell
+  var cellLeft = row.insertCell(1);
+  var textNode1 = document.createTextNode('');
+  cellLeft.appendChild(textNode1);
+ 
+  // component_name
+  var component_name = row.insertCell(2);
+  var cn = document.createElement('input');
+  cn.type = 'text';
+  cn.name = 'component_name' + iteration;
+  cn.id = 'component_name'+ iteration;
+  cn.size = 60;
+  
+  cn.onkeypress = keyPressTest;
+  component_name.appendChild(cn);
+  
+  
+  // select cell
+  var cellRightSel = row.insertCell(3);
+  var sel = document.createElement('select');
+  sel.name = 'question_type' + iteration;
+  sel.options[0] = new Option('ESSAY',1);
+  sel.options[1] = new Option('MCQ',2);
+  cellRightSel.appendChild(sel);
+  
+}
+
+
+
+function keyPressTest(e, obj)
+{
+  var validateChkb = document.getElementById('chkValidateOnKeyPress');
+  if (validateChkb.checked) {
+    var displayObj = document.getElementById('spanOutput');
+    var key;
+    if(window.event) {
+      key = window.event.keyCode; 
+    }
+    else if(e.which) {
+      key = e.which;
+    }
+    var objId;
+    if (obj != null) {
+      objId = obj.id;
+    } else {
+      objId = this.id;
+    }
+    displayObj.innerHTML = objId + ' : ' + String.fromCharCode(key);
+  }
+}
+
+
+function removeRowFromTable(total)
+{
+	
+  var curval=2;
+  newtotal=Math.abs(total)+Math.abs(curval);
+  
+  var tbl = document.getElementById('mtable');
+  var lastRow = tbl.rows.length;
+  
+  curval = document.getElementById('iteration').value;
+  if (lastRow > newtotal) {
+	  tbl.deleteRow(lastRow - 1);  
+      document.getElementById('iteration').value = curval-1;
+  }else{
+      alert('Sorry you cannot remove this component. CLick on checkbox then click delete button to delete.');
+  }
+}
+
+
+function openInNewWindow(frm)
+{
+  // open a blank window
+  var aWindow = window.open('','TableAddRowNewWindow','scrollbars=yes,menubar=yes,resizable=yes,toolbar=no,width=400,height=400');
+      
+  // set the target to the blank window
+  frm.target = 'TableAddRowNewWindow';
+  
+  // submit
+  frm.submit();
+}
+
+
+function validateRow(frm)
+{	
+	    var tbl = document.getElementById('mtable');
+	    
+	    var lastRow = tbl.rows.length - 2;
+	        
+	    
+	    if(lastRow==0){
+	    	alert('There is no item entered.');
+			return false;
+	    }
+						    
+ 	return true;
+}
+
+
+
+function save(){
+	$returnVal = validateRow(document.form1);
+
+	if($returnVal==true){
+		document.form1.action="<?php echo $this->url(array('module'=>'setup-question','controller'=> 'assessmenttype','action'=>'additem')); ?>";
+		document.form1.submit();
+	}
+}
+
+function del(){
+	
+		document.form1.action="<?php echo $this->url(array('module'=>'setup-question','controller'=> 'assessmenttype','action'=>'delete')); ?>";
+		document.form1.submit();
+}
+
+
+function goback(){
+	window.location="<?php echo $this->url(array('module'=>'setup-question','controller'=>'assessmenttype','action'=>'index','courseid'=>$this->courseid))?>";
+}
+
+
+
+</script>
+<?php   $total_component = count($this->component_item); ?>
+
+<table width="90%" border="0" cellspacing="1" cellpadding="1">
+  <tr> 
+    <td height="69"><strong> 
+      <h1><?php echo $this->title?></h1>
+      </strong>
+      
+      
+    <h2>Instruction</h2>
+<ul style="1">
+	<li>To add component, click on "Add Row" button.</li>
+	<li>To remove row, click on "Remove Row" button.</li>
+	<li>To delete assessment component, click on appropriate delete checkbox, then click "Delete" button. </li>
+	<li>Click "Save" button once you have finish editing assessment component.</li>
+</ul>
+<br>
+<br>
+  <form name="form1" method="post" action="">
+  
+    <input type="button" name="Add"  value="Add Row" onclick="addRowToTable();" class="button">
+    <input type="button" name="Remove"  value="Remove Row" onclick="removeRowFromTable('<?php echo count($this->component_item);?>');" class="button">
+    <input type="submit" name="Save"  value="Save" onclick="save();" class="button">
+    <input type="submit" name="Delete"  value="Delete" onclick="del();" class="button">
+    <input type="button" name="Back"  value="Back" onclick="goback();" class="button">
+    <br>
+    
+
+  <table id="mtable"   width="100%" cellpadding="5" cellspacing="1" >
+   <tr>
+    <th colspan="7">Assessment Component List.</th>
+  </tr>
+  <tr class="thd">
+    <td>No</td> 
+    <td>Delete</td>  
+    <td>Component Item Name</td>
+    <td>Question Type</td>
+   
+  </tr>
+     <?php 
+        if($this->component_item){
+        
+		  $no=1;		
+		  foreach ($this->component_item as $component_item){?>
+		     
+		  <tr>
+		    <td><?php echo $no;?>.</td>   
+		    <td>
+		    <input type="hidden" name="item_id<?php echo $no;?>" value="<?php echo $component_item["id"];?>"></input>
+		    <input type="checkbox" name="id[]" id="id[]" value="<?php echo $component_item["id"]?>"></input></td>
+
+		    <td><input size="60" type="text" name="component_name<?php echo $no;?>" value="<?php echo $component_item["component_name"]?>"></td>
+		    
+		    <td>
+		    <select name="question_type<?php echo $no;?>">
+		    	<option value="1" <? if( $component_item["question_type"]==1) echo "selected";?>>ESSAY</option>
+		    	<option value="2" <? if( $component_item["question_type"]==2) echo "selected";?>>MCQ</option>
+		    </select>
+		    </td>
+		      </tr>
+		  <?php $no++; } }//end if?>
+ 
+  
+</table>
+<input type="hidden" name="iteration" id="iteration" value="<?php echo $total_component ?>"></input>
+<input type="hidden" name="parent_id" id="parent_id" value="<?php echo $this->parent_id;?>"></input>
+<input type="hidden" name="courseid" id="courseid" value="<?php echo $this->courseid;?>"></input>
+   </table>
+  <br></br>
+
+  </form>
+  
+     
+      
+      </td>
+  </tr>
+</table>

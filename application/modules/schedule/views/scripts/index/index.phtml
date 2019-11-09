@@ -1,0 +1,333 @@
+<?php 
+		echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery/plugin/fullcalendar/fullcalendar.min.js');
+		echo $this->headLink()->prependStylesheet($this->baseUrl().'/js/jquery/plugin/fullcalendar/fullcalendar.css');
+?>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#calendar').fullCalendar({
+    	header: {
+			left: 'prev,next today',
+			center: 'title',
+			right: 'month,agendaWeek,agendaDay'
+		},
+		defaultView: 'month',
+        'theme' : true,
+        'firstDay': 1,
+        'weekMode': 'variable',
+        'height': 650,
+        editable: true,
+        events: {
+            url: '<?php echo $this->url(array('module'=>'schedule','controller'=>'index', 'action'=>'ajax-get-schedule')); ?>',
+            type: 'POST',
+            data: {
+                'exam_center_id': $('#exam_center').val()
+            },
+            error: function(a) {
+                alert('there was an error while fetching events!');
+            }
+ 		},
+ 		eventClick: function(event) {
+ 			var detail_url = '<?php echo $this->url(array('module'=>'schedule','controller'=>'index', 'action'=>'view')); ?>/id/'+event.id
+
+ 			$('#dialog-event').empty();
+    		$('#dialog-event').load(detail_url).dialog('open');
+
+    		//hook to edit button
+    		$( "#dialog-event" ).dialog( "option", "buttons", {
+    			"Close": function() { 
+                	$(this).dialog("close"); 
+            	}, 
+        		"Edit": function() { 
+	        		$(this).dialog("close");
+	        		
+	        		$( "#dialog-schedule" ).dialog( "option", "title", "Edit Exam Schedule" );
+	            	$("#dialog-schedule").html("");
+	            	$("#dialog-schedule").load('<?php echo $this->url(array('module'=>'schedule','controller'=>'index', 'action'=>'edit'),'default',true); ?>/id/'+event.id).dialog('open'); 
+        		}/*,
+                "Delete": function() {
+                    var msg = "Are you sure to delete this exam schedule?";
+                    if(confirm(msg)){
+                    	$(this).dialog("close");
+                    }
+                }*/
+        	});
+        },
+        eventDrop: function(event,dayDelta,minuteDelta,allDay,revertFunc) {
+
+            if (!confirm("Are you sure about this change?")) {
+                revertFunc();
+            }else{
+            	var status = updateEvent(event);
+            	if(!status){
+            		revertFunc();
+            	}
+            }
+
+        },
+        eventResize: function(event,dayDelta,minuteDelta,revertFunc) {
+
+            if (!confirm("is this okay?")) {
+                revertFunc();
+            }else{
+                var status = updateEvent(event);
+            	if(!status){
+            		revertFunc();
+            	}
+            }
+
+        }
+    });
+
+    $( "#tabs" ).tabs();
+
+    $( "#dialog-schedule" ).dialog({
+        'autoOpen': false,
+        'modal': true,
+        'width': 600,
+        'buttons': { 
+            'Close': function() { 
+                	$(this).dialog('close'); 
+            		},
+            'Submit': function() { 
+				var msg = 'Confirm to submit this exam schedule?';
+
+				/*validate*/
+				if( $('#program_id').val()==0 ){
+					alert('Please select program');
+					return false;
+				}else
+				if( $('#course_id').val()==null ){
+					alert('Please select course');
+					return false;
+				}else
+				if( $('#date').val()==0 ){
+					alert('Please select date');
+					return false;
+				}else
+				if( $('input[name=start]').val()=="" || $('input[name=end]').val()=="" ){
+					alert('Please select time');
+					return false;
+				}else
+				if( $('select[name=exam_center]').val()==null ){
+					alert('Please select exam center');
+					return false;
+				}else
+				if( $('#venue_id').val()==null ){
+					alert('Please select venue');
+					return false;
+				}else{
+					if(confirm(msg)){
+						$('#schedule_form').submit();
+					} 
+				}
+            } 
+    	}
+    });
+
+    $( "#dialog-event" ).dialog({
+        'autoOpen': false,
+        'modal': true,
+        'width': 600
+    });
+});
+
+function addSchedule(){
+	$( "#dialog-schedule" ).dialog( "option", "title", "Add Exam Schedule" );
+	$("#dialog-schedule").html("");
+	$("#dialog-schedule").load('<?php echo $this->url(array('module'=>'schedule','controller'=>'index', 'action'=>'add')); ?>/exam_center_id/'+$('#exam_center').val()).dialog('open');
+}
+
+function reloadpage(element){
+	var center_id = $(element).val();
+
+	window.location="?exam_center="+center_id;
+}
+
+function updateEvent(event){
+	var start = Math.round((event.start.getTime()) / 1000);
+	var end = Math.round((event.end.getTime()) / 1000);
+	var status = false;
+	
+	$.ajax({
+		  url: "<?php echo $this->url(array('module'=>'schedule','controller'=>'index', 'action'=>'ajax-update-schedule-time')); ?>",
+		  dataType: 'json',
+		  type: "POST",
+		  cache:false,
+		  async: false,
+		  data: {id:event.id, start:start, end:end },
+		  success: function(data) {
+
+			  status = data.status;
+			  			  
+				if(data.status==1){
+					status = true;
+				}else{
+					alert('Error while updating the schedule');
+					status = false;
+					
+				}
+		  }
+	});
+
+	return status;
+}
+
+function tableEdit(id){
+	$( "#dialog-schedule" ).dialog( "option", "title", "Edit Exam Schedule" );
+	$("#dialog-schedule").html("");
+	$("#dialog-schedule").load('<?php echo $this->url(array('module'=>'schedule','controller'=>'index', 'action'=>'edit'),'default',true); ?>/id/'+id).dialog('open');
+}
+</script>
+
+<style type="text/css">
+	#tabs{
+		background: #FFFFFF;	
+	}
+	.fc-day-number{
+		color: #0066FF;
+		font-weight: bold;
+	}
+	
+	.ui-widget-content{
+		background: #EEEEEE;	
+	}
+	
+	.fc-other-month{
+		background: #FFFFFF;	
+	}
+	
+	#icons li {
+	    cursor: pointer;
+	    float: left;
+	    list-style: none outside none;
+	    margin: 2px;
+	    padding: 4px;
+	    position: relative;
+	}
+</style>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="javascript:addSchedule(); return false;">
+					<span class='add'></span>
+					Add
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<?if(isset($this->noticeMessage)){?>
+<div id="msg" class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<div id="tabs">
+	<ul>
+		<li><a href="#tabs-1">Exam Calendar</a></li>
+		<li><a href="#tabs-2">Exam List</a></li>
+		<div style="float:right; margin:2px 0">
+			<select name="exam_center" id="exam_center" onChange="reloadpage(this)">
+				<option value="0">All Exam Center</option>
+				<?php
+				foreach ($this->examcenter as $center) {
+					$select ="";
+					if($this->exam_center == $center['id']){
+						$select = "selected='seledted'";
+					}
+					
+					echo "<option value='".$center['id']."' ".$select.">".$center['name']."</option>";
+				}
+				?>
+			</select>
+		</div>
+	</ul>
+	<div id="tabs-1">
+		<div id='calendar'></div>		
+	</div>
+	<div id="tabs-2">
+		<table class="table" width="100%" cellspacing="0" cellpadding="5" border="0">
+			<tr>
+				<th>Date</th>
+				<th>Course</th>
+				<th>Time</th>
+				<th>Exam Center</th>
+				<th>Venue</th>
+				<th width="80px">Capacity</th>
+				<th width="80px">Confirmed Seat</th>
+				<th width="80px">Booked Seat</th>
+				<th width="80px">Available Seat</th>
+				<th width="30px">&nbsp;</th>
+			</tr>
+			<?php
+			$scheduleCourseDB = new App_Model_Schedule_DbTable_ScheduleCourse(); 
+			$scheduleVenueDB = new App_Model_Schedule_DbTable_ScheduleVenue();
+        
+			foreach ($this->schedule as $schedule):
+			$course = $scheduleCourseDB->getScheduleData($schedule['id']);
+			$venue = $scheduleVenueDB->getScheduleData($schedule['id']);
+			?>
+			<tr>
+				<td align="center"><?php echo date('d/m/Y', strtotime($schedule['exam_date'])); ?></td>
+				<td>
+					<ul>
+					<?php 
+						foreach ($course as $crs){
+							echo "<li>".$crs['course_name']."</li>";
+						}
+					?>
+					</ul>
+				</td>
+				<td align="center"><?php echo $schedule['exam_time_start']?> - <?php echo $schedule['exam_time_end']?></td>
+				<td><?php echo $schedule['exam_center_name']?></td>
+				<td>
+					<ul>
+					<?php 
+						foreach ($venue as $vd){
+							echo "<li>".$vd['venue_name']."</li>";
+						}
+					?>
+					</ul>
+				</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					
+					<a href="#" onClick="tableEdit('<?php echo $schedule['id']; ?>')" id="icons" class="ui-widget ui-helper-clearfix">
+						<li class="ui-state-default ui-corner-all">
+							<span class="ui-icon ui-icon-wrench"></span>
+						</li>
+					</a>
+				</td>
+			</tr>
+			<?php endforeach;?>
+			
+			<?php if(!$this->schedule){?>
+			<tr>
+				<td colspan="8" align="center">
+					No Schedule available
+				</td>
+			</tr>
+			<?php }?>
+		</table>
+	</div>
+</div>
+
+<div id="dialog-schedule" title="Add Exam Schedule"></div>
+<div id="dialog-event" title="Exam Schedule Info"></div>

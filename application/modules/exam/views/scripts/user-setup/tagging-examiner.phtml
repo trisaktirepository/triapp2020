@@ -1,0 +1,72 @@
+<div class="message toolbar toolbar-clear" style="background-color: #CCC;">
+	<h2><?php echo $this->translate("List of Examiner"); ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#">
+					<span class="search"></span>
+					Search
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="#">
+					<span class="info"></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+	<tr>
+		<th>Name</th>
+		<th width="250px">Email</th>
+		<th width="250px">Branch</th>
+	</tr>
+	
+	<?php 
+	$i=0;
+	foreach ($this->paginator as $entry): 
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<td>
+			<a href="<?php echo $this->url(array('module'=>'exam','controller'=>'user-setup','action'=>'tagging-detail-examiner', 'uid'=>$entry['id']),'default',true) ?>"><?php echo $entry['name']; ?></a>
+		</td>
+		<td align="center">
+			<?php echo $entry['email']; ?>
+		</td>
+		<td>
+			<?php
+				if($entry['branch_id']==0){
+					echo $this->translate("USTY HQ");
+				}else{ 
+					echo $entry['branch_name'];
+				} 
+			?>
+		</td>
+	</tr>
+	<?php 
+	$i++;
+	endforeach 
+	?>
+	
+	<?php 
+	if( count($this->paginator) <1 ){
+	?>
+		<tr>
+			<td colspan="3" align="center">
+				<?php echo $this->translate("There are no user"); ?>
+			</td>
+		</tr>
+	<?php 
+	}
+	?>
+
+</table>
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>

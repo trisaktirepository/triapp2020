@@ -1,0 +1,26 @@
+
+<br>
+<table width="100%"  border="0" cellpadding="5" cellspacing="1" bgcolor="#CCCCCC">
+  <tr align="center" bgcolor="#F2F2F2">
+    <td colspan="2"><strong>Course Name </strong></td>
+    <td><strong>Course Code</strong></td>
+    <td><strong>Course Type</strong></td>
+    <td><strong>Credit Hour </strong></td>
+  </tr>
+  	<?php
+  	$i=1;
+	foreach ($this->landscape as $landscape){
+	?>
+  <tr bgcolor="#FFFFFF">
+    <td width="2"><?php echo $i;?>)</td>
+    <td><?php echo $landscape["course_name"]; ?></td>
+    <td align="center"><?php echo $landscape["course_code"]; ?></td>
+    <td align="center"><?php echo $landscape["course_type_name"]; ?></td>
+    <td align="center"><?php echo $landscape["credit_hour"]; ?></td>
+  </tr>
+  
+  <? $i++;
+	} ?>
+</table><br><br>
+
+

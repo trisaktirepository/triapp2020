@@ -1,0 +1,296 @@
+<script>
+
+function getLecturer(element,targetElement,targetElement2){
+	var idCollege = $(element).val();
+
+	$.ajax({
+		url: "<?php echo $this->url(array('module'=>'assistant','controller'=>'course-group', 'action'=>'ajax-get-lecturer'),'default',true);?>",
+		data: {'idCollege':$(element).val()},
+		type: 'POST',
+		dataType: 'json'	
+	}).done(function ( data ) {
+
+		
+		$(targetElement).empty().append('<option value="0"> <?php echo $this->translate("Please Select"); ?> </option>');
+	
+		$.each(data, function(index) {
+			$(targetElement).append('<option value="'+data[index].IdStaff+'"> '+data[index].FullName+' </option>');
+		});
+
+
+	    $(targetElement2).empty().append('<option value="0"> <?php echo $this->translate("Please Select"); ?> </option>');
+		
+		$.each(data, function(index) {
+			$(targetElement2).append('<option value="'+data[index].IdStaff+'"> '+data[index].FullName+' </option>');
+		})
+		
+	});
+}
+
+function addGroup(){
+	window.location = "<?php echo $this->url(array('module'=>'generalsetup','controller'=>'course-group','action'=>'add-group','idSubject'=>$this->idSubject,'idSemester'=>$this->idSemester,'idProgram'=>$this->idProgram),'default',true);?>";
+}
+
+function editGroup(){
+	var idGroup = $('input[name=idGroup]:checked').val();
+	
+	if(!idGroup){
+		alert("Please select group first");
+	}else{
+		 
+		url = "<?php echo $this->url(array('module'=>'assistant','controller'=>'course-group','action'=>'edit-group','idSubject'=>$this->idSubject,'idSemester'=>$this->idSemester),'default',true);?>/idGroup/"+idGroup; 
+		window.location = url;
+		 
+	}
+}
+
+$(function() {
+
+	$( "#dialog:ui-dialog" ).dialog( "destroy" );
+	
+
+    $( "#dialog-edit" ).dialog({
+        modal: true,
+        autoOpen: false,
+        width: 630,
+        buttons: {
+          "Cancel": function() {
+            $( this ).dialog( "close" );
+          },
+          "Save": function() {
+
+        	  $("#EditGroupForm").submit();
+	       	   $( this ).dialog( "close" );
+         	   
+            }
+        }
+      });
+
+
+    	
+	
+});
+
+function go_nav_back(){
+	
+	$('body').append(
+			$('<form>')
+			.attr('id','lets_go_back')
+			.attr('method','POST')
+			.attr('action','<?php echo $this->url(array('module'=>'assistant','controller'=>'course-group','action'=>'index'),'default',true);?>')
+			.append(
+				$('<input>')
+				.attr('type','hidden')
+				.attr('name','IdCollege')
+				.attr('value','<?php echo $this->subject['IdFaculty']; ?>')		
+			)
+			.append(
+				$('<input>')
+				.attr('type','hidden')
+				.attr('name','IdSemester')
+				.attr('value','<?php echo $this->semester['IdSemesterMaster'];?>')		
+			)
+	);
+	
+	$('#lets_go_back').submit();
+}
+
+</script>
+
+<style>
+ul.act, ul.act li{
+  list-style: none;
+  margin:0;
+  padding: 0;
+}
+
+ul.act li{
+  display: inline-block;
+}
+
+ul.prog-list, ul.prog-list li{
+  margin: 0 0 0 10px;
+  padding:0;
+}
+</style>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>			
+			<li>
+				<a href="#" onclick="addGroup();" >
+					<span class='add'></span>
+					Add Group
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="editGroup();" >
+					<span class='edit'></span>
+					Edit Group
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="#" onclick="go_nav_back();" >
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br>
+<?php if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+<?php }?>
+
+
+<div style="width:100%;">
+
+<fieldset>
+  <legend><?php echo $this->translate("Subject Info")?></legend>
+  <table class="" width="50%" cellpadding="5" cellspacing="5" border="0">
+  	<tr>
+  		<td width="100px"><?php echo $this->translate("Subject Name")?></td>
+  		<td width="5px">:</td>
+  		<td><?php echo ($this->subject["subjectMainDefaultLanguage"]) ? $this->subject["subjectMainDefaultLanguage"]:$this->subject["SubjectName"];  ?></td>
+  	</tr>
+  	<tr>
+  		<td><?php echo $this->translate("Subject Code")?></td>
+  		<td width="5px">:</td>
+  		<td><?php echo $this->subject["SubCode"];?></td>
+  	</tr>
+  	<tr>
+  		<td><?php echo $this->translate("Semester")?></td>
+  		<td width="5px">:</td>
+  		<td><?php echo $this->semester["SemesterMainName"];?></td>
+  	</tr>
+  	<tr>
+  		<td><?php echo $this->translate("Unsigned Student")?></td>
+  		<td width="5px">:</td>
+  		<td><strong><?php echo $this->unsignedstd;?></strong></td>
+  	</tr>
+  	
+  </table>
+</fieldset>
+<br>
+
+<table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+	<tr>
+		<th width="25px">&nbsp;</th>
+		<th><?php echo $this->translate("Group")?></th>
+		<th><?php echo $this->translate("Code")?></th>
+		<th><?php echo $this->translate("Semester")?></th>
+		<th><?php echo $this->translate("Coordinator")?></th>
+		<th><?php echo $this->translate("Mark Verify By")?></th>
+		<th><?php echo $this->translate("Program")?></th>
+		<th><?php echo $this->translate("Branch")?></th>
+		<th><?php echo $this->translate("Max Occupancy")?></th>
+		<th><?php echo $this->translate("Total Student")?></th>
+		<th><?php echo $this->translate("Remark")?></th>	
+		<th><?php echo $this->translate("Created Date")?></th>		
+		<th width="110px"><?php echo $this->translate("Action")?></th>
+	</tr>
+	<?php 
+	$i=1;
+	if(count($this->list_groups)>0){
+	foreach($this->list_groups as $group){
+	?>
+	<input type="hidden" id="nstd[<?php echo $group["IdCourseTaggingGroup"]?>]" value="<?php echo $group["total_student"]?>">
+	<tr>
+		<td align='center'>
+		<?php if ($group['Creator']==$this->owner) {?>
+			<input type="radio" id="idGroup" name="idGroup" value="<?php echo $group["IdCourseTaggingGroup"]?>"></td>
+		<?php }?>
+		<td><?php echo $group["GroupName"];?></td>
+		<td><?php echo $group["GroupCode"];?></td>
+		<td><?php echo $group["semester_name"];?></td>
+		<td><?php echo ($group["IdLecturer"]!=0 ?  $group["registrationId"].' '.$group["FullName"]:$this->translate("-"));?></td>
+		<td><?php echo ($group["VerifyBy"]!=0 ?  $group["VerifyByName"]:$this->translate("-"));?></td>
+		<td>
+		  <ul class="prog-list">
+		   <?php 
+		   if(sizeof($group['program'])>0){
+              foreach ($group['program'] as $pro):
+		   ?>
+		     <li><?php echo $pro['ShortName'];?></li>
+		   <?php 
+		     endforeach;
+           }
+           ?>
+           </ul>
+		</td>
+		<td>
+		  <ul class="branch-list">
+		   <?php 
+		   if(sizeof($group['branch'])>0){
+              foreach ($group['branch'] as $pro):
+		   ?>
+		     <li><?php echo $pro['BranchName'];?></li>
+		   <?php 
+		     endforeach;
+           }
+           ?>
+           </ul>
+		</td>
+		<td align="center"><?php echo $group["maxstud"];?></td>
+		<td align="center">
+		<?php echo ($group["total_student"]==0 ? '0':$group["total_student"]);?></td>
+		<td><?php echo $group["remark"];?></td>
+		<td align="center"><?php echo date("d-m-Y",strtotime($group["UpdDate"]));?></td>		
+		<td align="left" style="font-size: 10px;">
+		<ul class="act">
+		 	<?php if ($group['Creator']==$this->owner) $edit="1"; else $edit="0"; ?>
+		  <li>
+		    <a href="<?php echo $this->url(array('module'=>'assistant','controller'=>'course-group','action'=>'schedule','idGroup'=>$group["IdCourseTaggingGroup"],'idSemester'=>$group["IdSemester"],'idSubject'=>$group["IdSubject"],'edit'=>$edit),'default',true);?>" title="Schedule"><img src="/images/icon/calendar.png" /></a>
+		  </li>
+		  <?php if ($group['Creator']==$this->owner) { ?>
+				  <li>
+				    <a href="<?php echo $this->url(array('module'=>'assistant','controller'=>'course-group','action'=>'assign-student','idGroup'=>$group["IdCourseTaggingGroup"],'idSemester'=>$group["IdSemester"],'idSubject'=>$group["IdSubject"]),'default',true);?>" title="Assign Student"><img src="/images/icon/user_add.png" /></a>
+				  </li>
+				  <li>
+				    <a href="<?php echo $this->url(array('module'=>'assistant','controller'=>'course-group','action'=>'remove-student','idGroup'=>$group["IdCourseTaggingGroup"],'idSemester'=>$group["IdSemester"],'idSubject'=>$group["IdSubject"]),'default',true);?>" title="Remove Student"><img src="/images/icon/user_delete.png" /></a>
+				  </li>
+		  <?php }?>
+		  <li>
+		    <?php 
+		    if ($group["total_student"]==0){
+				
+            ?>		
+      		  <a href="<?php echo $this->url(array('module'=>'assistant','controller'=>'course-group','action'=>'delete-group','idGroup'=>$group["IdCourseTaggingGroup"],'idSemester'=>$group["IdSemester"],'idSubject'=>$group["IdSubject"]),'default',true);?>" Title="Delete Course Group" onclick="if(confirm('Confirm to delete?')){return true;}else{return false;}"><img src="/images/icon/user_trash_full.png" /></a>
+      		<?php 
+            } 
+      		?>
+		  </li>
+		  
+		   <li>
+		    <?php 
+		    if($group["total_student"] > 0){
+            ?>		
+      		  <a href="<?php echo $this->url(array('module'=>'assistant','controller'=>'course-group','action'=>'time-space','IdGroup'=>$group["IdCourseTaggingGroup"],'IdSemester'=>$group["IdSemester"],'IdSubject'=>$group["IdSubject"]),'default',true);?>" target="_blank" ><?php echo $this->translate("Waktu Luang");?></a>
+      		<?php 
+            } 
+      		?>
+		  </li>
+		</ul>
+		</td>
+	</tr>
+	<?php $i++; } }?>
+</table>
+
+
+</div>
+

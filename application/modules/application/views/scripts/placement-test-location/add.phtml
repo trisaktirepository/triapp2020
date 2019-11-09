@@ -1,0 +1,64 @@
+<script type="text/javascript">
+function changeCountry(element){
+	$.ajax({
+		url: "<?php echo $this->url(array('module'=>'default','controller'=>'ajax-utility', 'action'=>'get-state'),'default',true);?>",
+		data: {'country_id':$(element).val()},
+		type: 'POST',
+		dataType: 'json'	
+	}).done(function ( data ) {
+		
+		$('#al_state').empty().append('<option value=""> Select </option>');
+	
+		$.each(data, function(index) {
+			$('#al_state').append('<option value="'+data[index].idState+'"> '+data[index].StateName+' </option>');
+		});
+	});
+}
+
+function changeState(element){
+	$.ajax({
+		url: "<?php echo $this->url(array('module'=>'default','controller'=>'ajax-utility', 'action'=>'get-city'),'default',true);?>",
+		data: {'state_id':$(element).val()},
+		type: 'POST',
+		dataType: 'json'	
+	}).done(function ( data ) {
+		
+		$('#al_city').empty().append('<option value=""> Select </option>');
+	
+		$.each(data, function(index) {
+			$('#al_city').append('<option value="'+data[index].idCity+'"> '+data[index].CityName+' </option>');
+		});
+	});
+}
+</script>
+
+<style>
+	.zend_form#av_test_type{
+		height: 80px;	
+	}
+</style>
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'application','controller'=>'placement-test-location', 'action'=>'index'),'default',true);?>">
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<?php 
+	$this->form->setAction($this->url());
+	echo  $this->form;
+?>

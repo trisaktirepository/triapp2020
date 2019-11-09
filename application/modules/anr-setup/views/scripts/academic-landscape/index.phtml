@@ -1,0 +1,101 @@
+<script type="text/javascript">
+$(function() {
+	$( "#search-dialog" ).dialog({ 
+		autoOpen: false,
+		width: 400,
+		modal: true,
+		buttons: { 
+			"Search": function() {
+				 
+				$("#course_form").submit();
+				$(this).dialog("close"); 
+			},
+			"Close": function() { 
+				$(this).dialog("close"); 
+			} 
+		} 
+	});
+	
+});
+
+function searchbox(){
+	$( "#search-dialog" ).dialog('open');
+}
+
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a id="search" href="#" onclick="javascript:searchbox()">
+					<span class='search'></span>
+					Search
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<div style="width:100%;">
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+	<tr>
+		<th>Program</th>
+		<th>Learning Mode</th>
+		<th width="100px">Code</th>
+	</tr>
+	
+	<?php 
+	$i=0;
+	foreach ($this->paginator as $entry): 
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<td><a href="<?php echo $this->url(array('module'=>'anr-setup','controller'=>'academic-landscape','action'=>'view','program-id'=>$entry['id']));?>"><?php echo $entry['main_name']; ?></a></td>           
+		<td align="center"><?php echo $entry['market'];?></td>
+		<td align="center"><?php echo $entry['code'];?></td>
+	</tr>
+	<?php
+	$i++;
+	endforeach 
+	?>
+</table>
+</div>
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>
+
+<div id="search-dialog" title="Search Program">
+<form name="course_form" id="course_form" action="" method="post">
+	<table width="100%">
+		<tr>
+			<td>
+				Program Name
+			</td>
+			<td width="5px">:</td>
+			<td>
+				<input type="text" name="name" value="<?php echo $this->search_name; ?>" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Program Code
+			</td>
+			<td width="5px">:</td>
+			<td>
+				<input type="text" name="code" value="<?php echo $this->search_code; ?>" />
+			</td>
+		</tr>
+	</table>
+</form>
+</div>

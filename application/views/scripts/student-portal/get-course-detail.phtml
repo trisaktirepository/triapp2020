@@ -1,0 +1,232 @@
+<h2><?php echo $this->translate("Attendance Detail");?></h2>
+<table class="table" width="100%">
+	<tr>
+		<th rowspan="2"><?php echo $this->translate("Total Session");?></th>
+		<th colspan="4"><?php echo $this->translate("Attendance Status");?></th>
+	</tr>
+	<tr>
+		<th width="20%px"><?php echo $this->translate("Hadir");?></th>
+		<th width="20%px"><?php echo $this->translate("Ijin");?></th>
+		<th width="20%px"><?php echo $this->translate("Sakit");?></th>
+		<th width="20%px"><?php echo $this->translate("Tanpa Alasan");?></th>
+	</tr>
+	<tr>
+		<td align="center"><?php echo $this->class_group['class_session']?></td>
+		<td align="center"><?php echo $this->class_group['class_att_attended']?></td>
+		<td align="center"><?php echo $this->class_group['class_att_permission']?></td>
+		<td align="center"><?php echo $this->class_group['class_att_sick']?></td>
+		<td align="center"><?php echo $this->class_group['class_att_absent']?></td>
+	</tr>
+	<tr>
+		<th><?php echo $this->translate("Percentage");?></th>
+		<td align="center"><?php echo round($this->class_group['class_attendance_percentage'], 2);?>%</td>
+		<td colspan="3">&nbsp;</td>
+	</tr>
+</table>
+<h2>Detail</h2>
+<?php if (count($this->attdetail)>0) {?>
+<table class="table" width="100%">
+<tr><?php foreach ($this->attdetail as $value) {
+	?>
+	<th><?php echo date('d-m-Y',strtotime($value['class_date']))?></th>
+	<?php }?>
+	 
+ </tr>
+ <tr><?php 
+  foreach ($this->attdetail as $value) {
+ 	$color="";
+	  if ($value['Status']=='Absent') $color="red";
+	  if ($value['Status']=='Sick') $color="Lightgreen";
+	  if ($value['Status']=='Permission') $color="Yellow";?>
+	<td bgcolor="<?php echo $color;?>"><?php echo $value['Status'];?></td>
+	<?php }?>
+	 
+ </tr>
+</table>
+<?php } else echo $this->translate('Attendance is not recorded');?>
+
+<h2><?php echo $this->translate("Coursework Marks");?></h2>
+<table class="table" width="100%">
+	<tr>
+		<th><?php echo $this->translate("Component Name");?></th>
+		<th><?php echo $this->translate("Component Percentage");?></th>
+		<th><?php echo $this->translate("Mark");?></th>
+		<th><?php echo $this->translate("Mark Resit");?></th>
+		<th><?php echo $this->translate("Component Mark");?></th>
+		<th><?php echo $this->translate("Resit");?></th>
+	</tr>
+	<?php 
+	$tot_percentage = 0;
+	$tot_comp_mark = 0;
+	$today = date("d-m-Y");
+	$publish=0;
+	if ($this->outstanding=="0") {
+	if (count($this->coursework)>0) {
+	foreach ($this->coursework as $component):
+		$tot_percentage += $component['Percentage'];
+	if(isset($component["publish_date"])){
+		if(strtotime($component["publish_date"]) <= strtotime($today)) {
+			$publish++;
+	?>
+	<tr>
+		<td><?php echo $component['component_name'];?></td>
+		<td align="center"><?php echo $component['Percentage'];?></td>
+		<td align="center">
+			<?php 
+			if(isset($component['student_mark']['TotalMarkObtained'])){
+
+				echo number_format($component['student_mark']['TotalMarkObtained'],2) ."/". number_format($component['student_mark']['MarksTotal'],2);
+				echo $component['student_mark']['MarksEntryStatus'] == 407?"*":"";
+			}else{
+				echo "<small>n/a</small>";
+			}
+			?>
+		</td>
+		<td align="center">
+			<?php 
+			if(isset($component['student_mark']['TotalMarkObtainedResit'])){
+
+				echo number_format($component['student_mark']['TotalMarkObtainedResit'],2) ."/". number_format($component['student_mark']['MarksTotal'],2);
+				echo $component['student_mark']['MarksEntryStatus'] == 407?"*":"";
+			}else{
+				echo "<small>n/a</small>";
+			}
+			?>
+		</td>
+		<td align="center">
+			<?php 
+			if(isset($component['student_mark']['FinalTotalMarkObtained'])){
+				$tot_comp_mark += $component['student_mark']['FinalTotalMarkObtained'];
+				echo number_format($component['student_mark']['FinalTotalMarkObtained'],2) ."/". number_format($component['Marks'],2);
+				echo $component['student_mark']['MarksEntryStatus'] == 407?"*":"";
+			}else{
+				echo "<small>n/a</small>";
+			}
+			?>
+		</td>
+		<td><?php // if ($component['allow_resit']=="1" || $component['resit']=="1" ) {
+		if (isset($component['resit'])) { 
+			if ( $component['resit']=="1" ) {
+				if (($component['student_mark']['MarksEntryStatus'] == 411) && ($component['jadwal']=="1") ) {?>
+					<a href="/student-portal/resit/semester/<?php echo $component['semester']?>/subject/<?php echo $component['IdCourse']?>/id/<?php echo $component['IdMarksDistributionMaster']?>" target="_blank">Resit</a>
+		<?php 	} else if ($component['jadwal']=="") echo $this->translate('Resit Schedule Closed/Undefined'); else echo $this->translate('Mark unverified');
+			} else if ( $component['resit']=="2" ) {
+				?>
+					<a href="/student-portal/cancel-resit/semester/<?php echo $component['semester']?>/subject/<?php echo $component['IdCourse']?>/id/<?php echo $component['IdMarksDistributionMaster']?>/idHead/0;?>" target="_blank">Cancel Resit</a>
+			<?php 	 
+			} else   echo $this->translate('Not Allow');
+		} else   echo $this->translate('Not Allow');
+			?></td>
+	</tr>
+	<?php 
+			}//not publish
+		} //isset
+	endforeach;
+	} else echo $this->translate('There is no Course Works Detail');
+	} else echo '<font color="red">'.$this->translate('Courseworks Mark can not be seen, you have outstanding payment on this semester or semester 1').'</font>';?>
+	
+	<?php if(sizeof($this->coursework)==0){?>
+	<tr>
+		<td colspan="5" align="center">
+			<?php echo $this->translate("No mark distribution");?>
+		</td>
+	</tr>
+	<?php }?>
+	<?php if ($publish>0) {?>
+	<tr>
+		<th colspan="4"><?php echo $this->translate("Total");?></th>
+		<td align="center"><?php echo number_format($tot_comp_mark,2);?>/<?php echo $tot_percentage; ?></td>
+	</tr>
+	<?php }?>
+</table>
+
+<small>
+	*:<?php echo $this->translate("Mark not verified");?>
+	<br />
+	
+</small>
+
+<?php 
+
+if (count($this->courseworkdeposit)>0) {
+
+?>
+<h2><?php echo $this->translate("Coursework Marks Deposit");?></h2>
+<table class="table" width="100%">
+	<tr>
+		<th><?php echo $this->translate("Component Name");?></th>
+		<th><?php echo $this->translate("Component Percentage");?></th>
+		<th><?php echo $this->translate("Mark");?></th>
+		<th><?php echo $this->translate("Mark Resit");?></th>
+		<th><?php echo $this->translate("Component Mark");?></th>
+		<th><?php echo $this->translate("Resit");?></th>
+	</tr>
+	<?php 
+	$tot_percentage = 0;
+	$tot_comp_mark = 0;
+	$today = date("d-m-Y");
+	$publish=0;
+ 
+	foreach ($this->courseworkdeposit as $component):
+	$tot_percentage += $component['Percentage'];
+	if(isset($component["publish_date"])){
+		if(strtotime($component["publish_date"]) <= strtotime($today)) {
+			$publish++;
+			?>
+	<tr>
+		<td><?php echo $component['component_name'];?></td>
+		<td align="center"><?php echo $component['Percentage'];?></td>
+		<td align="center">
+			<?php 
+			if(isset($component['student_mark']['TotalMarkObtained'])){
+
+				echo number_format($component['student_mark']['TotalMarkObtained'],2) ."/". number_format($component['student_mark']['MarksTotal'],2);
+				echo $component['student_mark']['MarksEntryStatus'] == 407?"*":"";
+			}else{
+				echo "<small>n/a</small>";
+			}
+			?>
+		</td>
+		<td align="center">
+			<?php 
+			if(isset($component['student_mark']['TotalMarkObtainedResit'])){
+
+				echo number_format($component['student_mark']['TotalMarkObtainedResit'],2) ."/". number_format($component['student_mark']['MarksTotal'],2);
+				echo $component['student_mark']['MarksEntryStatus'] == 407?"*":"";
+			}else{
+				echo "<small>n/a</small>";
+			}
+			?>
+		</td>
+		<td align="center">
+			<?php 
+			if(isset($component['student_mark']['FinalTotalMarkObtained'])){
+				$tot_comp_mark += $component['student_mark']['FinalTotalMarkObtained'];
+				echo number_format($component['student_mark']['FinalTotalMarkObtained'],2) ."/". number_format($component['Marks'],2);
+				echo $component['student_mark']['MarksEntryStatus'] == 407?"*":"";
+			}else{
+				echo "<small>n/a</small>";
+			}
+			?>
+		</td>
+		<td><?php // if ($component['allow_resit']=="1" || $component['resit']=="1" ) {
+			  
+			if ( $component['resit']=="1" ) {
+				if (($component['student_mark']['MarksEntryStatus'] == 411) && ($component['jadwal']=="1") ) {?>
+					<a href="/student-portal/resit/semester/<?php echo $component['semester']?>/subject/<?php echo $component['IdCourse']?>/id/<?php echo $component['IdMarksDistributionMaster']?>/idHead/<?php echo $component['student_mark']['IdHeader'];?>" target="_blank">Resit</a>
+		<?php 	} else if ($component['jadwal']=="") echo $this->translate('Resit Schedule Closed/Undefined'); else echo $this->translate('Mark unverified');
+			} else if ( $component['resit']=="2" ) {
+				?>
+					<a href="/student-portal/cancel-resit/semester/<?php echo $component['semester']?>/subject/<?php echo $component['IdCourse']?>/id/<?php echo $component['IdMarksDistributionMaster']?>/idHead/<?php echo $component['student_mark']['IdHeader'];?>" target="_blank">Cancel Resit</a>
+		<?php 	 
+			} else  echo $this->translate('Not Allow');
+			?></td>
+	</tr>
+	<?php 
+			}//not publish
+		} //isset
+	endforeach;
+	}
+
+?>
+</table>

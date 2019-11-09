@@ -1,0 +1,132 @@
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<script type="text/javascript">
+	function del(title, id){
+		if(confirm('Are you sure to delete '+title+'?')){
+			window.location = "<?php echo $this->url(array('module'=>'admission','controller'=>'registration', 'action'=>'delete')); ?>/id/"+id;
+		}
+	}
+	
+	function add(){
+		window.location="<?php echo $this->url(array('module'=>'admission','controller'=>'registration', 'action'=>'add'));?>";
+	}
+
+	function edit(id){
+		window.location="<?php echo $this->url(array('module'=>'admission','controller'=>'registration', 'action'=>'edit'));?>/id/"+id;
+	}
+
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+
+
+<div style="width: 600px;">
+<fieldset style="width:600px; margin:0 0">
+	<legend>Student Profile Search Options</legend>
+<form name="course_form" action="" method="post">
+	<table width="100%">
+		<tr>
+			<td width="20%">
+				IC Number
+			</td>
+			<td width="5px">:</td>
+			<td width="80%">
+				<input type="text" name="id" value="<?php echo $this->search_id; ?>" style="width:250px" />
+			</td>
+		</tr>
+		<!--<tr>
+			<td>
+				Type Of ID
+			</td>
+			<td width="5px">:</td>
+			<td>
+				
+				<input type="radio" name="id_type" value="1" <? echo $this->search_id_type==1?"checked='checked'":""; ?> /> Personal ID
+				<input type="radio" name="id_type" value="2" <? echo $this->search_id_type==2?"checked='checked'":""; ?> /> Family ID
+				<input type="radio" name="id_type" value="3" <? echo $this->search_id_type==3?"checked='checked'":""; ?> /> Passport
+			</td>
+		</tr>-->
+		<tr>
+			<td>
+				Applicant Name
+			</td>
+			<td width="5px">:</td>
+			<td>
+				<input type="text" name="name" value="<?php echo $this->search_name; ?>" style="width:250px" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Program
+			</td>
+			<td width="5px">:</td>
+			<td>
+				<select name="program" onChange="document.registration_form.submit()">
+					<option value="0"> -- Select Program --</option>
+					<?php
+						foreach ($this->programlist as $programlist) {
+							if($programlist['id'] ==$this->programlist){
+								$selected="selected='selected'";
+							}
+							echo "<option value=".$programlist['id'] .$selected." >".$programlist['main_name']."</option>";
+						}
+					?>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">&nbsp;</td>
+			<td><input type="submit" value="search" /></td>
+		</tr>
+	</table>
+</form>
+</fieldset>
+</div>
+<br />
+<table class="table" width="100%" cellpadding="5" cellspacing="1">	
+	<tr>
+		<th width="10%">IC</th>
+		<th width="50%">Applicant Name</th>
+		<th width="40%">Programme</th>
+	</tr>
+	<?php
+	if(isset($this->applicant)){
+		$i=0; 
+		foreach ($this->applicant as $applicant):
+		?>	
+		<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+			<td><a href="<?php echo $this->url(array('module'=>'application','controller'=>'migration', 'action'=>'view', 'id'=>$applicant['ID']),'default',true);?>"><?php echo $applicant['ARD_IC']; ?></a></td>
+			<td align="left"><?php echo $applicant['ARD_NAME']; ?></td>
+			<td align="left"><?php echo $applicant['main_name']; ?></td>
+		</tr>
+		<?php 
+		$i++;
+		endforeach; 
+	}
+	?>
+</table>
+
+

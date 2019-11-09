@@ -1,0 +1,152 @@
+<script type="text/javascript">
+
+function getLocation(element){
+	//appl_province
+	var select_date =  $("#aps_test_date").val()
+	
+	var selected_val = "<?php echo $this->aps_id;?>";
+
+	
+	 
+	$.ajax({ 
+		type: "POST",
+		url: "<?php echo $this->url(array('module'=>'application','controller'=>'batch-agent','action'=>'ajax-get-location'),'default',true);?>/select_date/"+select_date, 
+		data: "select_date=" + select_date,
+		dataType: 'json',
+		success:		   
+			function(data){			
+
+				$('#aps_id').empty().append('<option value=""> <?php echo $this->translate('please_select'); ?> </option>');
+				 
+				var location = $('#aps_id');
+				var append_html = "";
+				
+				for (var index = 0; index < data.length; index++) {
+					append_html += '<option value="'+data[index].aps_id+'"> '+data[index].location_name+' </option>';
+				}	
+
+				location.append(append_html);		
+				
+	    	}
+	    	
+	});
+
+	
+	
+}	
+
+
+function getFees(element){
+	
+	var aps_id   =  $(element).val()	
+	var appl_id    =  $("#appl_id").val()
+	var transaction_id    =  $("#transaction_id").val()
+    var app_ptest_code    =  $("#app_ptest_code").val()
+    var aph_fees_program  =  $("#aph_fees_program").val()   
+    var aph_fees_location =  $("#aph_fees_location").val()
+     
+   			
+	$.ajax({ 
+		type: "POST",
+		url: "<?php echo $this->url(array('module'=>'default','controller'=>'ajax-utility','action'=>'ajax-get-test-fees'),'default',true);?>/code/"+app_ptest_code+"/program/"+aph_fees_program+"/location/"+aph_fees_location+"/aps_id/"+aps_id+"/tid/"+transaction_id, 
+		data: "",
+		context: document.body, 
+		success:		   
+			function(data){		
+			document.getElementById('apt_fee_amt').value=data;						
+	    	}
+	    	
+	});
+}	
+	
+
+$(window).load(function() {
+	if( $('#aps_test_date').val() != '' ){
+		getLocation();
+		
+	}
+});
+
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li class="divider"></li>
+			<li>
+				<a id="back" href="#" onclick="javascript:back()">
+					<span class='back'></span>
+					<?php echo $this->translate("Back"); ?>
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					<?php echo $this->translate("Info"); ?>
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+	<?php //echo $this->ptform; ?>
+	<form method="post" action="<?php echo $this->url(array('module'=>'agent','controller'=>'batch-agent', 'action'=>'save-answer-sheet'),'default',true);?>">
+	
+	<table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
+		<tr>
+			<!--<th width="10px"><input type="checkbox" name="checkall" id="checkall" value="" /></th>
+			--><th><?php echo $this->translate("Applicant ID"); ?></th>
+			<th><?php echo $this->translate("Applicant Name"); ?></th>
+			<th><?php echo $this->translate("Program 1"); ?></th>
+			<th><?php echo $this->translate("Program 2"); ?></th>
+			<th><?php echo "."?></th>
+		</tr>
+		<?php 
+		if( isset($this->data)){
+			$i=0;
+			foreach ($this->data as $data):
+		?>
+		<tr>
+			<!--<td>
+				
+						<input type="checkbox" name="row[]" class="check" value="<?php echo $i; ?>" disabled="disabled" />
+				
+			</td>
+			--><td align="center">
+				<?php echo $data['applicantID']; ?>
+			</td>
+			<td>
+				<?php echo $data['appl_fname']; ?>
+				
+			</td>
+			<td>
+				<?php echo $data['programcode1'];?>
+			</td>
+			<td>
+				<?php echo $data['programcode2'];?>
+			</td>
+			<td>
+				<?php echo $data['status'];?>
+			</td>			
+		</tr>
+		<?php 
+			$i++;
+			endforeach;
+		}
+		?>
+	</table>
+	<br />
+</form>
+
+

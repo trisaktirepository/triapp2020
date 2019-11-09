@@ -1,0 +1,248 @@
+<script>
+$(function() {
+	var tips = $( ".validateTips" );
+
+	
+	$( "#tabs" ).tabs();
+
+	$("#dialog:ui-dialog").dialog( "destroy" );
+
+	$("#dialog-credit-modal").dialog({
+		
+		width: 615,
+		modal: true,
+		autoOpen: false,
+		buttons: {
+			"Save": function() {
+				$("#creditForm").submit();
+				$( this ).dialog( "close" );
+			},
+			Cancel: function() {
+				$( this ).dialog( "close" );
+			}
+		}
+		
+	});
+
+	$("#dialog-detail-modal").dialog({
+		
+		width: 615,
+		modal: true,
+		autoOpen: false,
+		buttons: {
+			
+			"Close": function() {
+				$( this ).dialog( "close" );
+			}
+		}
+		
+	});
+	
+	$("#dialog-program-modal").dialog({
+		
+		width: 615,
+		modal: true,
+		autoOpen: false,
+		buttons: {
+			
+			"Close": function() {
+				$( this ).dialog( "close" );
+			}
+		}
+		
+	});
+
+	$("#dialog-detail-edit-modal").dialog({
+		
+		width: 615,
+		modal: true,
+		autoOpen: false,
+		buttons: {
+			"Save": function() {
+				if(checkLength('#course_type_id', "Credit Hour", 1, 1 ) && checkLength('#credit_hour', "Credit Hour", 1, 10 )){
+					$("#detailForm").submit();
+				}
+			},
+			Cancel: function() {
+				$( this ).dialog( "close" );
+			}
+		}
+	});
+
+	function checkLength( o, n, min, max ) {
+		if ( $(o).val().length > max || $(o).val().length < min ) {
+			$(o).addClass( "ui-state-error" );
+			updateTips( "Length of " + n + " must be between " +
+				min + " and " + max + ".",$(o) );
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	function updateTips( t ) {
+		tips
+			.text( t )
+			.addClass( "ui-state-highlight" );
+		setTimeout(function() {
+			tips.removeClass( "ui-state-highlight", 1500 );
+		}, 500 );
+	}
+
+});
+
+
+
+function viewDetail(id_place){
+	$('#dialog-detail-modal').load("<?php echo $this->url(array('module'=>'application', 'controller'=>'online-application','action'=>'view-mark'),'default',true); ?>/id_place/"+id_place);
+	$('#dialog-detail-modal').dialog('open');
+}
+
+function viewProgramme(id_prog){
+	$('#dialog-program-modal').load("<?php echo $this->url(array('module'=>'application', 'controller'=>'online-application','action'=>'view-programme'),'default',true); ?>/id_prog/"+id_prog);
+	$('#dialog-program-modal').dialog('open');
+}
+
+
+function autocheck(s,o,select,programid){
+//	alert(programid);
+//	alert(select);
+	
+var r= s.form.elements['checkprogram[]'];
+if(select!=0){r[o-1].checked=true;}
+else{r[o-1].checked=false;}
+}
+
+function submitApplication(title, id){
+	if(confirm('Are you sure to delete '+title+'?')){
+		//window.location = "<?php echo $this->url(array('module'=>'admission','controller'=>'registration', 'action'=>'delete')); ?>/id/"+id;
+	}
+}
+	
+
+</script>
+
+	
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<!--<ul>
+			<li>
+				<a href="#" onclick="javascript:searchbox()">
+					<span class='search'></span>
+					Search
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>-->
+	</div>
+</div>
+
+<div align="center" style="background:#ebebeb; height:30px;">
+<ul class="steps">
+	<li class="prevDone">
+		<span>1</span> <a href="<?php echo $this->url(array('module'=>'application','controller'=>'online-application','action'=>'index','id'=>$this->id),'default',true) ?>">Personal Particulars</a>
+	</li>
+    <li class="prevDone">
+		<span>2</span> <a href="<?php echo $this->url(array('module'=>'application','controller'=>'online-application','action'=>'add-apply','id'=>$this->id),'default',true) ?>">Qualification</a>
+	</li>
+    <li class="current">
+		<span>3</span> Program Preferred
+	</li>
+	<li class="next">
+		<span>4</span> Additional Information
+	</li>
+	<li class="empty">
+		<span>5</span> Offer Letter
+	</li>
+</ul>
+<br class="clear" />
+</div>
+	
+<BR>
+<p>* <?php echo $this->translate("Please choose your preferred program"); ?></p>
+<form name="f1" method="POST">
+<table class="table2" width="100%" cellpadding="5" cellspacing="1" border="0">	
+	<tr bgcolor="#F2F2F2">
+		<td width="5"><b>Bil</b></td>
+		<td align="center"><b>Programme Name</b></td>
+		<td align="center"><b>Market</b></td>
+		<td align="center"><b>Placement Test</b></td>
+		<td align="center"><b>Rank</b></td>
+	</tr>
+	
+	<?php 
+	$bil =1;
+	foreach ($this->program as $data){ 
+	?>
+	
+	<tr bgcolor="#ffffff">
+		<td width="5"><?php echo $bil;?>) </td>
+		<td><?php //echo $data["id"];?>  <a href="#" onclick="javascript:viewProgramme(<?php echo $data["id"];?>);"><?php echo $data["main_name"];?></a></td>
+		<td><?php echo $data["market"];?></td>
+		<td>
+		<?php
+		$placeDB = new App_Model_Application_DbTable_PlacementTest();
+		$placement_test = $placeDB->getPlace($data["id"]);
+		if (!$placement_test) {
+			echo "N/A";
+		}else {
+			$id_place = $placement_test['ID'];
+			echo "<a href='#' onClick=\"javascript:viewDetail($id_place);\" >".$placement_test['NAME']."</a>";
+			
+		}
+
+		?>
+		
+		
+		</td>
+		<td>
+		<input type="checkbox" name="checkprogram[]" id="checkprogram[]" value="<?=$data["id"]?>" />
+			<select name="rank_program<?=$bil?>" id="rank_program<?=$bil?>" onchange="autocheck(this,<?=$bil?>,this.selectedIndex,<?=$data["id"]?>)"> >
+			<option value="0">Please select..</option>
+			<? for ($i=1;$i<=$this->program_count;$i++){ ?>
+			<option value="<?php echo $i;?>"><?php echo $i;?></option>
+			<? } ?>
+			</select>
+			<img src="/images/icon/inquiry_icon.gif">
+		</td>
+	</tr>
+	<?php 
+	$bil++;
+	}
+
+	?>
+
+</table>
+<br>
+
+	<table width="100%">
+		<tr>
+			<td align="center">
+			<input type="submit" value="Save & Next" onclick="form.action='<? echo $this->url(array('module'=>'application','controller'=>'online-application','action'=>'additional','id'=>$this->id),'default',true) ?>'"/>
+			<input type="submit" value="Back" onclick="form.action='<? echo $this->url(array('module'=>'application','controller'=>'online-application','action'=>'add-apply','id'=>$this->id),'default',true) ?>'"/>
+			</td>
+		</tr>
+	</table>
+	</form>
+	
+	
+	
+<div id="dialog-detail-modal" title="Placement Test Assessment Info"></div>
+
+<div id="dialog-program-modal" title="Academic Landscape"></div>

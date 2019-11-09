@@ -1,0 +1,114 @@
+<!--<form action='expresscheckout.php' METHOD='POST'>-->
+<!--<input type='image' name='submit' src='https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif' border='0' align='top' alt='Check out with PayPal'/>-->
+<!--</form>-->
+
+
+
+<!--<form action="https://www.paypal.com/cgi-bin/webscr" method="post">-->
+<form action="http://ibfimsis.oum.edu.my/application/paypal-notification" method="post">
+
+<input type="hidden" name="oso" value="50">
+
+<!-- the cmd parameter is set to _xclick for a Buy Now button -->
+<!-- the cmd parameter is set to _xclick for a Buy Now button -->
+<input type="hidden" name="cmd" value="_xclick">
+<!--to define recepient's/IBFIM email here-->
+<input type="hidden" name="business" value="suliana@meteor.com.my">
+
+<?
+
+$id_stud = 4;
+  
+
+?>
+<input type="hidden" name="item_name" value="TBE">
+<!--<input type="hidden" name="item_number" value="123">-->
+<input type="hidden" name="amount" value="0.01">
+<input type="hidden" name="no_shipping" value="1">
+<input type="hidden" name="no_note" value="1">
+<input type="hidden" name="currency_code" value="MYR">
+<input type="hidden" name="lc" value="GB">
+<input type="hidden" name="bn" value="PP-BuyNowBF">
+<input type="hidden" name="invoice" value="TBE-01-20120503-06">
+
+<!--<img alt="" border="0" src="https://www.paypal.com/en_GB/i/scr/pixel.gif" width="1" height="1">-->
+<br><input type="submit" id="submit" value="submit">
+<div id="divtoprint">
+<table width="100%">
+
+   
+<tr>
+    <td class="test">
+    <img align="left" title="Print" src="/onapp/images/paypal_logo.gif" height="25">
+    <br>
+    </td>
+</tr>
+<tr>
+    <td colspan="2" class="test">
+    <br>
+    <table width="50%" bgcolor="#cccccc" cellspacing="1" cellpadding="5" align="left">
+    <tr bgcolor="#ffffff">
+    <td class="test">
+    <?
+   // echo $_POST["amount"];
+   
+    $topay = $_POST["amount"];
+    ?>
+    Examination Name : TBE<br>
+    Amount : <font color="Red">RM 80</font>
+    </td> 
+  </tr>
+</table><br>
+    </td>
+  </tr>
+  <tr>
+    <td class="test"> 
+    <br>
+<!--    <input type="image" src="https://www.paypal.com/en_US/i/btn/x-click-but23.gif" border="0" name="submit" alt="Make payments with PayPal - it's fast, free and secure!">-->
+<!--    <input type="image" src="images/pay.gif" border="0" name="submit" alt="Make paymentccs with PayPal - it's fast, free and secure!">-->
+    
+    </td>
+    <td>&nbsp;</td>
+  </tr>
+
+</table>
+
+
+</div>
+<table width="100%" border="0" cellpadding="3">
+  <tr>
+         <td valign="top" colspan="3" align="center">
+        
+<!--         <input type="submit" name="submit" value="<?=strtoupper(_PROCEEDTo)?>" onclick="form.action='https://www.paypal.com/cgi-bin/webscr'" />-->
+         
+         </td>
+<!--         <td valign="top" colspan="3" align="center"><input type="submit" name="submit" value="<?=strtoupper(_PROCEEDTo)?>" onclick="form.action='../paypal/expresscheckout.php'" /></td>-->
+      </tr>
+</table>
+
+
+<!-- If you have turned on auto return on your paypal profile the next line shows where they will go after they have paid by paypal and they click return to site -->
+<input type="hidden" name="return" value="http://ibfim.oum.edu.my/onapp/paythanx.php?status=paid&idstud=<?=$id_stud?>"> 
+
+ <!-- and this is where they will go if they click cancel -->
+<!--<input type="hidden" name="cancel_return" value="http://ibfim.oum.edu.my/onapp/paymode.php?id_stud=132">-->
+<input type="hidden" name="cancel_return" value="http://ibfim.oum.edu.my/onapp/paythanx.php?status=notpaid&idstud=<?=$id_stud?>">
+
+<!-- notes about the following parameter rm
+If your return_url page is a static web page and if Instant Payment Notification is on within the profile, you must to set rm = 1 in the button code so that the return_url page can be called through a GET. If you do not set it, your users will encounter HTTP 405 errors when they try to go to the return page because a static web page can't accept a POST.
+So make your return_url a .php file if you have rm=2-->
+<input type="hidden" name="rm" value="2">          <!--Auto return must be off if rm=2     -->
+<!--Next line is where paypal should send the ipn to. we will have set a global value in our paypal account but we can re specify it here  -->
+<!--<input type="hidden" name="notify_url" value="http://ibfimsis.oum.edu.my/application/paypal-notification" /> -->
+<input type="hidden" name="notify_url" value="http://ibfimsis.oum.edu.my/paypal/paypalipn.php" /> 
+<!--ni utk save ic-->
+<input type="hidden" name="custom" value="851017016312_1">   
+<!--<input type="hidden" name="payer_ic" value="850502146107">   -->
+<!--<input type="hidden" name="transaction_subject" value="TBE Part A">-->   
+
+
+
+
+
+
+<input type="hidden" name="idstud" id="idstud" value="6">

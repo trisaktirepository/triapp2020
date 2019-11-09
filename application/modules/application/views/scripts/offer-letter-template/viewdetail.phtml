@@ -1,0 +1,227 @@
+<script>
+$(function() {
+	var tips = $( ".validateTips" );
+
+	
+	$( "#tabs" ).tabs();
+
+	$("#dialog:ui-dialog").dialog( "destroy" );
+
+	$("#dialog-credit-modal").dialog({
+		
+		width: 615,
+		modal: true,
+		autoOpen: false,
+		buttons: {
+			"Save": function() {
+				$("#creditForm").submit();
+				$( this ).dialog( "close" );
+			},
+			Cancel: function() {
+				$( this ).dialog( "close" );
+			}
+		}
+		
+	});
+
+	$("#dialog-detail-modal").dialog({
+		
+		width: 615,
+		modal: true,
+		autoOpen: false,
+		buttons: {
+			
+			"Close": function() {
+				$( this ).dialog( "close" );
+			}
+		}
+		
+	});
+	
+	$("#dialog-program-modal").dialog({
+		
+		width: 615,
+		modal: true,
+		autoOpen: false,
+		buttons: {
+			
+			"Close": function() {
+				$( this ).dialog( "close" );
+			}
+		}
+		
+	});
+
+	$("#dialog-detail-edit-modal").dialog({
+		
+		width: 615,
+		modal: true,
+		autoOpen: false,
+		buttons: {
+			"Save": function() {
+				if(checkLength('#course_type_id', "Credit Hour", 1, 1 ) && checkLength('#credit_hour', "Credit Hour", 1, 10 )){
+					$("#detailForm").submit();
+				}
+			},
+			Cancel: function() {
+				$( this ).dialog( "close" );
+			}
+		}
+	});
+
+	function checkLength( o, n, min, max ) {
+		if ( $(o).val().length > max || $(o).val().length < min ) {
+			$(o).addClass( "ui-state-error" );
+			updateTips( "Length of " + n + " must be between " +
+				min + " and " + max + ".",$(o) );
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	function updateTips( t ) {
+		tips
+			.text( t )
+			.addClass( "ui-state-highlight" );
+		setTimeout(function() {
+			tips.removeClass( "ui-state-highlight", 1500 );
+		}, 500 );
+	}
+
+});
+
+function delDetail(title, id){
+	if(confirm('Are you sure to delete '+title+'?')){
+		window.location = "<?php echo $this->url(array('module'=>'application','controller'=>'offer-letter-template', 'action'=>'deletedetail', 'programID'=>$this->program_id, 'entryID'=>$this->id),'default',true); ?>/id/"+id;
+	}
+}
+
+function addDetail(){
+	window.location="<?php echo $this->url(array('module'=>'application', 'controller'=>'offer-letter-template','action'=>'adddetail', 'id'=>$this->id),'default',true);?>";
+}
+
+function editDetail(id){
+	$('#dialog-detail-edit-modal').load("<?php echo $this->url(array('module'=>'application', 'controller'=>'offer-letter-template','action'=>'adddetail'),'default',true); ?>/id/"+id);
+	$('#dialog-detail-edit-modal').dialog('open');
+}
+
+function back(){
+	window.location="<?php echo $this->url(array('module'=>'application','controller'=>'offer-letter-template','action'=>'index'), 'default', true);?>";
+}
+
+</script>
+
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			
+			<li class="divider"></li>
+			<li>							
+					<a href="#" onClick="back()">
+						<span class='back'></span>Back</a>				
+			</li>	
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+<!--
+<div width="500px">
+
+	<fieldset style="width:500px;">
+		<legend><? echo $this->translate("Programme Info"); ?></legend>
+		<table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
+			<tr>
+				<th width="150px"><? echo $this->translate("Programme Name"); ?> :</th>
+				<td><?php echo $this->program['main_name']; ?></td>
+			</tr>
+			<tr>
+				<th><? echo $this->translate("Program Code"); ?> :</th>
+				<td><?php echo $this->program['code']; ?></td>
+			</tr>
+			<tr>
+				<th><? echo $this->translate("Market"); ?> :</th>
+				<td><?php echo $this->program['market']; ?></td>
+			</tr>
+		</table>	
+	</fieldset>
+</div>
+<br />-->
+<!--<div id="tabs" style="padding: 0 20px;">
+	<ul>
+		<li><a href="#tabs-1"><? echo $this->translate("Entry Requirement"); ?></a></li>
+		<li><a href="#tabs-2">Course Type Requirement</a></li>
+	</ul>
+	-->
+	
+	<!-- Course type Requirement -->
+	<div id="tabs-1">
+		<div class="span-7 buttons">
+		    <a class="positive addLink" href="#" onClick="addDetail();">
+		    	Add Requirement   
+		    	
+		    </a>
+		</div>
+		<br />
+		<br />
+		<br />
+		<table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
+			<tr>
+				<th></th>
+				<th>Title</th>
+				<th>Content</th>
+				<th>Status</th>
+				<th>Order</th>
+				<th width="120px"><i>options</i></th>
+			</tr>
+			
+			<?php 
+			if(isset($this->item)){
+				
+				$i=1;
+				foreach ($this->item as $rs): 
+				?>
+				<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+					<td><?php echo $i; ?>)</td>
+					<td><?php echo $rs['title']; ?></td>
+					<td><?php echo $rs['content']; ?> </td>
+					<td><?php echo $rs['status']==1?"Yes":"no"; ?></td>
+					<td><?php echo $rs['order'];?></td>
+					<td>
+						<a class="editLink" href="#" onClick="editDetail(<?php echo $rs['id']; ?>)">Edit</a>&nbsp;
+						<a class="delLink2" href="#" onClick="delDetail('<?php echo $rs['id']; ?>',<?php echo $rs['id']; ?>)">Delete</a>
+					</td>
+				</tr>
+				<?php 
+				$i++;
+				endforeach; 
+			}
+			?>
+		</table>
+	</div>
+	
+	
+
+<!--  Dialog for program requirement detail add -->
+<div id="dialog-detail-modal" title="Offer Letter Item - Add"></div>
+
+<!--  Dialog for program requirement detail edit-->
+<div id="dialog-detail-edit-modal" title="Offer Letter Item - Edit"></div>

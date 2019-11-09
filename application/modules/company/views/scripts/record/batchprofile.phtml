@@ -1,0 +1,319 @@
+<link class="jsbin" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" /><script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
+<script type="text/javascript">
+
+function geticdetails(form, a){
+	var icnum="icnum"+a;
+	var name = "fullname"+a;
+	var race = "race"+a;
+	var religion = "religion"+a;
+	var email = "email"+a;
+	var contactnum = "contactnum"+a;
+	var gender = "gender"+a;
+	
+	var studIC = document.getElementById(icnum).value;
+
+	$.ajax({ 
+		type: "POST",
+		url: "<?php echo $this->url(array('module'=>'company','controller'=>'record','action'=>'ajax-get-check-ic'),'default',true)?>", 
+		
+		data: "ic=" + studIC,
+		context: document.body, 
+		success: function(data){
+			
+			if (data=='false'){
+				document.getElementById(icnum).value = "";
+				document.getElementById(name).value = "";
+				document.getElementById(race).value = "";
+				document.getElementById(religion).value = "";
+				document.getElementById(email).value = "";
+				document.getElementById(contactnum).value = "";
+				document.getElementById(gender).value = "";
+				document.forms["f1"]["icnum"+a].focus();
+			}else{
+				var response = eval( "(" + data + ")" );
+				
+				if (response.ARD_IC==undefined){
+					
+					document.getElementById(icnum).value = studIC;
+					document.getElementById(name).value = "";
+					document.getElementById(race).value = "";
+					document.getElementById(religion).value = "";
+					document.getElementById(email).value = "";
+					document.getElementById(contactnum).value = "";
+					document.getElementById(gender).value = "";
+				}else{
+					
+					ARD_IC=response.ARD_IC;
+					ARD_NAME=response.ARD_NAME;
+					ARD_RACE=response.ARD_RACE;
+					c_race=response.c_race;
+					ARD_RELIGION=response.ARD_RELIGION;
+					a_religion=response.a_religion;
+					ARD_EMAIL=response.ARD_EMAIL;
+					ARD_PHONE=response.ARD_PHONE;
+					ARD_SEX=response.ARD_SEX;
+					
+					if (ARD_SEX=="M"){
+						jantina="Male";
+					}else if (ARD_SEX=="F"){
+						jantina="Female";
+					}else{
+						jantina=ARD_SEX;
+					}
+					
+					if((ARD_RELIGION=="") || (ARD_RELIGION==null)){
+						agama=ARD_RELIGION;
+					}else{
+						agama=a_religion;
+					}
+					
+					if((ARD_RACE=="") || (ARD_RACE==null)){
+						bangsa=ARD_RACE;
+					}else{
+						bangsa=c_race;
+					}
+					
+					document.getElementById(icnum).value = ARD_IC;
+					document.getElementById(name).value = ARD_NAME;
+					document.getElementById(race).value = response.ARD_RACE,bangsa;
+					document.getElementById(religion).value = response.ARD_RELIGION,agama;
+					document.getElementById(email).value = ARD_EMAIL;
+					document.getElementById(contactnum).value = ARD_PHONE;
+					document.getElementById(gender).value = response.ARD_SEX,jantina;
+				}
+			}
+		}
+	});
+	
+}
+
+function checkgender(form, a){
+//	var jantina= ["Female", "Male"]
+	var jantina = [ { label: "Female", value: "F" },  { label: "Male", value: "M" } ]
+	  $("#gender"+a).autocomplete({
+	  source: jantina
+	  });
+}
+
+//$(function() {
+//  var cities= ["Female", "Male"]
+//  $("#city").autocomplete({
+//  source: cities
+//  });
+//});
+
+
+function isNumberKey(evt)
+ {
+         var charCode = (evt.which) ? evt.which : event.keyCode
+         //allows only numeric and point
+         if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+            
+
+         return true;
+ }
+ 
+ function addrows(){
+ 	var candidates_num = document.frow.candidates_num.value;
+ 	
+ 	if(candidates_num==""){
+			alert('Please insert any number and click Add Rows button');
+		}else{
+			window.location="<?php echo $this->url(array('module'=>'company','controller'=>'record', 'action'=>'batchprofile'),'default',true);?>/candidates_num/"+candidates_num;
+		}
+ }
+ 
+ function savecandidates(candidates_num){
+ 	
+ 	for (var a=1; a<=candidates_num; a++){
+ 		
+		var icnum = document.forms["f1"]["icnum"+a].value;
+		var name = document.forms["f1"]["fullname"+a].value;
+		var race = document.forms["f1"]["race"+a].value;
+		var religion = document.forms["f1"]["religion"+a].value;
+		var email = document.forms["f1"]["email"+a].value;
+		var contactnum = document.forms["f1"]["contactnum"+a].value;
+		var gender = document.forms["f1"]["gender"+a].value;
+		
+		if (icnum==null || icnum=="")
+		{
+			alert("Please enter Ic Number");
+			document.forms["f1"]["icnum"+a].focus();
+			document.forms["f1"]["icnum"+a].style.border = "1px solid red";
+			return false;
+		}
+		
+		if (name==null || name=="")
+		{
+			alert("Please enter your name (as per NRIC)");
+			document.forms["f1"]["fullname"+a].focus();
+			document.forms["f1"]["fullname"+a].style.border = "1px solid red";
+			return false;
+		}
+		
+		if (race==null || race=="")
+		{
+			alert("Please enter race");
+			document.forms["f1"]["race"+a].focus();
+			document.forms["f1"]["race"+a].style.border = "1px solid red";
+			return false;
+		}
+		
+		if (religion==null || religion=="")
+		{
+			alert("Please enter religion");
+			document.forms["f1"]["religion"+a].focus();
+			document.forms["f1"]["religion"+a].style.border = "1px solid red";
+			return false;
+		}
+		
+		if (email==null || email=="")
+		{
+			alert('Please enter Email!');
+			document.forms["f1"]["email"+a].focus();
+			document.forms["f1"]["email"+a].style.border = "1px solid red";
+			return (false);
+		}else{
+			var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+			if (!filter.test(email)) {
+				alert('Please enter valid e-mail address!');
+				document.forms["f1"]["email"+a].focus();
+				document.forms["f1"]["email"+a].style.border = "1px solid red";
+				return (false);
+			} 
+		}
+		
+		if (contactnum==null || contactnum=="")
+		{
+			alert("Please enter contact num");
+			document.forms["f1"]["contactnum"+a].focus();
+			document.forms["f1"]["contactnum"+a].style.border = "1px solid red";
+			return false;
+		}
+		
+		if (gender==null || gender=="")
+		{
+			alert("Please enter gender");
+			document.forms["f1"]["gender"+a].focus();
+			document.forms["f1"]["gender"+a].style.border = "1px solid red";
+			return false;
+		}
+		
+//		if (icnum=="" || fullname=="" || race=="" || religion=="" || email=="" || contactnum=="" || gender==""){
+//			alert("Please complete all fields");
+//			document.forms["f1"]["icnum"+a].focus();
+//			return;
+//		}
+ 	}
+ }
+</script>
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+</div>
+<br />
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+<br />
+<form id="frow" name="frow">
+Number of Candidates: <input type="text" name="candidates_num" id="candidates_num" onkeypress="return isNumberKey(event);"> &nbsp; 
+<input type="button" value="Add Candidate Rows" onclick="addrows();">
+</form>
+<p>
+<?php 
+if ($this->candidates_num!=""){
+?>
+<form id="f1" name="f1"  method="post" action="<?php echo $this->url(array('module'=>'company','controller'=>'record','action'=>'add-batch-profile'),'default',true) ?>" onsubmit="return savecandidates('<?php echo $this->candidates_num?>');">
+<table class="table" width="100%" cellpadding="5" cellspacing="2">
+	<tr>
+		<th width="25px">&nbsp;</th>
+		<th width="50px"><?php echo $this->translate("IC Number"); ?></th>
+		<th width="140px"><?php echo $this->translate("Full Name (as per NRIC)"); ?></th>
+		<th width="50px">Race</th>
+		<th width="80px">Religion</th>
+		<th width="150px">Email</th>
+		<th width="110px">Contact Number</th>
+		<th width="60px">Gender</th>
+	</tr>
+	
+	<?php for ($i=1; $i<=$this->candidates_num; $i++){?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<td>
+			<?php echo $i;?> 
+		</td>		
+		
+		<td>
+			<input type="text" maxlength="12" id="icnum<?php echo $i?>" name="icnum<?php echo $i?>" value=""  onblur="geticdetails(this.form,'<?=$i?>');"> 
+		</td>
+		
+		<td>
+			<input type="text" id="fullname<?php echo $i?>" name="fullname<?php echo $i?>" value=""> 
+		</td>
+		
+		<td>
+			<select name="race<?php echo $i?>" id="race<?php echo $i?>">
+				<option value="">--Please Select--</option>
+				<?php foreach ($this->getRace as $getRce){
+					$raceID = $getRce["id"];
+					$raceParentID = $getRce["parentID"];
+					$raceName = $getRce["name"];
+					?>
+				<option value="<?php echo $raceID;?>"><?php echo $raceName;?></option>
+				<?php }?>
+			</select>
+<!--			<input type="text" size="10" id="race<?php echo $i?>" name="race<?php echo $i?>" value=""> -->
+		</td>
+		
+		<td>
+			<select name="religion<?php echo $i?>" id="religion<?php echo $i?>">
+				<option value="">--Please Select--</option>
+				<?php foreach ($this->getReligion as $getR){
+					$religionID = $getR["id"];
+					$religionParentID = $getR["parentID"];
+					$religionName = $getR["name"];
+					?>
+				<option value="<?php echo $religionID;?>"><?php echo $religionName;?></option>
+				<?php }?>
+			</select>
+<!--			<input type="text" size="10" id="religion<?php echo $i?>" name="religion<?php echo $i?>" value=""> -->
+		</td>
+		
+		<td>
+			<input type="text" id="email<?php echo $i?>" name="email<?php echo $i?>" value=""> 
+		</td>
+		
+		<td>
+			<input type="text" id="contactnum<?php echo $i?>" name="contactnum<?php echo $i?>" value=""> 
+		</td>
+		
+		<td>
+			<select name="gender<?php echo $i?>" id="gender<?php echo $i?>">
+				<option value="">--Please Select--</option>
+				<option value="F">Female</option>
+				<option value="M">Male</option>
+			</select>
+			<!--<input type="text" size="7"  id="gender<?php echo $i?>" name="gender<?php echo $i?>" value="" onkeyup="checkgender(this.form,'<?=$i?>');">-->
+			<!--<input type="text" id="city" > -->
+		</td>
+	</tr>
+	<?php }?>
+	
+	<tr><th colspan="8" align="center">
+	<input type="submit" name="Submit" value="Save Candidate (s)">
+	<!--<input type="submit" name="Reset" value="Reset">-->
+	<input type="hidden" name="company_id" id="company_id" value="<?php echo $this->company_id;?>">
+	<!--<input type="button" value="Save Candidate (s)" onclick="savecandidates('<?php echo $this->candidates_num?>');">-->
+	<input type="hidden" name="candidated_num" id="candidates_num" value="<?php echo $this->candidates_num?>"></th>
+	</tr>
+</table>
+</form>
+
+<?php } ?>

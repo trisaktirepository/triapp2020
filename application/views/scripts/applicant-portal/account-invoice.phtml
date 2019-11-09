@@ -1,0 +1,131 @@
+<script type="text/javascript">
+function postIt(url, data){
+	
+    $('body').append($('<form/>', {
+      id: 'jQueryPostItForm',
+      method: 'POST',
+      action: url
+    }));
+
+    for(var i in data){
+      $('#jQueryPostItForm').append($('<input/>', {
+        type: 'hidden',
+        name: i,
+        value: data[i]
+      }));
+    }
+
+    $('#jQueryPostItForm').submit();
+}
+
+function print_bank_slip(invoice_id,bank_id){
+
+	
+	var data = {'invoice_id':invoice_id,'bank_id':bank_id}
+
+	$('body').append($('<form/>', {
+      id: 'jQueryPostItForm',
+      method: 'POST',
+      action: "/applicant-portal/account-print-bank-slip"
+    }));
+	
+    for(var i in data){
+      $('#jQueryPostItForm').append($('<input/>', {
+        type: 'hidden',
+        name: i,
+        value: data[i]
+      }));
+    }
+	
+    $('#jQueryPostItForm').submit();
+}
+</script>
+
+<table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		<th width="20px" rowspan="2">&nbsp;</th>
+		<th width="100px" rowspan="2"><?php echo $this->translate("Date")?></th>
+		<th rowspan="2"><?php echo $this->translate("Invoice No")?></th>
+		<th rowspan="2"><?php echo $this->translate("Virtual Account")?></th>
+		
+		<th rowspan="2"><?php echo $this->translate("Description")?></th>
+		<th width="110px"><?php echo $this->translate("Invoice Amount")?></th>
+		<th width="110px"><?php echo $this->translate("Invoice Paid")?></th>
+		<th width="110px"><?php echo $this->translate("Credit Note")?></th>
+		<th width="110px"><?php echo $this->translate("Debit Note")?></th>
+		<th width="110px"><?php echo $this->translate("Balance")?></th>
+		<th width="80px" rowspan="2"><?php echo $this->translate("Bank Slip"); ?></th>
+	</tr>
+	<tr>
+		<th align="center">IDR</th>
+		<th align="center">IDR</th>
+		<th align="center">IDR</th>
+		<th align="center">IDR</th>
+		<th align="center">IDR</th>
+	</tr>
+	
+	<?php 
+	$i=0;
+	$total = 0;
+	$total_paid = 0;
+	$total_cn = 0;
+	$total_dn = 0;
+	$total_balance = 0;
+		
+	if($this->invoice){
+	foreach ($this->invoice as $entry):
+		$total = $total + $entry['debit'];
+		$total_paid = $total_paid + $entry['bill_paid'];
+		$total_balance = $total_balance + $entry['bill_balance'];
+		$total_cn += $entry['cn_amount'];
+		$total_dn += $entry['dn_amount'];
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<td align="center"><?php echo $i+1;?></td>
+		<td align="center"><?php echo date('d-m-Y', strtotime($entry['record_date']) ); ?></td>
+		<td><?php if ($entry['IdBank']==1) echo $entry['document']; else echo "-"; ?></td>
+		<td><?php echo $entry['va']; ?></td>
+		<td><?php echo $entry['description']; ?></td>
+		<td><?php echo number_format($entry['bill_amount'], 2, '.', ','); ?></td>
+		<td><?php echo number_format($entry['bill_paid'], 2, '.', ','); ?></td>
+		<td><?php echo number_format($entry['cn_amount'], 2, '.', ','); ?></td>
+		<td><?php echo number_format($entry['dn_amount'], 2, '.', ','); ?></td>
+		<td><?php echo number_format($entry['bill_balance'], 2, '.', ','); ?></td>
+		<td align="center">
+		
+		 
+			<?php 
+				if( strlen($entry['document'])>8 && isset($entry['bill_balance']) && $entry['bill_balance']!=0.00 && ($entry['bill_amount'] != $entry['bill_balance']) ){
+			?>
+			<a href="#" class="printLink" onclick="print_bank_slip(<?php echo $entry['id'];?>);">Cetak</a>
+			<?php 
+				}else
+                if( isset($entry['ppd_id']) && $entry['ppd_id']!=null && $entry['ppd_id'] !=0 ){
+			?>
+			<a href="#" class="printLink" onclick="print_bank_slip(<?php echo $entry['id'];?>);">Cetak</a>  
+			<?php 
+				}else if ($entry['IdBank']==1) {
+			?>
+				SPC (BNI46)
+		 	<?php 
+		 		} else {
+
+		 	?>
+		 		
+		 	<a href="#" class="printLink" onclick="print_bank_slip(<?php echo $entry['id'];?>,<?php echo $entry['IdBank'];?>);">   <?php echo 'Cetak Slip '.$entry['BankName'];}?></a>
+		</td>
+	</tr>
+	<?php 
+	$i++;
+	endforeach;
+	} 
+	?>
+	<tr>
+		<td colspan="4">&nbsp;</td>
+		<th><?php echo number_format($total, 2, '.', ','); ?></th>
+		<th><?php echo number_format($total_paid, 2, '.', ','); ?></th>
+		<th><?php echo number_format($total_cn, 2, '.', ','); ?></th>
+		<th><?php echo number_format($total_dn, 2, '.', ','); ?></th>
+		<th><?php echo number_format($total_balance, 2, '.', ','); ?></th>
+	</tr>
+</table>

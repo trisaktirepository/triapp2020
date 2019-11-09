@@ -1,0 +1,683 @@
+<script>
+	$(function() {
+		$( "#tabs" ).tabs();
+	});
+	
+	$(function() {
+		// a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
+		$( "#dialog:ui-dialog" ).dialog( "destroy" );
+	
+		$( "#dialog-search" ).dialog({
+			modal: true,
+			autoOpen: false,
+			width: 600,
+//			buttons: {
+//				"Search": function() { 
+//					$("#search_form").submit(); 
+//				}, 
+//				"Cancel": function() { 
+//					$(this).dialog("close"); 
+//				}
+//				
+//			}
+		});
+	});
+
+	function searchbox(){
+		$( "#dialog-search" ).dialog('open');
+	}
+
+
+	$(function() {
+		$( "#dialog:ui-dialog" ).dialog( "destroy" );
+		
+		
+		$( "#dialog_student_edit" ).dialog({ 
+			autoOpen: false,
+			modal: true,
+			width: 615,
+	        buttons: { 
+	        
+		        "Save Changes": function() { 
+		        	$('#student_form').submit(); 
+	        	},
+	        	"Cancel": function() { 
+		        	$(this).dialog("close"); 
+	        	}
+        	}
+	        
+		});
+		
+		
+		
+	});
+	
+	
+	$(function() {
+		$( "#dialog:ui-dialog" ).dialog( "destroy" );
+		
+		
+		$( "#dialog_contact_edit" ).dialog({ 
+			autoOpen: false,
+			modal: true,
+			width: 615,
+	        buttons: { 
+	        
+		        "Save Changes": function() { 
+		        	$('#student_contact_form').submit(); 
+	        	},
+	        	"Cancel": function() { 
+		        	$(this).dialog("close"); 
+	        	}
+        	}
+	        
+		});
+		
+		
+		
+	});
+	
+	
+	
+	
+	
+	
+
+	function edit(student_id,address_type_id){			
+		
+			$("#dialog_contact_edit").html("<p><center><img src='/images/icon/ajax-loader.gif' style='margin: 5px 0 0 0;' />&nbsp;&nbsp;Loading...</center></p>");
+			$("#dialog_contact_edit").load("<?php echo $this->url(array('module'=>'admission-record','controller'=>'student', 'action'=>'address'),'default',true);?>/id/" + student_id + "/address_type_id/"+address_type_id);
+			$("#dialog_contact_edit").dialog('open');
+		
+	}
+		
+	
+	
+	function editContact(student_id){
+
+		$("#dialog_student_edit").html("<p><center><img src='/images/icon/ajax-loader.gif' style='margin: 5px 0 0 0;' />&nbsp;&nbsp;Loading...</center></p>");
+			$("#dialog_student_edit").load("<?php echo $this->url(array('module'=>'admission-record','controller'=>'student', 'action'=>'contact'),'default',true);?>/id/" + student_id);
+			$("#dialog_student_edit").dialog('open');
+		
+		
+	}
+
+</script>
+
+
+<body onload="setIframeHeight('myframe');" onresize="setIframeHeight('myframe');"> 
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a id="search" href="<?php echo $this->url(array('module'=>'admission-record','controller'=>'student', 'action'=>'profile'),'default',true);?>">
+					<span class='back'></span>
+					back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+
+<br />
+	
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><? echo $this->noticeMessage;?>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><? echo $this->noticeSuccess;?>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><? echo $this->noticeError;?>.</div>
+<?}?>
+
+
+
+<div id="tabs">
+	<ul>
+		<li><a href="#profile"><?php echo $this->translate("Profile");?></a></li>
+		<li><a href="#address"><?php echo $this->translate("Address");?></a></li>
+		<li><a href="#contact"><?php echo $this->translate("Contact");?></a></li>
+		<li><a href="#regis-history"><?php echo $this->translate("Registration History");?></a></li>
+		<li><a href="#academic-landscape"><?php echo $this->translate("Academic Landscape");?></a></li>
+		<li><a href="#exam-slip"><?php echo $this->translate("Examination");?></a></li>
+	</ul>
+	<div id="profile">
+	
+
+	
+<!-- myProfile TAB -->	
+		
+<table class="table3" width="100%" border="0" cellpadding="5" cellspacing="1" >
+  <tbody>
+    <tr>
+      <th ><b><?php echo $this->translate("myProfile");?></b></th>
+    </tr>
+    <tr>
+      <td ><table width="100%" border="0" cellspacing="0" cellpadding="5" >
+          <tbody>
+            <tr>
+              <td width="150" ><? echo $this->translate("Name");?></td>
+              <td width="20" >:</td>
+              <td ><? echo $this->student["fullname"];?></td>
+              <td width="200px" rowspan="10" align="left" valign="top">
+              
+	              <table width="200" height="150" border="1" cellspacing="0" cellpadding="5">
+	              	<tr>
+	              		<td align="center">
+	              		<img src="/documents/Upload/UserFiles/profile/<? echo $this->student["ic_no"];?>/<? echo $this->uploadFile["filename"];?>" width="150" height="200">
+	              		<br>
+	              		[ <a href="#" onclick="javascript:searchbox()"><?php echo $this->translate("Upload");?><?php echo $this->translate("Picture");?></a> ]</td>
+	            	</tr>
+	        	</table>
+              </td>
+            </tr>
+            <tr>
+              <td width="150" ><? echo $this->translate("Programme");?></td>
+              <td width="20" >:</td>
+              <td ><? echo $this->student["main_name"];?></td>
+            </tr>
+            <tr>
+              <td width="150" ><? echo $this->translate("Faculty");?></td>
+              <td width="20" >:</td>
+              <td > </td>
+            </tr>
+            </tr>
+            <tr>
+              <td width="150" ><? echo $this->translate("ULC");?></td>
+              <td width="20" >:</td>
+              <td > </td>
+            </tr>
+            <tr>
+              <td width="150" ><? echo $this->translate("Intake");?></td>
+              <td width="20" >:</td>
+              <td ><? echo $this->intake_name;?></td>
+            </tr>
+            <tr>
+              <td width="150" ><? echo $this->translate("IC No");?></td>
+              <td width="20" >:</td>
+              <td ><? echo $this->student["ic_no"];?></td>
+            </tr>
+            <tr>
+              <td width="150" ><? echo $this->translate("Passport");?></td>
+              <td width="20" >:</td>
+              <td ><? echo $this->student["passport_no"];?></td>
+            </tr>
+            <tr>
+              <td width="150" ><? echo $this->translate("Citizenship");?></td>
+              <td width="20" >:</td>
+              <td ><? echo $this->student["citizen_name"];?></td>
+            </tr>
+            <tr>
+              <td width="150" ><? echo $this->translate("My E-Mail");?></td>
+              <td width="20" >:</td>
+              <td ><? echo $this->student["email"];?></td>
+            </tr>
+            <tr>
+              <td width="150" ><? echo $this->translate("Gender");?></td>
+              <td width="20" >:</td>
+              <td > <? 
+              		if($this->student["gender"]=='F') echo 'Female';
+              		if($this->student["gender"]=='M') echo 'Male';
+              		?></td>
+            </tr>
+          </tbody>
+      </table>
+</td>
+    </tr>
+    
+  </tbody>
+</table>
+
+
+
+
+
+
+
+<!-- ADDRESS TAB -->	
+
+	</div>
+	<div id="address">
+	<table width="100%" border="0" cellspacing="1" cellpadding="5" class="table3">
+		<tr bgcolor="#f2f2f2" >
+        <th align="<?php echo $this->direction ?>" ><b>Correspondence Address</b></th>
+        <th align="right" width="10"><a href="#" onclick="javascript:edit('<?php echo $this->student_id?>',1)">Edit</a></th>
+    </tr>
+    <tr>
+      <td  colspan=2><table width="100%" border="0" cellspacing="0" cellpadding="5" >
+           <tbody>
+            <tr>
+              <td width="150" ><?php echo $this->translate("Address");?></td>
+              <td width="20" >:</td>
+              <td ><? echo $this->c_address["address1"]?></td>
+            </tr>
+            <tr>
+              <td width="150" ></td>
+              <td width="20" >:</td>
+              <td ><? echo $this->c_address["address2"]?></td>
+            </tr>
+            <tr>
+              <td width="150" ><?php echo $this->translate("City");?></td>
+              <td width="20" >:</td>
+              <td ><? echo $this->c_address["city"]?></td>
+            </tr>
+            <tr>
+              <td width="150" ><?php echo $this->translate("Postcode");?></td>
+              <td width="20" >:</td>
+              <td ><? echo $this->c_address["postcode"]?></td>
+            </tr>
+            <tr>
+              <td width="150" ><?php echo $this->translate("State");?></td>
+              <td width="20" >:</td>
+              <td ><? echo $this->c_address["state_name"]?></td>
+            </tr>
+            <tr>
+              <td width="150" ><?php echo $this->translate("Country");?></td>
+              <td width="20" >:</td>
+              <td ><? echo $this->c_address["country_name"]?></td>
+            </tr>
+          </tbody>
+      </table></td>
+    </tr>
+     <tr bgcolor="#f2f2f2" >
+      <th align="<?php echo $this->direction ?>" bgcolor="#f2f2f2" ><b><?php echo $this->translate("Permenant");?><?php echo $this->translate("Address");?></b></th>
+       <th align="right"><a href="#" onclick="javascript:edit('<?php echo $this->student_id?>',2)">Edit</a></th>
+    </tr><br>
+    <tr>
+      <td colspan=2 valign="top" ><table width="100%" border="0" cellspacing="0" cellpadding="5">
+      <tbody>
+            <tr>
+              <td width="150" ><?php echo $this->translate("Address");?></td>
+              <td width="20" >:</td>
+              <td ><? echo $this->p_address["address1"]?></td>
+            </tr>
+            <tr>
+              <td width="150" ></td>
+              <td width="20" ></td>
+              <td ><? echo $this->p_address["address2"]?></td>
+            </tr>
+            <tr>
+              <td width="150" ><?php echo $this->translate("City");?></td>
+              <td width="20" >:</td>
+              <td ><? echo $this->p_address["city"]?></td>
+            </tr>
+            <tr>
+              <td width="150" ><?php echo $this->translate("Postcode");?></td>
+              <td width="20" >:</td>
+              <td ><? echo $this->p_address["postcode"]?></td>
+            </tr>
+            <tr>
+              <td width="150" ><?php echo $this->translate("State");?></td>
+              <td width="20" >:</td>
+              <td ><? echo $this->p_address["state_name"]?></td>
+            </tr>
+            <tr>
+              <td width="150" ><?php echo $this->translate("Country");?></td>
+              <td width="20" >:</td>
+              <td ><? echo $this->p_address["country_name"]?></td>
+            </tr>
+          </tbody>
+         
+      </table></td>
+    </tr>
+     </table>
+	</div>
+	
+	
+	
+	<!-- CONTACT  TAB -->	
+	
+	<div id="contact">
+	<table width="98%" border="0" cellpadding="5" cellspacing="1" class="table3">
+	  <tbody>
+	  <tr><td align="right">
+	  <a href="#" onclick="javascript:editContact('<?php echo $this->student_id?>')">Edit</a></td>
+	  </tr>
+	    <tr>
+	      <th><b>Personal E-Mail</b></th>
+	    </tr>
+	    <tr>
+	      <td ><table width="100%" border="0" cellspacing="0" cellpadding="5">
+	          <tbody>
+	            <tr>
+	              <td width="150" ><? echo $this->translate("Email");?></td>
+	              <td width="20" >:</td>
+	              <td ><? echo $this->contact["email"];?></td>
+	            </tr>
+	          </tbody>
+	      </table></td>
+	    </tr>
+	    <tr>
+	      <th><div align="justify"><? echo $this->translate("Contact");?> <? echo $this->translate("Number");?></th>
+	    </tr>
+	    <tr>
+	      <td valign="top" ><table width="100%" border="0" cellspacing="0" cellpadding="5">
+	          <tbody>
+	            <tr>
+	              <td width="150" >Telephone (Home)</td>
+	              <td width="20" >:</td>
+	              <td ><? echo $this->contact["house_phone"];?></td>
+	            </tr>
+	            <tr>
+	              <td width="150" >Telephone (Office)</td>
+	              <td width="20" >:</td>
+	              <td ><? echo $this->contact["office_phone"];?></td>
+	            </tr>
+	            <tr>
+	              <td width="150" >Mobile</td>
+	              <td width="20" >:</td>
+	              <td ><? echo $this->contact["mobile"];?></td>
+	            </tr>
+	          </tbody>
+	      </table></td>
+	    </tr>
+	    <tr>
+	      <th><b>Emergency Contact</b></th>
+	    </tr>
+	    <tr>
+	      <td valign="top" ><table width="100%" border="0" cellspacing="0" cellpadding="5">
+	          <tbody>
+	            <tr>
+	              <td width="150" >Name</td>
+	              <td width="20" >:</td>
+	              <td ><? echo $this->contact["ec_name"];?></td>
+	            </tr>
+	            <tr>
+	              <td width="150" >Address</td>
+	              <td width="20" >:</td>
+	              <td ><? echo $this->contact["ec_address"];?></td>
+	            </tr>
+	            <tr>
+	              <td width="150" ></td>
+	              <td width="20" >:</td>
+	              <td ></td>
+	            </tr>
+	            <tr>
+	              <td width="150" >City</td>
+	              <td width="20" >:</td>
+	              <td ><? echo $this->contact["ec_city"];?></td>
+	            </tr>
+	            <tr>
+	              <td width="150" >Postcode</td>
+	              <td width="20" >:</td>
+	              <td ><? echo $this->contact["ec_postcode"];?></td>
+	            </tr>
+	            <tr>
+	              <td width="150" >State</td>
+	              <td width="20" >:</td>
+	              <td ><? echo $this->contact["ec_state"];?></td>
+	            </tr>
+	            <tr>
+	              <td width="150" >Country</td>
+	              <td width="20" >:</td>
+	              <td ><? echo $this->contact["ec_country"];?></td>
+	            </tr>
+	            <tr>
+	              <td width="150" >Telephone</td>
+	              <td width="20" >:</td>
+	              <td ><? echo $this->contact["ec_housephone"];?></td>
+	            </tr>
+	            <tr>
+	              <td width="150" >Handphone</td>
+	              <td width="20" >:</td>
+	              <td ><? echo $this->contact["ec_handphone"];?></td>
+	            </tr>
+	          </tbody>
+	        </table>
+	          </td>
+	    </tr>
+	    <tr>
+	      <td >
+	        <div align="justify"><? echo $this->translate["amendment_note"];?>
+	      </td>
+	    </tr>
+	  </tbody>
+	</table>
+
+	</div>
+	
+	
+	
+	<!-- REGISTRATION HISTORY TAB -->	
+	<div id="regis-history">
+		<table class="table3" width="100%" cellpadding=5 cellspacing=1>
+		 
+			<tr>
+				<th><?php echo $this->translate("Course")?> <?php echo $this->translate("Code")?></th>
+				<th><?php echo $this->translate("Course")?> <?php echo $this->translate("Name")?></th>
+				<th><?php echo $this->translate("Credit")?> <?php echo $this->translate("Hour")?></th>
+				<th><?php echo $this->translate("Status")?></th>	
+				<th><?php echo $this->translate("Date")?></th>			
+			</tr>
+			<?php 
+			    $old_sem='';
+				foreach($this->info as $info){					
+				
+				if($info["semester_id"]!=$old_sem){
+			?>
+			<tr><td colspan=5><?php echo $this->translate("Semester")?> : <?php echo $info["semester_name"] ?></td></tr>
+				<?php } //end if?>
+			
+			<tr>
+				<td><?php echo $info["course_code"]?></td>
+				<td><?php echo $info["course_name"]?></td>
+				<td><?php echo $info["course_credit_hour"]?></td>
+				<td><?php echo $info["status"]?></td>
+				<td><?php echo $info["entry_date"]?></td>
+			</tr>
+			<?php $old_sem = $info["semester_id"]; }?>
+			
+		</table>
+		
+	</div>
+	
+	<div id="academic-landscape">
+	<table width="98%" border="0" cellpadding="5" cellspacing="1" class="table3">
+  <tbody>
+    <tr>
+      <th bgcolor="#f2f2f2" ><b>myAcademic</b></th>
+    </tr>
+    <tr>
+      <td><table width="100%" border="0" cellspacing="1" cellpadding="5" class="table3">
+          <tbody>
+            <tr>
+              <th>Course Code</th>
+              <th>Course Name</th>
+              <th>Course Type</th>
+              <th width="30">Credit Hours</th>
+              <th>Remarks</th>
+            </tr>
+            
+            <?
+            foreach ($this->landscape as $landscape){
+			?>
+            <tr>
+              <td><?=$landscape["course_code"];?></td>
+              <td><?=$landscape["course_name"];?></td>
+              <td><?=$landscape["course_type_name"];?></td>
+              <td align="center"><?=$landscape["credit_hour"];?></td>
+              <td></td>
+            </tr>
+            <? } ?>
+          
+          </tbody>
+      </table></td>
+    </tr>
+  </tbody>
+</table>
+	
+	
+	</div>
+	
+	
+	
+	
+	<!--  EXAM SLIP TAB -->
+	<div id="exam-slip">
+		
+					
+			<?php   $total=0;
+			  		$grand_total=0;  		
+			  		$total_credit_hour=0;
+			  		foreach($this->semester_list as $semester){?>
+			<br>
+			<table class="table3" width="100%" border="0" cellspacing="1" cellpadding="5" >
+			  <tr ><td colspan=5><div align="center"><h3><?php echo $this->translate("Semester"); ?> : <?php echo $semester["semester_name"]?></h3></div></td></tr>
+			  <tr>    
+			    <th width="10%" align="left"><?php echo $this->translate("Course"); ?> <?php echo $this->translate("Code"); ?></th>
+			    <th width="60%" align="left"><?php echo $this->translate("Course"); ?> <?php echo $this->translate("Course Name"); ?></th>
+			    <th width="10%" align="left"><?php echo $this->translate("Credit "); ?> <?php echo $this->translate("Hour"); ?></th>
+			    <th width="10%"><div align="center"><?php echo $this->translate("Mark"); ?></div></th>
+			    <th width="10%"><div align="center"><?php echo $this->translate("Grade"); ?></div></th>
+			  </tr> 
+			  
+			  <?php 
+			  			//get course registartion for particular semester  	
+			    		$oCourse = new App_Model_Record_DbTable_StudentCourseRegistration();
+			    		$course_list = $oCourse->getRegistrationData($this->student["id"],$semester["semester_id"]); 
+			    	  		    	
+			  ?>
+			  
+			  <?php 
+			  		
+			  		foreach($course_list as $course){  ?>
+			  <tr>    
+			  	<td><?php echo $course["course_code"]?></td>
+			  	<td><?php echo $course["course_name"]?></td>
+			  	<td align="center"><?php echo $course["course_credit_hour"]?></td>
+			  	<td align="center"><?php echo $course["final_course_mark"]?></td>
+			  	<td align="center"><?php echo $course["grade_course_mark"]?></td>
+			  </tr>
+			  <?php 
+			  		  $total_credit_hour=$total_credit_hour+$course["course_credit_hour"];
+			  		  $total=($course["course_credit_hour"]*$course["final_course_mark"]);  
+			  		  $grand_total=$grand_total+$total;	  	
+			  		  $grand_mark=($grand_total/$total_credit_hour);	
+			  		}?>
+			 
+			 <tr align="center">
+			  	<td colspan=5>
+			  	<?php echo $this->translate("Semester Average"); ?> :
+			  	<?php echo round($grand_mark, 2); 	?>
+			  	&nbsp;&nbsp;&nbsp;
+			  	<?php  echo $this->translate("Grade"); ?> : 
+			  	<?php  if($grand_mark){
+			  				$oGrade = new App_Model_Exam_DbTable_Grade();
+					  		$data= $oGrade->getGradeInfo($this->student["program_id"],$semester["semester_id"],$grand_mark);
+					   	    echo $data["status"];
+			  		   }
+			    ?></td>
+			  </tr>
+			</table>
+			<br></br>
+			<?php   $total=0;
+			  		$grand_total=0;  	
+			  		$grand_mark=0;	
+			  		$total_credit_hour=0; } //end semester list?>
+			<p>&nbsp;</p>
+		
+	</div>
+</div>
+
+
+<div id="dialog-search" title="Upload Picture">
+<?php 
+	$this->form->setAction($this->url());
+	echo  $this->form;
+?>
+</div>
+
+<script type="text/javascript"> 
+ 
+/***********************************************
+* IFrame SSI script II- ? Dynamic Drive DHTML code library (http://www.dynamicdrive.com)
+* Visit DynamicDrive.com for hundreds of original DHTML scripts
+* This notice must stay intact for legal use
+***********************************************/
+ 
+//Input the IDs of the IFRAMES you wish to dynamically resize to match its content height:
+//Separate each ID with a comma. Examples: ["myframe1", "myframe2"] or ["myframe"] or [] for none:
+var iframeids=["myframe"]
+ 
+//Should script hide iframe from browsers that don't support this script (non IE5+/NS6+ browsers. Recommended):
+var iframehide="yes"
+ 
+var getFFVersion=navigator.userAgent.substring(navigator.userAgent.indexOf("Firefox")).split("/")[1]
+var FFextraHeight=parseFloat(getFFVersion)>=0.1? 16 : 0 //extra height in px to add to iframe in FireFox 1.0+ browsers
+ 
+function resizeCaller() {
+var dyniframe=new Array()
+ 
+for (i=0; i<iframeids.length; i++){
+if (document.getElementById)
+resizeIframe(iframeids[i])
+//reveal iframe for lower end browsers? (see var above):
+if ((document.all || document.getElementById) && iframehide=="no"){
+var tempobj=document.all? document.all[iframeids[i]] : document.getElementById(iframeids[i])
+tempobj.style.display="block"
+}
+}
+}
+ 
+function resizeIframe(frameid){
+var currentfr=document.getElementById(frameid)
+if (currentfr && !window.opera){
+currentfr.style.display="block"
+ 
+if (currentfr.contentDocument && currentfr.contentDocument.body.offsetHeight) //ns6 syntax
+	currentfr.height = currentfr.contentDocument.body.offsetHeight+FFextraHeight+100; 
+else if (currentfr.Document && currentfr.Document.body.scrollHeight) //ie5+ syntax
+	currentfr.height = currentfr.Document.body.scrollHeight+100;
+else
+	currentfr.height = 800;
+	
+ 
+if (currentfr.addEventListener)
+currentfr.addEventListener("load", readjustIframe, false)
+else if (currentfr.attachEvent){
+currentfr.detachEvent("onload", readjustIframe) // Bug fix line
+currentfr.attachEvent("onload", readjustIframe)
+}
+}
+}
+ 
+function readjustIframe(loadevt) {
+var crossevt=(window.event)? event : loadevt
+var iframeroot=(crossevt.currentTarget)? crossevt.currentTarget : crossevt.srcElement
+if (iframeroot)
+resizeIframe(iframeroot.id);
+}
+ 
+function loadintoIframe(iframeid, url){
+if (document.getElementById)
+document.getElementById(iframeid).src=url
+}
+ 
+if (window.addEventListener)
+window.addEventListener("load", resizeCaller, false)
+else if (window.attachEvent)
+window.attachEvent("onload", resizeCaller)
+else
+window.onload=resizeCaller
+ 
+</script> 
+
+
+<!-- New user dialog -->
+<div id="dialog_student_edit" title="Edit Address">
+</div>
+
+<div id="dialog_contact_edit" title="Edit Contact">
+</div>
+
+

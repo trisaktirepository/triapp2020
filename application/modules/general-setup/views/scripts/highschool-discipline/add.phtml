@@ -1,0 +1,77 @@
+<script type="text/javascript">
+function changeState(element,targetElement){
+	var country_id = $(element).val();
+	
+	$.ajax({
+		url: "<?php echo $this->url(array('module'=>'default','controller'=>'ajax-utility', 'action'=>'get-state'),'default',true);?>",
+		data: {'country_id':$(element).val()},
+		type: 'POST',
+		dataType: 'json'	
+	}).done(function ( data ) {
+		
+		$(targetElement).empty().append('<option value=""> <?php echo $this->translate("please_select"); ?> </option>');
+	
+		$.each(data, function(index) {
+			$(targetElement).append('<option value="'+data[index].idState+'"> '+data[index].StateName+' </option>');
+		});
+	});
+}
+
+function changeCity(element, targetElement){
+	$.ajax({
+		url: "<?php echo $this->url(array('module'=>'default','controller'=>'ajax-utility', 'action'=>'get-city'),'default',true);?>",
+		data: {'state_id':$(element).val()},
+		type: 'POST',
+		dataType: 'json'	
+	}).done(function ( data ) {
+		
+		$(targetElement).empty().append('<option value=""> <?php echo $this->translate("please_select"); ?> </option>');
+	
+		$.each(data, function(index) {
+			$(targetElement).append('<option value="'+data[index].idCity+'"> '+data[index].CityName+' </option>');
+		});
+	});
+}
+</script>
+
+<style type="text/css">
+	
+</style>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li class="divider"></li>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'general-setup','controller'=>'highschool-discipline', 'action'=>'index'),'default',true);?>" >
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<br />
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<br />
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<br />
+<?}?>
+<?php 
+	$this->form->setAction($this->url());
+	echo  $this->form;
+?>

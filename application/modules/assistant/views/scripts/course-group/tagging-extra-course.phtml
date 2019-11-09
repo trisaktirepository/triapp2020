@@ -1,0 +1,197 @@
+<script type="text/javascript">
+
+function save() {
+	$("#formlabel").submit();
+}
+	 
+function getProgramme(){
+	var faculty_id = $("#IdCollege").val();
+	 
+	$.ajax({
+		url: "<?php echo $this->url(array('module'=>'ws','controller'=>'transmhs', 'action'=>'ajax-get-program'),'default',true);?>",
+		data: {'faculty_id':$("#IdCollege").val()},
+		type: 'POST',
+		dataType: 'json'	
+	}).done(function ( data ) {
+
+		 
+		$("#IdProgram").empty().append('<option value=""> <?php echo $this->translate("All"); ?> </option>');
+	
+		$.each(data, function(index) {
+			$("#IdProgram").append('<option value="'+data[index].IdProgram+'"> '+data[index].ProgramCode+' '+data[index].ProgramName+' </option>');
+		});
+	});
+}	 
+ 
+	
+</script>
+
+<style>
+ul.program, ul.program li{
+  margin: 0 0 0 10px;
+  padding: 0;
+}
+</style>
+<body ">
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="save();" >
+					<span class='save'></span>
+					<?php echo $this->translate('Save');?>
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<?php if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+<br />
+<?php }?>
+
+<form action="" method="post" >
+	<dl class="zend_form">
+		 
+		<dt id="IdSemester-label">
+			<label class="required" for="IdSemester"><?php echo $this->translate("Semester"); ?></label>
+		</dt>
+		<dd id="IdSemester-element">
+			<select id="IdSemester" name="IdSemester" onchange="search_subject();">
+			    <option value="0"><?php echo $this->translate("Please Select");?></option>
+			    <?php 
+			    	foreach ($this->semester_list as $semester):
+			    		if ($this->semid==$semester['key']) $status='selected="selected"'; else $status="";
+			    ?>
+			    		<option value="<?php echo $semester["key"];?>" <?php echo $status; ?>><?php echo $semester["value"];?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select>
+		</dd>
+		<dt id="IdCollege-label">
+			<label class="required" for="IdCollege"><?php echo $this->translate("Faculty"); ?></label>
+		</dt>
+		<dd id="IdCollege-element">
+			<select id="IdCollege" name="IdCollege" onchange="getProgramme();">
+			    <?php if ($this->role=="1") {?>
+			    <option value=""><?php echo $this->translate("Please Select");?></option>
+			    <?php }
+			    	foreach ($this->college_list as $college):
+			    		$select ='';
+			    		if( isset($this->facid) && $this->facid== $college["key"] ){
+							$select = 'selected="selected"';
+						}
+			    ?>
+			    		<option value="<?php echo $college["key"];?>" <?php echo $select; ?>><?php echo $college["value"];?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select>
+		</dd>
+		
+		<dt id="IdProgram-label">
+			<label   for="IdProgram"><?php echo $this->translate("Program"); ?></label>
+		</dt>
+		<dd id="IdCollege-element">
+			<select id="IdProgram" name="IdProgram" >
+			    <option value=""><?php echo $this->translate("Please Select");?></option>
+			    <?php 
+			    	foreach ($this->program_list as $college):
+			    		$select ='';
+			    		if( isset($this->programid) && $this->programid== $college["IdProgram"] ){
+							$select = 'selected="selected"';
+						}
+			    ?>
+			    		<option value="<?php echo $college["IdProgram"];?>" <?php echo $select; ?>><?php echo $college["ProgramCode"].' - '.$college["ArabicName"];?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select>
+		</dd>
+		
+		 
+		<dt >
+		</dt>
+		<dd >
+			 <input type="submit" name="Cari" value="Cari" >
+		</dd>
+		
+				
+	</dl>
+</form>
+<form method="post" id="formlabel" action="/generalsetup/course-group/tagging-extra-course">
+<input type="hidden" name="save" value="">
+<input type="hidden" name="IdSemester" value="<?php echo $this->semid;?>">
+<input type="hidden" name="IdCollege" value="<?php echo $this->facid;?>">
+<input type="hidden" name="IdProgram" value="<?php echo $this->programid;?>">
+<table class="table" id="result" width="100%">
+	<thead>
+		<tr><th><?php echo $this->translate("No"); ?></th>
+			<th><?php echo $this->translate("Lecturer"); ?></th>
+			<th><?php echo $this->translate("Day"); ?></th> 
+			<th><?php echo $this->translate("Start"); ?></th>
+			<th><?php echo $this->translate("Stop"); ?></th>
+			<th><?php echo $this->translate("Room"); ?></th>
+			<th><?php echo $this->translate("Subject Code"); ?></th>
+			<th><?php echo $this->translate("Subject Name"); ?></th>
+			
+			
+			<th><?php echo $this->translate("Group Code"); ?></th>
+			<th><?php echo $this->translate("Total Student"); ?></th>
+			
+			<th><?php echo $this->translate("Credit Hours"); ?>
+			<th><?php echo $this->translate("Extra Class")?></th>
+			 
+		</tr>
+	</thead>
+	<tbody>
+	<?php $dt='';$name='';
+		foreach ($this->examlist as $key=>$value) {
+			$status="checked";
+			if ($value['Extra']!="1") $status="";
+			$bgcolor="";
+			if($value['FullName']!=$name) {
+				$awal="1"; 
+				$bgcolor="white";
+				$name=$value['FullName'];
+			}
+				else $awal="";
+				
+		 
+		?>
+		<input type="hidden" name="extra[<?php echo $value['sc_id']?>]" value="<?php echo $value['Extra']?>">
+		<tr bgcolor="<?php echo $bgcolor; ?>"><td><?php  echo $key+1;?></td>
+		<td><?php if ($awal=="1") echo $value['FullName'];?></td>
+		<td><?php  echo $this->translate($value['sc_day']);?></td> 
+		<td><?php  echo $value['sc_start_time'];?></td>
+		<td><?php echo $value['sc_end_time'];?></td>
+		<td><?php echo $value['sc_venue'];?></td> 
+		<td><?php echo $value['subject_code'];?></td>
+		<td><?php echo $value['subject_name'];?></td>
+		
+		<td><?php echo $value['GroupName'];?></td>
+		<td><?php echo $value['nstd'];?></td>
+		
+		<td><?php echo $value['sks'];?></td>
+		<td><input type="checkbox" class="cek" name="cek[<?php echo $value['sc_id']?>]" id="cek[<?php echo $value['sc_id']?>]" value="<?php echo $value['Extra'];?>" <?php echo $status?>> </td>
+		
+		</tr>
+		<?php 
+		  
+	}?>
+	</tbody>
+</table>
+</form>
+</body>

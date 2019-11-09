@@ -1,0 +1,70 @@
+<?php
+$registry = Zend_Registry::getInstance();
+$locale = $registry->get('Zend_Locale');
+$this->locale = $locale->toString();
+?>
+<!--<div class="breadcrum">
+	<ul class="tri-steps">
+		<li class="prevDone" ><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'register'),'default',true);?>"><?php echo $this->translate("apply"); ?></a></div></li>
+		<li class="current" ><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'index'),'default',true);?>"><?php echo $this->translate("login"); ?></a></div></li>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'biodata'),'default',true);?>"><?php echo $this->translate("biodata"); ?></a></div></li>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'contactinfo'),'default',true);?>"><?php echo $this->translate("contact_info"); ?></a></div></li>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'programme'),'default',true);?>"><?php echo $this->translate("programme"); ?></a></div></li>
+		<li class="last"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'uploaddocument'),'default',true);?>"><?php echo $this->translate("upload_document"); ?></a></div></li>	
+	</ul>
+	<div class="clear"></div>
+</div>
+-->
+<?php 
+	echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery/plugin/colorbox/jquery.colorbox-min.js');
+	echo $this->headLink()->prependStylesheet($this->baseUrl().'/js/jquery/plugin/colorbox/colorbox.css');
+?>
+<script type="text/javascript">
+	function viewDocReq(){
+		var pId = $('#programme').val();
+
+		if(pId!=0){
+			$.colorbox({
+				href:"<?php echo $this->url(array('module'=>'default','controller'=>'online-application', 'action'=>'view-document-requirement'),'default',true);?>/pid/"+pId,
+				width: "70%",
+				height: "70%"
+			});
+		}else{
+			alert('<?php echo $this->translate("Please select programme"); ?>');
+		}
+	}
+</script>
+
+<style type="text/css">
+	ol{
+		padding: 0;
+		margin: 0 0 0 18px;	
+	}
+	
+	ol li{
+		padding: 2px 0;
+	}
+</style>
+
+<div style="float:left; width:55%;">
+	<div class="message toolbar">
+		<h2><?php echo $this->title; ?></h2>
+		<div class="toolbar-button">
+			
+		</div>
+	</div>
+	
+	<?if(isset($this->noticeMessage)){?>
+	<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+	<?}?>
+	<?if(isset($this->noticeSuccess)){?>
+	<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+	<?}?>
+	<?if(isset($this->noticeError)){?>
+	<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+	<?}?>
+	
+	<?php echo $this->form; ?>
+	
+	
+<div style="clear:both"></div>

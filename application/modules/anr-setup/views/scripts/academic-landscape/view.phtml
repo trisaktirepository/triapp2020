@@ -1,0 +1,169 @@
+<script type="text/javascript">
+
+$(function() {
+	// a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
+	$( "#dialog:ui-dialog" ).dialog( "destroy" );
+
+	$( "#dialog-add" ).dialog({
+		height: 140,
+		modal: true,
+		autoOpen: false,
+		buttons: { 
+			"Add": function() { 
+				$('#add_form').submit(); 
+			},
+			"Cancel": function() { 
+				$(this).dialog("close"); 
+			}
+		}
+	});
+});
+
+function del(title, id){
+	if(confirm('Are you sure to delete this landscape?')){
+		window.location = "<?php echo $this->url(array('module'=>'anr-setup','controller'=>'academic-landscape', 'action'=>'delete', 'program-id'=>$this->program_id),'default',true); ?>/id/"+id;
+	}
+}
+
+function edit(id){
+	window.location="<?php echo $this->url(array('module'=>'anr-setup','controller'=>'academic-landscape', 'action'=>'edit', 'program-id'=>$this->program_id),'default',true);?>/id/"+id;
+}
+
+function add(){
+	$( "#dialog-add" ).dialog('open');
+}
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="add();">
+					<span class='add'></span>
+					Add
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'anr-setup','controller'=>'academic-landscape', 'action'=>'index'),'default',true);?>">
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<br />
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<br />
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<br />
+<?}?>
+
+<div width="500px">
+	<table class="table" width="700px" cellpading="5" cellspacing="1">
+		<tr>
+			<th width="150px">Program Name</th>
+			<td><?php echo $this->program['main_name']; ?></td>
+		</tr>
+		<tr>
+			<th>Program Code</th>
+			<td><?php echo $this->program['code']; ?></td>
+		</tr>
+		<tr>
+			<th>Market</th>
+			<td><?php echo $this->program['market']; ?></td>
+		</tr>
+	</table>
+</div>
+<br />
+<fieldset style="width:300px">
+	<legend>Program Requirement Details</legend>
+	<div width="300px">
+		<table class="" cellpadding="5" cellspacing="1" width="300px">
+			<?php foreach($this->programRequirement_data as $data){?>
+			<tr>
+				<th width="180px"><?php echo $data['course_type_name']; ?> courses</th>
+				<td>:</td>
+				<td><?php echo $data['credit_hour']; ?> credit hours</td>
+			</tr>
+			<?php }?>
+		</table>
+	</div>
+</fieldset>
+<br />
+
+<table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		<th width="40px">Status</th>
+		<th>Landscape Type</th>
+		<th width="200">Update By</th>
+		<th width="200">Last Changes</th>
+		<th width="220px"><i>options</i></th>
+	</tr>
+	
+	<?php 
+	if(isset($this->landscapes)){
+		
+		$i=0;
+		foreach ($this->landscapes as $landscape): 
+		?>
+		<tr <?php echo $i%2==0?"class='shade'":""; ?>>	
+			<td align="center"><?php echo $landscape['status']==1?"<span class='state publish'>&nbsp;</span>":"<span class='state unpublish'>&nbsp;</span>"; ?></td>
+			<td>
+				<?php 
+					if($landscape['landscape_type']==1){
+						echo "Open Landscape (Add/Drop)";
+					}else
+					if($landscape['landscape_type']==2){
+						echo "Level Based Landscape";
+					}else
+					if($landscape['landscape_type']==3){
+						echo "Block Based";
+					}
+					
+				?>
+			</td>
+			<td><?php echo $landscape['user']; ?></td>
+			<td align="center"><?php echo date('d/m/Y  h:i:s a',strtotime($landscape['last_changes'])); ?></td>
+			<td>				
+				<a class="editLink" href="<?php echo $this->url(array('module'=>'anr-setup', 'controller' => 'academic-landscape', 'action' => 'view-detail', 'id'=>$landscape['id']),'default',true); ?>">View Setup</a>
+				<!-- a class="delLink2" href="#" onClick="del('',<?php echo $landscape['id']; ?>)">Delete</a-->
+				<?php 
+					echo $landscape['status']==0?"<a class='activeLink' href='". $this->url(array('module'=>'anr-setup', 'controller' => 'academic-landscape', 'action' => 'toggle','program-id'=>$this->program_id, 'id'=>$landscape['id']),'default',true)."'>Activate</a>":" "; ?>
+			</td>
+		</tr>
+		<?php 
+		$i++;
+		endforeach; 
+	}
+	?>
+</table>
+
+<br><br><br>
+
+<div id="dialog-add" title="Select landscape type">
+	<form name="add_form" id="add_form" action="<?php echo $this->url(array('module'=>'anr-setup', 'controller' => 'academic-landscape', 'action' => 'add', 'program-id'=>$this->program_id)); ?>">
+		<label><i>Select type of landscape to add</i></label>
+		<select name="type" style="width:250px">
+			<option value="1">Open landscape (add/drop)</option>
+			<option value="2">Level Based landscape</option>
+			<option	value="3">Block based Landscape</option>
+		</select>
+	</form>
+</div>

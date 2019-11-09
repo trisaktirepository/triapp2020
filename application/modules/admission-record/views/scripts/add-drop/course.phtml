@@ -1,0 +1,425 @@
+<script type="text/javascript">
+$().ready(function() {
+
+	// a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
+	$( "#dialog:ui-dialog" ).dialog( "destroy" );
+
+	$( "#dialog-add" ).dialog({
+		autoOpen: false,
+		modal: true,
+		width: 500,
+		buttons: { 
+			"Close": function() { 
+				$(this).dialog("close"); 
+			}
+		}
+	});
+
+	$( "#dialog-confirm" ).dialog({
+		resizable: false,
+		height:140,
+		modal: true,
+		autoOpen: false,
+		buttons: {
+			"Proceed": function() {
+				confirm_process();
+			},
+			Cancel: function() {
+				$( this ).dialog( "close" );
+			}
+		}
+	});
+
+});
+
+function add(){
+	var sem_limit = <?php echo $this->requirement['max_sem_credit']; ?>;
+	var total = $('#total').html();
+
+	if(total > sem_limit){
+		alert('This student have reach credit hour limit for this semester: '+total+" "+sem_limit);
+	}else{
+		$( "#dialog-add" ).dialog('open');
+	}
+	
+}
+
+function addCourse(course_id){
+	validate_add(course_id);
+	
+	var reg_data = getCourseData(course_id);
+	var current_credit_hour = calculate_credit_hour();
+	var sem_limit = <?php echo $this->requirement['max_sem_credit']; ?>;
+	
+	if(current_credit_hour + parseInt(reg_data.credit_hour) > sem_limit){
+		alert('Cannot add more course. Credit hour has reach maximum credit hour persemester');
+	}else{
+		var textToInsert = '';
+		textToInsert  += '<li id=\'add_course_' + reg_data.id + '\'>' + reg_data.name + ' - ' + reg_data.code + ' - <a href=\'#\' onclick=\'javascript:cancel_add(' + reg_data.id + ')\'>cancel</a></li>';
+		$('#add-course').append(textToInsert);
+	
+		var rowToInsert = '';
+		rowToInsert  += '<tr id=\'add_' + reg_data.id + '\'><td>&nbsp;</td><td>' + reg_data.name + '</td><td align=\'center\'>' + reg_data.code + '</td><td align=\'center\'>' + reg_data.credit_hour + '</td></tr>';
+		$('#student_course tr:last').before(rowToInsert);
+		
+		
+		$('#total').html(calculate_credit_hour());
+	}
+}
+
+function drop(){
+	var id = $('input[name=registration_id]:checked').val();
+
+	if(!id){
+		alert('Please select any course first');
+	}else{
+		/*get course detail*/
+		var reg_data = getRegistrationData(id);
+		
+		$('#reg_'+id).remove();
+		
+		var textToInsert = '';
+		textToInsert  += '<li id=\'drop_reg_id_' + id +'\'>' + reg_data.course_name + ' - ' + reg_data.course_code + ' - <a href=\'#\' onclick=\'javascript:cancel_drop(' + id + ')\'>cancel</a></li>';
+		
+		$('#drop-course').append(textToInsert);
+
+	}
+	
+	$('#total').html(calculate_credit_hour());
+}
+
+function getRegistrationData(registration_id){
+	var result=null;
+	
+	$.ajax({
+	  url: '<?php echo $this->url(array('module'=>'admission-record','controller'=>'registration', 'action'=>'ajax-get-registration'),'default',true);?>',
+	  dataType: 'json',
+	  async: false,
+	  type: 'POST',
+	  global: false,
+	  data: {id:registration_id},
+	  success: function(data){
+		  result = data;
+	  }
+	});
+	return result;
+}
+
+function getCourseData(course_id){
+	var result=null;
+	
+	$.ajax({
+	  url: '<?php echo $this->url(array('module'=>'anr-setup','controller'=>'course', 'action'=>'ajax-get-course'),'default',true);?>',
+	  dataType: 'json',
+	  type: 'POST',
+	  global: false,
+	  async: false,
+	  data: {id:course_id},
+	  success: function(data){
+		  result = data;
+	  }
+	});
+	return result;
+}
+
+function calculate_credit_hour(){
+	var credit_hour = 0;
+	var rows = $("#student_course tr:gt(0)");
+
+	rows.each(function(index){
+		var ch_col =  parseInt($("td:nth-child(4)", this).html());
+		
+		if(!isNaN(ch_col)){
+			credit_hour += ch_col;
+		}
+	});
+
+	return credit_hour;
+}
+
+function cancel_add(course_id){
+	$('#add_'+course_id).remove();
+	$('#add_course_'+course_id).remove();
+	$('#total').html(calculate_credit_hour());
+}
+
+function cancel_drop(course_reg_id){
+	var data = getRegistrationData(course_reg_id);
+
+	var rowToInsert = '';
+	rowToInsert  += '<tr id=\'reg_' + course_reg_id + '\'><td><input type=\'radio\' value=\'' + course_reg_id + ' \' name=\'registration_id\' /></td><td>' + data.course_name + '</td><td align=\'center\'>' + data.course_code + '</td><td align=\'center\'>' + data.course_credit_hour + '</td></tr>';
+	$('#student_course tr:last').before(rowToInsert);
+
+	$('#drop_reg_id_'+course_reg_id).remove();
+	
+	$('#total').html(calculate_credit_hour());
+}
+
+function validate_add(course_id){
+	/*check for already register*/
+	isCourseRegister(course_id);
+	
+	/*check for already tring to register*/
+}
+
+function isCourseRegister(course_id){
+	var result=null;
+	
+	$.ajax({
+	  url: '<?php echo $this->url(array('module'=>'admission-record','controller'=>'registration', 'action'=>'ajax-is-course-register','id'),'default',true);?>',
+	  dataType: 'json',
+	  async: false,
+	  type: 'POST',
+	  global: false,
+	  data: {id:<?php echo $this->student['id'];?>,semester_id:<?php echo $this->semester['id'];?>,course_id:course_id},
+	  success: function(data){
+		  result = data;
+	  }
+	});
+	return result;
+}
+
+function confirm_process(){
+	//drop data
+	var drop = $("#drop-course li");
+	var drop_id = '';
+	drop.each(function(index){
+		var data =  $(this).attr('id').replace("drop_reg_id_", "");
+
+		if(drop_id==''){
+			drop_id = data;
+		}else{
+			drop_id += ',' + data;
+		}
+	});
+	$('#drop').val(drop_id);
+	
+	//add_data
+	var add = $("#add-course li");
+	var add_id = '';
+	add.each(function(index){
+		var data =  $(this).attr('id').replace("add_course_", "");
+
+		if(add_id==''){
+			add_id = data;
+		}else{
+			add_id += ',' + data;
+		}
+	});
+	$('#add').val(add_id);
+	
+	
+	$('#add-drop_form').submit();
+}
+</script>
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="javascript:add()">
+					<span class='add-course'></span>
+					Add Course
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:drop()">
+					<span class='drop-course'></span>
+					Drop Course
+				</a>
+			</li>
+			<li class="divider" />
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'admission-record','controller'=>'add-drop', 'action'=>'semester', 'stud_id'=>$this->student['id']),'default',true);?>">
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="calculate_credit_hour();">
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<div align="center" style="background:#ebebeb; height:30px;">
+<ul class="steps">
+	<li class="prevDone">
+		<span>1</span> Student Selection
+	</li>
+    <li class="prevDone">
+		<span>2</span> Semester Selection
+	</li>
+    <li class="current">
+		<span>3</span> Course Add & Drop
+	</li>
+	<li class="next">
+		<span>3</span> Finish
+	</li>
+</ul>
+<br class="clear" />
+</div>
+
+<br />
+<h2>Student Details</h2>
+<table class="table5" cellpadding="0" cellspacing="2">
+	<tr>
+		<th><b>Name</b></th>
+		<td>:</td>
+		<td><?php echo $this->student['fullname']; ?></td>
+	</tr>
+	<tr>
+		<th><b>Matric No</b></th>
+		<td>:</td>
+		<td><?php echo $this->student['matric_no']; ?></td>
+	</tr>
+	<tr>
+		<th><b>Program</b></th>
+		<td>:</td>
+		<td><?php echo $this->program['main_name']; ?></td>
+	</tr>
+	<tr>
+		<th><b>Program Max Credit Hour</b></th>
+		<td>:</td>
+		<td><?php echo $this->requirement['max_sem_credit']; ?></td>
+	</tr>
+	<tr>
+		<th><b>Semester</b></th>
+		<td>:</td>
+		<td><?php echo $this->semester['name']; ?></td>
+	</tr>
+</table>
+<br />
+
+<h2>Student Courses</h2>
+<table id="student_course" class="table" width="100%" cellpadding="5" cellspacing="2">
+	<tr>
+		<th width="25px">&nbsp;</th>
+		<th>Course Name</th>
+		<th>Course Code</th>
+		<th>Credit Hour</th>
+	</tr>
+	<?php 
+	$i=0;
+	$total_credit_hour=0;
+	foreach ($this->courses as $course):
+			
+		if($course['course_status_id']==1){
+			$total_credit_hour += $course['course_credit_hour'];
+			?>
+	
+	<tr class='shade' id="<?php echo "reg_". $course['id']; ?>">
+		<td>
+			<input type="radio" name="registration_id" value="<?php echo $course['id']; ?>">
+		</td>
+		<td align="left"><?php echo $course['course_name']; ?></td>
+		<td align="center"><?php echo $course['course_code']; ?></td>
+		<td align="center" id="<?php echo $i; ?>"><?php echo $course['course_credit_hour']; ?></td>
+	</tr>
+	<?php 
+			$i++;
+		}
+	endforeach 
+	?>
+	<tr>
+		<td colspan="3" align="right" style=" background:#FFF;"><div style="margin:0 30px; font-weight:bold;">Total Credit Hours</div></td>
+		<td align="center" id="total"><?php echo $total_credit_hour; ?></td>
+	</tr>
+</table>
+
+<div>
+	<h2>Add & Drop Request</h2>
+<table class="table" width="100%" cellpadding="5" cellspacing="2">
+	<tr>
+		<th width="50%">Add</th>
+		<th>Drop</th>
+	</tr>
+	<tr>
+		<td><ul id="add-course"></ul></td>
+		<td><ul id="drop-course"></ul></td>
+	</tr>
+</table>
+</div>
+
+<div id="dialog-add" title="Course Offered for semester <?php echo $this->semester['name']; ?>">
+	<table width="100%" border="0" cellpadding="5">
+		<tr>
+			<td width="50px">
+				Faculty
+			</td>
+			<td width="10px">:</td>
+			<td>
+				<select>
+					<option>All Faculty</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Department
+			</td>
+			<td>:</td>
+			<td>
+				<select>
+					<option>All Department</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3">
+				<table width="100%" border="0" class="table3" cellpadding="5" cellspacing="1">
+					<tr>
+						<th>&nbsp;</th>
+						<th>Course Name</th>
+						<th>Course Code</th>
+						<th>Credit Hour</th>
+					</tr>
+				<?php foreach ($this->courseList as $course):?>
+					<tr>
+						<td><input type="button" value="Add" onclick="javascript:addCourse(<?php echo $course['course_id']; ?>)" /></td>
+						<td>
+							<?php echo $course['course_name']; ?>
+						</td>
+						<td>
+							<?php echo $course['course_code']; ?>
+						</td>
+						<td align="center">
+							<?php echo $course['course_credit_hour']; ?>
+						</td>
+						
+					</tr>
+					<?php endforeach;?>
+				</table>
+			</td>
+		</tr>
+	</table>
+</div>
+<br />
+<div style="width:100%; background:#E5E5E5; padding: 5px;">
+	<center>
+		<input type="button" value="Confirm Add & Drop" onClick="javascript:$('#dialog-confirm').dialog('open');" />
+	</center>
+</div>
+<form name="add-drop_form" id="add-drop_form" method="post" action="<?php echo $this->url(array('module'=>'admission-record','controller'=>'add-drop', 'action'=>'receipt', 'student_id'=>$this->student['id'],'semester_id'=>$this->semester['id']),'default',true);?>">
+	<input type="hidden" name="add" id="add" value="" />
+	<input type="hidden" name="drop" id="drop" value="" />
+</form>
+
+<!-- Confirm Dialog -->
+<div id="dialog-confirm" title="Confirm Add & Drop?">
+	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>These add & drop request will be submitted. Are you sure?</p>
+</div>

@@ -1,0 +1,215 @@
+<script>
+var s_elementName = null;
+var s_element = null;
+$(function(){
+	
+	$( "#dialog-assign" ).dialog({
+	  autoOpen: false,
+      modal: true,
+      width: 550,
+      buttons: {
+        "<?php echo $this->translate('Assign'); ?>": function() {
+          $(s_element).val($('#staff_list').val());
+          $(s_elementName).val($('#staff_list').find('option:selected').text());
+            
+          $( this ).dialog( "close" );
+        },
+        Close: function() {
+          $( this ).dialog( "close" );
+        }
+      }
+    });
+
+	$( "#dialog-program" ).dialog({
+		  autoOpen: false,
+	      modal: true,
+	      width: 550,
+	      buttons: {
+	    	  "<?php echo $this->translate('Add'); ?>": function() {  
+	    		  var sel_text = $('#program_sel').find('option:selected').text();
+	    		  var sel_id = $('#program_sel').val();
+	    		  
+	    		  var tappend = '<tr>'+
+	    		  '<td>'+
+	    		  '<input type="hidden" name="program[]" value="'+sel_id+'" />'+
+	    		  sel_text +
+	    		  '</td>'+
+	    		  '<td align="center"><a href="#" onclick="$(this).parent().parent().remove(); return false;"><img src="/images/icon/user_trash_full.png" title="Delete" /></td>'+
+	    		  '</tr>';
+		    	  $('#program tbody').append(tappend);
+		    	  
+	          $( this ).dialog( "close" );
+	        },
+	        Close: function() {
+	          $( this ).dialog( "close" );
+	        }
+	      }
+	    });
+
+    $('#assign-lecturer').click(function(){
+    	$( "#dialog-assign" ).dialog('open');
+    	s_element = $('#IdLecturer');
+    	s_elementName = $('#IdLecturerName');
+    	
+    	return false;
+    });
+
+    $('#assign-verificator').click(function(){
+    	$( "#dialog-assign" ).dialog('open');
+    	s_element = $('#VerifyBy');
+    	s_elementName = $('#VerifyByName');
+    	
+    	return false;
+    });
+
+
+    $('#assign-program').click(function(){
+    	$( "#dialog-program" ).dialog('open');
+
+    	return false;
+    });
+});
+
+function getLecturer(element,targetElement){
+	var nama = $(element).val();
+
+	$.ajax({
+		url: "<?php echo $this->url(array('module'=>'assistant','controller'=>'course-group', 'action'=>'ajax-get-lecturer'),'default',true);?>",
+		data: {'nama':$(element).val()},
+		type: 'POST',
+		dataType: 'json',	
+		beforeSend: function(){
+			$(targetElement).hide();
+			$(targetElement).parent().append('<div class="loading">Loading...</div>');	
+		}	
+	}).done(function ( data ) {
+
+		$('.loading').remove();  
+		$(targetElement).show();
+		
+		$(targetElement).empty().append('<option value="0"> <?php echo $this->translate("Please Select"); ?> </option>');
+	
+		$.each(data, function(index) {
+			$(targetElement).append('<option value="'+data[index].IdStaff+'"> '+data[index].FullName+' </option>');
+		});
+	});
+}
+
+function go_nav_back(url){
+	url = '<?php echo $this->url(array('module'=>'assistant','controller'=>'course-group','action'=>'group-list','idSubject'=>$this->idSubject,'idSemester'=>$this->idSemester),'default',true);?>';
+	
+	window.location = url;
+}
+
+</script>
+
+<style>
+.zend_form dt {
+    width: 175px;
+}
+.zend_form dd {
+    padding: 2px 0 0 175px;
+}
+.zend_form dd {
+    width: 360px;
+}
+</style>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>			
+			
+			<li>
+				<a href="#" onclick="go_nav_back();" >
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<fieldset>
+  <legend><?php echo $this->translate("Subject Info")?></legend>
+  <table class="" width="50%" cellpadding="5" cellspacing="5" border="0">
+  	<tr>
+  		<td width="100px"><?php echo $this->translate("Subject Name")?></td>
+  		<td width="5px">:</td>
+  		<td><?php echo ($this->subject["subjectMainDefaultLanguage"]) ? $this->subject["subjectMainDefaultLanguage"]:$this->subject["SubjectName"];  ?></td>
+  	</tr>
+  	<tr>
+  		<td><?php echo $this->translate("Subject Code")?></td>
+  		<td width="5px">:</td>
+  		<td><?php echo $this->subject["SubCode"];?></td>
+  	</tr>
+  	<tr>
+  		<td><?php echo $this->translate("Semester")?></td>
+  		<td width="5px">:</td>
+  		<td><?php echo $this->semester["SemesterMainName"];?></td>
+  	</tr>
+  </table>
+</fieldset>
+<br>
+
+
+<?php echo $this->form;?>
+
+
+<div id="dialog-assign" title="Assign Academic Staff">
+  <table>
+    <tr>
+      <td><?php echo $this->translate('Lecturer Search'); ?></td>
+      <td>:</td>
+      <td>
+        <input type="text" name="nama" id="nama" onchange="getLecturer(this,$('#staff_list'));">
+           
+      </td>
+    </tr>
+    <tr>
+      <td><?php echo $this->translate('Staff'); ?></td>
+      <td>:</td>
+      <td>
+        <select name="staff_list" id="staff_list">
+        </select>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<div id="dialog-program" title="Add Program">
+  <table>
+    <tr>
+      <td><?php echo $this->translate('Program'); ?></td>
+      <td>:</td>
+      <td>
+        <select name="program_sel" id="program_sel">
+          <option><?php echo $this->translate("Please select"); ?></option>
+          <?php 
+          foreach($this->program_list as $list):
+          ?>
+          <optgroup label="<?php echo $list['faculty']['ArabicName'];?> - <?php echo $list['faculty']['CollegeCode'];?>">
+              <?php 
+              if(isset($list['program'])){
+                foreach ($list['program'] as $program){
+              ?>
+              <option value="<?php echo $program['IdProgram'];?>"><?php echo $program['ArabicName'];?> - <?php echo $program['ProgramCode'];?></option>
+              <?php
+                } 
+              }
+              ?>
+          </optgroup>
+          <?php 
+          endforeach;
+          ?>
+        </select>
+      </td>
+    </tr>
+   </table>
+</div>

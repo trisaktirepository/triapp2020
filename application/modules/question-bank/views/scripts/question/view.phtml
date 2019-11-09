@@ -1,0 +1,205 @@
+<script type="text/javascript">
+	
+	
+	function add(){
+		window.location="<?php echo $this->url(array('module'=>'question-bank','controller'=>'question', 'action'=>'add-question'));?>";
+	}
+
+	function edit(){
+		var id = $('input[name=question_id]:checked').val();
+
+		if(!id){
+			alert('Please select any question first');
+		}else{
+			window.location="<?php echo $this->url(array('module'=>'question-bank','controller'=>'question', 'action'=>'edit'),'default',true);?>/qid/"+id+"/pid/<?php echo $this->pool_id?>";
+		}
+	}
+	
+	function del(){
+		var id = $('input[name=question_id]:checked').val();
+
+		if(!id){
+			alert('Please select any question question first');
+		}else{
+			if(confirm('Are you sure to delete this question?')){
+				window.location = "<?php echo $this->url(array('module'=>'question-bank','controller'=>'question', 'action'=>'delete-question')); ?>/qid/"+id;
+			}
+		}
+	}
+	
+	
+   function searchbox(){
+		$( "#dialog-search" ).dialog('open');
+	}
+	
+   $(function() {
+		// a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
+		$( "#dialog:ui-dialog" ).dialog( "destroy" );
+	
+		$( "#dialog-search" ).dialog({
+			modal: true,
+			autoOpen: false,
+			width: 600,
+			buttons: {
+				"Search": function() { 
+					$("#search_form").submit(); 
+				}, 
+				"Cancel": function() { 
+					$(this).dialog("close"); 
+				}
+				
+			}
+		});
+	});
+
+</script>
+
+
+
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+		    <li>
+				<a href="#" onClick="javscript:add();">
+					<span class='add'></span>
+					Add
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:edit()">
+					<span class='edit'></span>
+					Edit
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:del()">
+					<span class='delete'></span>
+					Delete
+				</a>
+			</li>
+			
+			
+			<li class="divider"></li>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'question-bank','controller'=>'question', 'action'=>'index'),'default',true);?>">
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:searchbox()">
+					<span class='search'></span>
+					Search
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<div width="500px">
+	
+	<fieldset style="width:500px;">
+		<legend>Question Bank Information</legend>
+		<table class="table2" width="500px">
+			<tr>
+				<th width="150px">Question Pool Name</th>
+				<td><?php echo $this->pool['name']; ?></td>
+			</tr>
+			
+		</table>	
+	</fieldset>
+</div>
+<br />
+		
+		<table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
+			<tr>
+			    <th width="25px">&nbsp;</th>
+			    <th width="25px">Question ID</th>
+				<th width="*">Question</th>				
+				<th width="10%">Chapter</th>				
+				<th width="10%">Status</th>		
+				
+			</tr>
+			
+			<?php 
+			if(isset($this->question)){
+				
+				$i=0;
+				foreach ($this->question as $q): 
+				?>
+				<tr valign="top" <?php echo $i%2==0?"class='shade'":""; ?>>
+				    <td width="25px"><input type="radio" name="question_id" value="<?php echo $q['id']; ?>"></td>		
+				    <td align="center">(<?php echo $q['id']; ?>)</td>	
+					<td><?php echo $q['english']; ?> </td>	
+					<td><?php echo $q['topic_name']; ?> </td>	
+					<td><?php if($q['status']==1) echo 'Active'; else 'Not Active'; ?> </td>	
+					
+				</tr>
+				<?php 
+				$i++;
+				endforeach; 
+			}
+			?>
+		</table>
+		
+	
+
+<div id="dialog-search" title="Search Question">
+<form name="search_form" id="search_form" action="" method="post">
+	<table width="100%" class="table5">
+	<tr>
+			<td>
+				Topic / Chapter
+			</td>
+			<td width="5px">:</td>
+			<td>
+				<select name="topic_id">
+				<option value="">--All--</option>
+				<?foreach ($this->topic as $t){?>
+				<option value="<?php echo $t["id"]?>"><?php echo $t["name"]?></option>
+				<? } ?>
+				</select>
+			</td>
+		</tr>
+		
+
+		<tr>
+			<td>
+				Questions
+			</td>
+			<td width="5px">:</td>
+			<td><input type="text" size="50" name="question" value=""></td>
+		</tr>
+		
+		<tr>
+			<td>
+				Questions ID
+			</td>
+			<td width="5px">:</td>
+			<td><input type="text" size="50" name="question_id" value=""></td>
+		</tr>
+		
+		
+		
+	</table>
+</form>
+</div>

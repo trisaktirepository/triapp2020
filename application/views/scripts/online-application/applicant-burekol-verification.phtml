@@ -1,0 +1,762 @@
+<style type="text/css">
+	.photo{
+	
+	}
+	
+	.tbl{
+		border-collapse:separate;
+    	border-spacing:0 5px;
+	}
+	
+	input[type='text']{
+		width: 250px;
+	}
+	
+	select{
+		width: 250px;
+	}
+	
+	input.rwrt{
+		width: 50px;
+	}
+	
+</style>
+
+<script type="text/javascript">
+$(function() {
+	 
+
+    $( "#dialog-upload-file" ).dialog({
+		autoOpen: false,
+    	resizable: false,
+      	height:140,
+      	modal: true,
+      	buttons: {
+        	"Upload File": function() {
+        		$('#form_file').submit();
+        	},
+        	Cancel: function() {
+          		$( this ).dialog( "close" );
+        	}
+      	}
+    });
+	$( ".datepicker" ).datepicker({
+		maxDate: "0",
+		"dateFormat" : 'yy-mm-dd',
+		changeMonth: true,
+	    changeYear: true 
+	});
+
+	$('.nat').click(function(){
+
+		var checked_item = $('input[name=appl_nationality]:checked').attr('id');
+
+		if(checked_item=='foreign'){
+			$('#nationality').show();
+		}else{
+			$('#nationality').hide();
+		}		
+
+		
+	});
+    
+    $('.uploadFile').click(function(e){
+        e.preventDefault();
+        type_id = $(this).attr('id');
+        $("#type_id").val(type_id);
+        
+        disp = $(this).attr('data-name');
+        $('#labelFile').html(disp);
+        
+        $('#dialog-upload-file').dialog('open');
+        
+        
+    })
+});
+
+ 
+
+function upload_file(){
+	
+    var datas = $( '#form_file' ).serialize(); 
+    $.ajax({  
+        type: "POST",
+        url: "/records/studentprofile/upload-photo",  
+        data: datas,  
+        success: function( data ){  
+            alert( data );  
+        }  
+    });  
+
+    return false;  
+}
+   
+
+function change_country(country_id,address_option){
+	
+	$.ajax({
+	    url: "/ajax-utility/get-state",
+	    type: "POST",
+	    dataType: "json",
+	    data: {"country_id": country_id},
+	    success: function(data){
+		    if(address_option=='permanent'){
+		    	$('#state').empty();
+		    	$('#state').append('<option value="">Please Select</option>');
+
+		    	$('#city').empty();
+		    	$('#city').append('<option value="">Please Select</option>');
+		    	
+		    	$.each(data, function(index) {
+		    		$('#state').append('<option value="'+data[index].idState+'">'+data[index].StateName+'</option>');	
+		    	});
+		    }else{
+		    	$('#cstate').empty();
+		    	$('#cstate').append('<option value="">Please Select</option>');
+
+		    	$('#ccity').empty();
+		    	$('#ccity').append('<option value="">Please Select</option>');
+		    	
+		    	$.each(data, function(index) {
+		    		$('#cstate').append('<option value="'+data[index].idState+'">'+data[index].StateName+'</option>');	
+		    	});
+			    
+		    }
+	    
+	    },
+	    error: function(error){
+	         console.log("Error:");
+	         console.log(error);
+	    },
+	    beforeSend: function() {
+	    	if(address_option=='permanent'){
+				showLoading('state','state','loading');
+	    	}else{
+	    		showLoading('cstate','cstate','loading');
+	    	}
+		},
+		complete: function() {
+			if(address_option=='permanent'){
+				hideLoading('loading','state');
+			}else{
+				hideLoading('loading','cstate');
+			}
+		}
+	});
+}
+
+function change_state(state_id,address_option){
+	$.ajax({
+	    url: "/ajax-utility/get-city",
+	    type: "POST",
+	    dataType: "json",
+	    data: {"state_id": state_id},
+	    success: function(data){
+	    	if(address_option=='permanent'){
+		    	$('#city').empty();
+		    	$('#city').append('<option value="">Please Select</option>');
+		    	
+		    	$.each(data, function(index) {
+		    		$('#city').append('<option value="'+data[index].idCity+'">'+data[index].CityName+'</option>');	
+		    	});
+	    	}else{
+	    		$('#ccity').empty();
+		    	$('#ccity').append('<option value="">Please Select</option>');
+		    	
+		    	$.each(data, function(index) {
+		    		$('#ccity').append('<option value="'+data[index].idCity+'">'+data[index].CityName+'</option>');	
+		    	});
+	    	}
+	    
+	    },
+	    error: function(error){
+	         console.log("Error:");
+	         console.log(error);
+	    },
+	    beforeSend: function() {
+	    	if(address_option=='permanent'){
+				showLoading('city','city','loading');
+	    	}else{
+	    		showLoading('ccity','ccity','loading');
+	    	}
+		},
+		complete: function() {
+			if(address_option=='permanent'){
+				hideLoading('loading','city');
+			}else{
+				hideLoading('loading','ccity');
+			}
+		}
+	});
+}
+
+function showLoading(target,target_div,loading_id){
+	$('#'+target).hide();
+	$('#'+target_div).after("<div id='"+loading_id+"'><img src='/images/ajax-loader-bar.gif' /></div>");
+}
+
+function hideLoading(loading_id,target){
+	$('#'+loading_id).remove();
+	$('#'+target).show();
+}
+
+function copy_address_above(){
+	$("input[name='appl_caddress_rw']").val($("input[name='appl_address_rw']").val());
+	$("input[name='appl_caddress_rt']").val($("input[name='appl_address_rt']").val());
+	$("input[name='appl_caddress1']").val($("input[name='appl_address1']").val());
+
+	
+	$("select[name='appl_cprovince']").val($("select[name='appl_province'] option:selected").val());
+	$("select[name='appl_cstate']").val($("select[name='appl_state'] option:selected").val());
+	$("select[name='appl_ccity']").val($("select[name='appl_city'] option:selected").val());
+	
+	$("input[name='appl_ckecamatan']").val($("input[name='appl_kecamatan']").val());
+	$("input[name='appl_ckelurahan']").val($("input[name='appl_kelurahan']").val());
+	$("input[name='appl_cpostcode']").val($("input[name='appl_postcode']").val());
+}
+</script>
+
+<?php 
+	if($this->profile['burekol_verify_date']!=null && $this->profile['burekol_verify_by']!=null ){
+?>
+		<div class="message success"><strong><? echo $this->translate("Data verified.");?></strong>.</div>
+<?php 
+	}else{
+?>
+		<div class="message error"><strong><? echo $this->translate("Data Not yet verified").". ".$this->msg;?></strong>.</div>
+<?php 
+	}
+?>
+<h2>Semua Isian tidak boleh ada yang kosong</h2> 
+<form method="post" action="default/online-application/applicant-burekol-verification/id/<?php echo $this->pes_id;?>">
+
+	<input type="hidden" name="profile_id" value="<?php echo $this->profile['appl_id']; ?>" />
+	<input type="hidden" name="registration_id" value="<?php echo $this->pes_id; ?>" />
+	<!-- PROFILE -->
+	<h2><?php echo $this->translate("Profile");?></h2>
+	<table class="tbl">
+		<tr>
+			<td><?php echo $this->translate("Name");?></td>
+			<td>:</td>
+			<td>
+				<input type="text" name="appl_fname" placeholder="Nama Awal" value="<?php echo $this->profile['appl_fname']; ?>" />
+				<input type="text" name="appl_mname" placeholder="Nama Tengah" value="<?php echo $this->profile['appl_mname']; ?>" />
+				<input type="text" name="appl_lname" placeholder="Nama Akhir" value="<?php echo $this->profile['appl_lname']; ?>" />
+				<br>*Jika nama anda hanya satu kata, isi kotak paling akhir. <br>Jika nama and lebih dari tiga kata isi kotak pertama dengan kata pertama dan kotak akhir dengan kata terakhir serta sisanya isi di kotak tengah
+			</td>
+		</tr>
+		<tr>
+			<td><?php echo $this->translate("Nama diatas kartu");?></td>
+			<td>:</td>
+			<td>
+				<?php 
+				if(isset($this->profile['appl_name_kartu'])){
+					$name_card = $this->profile['appl_name_kartu'];
+				}else{
+					$name_card = $this->profile['appl_fname'];
+					
+					if( strlen($name_card." ".$this->profile['appl_mname']) <17 ){
+						$name_card = $name_card." ".$this->profile['appl_mname'];
+						
+						if( strlen($name_card." ".$this->profile['appl_lname']) <17 ){
+							$name_card = $name_card." ".$this->profile['appl_lname'];
+						}
+					}
+				}
+				?>
+				<input type="text" name="appl_name_kartu" placeholder="" value="<?php echo $name_card; ?>" maxlength="16" />*Nama yang akan muncul di kartu Mahasiswa
+			</td>
+		</tr>
+		<tr>
+			<td><?php echo $this->translate("Tanggal Lahir");?></td>
+			<td>:</td>
+			<td>
+				<input type="text" name="appl_dob" placeholder="YYYY-MM-DD" class="datepicker" value="<?php echo $this->profile['appl_dob']!=null?date('Y-m-d',strtotime($this->profile['appl_dob'])):""; ?>"  />
+			</td>
+		</tr>
+		<tr>
+			<td><?php echo $this->translate("Tempat Lahir");?></td>
+			<td>:</td>
+			<td>
+				<input type="text" name="appl_birth_place" value="<?php echo $this->profile['appl_birth_place']; ?>" />
+			</td>
+		</tr>
+		<tr>
+			<td valign="top"><?php echo $this->translate("Jenis Kelamin");?></td>
+			<td valign="top">:</td>
+			<td>
+				<input type="radio" name="appl_gender" value="1" <?php echo $this->profile['appl_gender']==1?"checked='checked'":""; ?> /> laki-laki
+				<br />
+				<input type="radio" name="appl_gender" value="2" <?php echo $this->profile['appl_gender']==2?"checked='checked'":""; ?> /> Perempuan
+			</td>
+		</tr>
+		<tr><td colspan="3">&nbsp;</td></tr>
+		<tr>
+			<td valign="top"><?php echo $this->translate("Agama");?></td>
+			<td valign="top">:</td>
+			<td>
+				<?php 
+				foreach ($this->religionList as $religion){
+					$checked = "";
+					if($this->profile['appl_religion']==$religion['ssd_id']){
+						$checked = 'checked="checked"';
+					}
+				?>
+				<input type="radio" name="appl_religion" value="<?php echo $religion['ssd_id']; ?>" <?php echo $checked; ?> /> <?php echo $religion['ssd_name_bahasa']; ?>
+				<br />
+				<?php }?>
+			</td>
+		</tr>
+		<tr><td colspan="3">&nbsp;</td></tr>
+		<tr>
+			<td valign="top"><?php echo $this->translate("Status Perkahwinan");?></td>
+			<td valign="top">:</td>
+			<td>
+				<?php 
+				foreach ($this->maritalList as $marital){
+					$checked = "";
+					if($this->profile['appl_marital_status']==$marital['ssd_id']){
+						$checked = 'checked="checked"';
+					}
+				?>
+				<input type="radio" name="appl_marital_status" value="<?php echo $marital['ssd_id']; ?>" <?php echo $checked; ?> /> <?php echo $marital['ssd_name_bahasa']; ?>
+				<br />
+				<?php }?>
+			</td>
+		</tr>
+		<tr><td colspan="3">&nbsp;</td></tr>
+		
+		<tr>
+			<td valign="top"><?php echo $this->translate("Warganegara");?></td>
+			<td valign="top">:</td>
+			<td>
+				<input type="radio" class="nat" name="appl_nationality" id="local" value="96" <?php echo $this->profile['appl_nationality']==1||$this->profile['appl_nationality']==96?"checked='checked'":""?> /> Indonesia
+				<input type="radio" class="nat" name="appl_nationality" id="foreign" value="<?php echo $this->profile['appl_nationality']; ?>" <?php echo $this->profile['appl_nationality']==1||$this->profile['appl_nationality']==96?"":"checked='checked'"?> /> Lainnya
+				<?php 
+					$style = "display: none";
+					if($this->profile['appl_nationality']!=1 && $this->profile['appl_nationality']!=96){
+						$style="display:block;";
+					}
+				?>
+				<select id="nationality" name="" style="<?php echo $style;?>" onchange="$('#foreign').val($(this).val());">
+					<?php 
+					$enable="";
+					foreach ($this->countryList as $country):
+						$select ="";
+						if($enable=="" && $this->profile['appl_nationality']==$country['idCountry']){
+							$select = "selected='selected'";
+						}
+					?>
+					<option value="<?php echo $country['idCountry'];?>" <?php echo $select; ?>>
+						<?php echo $country['CountryName'];?>
+					</option>
+					<?php 
+					endforeach;
+					?>
+				</select>
+			</td>
+		</tr>
+		<tr><td colspan="3">&nbsp;</td></tr>
+		<tr>
+			<td valign="top"><?php echo $this->translate('Alamat'); ?></td>
+			<td valign="top">:</td>
+			<td>
+				<fieldset>
+					<legend><?php echo $this->translate("Alamat");?></legend>
+					
+					<table>
+						<tr>
+							<td><?php echo $this->translate("Rukun Warga / Rukun Tetangga"); ?></td>
+							<td>
+								<input type="text" class="rwrt" name="appl_address_rw" value="<?php echo $this->profile['appl_address_rw']!=null?$this->profile['appl_address_rw']:""; ?>" placeholder="RW" />
+								<input type="text" class="rwrt" name="appl_address_rt" value="<?php echo $this->profile['appl_address_rt']!=null?$this->profile['appl_address_rt']:""; ?>" placeholder="RT" />
+							</td>
+						</tr>
+						<tr>
+							<td><?php echo $this->translate("Jalan"); ?></td>
+							<td>
+								<input type="text" name="appl_address1" value="<?php echo $this->profile['appl_address1']; ?>" placeholder="Jalan" />
+								<!--
+								<input type="text" name="appl_address2" value="<?php echo $this->profile['appl_address2']; ?>" placeholder="Jalan 2" />
+								-->
+							</td>
+						</tr>
+						<tr>
+							<td><?php echo $this->translate("Negara"); ?></td>
+							<td>
+								<select id="country" name="appl_province" onchange="change_country($(this).val(),'permanent');">
+									<option value="null"><?php echo $this->translate("Please Select");?></option>
+									<?php
+									foreach($this->countryList as $country):
+										$select = "";
+										if($this->profile['appl_province']==$country['idCountry']){
+											$select = "selected='selected'";
+										}
+									?>
+									<option value="<?php echo $country['idCountry']; ?>" <?php echo $select; ?>><?php echo $country['CountryName']; ?></option>
+									<?php endforeach;?>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td><?php echo $this->translate("Propinsi"); ?></td>
+							<td>
+								<select id="state" name="appl_state" onchange="change_state($(this).val(),'permanent');">
+									<option value="null"><?php echo $this->translate("Please Select");?></option>
+									<?php 
+									foreach($this->stateList as $state):
+										$select = "";
+										if($this->profile['appl_state']==$state['idState']){
+											$select = "selected='selected'";
+										}	
+									?>
+									<option value="<?php echo $state['idState']; ?>" <?php echo $select; ?>><?php echo $state['StateName']; ?></option>
+									<?php endforeach;?>
+								</select>
+							</td>
+						</tr>
+						
+						<tr>
+							<td><?php echo $this->translate("Kabupaten"); ?></td>
+							<td>
+								<select id="city" name="appl_city">
+									<option value="null"><?php echo $this->translate("Please Select");?></option>
+									<?php 
+									foreach($this->cityList as $city):
+										$select = "";
+										if($this->profile['appl_city']==$city['idCity']){
+											$select = "selected='selected'";
+										}
+									?>
+									<option value="<?php echo $city['idCity']; ?>" <?php echo $select; ?>><?php echo $city['CityName']; ?></option>
+									<?php endforeach;?>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td><?php echo $this->translate("Kecamatan"); ?></td>
+							<td>
+								<input type="text" name="appl_kecamatan" value="<?php echo $this->profile['appl_kecamatan']; ?>" />
+							</td>
+						</tr>
+						<tr>
+							<td><?php echo $this->translate("Kelurahan"); ?></td>
+							<td>
+								<input type="text" name="appl_kelurahan" value="<?php echo $this->profile['appl_kelurahan']; ?>" />
+							</td>
+						</tr>
+						<tr>
+							<td><?php echo $this->translate("Kode Pos"); ?></td>
+							<td>
+								<input type="text" name="appl_postcode" value="<?php echo $this->profile['appl_postcode']; ?>" placeholder="Postcode" />
+							</td>
+						</tr>
+					</table>
+				</fieldset>
+				<br />
+				<fieldset>
+					<legend><?php echo $this->translate("Alamat Terkini");?></legend>
+					<input type="button" value="<?php echo $this->translate("Copy address above");?>" onclick="copy_address_above();" />
+					<br />
+					<table>
+						<tr>
+							<td><?php echo $this->translate("Rukun Warga / Rukun Tetangga"); ?></td>
+							<td>
+								<input type="text" class="rwrt" name="appl_caddress_rw" value="<?php echo $this->profile['appl_caddress_rw']!=null?$this->profile['appl_caddress_rw']:""; ?>" placeholder="RW" />
+								<input type="text" class="rwrt" name="appl_caddress_rt" value="<?php echo $this->profile['appl_caddress_rt']!=null?$this->profile['appl_caddress_rt']:""; ?>" placeholder="RT" />
+							</td>
+						</tr>
+						<tr>
+							<td><?php echo $this->translate("Jalan"); ?></td>
+							<td>
+								<input type="text" name="appl_caddress1" value="<?php echo $this->profile['appl_caddress1']; ?>" placeholder="Jalan" />
+								<!-- 
+								<input type="text" name="appl_caddress2" value="<?php echo $this->profile['appl_caddress2']; ?>" placeholder="Jalan 2" />
+								 -->
+							</td>
+						</tr>
+						<tr>
+							<td><?php echo $this->translate("Negara"); ?></td>
+							<td>
+								<select id="country" name="appl_cprovince" onchange="change_country($(this).val(),'current');">
+									<option value="null"><?php echo $this->translate("Please Select");?></option>
+									<?php
+									foreach($this->countryList as $country):
+										$select = "";
+										if($this->profile['appl_cprovince']==$country['idCountry']){
+											$select = "selected='selected'";
+										}
+									?>
+									<option value="<?php echo $country['idCountry']; ?>" <?php echo $select; ?>><?php echo $country['CountryName']; ?></option>
+									<?php endforeach;?>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td><?php echo $this->translate("Propinsi"); ?></td>
+							<td>
+								<select id="cstate" name="appl_cstate" onchange="change_state($(this).val(),'current');">
+									<option value="null"><?php echo $this->translate("Please Select");?></option>
+									<?php 
+									foreach($this->stateList as $state):
+										$select = "";
+										if($this->profile['appl_cstate']==$state['idState']){
+											$select = "selected='selected'";
+										}	
+									?>
+									<option value="<?php echo $state['idState']; ?>" <?php echo $select; ?>><?php echo $state['StateName']; ?></option>
+									<?php endforeach;?>
+								</select>
+							</td>
+						</tr>
+						
+						<tr>
+							<td><?php echo $this->translate("Kabupaten"); ?></td>
+							<td>
+								<select id="ccity" name="appl_ccity">
+									<option value="null"><?php echo $this->translate("Please Select");?></option>
+									<?php 
+									foreach($this->cityList as $city):
+										$select = "";
+										if($this->profile['appl_ccity']==$city['idCity']){
+											$select = "selected='selected'";
+										}
+									?>
+									<option value="<?php echo $city['idCity']; ?>" <?php echo $select; ?>><?php echo $city['CityName']; ?></option>
+									<?php endforeach;?>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td><?php echo $this->translate("Kecamatan"); ?></td>
+							<td>
+								<input type="text" name="appl_ckecamatan" value="<?php echo $this->profile['appl_ckecamatan']; ?>" />
+							</td>
+						</tr>
+						<tr>
+							<td><?php echo $this->translate("Kelurahan"); ?></td>
+							<td>
+								<input type="text" name="appl_ckelurahan" value="<?php echo $this->profile['appl_ckelurahan']; ?>" />
+							</td>
+						</tr>
+						<tr>
+							<td><?php echo $this->translate("Kode Pos"); ?></td>
+							<td>
+								<input type="text" name="appl_cpostcode" value="<?php echo $this->profile['appl_cpostcode']; ?>" placeholder="Postcode" />
+							</td>
+						</tr>
+					</table>
+				</fieldset>
+				
+			</td>
+		</tr>
+		<tr><td colspan="3">&nbsp;</td></tr>
+		<tr>
+			<td><?php echo $this->translate("Nomor Telp Rumah");?></td>
+			<td>:</td>
+			<td>
+				<input type="text" name="appl_phone_home" value="<?php echo $this->profile['appl_phone_home']; ?>" />
+			</td>
+		</tr>
+		<tr>
+			<?php if ( $this->profile['appl_phone_hp']=="") {
+				$color="red"; ; $pesan="Harus diisi, dan harus benar karena digunakan untuk kirim pesan ";}
+				else {
+					$color="";
+					$pesan="";
+			}?>
+			<td><?php echo $this->translate("Nomor Telp HP");?></td>
+			<td>:</td>
+			<td bgcolor="<?php echo $color;?>">
+				<input type="text" name="appl_phone_hp" value="<?php echo $this->profile['appl_phone_hp']; ?>" /><?php echo $pesan;?>
+			</td>
+		</tr>
+		<tr>
+				<?php if ( $this->profile['appl_email']=="") {
+				$color="red"; ; $pesan="Harus diisi dan digunakan sebagai Login Name";}
+				else {
+					$color="";
+					$pesan="";
+			}?>
+			<td><?php echo $this->translate("Email");?></td>
+			<td>:</td>
+			<td bgcolor="<?php echo $color;?>">
+				<input type="text" name="appl_email" value="<?php echo $this->profile['appl_email']; ?>" /><?php echo $pesan;?>
+			</td>
+		</tr>
+		<tr>
+		<?php if ( $this->profile['appl_nis']=="") {
+			$color="red" ; $pesan="Harus diisi";
+		} else {
+		$color="";$pesan="";
+		}?>
+			<td><?php echo $this->translate("Nomor Induk Siswa");?></td>
+			<td>:</td>
+			<td bgcolor="<?php echo $color;?>">
+				<input type="text" name="appl_nis" value="<?php echo $this->profile['appl_nis']; ?>" /><?php echo $pesan;?>
+			</td>
+		</tr>
+		<tr>
+			<?php if ( $this->profile['appl_nik']=="") {
+				$color="red"; ; $pesan="Harus diisi";}
+				else {
+					$color="";
+					$pesan="";
+			}?>
+			<td><?php echo $this->translate("Nomor Induk Kependudukan");?></td>
+			<td>:</td>
+			<td bgcolor="<?php echo $color;?>">
+				<input type="text" name="appl_nik" value="<?php echo $this->profile['appl_nik']; ?>" /><?php echo $pesan;?>
+			</td>
+		</tr>
+		<tr>
+			<?php if ( $this->profile['appl_uan']=="" ||  $this->profile['appl_uan']==0 ) {
+				$color="red";; $pesan="Harus diisi";}
+				else {
+			$color="";
+			$pesan="";
+			}?>
+			<td ><?php echo $this->translate("Nilai Ujian Nasional");?></td>
+			<td>:</td>
+			<td bgcolor="<?php echo $color;?>">
+				<input type="text" name="appl_uan" value="<?php echo $this->profile['appl_uan']; ?>" /><?php echo $pesan;?>
+			</td>
+		</tr>
+		<tr>
+							<td><?php echo $this->translate("Class"); ?></td><td>:</td>
+							<td>
+								<select id="appl_idbranch" name="appl_idbranch" >
+									 
+									<?php 
+									foreach($this->branchlist as $state):
+										$select = "";
+										if($this->profile['appl_idbranch']==$state['key']){
+											$select = "selected='selected'";
+										}	
+									?>
+									<option value="<?php echo $state['key']; ?>" <?php echo $select; ?>><?php echo $state['value']; ?></option>
+									<?php endforeach;?>
+								</select>
+							</td>
+						</tr>
+	</table>
+	
+	<!-- FAMILY DATA -->
+	<h2><?php echo $this->translate("Parent Data");?></h2>
+	
+	
+	<h3><?php echo $this->translate("Data Ibu");?></h3>
+	<table class="tbl">
+		<tr>
+			<td><?php echo $this->translate('Nama Ibu'); ?></td>
+			<td>:</td>
+			<td>
+				<input type="text" name="af_name" value="<?php echo $this->motherData['af_name']; ?>" />
+			</td>
+		</tr>
+		<tr>
+			<td><?php echo $this->translate('No HP Ibu'); ?></td>
+			<td>:</td>
+			<td>
+				<input type="text" name="af_hp_ibu" value="<?php echo $this->motherData['af_phone']; ?>" />
+			</td>
+		</tr>
+		<tr>
+			<td><?php echo $this->translate('Nama Ayah'); ?></td>
+			<td>:</td>
+			<td>
+				<input type="text" name="af_name_father" value="<?php echo $this->fatherData['af_name']; ?>" />
+			</td>
+		</tr>
+		<tr>
+			<td><?php echo $this->translate('No HP Ayah'); ?></td>
+			<td>:</td>
+			<td>
+				<input type="text" name="af_hp_father" value="<?php echo $this->fatherData['af_phone']; ?>" />
+			</td>
+		</tr>
+	</table>
+
+	 
+	<div style="clear:both;"></div>
+	
+	
+	<!-- DOCUMENT FILE -->
+	
+	<h2><?php echo $this->translate("Document");?></h2>
+	<table class="table" width="100%">
+		<tr>
+			<th><?php echo $this->translate("Document Type");?></th>
+			<th><?php echo $this->translate("Document Name");?></th>
+		</tr>
+		<?php 
+		foreach($this->documentList as $doc){
+		?>
+		<tr>
+			<td><?php echo $doc['type_name']; ?></td>
+			<td>
+				<table width="100%" style="" cellpadding="0" cellspacing="0">
+					<?php 
+					
+                    for($i=0; $i<sizeof($doc['data']);$i++){
+						$file = $doc['data'][$i];
+						
+						$dt = explode("triapp",$file['pathupload']);
+						$path = $dt[1];
+						$download ="<a target='_blank' href=".$path.">".$this->translate('Download')."</a>";
+					?>
+					<tr>
+						<td><?php echo $file['auf_file_name'];?></td>
+						<td width="100px" align="center" style="text-align:center;">
+							<?php echo $download; ?>
+						</td>
+						<td width="100px" align="center" style="text-align:center;">
+							<a id="<?php echo $doc['type_id'];?>" class="uploadFile" data-name="<?php echo $doc['type_name'];?>" href=""><?php echo $this->translate("Upload"); ?></a>
+						</td>
+					</tr>
+					<?php 
+					}
+					
+					if(count($doc['data'])<=0){
+					?>
+					<tr>
+						<td></td>
+						<td width="100px" align="center" style="text-align:center;"></td>
+						<td width="100px" align="center" style="text-align:center;">
+							<a id="<?php echo $doc['type_id'];?>" class="uploadFile" data-name="<?php echo $doc['type_name'];?>" href="#"><?php echo $this->translate("Upload"); ?></a>
+						</td>
+					</tr>
+					<?php 
+                    
+					}
+					?>
+				</table>	
+			</td>
+		</tr>
+		<?php 
+		}
+		?>
+	</table>
+	<br>
+	*Dokumen Keterangan Bebas Buta Warna dan Narkoba dilaksanakan di PMT Universitas Trisakti dan dokumen akan diupload oleh PMT Trisakti
+	<br>
+	*Dokumen Rapot hanya untuk jalur PSSB
+	<br>
+	<div style="text-align:center; background:#EEE; margin: 10px 0 10px 0">
+		<input type="submit" value="Verified Burekol Data" />
+	</div>
+	
+</form>	
+
+ 
+<div id="dialog-upload-file" title="<?php echo $this->translate("Upload Document");?>">
+  	<form name="form_file" id="form_file" method="post" action="/default/online-application/upload-file/id/<?php echo $this->pes_id;?>" enctype="multipart/form-data">
+  		<div id="labelFile"></div>
+        <input type="file" name="file" />
+  		<input type="hidden" name="transaction_id" value="<?php echo $this->transaction_id; ?>" />
+  		<input type="hidden" id="type_id" name="type_id" value="" />
+  		
+  		<input type="hidden" name="redirect_path" value="/default/online-application/applicant-burekol-verification/txn_id/<?php echo $this->transaction_id;?>" />
+  		
+  	</form>
+</div>

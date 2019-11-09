@@ -1,0 +1,97 @@
+<?php 
+	echo "<h1>". $this->title ."</h1>";
+?>
+
+<div style="width:900px; margin: 0 auto;">
+
+
+<div style="width: 100%;">
+<fieldset style="width:450px;">
+	<legend>Please select the information below:-</legend>
+<form name="searchfrm" action="" method="post">
+	<table width="100%">		
+			
+		<tr>
+			<td>
+				Courses 
+			</td>
+			<td width="5px">:</td>
+			<td>			
+				<select name="course_id" onchange="form.submit()">
+				<option value="0">Please select</option>
+				<?php 
+				foreach($this->courses as $c){
+					if($this->course_id==$c[course_id])
+					  $sel = "selected";
+					else
+					  $sel = "";
+				 	echo "<option value='$c[course_id]' $sel>$c[name]</option>";
+				 } ?>
+				</select>
+			</td>
+		</tr>			
+	</table>
+</form>
+</fieldset>
+</div>
+<br></br>
+<table class="table" width="30%" cellpadding="5" cellspacing="1" >
+
+ <caption>Grade Distribution</caption>
+ <tr>
+    <th>Grade</th>
+    <th>Total Student</th>
+    <th>Percentage (%)</th>
+ </tr>
+ <tr align="center">
+     <td>A+</td>
+     <td><?php echo $this->grades[0];?></td>
+     <td><?php echo $this->percentage[0];?></td>
+ </tr>
+  <tr align="center">
+     <td>A</td>
+     <td><?php echo $this->grades[1];?></td>
+     <td><?php echo $this->percentage[1];?></td>
+ </tr>
+  <tr align="center">
+     <td>A-</td>
+     <td><?php echo $this->grades[2];?></td>
+     <td><?php echo $this->percentage[2];?></td>
+ </tr>
+ <tr align="center">
+     <td>B+</td>
+     <td><?php echo $this->grades[3];?></td>
+     <td><?php echo $this->percentage[3];?></td>
+ </tr>
+  <tr align="center">
+     <td>B</td>
+     <td><?php echo $this->grades[4];?></td>
+     <td><?php echo $this->percentage[4];?></td>
+ </tr>
+ <tr align="center">
+     <td>C</td>
+     <td><?php echo $this->grades[5];?></td>
+     <td><?php echo $this->percentage[5];?></td>
+ </tr>
+  <tr align="center">
+     <td>D</td>
+     <td><?php echo $this->grades[6];?></td>
+     <td><?php echo $this->percentage[6];?></td>
+ </tr>
+   <tr align="center">
+     <td>E</td>
+     <td><?php echo $this->grades[7];?></td>
+     <td><?php echo $this->percentage[7];?></td>
+ </tr>
+    <tr align="center">
+     <td>F</td>
+     <td><?php echo $this->grades[8];;?></td>
+     <td><?php echo $this->percentage[8];?></td>
+ </tr>
+ <tr align="center">
+     <td>Total</td>
+     <td><?php echo array_sum($this->grades);?></td>
+     <td><?php echo array_sum($this->percentage);?></td>
+ </tr>
+</table>
+</div>

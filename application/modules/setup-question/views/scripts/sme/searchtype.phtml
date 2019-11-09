@@ -1,0 +1,83 @@
+<table width="90%" border="0" align="center" cellpadding="1" cellspacing="1">
+  <tr> 
+    <td><strong>
+      <h1><?php echo $this->title;?></h1>
+      </strong></td>
+  </tr>
+  <tr> 
+    <td height="153"> 
+    <br>
+     <table width="100%" cellspacing="1" cellpadding="5" id=""  align="center">
+		<tr align="right"> 
+          <td width="20%"><a href="<?php echo $this->url(array(module=>question ,controller => sme, action => searchtype))?>"><img src="<?php echo $this->baseUrl(); ?>/images/button-prev.gif" title="Back to previous page"></a>                       </td>
+          
+        </tr>
+     <form id="frmSearch" method="POST" action="<?php echo $this->url(array('module'=>'question','controller'=>'sme','action'=>'searchtype'),'default',true);?>">  
+     <table width="95%" cellspacing="1" cellpadding="5" id="mtable"  align="center">
+		<tr> 
+          <td width="20%">Course</td>
+          <td><?php echo $this->course["coursename"].' ('.$this->course["courseid"].")"?>
+            <input type="hidden" name="course_id" id="course_id" value="<?php echo $this->course_id?>"></td>
+        </tr>
+        <tr> 
+          <td width="20%">Assessment</td>
+          <td><?php echo $this->assessment;?><input type="hidden" name="atype"  id="atype" value="<?php echo $this->atype?>"></td>
+        </tr>
+         <tr> 
+          <td>Sort by</td>
+          <td><select name="orderby" id="orderby" onchange="form.submit();">
+	        <option value="">-- Please select --</option>
+	        <option value="status"    <? if($this->orderby=="status") echo 'selected';?>>Status</option>
+	        <option value="createddt" <? if($this->orderby=="createddt") echo 'selected';?>>Date Created</option>       
+	        <option value="topic_id"  <? if($this->orderby=="topic_id") echo 'selected';?>>Topic</option>       
+	              
+	      </select></td>
+        </tr>
+      </table>
+       </form>
+    <br>
+    
+       <table width="100%" border="0" align="center" cellpadding="1" cellspacing="1" >
+	     <tr> 
+          <td height="" colspan="4"> 
+          </td>  
+          <td align="right"> <?php  echo $this->paginationControl($this->paginator, 'Elastic','pagination.phtml');?></td>      
+        </tr>
+        </table>
+      <table width="95%" border="0" align="center" cellpadding="1" cellspacing="1"  id="mtable"  >
+        <tr align="center"> 
+         
+          <th width="3%" bgcolor="#F0F0F0"><strong>ID</strong></th>
+          <th width="47%" bgcolor="#F0F0F0"><strong>Question</strong></th>
+          <th width="10%" bgcolor="#F0F0F0"><strong>Topic</strong></th>
+          <th width="10%" bgcolor="#F0F0F0"><strong>Taxanomy Level</strong></th> 
+          <th width="10%" bgcolor="#F0F0F0"><strong>Created Date</strong></th>
+          <th width="10%" bgcolor="#F0F0F0"><strong>Status</strong></th>
+          <th width="10%" bgcolor="#F0F0F0"><strong>Action</strong></th>
+        </tr>
+        <?php foreach ($this->paginator as $q){?>
+        <tr valign="top"> 
+        
+          <td ><?php echo $q["id"]; ?></td>
+          <td ><?php echo $q["question"];?></td>
+          <td ><?php echo $q["topic_name"];?></td>
+          <td ><?php echo $q["taxanomy_name"];?></td>
+          <td ><?php echo $q["createddt"];?></td>
+          <td ><?php echo $q["status_name"];?></td>
+          <td >
+          <a href="<?php echo $this->url(array(module=>question ,controller => sme, action => preview,id => $q[id]))?>"><img src="<?php echo $this->baseUrl(); ?>/images/button-new.gif" title="View"></a>
+          <? if($q["status"]==1 || $q["status"]==3){?>
+          <a href="<?php echo $this->url(array(module=>question ,controller => sme, action => edit,id => $q[id]))?>"><img src="<?php echo $this->baseUrl(); ?>/images/button-edit.gif" title="Edit"></a>
+          <a href=""><img src="<?php echo $this->baseUrl(); ?>/images/button-cross.gif" title="Delete"></a>  
+          <? } ?>
+          </td>
+        </tr>
+        <? } ?>
+      </table> 
+      
+      </td>
+  </tr>
+  
+</table>
+
+<p>&nbsp;</p>

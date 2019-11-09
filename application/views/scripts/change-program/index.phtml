@@ -1,0 +1,106 @@
+<script>
+function apply(){
+		
+	window.location = "<?php echo $this->url(array('module'=>'default','controller'=>'change-program', 'action'=>'apply'),'default',true); ?>";
+		
+}
+
+function downloadCard(acp_id){
+	
+	window.location = "<?php echo $this->url(array('module'=>'default','controller'=>'change-program', 'action'=>'download'),'default',true); ?>/acp_id/"+acp_id;
+		
+}
+
+</script>
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+		
+		   <?php  if(count($this->list_program)>0){?>
+			<li>
+				<a href="#" onclick="javascript:apply()">
+					<span class='process'></span>
+					Apply
+				</a>
+			</li>
+			<?php }//allow apply change program?>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<?if(isset($this->noticeMessage)){?>
+	<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+	<?}?>
+	<?if(isset($this->noticeSuccess)){?>
+	<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+	<?}?>
+	<?if(isset($this->noticeError)){?>
+	<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+	<?}?>
+
+<div style="width:100%;">
+
+	<h2><?php echo $this->translate("List of Change Program Applied")?></h2>
+	<table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
+		<tr>	
+		    <th rowspan=2><?php echo $this->translate("No"); ?></th>	 	
+			<th colspan=2><?php echo $this->translate("Program Asal"); ?></th>	
+			<th colspan=2><?php echo $this->translate("Program yang dimohon"); ?></th>
+			<th rowspan=2><?php echo $this->translate("Tanggal Permohonan"); ?></th>
+			<th rowspan=2><?php echo $this->translate("Action"); ?></th>
+				
+		</tr>
+		<tr>			    	  		
+			<th><?php echo $this->translate("Program"); ?></th>	
+			<th><?php echo $this->translate("Jenis Pendaftaran"); ?></th>
+			<th><?php echo $this->translate("Program"); ?></th>	
+			<th><?php echo $this->translate("Jenis Pendaftaran"); ?></th>	
+		</tr>
+		<?php 
+		if(isset($this->list)){
+			$i=1;
+			foreach($this->list as $info){
+				
+				
+					$applicantProgramDb = new App_Model_Application_DbTable_ApplicantProgram();
+					list($txn_data_from,$program_from) = $applicantProgramDb->getChangeProgram($info["acp_trans_id_from"]);
+					list($txn_data_to,$program_to) = $applicantProgramDb->getChangeProgram($info["acp_trans_id_to"]);
+					
+					
+		?>
+		<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+			<td><?php echo $i?></td>	
+			<td><?php echo '('.$program_from["ProgramCode"].') '.$program_from["ArabicName"]; ?></td>	
+			<td><?php 			
+				if($txn_data_from["at_appl_type"]==1 ){
+					echo $this->translate("USM");}
+				else{
+					echo $this->translate("PSSB (Raport)");
+				}?></td>	
+			<td><?php echo '('.$program_to["ProgramCode"].') '.$program_to["ArabicName"]; ?></td>	
+			<td><?php 			
+				if($txn_data_to["at_appl_type"]==1 ){
+					echo $this->translate("USM");}
+				else{
+					echo $this->translate("PSSB (Raport)");
+				}?></td>	
+			<td align="center"><?php echo date("d-m-Y",strtotime($info["acp_createddt"])); ?></td>
+			<td align="center">
+			<a href="#" onclick="downloadCard('<?php echo $info["acp_id"];?>')"><?php echo $this->translate("Download")?></a>
+			</td>	
+		</tr>
+		<?php } }else{?>
+		<tr>
+			<td colspan="7"><?php echo $this->translate("You have NO program applied for Change Program.");?></td>
+		</tr>
+		<?php } ?>
+	</table>
+</div>

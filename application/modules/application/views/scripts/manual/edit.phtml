@@ -1,0 +1,189 @@
+<script>
+	$(function() {
+		$( "#migrate-dialog" ).dialog({ 
+			autoOpen: false,
+			modal: true,
+			width: 500,
+			height: 200,
+			buttons: { 
+				"Proceed": function() { 
+					$("#migrateform").submit(); 
+				},
+				"Cancel": function() { 
+					$(this).dialog("close"); 
+				}  
+			} 
+		});
+	});
+	
+	$(function() {
+		$( "#tabs" ).tabs();
+	});
+	
+	$(function() {
+		// a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
+		$( "#dialog:ui-dialog" ).dialog( "destroy" );
+	
+		$( "#dialog-search" ).dialog({
+			modal: true,
+			autoOpen: false,
+			width: 600,
+//			buttons: {
+//				"Search": function() { 
+//					$("#search_form").submit(); 
+//				}, 
+//				"Cancel": function() { 
+//					$(this).dialog("close"); 
+//				}
+//				
+//			}
+		});
+	});
+
+	function searchbox(){
+		$( "#dialog-search" ).dialog('open');
+	}
+
+
+	$(function() {
+		$( "#dialog:ui-dialog" ).dialog( "destroy" );
+		
+		
+		$( "#dialog_student_edit" ).dialog({ 
+			autoOpen: false,
+			modal: true,
+			width: 615,
+	        buttons: { 
+	        
+		        "Save Changes": function() { 
+		        	$('#student_form').submit(); 
+	        	},
+	        	"Cancel": function() { 
+		        	$(this).dialog("close"); 
+	        	}
+        	}
+	        
+		});
+		
+		
+		
+	});
+	
+	
+	$(function() {
+		$( "#dialog:ui-dialog" ).dialog( "destroy" );
+		
+		
+		$( "#dialog_contact_edit" ).dialog({ 
+			autoOpen: false,
+			modal: true,
+			width: 615,
+	        buttons: { 
+	        
+		        "Save Changes": function() { 
+		        	$('#student_contact_form').submit(); 
+	        	},
+	        	"Cancel": function() { 
+		        	$(this).dialog("close"); 
+	        	}
+        	}
+	        
+		});
+		
+		
+		
+	});
+	
+	function delDetail(id){
+	if(confirm('Are you sure to delete ?')){
+		window.location = "<?php echo $this->url(array('module'=>'application','controller'=>'manual', 'action'=>'delete-attachment','app_id'=>$this->id),'default',true);?>/id/"+id;
+	}
+}
+
+</script>	
+	
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'application','controller'=>'manual', 'action'=>'index'),'default',true);?>">
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+
+<div id="tabs">
+	<ul>
+		<li><a href="#profile"><?php echo $this->translate("Personal Particular");?></a></li>
+		<li><a href="#attach"><?php echo $this->translate("Attachments");?></a></li>
+	</ul>
+
+	<div id="profile">
+	<?php 
+		$this->form->setAction($this->url());
+		echo  $this->form;
+	?>
+	
+	</div>
+	
+	<div id="attach">
+	
+		<div>
+			<input type="button" value="Upload Attachment" onclick="javascript:searchbox()" />
+		</div>
+		<br>
+		<div style="width:100%;">
+		Attachments : 
+		<br><br>
+		<table width="100%" cellpadding="5" cellspacing="1" class="table">
+			<tr>
+				<th colspan="2">File Name </th>
+				<th>File Upload </th>
+				<th>Option </th>
+			</tr>
+			
+			<?php
+			$i=1;
+			foreach ($this->attachment as $attach){
+			?>
+			<tr bgcolor="#ffffff">
+				<td width="2"><?php echo $i;?>) </td>
+				<td><?php echo $attach["filename"];?></td>
+				<td><a href="/documents/Application/<?php echo $this->ic_no;?>/<?php echo $attach["fileupload"];?>" target="_blank"><?php echo $attach["fileupload"];?></a></td>
+				<td><a class="delLink2" href="#" onClick="delDetail(<?php echo $attach['id']; ?>)">Delete</a></td>
+			</tr>
+			<? 
+			$i++;
+			} ?>
+		</table>
+
+
+		</div>
+		
+	</div>
+</div>
+
+
+<div id="dialog-search" title="Upload Picture">
+		<?php 
+			$this->formUpload->setAction($this->url());
+			echo  $this->formUpload;
+		?>
+		</div>
+
+
+
+
+

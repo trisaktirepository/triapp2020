@@ -1,0 +1,182 @@
+	
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<!--<ul>
+			<li>
+				<a href="#" onclick="javascript:searchbox()">
+					<span class='search'></span>
+					Search
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>-->
+	</div>
+</div>
+
+<div align="center" style="background:#ebebeb; height:30px;">
+<ul class="steps">
+	<li class="prevDone">
+		<span>1</span> <a href="<?php echo $this->url(array('module'=>'application','controller'=>'online-application','action'=>'index','id'=>$this->id),'default',true) ?>">Personal Particulars</a>
+	</li>
+    <li class="prevDone">
+		<span>2</span> Qualification
+		<!--<span>2</span> <a href="<?php echo $this->url(array('module'=>'application','controller'=>'online-application','action'=>'add-apply','id'=>$this->id),'default',true) ?>">Qualification</a>-->
+	</li>
+    <li class="prevDone">
+		<span>3</span> Program Preferred
+		<!--<span>3</span> <a href="<?php echo $this->url(array('module'=>'application','controller'=>'online-application','action'=>'add-detail','id'=>$this->id),'default',true) ?>">Program Preferred</a>-->
+	</li>
+	<li class="current">
+		<span>4</span> Additional Information
+	</li>
+	<li class="next">
+		<span>5</span> Offer Letter
+	</li>
+</ul>
+<br class="clear" />
+</div>
+
+<BR>
+<p>* <?php echo $this->translate("Please enter additional information."); ?></p>
+<form name="f1" method="POST">
+<table width="100%" cellpadding="5" cellspacing="1" class="table3">
+<tr valign='top'>
+    <th colspan="4" bgcolor="#F2F2F2">A) ADDITIONAL INFORMATION</th>
+  </tr>
+  <tr valign='top'>
+    <td width="20%">Fullname</td>
+    <td colspan="3" width="80%"><?php echo $this->applicant['ARD_NAME'];?></td>
+  </tr>
+  <tr valign='top'>
+    <td width="20%">Personal ID</td>
+    <td colspan="3" width="80%"><?php echo $this->applicant['ARD_IC'];?></td>
+  </tr>
+  <tr valign='top'>
+    <td>Billing Address</td>
+    <td colspan="3"><input type="text" name="ARD_ADDRESS1" size="60" value="<?php echo $this->applicant['ARD_ADDRESS1'];?>"></td>
+  </tr>
+  <tr valign='top'>
+    <td></td>
+    <td colspan="3"><input type="text" name="ARD_ADDRESS2" size="60" value="<?php echo $this->applicant['ARD_ADDRESS2'];?>"></td>
+  </tr>
+  <tr valign='top'>
+    <td>Town</td>
+    <td colspan="3"><input type="text" name="ARD_TOWN" size="60" value="<?php echo $this->applicant['ARD_TOWN'];?>"></td>
+  </tr>
+  <tr valign='top'>
+    <td>Postcode</td>
+    <td colspan="3"><input type="text" name="ARD_POSTCODE" value="<?php echo $this->applicant['ARD_POSTCODE'];?>"></td>
+  </tr>
+  <tr valign='top'>
+    <td>State</td>
+    <td colspan="3"><input type="text" name="ARD_STATE" value="<?php echo $this->applicant['ARD_STATE'];?>"></td>
+  </tr>
+  <tr valign='top'>
+    <td>Country</td>
+    <td colspan="3"><input type="text" name="ARD_COUNTRY" value="<?php echo $this->applicant['ARD_COUNTRY'];?>"></td>
+  </tr>
+  <tr valign='top'>
+    <th colspan="4" bgcolor="#F2F2F2">B) PARENT/SPOUSE INFORMATION</th>
+  </tr>
+  <tr valign='top'>
+    <td>Name</td>
+    <td colspan="3"><input type="text" name="par_name" size="60" value="<?php echo $this->additional['par_name'];?>"></td>
+  </tr>
+  <tr valign='top'>
+    <td>Kinship</td>
+    <td colspan="3"><input type="text" name="par_kinship" size="60" value="<?php echo $this->additional['par_kinship'];?>"></td>
+  </tr>
+  <tr valign='top'>
+    <td>Occupation</td>
+    <td colspan="3"><input type="text" name="par_occupation" size="60" value="<?php echo $this->additional['par_occupation'];?>"></td>
+  </tr>
+  <tr valign='top'>
+    <td>Place of work </td>
+    <td colspan="3"><input type="text" name="par_placeofwork" size="60" value="<?php echo $this->additional['par_placeofwork'];?>"></td>
+  </tr>
+  <tr valign='top'>
+    <td>Contact Number </td>
+    <td colspan="3"><input type="text" name="par_contact" value="<?php echo $this->additional['par_contact'];?>"></td>
+  </tr>
+  <tr valign='top'>
+    <td>Address</td>
+    <td colspan="3"><textarea name="par_address"><?php echo $this->additional['par_address'];?></textarea></td>
+  </tr>
+  <tr valign='top'>
+    <td>Email address</td>
+    <td colspan="3"><input type="text" name="par_email" size="60" value="<?php echo $this->additional['par_email'];?>"></td>
+  </tr>
+ 
+  <tr valign='top'>
+    <th colspan="4" bgcolor="#f2f2f2">C) EMERGENCY CONTACT</th>
+  </tr>
+  <tr valign='top'>
+    <td>Name</td>
+    <td><input type="text" name="ec_name_1" size="40" value="<?php echo $this->additional['ec_name_1'];?>"></td>
+    <td>Name</td>
+    <td><input type="text" name="ec_name_2" size="40" value="<?php echo $this->additional['ec_name_2'];?>"></td>
+  </tr>
+  <tr valign='top'>
+    <td>Nationality</td>
+    <td><input type="text" name="ec_nationality_1" value="<?php echo $this->additional['ec_nationality_1'];?>"></td>
+    <td>Nationality</td>
+    <td><input type="text" name="ec_nationality_2" value="<?php echo $this->additional['ec_nationality_2'];?>"></td>
+  </tr>
+  <tr valign='top'>
+    <td>Kinship</td>
+    <td><input type="text" name="ec_kinship_1" size="40" value="<?php echo $this->additional['ec_kinship_1'];?>"></td>
+    <td>Kinship</td>
+    <td><input type="text" name="ec_kinship_2" size="40" value="<?php echo $this->additional['ec_kinship_2'];?>"></td>
+  </tr>
+  <tr valign='top'>
+    <td>Occupation</td>
+    <td><input type="text" name="ec_occupation_1" size="40" value="<?php echo $this->additional['ec_occupation_1'];?>"></td>
+    <td>Occupation</td>
+    <td><input type="text" name="ec_occupation_2" size="40" value="<?php echo $this->additional['ec_occupation_2'];?>"></td>
+  </tr>
+  <tr valign='top'>
+    <td>Address</td>
+    <td><textarea name="ec_address_1"><?php echo $this->additional['ec_address_1'];?></textarea></td>
+    <td>Address</td>
+    <td><textarea name="ec_address_2"><?php echo $this->additional['ec_address_2'];?></textarea></td>
+  </tr>
+  <tr valign='top'>
+    <td>Contact Number </td>
+    <td><input type="text" name="ec_contact_1" value="<?php echo $this->additional['ec_contact_1'];?>"></td>
+    <td>Contact Number </td>
+    <td><input type="text" name="ec_contact_2" value="<?php echo $this->additional['ec_contact_2'];?>"></td>
+  </tr>
+  <tr valign='top'>
+    <td>Email address</td>
+    <td><input type="text" name="ec_email_1" size="40" value="<?php echo $this->additional['ec_email_1'];?>"></td>
+    <td>Email address</td>
+    <td><input type="text" name="ec_email_2" size="40" value="<?php echo $this->additional['ec_email_2'];?>"></td>
+  </tr>
+</table>
+<br><br>
+<table width="100%">
+		<tr valign='top'>
+			<td align="center">
+			<input type="submit" value="Save & Next" onclick="form.action='<? echo $this->url(array('module'=>'application','controller'=>'online-application','action'=>'conditional-offer-letter','id'=>$this->id),'default',true) ?>'"/>
+			<input type="submit" value="Back" onclick="form.action='<? echo $this->url(array('module'=>'application','controller'=>'online-application','action'=>'additional','id'=>$this->id),'default',true) ?>'"/>
+			</td>
+		</tr>
+	</table><br>
+</form>
+

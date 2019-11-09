@@ -1,0 +1,150 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+		
+		$("#start_date").datepicker({
+				"dateFormat":"yy-mm-dd",
+				"changeMonth":"true",
+				beforeShow: function(input, inst) { 
+					if ($("#end_date").val()) { // Only update when has a value.
+							$( "#start_date" ).datepicker( "option", "maxDate", $("#end_date").datepicker("getDate") );
+					}
+				}
+			
+				
+		});
+		
+		$("#end_date").datepicker({
+				"dateFormat":"yy-mm-dd",
+				"changeMonth":"true",
+				beforeShow: function(input, inst) { 
+					if ($("#start_date").val()) { // Only update when has a value.
+							$( "#end_date" ).datepicker( "option", "minDate", $("#start_date").datepicker("getDate") );
+					}
+				}
+				
+		});
+
+		/*Add Remove function*/
+		$('#add').click(function() {
+			return !$('#select1 option:selected').remove().appendTo('#select2');
+		});
+		$('#remove').click(function() {
+			return !$('#select2 option:selected').remove().appendTo('#select1');
+		});
+
+		$('form').submit(function() {
+			var selProgram = "";
+			
+			$('#select2 option').each(function(i) {
+				$(this).attr("selected", "selected");
+				if(selProgram==""){
+					selProgram += this.value;
+				}else{
+					selProgram += "," + this.value;
+				}
+			});
+
+			$('#selProgram').attr("value", selProgram);
+		});
+
+	});
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'anr-setup','controller'=>'semester', 'action'=>'index'),'default',true);?>">
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+	
+	<form action="<?php echo $this->url(array('module'=>'anr-setup','controller'=>'semester','action'=>'add'),'default',true); ?>" method="post">
+	<input type="hidden" name="selProgram" id ="selProgram" value="" />
+	<dl class="zend_form">
+		<dt id="name-label">
+			<label class="required" for="name">Semester Name</label>
+		</dt>
+		<dd id="name-element">
+			<input id="name" type="text" value="" name="name"/>
+		</dd>
+		
+		<dt id="code-label">
+			<label for="code">Semester Code</label>
+		</dt>
+		<dd id="code-element">
+			<input id="code" type="text" value="" name="code"/>
+		</dd>
+		
+		<dt id="start_date-label">
+			<label class="required" for="start_date">Start Date</label>
+		</dt>
+		<dd id="start_date-element">
+			<input id="start_date" type="text" value="" name="start_date"/>
+		</dd>
+		
+		<dt id="end_date-label">
+			<label class="required" for="end_ate">End Date</label>
+		</dt>
+		<dd id="end_date-element">
+			<input id="end_date" type="text" value="" name="end_date"/>
+		</dd>
+	</dl>
+	
+	<table width="100%" border="0">
+		<tr>
+			<td width="45%">
+				<h4>Program List</h4>
+				<select id="select1" name="courselist" size="20" style="width:100%;" multiple="multiple" >
+					<?php foreach ($this->programlist as $program):?>
+						<option value="<?php echo $program['id']; ?>"><?php echo $program['code']; ?> - <?php echo $program['main_name']; ?> </option>
+					<?php endforeach;?>
+				</select>
+			</td>
+			<td align="middle" valign="middle" width="10px">
+				<input id="add" type="button" class="buttonLink" value="Add" />
+				<input id="remove" type="button" class="buttonLink" value="Remove" />
+			</td>
+			<td width="45%">
+				<h4>Selected Program</h4>
+				<select id="select2" name="select2" size="20" style="width:100%;" multiple="multiple" >
+					<?php foreach ($this->courseprerequisites as $course):?>
+						<option value="<?php echo $course['id']; ?>"><?php echo $course['code']; ?> - <?php echo $course['name']; ?></option>
+					<?php endforeach;?>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3" align="left">
+				<div width="200px">
+					<br />
+					<input type="submit" value="save" />
+					<input type="button" value="Cancel" onClick="window.location = '<?php echo $this->url(array('module'=>'anr-setup','controller'=>'semester', 'action'=>'index'),'default',true);?>'" />
+				</div>
+			</td>
+		</tr>
+	</table>
+</form>

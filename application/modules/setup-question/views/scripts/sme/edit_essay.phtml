@@ -1,0 +1,38 @@
+<table width="95%" border="0" align="center" cellpadding="1" cellspacing="1" id="mtable">
+        <tr> 
+          <th height="30" colspan="2"  ><strong>Question & Answer</strong></th>         
+        </tr>
+        
+        <? $i=1; foreach ($this->question as $question) { ?>
+        <input type="hidden" name="id<?=$i?>" value="<?php echo $question["id"];?>">
+        
+        
+        
+        <? if($this->course["total_language"]>1){?>
+        <tr> 
+          <td height="30" colspan="2" bgcolor="#DFDFDF"><strong>Language <?=$i;?>  </strong></td>
+          </tr> 
+        <? } ?>  
+                 
+        <tr > 
+         <td width="10%">Question</td> 
+          <td><textarea  name="question<?=$i?>" cols="50" rows="5" class="required"><?php echo stripslashes($question["question"])?> </textarea>   </td>            
+        </tr>
+         <tr > 
+          <td width="10%">Answer</td>          
+          <td> <textarea name="answer<?=$i?>" cols="50" rows="5"><?php echo $question["answer"]?></textarea> </td>    
+        </tr>
+        
+        
+     
+        <? $i++;} ?>
+    
+       
+      </table>
+
+    <script type="text/javascript">
+    CKEDITOR.replace( 'question1',{ filebrowserBrowseUrl: '<?php echo $this->baseUrl(); ?>/kfm/',  height: 80, width: 800 } );
+    CKEDITOR.replace( 'answer1',{ filebrowserBrowseUrl: '<?php echo $this->baseUrl(); ?>/kfm/',  height: 80, width: 800 } );
+    CKEDITOR.replace( 'question2',{ filebrowserBrowseUrl: '<?php echo $this->baseUrl(); ?>/kfm/',  height: 80, width: 800 } );  
+    CKEDITOR.replace( 'answer2',{ filebrowserBrowseUrl: '<?php echo $this->baseUrl(); ?>/kfm/',  height: 80, width: 800 } );
+</script>

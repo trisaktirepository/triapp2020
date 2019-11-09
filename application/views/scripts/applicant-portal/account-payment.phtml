@@ -1,0 +1,35 @@
+<table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		<th width="20px">&nbsp;</th>
+		<th width="100px"><?php echo $this->translate("Date")?></th>
+		<th><?php echo $this->translate("Receipt No")?></th>
+		<th><?php echo $this->translate("Payment Mode")?></th>
+		<th><?php echo $this->translate("Description")?></th>
+		<th width="150px"><?php echo $this->translate("Amount")?> (IDR)</th>
+	</tr>
+	
+	<?php 
+	$i=0;
+	$total = 0;
+	if($this->payment){
+	foreach ($this->payment as $entry):
+		$total = $total + $entry['credit'];
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<td align="center"><?php echo $i+1;?></td>
+		<td align="center"><?php echo date('d-m-Y', strtotime($entry['record_date']) ); ?></td>
+		<td><?php echo $entry['document']; ?></td>
+		<td><?php echo $entry['payment_mode']; ?></td>
+		<td><?php echo $entry['description']; ?></td>
+		<td><?php echo number_format($entry['credit'], 2, '.', ','); ?></td>
+	</tr>
+	<?php 
+	$i++;
+	endforeach;
+	} 
+	?>
+	<tr>
+		<td colspan="5">&nbsp;</td>
+		<th><?php echo number_format($total, 2, '.', ','); ?></th>
+	</tr>
+</table>

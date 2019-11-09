@@ -1,0 +1,74 @@
+<style type="text/css">
+.zend_form dt {
+    width: 177px;
+}
+.zend_form dd {
+    padding: 2px 187px;
+}
+</style> 
+ 
+<div style="width:100%;">
+<fieldset>
+<form id="add" method="post"  >
+<table  width="80%" cellpadding="5" cellspacing="3" border="0">
+	<tr>	<td width="20%"><?php echo $this->translate("Name of Setup");?></td><td>:</td>
+			<td> <textarea rows="4" cols="50" id="remark" name="remark">    
+			</textarea></tr> 
+	 
+	<tr>	<td width="20%"><?php echo $this->translate("Semester");?></td><td>:</td>
+			<td>
+		 
+			<select id="IdSemesterMain" name="IdSemesterMain">
+			    <option value="0"><?php echo $this->translate("Please Select");?></option>
+			    <?php 
+			    	foreach ($this->semester_list as $level):
+			    ?>
+			    		<option value="<?php echo $level["key"];?>"<?php if($this->levelId == $level["key"]){ echo 'selected';}?>><?php echo $level["value"];?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select>
+		 
+			</td></tr>
+	<tr>	<td width="20%"><?php echo $this->translate("Program");?></td><td>:</td>
+			<td>
+		 
+			<select id="IdProgram" name="IdProgram">
+			    <option value="0"><?php echo $this->translate("Please Select");?></option>
+			    <?php 
+			    	foreach ($this->program_list as $level):
+			    ?>
+			    		<option value="<?php echo $level["key"];?>"<?php if($this->levelId == $level["key"]){ echo 'selected';}?>><?php echo $level["value"];?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select>
+		 
+			</td></tr>
+	<tr>	<td width="20%"><?php echo $this->translate("Branch");?></td><td>:</td>
+			<td>
+		 
+			<select id="IdBranch" name="IdBranch">
+			    <option value="0"><?php echo $this->translate("Please Select");?></option>
+			    <?php 
+			    	foreach ($this->branch_list as $level):
+			    ?>
+			    		<option value="<?php echo $level["key"];?>"<?php if($this->levelId == $level["key"]){ echo 'selected';}?>><?php echo $level["value"];?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select>
+		 
+			</td></tr>
+	 
+	
+	<tr><td colspan="3" align="right"><input type="submit" name="submit" value="<?php echo $this->translate('Save')?>" ></td>
+	
+	</tr>
+</table>
+
+</form>
+</fieldset>
+<br>
+ 
+  

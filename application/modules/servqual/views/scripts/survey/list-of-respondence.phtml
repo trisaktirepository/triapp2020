@@ -1,0 +1,43 @@
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+</div>
+<br />
+
+<?php if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+<br />
+<?php }?>
+<fieldset><legend><?php echo $this->translate('Search Respondence')?></legend>
+<?php echo $this->form;?>
+</fieldset>
+<fieldset><legend><?php echo $this->translate('List of Respondence');?></legend>
+<table width="100%" class="table">
+	<tr>
+		<th><?php echo $this->translate('Name');?></th>
+		<th><?php echo $this->translate('Identity');?></th>
+	</tr>
+	<?php 
+	if(count($this->listofrespondence)>0 ){
+      foreach($this->listofrespondence as $index => $batch){
+	?>
+	<tr <?php echo $index%2==0?"class='shade'":""?> >
+		
+		<td><a href="/servqual/survey/dispatcher/id/<?php echo $batch['IdStudentRegistration'];?>/type/student"><?php echo $batch['Name']; ?></a></td>
+		<td><?php echo $batch['Identity']; ?></td>
+	</tr>
+	<?php 
+	  }
+	}
+	?>
+</table>
+</fieldset>

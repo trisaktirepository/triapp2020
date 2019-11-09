@@ -1,0 +1,25 @@
+<script>
+function verify(){
+	if(document.appform.request_number.value==''){
+		alert('Please enter request number.');
+		document.appform.request_number.focus();
+		return false;
+	}
+	
+	if(confirm('Are you sure you want to approve this mark. Once the mark has been approved, changes will not be allowed.')){	
+		opener.document.verifyfrm.request_no.value = document.appform.request_number.value;
+		opener.document.verifyfrm.action="<?php echo $this->url(array('module'=>'exam','controller'=>'Markentry','action'=>'confirm'))?>";
+	    opener.document.verifyfrm.submit();	
+		self.close();		
+	}
+}
+
+</script>
+<form name="appform">
+<table cellpadding=5>
+	<tr><td colspan=2>Please enter Mark Verification Request Code</td></tr>
+	<tr><td>Request Code:</td><td><input type"text" name="request_number" size=20 value=""></input></td></tr>
+	<tr><td>&nbsp;</td><td><input type="button" value="Approve" onclick="verify();"></input>
+						  <input type="button" value="Cancel" onclick="window.close();"></input></td></tr>
+</table>
+</form>

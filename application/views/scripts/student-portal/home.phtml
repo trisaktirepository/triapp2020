@@ -1,0 +1,105 @@
+<script>
+function validate(IdStudentRegSubjects){
+	
+	msg = confirm('<?php echo $this->translate("Are sure you want to withdraw this Subject?")?>');
+	if(msg){
+		alert('Your application will be submitted for approval. It will take 3 working days.');
+		url = "<?php echo $this->url(array('module'=>'default','controller'=>'student-portal', 'action'=>'withdrawal'),'default',true);?>/IdStudentRegSubjects/"+IdStudentRegSubjects;
+		window.location = url;
+	}
+}
+</script>
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>		
+			 <li>
+				<a href="#" onclick="withdrawal();" >
+					<span class='delete'></span>
+					<?php echo $this->translate('Withdraw');?>
+				</a>
+			</li>	
+			
+		</ul>
+	</div>	
+</div>
+
+<div style="width:100%;">
+
+<?php if(is_array($this->semester)) { ?>
+
+<h2><?php echo $this->translate("My Registered Courses for Semester ").' '.$this->semester['SemesterMainName'];?></h2>
+<table class="table" width="100%" cellpadding="5" cellspacing="1">
+			  	<tr>			  	  		  	   
+			  		<th><?php echo $this->translate("Course Name")?></th>
+			  		<th><?php echo $this->translate("Course Code")?></th>
+			  		<th><?php echo $this->translate("Course Type")?></th>
+			  		<th><?php echo $this->translate("Credit Hours")?></th>
+			  		<th><?php echo $this->translate("Status")?></th>
+			  		<th><?php echo $this->translate("Schedule")?></th>
+			  		<th><?php echo $this->translate("Withdraw")?></th>
+			  		<th><?php echo $this->translate("Doc Inspection")?></th>
+			  </tr>	
+			  	<?php   
+			  	foreach($this->subject as $course){  
+			  	?>	
+			  <tr>			  			  	
+			  		<td><?php echo ($course["BahasaIndonesia"]!='' ? $course["BahasaIndonesia"]:$course["SubjectName"]); ?></td>
+			  		<td><?php echo $course["SubCode"]; ?></td>
+			  		<td><?php echo $course["SubjectType"];?></td>
+			  		<td align="center"><?php echo $course["CreditHours"]; ?></td>
+			  		<td><?php 
+			  		        if($course["Active"]==0) echo $this->translate("Not Register");
+			  				if($course["Active"]==1) echo $this->translate("Register"); 
+			  				if($course["Active"]==2) echo $this->translate("Drop");
+			  				if($course["Active"]==3) echo $this->translate("Withdraw"); 
+			  				if($course["Active"]==4) echo $this->translate("Repeat"); 
+			  				if($course["Active"]==5) echo $this->translate("Refer"); 
+			  				
+			  			?></td>
+			  		 	<td>
+			  		<?php 
+			  		if($course["Active"]==1 || $course["Active"]==3){
+			  			if($course["IdCourseTaggingGroup"]!=0){?>
+			  			<a href="<?php echo $this->url(array('module'=>'default','controller'=>'student-portal','action'=>'view-schedule','idGroup'=>$course["IdCourseTaggingGroup"]),'default',true);?>"><?php  echo $this->translate("View Schedule"); ?></a>
+			  		<?php }else { echo $this->translate("Currently Not Available");} }?>
+			  	</td>
+			  	
+			  		<td align='center'>
+			  		<?php 
+			  		if(!is_array($course['withdrawal'])){	
+			  			
+			  			if(is_array($this->activity)){		  			
+			  		?>
+			  			<a href='#' onclick="validate('<?php echo $course['IdStudentRegSubjects'];?>');"><?php echo $this->translate("Withdraw")?></a>
+			  		<?php }//end if activity
+			  		}else{
+					
+			  			if($course['withdrawal']['w_status']==2){ 
+			  				echo $this->translate('Approved').'<br>'.date('d-m-Y',strtotime($course['withdrawal']['w_approvedt']));
+			  			}else if($course['withdrawal']['w_status']==3){
+			  				echo $this->translate('Rejected').'<br>'.date('d-m-Y',strtotime($course['withdrawal']['w_approvedt']));
+			  			}else{
+			  				echo $this->translate('Applied').'<br>'.date('d-m-Y',strtotime($course['withdrawal']['w_applydt']));
+			  			}
+			  			
+			  		}?>
+			  		</td>
+			  		<td>
+		 <?php if (isset($course['permission'])) {
+		 	foreach ($course['permission'] as $permision) {?>
+		 		 <a href="<?php echo $permision['url_site'] ?>" target="_blank"><?php echo $this->translate('Go to ').$permision['name'];?></a> <?php echo $this->translate("using username: ").$permision['username'].$this->translate(" and password: ").$permision['password'];?>
+			<?php }
+			}?> 
+		</td>
+			  
+			  </tr>
+			  <?php } ?>
+</table>
+<?php }else { //end array seemester?>
+	
+	<div class="message notice"><strong><? echo $this->translate('There is no semester course registration.');?></strong>.</div>
+
+<?php }?>
+
+</div>

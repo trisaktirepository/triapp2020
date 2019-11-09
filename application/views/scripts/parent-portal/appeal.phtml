@@ -1,0 +1,57 @@
+<script>
+function applyAppeal(){
+
+   var msg = confirm("Are you sure you want to apply for appeal?");
+
+   if(msg){	
+		//jquery submit
+		$.ajax({
+			url: "/default/student-portal/apply-appeal",
+		    type: "post",
+		    async : false,
+		    data: {'semester':<?php echo $this->idSemester;?>, 'subject':<?php echo $this->idSubject;?>, 'component':<?php echo $this->idComponent;?>},
+		    dataType: 'json',
+		    success: function(data){	    
+		          //alert("succes");
+			},
+			error:function(){
+		          alert("failure");
+			},
+			beforeSend: function() {			
+				$("#loadButton").after("<img src='/images/spinner.gif' width='30' heigth='30' />");
+			},
+			complete: function() {
+				$("#loadButton").hide();
+				$("#showCompleted").show();
+			}   
+		});
+   }
+}
+
+
+
+
+</script>
+<div style="width:100%;">
+
+<fieldset><legend><?php echo $this->translate("Subject Info");?></legend>
+
+<form name="appealForm" method="post" action="">
+<table>
+	<tr><td><?php echo $this->translate("Semester");?></td><td>: <?php echo $this->semester["SemesterMainName"]?></td></tr>
+	<tr><td><?php echo $this->translate("Subject");?></td><td>: <?php echo $this->subject["BahasaIndonesia"];?> ( <?php echo $this->subject["SubCode"];?> )</td></tr>
+	<tr><td><?php echo $this->translate("Component");?></td><td>: <?php echo $this->component["component_name"]; ?></td></tr>
+</table>
+<br>
+<table width="100%" id="loadButton">
+	<tr bgcolor="#CBC7C7">
+		<td align="center"><input type="button" name="apply" onclick="applyAppeal();" value="<?php echo $this->translate("Apply Appeal");?>"></td>		
+	</tr>
+</table>
+
+<div id="showCompleted" style="display:none">
+<div class="message success"><?php echo $this->translate("Your application has been submitted.Thank you.");?></div>
+</div>
+</form>
+</fieldset>
+</div>

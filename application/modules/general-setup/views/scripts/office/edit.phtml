@@ -1,0 +1,58 @@
+<script type="text/javascript">
+$(document).ready(function() {
+
+	$('#country_id').change(function() {
+		var id = $('#country_id').val();
+	  	changeState(id)
+	});
+
+});
+
+function changeState(id){
+	document.getElementById('state_id').options.length = 0;
+	
+	$.ajax({ 
+		type: "POST",
+		url: "<?php echo $this->url(array('module'=>'general-setup','controller'=>'country','action'=>'ajax-get-state'),'default',true);?>", 
+		data: "id=" + id,
+		context: document.body, 
+		success: function(data){
+			response = eval(data);
+			var stateList = document.getElementById('state_id');
+			stateList.options.length = 0;
+			stateList.options[0]=new Option('-- Select State --','');
+			
+			for(var i=0; i<response.length; i++){
+				stateList.options[i+1]=new Option(response[i].state_name,response[i].state_id);
+			}		
+    	}
+	});
+}
+</script>
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li class="divider"></li>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'general-setup','controller'=>'office', 'action'=>'index'),'default',true);?>" >
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+<?php 
+	$this->form->setAction($this->url());
+	echo  $this->form;
+?>	

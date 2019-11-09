@@ -1,0 +1,143 @@
+
+<script type="text/javascript">
+	$(function() {
+		// a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
+		$( "#dialog:ui-dialog" ).dialog( "destroy" );
+	
+		$( "#dialog-search" ).dialog({
+			modal: true,
+			autoOpen: false,
+			width: 600,
+			buttons: {
+				"Search": function() { 
+					$("#search_form").submit(); 
+				}, 
+				"Cancel": function() { 
+					$(this).dialog("close"); 
+				}
+				
+			}
+		});
+	});
+	
+
+</script>
+
+<script type="text/javascript">
+
+    /*function add(){
+		var id = $('input[name=studentid]:checked').val();
+
+		if(!id){
+			alert('Please select any manual first');
+		}else{
+			window.location="<?php echo $this->url(array('module'=>'discipline','controller'=>'case', 'action'=>'form-student-case'),'default',true);?>/id/"+id;
+		}
+	}*/
+    
+    function add(){
+    	window.location="<?php echo $this->url(array('module'=>'discipline','controller'=>'case', 'action'=>'form-student-case'),'default',true);?>";
+    }
+	
+	function searchbox(){
+		$( "#dialog-search" ).dialog('open');
+	}
+
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>		
+		    <li>
+				<a href="#" onclick="javascript:add()">
+					<span class='add'></span>
+					Add New Case
+				</a>
+			</li>
+			
+			<li class="divider"></li>
+			<li>
+				<a href="#" onclick="javascript:searchbox()">
+					<span class='search'></span>
+					Search
+				</a>
+			</li>			
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<div style="width:100%;">
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+<table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+	<tr>	   
+		<th>Name</th>
+		<th>IC Number</th>	
+		<th>Status</th>		
+		<th>Last Update</th>		
+		<th>Update By</th>		
+	</tr>
+	
+	
+<?php 
+	$i=0;
+	foreach ($this->paginator as $entry):
+	
+	$oSDetail = new App_Model_Discipline_DbTable_StudentCaseDetail();
+	$case = $oSDetail->getStudentCaseDetail($entry['id']);
+
+	$oUser = new SystemSetup_Model_DbTable_User();	
+	$ruser = $oUser->getData($entry["releaseby"]);
+	$cuser = $oUser->getData($case["createdby"]);
+	
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>	
+		<td><a href="<?php echo $this->url(array('module'=>'discipline','controller'=>'case', 'action'=>'view-student-case','id'=>$entry['id']),'default',true);?>"><?php echo $entry['student_name']; ?></a></td>
+		<td><?php  echo $entry['student_icno']; ?></td>
+		<td><?php echo $entry['case_status']==1? "Released": $case['penalty_name']; ?></td>
+		<td><?php echo $entry['case_status']==1? $entry['releasedt']: $case['createddt']; ?></td>	
+		<td><?php echo $entry['case_status']==1? $ruser["fullname"]: $cuser['fullname']; ?></td>	
+	</tr>
+	<?php 
+	$i++;
+	endforeach 
+	?>
+	
+	
+</table>
+
+
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>
+</div>
+
+
+
+
+<div id="dialog-search" title="Search Student">
+<form name="search_form" id="search_form" action="" method="post">
+	<table width="100%" class="table5">
+		<tr>
+			<td>
+				Name / IC Number
+			</td>
+			<td width="5px">:</td>
+			<td>
+				<input type="text" name="keyword" style="width:250px" />
+			</td>
+		</tr>
+		
+		
+	</table>
+</form>
+</div>

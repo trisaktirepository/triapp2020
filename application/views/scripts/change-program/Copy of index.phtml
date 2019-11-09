@@ -1,0 +1,124 @@
+<script>
+function quit(){
+	var id = $('input[name=trans_id]:checked').val();
+
+	if(!id){
+		alert('Please select application first');
+	}else{		
+		window.location = "<?php echo $this->url(array('module'=>'default','controller'=>'change-program', 'action'=>'apply'),'default',true); ?>/id/"+id;
+		
+	}
+}
+
+</script>
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="javascript:quit()">
+					<span class='process'></span>
+					Apply
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<?if(isset($this->noticeMessage)){?>
+	<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+	<?}?>
+	<?if(isset($this->noticeSuccess)){?>
+	<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+	<?}?>
+	<?if(isset($this->noticeError)){?>
+	<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+	<?}?>
+
+<div style="width:100%;">
+
+	<h2><?php echo $this->translate("Please select application to Change Program")?></h2>
+	<table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
+		<tr>
+		    <th>&nbsp;</th>
+			<th><?php echo $this->translate("Intake"); ?></th>
+			<th><?php echo $this->translate("Periode"); ?></th>
+			<th><?php echo $this->translate("Jenis Pendaftaran"); ?></th>
+			<th><?php echo $this->translate("Program"); ?></th>	
+			<th><?php echo $this->translate("Program yang dimohon"); ?></th>
+			<th width="100px"><?php echo $this->translate("Tanggal Permohonan Change Program"); ?></th>	
+			<th><?php echo $this->translate("Status"); ?></th>	
+			<th><?php echo $this->translate("Action"); ?></th>		
+		</tr>
+		
+		<?php 
+		if( sizeof($this->paginator) >0 ){
+		$i=0;
+		foreach ($this->paginator as $entry){
+				
+			//get change program info
+			$changeProgramDb = new App_Model_Application_DbTable_ApplicantChangeProgram();
+			$changeProgram = $changeProgramDb->getInfo($entry['at_trans_id']);				
+				
+			if($entry["at_move_id"]!=0) {				
+				$disabled="disabled";	
+			}else{
+				$disabled='';
+			}
+			
+			//get program yg diappply for change program
+			$program = $changeProgramDb->getChangeProgram($entry['at_trans_id']);
+		?>
+		<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		    <td><input type="radio" name="trans_id" id="trans_id" value="<?php echo $entry['at_trans_id']; ?>" <?php echo $disabled;?>></td>
+			<td align="center"><?php echo $entry['IntakeDefaultLanguage']; ?></td>
+			<td align="center"><?php echo $entry['ap_code']; ?></td>
+			<td>
+			<?php 			
+				if( $entry['at_appl_type']==1 ){
+					echo $this->translate("USM");}
+				else{
+					echo $this->translate("PSSB (Raport)");
+				}?>
+			</td>
+			<td ><?php echo '('.$this->txnProgram[$i]['program_code'].')<br> '.$this->txnProgram[$i]['program_name_indonesia']; ?></td>		
+		<td>
+		<?php 
+		if(isset($program)){
+		echo "<ol>";
+		foreach($program as $p){
+			echo '<li> ('.$p["ProgramCode"].') '.$p["ArabicName"].'</li>';
+		}
+		echo "</ol>";
+		}
+		?></td>	
+		<td align="center"><?php echo $changeProgram["acp_createddt"]? date("d-m-Y",strtotime($changeProgram["acp_createddt"])) : null;?></td>
+		<td align="center">
+		<?php 
+		if($changeProgram["acp_status"]==1) {			
+			echo $this->translate("APPLY");			
+		}
+		?>	&nbsp;</td>
+		<td><?php 
+		if($entry["at_move_id"]!=0) {
+			if($changeProgram["acp_status"]==1) {
+				$url = $this->url(array("module"=>'default','controller'=>'applicant-portal','action'=>'continue-application','id'=>$changeProgram['acp_chg_prog_trans_id']),'default',true);
+				echo $this->translate("Cancel");
+			}elseif($changeProgram["acp_status"]==3){
+				echo $this->translate("Acceptance");
+			}
+		}
+		 ?></td>
+		</tr>
+		<?php $i++;}//end foreach 
+		}?>
+	</table>
+	
+</div>

@@ -1,0 +1,184 @@
+<script type="text/javascript">
+	
+	function save(){
+		
+		message = confirm('Are you sure you want to save?');
+	    	
+	    	if(message){
+	    		document.addfrm.action="<?php echo $this->url(array('module'=>'question-bank','controller'=>'tos', 'action'=>'edit-tos'));?>";
+				document.addfrm.submit();
+	    	}
+		
+		
+	}
+
+	
+
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="javascript:save()">
+					<span class='save'></span>
+					Save
+				</a>
+			</li>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'question-bank','controller'=>'tos', 'action'=>'list-tos','pool_id'=>$this->pool_id),'default',true);?>">
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			
+			<li class="divider"></li>
+			
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+
+<form name="addfrm" method="POST" action="">
+
+
+ <input type="hidden" name="pool_id" size="5" value="<?php echo $this->pool_id?>">
+ <input type="hidden" name="tos_id" size="5" value="<?php echo $this->tos_id?>">
+ <input type="hidden" name="total_topic" id="total_topic" size="5" value="<?php echo count($this->chapter)?>">
+ 
+ 
+<br>
+<table class="" width="60%" border="0" cellpadding=" 5" cellspacing="1">
+  <tr>
+    <td>Pool Name</td>
+    <td width="5px">:</td>
+    <td><?php echo $this->pool["name"]?></td>
+  </tr>
+    <tr>
+    <td>TOS Name</td>
+    <td width="5px">:</td>
+    <td><input type="text" name="tosname" size="50" value="<?php echo $this->tos["tosname"]?>"></td>
+  </tr> 
+
+</table>
+ <br>
+<table class="table3" width="90%" border="0" cellspacing="1" cellpadding="1">
+  <tr> 
+    <th rowspan="2">Chapter</th>
+    <th colspan="3" height="30px">Difficulty Level</th>
+    <th rowspan="2" width="20%">Total</th>
+  </tr>
+  <tr> 
+    <th height="30px">Easy</th>
+    <th>Medium</th>
+    <th>Difficult</th>
+  </tr>
+   
+   <?  
+        $topicRow=1; 
+        $gtotal=0;
+        foreach ($this->chapter as $c){
+   	    $questionDB = new App_Model_Question_DbTable_Question();
+   	 
+   	?>
+  <tr align="center"> 
+    <td width="25%"><?php echo $c["name"]?><input type="hidden" size="5" name="topic_id[]" value="<?php echo $c["id"]?>"></td>
+    
+    <? $rowVal = 0; 
+       for($level=1; $level<=3; $level++){
+    	
+    	$condition = array('pool_id'=>$this->pool["id"],'topic_id'=>$c["id"],'difficulty_level'=>$level);
+        $total_avail = $questionDB->getTotalQuestion($condition);
+        
+        //get
+        $tosDb =  new App_Model_Tos_DbTable_Tos();
+        $condition = array('tos_id'=>$this->tos_id,'topic_id'=>$c["id"],'difficulty_level'=>$level);
+        $val = $tosDb->getDetailTos($condition);
+        
+        $rowVal += $val["NoOfQuestion"];
+    ?>
+    <td>   
+    <input size="2" type="hidden" value="<?php echo $val["id"]?>" name="tos_details_id[<?php echo $c["id"]?>][<?php echo $level;?>]"> 
+     <input type="text" name="require[<?php echo $c["id"]?>][<?php echo $level;?>]" id="require[<?php echo $c["id"]?>][<?php echo $level;?>]" onblur="checkval('<?php echo $c["id"];?>','<?php echo $level?>','<?php echo $topicRow;?>')" size="3" value="<?php echo $val["NoOfQuestion"]?>">
+     /
+     <input type="text" name="available[<?php echo $c["id"]?>][<?php echo $level;?>]" id="available[<?php echo $c["id"]?>][<?php echo $level;?>]" size="3" value="<?php echo $total_avail;?>" style="background-color:#CCCCCC" readonly></td>
+    <? } ?>
+
+    <td><input type="text" size="3" name="total<?php echo $topicRow;?>" id="total<?php echo $topicRow;?>" value="<?php echo $rowVal;?>" style="background-color:#E1FCD8" readonly></td>
+  </tr>
+  <? $gtotal +=$rowVal; $topicRow++; } //end chapter ?>
+    
+  <tr align="center"> 
+    <td colspan="4">Grand Total</strong> </td>
+    <td>
+    <input type="text" size="3" name="gtotal" id="gtotal" value="<?php echo $gtotal;?>" style="background-color:#E1FCD8" readonly>    
+       
+   
+    </td>
+  </tr>
+</table>
+<br>
+<script>
+function checkval(topic,level,topicBR){
+	    
+
+var inputidname = 'require['+topic+']['+level+']';
+var inputval = document.getElementById(inputidname).value;
+
+var availableid = 'available['+topic+']['+level+']';
+var availableval = document.getElementById(availableid).value;
+
+availableid = Math.round(availableid);
+availableval = Math.round(availableval);
+
+if(inputval > availableval){	
+	alert('Sorry, you have exceeded the available question.');
+	document.getElementById(inputidname).focus;
+	document.getElementById(inputidname).value=0;
+}
+
+
+//loop level
+var total=0;
+for(x=1; x<=3; x++){
+	
+	var inputidnamex = 'require['+topic+']['+x+']';
+	curval = document.getElementById(inputidnamex).value;		
+    total = Math.round(total) + Math.round(curval)
+}
+
+
+var totalname = 'total'+topicBR;
+document.getElementById(totalname).value=total; //total each Topic Row
+
+	var gtotal=0;
+	
+	total_topic = document.getElementById('total_topic').value; //ada berapa topic?
+
+	gtotal=0;
+	for(m=1; m<=total_topic; m++){
+		
+		var topicRow = 'total'+m; 		 
+	    topicRowVal = document.getElementById(topicRow).value
+	    gtotal = Math.round(gtotal) + Math.round(topicRowVal)
+	   
+	} 
+	
+	document.getElementById('gtotal').value=gtotal;
+
+
+}
+</script>
+ 
+</form>

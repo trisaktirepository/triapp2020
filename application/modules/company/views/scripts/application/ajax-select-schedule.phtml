@@ -1,0 +1,85 @@
+<?php 
+	echo $this->headLink()->prependStylesheet($this->baseUrl().'/js/jquery/plugin/fullcalendar/fullcalendar.css');	
+	echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery/plugin/fullcalendar/fullcalendar.min.js');		
+?>
+<script type="text/javascript"><!--
+$(document).ready(function() {
+
+    $('#calendar').fullCalendar({
+    	header: {
+			left: 'prev,next today',
+			center: 'title',
+			right: 'month,agendaWeek,agendaDay'
+		},
+		defaultView: 'month',
+        'theme' : true,
+        'firstDay': 1,
+        'weekMode': 'variable',
+        'height': 650,
+        editable: false,
+        disableDragging: true,
+        cache: false,
+        events: {
+            url: '<?php echo $this->url(array('module'=>'company','controller'=>'application', 'action'=>'ajax-get-schedule-data')); ?>',
+            type: 'POST',
+            cache: false,
+            async: false,
+            data: {
+                'course_id': '<?php echo $this->course_id; ?>',
+                'exam_center_id': '<?php echo $this->exam_center_id; ?>'
+            },
+            error: function(a) {
+                alert('there was an error while fetching events!');
+            }
+            
+ 		},
+ 		eventClick: function(event) {
+ 	 		window.parent.schedule = event;
+ 	 		parent.$.fn.colorbox.close();
+        }       
+    });    
+});
+
+
+--></script>
+
+<style type="text/css">
+	.fc-day-number{
+		color: #0066FF;
+		font-weight: bold;
+	}
+	
+	.ui-widget-content{
+		background: #EEEEEE;	
+	}
+	
+	.fc-other-month{
+		background: #FFFFFF;	
+	}
+	
+	#icons li {
+	    cursor: pointer;
+	    float: left;
+	    list-style: none outside none;
+	    margin: 2px;
+	    padding: 4px;
+	    position: relative;
+	}
+	
+	#calendar{
+		padding: 30px 15px 0;
+	}
+</style>
+
+
+<?if(isset($this->noticeMessage)){?>
+<div id="msg" class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<div id='calendar'></div>

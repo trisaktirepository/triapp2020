@@ -1,0 +1,764 @@
+<?php
+ini_set('memory_limit', '-1');
+$registry = Zend_Registry::getInstance();
+$locale = $registry->get('Zend_Locale');
+$this->locale = $locale->toString();
+/*
+* Copyright (c) 2008 http://www.webmotionuk.com
+* "PHP & Jquery image upload & crop"
+* Date: 2008-05-15
+* Ver 1.0
+* Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+* Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+*
+* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
+* ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+* WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+* IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, 
+* INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, 
+* PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
+* INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, 
+* STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+* THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*
+* http://www.opensource.org/licenses/bsd-license.php
+*/
+
+//Constants
+//You can alter these options
+//$upload_dir = DOC_PATH."/".APP_FOLDER."/upload/photo";
+/*if(!is_dir($upload_dir)){
+	mkdir($upload_dir, 0777);
+	chmod($upload_dir, 0777);
+}*/
+
+/*foreach ( $this->userprofile as $row ) {
+	
+	$username=$row['username'];
+}*/
+
+//Image functions
+//You do not need to alter these functions
+function resizeImage($image,$width,$height,$scaleX,$scaleY) {
+	$newImageWidth = ceil($width * $scaleX);
+	$newImageHeight = ceil($height * $scaleX);
+	$newImage = imagecreatetruecolor($newImageWidth,$newImageHeight);
+	$source = imagecreatefromjpeg($image);
+	imagecopyresampled($newImage,$source,0,0,0,0,$newImageWidth,$newImageHeight,$width,$height);
+	imagejpeg($newImage,$image,90);
+	chmod($image, 0777);
+	return $image;
+}
+//You do not need to alter these functions
+function resizeThumbnailImage($thumb_image_name, $image, $width, $height, $start_width, $start_height, $scale){
+	$newImageWidth = ceil($width * $scale);
+	$newImageHeight = ceil($height * $scale);
+	$newImage = imagecreatetruecolor($newImageWidth,$newImageHeight);
+	$source = imagecreatefromjpeg($image);
+	imagecopyresampled($newImage,$source,0,0,$start_width,$start_height,$newImageWidth,$newImageHeight,$width,$height);
+	imagejpeg($newImage,$thumb_image_name,90);
+	chmod($thumb_image_name, 0777);
+	return $thumb_image_name;
+}
+//You do not need to alter these functions
+function getHeight($image) {
+	$sizes = getimagesize($image);
+	$height = $sizes[1];
+	return $height;
+}
+//You do not need to alter these functions
+function getWidth($image) {
+	$sizes = getimagesize($image);
+	$width = $sizes[0];
+	return $width;
+}
+
+
+
+?>
+
+
+<script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/js/jquery-pack.js"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/js/jquery.imgareaselect-0.3.min.js"></script>
+
+
+
+<div class="breadcrum">
+	<ul class="tri-steps">
+		<li class="empty" ><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'register'),'default',true);?>"><?php echo $this->translate("apply"); ?></a></div></li>
+		<li class="empty" ><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'index'),'default',true);?>"><?php echo $this->translate("login"); ?></a></div></li>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'biodata'),'default',true);?>"><?php echo $this->translate("biodata"); ?></a></div></li>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'contactinfo'),'default',true);?>"><?php echo $this->translate("contact_info"); ?></a></div></li>
+		<?php if($this->applicant['appl_admission_type']=='1'){?>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'placement-test'),'default',true);?>"><?php echo $this->translate("test_schedule"); ?></a></div></li>
+		<?php }?>
+		<li class="prevDone"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'programme'),'default',true);?>"><?php echo $this->translate("programme"); ?></a></div></li>
+		<li class="current"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'uploaddocument'),'default',true);?>"><?php echo $this->translate("upload_document"); ?></a></div></li>
+		<li class="last"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'confirmation'),'default',true);?>"><?php echo $this->translate("confirmation"); ?></a></div></li>	
+	</ul>
+	<div class="clear"></div>
+</div>
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		
+	</div>
+</div>
+<p>
+<div style="width:100%;">
+
+<?php 
+if (count($this->uploadeddata)!=0) {?>
+<table class="table3" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>	
+		<th width="25px"></th>
+		<th width="50%"><?php echo $this->translate("upload_document")?></th>
+		<th width="50%"><?php echo $this->translate("file")?></th>	
+	</tr>
+	<?php 
+	$i=1;
+	foreach ($this->uploadeddata as $upddata){
+		$data = explode("_",$upddata["auf_file_name"]);
+		$namafile = $data[1];
+		
+		$file = strstr($namafile, ".", true);
+		
+		if ($file) {
+			$nme = $file;
+		}else{
+			$nme = $namafile;
+		}
+		
+		if($nme=="photograph") {
+			$document = $this->translate("photograph");
+		}else if($nme=="nric"){
+			$document = $this->translate("nric");
+		}else if($nme=="passport"){
+			$document = $this->translate("passport");
+		}else if($nme=="academic"){
+			$document = $this->translate("academic_award");
+		}else if($nme=="transcript"){
+			$document = $this->translate("academic_transcript");
+		}
+		?>
+	<tr>
+		<td valign="top" align="center"><?php echo $i;?></td>
+		<td valign="top"><?php echo $document; ?></td>
+		<td valign="top">
+		<?php 
+		
+		$fdir=DOCUMENT_PATH."/".$this->appl_id;
+		$fname=$upddata["auf_file_name"];
+		$filename = $fdir.$fname;
+		
+		$downloaddir="http://".APP_HOSTNAME."/documents/".$this->appl_id."/".$fname;
+		?>
+		<a href="<?php echo $downloaddir?>" target="_blank">Click to Download</a>
+		<?php 
+		if($nme=="photograph"){
+			
+			$appl_id =$this->appl_id;
+			
+			$upload_dir = DOCUMENT_PATH."/".$appl_id;				// The directory for the images to be saved in
+			$upload_path = $upload_dir."/";				// The path to where the image will be saved
+			$large_image_name = $fname; 		// New name of the large image
+			$thumb_image_name = "thumbnail_pic.jpg"; 	// New name of the thumbnail image
+			$max_file = 4*1024*1024; 					// Approx 4MB
+			$max_width = "151";							// Max width allowed for the large image
+			$max_height = "226";						// Max height allowed for the large image
+			$thumb_width = "130";						// Width of thumbnail image
+			$thumb_height = "180";						// Height of thumbnail image
+			$viewurl = "/documents/".$appl_id;			
+			
+		//Image Locations
+		$large_image_location = $upload_path.$large_image_name;
+		$thumb_image_location = $upload_path.$thumb_image_name;
+		
+		//Create the upload directory with the right permissions if it doesn't exist
+		if(!is_dir($upload_dir)){
+			mkdir($upload_dir, 0777);
+			chmod($upload_dir, 0777);
+		}
+		
+		//Check to see if any images with the same names already exist
+		if (file_exists($large_image_location)){
+			if(file_exists($thumb_image_location)){
+				$thumb_photo_exists = "<img src=\"/".$viewurl."/$appl_id/$thumb_image_name\" alt=\"Thumbnail Image\"/>";
+			}else{
+				$thumb_photo_exists = "";
+			}
+		   	$large_photo_exists = "<img src=\"/".$viewurl."/$appl_id/$large_image_name\" alt=\"Large Image\"/>";
+		} else {
+		   	$large_photo_exists = "";
+			$thumb_photo_exists = "";
+		}
+		
+			
+			
+		if (file_exists($large_image_location)){
+
+			//move_uploaded_file($userfile_tmp, $large_image_location);
+			chmod($large_image_location, 0777);
+			
+			$width = getWidth($large_image_location);
+			$height = getHeight($large_image_location);
+
+			//Scale the image if it is greater than the width set above
+			if ($width > $max_width || $height > $max_height){
+			
+				$scaleX = $max_width/$width;
+				$scaleY = $max_height/$height;
+	
+				$uploaded = resizeImage($large_image_location,$width,$height,$scaleX,$scaleY);
+			}else{
+				$scale = 1;
+	
+			}
+			//Delete the thumbnail file so the user can create a new one
+			if (file_exists($thumb_image_location)) {
+				unlink($thumb_image_location);
+			}
+		}
+if(strlen($large_photo_exists)>0){
+	$current_large_image_width = getWidth($large_image_location);
+	$current_large_image_height = getHeight($large_image_location);
+}			
+		?>
+		<div id="contentonly">
+		<?php
+		
+		//Display error message if there are any
+
+		if(strlen($large_photo_exists)>0 && strlen($thumb_photo_exists)>0){
+			echo "<p class='portfolio'><strong>NOTE:</strong> If the thumbnail image looks the same as the previous one, just hit refresh a couple of times.</p>";
+			echo $large_photo_exists."&nbsp;".$thumb_photo_exists;
+			echo "<p><a class='portfoliolink' href='".$this->url(array('module' => 'users' ,'controller' => 'portfolio', 'action' => 'uploadphoto'),'default',true)."?a=delete'>".$this->translate('delete')." ".$this->translate('photo')."</a></p>";
+		}else{
+				if(strlen($large_photo_exists)>0){?>
+				
+				<div align="center">
+					<img src="<?php echo $viewurl."/$large_image_name";?>" style="float: left; margin-right: 10px;" id="thumbnail" alt="Create Thumbnail" />
+					<div style="float:left; position:relative; overflow:hidden; width:<?php echo $thumb_width;?>px; height:<?php echo $thumb_height;?>px;">
+						<img src="<?php echo $upload_path.$large_image_name;?>" style="position: relative;" alt="" />
+					</div>
+					<br style="clear:both;"/><!--
+					<form name="thumbnail" action="<?php echo $this->url(array('module' => 'default' ,'controller' => 'online-application', 'action' => 'uploadphoto'),'default',true)?>" method="post">
+						<input type="hidden" name="x1" value="" id="x1" />
+						<input type="hidden" name="y1" value="" id="y1" />
+						<input type="hidden" name="x2" value="" id="x2" />
+						<input type="hidden" name="y2" value="" id="y2" />
+						<input type="hidden" name="w" value="" id="w" />
+						<input type="hidden" name="h" value="" id="h" />
+						<input type="submit" name="upload_thumbnail" value="<?php echo $this->translate('save_thumbnail'); ?>" id="save_thumb" />
+					</form>
+				--></div>
+			
+			<?php 	} 	?>
+		
+		<?php } ?>
+		</div>		
+		<?php 	
+		}
+		?>
+		</td>
+	</tr>
+	<?php $i++;
+	}?>
+</table>
+<?php }else{?>
+<form method="POST" name="srform" id="srform" enctype="multipart/form-data">
+<table class="table3" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>	
+<!--		<th width="25px"></th>-->
+		<th><?php echo $this->translate("document_tobe_upload")?></th>
+		<th><?php echo $this->translate("type")?></th>
+		<th><?php echo $this->translate("document_size")?></th>
+		<th><?php echo $this->translate("browse")?></th>		
+	</tr>
+	
+	<tr>
+<!--		<td valign="top" align="center">1</td>-->
+		<td valign="top"><?php echo $this->translate("photograph"); ?></td>
+		<td valign="top" align="center" width="10%"><?php echo $this->translate("jenis_file"); ?></td>
+		<td valign="top" align="center" width="20%"><?php echo $this->translate("notmore100kb"); ?></td>
+		<td valign="top" align="right" width="20%"><input type="file" name="photograph" id="photograph"></td>
+	</tr>
+	<tr>
+<!--		<td valign="top" align="center">2</td>-->
+		<td valign="top"><?php echo $this->translate("nric"); ?></td>
+		<td valign="top" align="center"><?php echo $this->translate("jenis_file"); ?></td>
+		<td valign="top" align="center"><?php echo $this->translate("notmore500kb"); ?></td>
+		<td valign="top" align="right"><input type="file" name="nric" id="nric"></td>
+	</tr>
+	<!--<tr>
+		<td valign="top" align="center">3</td>
+		<td valign="top"><?php echo $this->translate("passport"); ?></td>
+		<td valign="top" align="center"><?php echo $this->translate("jenis_file"); ?></td>
+		<td valign="top" align="center"><?php echo $this->translate("notmore500kb"); ?></td>
+		<td valign="top" align="right"><input type="file" name="passport" id="passport"></td>
+	</tr>
+	<tr>-->
+<!--		<td valign="top" align="center">4</td>-->
+		<!--<td valign="top"><?php echo $this->translate("academic_award"); ?></td>
+		-->
+		<td valign="top"><?php echo $this->translate("academic_award"); ?></td>
+		<td valign="top" align="center"><?php echo $this->translate("jenis_file"); ?></td>
+		<td valign="top" align="center"><?php echo $this->translate("totalnotmore2mb"); ?></td>
+		<td valign="top" align="center">
+			<table border="0" id="tblAcademic" width="100%">
+			  <tr>
+			    <td class="shade" colspan="3" align="right">
+			    <input type="button" value="Add File" onclick="addRowToTable();" />
+				<input type="button" value="Remove File" onclick="removeRowFromTable();" />
+			    </td>
+			  </tr>
+			  <tr>
+			    <td>1</td>
+			    <td><input type="file" name="academic_award1" id="academic_award1" size="40" ></td>
+			  </tr>
+			  
+			</table>
+			<input type="hidden" name="iteration_academic" id="iteration_academic" value="1">
+			<input type="hidden" name="appl_nationality" id="appl_nationality" value="<?php echo $this->applicant["appl_nationality"]?>">
+		<input type="hidden" name="appl_admission_type" id="appl_admission_type" value="<?php echo $this->applicant["appl_admission_type"]?>">
+		<input type="hidden" name="appl_id" id="appl_id" value="<?php echo $this->appl_id?>">
+		<!--<input type="file" name="academic_award" id="academic_award">--></td>
+	</tr>
+	<?php if($this->applicant['appl_admission_type']=='2'){?>
+	<tr>
+<!--		<td valign="top" align="center">5</td>-->
+		<td valign="top"><?php echo $this->translate("academic_transcript"); ?></td>
+		<td valign="top" align="center"><?php echo $this->translate("jenis_file"); ?></td>
+		<td valign="top" align="center"><?php echo $this->translate("totalnotmore2mb"); ?></td>
+		<td valign="top" align="center">
+			<table border="0" id="tblTranscript" width="100%">
+			  <tr>
+			    <td class="shade" colspan="3" align="right">
+			    <input type="button" value="Add Transcript File" onclick="addRowToTableTranscript();" />
+				<input type="button" value="Remove Transcript File" onclick="removeRowFromTableTranscript();" />
+			    </td>
+			  </tr>
+			  <tr>
+			    <td>1</td>
+			    <td><input type="file" name="academic_transcript1" id="academic_transcript1" size="40" ></td>
+			  </tr>
+			  
+			</table>
+			<input type="hidden" name="iteration_transcript" id="iteration_transcript" value="1">		
+		</td>
+	</tr>
+	<?php }?>
+
+</table>
+<P>
+<div align="center" style="border: 1px solid #111; background: #EEE; padding: 5px 0;">
+<input type="button" name="bsub" value="<?php echo $this->translate('upload')?>" onclick="validatefile(this.form);">
+</div><P>
+<div align="left">
+<fieldset>
+<legend><u><?php echo $this->translate("important_note"); ?></u></legend>
+<?php echo $this->translate("important_note_desc"); ?>
+</fieldset>
+</div>
+</form>
+<?php }?>
+</div>
+
+<script>
+function addRowToTable()
+{
+  var tbl = document.getElementById('tblAcademic');
+  var lastRow = tbl.rows.length;
+  var maxRow=11;
+  // if there's no header row in the table, then iteration = lastRow + 1
+  if(lastRow<maxRow){
+	  var iteration = lastRow;
+	  var row = tbl.insertRow(lastRow);
+  }
+  
+  // left cell
+  var cellLeft = row.insertCell(0);
+  var textNode = document.createTextNode(iteration);
+  cellLeft.appendChild(textNode);
+  
+  // right cell
+  var cellRight = row.insertCell(1);
+  var el = document.createElement('input');
+  el.type = 'file';
+  el.name = 'academic_award' + iteration;
+  el.id = 'academic_award' + iteration;
+  el.size = 40;
+  
+//  el.onkeypress = keyPressTest;
+  cellRight.appendChild(el);
+  document.srform.iteration_academic.value=iteration;
+
+}
+
+function removeRowFromTable()
+{    
+  var iteration = document.srform.iteration_academic.value;
+  iteration=iteration-1;
+  if(iteration>0){
+  	document.srform.iteration_academic.value=iteration;
+  }else{
+  	document.srform.iteration_academic.value=1;
+  }
+  
+  var tbl = document.getElementById('tblAcademic');
+  var lastRow = tbl.rows.length;
+  if (lastRow > 2) tbl.deleteRow(lastRow - 1);
+  
+}
+
+
+function addRowToTableTranscript()
+{
+  var tbl = document.getElementById('tblTranscript');
+  var lastRow = tbl.rows.length;
+  var maxRow=11;
+  // if there's no header row in the table, then iteration = lastRow + 1
+  if(lastRow<maxRow){
+	  var iteration = lastRow;
+	  var row = tbl.insertRow(lastRow);
+  }
+  
+  // left cell
+  var cellLeft = row.insertCell(0);
+  var textNode = document.createTextNode(iteration);
+  cellLeft.appendChild(textNode);
+  
+  // right cell
+  var cellRight = row.insertCell(1);
+  var el = document.createElement('input');
+  el.type = 'file';
+  el.name = 'academic_transcript' + iteration;
+  el.id = 'academic_transcript' + iteration;
+  el.size = 40;
+  
+//  el.onkeypress = keyPressTest;
+  cellRight.appendChild(el);
+  document.srform.iteration_transcript.value=iteration;
+
+}
+
+function removeRowFromTableTranscript()
+{    
+  var iteration = document.srform.iteration_transcript.value;
+  iteration=iteration-1;
+  if(iteration>0){
+  	document.srform.iteration_transcript.value=iteration;
+  }else{
+  	document.srform.iteration_transcript.value=1;
+  }
+  
+  var tbl = document.getElementById('tblTranscript');
+  var lastRow = tbl.rows.length;
+  if (lastRow > 2) tbl.deleteRow(lastRow - 1);
+  
+}
+
+function validatefile(form){
+	allowSubmit = false;
+	extArray = new Array(".jpg", ".JPG", ".jpeg", ".JPEG", ".gif", ".GIF", ".png", ".PNG");
+	
+	var nationality = document.getElementById('appl_nationality').value;
+	var admission_type = document.getElementById('appl_admission_type').value;
+	var msg = "Unggah semua tugasan\n\nUpload all files";
+	
+	var photograph = document.getElementById('photograph').value;
+	var nric = document.getElementById('nric').value;
+	/*var passport = document.getElementById('passport').value;
+	var academic_award = document.getElementById('academic_award').value;
+	var academic_transcript = document.getElementById('academic_transcript').value;*/
+	
+	
+	
+	var iteration_academic = document.srform.iteration_academic.value;
+	var ext_photograph = photograph.slice(photograph.lastIndexOf(".")).toLowerCase();
+	var ext_nric = nric.slice(nric.lastIndexOf(".")).toLowerCase();
+//	var ext_passport = passport.slice(passport.lastIndexOf(".")).toLowerCase();
+	/*var ext_academicaward = academic_award.slice(academic_award.lastIndexOf(".")).toLowerCase();
+	var ext_transcript = academic_transcript.slice(academic_transcript.lastIndexOf(".")).toLowerCase();*/
+	
+
+		if(admission_type==1){
+			
+			if (photograph==""){
+				alert("Sila pilih fail fotograf\n\nPlease select file for photograph");
+				return false;
+			}
+			if (nric==""){
+				alert("Sila pilih fail KTP/SIM\n\nPlease select file for KTP/SIM");
+				return false;
+			}
+			
+			for (var x=1; x<=iteration_academic; x++){
+				var academic_award = document.getElementById('academic_award'+x).value;
+				var ext_academicaward = academic_award.slice(academic_award.lastIndexOf(".")).toLowerCase();
+				if (academic_award==""){
+					alert("Sila pilih fail Surat Dokter\n\nPlease select file for Doctor Report");
+					return false;
+				}
+			}
+		
+			/*if (academic_award==""){
+				alert("Please select file for academic/award");
+				return false;
+			}
+			if (academic_transcript==""){
+				alert("Please select file for academic transcript");
+				return false;
+			}*/
+			
+			for (var i = 0; i < extArray.length; i++){
+		       //check to see if it's the proper extension
+		        if ((extArray[i] == ext_photograph) && (extArray[i] == ext_nric) &&  (extArray[i] == ext_academicaward))
+		        {allowSubmit = true;}
+		    }
+		}else if(admission_type==2){
+			var iteration_transcript = document.srform.iteration_transcript.value;
+			var iteration_academic = document.srform.iteration_academic.value;
+			
+			if (photograph==""){
+				alert("Sila pilih fail fotograf\n\nPlease select file for photograph");
+				return false;
+			}
+			if (nric==""){
+				alert("Sila pilih fail KTP/SIM\n\nPlease select file for KTP/SIM");
+				return false;
+			}
+			
+			for (var x=1; x<=iteration_academic; x++){
+				var academic_award = document.getElementById('academic_award'+x).value;
+				var ext_academicaward = academic_award.slice(academic_award.lastIndexOf(".")).toLowerCase();
+				if (academic_award==""){
+					alert("Sila pilih fail Surat Dokter\n\nPlease select file for Doctor Report");
+					return false;
+				}
+			}
+			
+			for (var t=1; t<=iteration_transcript; t++){
+				var academic_transcript = document.getElementById('academic_transcript'+t).value;
+				var ext_transcript = academic_transcript.slice(academic_transcript.lastIndexOf(".")).toLowerCase();
+				if (academic_transcript==""){
+					alert("Sila pilih fail Raport Halaman\n\nPlease select file for Raport Halaman");
+					return false;
+				}
+			}
+			
+			for (var i = 0; i < extArray.length; i++){
+		       //check to see if it's the proper extension
+		       // if (photograph!="" || nric!="" || academic_award!=""  || ext_transcript!=""){
+		       		if ((extArray[i] == ext_photograph) && (extArray[i] == ext_nric)  && (extArray[i] == ext_academicaward) && (extArray[i] == ext_transcript))
+		        	{allowSubmit = true;}
+		      // }
+		       /*if (academic_award!="" || ext_transcript!="" || passport!=""){
+		       		if ((extArray[i] == ext_photograph) && (extArray[i] == ext_nric) && (extArray[i] == ext_passport) && (extArray[i] == ext_academicaward) && (extArray[i] == ext_transcript))
+		        	{allowSubmit = true;}
+		       }else{
+		       		if ((extArray[i] == ext_photograph) && (extArray[i] == ext_nric))
+		        	{allowSubmit = true;}
+		       }*/
+		        
+		    }
+		}
+
+    
+    if (allowSubmit){
+		if (confirm(msg)){
+			document.srform.action="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'uploaddocumentfiles'),'default',true);?>";
+			document.srform.submit();
+		}
+	}else{
+	 	alert("Terdapat extension fail yang salah.\n\nHanya fail berjenis "+extArray+" sahaja dibenarkan.\n\n\nSome of your file is not an authorized extension.\n\nOnly file type with extension " + extArray + " are allowed to be uploaded");
+		return false;
+ 	}
+	
+}
+
+
+
+
+//function validatefile(form){
+//	allowSubmit = false;
+//	extArray = new Array(".jpg", ".JPG", ".jpeg", ".JPEG", ".gif", ".GIF", ".png", ".PNG");
+//	
+//	var nationality = document.getElementById('appl_nationality').value;
+//	var admission_type = document.getElementById('appl_admission_type').value;
+//	var msg = "Unggah semua tugasan\n\nUpload all files";
+//	
+//	var photograph = document.getElementById('photograph').value;
+//	var nric = document.getElementById('nric').value;
+//	var passport = document.getElementById('passport').value;
+//	/*var academic_award = document.getElementById('academic_award').value;
+//	var academic_transcript = document.getElementById('academic_transcript').value;*/
+//	var iteration_academic = document.srform.iteration_academic.value;
+//	var iteration_transcript = document.srform.iteration_transcript.value;
+//	
+//	var ext_photograph = photograph.slice(photograph.lastIndexOf(".")).toLowerCase();
+//	var ext_nric = nric.slice(nric.lastIndexOf(".")).toLowerCase();
+//	var ext_passport = passport.slice(passport.lastIndexOf(".")).toLowerCase();
+//	/*var ext_academicaward = academic_award.slice(academic_award.lastIndexOf(".")).toLowerCase();
+//	var ext_transcript = academic_transcript.slice(academic_transcript.lastIndexOf(".")).toLowerCase();*/
+//	
+//	if(nationality==0){
+//		if (photograph==""){
+//			alert("Sila pilih fail fotograf\n\nPlease select file for photograph");
+//			return false;
+//		}
+//		if (nric==""){
+//			alert("Sila pilih fail nric\n\nPlease select file for nric");
+//			return false;
+//		}
+//		if (passport==""){
+//			alert("Sila pilih fail passport\n\nPlease select file for passport");
+//			return false;
+//		}
+//		
+//		for (var x=1; x<=iteration_academic; x++){
+//			var academic_award = document.getElementById('academic_award'+x).value;
+//			var ext_academicaward = academic_award.slice(academic_award.lastIndexOf(".")).toLowerCase();
+//			if (academic_award==""){
+//				alert("Sila pilih fail fotograf\n\nPlease select file for academic/award");
+//				return false;
+//			}
+//		}
+//		
+//		for (var t=1; t<=iteration_transcript; t++){
+//			var academic_transcript = document.getElementById('academic_transcript'+t).value;
+//			var ext_transcript = academic_transcript.slice(academic_transcript.lastIndexOf(".")).toLowerCase();
+//			if (academic_transcript==""){
+//				alert("Sila pilih fail transkrip\n\nPlease select file for academic transcript");
+//				return false;
+//			}
+//		}
+//		/*if (academic_award==""){
+//			alert("Please select file for academic/award");
+//			return false;
+//		}
+//		if (academic_transcript==""){
+//			alert("Please select file for academic transcript");
+//			return false;
+//		}*/
+//		
+//		for (var i = 0; i < extArray.length; i++){
+//	       //check to see if it's the proper extension
+////	       alert ("extphoto="+ext_photograph+" nric="+ext_nric+" passport="+ext_passport+" academic="+ext_academicaward+" trans="+ext_transcript);
+//	        if ((extArray[i] == ext_photograph) && (extArray[i] == ext_nric) && (extArray[i] == ext_passport) && (extArray[i] == ext_academicaward) && (extArray[i] == ext_transcript))
+//	        {allowSubmit = true;}
+//	    }
+//	    
+//	}else if(nationality==1){
+//		if(admission_type==1){
+//			if (photograph==""){
+//				alert("Sila pilih fail fotograf\n\nPlease select file for photograph");
+//				return false;
+//			}
+//			if (nric==""){
+//				alert("Sila pilih fail nric\n\nPlease select file for nric");
+//				return false;
+//			}
+//			for (var x=1; x<=iteration_academic; x++){
+//				var academic_award = document.getElementById('academic_award'+x).value;
+//				var ext_academicaward = academic_award.slice(academic_award.lastIndexOf(".")).toLowerCase();
+//				if (academic_award==""){
+//					alert("Sila pilih fail anugerah\n\nPlease select file for academic/award");
+//					return false;
+//				}
+//			}
+//			for (var t=1; t<=iteration_transcript; t++){
+//				var academic_transcript = document.getElementById('academic_transcript'+t).value;
+//				var ext_transcript = academic_transcript.slice(academic_transcript.lastIndexOf(".")).toLowerCase();
+//				
+//				if (academic_transcript==""){
+//					alert("Sila pilih fail transkrip\n\nPlease select file for academic transcript");
+//					return false;
+//				}
+//			}
+//		
+//			/*if (academic_award==""){
+//				alert("Please select file for academic/award");
+//				return false;
+//			}
+//			if (academic_transcript==""){
+//				alert("Please select file for academic transcript");
+//				return false;
+//			}*/
+//			
+//			for (var i = 0; i < extArray.length; i++){
+//		       //check to see if it's the proper extension
+//		        if ((extArray[i] == ext_photograph) && (extArray[i] == ext_nric) && (extArray[i] == ext_passport) && (extArray[i] == ext_academicaward) && (extArray[i] == ext_transcript))
+//		        {allowSubmit = true;}
+//		    }
+//		}else if(admission_type==2){
+//			if (photograph==""){
+//				alert("Sila pilih fail fotograf\n\nPlease select file for photograph");
+//				return false;
+//			}
+//			if (nric==""){
+//				alert("Sila pilih fail nric\n\nPlease select file for nric");
+//				return false;
+//			}
+//			
+//			for (var x=1; x<=iteration_academic; x++){
+//				var academic_award = document.getElementById('academic_award'+x).value;
+//				var ext_academicaward = academic_award.slice(academic_award.lastIndexOf(".")).toLowerCase();
+//			}
+//			
+//			for (var t=1; t<=iteration_transcript; t++){
+//				var academic_transcript = document.getElementById('academic_transcript'+t).value;
+//				var ext_transcript = academic_transcript.slice(academic_transcript.lastIndexOf(".")).toLowerCase();
+//			}
+//			
+//			for (var i = 0; i < extArray.length; i++){
+//		       //check to see if it's the proper extension
+//		       if (photograph!="" || nric!=""){
+//		       	if ((extArray[i] == ext_photograph) && (extArray[i] == ext_nric))
+//		        	{allowSubmit = true;}
+//		       }else if (photograph!="" || nric!="" || passport!=""){
+//		       	if ((extArray[i] == ext_photograph) && (extArray[i] == ext_nric) && (extArray[i] == ext_passport))
+//		        	{allowSubmit = true;}
+//		       }else if (photograph!="" || nric!="" || passport!="" || academic_award!=""){
+//		       	if ((extArray[i] == ext_photograph) && (extArray[i] == ext_nric) && (extArray[i] == ext_passport) && (extArray[i] == ext_academicaward))
+//		        	{allowSubmit = true;}
+//		       	
+//		       }else if (photograph!="" || nric!="" || passport!="" || academic_award!=""  || ext_transcript!=""){
+//		       	if ((extArray[i] == ext_photograph) && (extArray[i] == ext_nric) && (extArray[i] == ext_passport) && (extArray[i] == ext_academicaward) && (extArray[i] == ext_transcript))
+//		        	{allowSubmit = true;}
+//		       }
+//		       /*if (academic_award!="" || ext_transcript!="" || passport!=""){
+//		       		if ((extArray[i] == ext_photograph) && (extArray[i] == ext_nric) && (extArray[i] == ext_passport) && (extArray[i] == ext_academicaward) && (extArray[i] == ext_transcript))
+//		        	{allowSubmit = true;}
+//		       }else{
+//		       		if ((extArray[i] == ext_photograph) && (extArray[i] == ext_nric))
+//		        	{allowSubmit = true;}
+//		       }*/
+//		        
+//		    }
+//		}
+//	}
+//    
+//    if (allowSubmit){
+//		if (confirm(msg)){
+//			document.srform.action="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'uploaddocumentfiles'),'default',true);?>";
+//			document.srform.submit();
+//		}
+//	}else{
+//	 	alert("Terdapat extension fail yang salah.\n\nHanya fail berjenis "+extArray+" sahaja dibenarkan.\n\n\nSome of your file is not an authorized extension.\n\nOnly file type with extension " + extArray + " are allowed to be uploaded");
+//		return false;
+// 	}
+//	
+//}
+</script>

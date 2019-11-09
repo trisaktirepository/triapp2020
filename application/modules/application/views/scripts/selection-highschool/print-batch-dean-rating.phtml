@@ -1,0 +1,119 @@
+<div align="center" style="width:100%;">
+<table   width="100%" cellpadding="5" cellspacing="2" border="0">
+	<tr >
+		<td valign="top" rowspan="2" align="center"><img src="<?php echo $this->baseUrl(); ?>/images/logo.png"></td>
+		<td>
+			<table>
+				<tr>
+					<td>Nama Dokumen</td>
+					<td>:</td>
+					<td>SURAT DEKAN <?php echo strtoupper($this->faculty_name)?></td>
+				</tr>
+				<tr>
+					<td>Nomor</td>
+					<td>:</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>Tanggal</td>
+					<td>:</td>
+					<td></td>
+				</tr><!--
+				<tr>
+					<td>Program</td>
+					<td>:</td>
+					<td><?php echo $this->program_code.' '.$this->program_name;?></td>
+				</tr>
+			--></table><br>
+		</td>
+	</tr>
+	<tr>
+		<td align="center"><strong>DAFTAR USULAN NAMA CALON MAHASISWA YANG DITERIMA<br>
+			MELALUI PROGRAM, SELEKSI SISWA BERPOTENSI <?php echo strtoupper($this->period["ap_desc"]);?><br>
+			TAHUN AKADEMIK <?php echo $this->current_academic_year?></strong>
+</td>
+	</tr>
+	
+	
+	<tr><td colspan=2>
+	<br><br>
+	<table class="table4" width="100%" cellpadding="5" cellspacing="2" border="0">
+	<tr>
+		<th><?php echo $this->translate("no");?></th>			
+		<th><?php echo $this->translate("applicantID");?></th>
+		<th><?php echo $this->translate("name");?></th>
+		<th><?php echo $this->translate("program");?></th>	
+		<th><?php echo $this->translate("status")?></th>	
+		<th><?php echo $this->translate("rating")?></th>
+		
+	</tr>
+	
+	<?php 
+	if(isset($this->applicant)){
+		
+	$no=1;
+	foreach ($this->applicant as $entry){
+		
+	//get education average mark
+	$educationDB = new App_Model_Application_DbTable_ApplicantEducation();
+	//$education = $educationDB->getEducationDetail($entry["appl_id"]);
+	$everage_mark = $educationDB->getAverageMark($entry["appl_id"]);
+		
+			if($this->locale=="id_ID"){
+				$program_name = $entry["program_name_indonesia"];
+			}elseif($this->locale=="en_US"){
+				$program_name = $entry["program_name"];
+			}
+	?>
+	<tr>
+	   <td align="center"><?php echo $no;?></td>		
+		<td><?php echo $entry["applicantID"]?></td>
+		<td><?php echo $entry["appl_fname"].' '.$entry["appl_mname"].' '.$entry["appl_lname"]?></td>
+		<td><?php echo $program_name;?></td>	
+		<td >		
+		<input type="checkbox"><?php echo $this->translate("accept")?><br>
+		<input type="checkbox"><?php echo $this->translate("reject")?><br>
+		<input type="checkbox"><?php echo $this->translate("pending")?><br> 				    
+		</td>	
+		<td>		
+		<input type="checkbox">1<br>
+		<input type="checkbox">2<br>
+		<input type="checkbox">3<br></td>
+	</tr>
+	<?php $no++;}//end paginator 
+	}?>
+		
+</table>
+
+  </td></tr>
+	
+<tr >
+	<td>&nbsp;</td>
+	<td align="right">
+	
+	<table width="60%">
+				<tr>
+					<td>Diusulkan di</td>
+					<td>:</td>
+					<td>Jakarta</td>
+				</tr>
+				<tr>
+					<td>Pada Tanggal</td>
+					<td>:</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>DEKAN</td>
+					<td>:</td>
+					<td><?php echo strtoupper($this->dean_name)?></td>
+				</tr>
+			</table>
+			
+	</td>
+</tr>
+</table>
+<br>
+
+
+
+</div>

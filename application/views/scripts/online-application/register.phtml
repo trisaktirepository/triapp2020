@@ -1,0 +1,146 @@
+<?php
+$registry = Zend_Registry::getInstance();
+$locale = $registry->get('Zend_Locale');
+$this->locale = $locale->toString();
+?>
+<?php 
+	echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery/plugin/colorbox/jquery.colorbox-min.js');
+	echo $this->headLink()->prependStylesheet($this->baseUrl().'/js/jquery/plugin/colorbox/colorbox.css');
+?>
+<script>
+$(document).ready(function(){
+
+	/*$( "#appl_dob" ).datepicker({
+	dateFormat: "dd-mm-yy",
+	changeMonth: true,
+	numberOfMonths: 2,
+	});*/
+
+
+});
+</script>
+
+<script type="text/javascript">
+function changeOrigin(element){
+	if( $(element).val() == 0 ){
+		$('#country_origin').removeAttr('disabled');
+	}else{
+		$('#country_origin').attr('disabled','disabled');
+		$('#country_origin').val("");
+	}
+}
+
+function setLanguage(){
+	
+
+		if(document.getElementById('appl_prefer_lang-1').checked) {
+		  language='en';
+		}else if(document.getElementById('appl_prefer_lang-2').checked) {
+		  language='id';
+		}
+		
+		/*var language="";
+		if ($("#appl_prefer_lang").checked.value=='1'){
+			language='en';
+		}else if ($("#appl_prefer_lang").checked.value=='2'){
+			language='id';
+		}
+		window.parent.location="http://www.google.com";*/
+		window.location = '?lang=' + language;
+
+
+}
+
+function viewDocReq(){
+	var pId = $('#programme').val();
+
+	if(pId!=0){
+		$.colorbox({
+			href:"<?php echo $this->url(array('module'=>'default','controller'=>'online-application', 'action'=>'view-document-requirement'),'default',true);?>/pid/"+pId,
+			width: "70%",
+			height: "70%"
+		});
+	}else{
+		alert('<?php echo $this->translate("Please select programme"); ?>');
+	}
+}
+</script>
+
+<style type="text/css">
+.zend_form select#appl_dob-day{
+	width:50px;
+}
+.zend_form select#appl_dob-month{
+	width:100px;
+}
+.zend_form select#appl_dob-year{
+	width:80px;
+}
+</style>
+
+<!--<div class="breadcrum">
+	<ul class="tri-steps">
+		<li class="current" ><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'register'),'default',true);?>"><?php echo $this->translate("apply"); ?></a></div></li>
+		<li class="empty" ><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'index'),'default',true);?>"><?php echo $this->translate("login"); ?></a></div></li>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'biodata'),'default',true);?>"><?php echo $this->translate("biodata"); ?></a></div></li>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'contactinfo'),'default',true);?>"><?php echo $this->translate("contact_info"); ?></a></div></li>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'programme'),'default',true);?>"><?php echo $this->translate("programme"); ?></a></div></li>
+		<li class="last"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'uploaddocument'),'default',true);?>"><?php echo $this->translate("upload_document"); ?></a></div></li>	
+	</ul>
+	<div class="clear"></div>
+</div>
+
+-->
+
+<?php if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+<?php }?>
+
+
+<div style="float:left; width:55%;">
+	<div class="message toolbar">
+		<h2><?php echo $this->title; ?></h2>
+		<div class="toolbar-button">
+			 
+				<li>
+					<a href="http://www.infopmb.trisakti.ac.id" >
+						<span class='link'></span>
+						 <font size="4"><?php echo $this->translate("Info Detail PMB")?> </font>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	
+	<?php
+		if($this->notice){
+			?>
+			<div style="margin-top: 20px; padding: 0 .7em;" class="ui-state-highlight ui-corner-all">
+				<p><span style="float: left; margin-right: .3em;" class="ui-icon ui-icon-info"></span>
+				<?php echo $this->notice; ?></p>
+			</div>
+			<?php
+		}else
+		if($this->form){
+			echo $this->form;	
+		} 
+	?>
+	
+</div>
+
+
+<?php if ($this->locale=="en_US") { 
+$anntitle=$this->rsanntitle["sl_english"];
+$annmesg=$this->rsannmesg["sl_english"];
+} else if ($this->locale=="id_ID") { 
+$anntitle=$this->rsanntitle["sl_bahasa"];
+$annmesg=$this->rsannmesg["sl_bahasa"];
+}
+?>
+

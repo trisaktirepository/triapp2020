@@ -1,0 +1,242 @@
+<script type="text/javascript">
+
+	$(function() {
+		$( "#tabs" ).tabs();
+	});
+
+	function add(){
+		window.location="<?php echo $this->url(array('module'=>'anr-setup','controller'=>'calendar', 'action'=>'add'));?>";
+	}
+</script>
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="javascript:back()">
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+<div id="tabs">
+	<ul>
+		<li><a href="#tabs-1">Profile</a></li>
+<!--		<li><a href="#tabs-2">Program Progress</a></li>-->
+		<li><a href="#tabs-3">Registration History</a></li>
+		<li><a href="#tabs-4">Discplinary</a></li>
+	</ul>
+	<div id="tabs-1">
+		<table class="table4" width="100%" border="0" cellspacing="1" cellpadding="2" style="margin:10px;">
+			<tr>
+				<th width="100px">Fullname</th>
+				<td width="5px">:</td>
+				<td><?php echo $this->student['ARD_NAME']; ?></td>
+			</tr>
+			<tr>
+				<th>Username</th>
+				<td>:</td>
+				<td><?php echo $this->student['username']; ?></td>
+			</tr>
+			<tr>
+				<th>IC</th>
+				<td>:</td>
+				<td><?php echo $this->student['ARD_IC']; ?></td>
+			</tr>
+			<tr>
+				<th>Date of birth</th>
+				<td>:</td>
+				<td><?php echo date('jS M Y', strtotime($this->student['ARD_DOB'])); ?></td>
+			</tr>
+			<tr>
+				<th>Gender</th>
+				<td>:</td>
+				<td><?php echo $this->student['ARD_SEX']=="F"?"Female":"Male"; ?></td>
+			</tr>
+			<tr>
+				<th>Race</th>
+				<td>:</td>
+				<td><?php echo $this->student['student_race']; ?></td>
+			</tr>
+			<tr>
+				<th>Religion</th>
+				<td>:</td>
+				<td><?php echo $this->student['student_religion']; ?></td>
+			</tr>
+			<tr><td colspan="3"><br /></td></tr>
+			<tr>
+				<th valign="top">Address</th>
+				<td valign="top">:</td>
+				<td>
+					<?php echo $this->student['ARD_ADDRESS1']; ?>
+					<?php echo $this->student['ARD_ADDRESS2']!=null?"<br />".$this->student['ARD_ADDRESS2']:""; ?>
+					<?php echo $this->student['ARD_TOWN']!=null?"<br />".$this->student['ARD_TOWN']:""; ?>
+					<?php echo $this->student['ARD_CITY']!=null?"<br />".$this->student['ARD_CITY']:""; ?>
+					<?php echo $this->student['state_name']!=null?"<br />".$this->student['state_name']:""; ?>
+					<?php echo $this->student['country_name']!=null?"<br />".$this->student['country_name']:""; ?>
+					<?php echo $this->student['ARD_POSTCODE']!=null?"<br />".$this->student['ARD_POSTCODE']:""; ?>
+				</td>
+			</tr>
+			<tr><td colspan="3"><br /></td></tr>
+			<tr>
+				<th>Phone</th>
+				<td>:</td>
+				<td><?php echo $this->student['ARD_PHONE']; ?></td>
+			</tr>
+			<tr>
+				<th>Phone (Mobile)</th>
+				<td>:</td>
+				<td><?php echo $this->student['ARD_HPHONE']; ?></td>
+			</tr>
+			<tr>
+				<th>Email</th>
+				<td>:</td>
+				<td><?php echo $this->student['ARD_EMAIL']; ?></td>
+			</tr>
+			
+			
+		</table>
+	</div>
+	
+	<div id="tabs-3">
+		<table class="table5" width="100%" border="0" cellspacing="1" cellpadding="2" style="margin:10px;">
+			<tr>
+				<th width="100px">Fullname</th>
+				<td width="5px">:</td>
+				<td><?php echo $this->student['ARD_NAME']; ?></td>
+			</tr>
+			<tr>
+				<th>IC</th>
+				<td>:</td>
+				<td><?php echo $this->student['ARD_IC']; ?></td>
+			</tr>
+		</table>
+		<br>
+		<table width="100%" class="table4" border="0" cellpadding="5" cellspacing="1" bgcolor="" align="">
+		<tr bgcolor="#ffffff">
+			<th colspan="2" rowspan="2">Course Name</th>
+			<th colspan="4">Exam</th>
+			<th colspan="2">Mark</th>
+			<th colspan="2">Payment</th>
+			<th rowspan="2">Application Date</th>
+		</tr>
+		<tr bgcolor="#ffffff">
+			<th>Date</th>
+			<th>Time</th>
+			<th>Center</th>
+			<th>Status</th>
+			<th>Grade</th>
+			<th>Status</th>
+			<th>Mode</th>
+			<th>Status</th>
+		</tr>
+	<?php 
+	if($this->register){
+		$i=1;
+		foreach($this->register as $regis){?>
+		<tr bgcolor="#ffffff">
+			<td><?php echo $i;?>)</td>
+			<td><?php echo $regis['course_name'];?></td>
+			
+			<td><?php echo date('d-M-Y',strtotime($regis['exam_date'])); ?></td>
+			<td><?php if ($regis['exam_time_start']!=""){ echo $regis['exam_time_start'];?> to <?php echo $regis['exam_time_end'];}?></td>
+			<td><?php echo $regis['venue_name'];?></td>
+			<td><?php 
+			if($regis['course_grade'] == null){echo "<font color=red><B>INCOMPLETE</B></FONT>";}else{echo "COMPLETE";}
+			?></td>
+			<td><?php echo $regis['grade_symbol'];?></td>
+			<td><?php echo $regis['course_grade'];?></td>
+			<td><?php echo $regis['paymentmode'];?></td>
+			<td bgcolor='#f2f2f2'><?php if($regis['paymentStatus'] == 0)echo "<font color=red><b>PENDING</b></font>";elseif($regis['paymentStatus'] == 1) echo "<font color=green>COMPLETED</font>"; ?></td>
+			<td><?php echo $regis['dateApplied'];?></td>
+			
+		</tr>
+		<?php 
+		$i++;
+		}
+		}else{
+			echo "<tr><td colspan=10>No data.</td></tr>";
+		}?>
+	</table>
+	</div>
+	
+	<div id="tabs-4">
+	<?php if ($this->student_case){?>
+	<table class="table5" width="50%" cellpadding="5" cellspacing="2" border="0">
+	<tr>	
+		<th width="30%">Name</th>
+		<td><?php echo $this->student_name;?></td>	
+	</tr>
+	<tr>	
+		<th>Ic Number</th>
+		<td><?php echo $this->student_icno;?></td>	
+	</tr>
+	<tr>	
+		<th>Release Status</th>
+		<td><?php if($this->case_status==1) echo 'Released';?><?php if($this->case_status==0) echo 'Not Released';?>
+		</td>	
+	</tr>
+	</table>
+	<br>
+	<table class="table4" width="100%" cellpadding="5" cellspacing="2" border="0">
+	<tr>	
+		
+		<th>Case Name</th>
+		<th>Incidate Date</th>	
+		<th>Penalty</th>		
+		<th>Created By</th>		
+				
+	</tr>
+	
+	<?php 
+	$i=0;
+	foreach ($this->student_case as $entry): 
+
+	$oUser = new SystemSetup_Model_DbTable_User();
+	$user = $oUser->getData($entry["createdby"]);
+	$ruser = $oUser->getData($entry["releaseby"]);
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>		    
+		<td><?php  echo $entry["case_name"]?></td>
+		<td><?php  echo $entry["incident_date"]?></td>
+		<td><?php  echo $entry["penalty_name"]; ?></td>		
+		<td><?php  echo $user["fullname"].'<br>'.$entry["createddt"];?></td>
+		
+	</tr>
+	<?php 
+	$i++;
+	endforeach;	
+	?>
+	</table>
+	<?php 
+	}else{?>
+	<table class="table5" width="50%" cellpadding="5" cellspacing="2" border="0">
+	<tr>	
+		<th><b>No Cases</b></th>
+	</tr>
+	</table>
+	<?php }
+	?>
+	</div>
+</div>

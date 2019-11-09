@@ -1,0 +1,49 @@
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br>
+<div style="width:100%;">
+
+<?php echo $this->form; ?>
+<br>
+<form name="copymark" method="post" action="/examination/mark-entry/copy-mark-execute">
+<table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">	  
+	<input type="hidden" name="idSemesterSource" id="idSemesterSource" value="<?php echo $this->idsemestersource;?>"></input>
+	<input type="hidden" name="idSemesterDest" id="idSemesterDest" value="<?php echo $this->idsemesterdest;?>"></input>
+	<input type="hidden" name="idProgram" id="idProgram" value="<?php echo $this->idprogram;?>"></input>
+	  <tr>
+	    <th <?php echo $rowspan; ?> width="25px"><?php  echo "No";?></th>
+	    <th <?php echo $rowspan; ?>><?php echo $this->translate("Subject Code")?></th>
+	    <th <?php echo $rowspan; ?>><?php echo $this->translate("Subject Name")?></th>
+	    <th <?php echo $rowspan; ?>><?php echo $this->translate("Credit Hours")?></th>
+	     <th <?php echo $rowspan; ?>><?php echo $this->translate("Copy Mark")?></th>
+	<?php if (count($this->courses)>0)  {
+		$coun=1;
+		foreach ($this->courses as $course) {
+		?>
+		<tr>
+		<td><?php echo $coun; ?></td>
+		<td><?php echo $course['SubCode'] ?></td>
+		<td><?php echo $course['SubjectName'] ?></td>
+		<td><?php echo $course['CreditHours'] ?></td>
+		<td><input type="checkbox" name="copy[<?php echo $coun;?>]" value="<?php echo $course['IdSubject'];?>"></td>
+	<?php
+		$coun++; }
+	}?>
+	
+
+</table>
+<input type="submit" name="Copy">
+
+</form>

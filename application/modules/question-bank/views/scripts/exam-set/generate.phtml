@@ -1,0 +1,219 @@
+<script type="text/javascript">
+	
+	$(document).ready(function() {
+		
+		$("#exam_date").datepicker({
+				"dateFormat":"yy-mm-dd",
+				"changeMonth":"true",
+		});					
+	});
+
+</script>
+
+ <script type="text/javascript">
+ 
+   
+
+    function select_all(name, value) {
+    	 
+    	var forminputs = document.myform['student_id[]'];
+    	
+	    for (i = 0; i < forminputs.length; i++) {
+	    	
+	    // regex here to check name attribute
+	    var regex = new RegExp(name, "i");
+	  
+	    
+		    if (regex.test(forminputs[i].getAttribute('name'))) {
+		        
+			    if (value == '1') {
+			    forminputs[i].checked = true;
+			    } else {
+			    forminputs[i].checked = false;
+			    }
+		    }
+	    }
+    }
+    
+      
+    
+    function validate(){
+    	
+    	var id = $('input[id=student_id]:checked').val();
+    	
+    	if(!id){
+			alert('You did not select any of the checkboxes!');
+			return false;
+		}else{
+			msg = confirm('Are you sure you want to generate exam question?')
+    		if(msg){
+	           return true;
+			}else{
+			   return false;
+			}
+				    	
+		}
+
+    }
+      
+    </script>	
+
+		
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+		
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+
+
+<form name="searchfrm" method="POST" action="<?php echo $this->url(array('module'=>'question-bank','controller'=>'exam-set', 'action'=>'generate'),'default',true);?>">
+<table width="50%"%" border="0" cellpadding=" 5" cellspacing="1">
+ <tr>
+    <td>Learning Center</td>
+    <td>:</td>
+    <td>
+    <select name="idVenue" id="idVenue">
+		<option> --Select Venue-- </option>	
+		<? foreach ($this->venue as $v){
+			if($this->idVenue==$v["id"]){
+				$sel = "selected";
+			}else{
+				$sel = "";
+			}
+		?>	
+		<option value="<?php echo $v["id"]?>" <?php echo $sel;?>><?php echo $v["name"]?></option>		
+		<? } ?>
+	</select>
+	
+	</td>
+  </tr>
+  <tr>
+    <td>Exam Date</td>
+    <td width="5px">:</td>
+    <td><input type="text" name="exam_date" id="exam_date" size="10" value="<?php echo $this->exam_date; ?>"></td>
+  </tr>
+   <tr>
+    <td>&nbsp;</td>
+    <td width="5px">&nbsp;</td>
+    <td><input type="submit" name="submit" value="Submit"></td>
+  </tr>
+  </table>
+</form>
+
+<?php
+    if($this->paginator){
+	//kene buat nnotify message show tos yg active for each course
+?>
+
+<form method="POST" id="myform" onsubmit="return validate();" name="myform" action="<?php echo $this->url(array('module'=>'question-bank','controller'=>'exam-set', 'action'=>'exgenerate'),'default',true);?>">
+<table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		<th width="25px">&nbsp;</th>
+		<th>Student Name</th>
+		<th>IC Number</th>
+		<th>Course Name</th>	
+		<th>Registration ID</th>
+		<th>Generate Exam Paper Status</th>
+	</tr>
+	
+	<?php 
+	$i=0;
+	$oldcourse='';
+	$bil=1;
+	foreach ($this->paginator as $entry): 
+				
+	    $newcourse = $entry['cname'];
+		if($oldcourse!=$newcourse){
+			
+			$setDB = new App_Model_Tos_DbTable_ExamSet();
+		    $set   = $setDB->getSetByCourse($entry['courseid']);
+		    
+		    $msgTos="";
+		    if(!$set) {
+		    	$message = '* Exam Set is not available'; 
+		    }else {
+		    	$message="";		
+		    	
+		    	//cek TOS
+		    		foreach ($set as $s){
+		    			$pool_id = $s["pool_id"];
+		    			$tosDB   =  new App_Model_Tos_DbTable_Tos();
+						$tos     = $tosDB->getActiveTos($pool_id);
+						
+						if(!$tos){
+							$msgTos = "* TOS is Not Available";
+						}
+		    		}
+		    }
+		   
+		    		
+			echo '	<tr bgcolor="#B3C8F7"><td colspan="6">'.$entry['cname'].'&nbsp;&nbsp <font color=red>'.$message.''.$msgTos.'</font></td></tr>';
+		}
+		$oldcourse = $newcourse;
+	?>
+
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<td width="25px">
+		    <?  if($set ){
+		    	  if($tos){
+		    	  
+		    	if($entry["exam_set_id"]!= NULL){
+		    		$checkbox= $bil.")";
+		    		$statusSet = "<font color='green'>YES</font>";
+		    	}else{
+		    		$checkbox = "<input type='checkbox' name='student_id[]' id='student_id' value='".$entry['ID']."'>";
+		    		$statusSet = "<font color='red'>NO</font>";
+		    	}
+		    	
+		    	echo $checkbox;
+		    	  	?> 
+					
+					<input type="hidden" size="2" name="courseid[<?php echo $entry['ID']; ?>]" value="<?php echo $entry['courseid']?>">
+					<input type="hidden" size="2" name="regId[<?php echo $entry['ID']; ?>]" value="<?php echo $entry['regId']?>">
+			<? } } ?>
+		</td>
+		<td><?php echo strtoupper($entry['ARD_NAME']); ?></td>
+		<td><?php echo $entry['ARD_IC']; ?></td>		
+		<td><?php echo $entry['cname']; ?></td>		
+		<td><?php echo $entry['regId']; ?></td>		
+		<td><?php echo $statusSet; ?></td>
+		
+	</tr>
+	<?php 
+	$i++;
+	$bil++;
+	endforeach 
+	?>
+	<tr>
+		<td colspan="5" ><a href="#" onClick="select_all('student_id', '1');">Check All</a>  |
+		 <a href="#" onClick="select_all('student_id', '0');">Uncheck All</a></td>	
+    	
+	</tr>
+
+</table>
+<table width="100%" border="0" cellpadding=" 5" cellspacing="1">
+   <tr>
+    <td><input type="submit" name="submit" value="Generate Exam Questions"></td>
+  </tr>
+  </table>
+  </form>
+<?php 
+}
+?>
+
+
+
+
+

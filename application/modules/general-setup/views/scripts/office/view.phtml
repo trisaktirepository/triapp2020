@@ -1,0 +1,25 @@
+<table class="table2" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		<th>Name</th>
+		<td><?php echo $this->data['name'];?></td>
+	</tr>
+	<tr>
+		<th>Code</th>
+		<td><?php echo $this->data['code'];?></td>
+	</tr>
+	<tr>
+		<th>Address</th>
+		<td>
+			<?php echo $this->data['address1']!=null?$this->data['address1']."<br />":""; ?>
+			<?php echo $this->data['address2']!=null?$this->data['address2']."<br />":""; ?>
+			<?php echo $this->data['postcode']!=null?$this->data['postcode']."<br />":""; ?>
+			<?php echo $this->data['city']!=null?$this->data['city']."<br />":""; ?>
+			<?php echo $this->data['state_name']!=null?$this->data['state_name']."<br />":""; ?>
+			<?php echo $this->data['country_name']!=null?$this->data['country_name']."<br />":""; ?>
+		</td>
+	</tr>
+	<tr>
+		<th>Branch</th>
+		<td><?php echo $this->data['branch_name'];?></td>
+	</tr>
+</table>	

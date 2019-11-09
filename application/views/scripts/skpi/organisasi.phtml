@@ -1,0 +1,212 @@
+<style type="text/css">
+.zend_form dt {
+    width: 177px;
+}
+.zend_form dd {
+    padding: 2px 187px;
+}
+</style>
+<script type="text/javascript">
+ 
+function edit_Organisasi(n) {
+	 
+	var x = document.getElementById("data_org").rows[n].cells;
+	
+	document.getElementById("title_bahasa_org").value=x[2].innerHTML;
+	document.getElementById("title_org").value=x[3].innerHTML;
+	document.getElementById("idOrganisasi").value=document.getElementById("idOrganisasi["+n+"]").value;
+	document.getElementById("yearstart").value= x[7].innerHTML;
+	document.getElementById("yearstop").value= x[8].innerHTML;
+	document.getElementById("level_org").value=document.getElementById("level_org["+n+"]").value;
+	document.getElementById("occupacy").value=document.getElementById("occupacy["+n+"]").value;
+	document.getElementById("category").value=document.getElementById("category["+n+"]").value;
+	//alert(document.getElementById("field").value);
+}
+
+function onclickDelete(n) {
+	
+	var r = confirm("Are you sure to delete it?");
+	if (r == true) {
+		var url="skpi/delete-organisasi/idOrganisasi/"+n;
+		window.open(url);
+	}  
+}
+ 
+    
+ 
+ 
+</script>
+
+
+
+<?php echo $this->idHonors;?>
+<div style="width:100%;">
+<fieldset>
+<form id="honors" method="post" action="<?php echo $this->baseUrl()?>/skpi/organisasi" >
+<input type="hidden" name="idOrganisasi" id="idOrganisasi">
+<table  width="80%" cellpadding="5" cellspacing="0" border="0">
+	<tr>	<td width="20%"><?php echo $this->translate("Name of Organization in Bahasa");?></td><td>:</td>
+			<td> <textarea rows="4" cols="50" id="title_bahasa_org" name="title_bahasa_org">    
+			</textarea></tr> 
+	<tr>	<td width="20%"><?php echo $this->translate("Name Of Organization");?></td><td>:</td>
+			<td> <textarea rows="4" cols="50" id="title_org" name="title_org">     
+			</textarea></tr>
+	
+	<tr>	<td width="20%"><?php echo $this->translate("Category");?></td><td>:</td>
+			<td> <select id="category" name="category">
+			    <option value="0"><?php echo $this->translate("Please Select");?></option>
+			    <?php 
+			    	foreach ($this->category_list as $level):
+			    ?>
+			    		<option value="<?php echo $level["key"];?>"<?php if($this->levelId == $level["key"]){ echo 'selected';}?>><?php echo $level["value"];?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select></td>	</tr>		
+	
+	<tr>	<td width="20%"><?php echo $this->translate("Level");?></td><td>:</td>
+			<td>
+		 
+			<select id="level_org" name="level_org">
+			    <option value="0"><?php echo $this->translate("Please Select");?></option>
+			    <?php 
+			    	foreach ($this->level_list as $level):
+			    ?>
+			    		<option value="<?php echo $level["key"];?>"<?php if($this->levelId == $level["key"]){ echo 'selected';}?>><?php echo $level["value"];?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select>
+		 
+			</td></tr>
+	<tr>	<td width="20%"><?php echo $this->translate("Occupacy");?></td><td>:</td>
+			<td>
+			 
+			<select id="occupacy" name="occupacy">
+			    <option value="0"><?php echo $this->translate("Please Select");?></option>
+			    <?php 
+			    	foreach ($this->occupacy_list as $semester):
+			    ?>
+			    		<option value="<?php echo $semester["key"];?>" <?php if($this->fieldId == $semester["key"]){ echo 'selected';}?>><?php echo $semester["value"];?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select>
+		 
+			</td></tr>
+			<tr>	<td width="20%"><?php echo $this->translate("Year Start");?> </td><td>:</td><td>
+			<select id="yearstart" name="yearstart">
+				 <option value="0"><?php echo $this->translate("Please Select");?></option>
+			    <?php 
+			    	foreach ($this->year_list as $semester):
+			    ?>
+			    		<option value="<?php echo $semester;?>" <?php if($this->fieldId == $semester ){ echo 'selected';}?>><?php echo $semester ;?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select>
+			<?php echo $this->translate("Year Stop").' : ';?> 
+			<select id="yearstop" name="yearstop" >
+				  <option value="0"><?php echo $this->translate("Please Select");?></option>
+			    <?php 
+			    	foreach ($this->year_list as $semester):
+			    ?>
+			    		<option value="<?php echo $semester ;?>" <?php if($this->fieldId == $semester ){ echo 'selected';}?>><?php echo $semester ;?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select>
+			</td>
+	<tr><td colspan="3" align="right"><input type="submit" name="submit" value="<?php echo $this->translate('Save')?>" ></td>
+	
+	</tr>
+</table>
+
+</form>
+</fieldset>
+<br>
+ 
+ 
+<table class="table" id="data_org" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		<th width="5%"><?php echo $this->translate("No");?></th>
+		<th width="5%"><?php echo $this->translate("Status");?></th> 
+		<th width="35%"><?php echo $this->translate("Name  in Bahasa");?></th>
+		<th width="10%"><?php echo $this->translate("Name of Organization");?></th>
+		
+		<th width="10%"><?php echo $this->translate("Category");?></th>			
+		<th width="10%"><?php echo $this->translate("Level");?></th>
+		<th width="10%"><?php echo $this->translate("Occupation");?></th>
+		<th width="10%"><?php echo $this->translate("Year Started");?></th>
+		<th width="10%"><?php echo $this->translate("Year Stoped");?></th>
+		<th width="10%"><?php echo $this->translate("Certificate");?></th>
+		<th width="10%"><?php echo $this->translate("Action");?></th>
+	</tr>
+	<?php  
+	if (count($this->organisasis)>0) {
+	foreach($this->organisasis as $index=>$value){ 
+		$id=$value['idOrganisasi'];
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<input type="hidden" id="idOrganisasi[<?php echo $index+1;?>]" value="<?php echo $value['idOrganisasi'];?>">
+		<input type="hidden" id="level_org[<?php echo $index+1;?>]" value="<?php echo $value['levelid'];?>">
+		<input type="hidden" id="occupacy[<?php echo $index+1;?>]" value="<?php echo $value['occupacyid'];?>">
+		 <input type="hidden" id="category[<?php  echo $index+1;?>]" value="<?php echo $value['categoryid'];?>">
+		<td><?php echo $index+1;?></td> 
+		<td align="center">
+		<?php if ($value['id_user']!=$this->IdStudentRegistration && $value['approved']=='2' ) {
+					 
+					?>
+						<a href="<?php echo $this->url(array('module'=>'default','controller'=>'skpi', 'action'=>'organisasi-approved','idOrganisasi'=>$value['idOrganisasi']),'default',true)?>"><img src='<?php echo $this->baseUrl();?>/images/reject.png' border=0 width='20' height='20' title="do you want to acept" ></a>
+			  
+				<?php } ?>
+		<?php if ($value['id_user']!=$this->IdStudentRegistration && $value['approved']=='1') {
+					 
+					?>
+					 
+						<a href="<?php echo $this->url(array('module'=>'default','controller'=>'skpi', 'action'=>'organisasi-reject','idOrganisasi'=>$value['idOrganisasi']),'default',true)?>"><img src='<?php echo $this->baseUrl();?>/images/accept.png' border=0 width='20' height='20' title="do you want to reject" ></a>
+			<?php }?> 
+						
+		<?php if ($value['approved']=='0' ||$value['approved']=='') {
+					 
+					?>
+					 
+						 <img src='<?php echo $this->baseUrl();?>/images/prohibit.png' border=0 width='20' height='20' title="Not Approved yet" ></a>
+			<?php }?>
+		 
+			 
+		</td>
+		
+
+		<td><?php  echo $value['title_bahasa'];?> </td>
+		<td><?php echo $value['title']; ?>
+		<td><?php echo $value["category"];?></td>
+		<td><?php echo $value["level"];?></td>
+		<td><?php echo $value["occupacy"];?></td>
+		<td><?php echo $value["year_start"];?></td>
+		<td><?php echo $value["year_stop"];?></td>
+		<?php 
+		$pathupload=$value['path'];
+		if($pathupload!=''){
+			$dt = explode("triapp",$pathupload);
+			//echo var_dump($dt);exit;
+			$path = $dt[1];
+			$path ="<a target='_blank' href=http://".APP_HOSTNAME.$path.">" ;
+		
+		?> <td align="center"><?php  echo $path;?><img src='<?php echo $this->baseUrl();?>/images/document.png' border=0 width='20' height='20' title="Download" ></a></td> <?php 
+		} else {?>
+		<td align="center"><img src='<?php echo $this->baseUrl();?>/images/upload.png' border=0 width='20' height='20' title="Upload"  onclick="onclickUpload(<?php echo $value['idOrganisasi']?>,'Organisasi','/default/skpi/#Tab2')" /></td>
+		<?php }?>
+		<td align="center">
+		<?php if ($value['id_user']==$this->IdStudentRegistration) {?>
+		<img src='<?php echo $this->baseUrl();?>/images/edit.png' border=0 width='20' height='20' title="Edit"  onclick="edit_Organisasi(<?php echo  $index+1;?>)" >
+		<img src='<?php echo $this->baseUrl();?>/images/trash.png' border=0 width='20' height='20' title="Delete"  onclick="onclickDelete(<?php echo $value['idOrganisasi'];?>)">
+			<?php }?></td>
+	
+	</tr>
+	<?php }
+} ?>
+
+</table>
+  
+ 

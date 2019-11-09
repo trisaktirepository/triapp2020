@@ -1,0 +1,161 @@
+<script>
+dojo.addOnLoad(function(){
+	dijit.byId('field3').focus();
+	dijit.byId('field5').set('value','');
+	dijit.byId('field5').set('placeHolder','Select');		
+	});
+
+function save() {
+	alert('Simpan data?');
+	$( "#myform" ).submit();
+} 
+ 
+
+</script>
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+		
+		  <?php if(isset($this->staff_list) && (count($this->staff_list)>0)){ ?>
+			<li>
+				<a onclick="save();">
+					<span class='save'></span>
+					<?php echo $this->translate("save")?>
+				</a>
+			</li>
+			<?php } ?>			
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					<?php echo $this->translate("info")?>
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<fieldset>
+	 <legend><?php echo $this->translate("Staff").' '.$this->translate("Master").' '.$this->translate("Search");?></legend>
+                    <form action="<?php echo $this->baseUrl();?>/finalassignment/proposal/supervisor-setup/search/1/iddeandecree/<?php echo $this->IdDeanDecree;?>" method="POST">
+                            <table width="100%">
+                            	<tr>
+                                    <td ><?php echo $this->translate("Full").' '.$this->translate("Name");?></td>
+                                    <td colspan="3"><?php echo $this->lobjform->field4;?></td>
+                                </tr>
+                                <tr>
+                                    <td ><?php echo $this->translate("First").' '.$this->translate("Name");?></td>
+                                    <td ><?php echo $this->lobjform->field2;?></td>
+                                    <td ><?php echo $this->translate("Last").' '.$this->translate("Name");?></td>
+                                    <td ><?php echo $this->lobjform->field3;?></td>
+                                </tr>
+                                <tr>
+                                	<td ><?php echo $this->translate("Designation");?></td>
+                                    <td ><?php echo $this->lobjform->field5;?></td>
+                                    <td ><?php echo $this->translate("Email");?></td>
+                                    <td ><?php echo $this->lobjform->field6;?></td>
+                                </tr>
+                                <tr>
+                                    <td ><?php echo $this->translate("Active");?></td>
+                                    <td ><?php echo $this->lobjform->field7;?></td>
+                                </tr>
+                                <tr>
+                                <td align = "center" colspan = "4">
+
+											<?php echo $this->lobjform->Search;?>
+											
+											<?php echo $this->lobjform->Clear;?>
+								</td>
+							    </tr>
+                        </table>
+                    </form>	
+    </fieldset> 
+    <br/>
+<?php if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+<?php }?>
+
+<div style="width:100%;">
+<?php 
+if(isset($this->staff_list)){
+	$i=1;
+	
+?>	
+
+<?php echo $this->translate("Total Result : ").count($this->applicant);?>
+<form name="myform" id="myform" method="post" action="<?php echo $this->url(array('module'=>'finalassignment','controller'=>'proposal','action'=>'supervisor-setup'),'default',true); ?>">
+
+<input type="hidden" name="IdDeanDecree" id="IdDeanDecree"  value="<?php echo $this->IdDeanDecree;?>"> 
+
+<table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+	<tr>
+	    <th><?php echo $this->translate("no")?></th>
+		<th><?php echo $this->translate("Staff Id");?></th>
+		<th><?php echo $this->translate("Staff Name");?></th>	
+		<th><?php echo $this->translate("Supervisor");?><br>
+			 </th>	
+		<th><?php echo $this->translate("Examiner");?><br>
+			 </th>	
+	</tr>
+	
+	<?php 
+	$dbSupervisor=new Finalassignment_Model_DbTable_Supervisormaster();
+	foreach($this->staff_list as $items){
+
+		$idstaff=$items['IdStaff'];
+		$supervisor=$dbSupervisor->getStaffStatus($this->IdDeanDecree, $idstaff);
+	 	
+	?>
+	<input type="hidden" name="IdStaff[]" id="IdStaff[]" value="<?php echo $idstaff;?>">
+	<input type="hidden" name="IdTASupervisormaster[<?php echo $idstaff?>]" id="IdTASupervisormaster[<?php echo $idstaff?>]" value="<?php echo $supervisor['IdTASupervisormaster'];?>">
+	<tr>
+	    <td><?php echo $i; ?>.</td>
+		<td><?php echo $items["StaffId"];?>&nbsp;</td>
+		<td><?php echo $items["FullName"];?>&nbsp;</td>
+		<td>
+			<select name="supervisor[<?php echo $idstaff;?>]" id="supervisor[<?php echo $idstaff;?>]">	
+			<option value=""  ><?php echo $this->translate('-----')?></option>
+			<?php foreach ($this->supervisorSts_list as $item) {
+					$select = "";
+					if( $supervisor['Status_supervisor']==$item['key'] ){
+						$select = 'selected="selected"';
+					}?>
+		   		<option value="<?php echo $item['key']; ?>" <?php echo $select; ?>><?php echo $this->translate($item['value'])?></option>
+		   	<?php }?>
+			</select>
+		
+		</td>
+		<td>
+			<select name="examiner[<?php echo $idstaff;?>]" id="examiner[<?php echo $idstaff;?>]">	
+			<option value=""  ><?php echo $this->translate('-----')?></option>
+			<?php foreach ($this->examinerSts_list as $item) {
+				$select = "";
+					if( $supervisor['Status_examiner']==$item['key'] ){
+						$select = 'selected="selected"';
+					}?>
+		   		<option value="<?php echo $item['key']; ?>" <?php echo $select; ?>><?php echo $this->translate($item['value'])?></option>
+		   	<?php }?>
+			</select>
+		
+		</td>
+		 
+	</tr>
+	<?php $i++; }//end foreah?>
+	
+</table>
+</form>
+
+
+</div>
+
+
+ 
+<?php }//end isset?>

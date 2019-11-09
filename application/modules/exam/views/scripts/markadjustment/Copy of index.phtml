@@ -1,0 +1,127 @@
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		
+	</div>
+</div>
+<br></br>
+<div style="width:900px; margin: 0 auto;">
+
+
+<div style="width: 100%;">
+<fieldset style="width:450px;">
+	<legend>Please select the information below:-</legend>
+<form name="searchfrm" action="" method="post">
+	<table width="100%">
+		<tr>
+			<td>
+				Semester 
+			</td>
+			<td width="5px">:</td>
+			<td>			
+				<select name="semester_id" onchange="form.submit()">
+				<option value="0">Please select</option>
+				<?php 
+				foreach($this->semester as $s){
+					if($this->semester_id==$s[id])
+					  $sel = "selected";
+					else
+					  $sel = "";
+				 	echo "<option value='$s[id]' $sel>$s[name]</option>";
+				 } ?>
+				</select>
+			</td>
+		</tr>	
+		<tr>
+			<td>
+				Program 
+			</td>
+			<td width="5px">:</td>
+			<td>			
+				<select name="program_id" onchange="form.submit()">
+				<option value="0">Please select</option>
+				<?php 
+				foreach($this->program as $p){
+					if($this->program_id==$p[id])
+					  $sel = "selected";
+					else
+					  $sel = "";
+				 	echo "<option value='$p[id]' $sel>$p[main_name]</option>";
+				 } ?>
+				</select>
+			</td>
+		</tr>			
+	</table>
+</form>
+</fieldset>
+</div>
+<br />
+
+<?php if($this->semester_id && $this->program_id) {?>
+	<table class="table" width="100%" cellpadding="5" cellspacing="1" >
+		<tr>
+			<th>No.</th>
+			<th>Courses</th>
+			<th>A+</th>
+			<th>A</th>
+			<th>A-</th>
+			<th>B+</th>
+			<th>B</th>
+			<th>C</th>
+			<th>D</th>
+			<th>E</th>			
+			<th>Total</th>
+		</tr >
+		
+		<?php 
+		    $i=1; 	   
+		  
+		    foreach($this->courses as $course){
+		    	
+			    $a1=0;
+			  	$a2=0;
+			  	$a3=0;
+			  	$b1=0;
+			  	$b2=0;
+			  	$c=0;
+			  	$d=0;
+			  	$e=0;
+			  	$f=0;
+			  
+			    //get scr_id
+			    $oSCRegistarion = new App_Model_Exam_DbTable_StudentCourseRegistration();
+			    $student_list   = $oSCRegistarion->getByCourseSemester($this->semester_id,$course["course_id"]); 
+			   
+			   
+			    //to check grade foreach student.
+			   
+				    foreach($student_list as $sl){
+				      //echo $sl["student_id"];
+				    	 $oGrade = new App_Model_Exam_DbTable_Grade();
+				    	 list($a1,$a2,$a3,$b1,$b2,$c,$d,$e,$f)=$oGrade->checkGrade($sl["student_id"],$this->program_id,$a1,$a2,$a3,$b1,$b2,$c,$d,$e,$f);     
+					    
+			   		}//end foreach student
+			   
+			         
+	   		
+		  
+			?>
+			<tr  <?php echo $i%2==0?"class='shade'":""; ?> align="center">
+				<td><?php echo $i;?>.</td>
+				<td align="left"><a class="link" href="<?php echo $this->url(array('action'=>'view','program_id' => $this->program_id,'semester_id'=> $this->semester_id, 'course_id' => $course["course_id"])); ?>"><?php echo $course["code"].' - '.$course["name"]?></a></td>
+				<td><?php echo ($a1);?></td>
+				<td><?php echo ($a2);?></td>
+				<td><?php echo ($a3);?></td>
+				<td><?php echo ($b1);?></td>
+				<td><?php echo ($b2);?></td>
+				<td><?php echo ($c);?></td>
+				<td><?php echo ($d);?></td>
+				<td><?php echo ($e);?></td>				
+				<td><?php echo (int)($a1+$a2+$a3+$b1+$b2+$c+$d+$e); ?></td>
+			</tr>
+		<?php $i++; }//end foreach courses ?>
+		
+	</table>
+	<?php } ?>
+</div>

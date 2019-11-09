@@ -1,0 +1,230 @@
+<?php
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/css/layout.css' );
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/css/default/style.css' );
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/css/jquery-ui-1.8.5.custom.css' );
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/js/jquery-1.4.3.min.js' );
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/js/jquery.ui.core.js' );
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/js/jquery.ui.datepicker.j' );
+?>
+
+<!----><form name="f1" method="post" action="<?php echo $this->url(array('module'=>'finance','controller'=>'fee','action'=>'add'),'default',true) ?>">
+<!--<form name="f1" method="post" action="">-->
+
+
+<div style="width:900px; margin:0 auto;">
+<div id="dark_grey"><br><br>
+<!--<fieldset><legend>&nbsp;<?php echo $this->title; ?>&nbsp;&nbsp;</legend>-->
+<link rel="stylesheet" href="../demos.css">
+
+<script type="text/javascript">
+	function del(title, id){
+		if(confirm('Are you sure to delete '+title+'?')){
+			window.location = "<?php echo $this->url(array('module'=>'onapp','controller'=>'placementtest', 'action'=>'delete')); ?>/id/"+id;
+		}
+	}
+	
+	function add(){
+		alert('adad');
+		window.location="<?php echo $this->url(array('module'=>'finance','controller'=>'fee', 'action'=>'add'));?>";
+		document.f1.submit();
+	}
+
+	function edit(id){
+		window.location="<?php echo $this->url(array('module'=>'finance','controller'=>'fee', 'action'=>'edit'));?>/id/"+id;
+	}
+	
+	function red(){
+//		var id = 0;
+//		var e = document.getElementById("txtpromote");
+// 		id = e.options[e.selectedIndex].value;
+//alert(id);
+
+		//window.location="<?php echo $this->url(array('module'=>'finance','controller'=>'fee', 'action'=>'add'));?>/id/"+id;
+		document.getElementById("flag").value = "Y";
+		document.f1.submit();
+	}
+
+</script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		
+		
+		$("#expireDate").datepicker({
+				"dateFormat":"yy-mm-dd",
+				"changeMonth":"true",
+				beforeShow: function(input, inst) { 
+					if ($("#startDate").val()) { // Only update when has a value.
+							$( "#expireDate" ).datepicker( "option", "minDate", $("#startDate").datepicker("getDate") );
+					}
+				}
+				
+		});
+
+		/*Add Remove function*/
+		$('#add').click(function() {
+			return !$('#select1 option:selected').remove().appendTo('#select2');
+		});
+		$('#remove').click(function() {
+			return !$('#select2 option:selected').remove().appendTo('#select1');
+		});
+
+		$('form').submit(function() {
+			var selProgram = "";
+			
+			$('#select2 option').each(function(i) {
+				$(this).attr("selected", "selected");
+				if(selProgram==""){
+					selProgram += this.value;
+				}else{
+					selProgram += "," + this.value;
+				}
+			});
+
+			$('#selProgram').attr("value", selProgram);
+		});
+
+	});
+</script>	
+	
+
+<?
+
+//echo $this->id."**".$this->addtn;
+?>	
+	
+<input type="hidden" name="selProgram" id ="selProgram" value="" />
+<input type="hidden" name="flag" id="flag" value=""/>
+	
+	<table width="100%" cellpadding="5" cellspacing="1" bgcolor="">
+	<tr>
+    <td bgcolor="" width="20%">Select Additional Fee</td>
+    <td bgcolor="" width="2%">:</td>
+    <td bgcolor="#FFFFFF">
+
+	 <select name="txtaddition" id="txtaddition">
+		<option value="0"> -- Please select -- </option>
+    <?php 
+	$promotionDB = new Finance_Model_DbTable_Fee();
+	$this->addfee= $promotionDB->getListData("fr_additional",1,"additional_name");
+//	
+	foreach ($this->addfee as $fee) {
+		if($fee['id'] == $this->addtn){
+						$selected="selected='selected'";
+					}else{
+						$selected="";
+					}
+					echo "<option value='".$fee['id']."'".$selected.">".strtoupper($fee['additional_name'])."</option>";
+				}
+	?>
+	</select>
+
+	</td>
+  </tr>
+  <tr>
+    <td bgcolor="" width="20%">Select Fee Structure </td>
+    <td bgcolor="" width="2%">:</td>
+    <td bgcolor="#FFFFFF">
+
+ <select name="txtpromote" id="txtpromote" onChange="red();">
+<!--    <select name="txtpromote" id="txtpromote" onChange="document.f1.submit();">-->
+	<option value="0"> -- Please select -- </option>
+    <?php 
+	$promotionDB = new Finance_Model_DbTable_Fee();
+	$this->promotion = $promotionDB->getListData("fr_targetgroup_main",1,"group_code");
+//	
+	foreach ($this->promotion as $promotion) {
+		if($promotion['id'] == $this->id){
+						$selected="selected='selected'";
+					}else{
+						$selected="";
+					}
+					echo "<option value='".$promotion['id']."'".$selected.">".strtoupper($promotion['group_code'])."</option>";
+				}
+	?>
+	</select>
+
+	</td>
+  </tr>
+  </table><br><br>
+  <table width="100%" cellpadding="5" cellspacing="1" bgcolor="#CCCCCC">
+  <?
+  $feeDB = new Finance_Model_DbTable_Fee();
+  if($this->id != 0){
+  	$iid = $this->id;
+  	$cond = "id=".$iid;
+  }else{
+  	$cond = 0;
+  }
+  $this->component = $feeDB->getData2("fr_promotion","fr_targetgroup_main","id = fr_targetgroupid","$cond","group_desc"); 
+  if(empty($this->component)){
+  ?>
+  <tr>
+    <td bgcolor="#FFFFFF" width="30%"><font color="red"><b>No Data </b></font></td>
+  </tr>
+  <?}else{?>
+  <?php foreach ($this->component as $component):?>
+  <tr>
+    <td bgcolor="#F2F2F2" width="30%"><b>Fee Structure </b></td>
+    <td bgcolor="#F2F2F2" width="70%"><?php echo $component['group_desc']; ?>&nbsp;(<i><?php echo $component['group_code']; ?></i>)</td>
+  </tr>
+  <tr>
+    <td bgcolor="#F2F2F2" width="30%"><b>Total Semester </b></td>
+    <td bgcolor="#F2F2F2" width="70%"><?php echo $component['fr_total_sem']; ?></td>
+  </tr>
+  <tr>
+    <td bgcolor="#F2F2F2" width="30%"><b>Total Month </b></td>
+    <td bgcolor="#F2F2F2" width="70%"><?php echo $component['fr_month']; ?></td>
+  </tr>
+  <tr>
+    <td bgcolor="#F2F2F2" width="30%"><b>Total Amount (RM)</b></td>
+    <td bgcolor="#F2F2F2" width="70%"><?php echo $component['fr_amount']; ?></td>
+  </tr>
+  	<?php endforeach;?>
+  	
+  </table>
+<br>
+	<table width="100%" border="0">
+		<tr>
+			<td width="45%">
+				<h4>Program List</h4>
+				<select id="select1" name="courselist" size="20" style="width:100%;" multiple="multiple" >
+					<?php foreach ($this->programlist as $program):?>
+						<option value="<?php echo $program['masterProgramID']; ?>"><?php echo $program['masterProgram']; ?> </option>
+					<?php endforeach;?>
+				</select>
+			</td>
+			<td align="center" valign="middle" width="10px">
+			<table>
+			<tr>
+				<td align="center"><input id="add" type="button" class="buttonLink" value=">"/></td>
+			</tr>
+			<tr>
+				<td align="center"><input id="remove" type="button" class="buttonLink" value="<"/></td>
+			</tr>
+			</table>
+			</td>
+			<td width="45%">
+				<h4>Selected Program</h4>
+				<select id="select2" name="select2" size="20" style="width:100%;" multiple="multiple" >
+					<?php foreach ($this->courseprerequisites as $course):?>
+						<option value="<?php echo $course['courseid']; ?>"><?php echo $course['course_code']; ?> - <?php echo $course['course_name']; ?></option>
+					<?php endforeach;?>
+				</select>
+			</td>
+		</tr>
+		
+		<tr>
+			<td colspan="3" align="left">
+				<div width="200px">
+					<br />
+					<input type="submit" value="Save" onClick="add();" />
+					<input type="button" value="Cancel" onClick="window.location = '<?php echo $this->url(array('module'=>'setup','controller'=>'semester', 'action'=>'index'));?>'" />
+				</div>
+			</td>
+		</tr>
+	</table><?}?>
+<!--</fieldset>-->
+</div>
+</div>
+
+</form>

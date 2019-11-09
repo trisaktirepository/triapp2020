@@ -1,0 +1,22 @@
+<?php
+/*
+ *  @author Suliana
+ *  @created May 16, 2011
+ */
+?>
+<div id="vertmenu">
+	
+	<ul>  
+	    <li><h1>Configuration</h1></li>  
+	    <li><a href="<?php echo $this->url(array('module'=>'system-setup','controller'=>'module','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Module Configuration"); ?></a></li>
+	    <li><a href="<?php echo $this->url(array('module'=>'system-setup','controller'=>'role','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Roles & Permissions"); ?></a></li>
+	</ul>
+	<br />
+	<ul>  
+	    <li><h1>System Users</h1></li>  
+	    <li><a href="<?php echo $this->url(array('module'=>'system-setup','controller'=>'user','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Users"); ?></a></li>
+	    <li><a href="<?php echo $this->url(array('module'=>'system-setup','controller'=>'audit','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Audit Trail"); ?></a></li>        
+	</ul>
+	<br />
+	
+</div>

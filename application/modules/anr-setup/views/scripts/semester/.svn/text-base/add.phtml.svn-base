@@ -1,0 +1,64 @@
+
+<form method='POST' id='frmsemester' 
+      action="<?php echo $this->action ?>">
+   <input type="hidden" name="semesterID"/>
+    <table width="600">
+        <tr>
+            <td>Program</td>
+            <td>Term</td>
+        </tr>
+        <tr>
+            <td>
+                <select name="programID">
+                    <?php foreach ($this->programs as $programKey => $programValue):?>
+                    <option value="<?php echo $programKey;?>" > <?php echo $programValue;?></option>
+                    <?php endforeach;?>
+                </select>
+            </td>
+            <td>
+                <input type="text" class="input" name="semester" />
+            </td>
+        </tr>
+        <tr>
+            <td>Semester Start Date</td>
+            <td>Semester End Date</td>
+        </tr>
+        <tr>
+            <td>
+                <input type="text" class="datepicker" name="semester_start" />
+            </td>
+            <td>
+                <input type="text" class="datepicker" name="semester_end" />
+            </td>
+        </tr>
+    <?php
+    $i = 0;
+    if ($this->activities) {
+    foreach ($this->activities as $key => $activity):
+    ?>
+        <tr>
+            <td>
+                <input type="hidden" name="activityID[<?php echo $i;?>]" value="<?php echo $key;?>" />
+                <?php echo $activity;?> Start Date
+            </td>
+            <td>
+                <?php echo $activity;?> End Date
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="text" class="datepicker" name="start[<?php echo $i;?>]" />
+            </td>
+            <td>
+                <input type="text" class="datepicker" name="end[<?php echo $i;?>]" />
+            </td>
+        </tr>
+    <?php
+        $i++;
+    endforeach;
+    } //end if
+    ?>
+    </table>
+    <input type="submit" id="cmdsubmit" name="cmdsubmit" value="Submit" />
+</form>
+

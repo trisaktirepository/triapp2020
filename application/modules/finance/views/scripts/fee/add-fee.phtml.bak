@@ -1,0 +1,219 @@
+
+<form name="f1" method="post" action="<?php echo $this->url(array('module'=>'finance','controller'=>'billfee','action'=>'add-comp'),'default',true) ?>">
+
+<fieldset>
+<link rel="stylesheet" href="../demos.css">
+
+<script type="text/javascript">
+	function del(title, id){
+		if(confirm('Are you sure to delete '+title+'?')){
+			window.location = "<?php echo $this->url(array('module'=>'onapp','controller'=>'placementtest', 'action'=>'delete')); ?>/id/"+id;
+		}
+	}
+	
+	function add(){
+		window.location="<?php echo $this->url(array('module'=>'finance','controller'=>'billfee', 'action'=>'add'));?>";
+	}
+
+	function edit(id){
+		window.location="<?php echo $this->url(array('module'=>'finance','controller'=>'billfee', 'action'=>'edit'));?>/id/"+id;
+	}
+
+</script>
+<?
+
+$promDB = new Finance_Model_DbTable_Billfee();
+$this->prom = $promDB->getPaginateData($this->id);
+
+//echo $this->chargeID;
+?>	
+
+	
+<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+<!-- <tr class="shade">
+    <td width="20%">1) Fee Type </td>
+    <td width="2%">:</td>
+    <td>
+
+    <select name="txtcharge" id="txtcharge">
+	<option value="0"> -- Please select -- </option>
+	<option value="1"> Main Fee</option>
+	<option value="2"> Additional Fee </option>
+	
+   <?php 
+	$this->charge = $promDB->getListData("fr_charging_main",1,"charging_type");
+	
+	foreach ($this->charge as $charge) {
+		echo "<option value='".$charge['id']."'>".strtoupper($charge['charging_type'])."</option>";
+	}
+	?>
+	</select>
+
+	</td>
+  </tr>
+  <tr class="shade">
+	<td colspan="3"><u>Main Fee</u></td>
+  </tr>-->
+	<tr class="shade">
+		<td colspan="3"><u>Fee Structure Component</u></td>
+	</tr>
+	<?foreach ($this->prom as $pr) { ?>
+	<tr class="shade">
+		<td width="20%">Promotion Type </td>
+		<td width="2%">:</td>
+		<td align="left"><?php echo $pr["group_code"];?></td>
+	</tr>
+  <?} ?>
+	<tr class="shade">
+		<td width="20%">1) Charging Period </td>
+		<td width="2%">:</td>
+		<td>
+		
+		<select name="txtcharge" id="txtcharge" onChange="document.f1.submit()" >
+		<option value="0"> -- Please select -- </option>
+		<?php 
+		$this->charge = $promDB->getListData("fr_charging_main",1,"charging_type");
+					
+			foreach ($this->charge as $charge) {
+				if ($charge['id'] == $this->chargeID) {
+					$selected="selected='selected'";
+				}else{
+					$selected="";
+				}
+			echo "<option value='".$charge['id']."'  ".$selected." >".strtoupper($charge['charging_type'])."</option>";
+		}
+		?>
+		</select>
+		
+		</td>
+	</tr>
+	<?php
+	if ($this->chargeID == 1) {
+	?>
+	<tr class="shade">
+		<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Semester </td>
+		<td width="2%">:</td>
+		<td>
+		
+		<select name="txtsem" id="txtsem">
+		<option value="0"> -- Please select -- </option>
+		<?php 
+		$this->sem = $promDB->getListData("semester",1,"semester");
+		foreach ($this->sem as $sems) {
+			echo "<option value='".$sems['semesterID']."'>".strtoupper($sems['semester'])."</option>";
+		}
+		?>
+		</select>
+		
+		</td>
+	</tr>
+	<? } else {?>
+		<input type="hidden" name="txtsem" id="txtsem" value="null">
+	<? } ?>
+	<tr class="shade">
+		<td> 2) Bill Type Group </td>
+		<td>:</td>
+		<td>
+		
+		<select name="txtbgroup" id="txtbgroup">
+		<option value="0"> -- Please select -- </option>
+		<?php 
+		$this->group = $promDB->getListData("fr_component_group",1,"group_desc");
+		foreach ($this->group as $group) {
+			echo "<option value='".$group['id']."'>".strtoupper($group['group_desc'])."</option>";
+		}
+		?>
+		</select>
+		</td>
+	</tr>
+	<tr class="shade">
+		<td>3) Bill Type</td>
+		<td>:</td>
+		<td>
+		
+		<select name="txtbtype" id="txtbtype">
+		<option value="0"> -- Please select -- </option>
+		<?php 
+		$this->group = $promDB->getListData("fr_component",1,"comp_code");
+		foreach ($this->group as $group) {
+			echo "<option value='".$group['id']."'>".strtoupper($group['comp_code'])."</option>";
+		}
+		?>
+		</select>
+		</td>
+	</tr>
+	<tr class="shade">
+		<td>4) Fee (RM)</td>
+		<td>:</td>
+		<td>
+			<input type="text" name="txtfee" id="txtfee" value="" style="width:20%">
+			<input type="hidden" name="txtpromid" id="" value="<? echo $this->id ?>" style="width:70%">
+		</td>
+	</tr>
+</table>
+<br>
+<input type="submit" name="Submit" value="Add Component">
+</fieldset>
+</form>
+
+<form name="f2" method="post" action="<?php echo $this->url(array('module'=>'finance','controller'=>'billfee','action'=>'plan','id'=>$this->id));?>" onsubmit="return form_Validator(this);">
+<br>
+<input type="submit" name="Submit" value="Set Payment Plan">
+<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+	<tr>
+		<td bgcolor="#f2f2f2" align="center" width="5"></td>
+		<td bgcolor="#f2f2f2" align="center">CHARGING PERIOD</td>
+		<td bgcolor="#f2f2f2" align="center">SEMESTER </td>
+		<td bgcolor="#f2f2f2" align="center">BILL TYPE GROUP  </td>
+		<td bgcolor="#f2f2f2" align="center">BILL TYPE </td>
+		<td bgcolor="#f2f2f2" align="center">FEE (RM)  </td>
+		<td bgcolor="#f2f2f2" align="center" width="110"><em>options</em></td>
+	</tr>
+	<?php
+	$this->component = $promDB->getFeeData("fr_promotion_component","fr_charging_main","fr_charge_period = fr_charging_main.id","fr_component_group","fr_comp_group = fr_component_group.id","fr_component","fr_comp_desc = fr_component.id","semester","fr_semid = semesterID",$this->id); 
+	$i=1;
+	$total = 0;
+	foreach ($this->component as $comfee): 
+	?>
+	<tr bgcolor="#FFFFFF">
+		<td ><?php echo $i; ?>)</td>
+		<td><?php echo strtoupper($comfee["charging_type"]); ?></td>
+		<td>
+			<?php 
+			
+			if($comfee["semester"]!= ""){
+				$smstr = $comfee["semester"];
+			}else{
+				$smstr = "N/A";
+			}
+				echo strtoupper($smstr);
+			
+			?>
+		</td>
+		<td><?php echo strtoupper($comfee["group_desc"]); ?></td>
+		<td><?php echo strtoupper($comfee["comp_code"]); ?></td><br>
+		<td><?php 
+		$amount = $comfee["fr_amount"];
+		echo $amount; 
+		
+		?></td>
+		<td>
+		<a class="editLink" href="#" onClick="edit(<?php echo $entry['id']; ?>)">Edit</a>&nbsp;
+		<a class="delLink2" href="#" onClick="del('<?php echo $entry['id']; ?>',<?php echo $comfee['id']; ?>)">Delete</a>
+		</td>
+	</tr>
+	
+	<?php 
+	$i++;
+	$total += $amount;
+	endforeach ;
+	
+	?>
+	<tr bgcolor="#f2f2f2">
+		<td colspan="5">GRAND TOTAL (RM)</td>
+		<td colspan="2" align="left"><? echo $total; ?></td>
+	</tr>
+</table>
+
+
+</form>

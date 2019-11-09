@@ -1,0 +1,182 @@
+<script type="text/javascript">
+	function del(title, id){
+		if(confirm('Are you sure to delete '+title+'?')){
+			window.location = "<?php echo $this->url(array('module'=>'finance','controller'=>'payment', 'action'=>'delete')); ?>/id/"+id;
+		}
+	}
+	
+	function add(){
+		window.location="<?php echo $this->url(array('module'=>'finance','controller'=>'payment', 'action'=>'add'));?>";
+	}
+
+	function edit(id){
+		window.location="<?php echo $this->url(array('module'=>'finance','controller'=>'payment', 'action'=>'add'));?>/id/"+id;
+	}
+	
+	
+function cal1(compamt,i){
+	
+	var comp_paying = "comp_paying"+i;
+	var bal = "comp_bal"+i;
+	var paying = parseInt(document.forms.f2[comp_paying].value);
+	var grand = 0;
+	
+	if (isNaN(paying)){
+			paying = 0;
+		}
+		
+	grand= parseInt(compamt) - paying;
+	document.forms.f2[bal].value=grand;
+}
+
+</script>
+
+
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+
+<?php 
+	echo "<h1>". $this->title ."</h1>";
+	
+$dataDB = new Finance_Model_DbTable_Apply();
+$data = $dataDB->getData($this->id);
+	
+?>
+<div style="width: 600px;">
+<form name="f2" action="" method="post">
+	<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+		<tr class="shade">
+			<td width="20%">Name</td>
+			<td width="5px">:</td>
+			<td><?php echo $data["ARD_NAME"]; ?></td>
+		</tr>
+		<tr class="shade">
+			<td width="20%">IC Number</td>
+			<td width="5px">:</td>
+			<td><?php echo $data["ARD_IC"]; ?></td>
+		</tr>
+		<tr class="shade">
+			<td width="20%">Set Payment Plan</td>
+			<td width="5px">:</td>
+			<td>
+			<select name="plan_id" id="plan_id" onChange="document.f2.submit()">
+			<option value="0"> -- Please select -- </option>
+			<?php 
+			$promotionDB = new Finance_Model_DbTable_Payment();
+			$this->promotion = $promotionDB->getListData("fr_promotion as a",1,"fr_targetgroup_main as b","a.fr_targetgroupid = b.id","id");
+			
+				foreach ($this->promotion as $promo) {
+					if($promo['fr_id'] == $this->plan){
+						$selected="selected='selected'";
+					}else{
+						$selected="";
+					}
+					echo "<option value='".$promo['fr_id']."' ".$selected.">".$promo['group_code']."</option>";
+				}
+			?>
+		</select>
+		
+		</td>
+		</tr>
+	</table>
+</div>	
+<br />
+	<?php
+	
+	$promDB = new Finance_Model_DbTable_Billfee();
+	
+	?>	
+
+<table class="table" width="100%" cellpadding="5" cellspacing="0">
+	<tr>
+		<td bgcolor="#f2f2f2" align="center" width="5"></td>
+		<td bgcolor="#f2f2f2" align="center">CHARGING PERIOD</td>
+<!--		<td bgcolor="#f2f2f2" align="center">SEMESTER </td>-->
+		<td bgcolor="#f2f2f2" align="center">BILL TYPE GROUP  </td>
+<!--		<td bgcolor="#f2f2f2" align="center">BILL TYPE </td>-->
+		<td bgcolor="#f2f2f2" align="center">FEE (RM)  </td>
+		<td bgcolor="#f2f2f2" align="center">PAYING (RM)  </td>
+		<td bgcolor="#f2f2f2" align="center">BALANCE (RM)  </td>
+		<td bgcolor="#f2f2f2" align="center">PAYMENT MODE </td>
+		<td bgcolor="#f2f2f2" align="center"><em>options</em></td>
+	</tr>
+	<?php
+	if(isset($this->planList)) {  
+		
+	$i=1;
+	$total = 0;
+	foreach ($this->planList as $comfee){
+		
+	?>
+	<tr bgcolor="#FFFFFF">
+		<td ><?php echo $i; ?>)</td>
+		<td><?php echo strtoupper($comfee["charging_type"]); ?></td>
+		<!--<td>
+			<?php 
+			
+			if($comfee["semester"]!= ""){
+				$smstr = $comfee["semester"];
+			}else{
+				$smstr = "N/A";
+			}
+				echo strtoupper($smstr);
+			
+			?>
+		</td>-->
+		<td><?php echo strtoupper($comfee["group_desc"]); ?></td>
+		<!--<td><?php echo strtoupper($comfee["comp_code"]); ?></td>-->
+		<td><?php 
+		$amount = $comfee["fr_amount"];
+		echo $amount; 
+		
+		?></td>
+		<td><input type="text" name="comp_paying<?=$i?>" id="comp_paying<?=$i?>" size="5" onkeyup="javascript:cal1(<?=$amount?>,<?=$i?>);" value="0"></td>
+		<td><input type="text" name="comp_bal<?=$i?>" id="comp_bal<?=$i?>" size="5" value="<?=$amount?>" readonly disabled></td>
+		<td>
+			<select name="pmode" id="pmode" onchange="javascript:showDivArea('12')">
+			<option value="0"> -- Please select -- </option>
+			<?php 
+			$this->paymode = $promotionDB->getList2("fr_paymentmode",1,"fr_paymodeid");
+			
+				foreach ($this->paymode as $pmode) {
+					echo "<option value='".$pmode['fr_paymodeid']."' ".$selected.">".$pmode['fr_paymode']."</option>";
+				}
+			?>
+			</select>
+			
+			
+		</td>
+		<td>
+		<a href="#?w=500" rel="<?=$i?>" class="poplight">Pay</a>&nbsp;
+		<div id="<?=$i?>" class="popup_block">
+			test
+		</div>
+		</td>
+	</tr>
+	
+	<?php 
+		$i++;
+		$total += $amount;
+		};
+	}
+	
+	?>
+	<tr bgcolor="#FFFFFF">
+		<td colspan="4">GRAND TOTAL (RM)</td>
+		<td align="left"><? echo $total; ?></td>
+		<td align="left"><? echo $total; ?></td>
+		<td colspan="2" align="left"><? echo $total; ?></td>
+	</tr>
+</table>
+
+</form>
+

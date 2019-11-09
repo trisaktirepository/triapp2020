@@ -1,0 +1,158 @@
+<script>
+
+function goprint(){
+	document.getElementById('printbl').style.display = 'none';
+	window.print();
+}
+</script>
+<table id="printbl" ><tr><td align="right">
+<input type="button" value="PRINT" onclick="goprint();"></input></td></tr>
+</table>
+</p>
+
+<table width="800px" border="0" cellspacing="0" cellpadding="5">
+<tr><td><img src="/images/headeribfim.jpg" size="10px" alt="IBFIM LOGO"/></td></tr>
+<tr><td>&nbsp;</td></tr>
+</table>
+
+<br>
+<h2>Mark Entry Report : List of Candidates for the following details:-</h2>
+
+<table class="table3" width="50%" cellpadding="5" cellspacing="1" >
+<tr><th>Venue</th><td><?php echo $this->venue["name"];?></td></tr>
+<tr><th>Exam Date</th><td><?php echo date("j F Y", strtotime($this->exam_date));?></td></tr>
+<tr><th>Date Print</th><td><?php  echo date("j F Y");?></td></tr>
+<tr><th>Print By</th><td><?php echo $this->printBy?></td></tr>
+</table>
+<br>
+
+
+
+
+<? $total = 0; foreach ($this->courses as $course){
+	
+	 $oStudent = new App_Model_Record_DbTable_Student();			
+	 $students = $oStudent->getPreviewList($this->program_id,$course["id"],$this->idVenue,$this->keyword,$this->exam_date);
+	
+	 //to count how many candidates per course
+	 $candidate[$course["id"]] = count($students);
+	 $total = $total + $candidate[$course["id"]];
+	
+	//foreach course get assessment component
+     $asscomponent = new App_Model_Exam_DbTable_Asscomponent();
+     $components = $asscomponent->getComponentList($this->program_id,$course["id"]);   
+    
+     
+?>
+
+<h4><?php echo $course["name"]?></h4>
+<table class="table3" width="100%" cellpadding="5" cellspacing="1" >
+
+	<tr align="center">	   
+	    <th width="2%" rowspan="2" align="center">No</th>	
+	    <th width="5%" rowspan="2" >ID</th>	
+	    <th width="10%" rowspan="2">IC No</th>
+		<th width="20%" rowspan="2">Student Name</th>			
+		<th width="10%" rowspan="2">Registration ID</th>
+		<th width="10%" rowspan="2">Course</th>
+		<th width="10%" rowspan="2">Exam Date</th>
+		<th width="10%" rowspan="2">Venue</th>
+		
+		
+		<? 		
+		foreach ($components as $component){
+			$itemDB = new App_Model_Exam_DbTable_Asscompitem();
+			$item = $itemDB->getCompitemByCompId($component["id"]);
+			$column = count($item);			
+		?>
+			<th width="" colspan="<?=$column+3?>"><?php echo $component["component_name"]?> </th>
+		<? } ?>
+		<th width="3%" rowspan="2">Verify</th>
+	</tr>
+	<tr align="center">
+	 
+		<? foreach ($components as $component){
+			$itemDB = new App_Model_Exam_DbTable_Asscompitem();
+			$item = $itemDB->getCompitemByCompId($component["id"]);
+			$column = count($item);
+				foreach ($item as $item){
+		?>
+			<th width=""><?php echo $item["component_name"]?> / <?php echo $item["component_item_total_mark"];?></th>
+		<? } //end item
+		}//end component ?>
+		<th >Total Mark</th>
+		<th >Grade</th>
+		<th >Status</th>
+	</tr>	
+	
+	<? 	
+	 $a=1;
+	 foreach ($students as $student){ ?>
+	<tr>	
+		<td><?php echo $a?>.</td>
+		<td><?php echo $student["rd_id"];?></td>
+		<td><?php echo $student["ARD_IC"];?></td>		
+		<td><?php echo strtoupper($student["ARD_NAME"]);?></td>		
+		<td><?php echo $student["regId"];?></td>
+		<td><?php echo $student["cname"];?></td>
+		<td><?php echo date("d-m-Y",strtotime($student["exam_date"]));?></td>
+		<td><?php echo $student["venue"]?></td>
+		
+		<? foreach ($components as $component){
+			
+			$itemDB = new App_Model_Exam_DbTable_Asscompitem();
+			$item = $itemDB->getCompitemByCompId($component["id"]);
+			$total_item_component = count($item);			 
+			   
+		    $m=0;
+		    foreach ($item as $item){
+		   	
+		   		 //cek mark component
+				 $markDB = new App_Model_Exam_DbTable_Markentry();	
+				 $smark = $markDB->getMarkByComponent($student["rd_id"],$component["id"],$item["component_item_id"]);
+				 
+				 if($smark["component_student_mark"]){
+				 	$scm_mark  =$smark["component_student_mark"];				 	
+				 }else{
+				 	$scm_mark=0;				 	
+				 }
+			   	
+			   	echo "<td  align=center>$scm_mark</td>";
+			   	
+		    $m++;
+		    
+		    } //end item
+		}//end component ?>
+		
+		<td align="center"><?=$student["course_mark"]?></td>
+		<td align="center"><?=$student["grade_symbol"]?></td>
+		<td align="center"><?=$student["course_grade"]?></td>
+		<td align="center"><?php if($student["verify"]==1) echo 'Yes'; else echo 'No';?></td>
+	</tr>
+	<? $a++;}//end foreach student ?>
+</table>
+<br>
+<? } //end foreach course ?>
+
+
+<br>
+<br>
+
+<h2>Summary</h2>
+<table class="table3" width="30%" cellpadding="5" cellspacing="1" >
+	<tr>
+		<th width="15%">Course Name</th>
+		<th width="15%">No of Candidates</th>
+	</tr>
+  <? foreach ($this->courses as $course){ //foreach course 2?>
+	<tr>
+		<td align="center"><?php echo $course["name"]?></th>
+		<td align="center"><?php echo $candidate[$course["id"]]?></th>
+	</tr>
+	<? } //end foreach course 2 ?>
+	<tr>
+		<td align="center" style="background:#E6E6E6"><b>Total</b></th>
+		<td align="center" style="background:#E6E6E6"><b><?=$total?></b></th>
+	</tr>
+
+</table>

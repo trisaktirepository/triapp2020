@@ -1,0 +1,93 @@
+<?php
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/css/layout.css' );
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/css/default/style.css' );
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/css/jquery-ui-1.8.5.custom.css' );
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/js/jquery-1.4.3.min.js' );
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/js/jquery.ui.core.js' );
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/js/jquery.ui.datepicker.j' );
+?>
+
+<form name="f1" method="post" action="<?php echo $this->url(array('module'=>'finance','controller'=>'billfee','action'=>'add-fee'),'default',true) ?>">
+
+
+<div style="width:900px; margin:0 auto;">
+<div id="dark_grey">
+<fieldset><legend>&nbsp;<?php echo $this->title; ?>&nbsp;&nbsp;</legend>
+<link rel="stylesheet" href="../demos.css">
+
+	
+	<script>
+	$(function() {
+		$( "#datepicker" ).datepicker();
+	});
+	</script>
+
+<?
+
+
+
+
+?>	
+	
+
+	
+	<table width="100%" cellpadding="5" cellspacing="1" bgcolor="#CCCCCC">
+  <tr>
+    <td bgcolor="#F2F2F2">1) Promotion Type </td>
+    <td bgcolor="#FFFFFF">:</td>
+    <td bgcolor="#FFFFFF">
+  
+    <select name="txtpromote" id="txtpromote">
+	<option value="0"> -- Please select -- </option>
+    <?php 
+	$promotionDB = new Finance_Model_DbTable_Promotion();
+	$this->promotion = $promotionDB->getProgram();
+//	
+	foreach ($this->promotion as $promotion) {
+					echo "<option value='".$promotion['id']."'>".$promotion['group_code']."</option>";
+				}
+	?>
+	</select>
+
+	</td>
+  </tr>
+  <tr>
+    <td bgcolor="#F2F2F2"> 2) Promotion Code </td>
+    <td bgcolor="#FFFFFF">:</td>
+    <td bgcolor="#FFFFFF">
+   
+    <input type="text" name="txtprcode" id="txtprcode" value="" style="width:70%">
+    </td>
+  </tr>
+   <tr>
+    <td bgcolor="#F2F2F2">3) Total Semester</td>
+    <td bgcolor="#FFFFFF">:</td>
+    <td bgcolor="#FFFFFF">
+ 
+    <input type="text" name="txtsem" id="txtsem" value="" style="width:70%">
+    </td>
+  </tr>
+   <tr>
+    <td bgcolor="#F2F2F2">4) Total Month</td>
+    <td bgcolor="#FFFFFF">:</td>
+    <td bgcolor="#FFFFFF">
+  
+    <input type="text" name="txtmth" id="txtmth" value="" style="width:70%">
+    </td>
+  </tr>
+  
+  
+ </table>
+<br>
+<table width="100%">
+		<tr>
+			<td align="center">
+			<td valign="top" colspan="3" > <input type="submit" name="Submit" value="Next"> <input type="submit" name="Reset" value="Cancel"></td>
+		</tr>
+	</table>
+	
+</fieldset>
+</div>
+</div>
+
+</form>

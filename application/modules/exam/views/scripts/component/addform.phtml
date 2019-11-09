@@ -1,0 +1,118 @@
+<script type="text/javascript"><!--
+function addRowToTable()
+{
+  var tbl = document.getElementById('tblComponent');
+  var lastRow = tbl.rows.length; 
+  // if there's no header row in the table, then iteration = lastRow + 1
+  var iteration = lastRow;
+  var row = tbl.insertRow(lastRow);
+ 
+  document.getElementById('iteration').value = iteration
+
+  // left cell
+  var cellLeft = row.insertCell(0);
+  var textNode = document.createTextNode('Component Item Name '+iteration);
+  cellLeft.appendChild(textNode);
+  
+  // component_name
+  var component_name = row.insertCell(1);
+  var cn = document.createElement('input');
+  cn.type = 'text';
+  cn.name = 'component_item_name' + iteration;
+  cn.id   = 'component_item_name'+ iteration;
+  cn.size = 30;
+  
+  //cn.onkeypress = keyPressTest;
+  component_name.appendChild(cn);
+
+
+
+}
+
+
+function removeRowFromTable()
+{
+  var tbl = document.getElementById('tblComponent');
+  var lastRow = tbl.rows.length;
+  
+  curval = document.getElementById('iteration').value;
+  if (lastRow > 2) tbl.deleteRow(lastRow - 1);   
+  document.getElementById('iteration').value = curval-1;
+}
+
+
+
+function save(){
+	
+		document.form1.action="<?php echo $this->url(array('module'=>'exam','controller'=> 'component','action'=>'add')); ?>";
+		document.form1.submit();
+	
+}
+
+function back(){
+	window.location="<?php echo $this->url(array('module'=>'exam','controller'=>'component','action'=>'index'), 'default', true);?>";
+}
+
+
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>	
+		   <li>
+				<!--<input type="Submit" value="Submit" onsubmit="return validateRow(this.form);" />
+				-->
+				   <a href="#" onClick="save();">
+					<span class='save'></span>
+					Save
+				</a>
+			</li>
+			<li class="divider"></li>		
+			<li>
+				<a href="#" onClick="addRowToTable();">
+					<span class='add'></span>
+					Add Item Row
+				</a>
+			</li>
+			<li>
+				<a href="#" onClick="removeRowFromTable();">
+					<span class='remove' align="center"></span>
+					Remove Item Row
+				</a>
+			</li>
+			
+			<li>							
+					<a href="#" onClick="back()">
+						<span class='back'></span>Back</a>				
+			</li>	
+	
+			</ul>
+	</div>
+</div>
+<br></br>
+
+<br>
+<h2>Instruction</h2>
+<ul style="1">
+	<li>To add more than one(01) component, click on "Add Row" button.</li>
+	<li>To remove row, click on "Remove Row" button.</li>
+	<li>Fill in the information required then click "Save" button to save.</li>
+</ul>
+<br>
+
+<form name="form1" action="" method="post">
+<table id="tblComponent" class="" width="60%" cellpadding="5" cellspacing="1" >
+ 
+  <tr>  
+    <td width="30%">Component Name</td>
+    <td><input type="text" name="component_name" id="component_name" size="30"  /></td>    
+  </tr>
+  <tr>  
+    <td>Component Item Name</td>
+    <td><input type="text" name="component_item_name1" id="component_item_name1" size="30"  /></td>    
+  </tr>
+  
+</table>
+<input type="hidden" name="iteration" id="iteration" value="1"></input>
+</form>

@@ -1,0 +1,35 @@
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title.' ('.$this->prg.' '.$this->smt.')'; ?></h2>
+	
+</div>
+<br />
+
+
+<h2><?php echo $this->translate('Detil Target');?></h2>
+<table width="100%" class="table">
+	<tr>
+		<th><?php echo $this->translate('Subject Name');?></th>
+		<th><?php echo $this->translate('Subject Code');?></th>
+		<th><?php echo $this->translate('Credit Hours');?></th>
+		<th><?php echo $this->translate('Group Name');?></th>
+		<th><?php echo $this->translate('Group Code');?></th>
+		</tr>
+	<?php 
+	if($this->target_list){
+      foreach($this->target_list as $index => $batch){
+	?>
+	<tr <?php echo $index%2==0?"class='shade'":""?> >
+		<td><?php echo $batch['SubjectName'];?></td>
+		<td><?php echo $batch['SubCode']; ?></a></td>
+		<td><?php echo $batch['CreditHours'];?></td>
+		<td><?php echo $batch['GroupName']; ?></a></td>
+		<td><?php echo $batch['GroupCode']; ?></a></td>
+		
+	</tr>
+	<?php 
+	  }
+	}
+	?>
+</table>

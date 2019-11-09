@@ -1,0 +1,227 @@
+<script type="text/javascript">
+
+	/*function getvalue(element,no){
+	
+		if( $(element).val() ==2 ){
+			$('#rector_rating'+no).removeAttr('disabled');
+		}else{			
+			$('#rector_rating'+no).attr('disabled','disabled');
+			$('#rector_rating'+no).val("");
+		}
+	
+	}*/
+
+	<?php
+	$php_array = $this->localDate;
+	$js_array = json_encode($php_array);
+	echo "var disabledDays = ". $js_array . ";\n";
+	?>
+
+	/* utility functions */
+	
+	
+	function noBlockDate(date) {
+	  return true;
+	  //return noBlockDates(date);
+	}
+
+	$(function() {
+		// a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
+		$( "#dialog:ui-dialog" ).dialog( "destroy" );
+
+		$( "#dialog-info" ).dialog({
+			modal: true,
+			autoOpen: false,
+			width: 600,
+			buttons: {
+				"Save": function() { 
+
+					
+					dialog_nomor = $("#dialog_nomor").val(); 
+					dialog_decree_date = $("#dialog_decree_date").val(); 
+
+					$("#dialog_nomor").css("border","");  
+					$("#dialog_decree_date").css("border","");
+					$("#academic_year").css("border","");
+					 
+					
+			 		if( !$("#dialog_nomor").val() ){
+						 alert("<?php echo $this->translate('All Fields cannot be empty.') ?> ");
+						 $("#dialog_nomor").css("border","1px solid red");
+					}else
+					if( !$("#dialog_decree_date").val() ){
+						 alert("<?php echo $this->translate('All Fields cannot be empty.') ?> ");
+						 $("#dialog_decree_date").css("border","1px solid red");	
+					}else
+					if( $("#academic_year").val()=="" ){
+						alert("<?php echo $this->translate('All Fields cannot be empty.') ?> ");
+						$("#academic_year").css("border","1px solid red");	
+					}else
+					if( !$("#ranking").val() ){
+						alert("<?php echo $this->translate('All Fields cannot be empty.') ?> ");
+						$("#ranking").css("border","1px solid red");	
+					}else{
+						//alert(dialog_nomor+'--'+dialog_decree_date);
+						$("#nomor").val(dialog_nomor);
+						$("#decree_date").val(dialog_decree_date);
+
+						$("#academic_year_data").val( $("#academic_year").val() );
+						 
+						if( $('#dialog_lock_decree_date').is(':checked') ){
+							$("#lock_date").val( 1 );
+						}else{
+							$("#lock_date").val( 0 );
+						}
+					
+						//$(this).dialog("close"); 
+						$("#myform").submit(); 
+					 }
+				}, 
+				"Cancel": function() { 
+					$(this).dialog("close"); 
+				}
+				
+			}
+		});
+
+
+		$("#dialog_decree_date").datepicker({
+			dateFormat: "dd-mm-yy",
+			"changeMonth":"true"
+		});
+
+		$.datepicker.regional[ "fr" ];
+		
+		$( ".from" ).datepicker({
+			dateFormat: "dd-mm-yy",
+            defaultDate: "+1w",
+            changeMonth: true,
+            numberOfMonths: 3,
+            onClose: function( selectedDate ) {
+                $( ".to" ).datepicker( "option", "minDate", selectedDate );
+            }
+        });
+        $( ".to" ).datepicker({
+        	dateFormat: "dd-mm-yy",
+            defaultDate: "+1w",
+            changeMonth: true,
+            numberOfMonths: 3,
+            onClose: function( selectedDate ) {
+                $( ".from" ).datepicker( "option", "maxDate", selectedDate );
+            }
+        });
+
+        $( ".from2" ).datepicker({
+        	dateFormat: "dd-mm-yy",
+            defaultDate: "+1w",
+            changeMonth: true,
+            numberOfMonths: 3,
+            onClose: function( selectedDate ) {
+                $( ".to2" ).datepicker( "option", "minDate", selectedDate );
+            }
+        });
+        $( ".to2" ).datepicker({
+        	dateFormat: "dd-mm-yy",
+            defaultDate: "+1w",
+            changeMonth: true,
+            numberOfMonths: 3,
+            onClose: function( selectedDate ) {
+                $( ".from2" ).datepicker( "option", "maxDate", selectedDate );
+            }
+        });
+
+        $('#rector_status_toggler').change(function() {
+            var all_val = $(this).val();
+            
+        	$('select[name="rector_status[]"]').each(function(){
+        	    $(this).val(all_val);
+
+        	    changeRating($(this));
+        	});
+
+        	
+        });
+		
+	});
+
+
+	function approve(){
+		$( "#dialog-info" ).dialog('open');
+		//document.myform.submit();
+	}
+
+	function cetak(){
+		window.location="<?php echo $this->url(array('module'=>'application','controller'=>'credit-transfer','action'=>'cetak-credit-transfer','ctid'=>$this->ctid), 'default', true);?>";
+	}
+	function view(){
+		window.location="<?php echo $this->url(array('module'=>'application','controller'=>'credit-transfer','action'=>'view-credit-transfer','ctid'=>$this->ctid), 'default', true);?>";
+	}
+</script>
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	  
+</div>
+<fieldset><legend><?php  echo $this->translate('Applicant Identity');?></legend>
+
+<table class="table" width="100%">
+<tr><td><img width="150" src="<?php echo $this->photo;?>"></td><td>
+<table class="table" width="100%">
+	<tr><td width="30%"><?php echo $this->translate('Name')?></td><td width="5px">:</td><td><?php echo $this->student["appl_fname"].' '.$this->student["appl_mname"].' '.$this->student["appl_lname"];?></td></tr>
+	<tr><td><?php echo $this->translate('Nomor Formulir')?></td><td width="5px">:</td><td><?php echo $this->student['at_pes_id']?></td></tr>
+	<tr><td><?php echo $this->translate('Program Studi Asal')?></td><td width="5px">:</td><td><?php echo $this->jurusan?></td></tr>
+	<tr><td><?php echo $this->translate('Program Studi Tujuan')?></td><td width="5px">:</td><td><?php echo $this->jurusan?></td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+
+</fieldset>
+	
+<div id='subjectList'> 
+    <div>
+      
+    <table class="table" width="100%">
+        <tr>
+            <th>No</th>
+            <th><?php echo $this->translate('Subject Code');?></th>
+            <th><?php echo $this->translate('Subject Name');?></th>
+            <th><?php echo $this->translate('Credit Hours');?></th>
+            <th><?php echo $this->translate('Grade');?></th>
+            <th>-></th>
+            <th><?php echo $this->translate('Subject Code');?></th>
+            <th><?php echo $this->translate('Subject Name Apply');?></th>
+            <th><?php echo $this->translate('Credit Hour Apply');?></th>
+        	<th>=></th>
+        	<th><?php echo $this->translate('Grade Approved');?></th> 
+        	 
+        </tr>
+        <?php 
+        $i = 1;
+        foreach ($this->credit_transfer as $key => $subject) :
+             
+        ?>
+        
+        <tr>
+            <td align="center"><?php echo $i++;?></td>
+            <td align="center"><?php echo $subject['SubCodeAsal'];?></td>
+            <td align="left"><?php echo $subject['SubjectNameAsal'];?></td>
+            <td align="center"><?php echo $subject['CreditHourAsal'];?></td>
+            <td align="center"><?php echo $subject['GradeAsal'];?></td>
+            <td></td>
+            <td align="center"><?php echo $subject['SubCode'];?></td>
+            <td align="left"><?php echo $subject['SubjectName'];?></td></td>
+            <td align="center"><?php echo $subject['CreditHours'];?></td>
+              <td></td>
+           <td align="left"><?php echo $subject['Grade'];?></td></td> 
+            
+            
+        </tr>
+        <?php 
+        
+        endforeach;?>
+    </table>
+    
+    </div>
+  
+</div>

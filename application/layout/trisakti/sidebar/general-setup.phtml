@@ -1,0 +1,16 @@
+<?php
+/*
+ *  @author Suliana
+ *  @created May 16, 2011
+ */
+?>
+<div id="vertmenu">
+	<ul>  
+		<li><h1>general set-up</h1></li>
+	    <li><a href="<?php echo $this->url(array('module'=>'general-setup','controller'=>'university','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Organization"); ?></a></li>
+	    <li><a href="<?php echo $this->url(array('module'=>'general-setup','controller'=>'country','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Country/State"); ?></a></li>
+	    <li><a href="<?php echo $this->url(array('module'=>'system-setup','controller'=>'module','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Configuration"); ?></a></li>
+	    <li><a href="<?php echo $this->url(array('module'=>'system-setup','controller'=>'user','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Users"); ?></a></li>
+	    <li><a href="<?php echo $this->url(array('module'=>'language-setup','controller'=>'index','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Language"); ?></a></li>
+	</ul>
+</div>

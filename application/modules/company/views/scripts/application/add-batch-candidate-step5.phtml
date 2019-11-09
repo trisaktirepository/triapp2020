@@ -1,0 +1,63 @@
+
+<style type="text/css">
+	.table tfoot td, .table tfoot tr{
+		background: #FFF;
+		border: none;	
+	}
+	
+	.table tfoot td#total{
+		border-top: 4px  double #AAAAAA;
+	}
+</style>
+
+<script type="text/javascript">
+
+</script>
+
+		
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<div align="center" style="background:#ebebeb; height:30px;">
+<ul class="steps">
+	<li class="prevDone">
+		<span>1.</span> Select Candidate & Course
+	</li>
+    <li class="prevDone">
+		<span>2.</span> Select Schedule
+	</li>
+	<li class="prevDone">
+		<span>3.</span> Payment Selection
+	</li>
+	<li class="prevDone">
+		<span>4.</span> Confirmation
+	</li>
+	<li class="current">
+		<span>5.</span> Receipt
+	</li>
+</ul>
+<br class="clear" />
+</div>
+<br />
+<p>*Please dont use your browser's back button</p>

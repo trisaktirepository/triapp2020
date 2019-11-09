@@ -1,0 +1,17 @@
+<div id="paginatorBottom">
+<?php
+	if(isset($this->previous)){ 
+		echo "&nbsp; <a class='fst' href='".$this->url(array('page'=>$this->first))."'>First</a> &nbsp;";
+	}
+	foreach($this->pagesInRange as $page){
+		if($this->current != $page){
+			echo "&nbsp; <a href='".$this->url(array('page'=>$page))."'>".$page."</a> &nbsp;";
+		}else{
+			echo "&nbsp;<b style='color:green; font-weight:bold;'>".$page."</b>&nbsp";
+		}
+	}
+	if(isset($this->next)){
+		echo "&nbsp; <a class='lst' href='".$this->url(array('page'=>$this->last))."'>Last</a> &nbsp;";
+	}
+?>
+</div>

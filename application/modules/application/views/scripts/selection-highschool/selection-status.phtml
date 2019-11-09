@@ -1,0 +1,164 @@
+<script type="text/javascript">
+
+$(function() {
+	// a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
+	$( "#dialog:ui-dialog" ).dialog( "destroy" );
+
+	$( "#dialog-search" ).dialog({
+		modal: true,
+		autoOpen: false,
+		width: 600,
+		buttons: {
+			"Search": function() { 
+				$("#search_form").submit(); 
+			}, 
+			"Cancel": function() { 
+				$(this).dialog("close"); 
+			}
+			
+		}
+	});
+});
+
+function searchbox(){
+	$( "#dialog-search" ).dialog('open');
+}
+
+function getProgramme(element,targetElement){
+	var faculty_id = $(element).val();
+	
+	$.ajax({
+		url: "<?php echo $this->url(array('module'=>'application','controller'=>'selection-highschool', 'action'=>'ajax-get-program'),'default',true);?>",
+		data: {'faculty_id':$(element).val()},
+		type: 'POST',
+		dataType: 'json'	
+	}).done(function ( data ) {
+
+		
+		$(targetElement).empty().append('<option value=""> <?php echo $this->translate("All"); ?> </option>');
+	
+		$.each(data, function(index) {
+			$(targetElement).append('<option value="'+data[index].ProgramCode+'"> '+data[index].ProgramName+' </option>');
+		});
+	});
+}
+
+
+
+
+
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			
+						
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					<?php echo $this->translate("info")?>
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<div style="width:100%;">
+
+<?php echo $this->form;?>
+
+<br>
+
+
+<!--<h3><?php echo $this->translate("Total").':'.count($this->applicant_data);?></h3>
+-->
+<?php
+if(isset($this->paginator)){
+	
+	echo $this->paginationControl($this->paginator, 'Sliding','pagination.phtml',$this->searchParams);
+?>
+<table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+	<tr>	
+		<th><?php echo $this->translate("applicantID");?></th>
+		<th><?php echo $this->translate("name");?></th>	
+		<th><?php echo $this->translate("mark");?></th>
+		<th><?php echo $this->translate("dean_rank");?></th>
+		<th><?php echo $this->translate("dean_status");?></th>
+		<th><?php echo $this->translate("rector_rank");?></th>
+		<th><?php echo $this->translate("rector_status");?></th>	
+		<th><?php echo $this->translate("selection_status");?></th>
+		<th><?php echo $this->translate("application_status");?></th>
+	</tr>
+	
+	<?php 	
+	
+	foreach ($this->paginator as $entry){
+		
+	//get education average mark
+	$educationDB = new App_Model_Application_DbTable_ApplicantEducation();
+	//$education = $educationDB->getEducationDetail($entry["appl_id"]);
+	$everage_mark = $educationDB->getAverageMark($entry["appl_id"]);
+
+	
+	//get dean rating
+	$assessmentDB=new App_Model_Application_DbTable_ApplicantAssessment();
+	$rate = $assessmentDB->getData($entry["transaction_id"]);
+	
+	?>
+	<tr>
+		
+		<td><?php echo $entry["applicantID"]?></td>
+		<td><?php echo $entry["appl_fname"].' '.$entry["appl_mname"].' '.$entry["appl_lname"]?></td>		
+		<td align='center'><?php echo round($everage_mark,2);?></td>
+		<td align="center"><?php echo $rate["aar_rating_dean"];?></td>
+		<td align="center">
+		<?php 
+			if($rate["aar_dean_status"]==1){ echo $this->translate("accept"); }
+			if($rate["aar_dean_status"]==2){ echo $this->translate("reject"); }
+		?></td>
+		<td align="center"><?php echo $rate["aar_rating_rector"];?></td>
+		<td align="center">
+		<?php
+			if($rate["aar_rector_status"]==1){ echo $this->translate("accept"); }
+			if($rate["aar_rector_status"]==2){ echo $this->translate("reject"); }
+		?></td>	
+		<!--<td align='center'><?php 
+     
+		if($rate["aar_rating_final"]==1) echo $this->translate("offer");
+		if($rate["aar_rating_final"]==2) echo $this->translate("reject");
+		if($rate["aar_rating_final"]==3) echo $this->translate("incomplete");
+		
+		?>
+		
+		</td>
+		--><td>
+		<?php 
+		
+		if($entry["selection_status"]==0) echo $this->translate("Waiting Rank By Dean");
+		if($entry["selection_status"]==1) echo $this->translate("Waiting Rank By Rector");
+		if($entry["selection_status"]==2) echo $this->translate("Waiting For Final Approval");
+		if($entry["selection_status"]==3) echo $this->translate("Selection Completed");
+		?></td>
+		<td align='center'><?php echo $entry["status"]?></td>
+		
+	</tr>
+	<?php 
+	}?>
+		
+</table>
+<?php }//end paginator ?>
+</div>
+
+

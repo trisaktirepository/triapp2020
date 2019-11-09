@@ -1,0 +1,59 @@
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="/graduation/skpm/add-score-main" >
+					<span class='add'></span>
+					<?php echo $this->translate("Create Score Setup"); ?>
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<?php if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+<br />
+<?php }?>
+
+<h2><?php echo $this->translate('History');?></h2>
+<table width="100%" class="table">
+	<tr>
+		<th><?php echo $this->translate('Semester');?></th>
+		<th><?php echo $this->translate('Title');?></th>
+		<th><?php echo $this->translate('Program');?></th>
+		<th><?php echo $this->translate('Branch');?></th>
+		<th><?php echo $this->translate('Action');?></th> 
+	</tr>
+	<?php 
+	if($this->scoremain_list){
+      foreach($this->scoremain_list as $index => $batch){
+	?>
+	<tr <?php echo $index%2==0?"class='shade'":""?> >
+		<td><?php echo $batch['SemesterName'];?></td> 
+		<td><?php echo $batch['remark']; ?></a></td>
+		<td><?php echo $batch['ProgramName']; ?></td>
+		<td><?php echo $batch['BranchName']; ?> </td>
+		<td align="center">
+		  <a href="/graduation/skpm/edit-skore-main/id/<?php echo $batch['IdScoreMain'];?>">Edit</a>
+		  <a href="/graduation/skpm/skore-view/id/<?php echo $batch['idScoreMain'];?>/idprogram/<?php echo $batch['IdProgram'];?>">View</a>
+		 </td>
+		 
+	</tr>
+	<?php 
+	  }
+	}
+	?>
+</table>

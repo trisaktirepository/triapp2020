@@ -1,0 +1,142 @@
+
+<script type="text/javascript">
+$(function() {
+	$( "#search-dialog" ).dialog({ 
+		autoOpen: false,
+		width: 400,
+		modal: true,
+		buttons: { 
+			"Search": function() {
+				 
+				$("#course_form").submit();
+				$(this).dialog("close"); 
+			},
+			"Close": function() { 
+				$(this).dialog("close"); 
+			} 
+		} 
+	});
+	
+});
+
+function searchbox(){
+	$( "#search-dialog" ).dialog('open');
+}
+
+</script>
+
+<script type="text/javascript">
+	function del(){
+
+		var id = $('input[name=entry_id]:checked').val();
+
+		if(!id){
+			alert('Please select any item to delete');
+		}else{
+			if(confirm('Are you sure to delete?')){
+				window.location = "<?php echo $this->url(array('module'=>'application','controller'=>'qualification-item', 'action'=>'delete'),'default',true); ?>/id/"+id;
+			}
+		}
+	}
+	
+	function add(){
+		window.location="<?php echo $this->url(array('module'=>'application','controller'=>'qualification-item', 'action'=>'add'),'default',true);?>";
+	}
+
+	function edit(){
+		var id = $('input[name=entry_id]:checked').val();
+		if(!id){
+			alert('Please select any item to edit');
+		}else{
+			window.location="<?php echo $this->url(array('module'=>'application','controller'=>'qualification-item', 'action'=>'edit'),'default',true);?>/id/"+id;
+		}
+	}
+
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="javascript:add()">
+					<span class='add'></span>
+					Add
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:edit()">
+					<span class='edit'></span>
+					Edit
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:del()">
+					<span class='delete'></span>
+					Delete
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<!--
+<script type="text/javascript">
+	function del(title, id){
+		if(confirm('Are you sure to delete '+title+'?')){
+			window.location = "<?php echo $this->url(array('module'=>'application','controller'=>'education-level', 'action'=>'delete'),'default',true); ?>/id/"+id;
+		}
+	}
+	
+	function add(){
+		window.location="<?php echo $this->url(array('module'=>'application','controller'=>'education-level', 'action'=>'add'),'default',true);?>";
+	}
+
+	function edit(id){
+		window.location="<?php echo $this->url(array('module'=>'application','controller'=>'education-level', 'action'=>'edit'),'default',true);?>/id/"+id;
+	}
+
+</script>-->
+
+
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+<table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		<th width="2"></th>
+		<th>Education Level</th>
+<!--		<th width="110px">options</th>-->
+	</tr>
+	
+	<?php 
+	$i=0;
+	foreach ($this->paginator as $entry): 
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<td> <input type="radio" name="entry_id" value="<?php echo $entry['id']; ?>"></td>
+		<td><?php echo $entry['name']; ?></td>
+		<!--<td>
+			<a class="editLink" href="#" onClick="edit(<?php echo $entry['id']; ?>)">Edit</a>&nbsp;
+			<a class="delLink2" href="#" onClick="del('<?php echo $entry['name']; ?>',<?php echo $entry['id']; ?>)">Delete</a>
+		</td>-->
+	</tr>
+	<?php 
+	$i++;
+	endforeach 
+	?>
+
+</table>
+</div>
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>
+<div id="addCountry2"></div>

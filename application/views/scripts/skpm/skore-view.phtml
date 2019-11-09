@@ -1,0 +1,175 @@
+<style type="text/css">
+.zend_form dt {
+    width: 177px;
+}
+.zend_form dd {
+    padding: 2px 187px;
+}
+</style>
+<script type="text/javascript">
+ 
+function edit_skore(n) {
+	 
+	var x = document.getElementById("data").rows[n].cells;
+	 
+	document.getElementById("activity").value=x[1].innerHTML; 
+	document.getElementById("document").value=x[7].innerHTML;
+	document.getElementById("skore").value=x[6].innerHTML;
+	
+	document.getElementById("idScore").value=document.getElementById("idScoreList["+n+"]").value;
+	 document.getElementById("level").value=document.getElementById("levelscore["+n+"]").value;
+	document.getElementById("field").value=document.getElementById("fieldscore["+n+"]").value;
+	document.getElementById("role").value=document.getElementById("rolescore["+n+"]").value;
+	document.getElementById("achievment").value=document.getElementById("achievmentscore["+n+"]").value;
+	 
+}
+ 
+
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		 
+	</div>
+</div>
+<br />
+
+<div style="width:100%;">
+<fieldset><legend><?php echo $this->translate('SKPM Score Setup');?></legend>
+<form id="score" method="post"  >
+<input type="hidden" name="idScore" id="idScore" >
+ 
+<input type="hidden" name="idScoreMain" id="idScoreMain" value="<?php echo $this->idmain;?>">
+ 
+<table  width="80%" cellpadding="5" cellspacing="3" border="0">
+	
+	<tr>	<td width="20%"><?php echo $this->translate("Activity Name");?></td><td>:</td>
+			<td><input type="text" id="activity" name="activity" size="50"></td>	</tr>		
+	<tr>	<td width="20%"><?php echo $this->translate("Field");?></td><td>:</td>
+			<td>
+			 
+			<select id="field" name="field">
+			    <option value="0"><?php echo $this->translate("Please Select");?></option>
+			    <?php 
+			    	foreach ($this->field_list as $semester):
+			    ?>
+			    		<option value="<?php echo $semester["key"];?>" <?php if($this->fieldId == $semester["key"]){ echo 'selected';}?>><?php echo $semester["value"];?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select>
+		 
+			</td></tr>
+	<tr>	<td width="20%"><?php echo $this->translate("Level");?></td><td>:</td>
+			<td>
+		 
+			<select id="level" name="level">
+			    <option value="0"><?php echo $this->translate("Please Select");?></option>
+			    <?php 
+			    	foreach ($this->level_list as $level):
+			    ?>
+			    		<option value="<?php echo $level["key"];?>"<?php if($this->levelId == $level["key"]){ echo 'selected';}?>><?php echo $level["value"];?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select>
+		 
+			</td></tr>
+	<tr>	<td width="20%"><?php echo $this->translate("Role in Activity");?></td><td>:</td>
+			<td>
+		 
+			<select id="role" name="role">
+			    <option value="0"><?php echo $this->translate("Please Select");?></option>
+			    <?php 
+			    	foreach ($this->role_list as $level):
+			    ?>
+			    		<option value="<?php echo $level["key"];?>"<?php if($this->levelId == $level["key"]){ echo 'selected';}?>><?php echo $level["value"];?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select>
+		 
+			</td></tr>
+	 
+	
+	
+	<tr>	<td width="20%"><?php echo $this->translate("Achievment");?></td><td>:</td>
+			<td>
+		 
+			<select id="achievment" name="achievment">
+			    <option value="0"><?php echo $this->translate("Please Select");?></option>
+			    <?php 
+			    	foreach ($this->achievment_list as $level):
+			    ?>
+			    		<option value="<?php echo $level["key"];?>"<?php if($this->levelId == $level["key"]){ echo 'selected';}?>><?php echo $level["value"];?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select>
+		 
+			</td></tr>
+	<tr>	<td width="20%"><?php echo $this->translate("Score");?></td><td>:</td>
+			<td><input type="text" id="skore" name="skore" size="5"></td>	</tr>
+	<tr>	<td width="20%"><?php echo $this->translate("Document");?></td><td>:</td>
+			<td><input type="text" id="document" name="document" size="50"></td>	</tr>
+							
+	
+	<tr><td colspan="3" align="center"><input type="submit" name="submit" value="<?php echo $this->translate('Save')?>" ></td>
+	
+	</tr>
+	
+</table>
+
+</form>
+</fieldset>
+<br>
+ 
+ 
+<table class="table" id="data" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		 <th width="5%"><?php echo $this->translate("No");?></th>
+		 <th width="5%"><?php echo $this->translate("Activity");?></th>
+		<th width="35%"><?php echo $this->translate("Field");?></th>
+		<th width="25%"><?php echo $this->translate("Level");?></th>
+		<th width="20%"><?php echo $this->translate("Role");?></th>
+		<th width="20%"><?php echo $this->translate("Achievment");?></th>			
+		<th width="10%"><?php echo $this->translate("Score");?></th> 
+		<th width="10%"><?php echo $this->translate("Document");?></th> 
+		<th width="10%"><?php echo $this->translate("Action");?></th>
+	</tr>
+	
+	<?php  
+	if (count($this->score_list)>0) {
+		foreach($this->score_list as $index=>$value){ 
+			 
+			?>
+			<input type="hidden" id="idScoreList[<?php echo $index+1;?>]" value="<?php echo $value['idScore'];?>"> 
+			<input type="hidden" id="levelscore[<?php echo $index+1;?>]" value="<?php echo $value['level'];?>">
+			<input type="hidden" id="fieldscore[<?php echo $index+1;?>]" value="<?php echo $value['fieldid'];?>">
+			<input type="hidden" id="rolescore[<?php echo $index+1;?>]" value="<?php echo $value['roleid'];?>">
+			<input type="hidden" id="achievmentscore[<?php echo $index+1;?>]" value="<?php echo $value['achievmentid'];?>">
+		
+			<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+				
+				<td><?php echo $index+1;?></td> 
+				<td><?php  echo $value['ActivityName'];?> </td>
+				<td><?php  echo $value['field'];?> </td>
+				<td><?php echo $value['levelname']; ?>
+				<td><?php echo $value["role"];?></td>
+				<td><?php echo $value["achievmentname"];?></td>
+				<td><?php echo $value["skore"];?></td>
+				<td><?php echo $value["Document"];?></td> 
+				<td align="center">
+				<?php //if ($value['IdUser']==$this->iduser || ) {?>
+							<img src='<?php echo $this->baseUrl();?>/images/edit.png' border=0 width='16' height='16' title="Edit"  onclick="edit_skore(<?php echo $index+1;?>)" >
+							<a href="<?php echo $this->url(array('module'=>'graduation','controller'=>'skpm', 'action'=>'delete-skore','id'=>$value['idScore'],'idmain'=>$this->idmain),'default',true)?>"><img src='<?php echo $this->baseUrl();?>/images/trash.png' border=0 width='16' height='16' title="Delete" ></a>
+				<?php //}?></td>
+			</tr>
+	<?php }
+} ?>
+
+</table>
+  
+</div> 
+ 

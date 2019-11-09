@@ -1,0 +1,339 @@
+<?php 
+	
+?>
+
+<style>
+.next_bar{
+	width: 100%;
+	background: #EEE;
+	margin: 10px 0;
+	padding: 2px 0;
+	text-align: center;
+}
+select{
+	width: 250px;
+}
+</style>
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				
+			</li>
+		</ul>
+	</div>
+</div>
+<?php if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+<br />
+<?php }?>
+
+<!-- STEP 1 -->
+<?php 
+if($this->step == 1){
+?>
+<!-- Breadcrum -->
+<div class="breadcrum">
+	<ul class="tri-steps">
+		<li class="current"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'servqual-setup','action'=>'new-servqual', 'step'=>1),'default',true);?>"><?php echo $this->translate("ServQual Name"); ?></a></div></li>
+		<li class="next"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'servqual-setup','action'=>'new-servqual', 'step'=>2),'default',true);?>"><?php echo $this->translate("Dimension"); ?></a></div></li>
+		<li class="next"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'servqual-setup','action'=>'new-servqual', 'step'=>3),'default',true);?>"><?php echo $this->translate("ServQual Detail"); ?></a></div></li>
+		<li class="next"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'servqual-setup','action'=>'new-servqual', 'step'=>4),'default',true);?>"><?php echo $this->translate("Confirmation"); ?></a></div></li>	
+	</ul>
+	<div class="clear"></div>
+</div>
+<br />
+<!-- End Breadcrum -->
+
+<form id="form_1" method="post" action="/servqual/servqual-setup/new-servqual/step/1">
+<table>
+	<input type="hidden" name="IdServqual" value="<?php echo $this->servqual['IdServqual'];?>">
+	<tr>
+		<td>Title</td>
+		<td>:</td>
+		<td><input name="Title" value="<?php echo $this->servqual['Title']; ?>"></td>
+	</tr>
+	<tr>
+		<td>Direction</td>
+		<td>:</td>
+		<td><textarea name="Direction" cols="50" rows="10" ><?php echo $this->servqual['Direction']; ?></textarea></td>
+	</tr>
+		
+	<tr><td>Type of Survey</td>
+		<td>:</td>
+		<td>
+			<select name="survey_type">
+				<?php 
+				foreach ($this->surveytype as $list):
+					$select = "";
+					if( isset($this->servqual['survey_type']) && $this->servqual['survey_type']==$list['key'] ){
+						$select = 'selected="selected"';
+					}
+				?>
+					<option value="<?php echo $list['idDefinition'];?>" <?php echo $select; ?>><?php echo $list['BahasaIndonesia'];?></option>
+				<?php 
+				endforeach;
+				?>
+			</select>
+		</td>
+	</tr>
+</table>
+<div class="next_bar">
+	<input type="submit" value="<?php echo $this->translate("Next");?>" />
+</div>
+</form>
+<?php 
+}else
+?>
+
+
+<!-- STEP 2 -->
+<?php 
+if($this->step == 2){
+?>
+<!-- Breadcrum -->
+<div class="breadcrum">
+	<ul class="tri-steps">
+		<li class="previous"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'servqual-setup','action'=>'new-servqual', 'step'=>1),'default',true);?>"><?php echo $this->translate("ServQual Name"); ?></a></div></li>
+		<li class="current"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'servqual-setup','action'=>'new-servqual', 'step'=>2),'default',true);?>"><?php echo $this->translate("Dimension"); ?></a></div></li>
+		<li class="next"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'servqual-setup','action'=>'new-servqual', 'step'=>3),'default',true);?>"><?php echo $this->translate("ServQual Detail"); ?></a></div></li>
+		<li class="next"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'servqual-setup','action'=>'new-servqual', 'step'=>4),'default',true);?>"><?php echo $this->translate("Confirmation"); ?></a></div></li>	
+	</ul>
+	<div class="clear"></div>
+</div>
+<br />
+<form id="form_2" method="post" action="/servqual/servqual-setup/new-servqual/step/2">
+<table class="table" id="result" width="100%">
+
+		<thead>
+			<tr>
+				<th rowspan="2"><input type="checkbox" id="select_all" onclick="toggle_all(this);" /></th>
+				<th rowspan="2"><?php echo $this->translate("Order");?></th>
+				<th rowspan="2"><?php echo $this->translate("Group Name");?></th>
+			</tr>
+	   </thead>
+	   
+	   <?php 
+	   			//$ordergrp=$this->ordergrp_list;
+				foreach ($this->dimension_list as $key=>$grp):
+					$select = "";
+					$order='';
+					$IdServqual='';
+					if( isset($this->grp_list)){
+						foreach ($this->grp_list as $index=> $grpset) :
+							if ($grpset['IdDimension']==$grp['idDefinition'] ) {
+								$select = 'checked';
+								$order=$index;
+								$IdServqual=$grpset['IdServqualDimension'];
+								}
+						endforeach;
+					}?>
+					<tr>
+					<td width="5%"><input type="checkbox" name="idgrp[<?php echo $grp['idDefinition']?>]" <?php echo $select; ?> value="<?php echo $grp['idDefinition']?>"></td>
+					<td width="10%"><input type="textbox" size=3 name="ordergrp[<?php echo $grp['idDefinition']?>]" value="<?php echo $order; ?>"></td>
+					<td><?php echo $grp['BahasaIndonesia']?></td>
+					</tr>
+					<input type="hidden" name="IdServqualDimension[<?php echo $grp['idDefinition']?>]" value="<?php echo $IdServqual;?>">
+					<?php 
+				endforeach;
+				?>
+	</table>
+	
+<div class="next_bar">
+	<input type="submit" value="<?php echo $this->translate("Next");?>" />
+</div>
+</form>
+<!-- End Breadcrum -->
+<?php 
+}else
+?>
+
+
+<!-- STEP 3 -->
+<?php
+if($this->step == 3){
+?>
+<!-- Breadcrum -->
+<div class="breadcrum">
+	<ul class="tri-steps">
+		<li class="previous"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'servqual-setup','action'=>'new-servqual', 'step'=>1),'default',true);?>"><?php echo $this->translate("ServQual Name"); ?></a></div></li>
+		<li class="previous"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'servqual-setup','action'=>'new-servqual', 'step'=>2),'default',true);?>"><?php echo $this->translate("Dimension"); ?></a></div></li>
+		<li class="current"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'servqual-setup','action'=>'new-servqual', 'step'=>3),'default',true);?>"><?php echo $this->translate("ServQual Detail"); ?></a></div></li>
+		<li class="next"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'servqual-setup','action'=>'new-servqual', 'step'=>4),'default',true);?>"><?php echo $this->translate("Confirmation"); ?></a></div></li>	
+	</ul>
+	<div class="clear"></div>
+</div>
+<br />
+<form id="form_3" method="post" action="/servqual/servqual-setup/new-servqual/step/3">
+<?php 
+	$dbCommon=new App_Model_Common();
+	foreach ($this->dimension_list as $key=>$grp):?>
+	<fieldset>
+	<legend> <?php echo $grp["BahasaIndonesia"];?></legend>
+	<table>
+	<tr>
+		<td><?php echo $this->translate('Question');?></td>
+		<td>:</td>
+		<td>
+			<select name="questionid[<?php echo $grp["idDefinition"];?>]">
+				<option value="null"><?php echo $this->translate('Please select');?></option>
+				<?php 
+				if (isset($this->questions)) {
+				foreach ($this->questions as $question):
+				?>
+					<option value="<?php echo $question['IdServqualQuestion'];?>" > <?php echo $question['Question'];?> </option>
+				
+		    	<?php 
+				endforeach;
+				}
+				?>
+			</select>
+		</td>
+		</tr>
+		<tr>
+		<td><?php echo $this->translate('Scale')?>
+		</td>
+		<td>:</td>
+		<td>
+		<select name="Scale_id[<?php echo $grp['idDefinition']?>]" >
+				<?php 
+				if (isset($this->scales)) {
+				foreach ($this->scales as $scale):
+				?>
+					<option value="<?php echo $scale['idDefinition'];?>" > <?php echo $scale['BahasaIndonesia'].'('.$scale['Description'].')';?> </option>
+				
+		    	<?php 
+				endforeach;
+				}
+				?>
+			</select>
+			</td>
+		</tr>
+		<tr>
+		<td><?php echo $this->translate('Order');?></td>
+		<td>:</td>
+		<td><input type="text" name="order[<?php echo $grp['idDefinition']?>]" value=0>
+		<td><input type="submit" name="adds[<?php echo $grp['idDefinition']?>]" value="<?php echo $this->translate("add");?>" /></td>
+		
+	</tr>
+   </table>
+  <table class="table" id="result" width="100%">
+		<thead>
+			<tr>
+				<th rowspan="2"><?php echo $this->translate('Question');?></th>
+				<th rowspan="2"><?php echo $this->translate('Order');?></th>
+				<th rowspan="2"><?php echo $this->translate('Answer');?></th>
+				<th rowspan="2"><?php echo $this->translate('Delete');?></th>
+			</tr>
+	   </thead>
+	   <?php 
+	   if (isset($this->grp_question[$grp["idDefinition"]])) {
+			$idgrp=$grp["idDefinition"];
+			$questiongrps = $this->grp_question[$idgrp];
+			$coun=0;
+			foreach ($questiongrps as $question):?>
+	   			<tr>
+	   			<td width="50%"><?php echo $question['Question']?></td>
+	   			<td><?php echo $question['order']?></td>
+	   			<?php 
+	   				$scaleid=$question['Scale_id'];
+	   				$scalename=$dbCommon->fnGetScaleName($scaleid);
+	   			?>
+	   			<td width="25%"><?php echo $scalename['BahasaIndonesia'].' ('.$scalename['Description'].')'?></td>
+	   					
+	   			<input type="hidden" name="IdServqualDetail[<?php echo $idgrp; ?>][<?php echo $question['IdServqualDetail'];?>]" value="<?php echo $question['IdServqualDetail'];?>">
+	   			<td><input type="hidden" name="question[<?php echo $idgrp; ?>][<?php echo $question['IdServqualQuestion'];?>]" value="<?php echo $question['IdServqualQuestion'];?>">
+	   			<input type="checkbox" name="del[<?php echo $idgrp; ?>][<?php echo $question['IdServqualQuestion']; ?>]" ></td>
+	   			
+	   			</tr>
+	   <?php 
+	   			$coun++;
+	   		endforeach;
+	   }?>
+	</table>
+	</fieldset>
+	<?php 
+	endforeach;?>
+<div class="next_bar">
+	<input type="submit" value="<?php echo $this->translate("Next");?>" />
+</div>
+</form>
+
+<?php 
+}else
+?>
+
+<!-- STEP 4 -->
+<?php
+if($this->step == 4){
+?>
+<!-- Breadcrum -->
+<div class="breadcrum">
+	<ul class="tri-steps">
+		<li class="previous"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'servqual-setup','action'=>'new-servqual', 'step'=>1),'default',true);?>"><?php echo $this->translate("ServQual Name"); ?></a></div></li>
+		<li class="previous"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'servqual-setup','action'=>'new-servqual', 'step'=>2),'default',true);?>"><?php echo $this->translate("Dimension"); ?></a></div></li>
+		<li class="previous"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'servqual-setup','action'=>'new-servqual', 'step'=>3),'default',true);?>"><?php echo $this->translate("ServQual Detail"); ?></a></div></li>
+		<li class="current"><div class="text"><a href="<?php echo $this->url(array('module'=>'servqual','controller'=>'servqual-setup','action'=>'new-servqual', 'step'=>4),'default',true);?>"><?php echo $this->translate("Confirmation"); ?></a></div></li>	
+	</ul>
+	<div class="clear"></div>
+</div>
+<br />
+<form id="form_4" method="post" action="/servqual/servqual-setup/new-servqual/step/4">
+<?php 
+	$dbCommon=new App_Model_Common();
+	foreach ($this->dimension_list as $key=>$grp):?>
+	<fieldset>
+	<legend> <?php echo $grp["BahasaIndonesia"];?></legend>
+	 <table class="table" id="result" width="100%">
+		<thead>
+			<tr>
+				<th rowspan="2"><?php echo $this->translate('No');?></th>
+				<th rowspan="2"><?php echo $this->translate('Question');?></th>
+				<th rowspan="2"><?php echo $this->translate('Order');?></th>
+				<th rowspan="2"><?php echo $this->translate('Answer');?></th>
+				
+			</tr>
+	   </thead>
+	   <?php 
+	   if (isset($this->grp_question[$grp["idDefinition"]])) {
+			$idgrp=$grp["idDefinition"];
+			$questiongrps = $this->grp_question[$idgrp];
+			$coun=1;
+			foreach ($questiongrps as $question):?>
+	   			<tr>
+	   			<td width="10%"><?php echo $coun;?></td>
+	   			<td ><?php echo $question['Question']?></td>
+	   			<td width="10%"><?php echo $question['order']?></td>
+	   			<?php 
+	   				$scaleid=$question['Scale_id'];
+	   				$scalename=$dbCommon->fnGetScaleName($scaleid);
+	   			?>
+	   			<td width="25%"><?php echo $scalename['BahasaIndonesia'].' ('.$scalename['Description'].')'?></td>
+	   							
+	   			</tr>
+	   <?php 
+	   			$coun++;
+	   		endforeach;
+	   }?>
+	</table>
+	</fieldset>
+	<?php 
+	endforeach;?>
+<div class="next_bar">
+	<input type="submit" value="<?php echo $this->translate("Save");?>" />
+</div>
+</form>
+
+<?php 
+}

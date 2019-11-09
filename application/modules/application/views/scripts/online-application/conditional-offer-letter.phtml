@@ -1,0 +1,195 @@
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<!--<ul>
+			<li>
+				<a href="#" onclick="javascript:searchbox()">
+					<span class='search'></span>
+					Search
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>-->
+	</div>
+</div>
+
+<div align="center" style="background:#ebebeb; height:30px;">
+<ul class="steps">
+	<li class="prevDone">
+		<span>1</span> Personal Particulars
+	</li>
+    <li class="prevDone">
+		<span>2</span> Qualification
+	</li>
+    <li class="prevDone">
+		<span>3</span> Program Preferred
+	</li>
+	<li class="prevDone">
+		<span>4</span> Additional Information
+	</li>
+	<li class="current">
+		<span>5</span> Offer Letter
+	</li>
+</ul>
+<br class="clear" />
+</div>
+<br>
+<!--<table width="100%" cellpadding="5" cellspacing="1">s
+  <tr>
+    <td colspan="4" align="right"><img src="/images/ustlogo.gif"> <img src="/images/ustyname.gif"></td>
+  </tr>
+</table>-->
+
+<!--<table width="100%" cellpadding="5" cellspacing="1">
+<tr>
+    <td align="left">
+
+<?php
+
+//foreach ($this->template as $rs){
+//	echo $rs['content'];
+//	echo"<br>";
+//}
+?>
+</td></tr>
+<tr>
+    <td align="left">
+    
+		
+    </td></tr>
+</table>-->
+
+
+<table border="0" cellspacing="0" cellpadding="0" width="100%">
+  <!--<tr>
+    <td>Our Ref </td>
+    <td width="89%" colspan="2">:</td>
+  </tr>-->
+  <tr>
+    <td>Date:</td>
+    <td width="89%" colspan="2">: <?php echo date('d-M-Y')?></td>
+  </tr>
+  <tr>
+    <td width="100%" colspan="3">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="100%" colspan="3"> &nbsp;</td>
+  </tr>
+  <tr>
+    <td width="100%" colspan="3"><?php echo $this->applicant['ARD_NAME'];?> </td>
+  </tr>
+  <tr>
+    <td width="100%" colspan="3"><?php echo $this->applicant['ARD_ADDRESS1'];?> </td>
+  </tr>
+  <tr>
+    <td width="100%" colspan="3"><?php echo $this->applicant['ARD_ADDRESS2'];?></td>
+  </tr>
+  <tr>
+    <td width="100%" colspan="3"><?php echo $this->applicant['ARD_POSTCODE'];?> <?php echo $this->applicant['ARD_TOWN'];?></td>
+  </tr>
+  <tr>
+    <td width="100%" colspan="3"><?php echo $this->applicant['ARD_STATE'];?></td>
+  </tr>
+  <tr>
+    <td width="100%" colspan="3"><?php echo $this->applicant['ARD_COUNTRY'];?></td>
+  </tr>
+  <tr>
+    <td width="100%" colspan="3">&nbsp; </td>
+  </tr>
+  <tr>
+    <td width="100%" colspan="3"> &nbsp;</td>
+  </tr>
+  <tr>
+    <td width="100%" colspan="3">Dear Sir/Madam, </td>
+  </tr>
+  <tr>
+    <td width="100%" colspan="3">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="100%" colspan="3"><strong>RE: CONDITIONAL OFFER  </strong> </td>
+  </tr>
+  <tr>
+    <td width="100%" colspan="3">&nbsp; </td>
+  </tr>
+  <tr>
+    <td width="100%" colspan="3">We are pleased to inform you that    your application to the programme of studies at USTY is successful. Details of    the said programme are as follows:</td>
+  </tr>
+  <tr>
+    <td width="100%" colspan="3">&nbsp;</td>
+  </tr>
+  <?php
+  
+  $i=1;
+  foreach ($this->appliedprogram as $ap){
+  
+  ?>
+  <tr>
+    <td colspan="2">PROGRAMME <?=$i?> </td>
+    <td width="78%">: <?=strtoupper($ap['main_name']);?></td>
+  </tr><? $i++;
+  } ?>
+  
+  <!-- <tr>
+    <td width="100%" colspan="3"> &nbsp;</td>
+  </tr>-->
+  <tr>
+    <td>INTAKE </td>
+    <td  colspan="2"width="78%">: Intake 1</td>
+  </tr>
+  
+  <!--<tr>
+    <td width="100%" colspan="3"> &nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2">Date</td>
+    <td width="78%">:</td>
+  </tr>-->
+  <tr>
+    <td>Venue</td>
+    <td  colspan="2"width="78%" valign="top">: UNIVERSITY OF SCIENCE AND TECHNOLOGY YEMEN </td>
+  </tr>
+  <!--<tr>
+    <td colspan="2">Time</td>
+    <td width="78%">: </td>
+  </tr>
+  <tr>
+    <td colspan="2">Commencement of Semester</td>
+    <td width="78%" valign="top">: </td>
+  </tr>-->
+  <tr>
+    <td width="100%" colspan="3">&nbsp; </td>
+  </tr>
+  <tr>
+    <td width="100%" colspan="3">Kindly refer to our website for the commencement of the tutorial.<br>
+          
+      <br>
+      Should you have any queries, please feel free to contact us at    admission@usty.edu.my.<br>
+      Congratulations and we look    forward to welcoming you to University of Science and Technology Yemen.<br>
+      <br>
+      Thank you.</td>
+  </tr>
+  <tr>
+    <td width="100%" colspan="3">&nbsp;</td>
+  </tr>
+ 
+  <tr>
+    <td width="100%" colspan="3">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="100%" colspan="3">For Registrar<br>
+      University of Science and Technology Yemen</td>
+  </tr>
+</table><br><br><br><br>
+<strong>---------------------------------------------------------------------------------</strong><br>
+    <strong>** </strong>Get info from  student application<strong></strong>
+
+
+
+

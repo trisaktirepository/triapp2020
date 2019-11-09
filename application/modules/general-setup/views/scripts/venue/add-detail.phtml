@@ -1,0 +1,58 @@
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li class="divider"></li>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'general-setup','controller'=>'venue', 'action'=>'detail', 'id'=>$this->id),'default',true);?>" >
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<br />
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<br />
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<br />
+<?}?>
+
+
+<table class="table2" width="50%" cellspacing="2" cellpadding="5">
+	<tr>
+		<th width="150px">Venue Name</th>
+		<td><?php echo $this->venue['name']?></td>
+	</tr>
+	<tr>
+		<th width="150px">Venue Address</th>
+		<td>
+			<?php echo $this->venue['address1']!=null?$this->venue['address1']:""; ?>
+			<?php echo $this->venue['address2']!=null?"<br />".$this->venue['address2']:""; ?>
+			<?php echo $this->venue['city']!=null?"<br />".$this->venue['city']:""; ?>
+			<?php echo $this->venue['state_name']!=null?"<br />".$this->venue['state_name']:""; ?>
+			<?php echo $this->venue['country_name']!=null?"<br />".$this->venue['country_name']:""; ?>
+			<?php echo $this->venue['postcode']!=null?"<br />".$this->venue['postcode']:""; ?>
+		</td>
+	</tr>
+</table>
+<br />
+
+<?php 
+	$this->form->setAction($this->url());
+	echo  $this->form;
+?>

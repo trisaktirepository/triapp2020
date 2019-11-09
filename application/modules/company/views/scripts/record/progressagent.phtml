@@ -1,0 +1,84 @@
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li class="divider"></li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+<table class="table" width="100%" cellpadding="5" cellspacing="2">
+	<tr>
+		<th width="25px">Bil</th>
+		<th width="90px">IC</th>
+		<th>Full Name</th>
+		<th width="150px">Takaful Operator / Company</th>
+		<?php 
+		foreach ($this->courselist as $clist): 
+		?>
+		<th width="100px"><?php echo $clist["name"]?></th>
+		<?php endforeach; ?>
+	</tr>
+	<?php
+		if(isset($this->paginator)){
+
+		$i=0;
+		foreach ($this->paginator as $user): 
+	?>
+		<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+			<td>
+				<?php echo $this->paginator->getAbsoluteItemNumber(0,$this->paginator->getCurrentPageNumber())+$i;?>
+			</td>
+			<td><a href="<?php echo $this->url(array('module'=>'company','controller'=>'record', 'action'=>'view', 'id'=>$user['ID']),'default',true);?>"><?php echo $user['ARD_IC']; ?></a></td>
+			<td>
+				<?php echo $user['ARD_NAME']; ?>
+			</td>			
+			
+			<td><?php echo $user['company_short_name']; ?></td>
+			
+			<?php foreach ($this->courselist as $clist):?>
+			<td><?php 
+			$RegistrationdetailsDB = new App_Model_Record_DbTable_Registrationdetails();
+			$getCourseGrade = $RegistrationdetailsDB->getCourseGrade($clist["id"],$user['ID']);
+			
+			if ($getCourseGrade){
+				if ($getCourseGrade["grade_symbol"]==null || $getCourseGrade["grade_symbol"]==""){
+					$grade = "-";
+				}else{
+					$grade =  $getCourseGrade["grade_symbol"];}
+			}else{
+				$grade =  "-";
+			}
+			echo $grade;
+			?></td>
+			<?php endforeach; ?>
+		</tr>		
+	<?php 
+		$i++;
+		endforeach;
+	 
+		}
+	?>
+</table>
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>

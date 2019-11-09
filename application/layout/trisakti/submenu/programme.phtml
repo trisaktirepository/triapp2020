@@ -1,0 +1,18 @@
+<?php
+/*
+ *  @author Suliana
+ *  @created May 16, 2011
+ */
+?>
+
+
+<div align="center" style="background:#fff; height:30px;">
+	<ul class="stepsmenu">
+		<li class="first"><a href="<?php echo $this->url(array('module'=>'anr-setup','controller'=>'award','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Award"); ?></a></li>
+	    <!-- <li class="second"><a href="<?php echo $this->url(array('module'=>'anr-setup','controller'=>'market','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Learning Mode"); ?></a></li> -->
+	    <!-- <li class="third"><a href="<?php echo $this->url(array('module'=>'anr-setup','controller'=>'main-program','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Main Programme"); ?></a></li> -->
+	    <li class="second"><a href="<?php echo $this->url(array('module'=>'anr-setup','controller'=>'program','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Programme"); ?></a></li>
+	    <li class="third"><a href="<?php echo $this->url(array('module'=>'anr-setup','controller'=>'program-requirement','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Requirement"); ?></a></li>
+<!--	    <li class="sixth"><a href="<?php echo $this->url(array('module'=>'anr-setup','controller'=>'academic-landscape','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Landscape"); ?></a></li>-->
+	</ul>
+</div>

@@ -1,0 +1,37 @@
+		
+		
+ 
+
+      
+		<table width="95%" border="0" align="center" cellpadding="1" cellspacing="1" id="mtable">
+		  
+        <tr> 
+          <td height="30" colspan="2" bgcolor="#DFDFDF"><strong>Question</strong></td>
+        </tr>
+        
+        <?php for($i=1; $i<=$this->course["total_language"]; $i++){?>
+        <tr> 
+          <td width="19%" bgcolor="#D7EBFF">Language <?=$i?> </td>
+          <td width="81%" bgcolor="#D7EBFF"> 
+           <p>
+           <textarea  name="fquestion<?=$i?>" cols="50" rows="5" class="required"></textarea>
+   </p>
+           </td>
+        </tr>
+        <? } ?>
+        
+          
+       
+        <tr> 
+          <td height="27" colspan="2" bgcolor="#DFDFDF"><strong>Answer Scheme</strong></td>
+        </tr>
+        <?php for($m=1; $m<=$this->course["total_language"]; $m++){?>
+        <tr> 
+          <td width="19%" bgcolor="#D7EBFF">Language <?=$m?></td>
+          <td bgcolor="#D7EBFF"> 
+            <textarea name="fanswer<?=$m?>" cols="50" rows="5" class="required"></textarea></td>
+        </tr>
+        <? } ?>
+       
+       
+      </table>

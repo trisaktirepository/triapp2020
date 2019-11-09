@@ -1,0 +1,62 @@
+
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>		
+			
+		</ul>
+	</div>
+</div>
+<br />
+
+<?php if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+<br />
+<?php }?>
+
+
+<div style="width:100%;">
+<fieldset>
+<?php echo $this->form; ?>
+</fieldset>
+<br>
+<?php  if(count($this->survey_data) > 0 ){ ?>
+<table class="table" width="80%" cellpadding="5" cellspacing="1" border="0">
+	<tr>		
+	    <th width="10%" align="center">&nbsp;</th>
+		<th width="20%"><?php echo $this->translate("Program"); ?></th>
+		<th width="20%"><?php echo $this->translate("Survey Name"); ?></th>
+		<th width="20%"><?php echo $this->translate("Semester"); ?></th>
+		<th width="20%"><?php echo $this->translate("Subject Code"); ?></th>
+		<th width="20%"><?php echo $this->translate("Subject Name"); ?></th>
+		
+	</tr>
+	<?php
+			foreach($this->survey_data as $data){
+	?>
+	<tr>
+	    <td align="center">
+	    <td><?php echo $data["ProgramCode"].' - '.$data["ProgramName"]?></td>
+		<td><?php echo $data["SurveyName"]?></td>
+		<td><?php echo $data["SemesterName"]?></td>
+		<td><?php echo $data['Subcode']?></td>
+		<td><?php echo $data['SubjectName']?></td>
+		
+		
+	</tr>
+	<?php } ?>
+		
+</table>
+	<?php }else{ echo $this->translate("No record found"); } ?>
+</div>
+

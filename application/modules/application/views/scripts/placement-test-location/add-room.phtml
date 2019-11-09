@@ -1,0 +1,9 @@
+<style>
+	.zend_form select#av_test_type{
+		height: 100px;	
+	}
+</style>
+<?php 
+	$this->form->setAction($this->url(array('module'=>'application','controller'=>'placement-test-location', 'action'=>'add-room', 'location_id'=>$this->location_id),'default',true));
+	echo  $this->form;
+?>

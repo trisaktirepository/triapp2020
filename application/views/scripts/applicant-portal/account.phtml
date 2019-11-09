@@ -1,0 +1,97 @@
+<script type="text/javascript">
+$(function() {
+	 $( "#tabs" ).tabs();
+});
+</script>
+
+<?php if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+<?php }?>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		
+	</div>
+</div>
+
+<br />
+<div id="tabs">
+	<ul>
+    	<li><a href="#tabs-1">Account Statement</a></li>
+    	<li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'account-invoice', 'id'=>$this->profile['appl_id']),'default',true);?>">Invoice</a></li>
+    	<li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'account-payment', 'id'=>$this->profile['appl_id']),'default',true);?>">Payment</a></li>
+  	</ul>
+  	<div id="tabs-1">
+    	<table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
+			<tr>
+				<th width="20px" rowspan="2">&nbsp;</th>
+				<th width="100px" rowspan="2"><?php echo $this->translate("Date")?></th>
+				<th rowspan="2"><?php echo $this->translate("Transaction Type")?></th>
+				<th rowspan="2"><?php echo $this->translate("Invoice No")?></th>
+				<th rowspan="2"><?php echo $this->translate("Receipt No")?></th>
+				<th rowspan="2"><?php echo $this->translate("Description")?></th>
+				<th width="150px"><?php echo $this->translate("Debit Amount")?></th>
+				<th width="150px"><?php echo $this->translate("Credit Amount")?></th>
+				<th width="150px"><?php echo $this->translate("Balance")?></th>
+			</tr>
+			<tr>
+				<th style="align:center">IDR</th>
+				<th style="align:center">IDR</th>
+				<th style="align:center">IDR</th>
+			</tr>
+			<?php 
+			$i=0;
+			if($this->account){
+				$balance = 0;
+			foreach ($this->account as $entry):
+				
+			if( $entry['txn_type']=="Invoice" ){
+				$balance = $balance + $entry['debit'];
+			}else
+			if( $entry['txn_type']=="Payment" ){
+				$balance = $balance - $entry['credit'];
+			}else
+			if( $entry['txn_type']=="Credit Note" ){
+				$balance = $balance - $entry['credit'];
+			}else
+			if( $entry['txn_type']=="Debit Note" ){
+				$balance = $balance + $entry['debit'];
+			}else
+			if( $entry['txn_type']=="Refund" ){
+				$balance = $balance + $entry['debit'];
+			}
+			
+			?>
+			<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+				<td align="center"><?php echo $i+1;?></td>
+				<td align="center"><?php echo date('d-m-Y', strtotime($entry['record_date']) ); ?></td>
+				<td><?php echo $entry['txn_type']; ?></td>
+				<td><?php echo $entry['invoice_no']; ?></td>
+				<td><?php echo $entry['receipt_no']; ?></td>
+				<td><?php echo $entry['description']; ?></td>
+				<td><?php echo number_format($entry['debit'], 2, '.', ','); ?></td>
+				<td><?php echo number_format($entry['credit'], 2, '.', ','); ?></td>
+				<td><?php echo number_format($balance, 2, '.', ','); ?></td>
+			</tr>
+			<?php 
+			$i++;
+			endforeach; 
+			?>
+			<tr>
+				<td colspan="8">&nbsp;</td>
+				<th><?php echo number_format($balance, 2, '.', ','); ?></th>
+			</tr>
+			<?php 
+			}
+			?>
+		</table>
+  	</div>
+  	
+</div>

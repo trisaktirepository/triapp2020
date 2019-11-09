@@ -1,0 +1,152 @@
+<script>
+function view(){
+	window.location="<?php echo $this->url(array('module'=>'exam','controller'=>'markentry','action'=>'index'));?>";
+}
+
+function add(){		
+	document.markfrm.action="<?php echo $this->url(array('module'=>'exam','controller'=>'markentry','action'=>'add'))?>";
+	document.markfrm.submit();
+}
+
+function verify(){
+	document.markfrm.action="<?php echo $this->url(array('module'=>'exam','controller'=>'markentry','action'=>'verify'))?>";
+	document.markfrm.submit();
+}
+
+
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+		    <?php if($this->student_list && $this->asscomponent_list ){?> 
+			<li>							
+					<a href="#" onClick="add()" title="Save Mark">
+						<span class='save'></span>Save</a>				
+			</li>	
+			<?php } ?>	
+
+			  <?php if($this->student_list){?>
+			<li>
+								
+					<a href="#" onClick="verify()" title="Verify Student Mark">
+						<span class='verify'></span>Verify</a>
+				
+			</li>	
+			<?php } ?>			
+		   		
+		</ul>
+		
+	</div>
+</div>
+
+<br></br>
+<div style="width: 100%;">
+
+<?php if($this->student_list){?>
+
+<?php 
+	if(!$this->asscomponent_list){?> 
+	<div class="notification">         
+   		<?php echo 'There is no assessment component has been setup.';?> 
+   		</div>
+     <br></br>
+<?php }?>
+
+
+<table class="table3" width="600px" cellpadding="5" cellspacing="1" border="0">
+<tr>
+	<th>
+		Course Name 
+	</th>					
+	<td>:	
+		<?php echo $this->coursename; ?>
+	</td>
+</tr><tr>
+	<th>
+		Component Name 
+	</th>					
+	<td>:	
+		<?php echo $this->component["component_name"]; ?>
+	</td>
+</tr>
+
+</table>
+  
+
+<form name="markfrm" action="" method="post" >
+
+<table class="table" width="100%" cellpadding="5" cellspacing="1" >
+
+	<tr align="center">
+	    <th width="5%" rowspan="2">No.</th>	
+		<th width="" rowspan="2">Student Name</th>		
+		<?php foreach($this->asscomponent_list as $component) { 	
+			//get component item 
+		  	     $oCompitem = new App_Model_Exam_DbTable_Asscompitem();	
+		  	     $component_item = $oCompitem->getCompitemByCompId($component["id"]);
+				 $cols =  count($component_item);
+				 	
+			echo "<th colspan=$cols>$component[component_name]</th>";
+	     }?>				
+	</tr>
+	
+	<tr align="center">
+		<?php foreach($this->asscomponent_list as $component) { 
+			//get component item 
+		  	     $oCompitem = new App_Model_Exam_DbTable_Asscompitem();	
+		  	     $component_item = $oCompitem->getCompitemByCompId($component["id"]);
+					 if($component_item){
+		  	        	foreach ($component_item as $item){		
+							echo "<th width=20>$item[component_name]</th>";
+		  	        	}
+					 }
+	     }?>				
+	</tr>
+	
+	
+	
+	<?php $i=0;
+	foreach($this->student_list as $student){?>	
+	<tr  align="center">
+	   <td><?php echo $i+1;?></td>
+		<td width="30%">
+			<input type="hidden" name="scr_id[<?php echo $i ?>]" value="<?php echo $student["scr_id"];?>">			
+			<?php echo $student["fullname"];?>
+		</td>
+		    
+			<?php							   
+			foreach($this->asscomponent_list as $component) {
+				
+				//get component item 
+		  	     $oCompitem = new App_Model_Exam_DbTable_Asscompitem();	
+		  	     $component_item = $oCompitem->getCompitemByCompId($component["id"]);		  	     
+				
+    	            if($component_item){
+		  	        	foreach ($component_item as $item){
+		  	        		
+		  	        		//get current mark
+    	          			$oMark = new App_Model_Exam_DbTable_Markentry();
+    	          			$mark  = $oMark->getMarkByComponent($student["scr_id"],$item["component_item_id"]); 
+		  	        		
+		  	        		echo "<td width=10%>
+		  	        		      <input type='text' name='mark[$i][]' id='mark[$i][]' value='$mark[component_student_mark]' size=3 >";
+							echo "<input type='hidden' name='scm_id[$i][]' value='$mark[id]'  size=3>";
+							echo "<input type='hidden' name='component_id[$i][]' id='component_id[$i][]' value='$item[component_item_id]' size=3 ></td>";
+		  	        	}
+    	            }
+	        }?>	
+	</tr>
+	<?php  $i++;} ?>
+	
+</table>
+</form>
+
+<?php }//end if student list?>
+
+</div>
+
+
+
+

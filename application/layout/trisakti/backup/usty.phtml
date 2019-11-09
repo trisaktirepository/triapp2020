@@ -1,0 +1,392 @@
+<?php 
+//created by suliana on 16/05/2011
+
+	//get locale
+	$registry = Zend_Registry::getInstance();
+	$locale = $registry->get('Zend_Locale');
+	$this->locale = $locale->toString();
+	
+	if($locale == 'ar_YE'){
+		$this->direction = "rtl";
+		$this->float = "right";	
+	}else{
+		$this->direction = "ltr";
+		$this->float = "left";
+	}
+?>
+<? echo $this->doctype(); ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->locale; ?>" dir="<?php echo $this->direction; ?>">
+<head>
+	<?php echo $this->headMeta(); ?>
+	<?php echo $this->headTitle(); ?>
+	<?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/layout.css'); ?>
+	<?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/usty/simpletree.css'); ?>
+	<?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/usty/topmenu.css'); ?>
+	<?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/usty/style.css'); ?>
+	<?php //echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/usty/left-menu.css'); ?>
+	
+	<?php
+		$this->jQuery()->enable();
+		$this->jQuery()->setVersion('1.5.0');
+		$this->jQuery()->useCdn(true);
+	 	$this->jQuery()->setLocalPath($this->baseUrl().'/js/jquery/jquery-1.4.1.min.js');
+		
+		$this->jQuery()->uiEnable();
+		//$this->jQuery()->addStylesheet($this->baseUrl().'/js/jquery/themes/smoothness/jquery-ui.css');
+		//$this->jQuery()->setUiLocalPath($this->baseUrl().'/js/jquery/ui/jquery-ui.js');
+		
+		echo $this->jQuery(); 
+	?>
+	
+	<?php //echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery/ui/jquery-ui.js'); ?>
+	
+	<?php 
+	
+	
+	 	if($this->direction == 'rtl'){
+	 		echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery/plugin/potato.menu/jquery.ui.potato.menu.rtl.js');
+	 		echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/usty/dashboard_rtl.css');
+	 		echo $this->headLink()->prependStylesheet($this->baseUrl().'/js/jquery/plugin/potato.menu/jquery.ui.potato.menu.rtl.css');
+	 		echo "<style>";
+	 		echo "ul.potato-menu li.potato-menu-item {
+	 				float:right;
+				}";
+	 		echo "#language{
+	 				left:0px;
+	 			}";
+	 		
+	 		echo "#appTitle{
+	 				left: 15px;
+					top: 25px;
+	 			}";
+	 		
+	 		echo "#main-content{
+						margin-right: 200px;
+				}";
+	 		
+		 	echo "div.toolbar-button {
+				float:left;
+				text-align: left;
+				}";
+		 	
+	 		echo "</style>";
+	 	}else{
+	 		echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/usty/dashboard_ltr.css');
+	 		echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery/plugin/potato.menu/jquery.ui.potato.menu.js');
+	 		echo $this->headLink()->prependStylesheet($this->baseUrl().'/js/jquery/plugin/potato.menu/jquery.ui.potato.menu.css');
+	 		
+	 		echo "<style>";
+	 		echo "ul.potato-menu li.potato-menu-item {
+	 				float:left;
+				}";
+	 		echo "#language{
+	 				right:0px;
+	 			}";
+	 		
+	 		echo "#appTitle{
+	 				right: 15px;
+					top: 25px;
+	 			}";
+
+	 		echo "#main-content{
+						margin-left: 200px;
+				}";
+	 		
+	 		echo "div.toolbar-button {
+				float:right;
+				text-align: right;
+				}";
+	 		
+	 		echo "</style>";
+	 	}
+	 
+	 ?>
+	 	
+	<!--[if lt IE 7]>
+	<style media="screen" type="text/css">
+	#container {
+		height:100%;
+	}
+	</style>
+	<![endif]-->
+	
+	<script type="text/javascript">
+	 $(document).ready(function() {
+	        $('#mainMenu').ptMenu();
+	        $('#mainMenu').show();
+	        
+	 });
+	</script>
+	
+	<!-- sidebar menu -->
+	<script type="text/javascript">
+	function slide(navigation_id, pad_out, pad_in, time, multiplier)
+	{
+		// creates the target paths
+		var list_elements = navigation_id + " li.sliding-element";
+		var link_elements = list_elements + " a";
+
+		// initiates the timer used for the sliding animation
+		var timer = 0;
+
+		// creates the slide animation for all list elements
+		$(list_elements).each(function(i)
+		{
+			// margin left = - ([width of element] + [total vertical padding of element])
+			$(this).css("margin-left","-180px");
+			// updates timer
+			timer = (timer*multiplier + time);
+			$(this).animate({ marginLeft: "0" }, timer);
+			$(this).animate({ marginLeft: "15px" }, timer);
+			$(this).animate({ marginLeft: "0" }, timer);
+		});
+
+		// creates the hover-slide effect for all link elements
+		$(link_elements).each(function(i)
+		{
+			/*$(this).hover(
+			function()
+			{
+				$(this).animate({ paddingLeft: pad_out }, 150);
+			},
+			function()
+			{
+				$(this).animate({ paddingLeft: pad_in }, 150);
+			});*/
+		});
+	}
+
+	$(document).ready(function()
+	{
+		slide("#sliding-navigation", 25, 15, 0, .8);
+	});
+	</script>
+	
+	
+</head>
+<body>
+
+<div id="container">
+	<div id="header">
+		<!-- Header start -->
+		<div id="logo"><div id="name">&nbsp;</div></div>
+		<div id="appTitle"><?php echo APPLICATION_TITLE; ?></div>
+	</div>
+	<div id="menu" style="background-color: #ffffff;">
+		<div id="language">
+			<select style="width:80px;" onChange="window.location = '?lang=' + this.options[this.selectedIndex].value">
+				<option value="ar" <?php echo $this->locale=="ar_YE"?"selected='selected'":""; ?>>Arabic</option>
+				<option value="en" <?php echo $this->locale=="en_US"?"selected='selected'":""; ?>>English</option>
+			</select>
+		</div>
+		<div id="topmenu">
+		<div class="underlinemenu">
+			<ul>
+				<li><a href="<?php echo $this->url(array('module'=>'index','controller'=>'index','action'=>'index'),'default',true) ?>">Home</a></li>
+				<li><a href="<?php echo $this->url(array('module'=>'general-setup','controller'=>'university','action'=>'index'),'default',true) ?>">General Setup</a></li>
+				<li><a href="<?php echo $this->url(array('module'=>'anr-setup','controller'=>'award','action'=>'index'),'default',true) ?>">Registration Setup</a></li>
+				<li><a href="<?php echo $this->url(array('module'=>'application','controller'=>'placement-test','action'=>'index'),'default',true) ?>">Application</a></li>
+				<li><a href="<?php echo $this->url(array('module'=>'admission-record','controller'=>'registration','action'=>'note'),'default',true) ?>">Registration</a></li>
+				<li><a href="<?php echo $this->url(array('module'=>'admission-record','controller'=>'student','action'=>'profile'),'default',true) ?>">Records</a></li>
+				<li><a href="<?php echo $this->url(array('module'=>'exam','controller'=>'asscomponent','action'=>'index'),'default',true) ?>">Examination</a></li>
+				<li><a href="#">Graduation</a></li>
+				<li><a href="#">Student Affairs</a></li>
+				<li><a href="#">Scheduling</a></li>
+				<li><a href="#">Student Finance</a></li>
+				<li><a href="#">Lecturer Management</a></li>
+			</ul>
+		</div>
+		</div>
+
+		<!--
+		<ul id="nav">
+			<li><a href="<?php echo $this->url(array('module'=>'index','controller'=>'index','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Home"); ?></a></li>
+			<li><a href="#"><?php echo $this->translate("Set-up"); ?></a>
+				<ul>
+					<li><a href="<?php echo $this->url(array('module'=>'general-setup','controller'=>'index','action'=>'index'),'default',true) ?>"><?php echo $this->translate("General Set-up"); ?></a></li>
+					<li><a href="<?php echo $this->url(array('module'=>'system-setup','controller'=>'index','action'=>'index'),'default',true) ?>"><?php echo $this->translate("System Set-up"); ?></a></li>
+					<li><a href="<?php echo $this->url(array('module'=>'language-setup','controller'=>'index','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Language Set-up"); ?></a></li>
+					<li><a href="<?php echo $this->url(array('module'=>'language-setup','controller'=>'index','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Organization Set-up"); ?></a></li>
+					<li><a href="<?php echo $this->url(array('module'=>'anr-setup','controller'=>'index','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Programme Set-up"); ?></a></li>
+					<li><a href="<?php echo $this->url(array('module'=>'language-setup','controller'=>'index','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Offer Letter"); ?></a></li>
+					<li><a href="<?php echo $this->url(array('module'=>'language-setup','controller'=>'index','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Notification after Application"); ?></a></li>
+				</ul>
+			</li>
+		
+		
+		
+			<li><a href="#"><?php echo $this->translate("Application for Admission"); ?></a>
+				<ul>
+			        <li><a href="<?php echo $this->url(array('module'=>'application','controller'=>'online-application','action'=>'index'),'default',true) ?>" target="_blank"><?php echo $this->translate("Online Application"); ?></a></li>
+			        <li><a href="<?php echo $this->url(array('module'=>'application','controller'=>'profile','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Manual"); ?></a></li>
+			        <li><a href="<?php echo $this->url(array('module'=>'application','controller'=>'placement-test','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Set-up"); ?></a></li>
+			       
+			        <li><a href="<?php echo $this->url(array('module'=>'application','controller'=>'apply','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Report"); ?></a></li>
+			    </ul>
+			</li>
+			
+			<li><a href="<?php echo $this->url(array('module'=>'admission-record','controller'=>'index','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Admission, Registration & Records"); ?></a>
+				<ul>
+					
+					 <li><a href="<?php echo $this->url(array('module'=>'application','controller'=>'migration','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Migration of Applicant to Student"); ?></a></li>
+					<li><a href="<?php echo $this->url(array('module'=>'admission-record','controller'=>'index','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Subject Registration"); ?></a></li>
+			    </ul>
+			</li>
+			<li><a href="#"><?php echo $this->translate("Examination"); ?></a>
+				<ul>		
+				    <li><a href="<?php echo $this->url(array('module'=>'exam'),'default',true) ?>"><?php echo $this->translate("Setup"); ?></a>   </li>		
+					<li><a href="<?php echo $this->url(array('module'=>'exam','controller'=>'examsitting','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Exam Sitting"); ?></a></li>
+			        <li><a href="<?php echo $this->url(array('module'=>'exam','controller'=>'markentry','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Mark Entry"); ?></a></li>
+			        <li><a href="<?php echo $this->url(array('module'=>'exam','controller'=>'result','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Transcript"); ?></a></li>
+			        <li><a href="<?php echo $this->url(array('module'=>'exam','controller'=>'markadjustment','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Mark Adjustment"); ?></a></li>
+			       
+			        <li><a href="<?php echo $this->url(array('module'=>'exam','controller'=>'report','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Report"); ?></a></li>
+			       
+			       
+			    </ul>
+			</li>
+			
+			<li><a href="#"><?php echo $this->translate("Scheduling"); ?></a></li>
+			<li><a href="#"><?php echo $this->translate("Student Affairs"); ?></a></li>
+			
+			
+			
+			<li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'logout','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Logout"); ?></a></li>
+		</ul>-->
+		
+	</div>
+		<!-- Header end -->
+	
+	<div id="body">
+		<!-- Begin Section Content-->
+		<?php 
+			$module = Zend_Controller_Front::getInstance()->getRequest()->getModuleName();
+			
+			$controller = Zend_Controller_Front::getInstance()->getRequest()->getControllerName();
+			//echo $module ." - ". $controller;
+			
+			$file="";
+			if($module=='general-setup'){
+				$file="sidebar/general-setup.phtml";
+				
+				if (($controller == 'university') ||
+					($controller == 'faculty') ||
+					($controller == 'department') ||
+					($controller == 'branch') ||
+					($controller == 'office') ||
+				 	($controller == 'venue')) {
+					$submenu = "submenu/organization.phtml";				
+				}	
+				elseif (($controller == 'country') ||
+				 	($controller == 'state')) {
+					$submenu = "submenu/country.phtml";				
+				}	
+			}else
+			if($module=='admission-record'){
+				$file="sidebar/admission-record.phtml";
+				
+				if (($controller == 'registration') ||
+				 	($controller == 'add-drop')) {
+					$submenu = "submenu/registration.phtml";				
+				}	
+				if (($controller == 'student')) {
+					$submenu = "submenu/record.phtml";				
+				}	
+				
+			}else
+			if($module=='anr-setup'){
+				$file="sidebar/anr-setup.phtml";	
+				
+				if (($controller == 'award') ||
+					($controller == 'market') ||
+					($controller == 'main-program') ||
+					($controller == 'program') ||
+					($controller == 'program-requirement') ||
+				 	($controller == 'academic-landscape')) {
+					$submenu = "submenu/programme.phtml";				
+				}	
+				elseif (($controller == 'course') ||
+					($controller == 'course-prerequisites') ||
+				 	($controller == 'course-offered')) {
+					$submenu = "submenu/course.phtml";				
+				}
+				elseif (($controller == 'semester') ||
+					($controller == 'activity') ||
+				 	($controller == 'calendar')) {
+					$submenu = "submenu/semester.phtml";				
+				}
+				
+			}else 
+			if($module=='finance'){
+				if ($controller=='sponsor') {
+					$file="sidebar/sponsor.phtml";
+				}
+				elseif ($controller=='payment'){
+					$file="sidebar/payment.phtml";
+				}
+				elseif ($controller=='renewal'){
+					$file="sidebar/renewal.phtml";
+				}
+				else {
+					$file="sidebar/finance.phtml";
+				}		
+			}else
+			if($module=='system-setup'){
+				$file="sidebar/system-setup.phtml";	
+			}else 
+			if($module=='application'){
+				$file="sidebar/application.phtml";	
+				$submenu = "submenu/application.phtml";		
+			}else 
+			if($module=='exam'){
+				if($controller=='examsitting'){
+					$file="";
+				}elseif($controller=='markentry'){
+					$file="";				
+				}elseif($controller=='result'){
+					$file="sidebar/exam-transcript.phtml";
+				}elseif($controller=='markadjustment'){
+					$file="";
+				}else{
+					$file="sidebar/exam.phtml";
+				}
+				$submenu = "submenu/exam.phtml";		
+				
+			}else 
+			if ($module=='setup'){
+				if($controller=='result'){
+					$file="sidebar/exam.phtml";
+				}
+			}
+			
+			
+			if($file!=''){
+			?>
+				<table width="100%" cellpadding="0" cellspacing="0" border="0">
+					
+					<tr>
+					    <td rowspan="2" valign="top"><?php echo $this->render($file); ?></td>
+					    <td><?php echo $this->render($submenu); ?></td>
+					 </tr>
+					 <tr>
+					    <td><?php echo $this->layout()->content; ?></td>
+					 </tr>
+					
+				</table>
+			<?php
+			}else{
+				echo $this->layout()->content;	
+			}
+
+		?>
+		<!-- End Section Content-->
+	</div>
+	
+	<div id="footer">
+		<!-- Footer start -->
+		Copyright &copy; <?php echo APPLICATION_ENTERPRISE; ?>
+		<!-- Footer end -->
+	</div>
+</div>
+</body>
+</html>

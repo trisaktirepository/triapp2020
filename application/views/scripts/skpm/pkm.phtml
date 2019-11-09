@@ -1,0 +1,273 @@
+<style type="text/css">
+.zend_form dt {
+    width: 177px;
+}
+.zend_form dd {
+    padding: 2px 187px;
+}
+</style>
+<script type="text/javascript">
+ 
+function edit_Softskill(n) {
+	 
+	var x = document.getElementById("data_softskill").rows[n].cells;
+	
+	document.getElementById("title_bahasa_softskill").value=x[2].innerHTML;
+	document.getElementById("title_softskill").value=x[3].innerHTML;
+	document.getElementById("idSoftskill").value=document.getElementById("idSoftskill["+n+"]").value;
+	document.getElementById("datestart").value= x[5].innerHTML;
+	document.getElementById("datestop").value= x[6].innerHTML;
+	document.getElementById("given_by_softskill").value=x[4].innerHTML;
+	document.getElementById("hours").value=x[7].innerHTML;
+	document.getElementById("category_pkm").value=document.getElementById("category_pkmlst["+n+"]").value;
+	document.getElementById("field_pkm").value=document.getElementById("field_pkmlst["+n+"]").value;
+	document.getElementById("role_pkm").value=document.getElementById("role_pkmlst["+n+"]").value;
+	document.getElementById("level_pkm").value=document.getElementById("level_pkmlst["+n+"]").value;
+	document.getElementById("IdSemester").value=document.getElementById("semester_pkmlst["+n+"]").value;
+	document.getElementById("IdBuktiPkm").value=document.getElementById("bukti_pkmlst["+n+"]").value;
+	
+}
+
+function onclickDeleteSoft(n,direct) {
+	
+	var r = confirm("Are you sure to delete it?");
+	if (r == true) {
+		var url="/default/skpm/delete-pkm/idSoftskill/"+n+direct;
+		window.location=url;
+	}  
+}
+ 
+ 
+</script>
+
+
+
+ 
+<div style="width:100%;">
+<fieldset>
+<form id="honors" method="post" action="<?php echo $this->baseUrl()?>/default/skpm/pkm" >
+<input type="hidden" name="idSoftskill" id="idSoftskill"> 
+<input type="hidden" name="idStudentRegistration" id="idStudentRegistration" value="<?php echo $this->IdStudentRegistration;?>">
+<input type="hidden" name="nim" id="nim" value="<?php echo $this->nim;?>">
+<input type="hidden" name="studentname" id="studentname" value="<?php echo $this->studentname;?>">
+
+<table  width="80%" cellpadding="5" cellspacing="5" border="0">
+	<tr>	<td width="20%"><?php echo $this->translate("Name of Community Activity in Bahasa");?></td><td>:</td>
+			<td> <textarea rows="4" cols="50" id="title_bahasa_softskill" name="title_bahasa_softskill">    
+			</textarea></tr> 
+	<tr>	<td width="20%"><?php echo $this->translate("Name Of Community Activity");?></td><td>:</td>
+			<td> <textarea rows="4" cols="50" id="title_softskill" name="title_softskill">     
+			</textarea></tr>
+	<tr>	<td width="20%"><?php echo $this->translate("Location of Activity");?></td><td>:</td>
+			 
+			 <td>	<input type="text" id="given_by_softskill" name="given_by_softskill" size="50"></tr>		
+	
+	
+			 
+		 </td></tr>
+			<tr>	<td width="20%"><?php echo $this->translate("Date Start");?> </td><td>:</td><td>
+			 <input type="date" id="datestart" name="datestart">
+			<?php echo $this->translate("Date Stop").' : ';?> 
+			 <input type="date" id="datestop" name="datestop">
+			</td>
+			<tr>	<td width="20%"><?php echo $this->translate("Hours Equivalent");?></td><td>:</td>
+			<td><input type="number" id="hours" name="hours">
+			</td></tr>
+		 
+	<tr>	<td width="20%"><?php echo $this->translate("Category");?></td><td>:</td>
+			<td>
+		 
+			<select id="category_pkm" name="category_pkm">
+			    <option value="0"><?php echo $this->translate("Please Select");?></option>
+			    <?php 
+			    	foreach ($this->category_list as $level):
+			    ?>
+			    		<option value="<?php echo $level["key"];?>"<?php if($this->levelId == $level["key"]){ echo 'selected';}?>><?php echo $level["value"];?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select>
+		 
+			</td></tr>
+	<tr>	<td width="20%"><?php echo $this->translate("Level");?></td><td>:</td>
+			<td>
+		 
+			<select id="level_pkm" name="level_pkm">
+			    <option value="0"><?php echo $this->translate("Please Select");?></option>
+			    <?php 
+			    	foreach ($this->level_list as $level):
+			    ?>
+			    		<option value="<?php echo $level["key"];?>"<?php if($this->levelId == $level["key"]){ echo 'selected';}?>><?php echo $level["value"];?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select>
+		 
+			</td></tr>		
+	<tr>	<td width="20%"><?php echo $this->translate("Role in Activity");?></td><td>:</td>
+			<td>
+		 
+			<select id="role_pkm" name="role_pkm">
+			    <option value="0"><?php echo $this->translate("Please Select");?></option>
+			    <?php 
+			    	foreach ($this->role_list as $level):
+			    ?>
+			    		<option value="<?php echo $level["key"];?>"<?php if($this->levelId == $level["key"]){ echo 'selected';}?>><?php echo $level["value"];?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select>
+		 
+			</td></tr>
+	<tr>	<td width="20%"><?php echo $this->translate("Field");?></td><td>:</td>
+			<td>
+			 
+			<select id="field_pkm" name="field_pkm">
+			    <option value="0"><?php echo $this->translate("Please Select");?></option>
+			    <?php 
+			    	foreach ($this->field_list as $semester):
+			    ?>
+			    		<option value="<?php echo $semester["key"];?>" <?php if($this->fieldId == $semester["key"]){ echo 'selected';}?>><?php echo $semester["value"];?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select>
+		 
+			</td></tr>
+	<tr>	<td width="20%"><?php echo $this->translate("Semester");?></td><td>:</td>
+			<td>
+			 
+			<select id="IdSemester" name="IdSemester" >
+			     <?php 
+			    	foreach ($this->semester_list as $semester):
+			    ?>
+			    		<option value="<?php echo $semester["key"];?>" <?php if($this->semesterid == $semester["key"]){ echo 'selected';}?>><?php echo $semester["value"];?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select>
+		 
+			</td></tr>
+			
+	<tr>	<td width="20%"><?php echo $this->translate("Bukti Fisik");?></td><td>:</td>
+			<td>
+			 
+			<select id="IdBuktiPkm" name="IdBukti" >
+			     <?php 
+			    	foreach ($this->bukti_list as $semester):
+			    ?>
+			    		<option value="<?php echo $semester["key"];?>" <?php if($this->buktid == $semester["key"]){ echo 'selected';}?>><?php echo $semester["value"];?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select>
+		 
+			</td></tr>
+	<tr><td colspan="3" align="center"><input type="submit" name="submit" value="<?php echo $this->translate('Save')?>" ></td>
+	
+	</tr>
+</table>
+
+</form>
+</fieldset>
+<br>
+ 
+ 
+<table class="table" id="data_softskill" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		<th width="5%"><?php echo $this->translate("No");?></th>
+		<th width="5%"><?php echo $this->translate("Status");?></th> 
+		<th width="35%"><?php echo $this->translate("Name of Community Act in Bahasa");?></th>
+		<th width="35%"><?php echo $this->translate("Name of Community Act Education");?></th>
+		
+		<th width="10%"><?php echo $this->translate("Provided by");?></th>			
+		<th width="10%"><?php echo $this->translate("Started Date");?></th>
+		<th width="10%"><?php echo $this->translate("Stoped Date");?></th>
+		<th width="10%"><?php echo $this->translate("Hours Eq.");?></th> 
+		<th width="10%"><?php echo $this->translate("Category");?></th>
+		<th width="10%"><?php echo $this->translate("Role");?></th>
+		<th width="10%"><?php echo $this->translate("Field");?></th> 
+		<th width="10%"><?php echo $this->translate("Semester");?></th>
+		<th width="10%"><?php echo $this->translate("Certificate");?></th>
+			
+		<th width="10%"><?php echo $this->translate("Action");?></th>
+	</tr>
+	<?php  
+	if (count($this->softskills)>0) {
+	foreach($this->softskills as $index=>$value){ 
+		$id=$value['idSoftskill'];
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<input type="hidden" id="idSoftskill[<?php echo $index+1;?>]" value="<?php echo $value['idSoftskill'];?>">
+		<input type="hidden" id="field_pkmlst[<?php echo $index+1;?>]" value="<?php echo $value['fieldid'];?>">
+		<input type="hidden" id="role_pkmlst[<?php echo $index+1;?>]" value="<?php echo $value['roleid'];?>">
+		<input type="hidden" id="level_pkmlst[<?php echo $index+1;?>]" value="<?php echo $value['levelid'];?>">
+		
+		<input type="hidden" id="category_pkmlst[<?php echo $index+1;?>]" value="<?php echo $value['categoryid'];?>">
+		<input type="hidden" id="semester_pkmlst[<?php echo $index+1;?>]" value="<?php echo $value['IdSemesterMain'];?>">
+		<input type="hidden" id="bukti_pkmlst[<?php echo $index+1;?>]" value="<?php echo $value['BuktiFisik'];?>">
+		
+		<td><?php echo $index+1;?></td> 
+		<td align="center">
+		<?php if ($value['approved']=='2' ) {
+					 
+					?>
+					<img src='<?php echo $this->baseUrl();?>/images/reject.png' border=0 width='20' height='20' title="<?php echo $this->translate('rejected by student'); ?>"> 
+			  
+				<?php } ?>
+		<?php if ($value['approved_by']==$this->iduser && $value['approved']=='1') {
+					 
+					?>
+					 
+						<a href="<?php echo $this->url(array('module'=>'default','controller'=>'skpm', 'action'=>'pkm-reject','idSoftskill'=>$value['idSoftskill'],'id'=>$this->IdStudentRegistration,'name'=>$this->studentname,'nim'=>$this->nim),'default',true)?>"><img src='<?php echo $this->baseUrl();?>/images/accept.png' border=0 width='20' height='20' title='<?php echo $this->translate("do you want to unapprove?");?>' ></a>
+			<?php } else if ($value['approved']=='1') {?> 
+			
+					<img src='<?php echo $this->baseUrl();?>/images/prohibit.png' border=0 width='20' height='20' title="<?php echo $this->translate('Approved by other'); ?>"> 	
+		<?php }
+			if ($value['approved']=='0' ||$value['approved']=='') {
+					 
+					?>
+					 
+				<img src='<?php echo $this->baseUrl();?>/images/free.png' border=0 width='20' height='20' title='<?php echo $this->translate("not approve yet?");?>' ><?php }?>
+		 
+			 
+		</td>
+		
+
+		<td><?php  echo $value['title_bahasa'];?> </td>
+		<td><?php echo $value['title']; ?>
+		<td><?php echo $value["given_by"];?></td>
+		<td><?php echo $value["datestart"];?></td>
+		<td><?php echo $value["datestop"];?></td>
+		<td><?php echo $value["hours"];?></td>
+		 <td><?php echo $value["categoryname"];?></td>
+		 <td><?php echo $value["role"];?></td>
+		<td><?php echo $value["field"];?></td>
+		<td><?php echo $value["SemesterMainName"];?></td>
+		<?php 
+		$pathupload=$value['path'];
+		if($pathupload!=''){
+			$dt = explode("triapp",$pathupload);
+			//echo var_dump($dt);exit;
+			$path = $dt[1];
+			$path ="<a target='_blank' href=http://".APP_HOSTNAME.$path.">" ;
+		
+		?> <td align="center"><?php  echo $path;?><img src='<?php echo $this->baseUrl();?>/images/document.png' border=0 width='20' height='20' title="Download" ></a></td> <?php 
+		} else {
+			$direct=$direct=$this->url(array('module'=>'default','controller'=>'skpm', 'action'=>'skpm','id'=>$this->IdStudentRegistration,'nim'=>$this->nim,'name'=>$this->studentname),'default',true)."/#Tab4"; ?>
+		<td align="center"><img src='<?php echo $this->baseUrl();?>/images/upload.png' border=0 width='20' height='20' title="Upload"  onclick="onclickUpload(<?php echo $value['idSoftskill']?>,'Pkm','<?php echo $direct;?>',<?php echo $this->IdStudentRegistration;?>,'104')"  /></td>
+		<?php }?>
+		<td align="center">
+		<?php if ($value['id_user']==$this->iduser && $value['approved']=='0') {?>
+					<img src='<?php echo $this->baseUrl();?>/images/edit.png' border=0 width='20' height='20' title="Edit"  onclick="edit_Softskill(<?php echo  $index+1;?>)" >
+					<img src='<?php echo $this->baseUrl();?>/images/trash.png' border=0 width='20' height='20' title="Delete"  onclick="onclickDeleteSoft(<?php echo $value['idSoftskill'];?>,'/id/<?php echo $this->IdStudentRegistration ?>/name/<?php echo $this->studentname; ?>/nim/<?php echo $this->nim; ?>')">
+			<?php }?></td>
+	
+	
+	</tr>
+	<?php }
+} ?>
+
+</table>
+ 
+ 

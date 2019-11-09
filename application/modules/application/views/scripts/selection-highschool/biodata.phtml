@@ -1,0 +1,155 @@
+
+<div class="breadcrum">
+	<ul class="tri-steps">
+		<li class="current"><div class="text"><a href="<?php echo $this->url(array('module'=>'application','controller'=>'selection-highschool','action'=>'biodata'),'default',true);?>"><?php echo $this->translate("biodata"); ?></a></div></li>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'application','controller'=>'selection-highschool','action'=>'contactinfo'),'default',true);?>"><?php echo $this->translate("contact_info"); ?></a></div></li>
+		
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'application','controller'=>'selection-highschool','action'=>'programme'),'default',true);?>"><?php echo $this->translate("programme"); ?></a></div></li>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'application','controller'=>'selection-highschool','action'=>'document'),'default',true);?>"><?php echo $this->translate("upload_document"); ?></a></div></li>
+		<li class="last"><div class="text"><a href="<?php echo $this->url(array('module'=>'application','controller'=>'selection-highschool','action'=>'processing'),'default',true);?>"><?php echo $this->translate("processing"); ?></a></div></li>	
+	</ul>
+	<div class="clear"></div>
+</div>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			
+			<li class="divider"></li>
+			
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+
+<div style="width:100%;">
+
+
+<p><h2><?php echo $this->translate("personal_info");?></h2></p>
+	<table class="table3" width="700px" border="0" cellpadding="5" cellspacing="1">
+		<tr>
+			<th><?php echo $this->translate("name");?></th>
+			<td><?php echo $this->applicant['appl_fname'].' '.$this->applicant['appl_mname'].' '.$this->applicant['appl_lname']; ?></td>
+		</tr>
+		<tr>
+			<th><?php echo $this->translate("email");?></th>
+			<td><?php echo $this->applicant['appl_email']; ?></td>
+		</tr>
+		<tr>
+			<th><?php echo $this->translate("gender");?></th>
+			<td><?php echo $this->applicant['appl_gender']=="2"?"Female":"Male"; ?></td>
+		</tr>
+			<tr>
+			<th><?php echo $this->translate("dob");?></th>
+			<td><?php echo date('d F Y', strtotime($this->applicant['appl_dob'])); ?></td>
+		</tr>	
+		<tr>
+			<th width="150px"><?php echo $this->translate("nationality");?></th>
+			<td><?php echo $this->applicant['appl_nationality']; ?></td>
+		</tr>
+		<tr>
+			<th width="150px"><?php echo $this->translate("admission_type");?></th>
+			<td><?php echo $this->applicant['appl_admission_type']=="1" ? $this->translate('placement_test') : $this->translate('hign_school_certificate'); ?></td>
+		</tr>
+		<tr>
+			<th width="150px"><?php echo $this->translate("religion");?></th>
+			<td><?php 
+					$setupDB = new App_Model_General_DbTable_Setup();
+			        echo $setupDB->getDetailbyId($this->applicant['appl_religion']); ?></td>
+		</tr>
+		<tr>
+			<th width="150px"><?php echo $this->translate("marital_status");?></th>
+			<td><?php $setupDB = new App_Model_General_DbTable_Setup();
+			        echo $setupDB->getDetailbyId($this->applicant['appl_marital_status']);  ?></td>
+		</tr>
+		<tr>
+			<th width="150px"><?php echo $this->translate("no_of_child");?></th>
+			<td><?php echo $this->applicant['appl_no_of_child']; ?></td>
+		</tr>
+		<tr>
+			<th width="150px"><?php echo $this->translate("jacket_size");?></th>
+			<td><?php echo $this->applicant['appl_jacket_size']; ?></td>
+		</tr>
+	</table>
+</div>
+<br />		
+		
+	
+<p><h2><?php echo $this->translate("parents_info");?></h2></p>
+	<table class="table3" width="700px" border="0" cellpadding="5" cellspacing="1">
+	
+				
+		<tr>
+			<th  width="150px"><?php echo $this->translate("father_name");?></th>
+			<td><?php echo $this->father["af_name"]?></td>
+			<th  width="150px"><?php echo $this->translate("mother_name");?></th>
+			<td><?php echo $this->mother["af_name"]?></td>
+		</tr>	
+		
+		<tr>
+			<th><?php echo $this->translate("address1");?></th>
+			<td><?php echo $this->father["af_address1"].','.$this->father["af_address2"]?></td>
+			<th><?php echo $this->translate("address1");?></th>
+			<td><?php echo $this->mother["af_address1"].','.$this->mother["af_address2"]?></td>
+		</tr>
+		<tr>
+			<th><?php echo $this->translate("state_province");?></th>
+			<td><?php echo $this->father["af_state"]?></td>
+			<th><?php echo $this->translate("state_province");?></th>
+			<td><?php echo $this->mother["af_state"]?></td>
+		</tr>
+		<tr>
+			<th><?php echo $this->translate("city");?></th>
+			<td><?php echo $this->father["af_city"]?></td>
+			<th><?php echo $this->translate("city");?></th>
+			<td><?php echo $this->mother["af_state"]?></td>
+		</tr>
+		<tr>
+			<th><?php echo $this->translate("postcode");?></th>
+			<td><?php echo $this->father["af_postcode"]?></td>
+			<th><?php echo $this->translate("postcode");?></th>
+			<td><?php echo $this->mother["af_state"]?></td>
+		</tr>
+		<tr>
+			<th><?php echo $this->translate("Telephone");?></th>
+			<td><?php echo $this->father["af_phone"]?></td>
+			<th><?php echo $this->translate("Telephone");?></th>
+			<td><?php echo $this->mother["af_phone"]?></td>
+		</tr>
+		<tr>
+			<th><?php echo $this->translate("email");?></th>
+			<td><?php echo $this->father["af_email"]?></td>
+			<th><?php echo $this->translate("email");?></th>
+			<td><?php echo $this->mother["af_email"]?></td>
+		</tr>
+		<tr>
+			<th><?php echo $this->translate("Job");?></th>
+			<td><?php echo $this->father["af_job"]?></td>
+			<th><?php echo $this->translate("Job");?></th>
+			<td><?php echo $this->mother["af_job"]?></td>
+		</tr>
+		<tr>
+			<th><?php echo $this->translate("Education Level");?></th>
+			<td><?php echo $this->father["af_education_level"]?></td>
+			<th><?php echo $this->translate("Education Level");?></th>
+			<td><?php echo $this->mother["af_education_level"]?></td>
+		</tr>
+		<tr>
+			<th><?php echo $this->translate("Father's Condition");?></th>
+			<td><?php echo $this->father["af_family_condition"]?></td>
+			<th><?php echo $this->translate("Mother's Condition");?></th>
+			<td><?php echo $this->mother["af_family_condition"]?></td>
+		</tr>
+	</table>
+</div>
+<br />	
+</div>
+

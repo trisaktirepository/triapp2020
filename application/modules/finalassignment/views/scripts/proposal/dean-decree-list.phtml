@@ -1,0 +1,250 @@
+
+<script type="text/javascript">
+
+		<?php
+		$php_array = $this->localDate;
+		$js_array = json_encode($php_array);
+		echo "var disabledDays = ". $js_array . ";\n";
+		?>
+
+		/* utility functions */
+		function noBlockDates(date) {
+			
+			  var m = date.getMonth(), d = date.getDate(), y = date.getFullYear();
+			  //console.log('Checking (raw): ' + m + '-' + d + '-' + y);
+			  for (i = 0; i < disabledDays.length; i++) {
+			    if($.inArray((m+1) + '-' + d + '-' + y,disabledDays) != -1) {
+			      //console.log('bad:  ' + (m+1) + '-' + d + '-' + y + ' / ' + disabledDays[i]);
+			      return [false];
+			    }
+			  }
+			  //console.log('good:  ' + (m+1) + '-' + d + '-' + y);
+			  return [true];
+		}
+
+		function noBlockDate(date) {		  
+		  return noBlockDates(date);
+		}
+
+
+		
+	$(function() {
+		// a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
+		$( "#dialog:ui-dialog" ).dialog( "destroy" );
+	
+		$( "#dialog-info" ).dialog({
+			modal: true,
+			autoOpen: false,
+			width: 600,
+			buttons: {
+				"Save": function() { 
+
+					if( !$("#dialog_nomor").val() ){
+						 alert("<?php echo $this->translate('All Fields cannot be empty.') ?> ");
+					 		 $("#dialog_nomor").css("border","1px solid red");
+						}else
+						if( !$("#dialog_decree_date").val() ){
+							 alert("<?php echo $this->translate('All Fields cannot be empty.') ?> ");
+							 $("#dialog_decree_date").css("border","1px solid red");	
+						}else
+						if( $("#IdSemester").val()=="" ){
+							alert("<?php echo $this->translate('All Fields cannot be empty.') ?> ");
+							$("#IdSemester").css("border","1px solid red");	
+						} else if( $("#IdProgram").val()=="" ){
+							alert("<?php echo $this->translate('All Fields cannot be empty.') ?> ");
+							$("#IdProgram").css("border","1px solid red");	
+						} else {
+									 
+							$("#myform").submit(); 
+						 }
+
+
+					
+				}, 
+				"Cancel": function() { 
+					$(this).dialog("close"); 
+				}
+				
+			}
+		});
+
+ 
+		$("#dialog_decree_date").datepicker({
+			dateFormat: "dd-mm-yy",
+			"changeMonth":"true",
+			beforeShowDay: noBlockDate
+		});
+
+		$.datepicker.regional[ "fr" ];
+		
+		
+	});//end function
+
+	function add(){
+		$( "#dialog-info" ).dialog('open');
+		
+	}
+
+	function setStatus(nomor,status){	
+		url="<?php echo $this->url(array('module'=>'application','controller'=>'selection-setup','action'=>'set-status'),'default',true); ?>";
+		var data = {'nomor':nomor,'status':status};
+
+		postIt(url,data);
+		
+		return false;
+	}
+
+		
+	function postIt(url, data){
+	
+		$('#jQueryPostItForm').remove();
+		
+	    $('body').append($('<form/>', {
+	      id: 'jQueryPostItForm',
+	      method: 'POST',
+	      action: url,	    
+	    }));
+	
+	    for(var i in data){
+	      $('#jQueryPostItForm').append($('<input/>', {
+	        type: 'hidden',
+	        name: i,
+	        value: data[i]
+	      }));
+	    }
+	
+	    $('#jQueryPostItForm').submit();
+	}
+</script>
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			
+			<li class="divider"></li>
+			<li>
+				<a href="#" onclick="javascript:add()">
+					<span class='add'></span>
+					Add
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<?php if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+<br />
+<?php }?>
+ 
+<fieldset><legend><?php echo $this->translate('Dean Decree for Supervisor/Examiner')?></legend>
+<h2><?php echo $this->translate('History');?></h2>
+<table width="100%" class="table">
+	<tr>
+		<th><?php echo $this->translate('Dean Decree');?></th>
+		<th><?php echo $this->translate('Date');?></th>
+		<th><?php echo $this->translate('Semester');?></th>
+		<th><?php echo $this->translate('Program');?></th>
+		<th><?php echo $this->translate('Setup Supervisor/examiner');?></th>
+	</tr>
+	<?php 
+	if($this->deandecree_list){
+      foreach($this->deandecree_list as $index => $batch){
+	?>
+	<tr <?php echo $index%2==0?"class='shade'":""?> >
+		<td><?php echo $batch['decree'];?></td>
+		<td><?php echo $batch['dt_effective'];?></td>
+		<td><?php echo $batch['SemesterName'];?></td> 
+		<td><?php echo $batch['ProgramName'];?></td>
+		<td><a href="/finalassignment/proposal/supervisor-setup/iddeandecree/<?php echo $batch['Id'];?>"><?php echo $this->translate('Setup')?></a></td>
+	</tr>
+	<?php 
+	  }
+	}
+	?>
+</table>
+</fieldset>
+<br />
+ 
+</fieldset>
+
+<div id="dialog-info" title="Details Info">
+<form name="myform" id="myform" method="post" action="<?php echo $this->url(array('module'=>'finalassignment','controller'=>'proposal','action'=>'dean-decree-list'),'default',true); ?>">
+	<h3><?php echo $this->translate("Dean Decree for Supervisor/Examiner");?></h3>
+	<table width="100%" class="table5">
+		<tr>
+			<td>
+				<?php echo $this->translate("Nomor")?>
+			</td>
+			<td width="5px">:</td>
+			<td>
+				<input type="text" name="dialog_nomor" id="dialog_nomor" style="width:250px" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<?php echo $this->translate("Decree Date")?>
+			</td>
+			<td width="5px">:</td>
+			<td>
+				<input type="date" name="dialog_decree_date" id="dialog_decree_date" style="width:250px" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<?php echo $this->translate("Close Decree Date")?>
+			</td>
+			<td width="5px">:</td>
+			<td>
+				<input type="checkbox" name="dialog_lock_decree_date" id="dialog_lock_decree_date" value="1" />
+			</td>
+		</tr>
+		<tr><td>
+				<?php echo $this->translate("Program")?>
+			</td>
+			<td width="5px">:</td>
+		<td> 
+			<select name="IdProgram" id="IdProgram">	
+			<option value=""  ><?php echo $this->translate('--Please Select--')?></option>
+			<?php foreach ($this->program_list as $item) {
+					 ?>
+		   		<option value="<?php echo $item['key']; ?>"  ><?php echo $this->translate($item['value'])?></option>
+		   	<?php }?>
+			</select>
+		
+		</td>
+		</tr>
+		<tr><td>
+				<?php echo $this->translate("Semester")?>
+			</td>
+			<td width="5px">:</td>
+		<td> 
+			<select name="IdSemester" id="IdSemester">	
+			<option value=""  ><?php echo $this->translate('--Please Select--')?></option>
+			<?php foreach ($this->semester_list as $item) {
+					 ?>
+		   		<option value="<?php echo $item['key']; ?>"  ><?php echo $this->translate($item['value'])?></option>
+		   	<?php }?>
+			</select>
+		
+		</td>
+		</tr>
+	 
+	</table>
+</form>
+</div>

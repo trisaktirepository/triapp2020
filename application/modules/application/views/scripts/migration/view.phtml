@@ -1,0 +1,186 @@
+<script>
+	$(function() {
+		$( "#migrate-dialog" ).dialog({ 
+			autoOpen: false,
+			modal: true,
+			width: 500,
+			height: 200,
+			buttons: { 
+				"Proceed": function() { 
+					$("#migrateform").submit(); 
+				},
+				"Cancel": function() { 
+					$(this).dialog("close"); 
+				}  
+			} 
+		});
+	});
+</script>
+
+<script type="text/javascript">
+function edit(id){
+		
+			window.location="<?php echo $this->url(array('module'=>'application','controller'=>'manual', 'action'=>'edit'),'default',true);?>/id/"+id;
+	}
+	
+	
+	</script>
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="javascript:edit(<?php echo $this->id?>)">
+					<span class='edit'></span>
+					Edit
+				</a>
+			</li>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'application','controller'=>'migration', 'action'=>'index'),'default',true);?>">
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+
+<div width="500px">
+	<p><h2>Applicant Particulars</h2></p>
+	<table class="table3" width="700px" border="0" cellpadding="5" cellspacing="1">
+		<tr>
+			<th>NAME</th>
+			<td><?php echo $this->applicant['ARD_NAME']; ?></td>
+		</tr>
+		<tr>
+			<th>IC</th>
+			<td><?php echo $this->applicant['ARD_IC']; ?></td>
+		</tr>
+		<tr>
+			<th>GENDER</th>
+			<td><?php echo $this->applicant['ARD_SEX']=="F"?"Female":"Male"; ?></td>
+		</tr>
+			<tr>
+			<th>DOB</th>
+			<td><?php echo date('d F Y', strtotime($this->applicant['ARD_DOB'])); ?></td>
+		</tr>	
+		<tr>
+			<th width="150px">NATIONALITY</th>
+			<td><?php echo $this->applicant['ARD_CITIZEN']; ?></td>
+		</tr>
+	</table>
+</div>
+<br />
+<p><h2>Applicant Contact Details</h2></p>
+<div width="500px">
+	<table class="table3" width="700px" border="0" cellpadding="5" cellspacing="1">
+		<tr>
+			<th width="150px">ADDRESS 1</th>
+			<td><?php echo $this->applicant['ARD_ADDRESS1']; ?></td>
+			
+		</tr>
+		<tr>
+			<th>ADDRESS 2</th>
+			<td><?php echo $this->applicant['ARD_ADDRESS2']; ?></td>
+		</tr>
+		<tr>
+			<th>POSTCODE</th>
+			<td><?php echo $this->applicant['ARD_POSTCODE']; ?></td>
+		</tr>
+		<tr>
+			<th>STATE</th>
+			<td><?php echo $this->applicant['ARD_STATE']; ?></td>
+		</tr>
+		<tr>
+			<th>COUNTRY</th>
+			<td><?php echo $this->applicant['ARD_COUNTRY']; ?></td>
+		</tr>
+		<tr>
+			<th>EMAIL</th>
+			<td><?php echo $this->applicant['ARD_EMAIL']; ?></td>
+		</tr>	
+		
+		<tr>
+			<th width="150px">MOBILE NO.</th>
+			<td><?php echo $this->applicant['ARD_HPHONE']; ?></td>
+		</tr>
+	</table>
+</div>
+<br />
+<p><h2>Program Offered Details</h2></p>
+<div width="500px">
+	<table class="table3" width="700px" border="0" cellpadding="5" cellspacing="1">
+		<tr>
+			<th width="150px">Program Name</th>
+			<td><?php echo $this->applicant['main_name']; ?></td>
+		</tr>
+		<tr>
+			<th width="150px">Program Code</th>
+			<td><?php echo $this->applicant['program_code']; ?></td>
+		</tr>
+	</table>
+</div>
+
+<br />
+<div>
+	<input type="submit" value="Migrate this application" onClick="$('#migrate-dialog').dialog('open')" />
+	<input type="button" value="Back" onclick="javascript:window.location='<?php echo $this->url(array('module'=>'application','controller'=>'migration', 'action'=>'index'),'default',true);?>'" />
+</div>
+<br /><br />
+<!-- Registration Dialog -->
+<div id="migrate-dialog" title="Application Details">
+	<br />
+	<br />
+	<form id="migrateform" name="registerform" action="<?php echo $this->url(array('module'=>'application','controller'=>'migration', 'action'=>'migrate'),'default',true);?>" method="post">
+		<input type="hidden" name="id" value="<?php echo $this->applicant['ID']; ?>" />
+		<table class="table2" width="100%">
+			<tr>
+				<th width="100px">Program</th>
+				<td>
+					<?php echo $this->applicant['main_name']; ?>
+				</td>
+			</tr>
+			<tr>
+				<th width="100px">branch</th>
+				<td>
+					<select name="branch_id" style="width:250px">
+						<?php 
+							foreach ($this->branchlist as $branch){
+								echo "<option value='".$branch['id']."'>".$branch['name']."</option>"; 
+							}
+						?>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<th width="100px">Intake</th>
+				<td>
+					<select name="intake_id" style="width:250px">
+						<?php 
+							foreach ($this->intakelist as $intake){
+								echo "<option value='".$intake['id']."'>".$intake['name']."</option>"; 
+							}
+						?>
+					</select>
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>

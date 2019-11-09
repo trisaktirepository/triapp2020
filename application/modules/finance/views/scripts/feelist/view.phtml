@@ -1,0 +1,40 @@
+<?php
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/css/layout.css' );
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/css/default/style.css' );
+?>
+
+
+					
+		
+<table width="100%" border="0" cellpadding="5" align="center" bgcolor="#cccccc" cellspacing="1">
+		<tr bgcolor="#f2f2f2">
+			<td>NUM</td>
+			<td align="center">Programme</td>
+			<td align="center">Fee Structure</td>
+			<td align="center">Total Semester</td>
+			<td align="center">Amount(RM)</td>
+			<td align="center">Payment Plan</td>
+		</tr>
+		
+		<?php 
+		echo $this->id."&&&&";
+//					$applyDB = new Onapp_Model_DbTable_Apply();
+//    				$apply = $applyDB->getData();
+					$bil = 1;
+						foreach ($this->paginator as $entry): 
+						?>
+						<tr bgcolor="#ffffff">
+							<td><?php echo $bil; ?>)</td>
+							<td><a href=""><?php echo strtoupper($entry['masterProgram']);?></a></td>
+							<td><?php echo strtoupper($entry['group_code']);?></td>
+							<td><?php echo $entry['fr_total_sem'];?></td>
+							<td><?php echo $entry['masterProgram'];?></td>
+							<td></td>
+						</tr>
+						<?php
+						$bil++;
+							endforeach 
+					?>
+					
+		
+	</table>

@@ -1,0 +1,414 @@
+<script >
+
+
+ $(function(){
+	
+	$( "#dialog-box" ).dialog({
+        autoOpen: false,
+        width: 650,
+        modal: true,
+        buttons: {
+            "Confirm": function() {
+            	
+            	var mark_entry_status = $("#mark_entry_status").val();	
+
+            	$("#MarksEntryStatus").val(mark_entry_status);	
+            	$("#Remarks").val($("#remarks").val());	
+            	
+    			url="<?php echo $this->url(array('module'=>'examination','controller'=>'mark-entry','action'=>'save-mark'), 'default', true);?>";
+    			$("#form1").attr('action',url);	
+    			
+    			if(mark_entry_status==411){
+            		var approver = $("#approveby option:selected").val();
+                 	if(approver==0){
+                		alert('Please select Approved by');
+                 	}else{
+
+                 		$("#ApprovedBy").val(approver);	
+                 		$("#form1").submit();                 		
+                 	}
+					
+            	}else{
+	            			
+	    			$("#form1").submit();
+            	}
+            	        	
+            },
+            Cancel: function() {
+                $( this ).dialog( "close" );
+            }
+        }
+    });
+		
+});
+
+ 
+
+function check(i,idmark,z,element,idmarkentry,exam_group_id,idregsub){
+
+	
+	 
+	var entrymark = $(element).val();
+	var element_totalitem='#total_item'+idmark;
+	var element_MarksTotal="#MarksTotal"+idmark;
+	var element_Percentage="#Percentage"+idmark;
+	var totalitem = $(element_totalitem).val();
+	 
+	var element_IdStudentRegistration="#IdStudentRegistration"+i;
+	IdStudentRegistration = $(element_IdStudentRegistration).val();
+	
+	var element_FinalTotalMark = "#FinalTotalMark"+i+idmark;
+	var element_FinalTotalMarkItem = "#FinalTotalMarkItem"+i+idmark; 
+    var element_IdStudentMarksEntry = "#IdStudentMarksEntry"+i+idmark;
+    var element_IdStudentMarksEntryDetail = "#IdStudentMarkDetail"+i+idmark;
+    //IdStudentMarksEntryDetail = $(element_IdStudentMarksEntryDetail).val();
+   
+    
+   
+	 
+	var Total = $(element_MarksTotal).val();
+	var Percentage = $(element_Percentage).val();		
+	idStdMarkDetail  = $(element_IdStudentMarksEntryDetail).val();
+ 
+	
+	if(entrymark!=''){
+		
+		//if ($.isNumeric( entrymark )==true){ 
+		  if (!isNaN(entrymark)) {
+			 
+			var markEnter = Math.abs(entrymark);
+			var markTotal = Math.abs(Total);
+			
+			if( markEnter > markTotal){
+				alert('Mark that you have entered exceeded the Total Mark');
+				$(element).val('');
+				entrymark = '';
+			}
+			if( markEnter < 0){
+				alert('Mark that you have entered below zero');
+				$(element).val('');
+				entrymark = '';
+			}
+			 
+		}else{
+			alert('Please enter a Numeric Value');
+			$(element).val('');	
+			entrymark='';		
+		}
+	}
+	 
+	 
+	 
+	SaveMark(i,idmark,entrymark,IdStudentRegistration,idStdMarkDetail,idmarkentry,idregsub);
+		
+	 
+}
+
+
+ 
+
+function SaveMark(i,idmark,markEnter,IdStudentRegistration,idStdMarkDetail,idmarkentry,idregsub){
+	//element="#IdMarksDistributionDetail"+idmark;
+	// alert(IdStudentRegistration+'/idMarkMaster/'+$("#idMarkDistMaster").val()+'/idMasterDetail/'+$(element).val()+'/markObtained/'+markEnter+'/idStdMarkDetail/'+idStdMarkDetail+'/idStdMarkEntry/'+idmarkentry+'/idstdregsubject/'+idregsub);
+	 
+	element_loadmark = "#FinalTotalMark"+i+idmark;
+	element_marked ="#save_marked"+i+idmark;
+  	$.ajax({
+		url: "/assistant/mark-entry/ajax-save-mark-detail/idSubject/<?php echo $this->idSubject;?>/idSemester/<?php echo $this->idSemester;?>/id/"+IdStudentRegistration,
+	    type: "POST",
+	    async : false,
+	    data: {'idMarkMaster':$("#idMarkDistMaster").val(),'idMasterDetail':$("#IdMarksDistributionDetail"+idmark).val(),'markObtained':markEnter,'idStdMarkDetail':idStdMarkDetail,'idStdMarkEntry':idmarkentry,'idstdregsubject':idregsub},
+	    dataType: 'json',
+	     
+		error:function(){
+	          alert("failure");
+		},
+		beforeSend: function() {
+			showLoading(element_loadmark,element_marked);
+		},
+		complete: function() {
+			hideLoading(element_loadmark,element_marked);
+		}   
+	}).done(function ( data ) {
+		 
+		var element_totalmark="#totalmark"+i;
+    	/* var element_gradename="#gradename"+i;  
+    	var element_examstatus="#examstatus"+i;
+    	var element_gradestatus="#gradestatus"+i; */
+		 var element_markfinal = "#FinalTotalMark"+i+idmark;
+    	 var element_IdStudentMarksDetail = "#IdStudentMarkDetail"+i+idmark;	
+    	 if(data.IdStudentMarksDetail=='x'){
+  			   $(element_IdStudentMarksDetail).val('');
+    			
+  		  } else {
+  			  $(element_IdStudentMarksDetail).val(data.IdStudentMarksDetail);
+   			  $(element_markfinal).val(data.markdetailfinal);
+  			   
+  	  	  }
+    	
+  		$(element_totalmark).text(data.markall);	    	 
+	   
+	});
+	
+}
+
+function showLoading(element_loadmark){	
+	$(element_loadmark).hide();
+	$(element_marked).after("<div id='loadimg'><img src='/images/spinner.gif' width='30' heigth='30' /></div>");
+}
+
+function hideLoading(element_loadmark){
+	$('#loadimg').remove();	
+	$(element_loadmark).show();
+}
+
+function validate(){
+	var valid = true;	
+	$('input[class="entry"]').each(function(){	   
+		 if($(this).val()==''){			 
+			 return valid = false;
+		 }	    
+	});
+
+}
+
+function validate_numeric(){
+	var valid = true;	
+	$('input[class="entry"]').each(function(){	
+		entrymark = $(this).val();
+		if(entrymark != ''){
+		if($.isNumeric( entrymark )==false){ 
+			return valid = false;
+		}}
+	});
+	return valid;	
+}
+
+ 
+
+$(function () {
+
+	$( "#dialog-search" ).dialog({
+        autoOpen: false,
+        width: 650,
+        modal: true,
+        buttons: {
+            "Search": function() {   
+    			$("#myform").submit();         	
+            },
+            "Cancel": function() {
+                $( this ).dialog( "close" );
+            }
+        }
+    });	
+	
+});
+
+function searchBox(){
+	$( "#dialog-search" ).dialog('open');	
+}
+
+function back(role){
+	if(role==1){//admin
+		window.location="<?php echo $this->url(array('module'=>'examination','controller'=>'mark-entry','action'=>'student-list-all'), 'default', true);?>";
+	}else{
+		window.location="<?php echo $this->url(array('module'=>'examination','controller'=>'mark-entry','action'=>'student-list-all','idSemester'=>$this->idSemester,'idProgram'=>$this->idProgram,'idSubject'=>$this->idSubject,'id'=>$this->id,'idBranch'=>$this->idBranch,'idstaff'=>$this->idstaff), 'default', true);?>";
+	}
+}
+ 
+  
+</script>
+
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+		    	
+		    <li>							
+					<a href="#" onClick="searchBox()">
+						<span class='search'></span>Search</a>				
+			</li>			
+			<li>							
+					<a href="#" onClick="back('<?php echo $this->role; ?>')">
+						<span class='back'></span>Back</a>				
+			</li>	
+			
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br>
+<div style="width:100%;">
+
+<table table="100%"><tr><td td width="50%"> 
+<table class="table" width="100%">
+<tr><th colspan="2"><strong><?php echo $this->translate("Main Component")?></strong> </th>
+<tr><th><?php echo $this->translate("Program");?></th><td><?php echo $this->translate($this->markdist['ArabicName']);?></td></tr>
+<tr><th><?php echo $this->translate("Subject Name");?></th><td><?php echo $this->translate($this->markdist['BahasaIndonesia']);?></td></tr>
+<tr><th><?php echo $this->translate("Main Component Name");?></th><td><?php echo $this->translate($this->markdist['component']);?></td></tr>
+<tr><th><?php echo $this->translate("Percentage");?></th><td><?php echo $this->translate($this->markdist['Percentage']);?></td></tr>
+<tr><th><?php echo $this->translate("Minimum Mark");?></th><td><?php echo $this->translate($this->markdist['min_mark']);?></td></tr>
+
+</table> 
+</td><td></td><td width="50%">
+<table class="table" width="100%">
+<tr><th colspan="2"><strong><?php echo $this->translate("Detail Rule")?> </strong></th>
+<tr><th><?php echo $this->translate("Entry By");?></th>
+<td> <?php if ($this->header['Entrier_mode']=="0") echo "Student"; else echo "Staff";?> </td></tr>
+<tr><th><?php echo $this->translate("Entrier Identity");?></th>
+<td><?php echo $this->header['EntryFullName'];?></td></tr>
+<tr><th><?php echo $this->translate("Verify By");?> </th>
+<td> <?php echo $this->header['VerifyName'];?> </td></tr>
+<tr><th><?php echo $this->translate("Calculation Mode");?></th>
+<td><?php echo $this->header["CalMode"]?> </td></tr>
+<tr><th><?php echo $this->translate("Minimum number of component");?></th>
+<td> <?php echo $this->header['Minimum_Component']?></td></tr>
+
+</table> 
+</td></tr></table>
+<br>
+
+<?php 
+if (count($this->rs_component)>0 ) {
+if(count($this->students)>0) {
+
+	
+		 
+	 
+?>
+
+<form id="form1" method="post" action="">
+
+<input type="hidden" name="idSemester" id="idSemester" value="<?php echo $this->idSemester;?>"></input>
+<input type="hidden" name="idProgram" id="idProgram" value="<?php echo $this->idProgram;?>"></input>
+<input type="hidden" name="idBranch" id="idBranch" value="<?php echo $this->idBranch;?>"></input>
+<input type="hidden" name="idMarkDistMaster" id="idMarkDistMaster" value="<?php echo $this->idMarkDistMaster;?>"></input>
+
+<input type="hidden" name="idSubject" id="idSubject" value="<?php echo $this->idSubject;?>"></input>
+<?php 
+
+$nComp=count($this->rs_component);
+$rowspan= 'rowspan=2';
+$compitem=false;
+ 
+
+?>
+
+
+ <table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">	  
+	  <tr>
+	    <th <?php echo $rowspan; ?> width="25px">&nbsp;</th>
+	    <th <?php echo $rowspan; ?>><?php echo $this->translate("Student Name")?></th>
+	    <th <?php echo $rowspan; ?>><?php echo $this->translate("Student ID/NIM")?></th>
+	  	 
+	    <?php foreach ($this->rs_component as $value) {
+			    	 
+			    	$idmark=$value['IdMarksDistributionDetail'];
+			    	$colspan = 2;
+			    	 
+	    	?>
+			    <th  align="center" colspan="<?php echo $colspan;?>">
+			    		<?php echo $value["component_name"] ?><br>
+			    		Entried by : <?php echo $value['EntrierFullName']; ?>
+			    </th>
+				<input type="hidden" name="IdMarksDistributionDetail<?php echo $idmark ?>" id="IdMarksDistributionDetail<?php echo $idmark ?>" value="<?php echo $idmark;?>">
+				 
+		<?php }
+		?> 
+	    <th <?php echo $rowspan; ?> width="25px"><?php echo $this->translate('Total Mark')?></th> 
+	   </tr>
+	  	
+		<tr>
+	      <?php  
+	      foreach ($this->rs_component as $value) {
+	      	
+	      	$idmark=$value["IdMarksDistributionDetail"];
+	      	if ($this->header["CalMode"]=='Rerata') $value["Percentage"]=100;
+			?>
+		  	<th align="center">
+		  	      Student Raw Mark <br>
+		  	     (Total Mark : <?php echo $value["Marks"];?>)
+		  	     <input type="hidden" size="3" name="MarksTotal" id="MarksTotal<?php echo $idmark?>" value="<?php echo $value["Marks"];?>">
+		  	</th>
+	        <th align="center">Mark 
+	        <br>(Percentage : <?php echo $value["Percentage"];?> %)<input type="hidden" size="3" name="Percentage" id="Percentage<?php echo $idmark?>" value="<?php echo $value["Percentage"];?>"></th>
+		  <?php  
+	   	 }?> 
+	   	 
+	   	 </tr>
+	  
+	    	 
+	  <?php 
+		$i=1;	
+		foreach($this->students as $student){		
+	  ?>
+	  <tr>
+	    <td><?php echo $i;?></td>
+		<td><?php echo $student["appl_fname"].' '.$student["appl_mname"].' '.$student["appl_lname"];?></td>
+		<td><?php echo $student["registrationId"];?>		
+		<input type="hidden" name="IdStudentRegistration" id="IdStudentRegistration<?php echo $i;?>" value="<?php echo $student["IdStudentRegistration"]; ?>">
+		</td>
+		 
+	    <?php 	
+	    foreach ($this->rs_component as $component) {   
+			$idmark=$component["IdMarksDistributionDetail"];
+			$mark=$student[$idmark];
+			 
+		    ?>
+		    
+	          <td align="center">
+	          <?php //echo $this->role;
+		   //echo var_dump($component);echo 'staff'.$this->idstaff;
+	           if(isset($mark["MarksEntryStatus"]) && $mark["MarksEntryStatus"]==411 || ($component['entrier']!=$this->idstaff) ){ //approve x boleh ubah lagi markah
+					 	
+							$disabled = 'disabled';
+					  
+	            }else{
+						 
+	            			$disabled =''; 
+	            }
+	            ?>
+	            
+		    	<input type="text" size="3" <?php echo $disabled; ?> class="entry" name="mark[<?php echo $student["IdStudentRegistration"]; ?>][<?php echo $idmark;?>]" id="mark<?php echo $i.$idmark?>" value="<?php echo (isset($mark["TotalMarkObtained"]) ? $mark["TotalMarkObtained"]:'');?>" onblur="check('<?php echo $i;?>','<?php echo $idmark?>','',this,'<?php echo $mark["IdStudentMarksEntry"];?>','<?php echo $mark["exam_group_id"];?>','<?php echo $student["IdStudentRegSubjects"];?>');">
+		    	
+		     </td>
+		     <td align="center">		     		          
+		    	 <input type="text" id="FinalTotalMark<?php echo $i.$idmark;?>" size="3" value="<?php echo (isset($mark["FinalTotalMarkObtained"]) ? $mark["FinalTotalMarkObtained"]:''); ?>" disabled>
+		     	<div id="save_marked<?php echo $i.$idmark;?>" style="display:none"></div> 
+		     </td>
+		     
+	    <?php  
+	            ?>
+	            		<input type="hidden" name="IdStudentMarkDetail[<?php echo $student['IdStudentRegistration']?>][<?php echo $idmark?>]" id="IdStudentMarkDetail<?php echo $i.$idmark;?>"     value="<?php echo $mark["IdStudentMarkDetail"]; ?>">
+	            <?php 
+	        }//end if else count item?>
+	  
+	  
+	  <td align="center"><div id="totalmark<?php echo $i?>"  ><?php echo number_format($student['final_course_mark'],2);?></div></td>  
+	   </tr>
+	  
+	  <?php 
+		$i++; }
+	  ?>
+	</table>
+</form>
+
+<?php }else{ //end if? 
+echo $this->translate("No record of student attended this Exam");
+}
+} else echo $this->translate("Mark Component not setup yet");
+	
+?>
+
+
+
+</div>
+<br>
+  

@@ -1,0 +1,91 @@
+<script>
+	$(function() {
+		$( "#tabs" ).tabs({
+			ajaxOptions: {
+				error: function( xhr, status, index, anchor ) {
+					$( anchor.hash ).html(
+						"Couldn't load this tab. We'll try to fix this as soon as possible. " +
+						"If this wouldn't be a demo." );
+				}
+			}
+		});
+	});
+</script>
+	
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'exam','controller'=>'lecturer', 'action'=>'index'),'default',true);?>">
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<div id="tabs">
+	<ul>
+		<li><a href="#tabs-1">Profile</a></li>
+		<li><a href="<?php echo $this->url(array('module'=>'exam','controller'=>'lecturer', 'action'=>'academic', 'id'=>$this->lid),'default',true);?>">Academic Background</a></li>
+		<li><a href="<?php echo $this->url(array('module'=>'exam','controller'=>'lecturer', 'action'=>'experience', 'id'=>$this->lid),'default',true);?>">Working Experiences</a></li>
+	</ul>
+	<div id="tabs-1">
+		<table class="table4" width="100%" cellpadding="6" cellspacing="1">
+			<tr>
+				<th width="150px"><?php echo $this->translate("Name");?></th>
+				<td width="5px">:</td>
+				<td><?php echo $this->data['salutation']; ?> <?php echo $this->data['name']; ?></td>
+			</tr>
+			<tr>
+				<th><?php echo $this->translate("Identity No");?>.</th>
+				<td>:</td>
+				<td><?php echo $this->data['identity_id']; ?></td>
+			</tr>
+			<tr>
+				<th><?php echo $this->translate("Identity Type");?></th>
+				<td>:</td>
+				<td><?php echo $this->data['identity_type_id']; ?></td>
+			</tr>
+			<tr>
+				<th><?php echo $this->translate("Branch");?></th>
+				<td>:</td>
+				<td>
+				<?php 
+					if($this->data['branch_id']==0){
+						echo $this->translate("HQ");
+					}else{
+						echo $this->data['branch_name'];	
+					}
+					 
+				?>
+				</td>
+			</tr>
+			<tr>
+				<th><?php echo $this->translate("Country of Origin");?></th>
+				<td>:</td>
+				<td><?php echo $this->data['country_name']; ?></td>
+			</tr>
+			<tr>
+				<th><?php echo $this->translate("Email");?></th>
+				<td>:</td>
+				<td><?php echo $this->data['email']; ?></td>
+			</tr>
+			<tr>
+				<th><?php echo $this->translate("Status");?></th>
+				<td>:</td>
+				<td><?php echo $this->data['status']; ?></td>
+			</tr>	
+		</table>
+	</div>
+</div>

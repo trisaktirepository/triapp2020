@@ -1,0 +1,195 @@
+<script>
+$(document).ready(function(){
+
+	 $( "#appl_dob" ).datepicker({
+	     	dateFormat: "dd-mm-yy",
+	     	changeMonth: true,
+	     	numberOfMonths: 2,
+	     });
+     
+   
+});
+
+
+
+function getLocation(element){
+	//appl_province
+	var select_date =  $("#aps_test_date").val()
+	var datetime= $("#aps_test_date option:selected").text();
+	var date=datetime.substring(0,11);
+	var time=datetime.substring(12,20);
+	
+	var selected_val = "<?php echo $this->aps_id;?>";
+	 
+	$.ajax({ 
+		type: "POST",
+		url: "<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'ajax-get-location'),'default',true);?>/select_date/"+date+"/select_time/"+time, 
+		data: "",
+		dataType: 'json',
+		beforeSend: function() {
+			showLoading('aps_id','aps_id-element','loading');
+		},
+		complete: function() {
+			hideLoading('loading','aps_id');
+		}
+	}).done(function ( data ) {
+			$('#aps_id').empty().append('<option value=""> <?php echo $this->translate('please_select'); ?> </option>');
+			 
+			var location = $('#aps_id');
+			var append_html = "";
+			
+			for (var index = 0; index < data.length; index++) {
+				append_html += '<option value="'+data[index].aps_location_id+'"> '+data[index].location_name+' </option>';
+			}	
+			 
+			location.append(append_html);
+		});	 
+}
+
+function getDate(element){
+	//appl_province
+	var placement_code =  $("#aph_placement_code").val()
+	
+	 
+	$.ajax({ 
+		type: "POST",
+		url: "<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'ajax-get-date'),'default',true);?>/placement_code/"+placement_code+"/transactionid/<?php echo $this->transaction_id; ?>/applid/<?php echo $this->appl_id; ?>", 
+		data: "placement_code=" + placement_code,
+		dataType: 'json',
+		beforeSend: function() {
+			showLoading('aps_test_date','aps_test_date-element','loading');
+		},
+		complete: function() {
+			hideLoading('loading','aps_test_date');
+		}
+	}).done(function ( data ) {
+		
+			$('#aps_test_date').empty().append('<option value=""> <?php echo $this->translate('please_select'); ?> </option>');
+			 
+			var testdate = $('#aps_test_date');
+			var append_html = "";
+			if (data.length>0) {
+				$("#aph_fees_program").val(data[0].aph_fees_program);   
+		    	$("#aph_fees_location").val(data[0].aph_fees_location);
+			}
+			for (var index = 0; index < data.length; index++) {
+				append_html += '<option value="'+data[index].aps_id+'"> '+data[index].aps_test_date+' '+data[index].aps_start_time+' </option>';
+			}	
+
+			testdate.append(append_html);
+		});	 
+}
+
+function showLoading(target,target_div,loading_id){
+	$('#'+target).hide();
+	$('#'+target_div).append("<div id='"+loading_id+"'><img src='/images/ajax-loader-bar.gif' /></div>");
+}
+
+function hideLoading(loading_id,target){
+	$('#'+loading_id).remove();
+	$('#'+target).show();
+}
+
+
+function getFees(element){
+	
+	var aps_id   =  $(element).val()	
+	var appl_id    =  $("#appl_id").val()
+	var transaction_id    =  $("#transaction_id").val()
+    var app_code    =  $("#aph_placement_code").val()
+    var aph_fees_program  =  $("#aph_fees_program").val()   
+    var aph_fees_location =  $("#aph_fees_location").val()
+     
+    //alert(app_ptest_code);
+	$.ajax({ 
+		type: "POST",
+		url: "<?php echo $this->url(array('module'=>'default','controller'=>'ajax-utility','action'=>'ajax-get-test-fees'),'default',true);?>/code/"+app_code+"/program/"+aph_fees_program+"/location/"+aph_fees_location+"/aps_id/"+aps_id+"/tid/"+transaction_id, 
+		data: "",
+		context: document.body, 
+		beforeSend: function() {
+			showLoading('apt_fee_amt','apt_fee_amt-element','loading');
+		},
+		complete: function() {
+			hideLoading('loading','apt_fee_amt');
+		}
+	}).done(function ( data ) {
+		document.getElementById('apt_fee_amt').value=data;	
+	});
+}	
+	
+
+$(window).load(function() {
+	if( $('#aps_test_date').val() != '' ){
+		getLocation();
+		
+	}
+});
+
+</script>
+
+<div class="breadcrum">
+	<ul class="tri-steps">
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'biodata'),'default',true);?>"><?php echo $this->translate("biodata"); ?></a></div></li>
+		
+		<?php if($this->transaction["entry_type"]!=2){ //case agent(manual entry- which is already have no peserta/choose admission type)?>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'contactinfo'),'default',true);?>"><?php echo $this->translate("contact_info"); ?></a></div></li>
+		<li class="prevDone"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'admission'),'default',true);?>"><?php echo $this->translate("Admission Type"); ?></a></div></li>
+		<?php }else{//end admission ?>
+		<li class="prevDone"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'contactinfo'),'default',true);?>"><?php echo $this->translate("contact_info"); ?></a></div></li>
+		<?php }//else?>
+		<li class="current"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'placement-test'),'default',true);?>"><?php echo $this->translate("test_schedule"); ?></a></div></li>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'programme'),'default',true);?>"><?php echo $this->translate("programme"); ?></a></div></li>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'uploaddocument'),'default',true);?>"><?php echo $this->translate("upload_document"); ?></a></div></li>
+		<li class="last"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'confirmation'),'default',true);?>"><?php echo $this->translate("confirmation"); ?></a></div></li>	
+	</ul>
+	<div class="clear"></div>
+</div>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		
+	</div>
+</div>
+
+<?php if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+<?php }?>
+
+<?php if( isset($this->data) ){?>
+<fieldset>
+	<table>
+		<tr>
+			<td width="80px"><?php echo $this->translate("Date");?></td>
+			<td>:</td>
+			<td><?php echo $this->data['aps_test_date'];?></td>
+		</tr>
+		<tr>
+			<td><?php echo $this->translate("Location");?></td>
+			<td>:</td>
+			<td><?php echo $this->data['al_location_name'];?></td>
+		</tr>
+		<tr>
+			<td><?php echo $this->translate("Total Fee");?></td>
+			<td>:</td>
+			<td><?php echo $this->data['apt_fee_amt'];?></td>
+		</tr>
+	</table>
+	<br />
+	<input type="button" value="<?php echo $this->translate("Continue"); ?>" onclick="window.location = '<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'programme'),'default',true);?>' " />
+</fieldset>
+
+<?php }?>
+
+<?php echo $this->form; ?>
+
+
+
+
+

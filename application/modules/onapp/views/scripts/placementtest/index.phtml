@@ -1,0 +1,160 @@
+<?php
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/css/layout.css' );
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/css/default/style.css' );
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/css/jquery-ui-1.8.5.custom.css' );
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/js/jquery-1.4.3.min.js' );
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/js/jquery.ui.core.js' );
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/js/jquery.ui.datepicker.j' );
+?>
+
+<script type="text/javascript">
+	function del(title, id){
+		if(confirm('Are you sure to delete '+title+'?')){
+			window.location = "<?php echo $this->url(array('module'=>'onapp','controller'=>'placementtest', 'action'=>'delete')); ?>/id/"+id;
+		}
+	}
+	
+	function add(){
+		window.location="<?php echo $this->url(array('module'=>'onapp','controller'=>'placementtest', 'action'=>'add'));?>";
+	}
+
+	function edit(id){
+		window.location="<?php echo $this->url(array('module'=>'onapp','controller'=>'placementtest', 'action'=>'edit'));?>/id/"+id;
+	}
+
+</script>
+
+<link rel="stylesheet" href="../demos.css">
+	
+	
+	<script>
+	$(function() {
+		$( "#datepicker" ).datepicker();
+	});
+	</script>
+	
+	
+<?php 
+	echo "<h1>". $this->title ."</h1>";
+?>
+
+
+<div style="width:100%; margin: 0 auto;">
+<form name="f1" method="POST">
+<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+  <tr class="shade">
+    <td bgcolor="#F2F2F2">Programme Name </td>
+    <td bgcolor="#FFFFFF">:</td>
+    <td bgcolor="#FFFFFF">
+    <select name="ID_PROG" id="ID_PROG">
+	<option value="0"> -- Please select -- </option>
+    <?php 
+	$courseDB = new Onapp_Model_DbTable_Course();
+	$this->course = $courseDB->getList("program","masterprogram","program_master_id = masterProgramID","award","program_award_id = award_id","1");
+	
+	foreach ($this->course as $course) {
+					echo "<option value='".$course['program_id']."'>".$course['masterProgram']."</option>";
+				}
+	?>
+	</select>
+	</td>
+  </tr>
+  <tr class="shade">
+    <td bgcolor="#F2F2F2">Date</td>
+    <td bgcolor="#FFFFFF">:</td>
+    <td bgcolor="#FFFFFF"><div class="demo">
+<input id="datepicker" name="datepicker" type="text">
+
+</div></td>
+  </tr>
+  <tr class="shade">
+    <td bgcolor="#F2F2F2">Venue</td>
+    <td bgcolor="#FFFFFF">:</td>
+    <td bgcolor="#FFFFFF">
+    <select name="VENUE" id="VENUE">
+	<option value="0"> -- Please select -- </option>
+    <?php 
+	$branchDB = new Onapp_Model_DbTable_Branch();
+	$this->branch = $branchDB->getData();
+	
+	foreach ($this->branch as $branch) {
+		echo "<option value='".$branch['branchID']."'>".$branch['branch']."</option>";
+	}
+	?>
+	</select>
+    </td>
+  </tr>
+</table>
+
+<table width="100%">
+		<tr>
+			<td align="center">
+			<input type="submit" value="Save" onclick="form.action='<? echo $this->url(array('module'=>'onapp','controller'=>'placementtest','action'=>'add'),'default',true) ?>'"/></td>
+<!--			<td><input type="submit" value="Reset" /></td>-->
+		</tr>
+	</table>
+	</form>
+	
+	
+	
+	<!--<div class="span-7 buttons">
+		<a class="positive addLink" href="#" onClick="add()">Add Placement Test</a>
+	</div>-->
+	<br />
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+	<tr>
+		<th>Bil</th>
+		<th>Programme Name</th>
+		<th>Venue</th>
+		<th>Date</th>
+		<th width="110px"><i>options</i></th>
+	</tr>
+	
+	<?php 
+	$i=0;
+	foreach ($this->paginator as $entry): 
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<td><?php echo $i+1; ?></td>
+		<td><?php echo $entry['masterProgram']; ?></td>
+		<td><?php echo $entry['branch']; ?></td>
+		<?php
+		$date = date('d/m/Y', strtotime($entry['DATE']));
+		?>
+		<td><?php echo $date ?></td>
+		<td>
+			<a class="editLink" href="#" onClick="edit(<?php echo $entry['ID']; ?>)">Edit</a>&nbsp;
+			<a class="delLink2" href="#" onClick="del('<?php echo $entry['ID']; ?>',<?php echo $entry['ID']; ?>)">Delete</a>
+		</td>
+	</tr>
+	<?php 
+	$i++;
+	endforeach 
+	?>
+
+</table>
+</div>
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>
+<div id="addCountry2"></div>
+<?php 
+	echo $this->dialogContainer("addDialog", '', array(
+		'title'=> 'Add placementtest',
+		'autoOpen'=>false,
+		'modal'=>false,
+		'width'=>'480px', 
+		'height'=>'150'
+		));
+		
+	echo $this->dialogContainer("editDialog", '', array(
+		'title'=> 'Edit placementtest',
+		'autoOpen'=>false,
+		'modal'=>false,
+		'width'=>'480px', 
+		'height'=>'200'
+		));
+?>

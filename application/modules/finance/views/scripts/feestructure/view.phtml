@@ -1,0 +1,161 @@
+<script>
+$(function() {
+	var tips = $( ".validateTips" );
+
+	
+	$( "#tabs" ).tabs();
+
+	$("#dialog:ui-dialog").dialog( "destroy" );
+
+
+	$("#dialog-add-course").dialog({
+		
+		width: 615,
+		modal: true,
+		autoOpen: false,
+		buttons: {
+			"Add": function() {
+				$( '#program_course_form' ).submit();
+			},
+			Cancel: function() {
+				$( this ).dialog( "close" );
+			}
+		}		
+	});
+
+});
+
+function delProgramCourse(title,id){
+	if(confirm('Are you sure to delete "'+title+'" from <?php echo $this->program['id']; ?>?')){
+		window.location = "<?php echo $this->url(array('module'=>'finance','controller'=>'feestructure', 'action'=>'delete-course', 'programID'=>$this->courseID),'default',true); ?>/id/"+id;
+	}
+}
+
+function addProgramCourse(){
+	$('#dialog-add-course').dialog('open');
+}
+
+</script>
+
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'finance','controller'=>'feestructure', 'action'=>'index'),'default',true);?>">
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<div width="500px">
+	
+	<fieldset style="width:500px;">
+		<legend>Course Info</legend>
+		<table class="table2" width="500px">
+			<tr>
+				<th width="150px">Course Name</th>
+				<td><?php echo $this->program['name']; ?></td>
+			</tr>
+			<tr>
+				<th>Course Code</th>
+				<td><?php echo $this->program['code']; ?></td>
+			</tr>
+			<tr>
+				<th>LMS Code</th>
+				<td><?php echo $this->program['lmsCode']; ?></td>
+			</tr>
+		</table>	
+	</fieldset>
+</div>
+<br />
+<div id="tabs" style="padding: 0 20px;">
+	<ul>
+		<li><a href="#tabs-1">Fee Structure</a></li>
+	</ul>
+	
+	<div id="tabs-1">
+		<div style="position: relative; height: 35px; clear: both;">
+			<div class="span-7 buttons">
+			    <a class="positive addLink" href="#" onClick="javscript:addProgramCourse();">
+			    	Add Fee Component       
+			    </a>
+			</div>
+		</div>
+		<table class="table" width="700px" cellpadding="5" cellspacing="0" border="0">
+			<tr>
+				<th width="200">Course Name</th>
+				<th width="100px">Currency</th>
+				<th width="100px">Amount</th>
+				<th width="50px"><i>options</i></th>
+			</tr>
+			
+			<?php 
+			if(isset($this->feestructure)){
+				
+				$i=0;
+				foreach ($this->feestructure as $course): 
+				?>
+				<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+					<td><?php echo $course['componentname']; ?></td>
+					<td align="center"><?php echo $course['currency']; ?></td>
+					<td align="center"><?php echo $course['amount']; ?></td>
+					<td>
+						<a class="delLink2" href="#" onClick="delProgramCourse('<?php echo $course['idCourse']; ?>','<?php echo $course['id']; ?>')">Remove</a>
+					</td>
+				</tr>
+				<?php 
+				$i++;
+				endforeach; 
+			}
+			?>
+		</table>
+		<!--<div id="dialog-add-course" title="Tag New Course to <?php echo $this->program['program_name']; ?>">
+			<form id="program_course_form" action="/finance/feestructure/add-course" method="post" enctype="application/x-www-form-urlencoded">
+				<dl class="zend_form">
+					<dt id="program_name-label">
+						<label for="program_name">Program Name</label>
+					</dt>
+					<dd id="program_name-element">
+						<?php echo $this->program['program_name']; ?>
+					</dd>
+						<input name="program_id" id="program_id" type="hidden" value="<?php echo $this->program['id']; ?>" />
+					<dt id="course_id-label">
+						<label class="required" for="course_id">Course</label>
+					</dt>
+					<dd id="program_name-element">
+						<select name="course_id">
+							<option> --Select Course -- </option>
+							<?php 
+							foreach ($this->courselist as $course):
+							?>
+								<option value="<?php echo $course['id']; ?>"><?php echo $course['name']; ?> (<?php echo $course['code']; ?>)</option>	
+							<?php endforeach;?> 
+						</select>
+					</dd>
+				</dl>
+			</form>
+		</div>	
+	--></div>
+</div>

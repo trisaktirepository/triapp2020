@@ -1,0 +1,125 @@
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				
+			</li>
+		</ul>
+	</div>
+</div>
+<?php if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+
+<br /> 
+<?php }?>
+<br />
+<fieldset><legend ><?php echo $this->translate('Proposal Info');?></legend>
+<table>
+<tr><td><?php echo $this->translate('Student');?></td><td>:</td><td><?php echo $this->proposal['registrationId'].'-'.$this->proposal['student_name'];?></td> 
+<tr><td><?php echo $this->translate('Title in Bahasa');?></td><td>:</td><td><?php echo $this->proposal['title_bahasa'];?></td>
+<tr><td><?php echo $this->translate('Title');?></td><td>:</td><td><?php echo $this->proposal['title'];?></td>
+<tr><td><?php echo $this->translate('Abstract');?></td><td>:</td><td><?php echo $this->proposal['abstrak'];?></td> 
+<tr><td><?php echo $this->translate('Date Started');?></td><td>:</td><td><?php echo $this->proposal['TGL_START'];?><?php echo $this->translate(' Ended: ');?><?php echo $this->proposal['TGL_selesai'];?></td> 
+ 
+</table>
+
+</fieldset>
+ 
+<br />
+<br /><fieldset><legend>
+<?php echo $this->translate('Supervision History');?></h2></legend>
+<?php if($this->supervision_list){
+		foreach ($this->supervision_list as $key=>$staff) {
+			 $idstaff=$staff['IdStaff'];
+			 $supervision=$staff[$idstaff];
+			  if ($this->idstaff==$idstaff) { ?>
+			  <h2><?php echo 'Supervision By: '.$staff['Fullname'].' ('.$staff['StaffAs'].')';?></h2>
+			  	<table width="100%" id="data" class="table">
+					<tr>
+						<th><?php echo $this->translate('Chapter');?></th>
+						<th><?php echo $this->translate('Ch. progress %');?></th>
+						<th><?php echo $this->translate('Student Note');?></th>
+						 <th><?php echo $this->translate('Supervisor Note');?></th>
+						<th><?php echo $this->translate('Achievement in %');?></th>
+						<th><?php echo $this->translate('Date of Recorded');?></th>
+						<th><?php echo $this->translate('Document');?></th> 
+					</tr>
+				<?php if (count($supervision)>0) {
+			      	foreach($supervision as $index => $batch){
+						?> 
+						<input type="hidden" id="tblIdTASupervision[<?php echo $index+1;?>]" value="<?php echo $batch['IdTASupervision'];?>">
+						<input type="hidden" id="tblchapter[<?php echo $index+1;?>]" value="<?php echo $batch['chapter'];?>">
+						<tr <?php echo $index%2==0?"class='shade'":""?> >
+							<td><?php echo $batch['ChapterName'];?></td>
+							<td><?php echo $batch['chapter_progress'];?></td>
+							<td><?php echo $batch['Student_Note'];?></td>
+							<td><?php echo $batch['Supervisor_Note'];?></td>
+							<td><?php echo $batch['Percent_progress'];?></td>
+							<td><?php echo $batch['dt_entry'];?></td>
+							<td> 
+							<?php $pathupload= $batch['doc_url'];
+							if($pathupload!=''){
+								$dt = explode("triapp",$pathupload);
+								//echo var_dump($dt);exit;
+								$path = $dt[1];
+								$path ="<a target='_blank' href=http://".APP_HOSTNAME.$path.">" ;
+							
+							  echo $path;?><img src='<?php echo $this->baseUrl();?>/images/document.png' border=0 width='20' height='20' title="Download" ></a></td>
+							  </td><?php  }
+							?> 
+							 </tr>
+					<?php 
+					}
+				} ?></table><?php 
+			  } else { ?>
+			  		
+			  		<h2><?php echo 'Supervision By: '.$staff['Fullname'].' ('.$staff['StaffAs'].')';?></h2>
+					<table width="100%" id="dataview" class="table">
+					<tr>
+						<th><?php echo $this->translate('Chapter');?></th>
+						<th><?php echo $this->translate('Student Note');?></th>
+						 <th><?php echo $this->translate('Supervisor Note');?></th>
+						<th><?php echo $this->translate('Achievment in %');?></th>
+						<th><?php echo $this->translate('Date of Recorded');?></th>
+						<th><?php echo $this->translate('Document');?></th>
+						  
+					</tr>
+				<?php 
+				if (count($supervision)>0) {
+				foreach($supervision as $index => $batch){ ?> 
+			  		<tr <?php echo $index%2==0?"class='shade'":""?> >
+							<td><?php echo $batch['ChapterName'];?></td>
+							<td><?php echo $batch['Student_Note'];?></td>
+							<td><?php echo $batch['Supervisor_Note'];?></td>
+							<td><?php echo $batch['Percent_progress'];?></td>
+							<td><?php echo $batch['dt_entry'];?></td>
+							<td><?php $pathupload= $batch['doc_url'];
+							if($pathupload!=''){
+								$dt = explode("triapp",$pathupload);
+								//echo var_dump($dt);exit;
+								$path = $dt[1];
+								$path ="<a target='_blank' href=http://".APP_HOSTNAME.$path.">" ;
+							    echo $path;?><img src='<?php echo $this->baseUrl();?>/images/document.png' border=0 width='20' height='20' title="Download" ></a></td><?php 
+							} ?></td>
+					</tr>
+			  <?php }
+				} ?></table><?php 
+			}
+		} ?>
+		<?php 
+	}
+	?>
+ 
+</fieldset>
+ 

@@ -1,0 +1,110 @@
+<script type="text/javascript">
+	function del(){
+		var id = $('input[name=type_id]:checked').val();
+
+		if(!id){
+			alert('Please select any takaful operator first');
+		}else{
+			if(confirm('Are you sure to delete this client type?')){
+				window.location = "<?php echo $this->url(array('module'=>'general-setup','controller'=>'takaful', 'action'=>'delete-type')); ?>/id/"+id;
+			}
+		}
+	}
+	
+	function add(){
+		window.location="<?php echo $this->url(array('module'=>'general-setup','controller'=>'takaful', 'action'=>'add-type'));?>";
+	}
+
+	function edit(){
+		var id = $('input[name=type_id]:checked').val();
+
+		if(!id){
+			alert('Please select any takaful operator first');
+		}else{
+			window.location="<?php echo $this->url(array('module'=>'general-setup','controller'=>'takaful', 'action'=>'edit-type'));?>/id/"+id;
+		}
+	}
+
+
+	/*//To remove flash MSG*/
+	setTimeout(function() {
+		$( "#msg" ).hide( 'blind',null, 1000);
+	}, 5000 );
+
+
+</script>
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="javascript:add()">
+					<span class='add'></span>
+					Add
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:edit()">
+					<span class='edit'></span>
+					Edit
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:del()">
+					<span class='delete'></span>
+					Delete
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<?if(isset($this->noticeMessage)){?>
+<div id="msg" class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+<table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		<th width="25px">&nbsp;</th>
+		<th>Name</th>
+	</tr>
+	
+	<?php 
+	$i=0;
+	foreach ($this->paginator as $entry): 
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<td width="25px">
+			<input type="radio" name="type_id" value="<?php echo $entry['id']; ?>">
+		</td>
+		<td><?php echo $entry['name']; ?></td>
+	</tr>
+	<?php 
+	$i++;
+	endforeach 
+	?>
+
+</table>
+
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>

@@ -1,0 +1,156 @@
+
+<?php
+if($this->qtype==1)  {
+include('/opt/lampp/htdocs/qbank/public/fckeditor26/fckeditor.inc');
+}
+?>
+<script>
+function goSave(status){
+	
+	 document.getElementById('status').value=status	
+	 document.questionForm.action='<?php echo $this->url(array('module'=>'question','controller'=>'sme','action'=>'addfrm'),'default',true)?>';
+	 document.questionForm.submit();
+}
+</script>
+
+<form class="cmxform" id="questionForm" name="questionForm" method="POST" action=""> 
+<table width="90%" border="0" cellspacing="1" cellpadding="1">
+  <tr> 
+    <td><strong> 
+      <h1><?php echo $this->title;?></h1>
+      </strong></td>
+  </tr>
+  <tr> 
+    <td height="154">
+    
+    
+    <table width="95%" cellspacing="1" cellpadding="5" id="mtable"  align="center"> 
+  <tr> 
+    <td width="19%" >Course</td>
+    <td width="81%" >
+    <?php echo $this->course["coursename"].' ('.$this->course["courseid"].")";?> 
+    <input type="hidden" name="course_id" value="<?php echo $this->course["courseid"]?>">
+       </td>
+  </tr>
+  <tr bgcolor="#D7EBFF"> 
+    <td>Assessment Type</td>
+    <td><?php echo $this->assessment["component_name"];?> <input type="hidden" name="assessment_type" value="<?php echo $this->component_id;?>"></td>
+  </tr>
+  <tr> 
+    <td>Question Type</td>
+    <td><? 
+		          if($this->qtype==1) echo 'ESSAY'; 
+		          if($this->qtype==2) echo 'MCQ'; 		          
+		          ?><input type="hidden" name="question_type" value="<?php echo $this->qtype?>"></td>
+  </tr>
+   <tr bgcolor="#D7EBFF" > 
+    <td>Topic</td>
+    <td> 
+      <select name="topic_id">
+        <option>-- Please Select --</option>
+        <?php 
+			foreach($this->syllabus as $s){
+				if($this->topic_id==$s[id])
+				  $sel = "selected";
+				else
+				  $sel = "";
+			 	echo "<option value='$s[id]' $sel>$s[name]</option>";
+			 } ?>br>
+      
+      </select></td>
+  </tr>
+  
+  <tr b > 
+    <td>Taxanomy</td>
+    <td> 
+   
+     <select name="taxanomy_level">
+        <option value="">-- Please Select --</option>
+         <?php 
+			foreach($this->taxanomy as $t){
+				if($this->taxanomy_level==$t[id])
+				  $sel = "selected";
+				else
+				  $sel = "";
+			 	echo "<option value='$t[id]' $sel>$t[taxanomy_name]</option>";
+			 } ?>
+      </select></td>
+  </tr>
+ <tr bgcolor="#D7EBFF"> 
+    <td>Difficulty Level</td>
+    <td> 
+      <select name="difficulty_level" >
+        <option value="">-- Please Select --</option>
+        <option  value="1">Easy</option>
+        <option value="2">Medium</option>
+        <option value="3" >Difficult</option>
+      </select></td>
+  </tr>
+    <tr > 
+          <td align="left">Point</td>
+          <td align="left"><input name="point" type="text" value="4" size="5"></td>
+        </tr>
+  <input type="hidden" name="status" id="status" value="">
+  <input type="hidden" name="total_language" id="total_language" value="<?php echo $this->course["total_language"]?>">
+  
+   </table>
+   <br>
+ 
+  
+<br>
+ 
+<!--ESSAY TEMPLATE-->
+ <?php if($this->qtype==1)  { //essay?>
+	  <table width="95%">
+	  <tr> 
+	    <td width="20%">Please choose editor :-</td>
+	    <td>
+	    &nbsp; <input type="radio" name="editor" id="editor" value="1" onclick="changeEditor(1)" checked> HTML Editor
+	    &nbsp; <input type="radio" name="editor" id="editor" value="2" onclick="changeEditor(2)"> Equation Editor</td>
+	  </tr>
+	  </table>
+ 
+	  <table id="htmleditor" width="100%" style="display:''"><tr><td><?php include("essay.phtml");?></td></tr></table>
+	  <table id="fckeditor" width="100%" style="display:none"><tr><td><?php include("fckessay.phtml");?></td></tr></table>
+ <? } ?>
+	  
+ 
+ 
+<!--MCQ TEMPLATE--> 
+ <?php if($this->qtype==2)  { ///mcq?>
+      <table id="htmleditor" width="100%" style="display:''"><tr><td><?php include("mcq.phtml");;?></td></tr></table>
+  <? } ?>
+	  
+      
+    </td>
+  </tr>
+ 
+ 
+   <tr align="center"> 
+          <td colspan="2">
+            <input type="button" name="Draft" value="Save as Draft" class="button" onclick="goSave(1);" > 
+            <input type="button" name="Moderate" value="Save as Ready to Moderate" class="button" onclick="goSave(2);"> 
+            <input type="button" name="btnCancel" value="Cancel" class="button" onclick="window.location='<?php echo $this->url(array('module'=>'question','controller'=>'sme','action'=>'index'),'default',true)?>'"> </td>
+     </tr>
+</table>
+</form>
+<p>&nbsp;</p>
+
+<script>
+function changeEditor(val){
+	
+	var html = document.getElementById('htmleditor');
+	var fck  = document.getElementById('fckeditor');
+
+	if(val==1){
+			html.style.display = '';
+			fck.style.display = 'none';
+	}
+	
+	if(val==2){	
+		    
+			html.style.display = 'none';
+			fck.style.display = '';
+	}
+}
+</script>

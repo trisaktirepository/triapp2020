@@ -1,0 +1,10 @@
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+</div>
+
+<?php echo $this->form ?>
+
+<script type="text/javascript">
+    CKEDITOR.replace( 'mesg_bi',{ filebrowserBrowseUrl: '<?php echo $this->baseUrl(); ?>/kfm/',  height: 80, width: 450 } );
+    CKEDITOR.replace( 'mesg_in',{ filebrowserBrowseUrl: '<?php echo $this->baseUrl(); ?>/kfm/',  height: 80, width: 450 } );
+</script>

@@ -1,0 +1,182 @@
+<script>
+function onclickUpload() {
+	$('#dialog-upload-approval').dialog('open');
+}
+
+$(function() {
+	$( "#dialog-upload-approval" ).dialog({
+		autoOpen: false,
+    	resizable: false,
+      	height:140,
+      	modal: true,
+      	buttons: {
+        	"Upload Letter": function() {
+        		$('#form_certificate').submit();
+        	},
+        	Cancel: function() {
+          		$( this ).dialog( "close" );
+        	}
+      	}
+    });
+
+	$( ".datepicker" ).datepicker({
+		maxDate: "0",
+		"dateFormat" : 'yy-mm-dd',
+		changeMonth: true,
+	    changeYear: true 
+	});
+});
+
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="/finalassignment/proposal/application/proposedby/<?php echo $this->proposedby;?>" >
+					<span class='add'></span>
+					<?php echo $this->translate("Create New Research"); ?>
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<?php if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+<br />
+<?php }?>
+<table>
+<tr><td><?php echo $this->translate('My Identity')?></td><td><?php echo $this->staff['FullName'];?></td>
+</tr>
+</table>
+<fieldset><legend><?php echo $this->translate('My Reseach Proposal')?></legend>
+<h2><?php echo $this->translate('History');?></h2>
+<table width="100%" class="table">
+	<tr>
+		<th><?php echo $this->translate('Title in Bahasa');?></th>
+		<th><?php echo $this->translate('Title in English');?></th>
+		<th><?php echo $this->translate('First Problem Statement');?></th>
+		<th><?php echo $this->translate('Second Problem Statement');?></th>
+		<th><?php echo $this->translate('Third Problem Statement');?></th>
+		<th><?php echo $this->translate('Abstract');?></th>
+		<th><?php echo $this->translate('Edit/View');?></th>
+	</tr>
+	<?php 
+	if($this->proposal_list){
+      foreach($this->proposal_list as $index => $batch){
+		
+	?>
+	<tr <?php echo $index%2==0?"class='shade'":""?> >
+		<td><?php echo $batch['title_bahasa'];?></td>
+		<td><?php echo $batch['title'];?></td>
+		<td><?php echo $batch['problem1'];?></td>
+		<td><?php echo $batch['problem2'];?></td>
+		<td><?php echo $batch['problem3'];?></td>
+		<td><?php echo $batch['abstrak'];?></td>
+		<td><a href="/finalassignment/proposal/application/edit/1/idProposal/<?php echo $batch['IdProposal'];?>">Edit</a></td>
+	</tr>
+	<?php 
+	  }
+	}
+	?>
+</table>
+</fieldset>
+<br />
+ 
+<fieldset><legend><?php echo $this->translate('My Task to verify Reseach Proposal')?></legend>
+<h2><?php echo $this->translate('History');?></h2>
+<table width="100%" class="table">
+	<tr>
+		<th><?php echo $this->translate('NPM');?></th>
+		<th><?php echo $this->translate('Name');?></th>
+		<th><?php echo $this->translate('Title in Bahasa');?></th>
+		<th><?php echo $this->translate('Title in English');?></th>
+		<th><?php echo $this->translate('Date of Proposed');?></th>
+		<th><?php echo $this->translate('Limit Date of Approval');?></th>
+		<th><?php echo $this->translate('Approval As');?></th>
+		<th><?php echo $this->translate('Process');?></th>
+		<th><?php echo $this->translate('Printed Doc.');?></th>
+		<th><?php echo $this->translate('Status Approval');?></th>
+		<th><?php echo $this->translate('Date of Approval');?></th> 
+	</tr>
+	<?php 
+	if($this->approval_list){
+      foreach($this->approval_list as $index => $batch){
+	?>
+	<tr <?php echo $index%2==0?"class='shade'":""?> >
+		<td><?php echo $batch['registrationId'];?></td>
+		<td><?php echo $batch['studentname'];?></td>
+		<td><?php echo $batch['title_bahasa'];?></td>
+		<td><?php echo $batch['title'];?></td>
+		<td><?php echo $batch['dt_proposed'];?></td>
+		<td><?php echo $batch['dt_latest'];?></td>
+		<td><?php echo $batch['StaffAs'];?></td>
+		<td><?php echo $batch['Stage'];?></td>
+		<td>
+		<?php if (isset($batch['printed_url']) && $batch['printed_url']!='') {?>
+		<?php  
+			$path ="<a target='_blank' href=http://".APP_HOSTNAME.$batch['printed_url'].">" ;
+		
+		  echo $path;?><img src='<?php echo $this->baseUrl();?>/images/document.png' border=0 width='20' height='20' title="Download Approval" ></a> 
+	<?php } if ($batch['report_profile']!='') {?>
+		<a href="/finalassignment/proposal/staff-approval-pdf/id/<?php echo $batch['IdTAApproval'];?>/idstaff/<?php echo $batch['Approved_by'];?>/proposedby/<?php echo $batch['IdStudentRegistration'];?>/idtaapplication/<?php echo $batch['IdTAApplication'];?>"><?php echo $this->translate('Generate');?></a> 
+	<?php } else echo "No Report";?>
+	</td>
+		<?php if ($batch['ApprovalStatus']!='1') {?>
+					<td><a href="/finalassignment/proposal/approval/idTaApproval/<?php echo $batch['IdTAApproval']?>/stage/<?php echo $batch['Stage'];?>/stagecode/<?php echo $batch['StageCode'];?>/staffas/<?php echo $batch['StaffAs'];?>">
+					<?php if ($batch['ApprovalStatus']=='2')  
+							 echo $this->translate('Pending');
+						else if ($batch['ApprovalStatus']=='3')  
+							 echo $this->translate('Rejected');
+						else    
+							 echo $this->translate('Not Yet');
+					?>
+				</a>
+			</td>
+		<?php } else {?>
+						<td> <table border="0"><tr><td>
+						<?php echo $this->translate('Approved'); 
+						$pathupload= $batch['doc_url'];
+						//echo $pathupload;
+						if ($pathupload!=''){
+							$dt = explode("triapp",$pathupload);
+							//echo var_dump($dt);exit;
+							$path = $dt[1];
+							$path ="<a target='_blank' href=http://".APP_HOSTNAME.$path.">" ;
+						
+						  echo $path;?><img src='<?php echo $this->baseUrl();?>/images/document.png' border=0 width='20' height='20' title="Download" ></a></td><?php 
+						} else { ?></td><tr><td>
+							<img src='<?php echo $this->baseUrl();?>/images/upload.png' border=0 width='20' height='20' title="Upload"  onclick="onclickUpload()" />
+						 
+						<?php } ?>
+						</td></tr></table></td>
+						<?php 
+					}?>
+			<td><?php echo $batch['dt_Approved'];?></td>
+	</tr>
+	<?php 
+	  }
+	}
+	?>
+</table>
+ 
+</fieldset>
+<div id="dialog-upload-approval" title="<?php echo $this->translate("Upload Approval Letter");?>">
+  	<form name="form_certificate" id="form_certificate" method="post" action="/finalassignment/proposal/upload-letter" enctype="multipart/form-data">
+  		<input type="file" name="file" />
+  		<input type="hidden" id="idTAApproval" name="idTAApproval" value="<?php echo $batch['IdTAApproval'];?>">
+  		<input type="hidden" id="Approved_by" name="Approved_by" value="<?php echo $batch['Approved_by'];?>">
+  		
+  	</form>
+</div>

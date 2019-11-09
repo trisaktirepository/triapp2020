@@ -1,0 +1,59 @@
+<?php date_default_timezone_set('Asia/Jakarta'); ?>
+
+
+
+<div id="tableOfData">
+    <p class='addLink'><a id="addLink" href="<?php echo $this->url(array('controller' => 'Session', 'action' => 'add')); ?>">
+            Add Semester
+        </a>
+        <a href="<?php echo $this->url(array('controller' => 'Session', 'action' => 'multi-delete')); ?>" id="deleteSelected">
+            Delete All
+        </a>
+    </p>
+
+    <table cellspacing="0" cellpadding="0">
+        <tr>
+            <th><input type="checkbox" name="togleSelectAll" class="togleSelectAll" ></th>
+            <th>Program</th>
+            <th>Semester</th>
+            <th>Start Date</th>
+            <th>Expire Date</th>
+
+            <th style="width:200px">Action</th>
+        </tr>
+        <?php foreach ($this->paginateData as $semester) : ?>
+        <?php //print_r($semester); ?>
+            <tr>
+                <td><input type="checkbox" name="markdel" class="mark" value="<?php echo $semester['Semester']['semesterID']; ?>"/></td>
+                <td><div class="innerTd triggerLoad"><div><?php echo $this->escape($semester['Program']['programCode']); ?></div></div></td>
+                <td><div class="innerTd triggerLoad"><div><?php echo $this->escape($semester['Semester']['semester']); ?></div></div></td>
+                <td><?php echo date("F j, Y", strtotime($semester['StartDate']['startDate'])); ?></td>
+                <td><?php echo date("F j, Y", strtotime($semester['ExpireDate']['expireDate'])); ?></td>
+
+                <td><div class="innerTd triggerLoad"><div>
+                            <a  class='editLink'  href="<?php echo $this->url(array('controller' => 'Session',
+                'action' => 'edit', 'semesterID' => $semester['Semester']['semesterID'])); ?>">
+                            Edit
+                        </a>
+                        <a class='deleteLink' href="<?php echo $this->url(array('controller' => 'Session',
+                                'action' => 'delete', 'semesterID' => $semester['Semester']['semesterID'])); ?>">
+                             Delete
+                         </a>
+                     </div></div></td>
+         </tr>
+        <?php endforeach; ?>
+                        </table>
+    <?php
+                            echo $this->paginationControl(
+                                    $this->paginator,
+                                    'Sliding',
+                                    'pagination.phtml',
+                                    array('filterQuery' => $this->filterQuery)
+                            );
+    ?>
+                        </div>
+                        <!-- <a href="<?php //echo $this->url(array('controller'=>'Session',  'action'=>'multi-delete')); ?>" id="deleteSelected">
+                         <img src="<?php //echo $this->CBaseUrl(); ?>img/icon/delete-icon.png" alt="Delete Selected" title="Delete Selected" />
+</a>
+-->
+<div id="basic-modal-content"></div>

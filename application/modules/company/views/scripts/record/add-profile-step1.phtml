@@ -1,0 +1,177 @@
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<script>
+function checkic(field,fieldID,nextFieldID){
+	
+  if(field.value.length >= field.maxLength){
+    document.getElementById(nextFieldID).focus();
+    var x = document.getElementById(fieldID).value;
+
+	if(fieldID == "qic1"){
+	
+	    var pday = parseInt(x.substring(4,6)); //date
+	    var pmonth = parseInt(x.substring(2,4)); // month
+	    var pyear = parseInt(x.substring(0,2)); //year
+	    var year1 = parseInt(x.substring(0,1)); 
+
+//	    alert(pyear);
+
+	    if(year1 == 0 || year1 == 1){
+			var yearCand = "20"+pyear;
+	    }else{
+	    	var yearCand = "19"+pyear;
+	    }
+//	    alert(yearCand);
+		 // Today info'
+	   
+	    today = new Date();
+	    year = today.getFullYear() ;
+	    month = today.getMonth();
+	    day = today.getDate();
+
+
+	    if ( month < pmonth ){
+	    	age = year - yearCand - 1;
+    	}
+    	else if ( month > pmonth ){
+    		age = year - yearCand;
+    	}
+    	else if ( month == pmonth ){
+	    	if ( day < pday ){
+	    		age = year - yearCand - 1;
+	    	}
+	    	else if ( day > pday ){
+	    		age = year - yearCand;
+	    	}
+	    	else if ( day == pday ){
+	    		age = year - yearCand;
+	    	}
+    	}
+
+//    	alert(age);
+
+	    if(pmonth >= 13){
+    		alert('Please enter valid IC Number');
+    		document.getElementById(fieldID).focus();
+    		document.getElementById(fieldID).value = "";
+    	}
+    	
+	    if(age < 18){
+    		alert('Attention: under 18!');
+    		document.getElementById(fieldID).focus();
+    		document.getElementById(fieldID).value = "";
+    	}
+    	
+	}
+  }
+ 
+  
+}
+
+function disablekey(field,field2,field3,inactive){
+	//return isNumberKey(event);
+	//alert(field.value + " " + field2.value);
+	if(field.value!="" && field2.value!="" && field3.value!=""){
+		//alert("yes");
+		inactive.disabled=true;
+	}else{
+		inactive.disabled=false;
+	}
+}
+
+function disablekey2(field,inactive1,inactive2,inactive3){
+	//return isNumberKey(event);
+	
+	if(field.value!=""){
+		//alert("yes");
+		inactive1.disabled=true;
+		inactive2.disabled=true;
+		inactive3.disabled=true;
+	}else{
+//		inactive.disabled=false;
+		inactive1.disabled=false;
+		inactive2.disabled=false;
+		inactive3.disabled=false;
+	}
+}
+
+function isNumberKey(evt)
+{
+	var charCode = (evt.which) ? evt.which : event.keyCode
+	if (charCode > 31 && (charCode < 48 || charCode > 57))
+	return false;
+	
+	return true;
+}
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<!--<ul>
+			<li>
+				<a href="#" onclick="javascript:searchbox()">
+					<span class='search'></span>
+					Search
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>-->
+	</div>
+</div>
+
+<div align="center" style="background:#ebebeb; height:30px;">
+<ul class="steps">
+	<li class="current">
+		<span>1</span> Personal Identity Number
+	</li>
+    <li class="next">
+		<span>2</span> Personal Particular
+	</li>
+	<li class="empty">
+		<span>2</span> Confirmation
+	</li>
+</ul>
+<br class="clear" />
+</div>
+<BR>
+
+<p>* <?php echo $this->translate("Please enter your Personal Identity Number."); ?></p>
+
+<div>
+
+<form name="onlineForm" method="post" action="<?php echo $this->url(array('module'=>'company','controller'=>'record','action'=>'add-profile-step2'),'default',true) ?>" onsubmit="return form_Validator()">
+<table class="table2" width="70%" cellpadding="5" cellspacing="0" border="0">	
+    <tr bgcolor="#ffffff">
+		<td valign="top" class="shade"><?php echo $this->translate("IC Number"); ?> </td>
+		<td valign="top">:</td>
+		<td valign="top"><input type="text" name="qic1" id="qic1" size="8" maxlength="6" onkeypress="return isNumberKey(event);" onkeyup="checkic(this,'qic1','qic2'); disablekey(this,'qic2','qic3',qkp);"/ >-
+          <input type="text" name="qic2" id="qic2" size="4" maxlength="2" onkeypress="return isNumberKey(event);" onkeyup="checkic(this,'qic2','qic3'); disablekey(this,'qic1','qic3',qkp);"/>-
+           <input type="text" name="qic3" id="qic3" size="6" maxlength="4" onkeypress="return isNumberKey(event);" onkeyup="disablekey(this,'qic1','qic2',qkp);" /></td>
+	</tr>
+	<tr bgcolor="#ffffff">
+		<td valign="top" class="shade"><?php echo $this->translate("IC Police/Army"); ?> </td>
+		<td valign="top">:</td>
+		<td valign="top"><input type="text" name="qkp" id="qkp" size="12" maxlength="10" onkeyup="disablekey2(this,qic1,qic2,qic3);" /></td>
+	</tr>
+	
+	<tr bgcolor="#ffffff">
+		<td colspan="3"><input type="submit" name="Submit" value="Next"> <input type="submit" name="Reset" value="Reset"></td>
+	</tr>
+	
+</table>
+</form>
+</div>

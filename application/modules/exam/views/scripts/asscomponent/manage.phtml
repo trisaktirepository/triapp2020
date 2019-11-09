@@ -1,0 +1,349 @@
+
+<script type="text/javascript"><!--
+function addRowToTable(curtotal)
+{
+	
+  var tbl = document.getElementById('tblComponent');
+  var lastRow = tbl.rows.length; 
+  // if there's no header row in the table, then iteration = lastRow + 1
+  var iteration = lastRow;
+  var row = tbl.insertRow(lastRow);
+
+ 
+ // iteration = lastRow-1;
+
+  document.getElementById('iteration').value = iteration
+
+  // left cell
+  var cellLeft = row.insertCell(0);
+  var textNode = document.createTextNode(iteration);
+  cellLeft.appendChild(textNode);
+
+  // left cell
+  var cellLeft = row.insertCell(1);
+  var textNode1 = document.createTextNode('');
+  cellLeft.appendChild(textNode1);
+ 
+  
+   // select cell component name
+  var component_id = row.insertCell(2);
+  var ci = document.createElement('select');
+  ci.name = 'component_id' + iteration;
+  ci.options[0] = new Option('-- Please Select --', '0');
+     
+  <? $i=1; foreach ($this->components as $component){ ?> 
+  ci.options[<?php echo $i;?>] = new Option('<?php echo $component["component_name"]?>', '<?php echo $component["id"]?>');
+  <? $i++; } ?>
+
+  component_id.appendChild(ci);
+  
+
+  //component_weightage
+  var component_weightage = row.insertCell(3);
+  var cw = document.createElement('input');
+  cw.type = 'text';
+  cw.name = 'component_weightage' + iteration ;
+  cw.id = 'component_weightage'+ iteration;
+  cw.size = 20;
+
+  //cw.onblur = onblurRow;  
+   component_weightage.appendChild(cw);
+
+
+  //component_passing_mark
+  /*var component_passing_mark = row.insertCell(4);
+  var cpm = document.createElement('input');
+  cpm.type = 'text';
+  cpm.name = 'component_passing_mark' + iteration;
+  cpm.id = 'component_passing_mark'+ iteration;
+  cpm.size = 20;
+  */
+  //cpm.onkeypress = keyPressTest;
+ // component_passing_mark.appendChild(cpm);
+
+  //component_total_mark
+  var component_total_mark = row.insertCell(4);
+  var ctm = document.createElement('input');
+  ctm.type = 'text';
+  ctm.name = 'component_total_mark' + iteration;
+  ctm.id = 'component_total_mark'+ iteration;
+  ctm.size = 20;
+  
+ // ctm.onkeypress = keyPressTest;
+  component_total_mark.appendChild(ctm);
+
+ 
+}
+function keyPressTest(e, obj)
+{
+  var validateChkb = document.getElementById('chkValidateOnKeyPress');
+  if (validateChkb.checked) {
+    var displayObj = document.getElementById('spanOutput');
+    var key;
+    if(window.event) {
+      key = window.event.keyCode; 
+    }
+    else if(e.which) {
+      key = e.which;
+    }
+    var objId;
+    if (obj != null) {
+      objId = obj.id;
+    } else {
+      objId = this.id;
+    }
+    displayObj.innerHTML = objId + ' : ' + String.fromCharCode(key);
+  }
+}
+function removeRowFromTable(total)
+{
+	
+  var curval=1;
+  newtotal=Math.abs(total)+Math.abs(curval);
+  
+  var tbl = document.getElementById('tblComponent');
+  var lastRow = tbl.rows.length;
+  
+  curval = document.getElementById('iteration').value;
+  if (lastRow > newtotal) {
+	  tbl.deleteRow(lastRow - 1);  
+      document.getElementById('iteration').value = curval-1;
+  }else{
+      alert('Sorry you cannot remove this component. CLick on checkbox then click delete button to delete.');
+  }
+}
+function openInNewWindow(frm)
+{
+  // open a blank window
+  var aWindow = window.open('','TableAddRowNewWindow','scrollbars=yes,menubar=yes,resizable=yes,toolbar=no,width=400,height=400');
+      
+  // set the target to the blank window
+  frm.target = 'TableAddRowNewWindow';
+  
+  // submit
+  frm.submit();
+}
+
+function validateRow(frm)
+{	 
+	    var tbl = document.getElementById('tblComponent');
+	  
+	    var lastRow = tbl.rows.length - 2;
+	  
+	    var i;
+	    var total=0;		  
+	    
+	    for (i=1; i<=lastRow; i++) {
+	      	  var aRow = document.getElementById('component_weightage' + i);
+		   
+		      if (aRow.value.length <= 0) {
+		        alert('Row ' + i + ' is empty');
+		        return false;
+		      }
+
+	         //get total weightage
+			 rowVal = aRow.value;
+			 total=total+Math.abs(rowVal);	
+	    }  
+	
+		if(total !=100){
+			alert('Total weightage is '+total+' .Please make sure...');
+			return false;
+		}
+					    
+ 	return true;
+}
+
+function onblurRow(total){
+	
+	    var curval=2;
+	    newtotal=Math.abs(total)+Math.abs(curval);
+
+		  
+    	//get total weightage
+	    var tbl = document.getElementById('tblComponent');
+	    var lastRow = tbl.rows.length - newtotal;
+	  
+	    var i;
+	    var total=0;		  
+	    
+	    for (i=1; i<=lastRow; i++) {
+	      	 var aRow = document.getElementById('component_weightage' + i);
+		     //get total weightage
+			 rowVal = aRow.value;
+			 total=total+Math.abs(rowVal);
+
+			 if(total > 100){
+					alert('Total weightage is '+total+' .Please make sure...');					
+					aRow.value=0;
+					aRow.focus();
+					return;
+			}	
+	    }  
+	    
+	document.getElementById('total_weightage').value = total;	
+}
+
+
+
+function subForm(action){
+	if(action==2){//delete
+		document.frmcomp.action="<?php echo $this->url(array('module'=>'exam','controller'=>'asscomponent','action'=>'delete'),'default',true)?>";
+	    document.frmcomp.submit();	
+	}
+
+	if(action==1){
+		document.frmcomp.action="<?php echo $this->url(array('module'=>'exam','controller'=>'asscomponent','action'=>'manage'),'default',true)?>";
+	    document.frmcomp.submit();	
+	}
+}
+
+
+function goback(){
+	window.location="<?php echo $this->url(array('module'=>'exam','controller'=>'asscomponent','action'=>'index'))?>";
+}
+
+
+
+</script>
+<?php   $total_component = count($this->rs_component); ?>
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>		
+			<li>
+				<a href="#" onClick="goback();">
+					<span class='back'></span>
+					Back
+				</a>
+			</li>	
+			<li>
+				<a href="#" onClick="subForm(1)">
+					<span class='save'></span>
+					Save
+				</a>
+			</li>
+			<li>
+				<a href="#" onClick="subForm(2);">
+					<span class='delete'></span>
+					Delete
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="#" onClick="addRowToTable('<?php echo $total_component;?>');">
+					<span class='add'></span>
+					Add Row
+				</a>
+			</li>
+			<li>
+				<a href="#" onClick="removeRowFromTable('<?php echo $total_component;?>');">
+					<span class='remove' align="center"></span>
+					Remove Row
+				</a>
+			</li>
+	
+			</ul>
+	</div>
+</div>
+<br>
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<br>
+<?}?>
+
+<form name="frmcomp" method="post" action="">
+
+  <table class="table3" width="600px" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		<th width="200px">
+			Program 
+		</th>
+		
+		<td>			
+			<?php echo $this->program_name;?>
+		</td>
+	</tr>
+	<tr>
+		<th>
+			Course
+		</th>
+		
+		<td>
+		<?php echo $this->course_name;?>
+			
+		</td>
+	</tr>
+	<tr>
+		<th>
+			Mark Distribution Type
+		</th>
+		
+		<td>
+		<?php echo $this->mark_tname;?>
+			
+		</td>
+	</tr>
+	
+</table>
+  
+  
+  
+    <br></br>
+    <h2>Assessment Component List</h2>
+   
+
+    <h3>Instruction :-</h3>
+<ul style="1">
+	<li>To add component, click on "Add Row" button.</li>
+	<li>To remove row, click on "Remove Row" button.</li>
+	<li>To delete assessment component, click on appropriate delete checkbox, then click "Delete" button. </li>
+	<li>Click "Save" button once you have finish editing assessment component.</li>
+</ul>
+  <table id="tblComponent"  class="table3" width="100%" cellpadding="5" cellspacing="1" >
+  
+  <tr>
+    <th>No</th> 
+    <th>Delete</td>  
+    <th>Component Name</th>
+    <? if($this->mark_type==1){?>
+    <th>Weightage</th>
+    <? } ?>
+  <!--  <td>Passing Mark</td>-->
+    <th>Total Mark</th>
+    
+  </tr>
+     <?php 
+		  $no=1;		
+		  foreach ($this->rs_component as $component){?>
+		     
+		  <tr>
+		    <td>&nbsp;<?php echo $no;?>.</td>   
+		    <td>
+		    <input type="hidden" name="id<?php echo $no;?>" value="<?php echo $component["id"];?>"></input>
+		    <input type="checkbox" name="id[]" id="id[]" value="<?php echo $component["id"]?>"></input></td>
+		    
+		    <td>
+		    <input type="hidden" name="component_id<?php echo $no;?>" value="<?php echo $component["component_id"]?>">
+		    <input type="text" name="component_name<?php echo $no;?>" value="<?php echo $component["component_name"]?>" onkeypress="keyPressTest(event, this);" readonly>		    
+		    </td>
+           
+		    <? if($this->mark_type==1){?>
+		    <td><input type="text" name="component_weightage<?php echo $no;?>" value="<?php echo $component["component_weightage"]?>" onblur="onblurRow('<?php echo $total_component;?>');"></input></td>
+		    <? } ?>
+		    
+		    <!--<td><input type="text" name="component_passing_mark<?php echo $no;?>" value="<?php echo $component["component_passing_mark"]?>" ></input></td>-->
+		    <td><input type="text" name="component_total_mark<?php echo $no;?>" value="<?php echo $component["component_total_mark"]?>"></input></td>		    
+		   
+		   </tr>
+		  <?php $no++; } ?>
+ 
+  
+</table>
+<input type="hidden" name="iteration" id="iteration" value="<?php echo $total_component ?>"></input>
+<input type="hidden" name="program_id" value="<?php echo $this->program_id;?>"></input>
+<input type="hidden" name="course_id" value="<?php echo $this->course_id;?>"></input>
+   </table>
+  <br></br>
+
+  </form>

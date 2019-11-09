@@ -1,0 +1,144 @@
+<script>
+function getBranch(){
+	var program = $("#idProgram").val();
+	var semester = $("#idSemester").val();
+ 
+	$.ajax({
+		url: "<?php echo $this->url(array('module'=>'assistant','controller'=>'mark-entry', 'action'=>'ajax-get-branch'),'default',true);?>",
+		data: {'semester_id':semester,'program_id':program},
+		type: 'POST',
+		dataType: 'json',	
+		beforeSend: function(){
+			$("#idBranch").hide();
+			$("#idBranch").parent().append('<div class="loading">Loading...</div>');	
+		}	
+	}).done(function ( data ) {
+
+		$('.loading').remove();  
+		$("#idBranch").show();
+		
+		$("#idBranch").empty().append('<option value=""> <?php echo $this->translate("All Branch"); ?> </option>');
+	
+		$.each(data, function(index) {
+			$("#idBranch").append('<option value="'+data[index].key+'"> '+data[index].value+' </option>');
+		});
+	});
+}
+ 
+function validate(){
+	if($('#idProgram').val()=='' || $('#idSemester').val()==''){
+		alert('Please select program and semester');
+	}else{
+		$("#form3").submit();
+	}
+	
+   
+}
+
+</script>
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>			
+			
+		
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br>
+<?php if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><php echo $this->noticeSuccess;?></strong>.</div>
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+<?php }?>
+
+
+<div style="width:100%;">
+
+<fieldset><legend>Search Option</legend>
+<form id="form3" method="post">
+<table width="100%" border="0" cellpadding="5" cellspacing="0" class="">
+  	<tr>
+			<td>Semester  </td>
+			<td>:					   
+			    <select id="idSemester" name="idSemester" >
+						<option value=""><?php echo $this->translate("Please Select"); ?></option>
+					<?php 
+					 foreach($this->semester as $mysem){
+							if($this->idSemester == $mysem["key"]){
+								$selected = "selected";
+							}else{
+								$selected='';
+							}
+						?>
+						<option value="<?php echo $mysem["key"];?>" <?php echo $selected;?>><?php echo $mysem["value"];?></option>
+					<?php  } ?>
+				</select></td>
+	    </tr>
+	     
+	 
+	 
+	  <tr><td>&nbsp;</td><td><input type="button" value="Search" onclick="validate();"></td></tr> </table>
+</form>
+</fieldset>
+<br>
+<?php  ?>
+
+<table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+	<tr>
+		<th><?php echo $this->translate("Mode Entry")?></th>
+		<th><?php echo $this->translate("Group")?></th>
+		<th><?php echo $this->translate("Code")?></th>
+		<th><?php echo $this->translate("Branch Name")?></th>
+		<th><?php echo $this->translate("Subject Code")?></th>
+		<th><?php echo $this->translate("Subject Name")?></th>
+		<th><?php echo $this->translate("Day")?></th>
+		<th><?php echo $this->translate("Time")?></th>
+		<th><?php echo $this->translate("Venue")?></th>
+		<th><?php echo $this->translate("Coordinator")?></th>
+		<th><?php echo $this->translate("Total Student")?></th>	 
+	</tr>
+	<?php 
+	$i=1;
+	if(count($this->list_groups)>0){
+		 
+	foreach($this->list_groups['grp'] as $group){
+	 
+	?>
+	<tr>
+		
+		<td>
+		 <a href="<?php echo $this->url(array('module'=>'assistant','controller'=>'mark-entry','action'=>'student-list-all-assistant','idSemester'=>$this->idSemester,'idProgram'=>$group['ProgramCreator'],'idSubject'=>$group["IdSubject"],'id'=>$group["IdCourseTaggingGroup"],'idBranch'=>$group['BranchCreator'],'idstaff'=>$this->idstaff),'default',true)?>" target="_blank"><img src="/images/icon/all.png"  style="width:25px;height:25px;" title="All"></a>
+		
+		</td>
+		<td><?php echo $group["GroupName"];?></td>
+		<td><?php echo $group["GroupCode"];?></td>
+		<td><?php echo $group['Branch']; ?></td>
+		<td><?php echo $group["subject_code"];?></td>
+		<td><?php echo $group["subject_name"];?></td>
+		<td><?php echo $group["sc_day"];?></td>
+		<td><?php echo $group["sc_start_time"].' - '.$group["sc_end_time"];?></td>
+		<td><?php echo $group["sc_venue"];?></td>
+		<td><?php echo ($group["IdLecturer"]!=0 ?  $group["coordinator"]:$this->translate("-"));?></td>
+		<td align="center">
+		<?php echo $group["total_student"];?></td>
+		  
+	</tr>
+	<?php $i++; } 
+
+}else{ echo '<tr><td colspan=7>No Data Found</td></tr>'; }?>
+</table>
+
+
+</div>
+<br>

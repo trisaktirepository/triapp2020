@@ -1,0 +1,172 @@
+<?php 
+	//get locale
+	$registry = Zend_Registry::getInstance();
+	$locale = $registry->get('Zend_Locale');
+	$this->locale = $locale->toString();
+	
+	if($locale == 'ar_YE'){
+		$this->direction = "rtl";	
+	}else{
+		$this->direction = "ltr";
+	}
+
+	//get locale
+	$registry = Zend_Registry::getInstance();
+	$locale = $registry->get('Zend_Locale');
+	$this->locale = $locale->toString();
+	
+	if($locale == 'ar_YE'){
+		$this->direction = "rtl";	
+	}else{
+		$this->direction = "ltr";
+	}
+?>
+<?php echo $this->doctype(); ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->locale; ?>" dir="<?php echo $this->direction; ?>">
+<head>
+	<?php echo $this->headMeta(); ?>
+	<?php echo $this->headTitle(); ?>
+	<?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/layout.css'); ?>
+	<?php //echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/default/style.css'); ?>
+	<?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/trisakti/style.css'); ?>
+	
+	<?php
+		$this->jQuery()->enable();
+		$this->jQuery()->setVersion('1.7.2');
+		$this->jQuery()->useCdn(false);
+	 	$this->jQuery()->setLocalPath($this->baseUrl().'/js/jquery/jquery-1.5.0.min.js');
+		
+		$this->jQuery()->uiEnable();
+		$this->jQuery()->setUiVersion('1.8.18');
+		$this->jQuery()->useUiCdn(false);
+		$this->jQuery()->addStylesheet($this->baseUrl().'/js/jquery/themes/smoothness/jquery-ui.css');
+		$this->jQuery()->setUiLocalPath($this->baseUrl().'/js/jquery/jquery-ui-1.8.18.min.js');
+		$this->headScript()->appendFile($this->baseUrl().'/js/jquery/plugin/number/jquery.number.min.js');
+		
+		echo $this->jQuery();
+		
+		echo $this->headLink()->prependStylesheet($this->baseUrl().'/js/jquery/plugin/timepicker/timePicker.css');
+		echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery/plugin/timepicker/jquery.timepicker.js');
+		
+		
+		echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery/plugin/multiselect-1.12/jquery.multiselect.min.js');
+		echo $this->headLink()->prependStylesheet($this->baseUrl().'/js/jquery/plugin/multiselect-1.12/jquery.multiselect.css');
+		echo $this->headLink()->prependStylesheet($this->baseUrl().'/js/jquery/plugin/potato.menu/jquery.ui.potato.menu.css'); 
+		
+		?>
+	
+	<?php 
+	 	if($this->direction == 'rtl'){
+	 		echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery/plugin/potato.menu/jquery.ui.potato.menu.rtl.js');
+	 		echo "<style>";
+	 		echo "ul.potato-menu li.potato-menu-item {
+	 				float:right;
+				}";
+	 		echo "#language{
+	 				left:0px;
+	 			}";
+	 		
+	 		echo "#appTitle{
+	 				left: 15px;
+					top: 25px;
+	 			}";
+	 		
+	 		echo "</style>";
+	 	}else{
+	 		echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery/plugin/potato.menu/jquery.ui.potato.menu.js');
+	 		
+	 		echo "<style>";
+	 		echo "ul.potato-menu li.potato-menu-item {
+	 				float:left;
+				}";
+	 		echo "#language{
+	 				right:0px;
+	 			}";
+	 		
+	 		echo "#appTitle{
+	 				right: 15px;
+					top: 25px;
+	 			}";
+	 		echo "</style>";
+	 	}
+	 
+	 ?>
+	 	
+	<!--[if lt IE 7]>
+	<style media="screen" type="text/css">
+	#container {
+		height:100%;
+	}
+	</style>
+	<![endif]-->
+	
+	<script type="text/javascript">
+	 $(document).ready(function() {
+	        $('#mainMenu').ptMenu();
+	        $('#mainMenu').show();
+	        
+	 });
+	</script>
+	
+	<style>
+		#appTitle{
+			left: 0;
+			width: 400px;
+ 			padding: 0 0 0 250px;
+    		top: 17px;
+			font-weight: bold;
+			font-size: 18px;
+			font-family: trebuchet ms;
+		}
+	</style>
+</head>
+<body>
+<div id="container">
+	<div id="header">
+		<!-- Header start -->
+		<?php 
+			$auth = Zend_Auth::getInstance();
+			if($auth->hasIdentity()){
+		?>
+		<div style="float:right; margin: 28px 20px 0 24px;">
+			<a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'logout'),'default',true) ?>"><?php echo $this->translate("logout");?></a>
+		</div>
+		<?php 
+			}
+		?>
+		
+		<div id="logo"></div>
+		<div id="appTitle">
+			SISTEM PENERIMAAN MAHASISWA BARU
+			<br />
+			SYSTEM FOR NEW STUDENT ADMISSION
+		</div>
+		
+	</div>
+
+		<!-- Header end -->
+	
+	<div id="body">
+		<!-- Begin Section Content-->
+		
+		<?php echo $this->layout()->content ?>
+		<!-- End Section Content-->
+		<div style="clear:both;">&nbsp;</div>
+	</div>
+	<div id="footer">
+		<!-- Footer start -->
+		<div style="width: 1024px; margin: 0 auto;">
+			<div style="float:left; text-align: left; padding-top: 5px;">
+				Trisakti University<br />
+				Jalan Kyai Tapa No. 1 Grogol, Jakarta Barat, Indonesia<br />
+				Phone: (62-21) 566 3232 | Fax: (62-21) 564 4270	
+			</div>
+			<div align="right" style="text-align: right; padding-top: 18px;" >
+				Copyright &copy; <?php echo APPLICATION_ENTERPRISE; ?>. All rights reserved.
+			</div>
+		</div>
+		<!-- Footer end -->
+	</div>
+</div>
+</body>
+</html>

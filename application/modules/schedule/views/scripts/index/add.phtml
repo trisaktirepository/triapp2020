@@ -1,0 +1,341 @@
+<script type="text/javascript">
+$(document).ready(function() {
+	//multiselect
+	/*$("#venue_id").multiselect({
+		noneSelectedText: "Select Venue",
+		minWidth: 350
+	});*/
+	
+	/*Date Picker*/
+	var dtFormat = 'dd-mm-yy';
+	
+	$("#date").datepicker({
+		dateFormat: dtFormat,
+		minDate: 0,
+		onClose:function(dateText, inst){
+			setWeeklyDay();
+		}
+	});
+
+	$("#date_end").datepicker({
+		dateFormat: dtFormat,
+		minDate: 0
+	});
+
+	/*Timepicker*/
+	$(".timepicker,.timepicker2").timePicker({
+		  startTime: "08:30",  // Using string. Can take string or Date object.
+		  endTime: new Date(0, 0, 0, 23, 00, 0),  // Using Date object here.
+		  show24Hours: false,
+		  separator:':',
+		  step: 15
+	});
+	
+	
+    // Keep the duration between the two inputs.
+    $(".timepicker").change(function() {
+    	
+    	var time = $.timePicker(".timepicker").getTime();
+    	
+    	$.timePicker(".timepicker2").setTime(new Date(time.getTime()+2*3600*1000)); //add 1hour multiplication
+    	
+    });
+    
+    // Validate.
+    $(".timepicker2").change(function() {
+      if($.timePicker(".timepicker").getTime() > $.timePicker(this).getTime()) {
+        $(this).addClass("error");
+      }
+      else {
+        $(this).removeClass("error");
+      }
+    });
+
+    //init
+
+    <?php
+    if( $this->exam_center_id!=0 ){
+    ?>
+    	var center = $("select[name='exam_center']").val('<?php echo $this->exam_center_id; ?>');
+    	feedVenue($(center));
+    <?
+    }
+    ?>
+});
+
+
+function changeRepeat(element){
+	var value = element.value;
+	
+	$('#daily').hide();
+	$('#weekly').hide();
+	$('#monthly').hide();
+
+	if(value=="1"){
+		$('#daily').show();	
+	}else
+	if(value=="2"){
+		$('#weekly').show();
+		setWeeklyDay();
+		
+	}else
+	if(value=="3"){
+		$('#monthly').show();	
+	}		
+}
+
+function setWeeklyDay(){
+	$("input[name='weekly_day[]']").attr('checked', false);
+	
+	var dateexam = $('#date').datepicker( "getDate" );
+	var day = dateexam.getDay()
+
+	$("input[name='weekly_day[]'][value="+day+"]").attr('checked', true);
+}
+
+function feedCourse(program){
+	var program_id = $(program).val();
+
+	/*$('#course_id').empty().append('<option value="0"> -- Select Course -- </option>');*/
+	$('#course_id').empty();
+	
+	$.ajax({
+		  url: "<?php echo $this->url(array('module'=>'schedule','controller'=>'index', 'action'=>'ajax-get-course'),'default',true); ?>",
+		  dataType: 'json',
+		  type: "POST",
+		  cache:false,
+		  async: false,
+		  data: {id : program_id},
+		  success: function(data) {
+			$.each(data, function(index) {
+            	var course_id = data[index].course_id;
+            	var course_name = data[index].course_name;
+
+            	$('#course_id').append('<option value="'+course_id+'">'+course_name+'</option>');
+        	});
+		  }
+	});
+}
+
+function feedVenue(exam_center){
+	var exam_center_id = $(exam_center).val();
+
+	/*$('#venue_id').empty().append('<option value="0"> -- Select Venue -- </option>');*/
+	$('#venue_id').empty();
+	
+	$.ajax({
+		  url: "<?php echo $this->url(array('module'=>'schedule','controller'=>'index', 'action'=>'ajax-get-venue-detail'),'default', true); ?>",
+		  dataType: 'json',
+		  type: "POST",
+		  cache:false,
+		  async: false,
+		  data: {id : exam_center_id},
+		  success: function(data) {
+			$.each(data, function(index) {
+	        	var venue_id = data[index].id;
+	        	var venue_name = data[index].name;
+	        	var venue_type_name = data[index].type_name;
+	        	var venue_capacity = data[index].capacity;
+
+        	$('#venue_id').append('<option value="'+venue_id+'">'+venue_name+' ('+venue_type_name+': capacity:'+venue_capacity+')'+'</option>');
+    		});
+
+			$('#venue_id').multiselect('refresh');
+		  }
+	});
+}
+</script>
+
+<style type="text/css">
+	table#schedule_tbl select{
+			width: 260px;
+	}
+	
+	table#schedule_tbl input[name="date"]{
+		width: 250px	
+	}
+	
+	table#schedule_tbl input[name="start"], table#schedule_tbl input[name="end"]{
+		width: 110px;	
+	}
+	
+	.ui-datepicker{
+		z-index: 9999;
+	}
+	
+	div.time-picker {
+		z-index: 99999;
+	}
+	
+</style>
+<form id="schedule_form" action="<?php echo $this->url(array('module'=>'schedule','controller'=>'index', 'action'=>'add')); ?>" method="post" enctype="application/x-www-form-urlencoded">
+<table id="schedule_tbl" width="100%">
+	<tr>
+		<td>Program</td>
+		<td>
+			<select name="program_id" id="program_id" onChange="feedCourse(this)">
+				<option value="0"> -- Select Program -- </option>
+				<?php
+				foreach ($this->programlist as $program) {
+					echo "<option value='".$program['id']."'>".$program['program_name']."</option>";
+				}
+				?>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">Course</td>
+		<td>
+			<select name="course_id[]" id="course_id" multiple="multiple"></select>
+		</td>
+	</tr>
+	<tr>
+		<td>Date</td>
+		<td>
+			<input id="date" type="text" value="" name="exam_date" class="date" />
+		</td>
+	</tr>
+	<tr>
+		<td>Time</td>
+		<td>
+			<input class="timepicker" type="text" value="" name="start" />
+			to
+			<input class="timepicker2" type="text" value="" name="end" />
+		</td>
+	</tr>
+	<tr>
+		<td>Exam Center</td>
+		<td>
+			<select name="exam_center" id="exam_center" onchange="feedVenue(this)">
+				<option value="0"> -- Select Exam Center -- </option>
+				<?php
+				foreach ($this->examcenter as $center) {
+					echo "<option value='".$center['id']."'>".$center['name']."</option>";
+				}
+				?>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">Venue</td>
+		<td>
+			<select name="venue_id[]" id="venue_id" multiple="multiple"></select>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">Repeat</td>
+		<td>
+			<input type="checkbox" name="repeat" onClick="$('#repeat').toggle();" />
+			<div id="repeat" style="border: 1px solid #CCCCCC; display: none; padding:5px; margin:0;">
+				<table width="100%" cellpadding="0" cellspacing="0">
+					<tr>
+						<td width="90px">Repeats</td>
+						<td width="2px">:</td>
+						<td>
+							<input type="radio" name="repeat_type" value="1" checked="checked" onclick="changeRepeat(this)" /> Daily
+							<input type="radio" name="repeat_type" value="2" onclick="changeRepeat(this)" /> Weekly
+							<input type="radio" name="repeat_type" value="3" onclick="changeRepeat(this)" /> Monthly
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3">
+					
+					<!-- daily -->
+					<div id="daily" style="display:block;">
+					<table width="100%" cellpadding="0" cellspacing="0">
+						<tr>
+							<td width="90px">Repeat Every</td>
+							<td width="5px">:</td>
+							<td> &nbsp;
+								<select name="daily_every" style="width: 40px;">
+									<?php for($i=1; $i<31; $i++){?>
+										<option value="<?php echo $i;?>"><?php echo $i;?></option>
+									<?php }?>
+								</select>
+								days
+							</td>
+						</tr>
+					</table>
+					</div>
+					
+					<!-- Weekly -->
+					<div id="weekly" style="display:none">
+					<table width="100%" cellpadding="0" cellspacing="0">
+						<tr>
+							<td width="90px">Repeat Every</td>
+							<td width="5px">:</td>
+							<td>
+								<select name="weekly_every" style="width: 40px;">
+									<?php for($i=1; $i<31; $i++){?>
+										<option value="<?php echo $i;?>"><?php echo $i;?></option>
+									<?php }?>
+								</select>
+								weeks
+							</td>
+						</tr>
+						<tr>
+							<td>Repeat On</td>
+							<td>:</td>
+							<td>
+								<input type="checkbox" name="weekly_day[]" value="1" /> M
+								<input type="checkbox" name="weekly_day[]" value="2" /> T
+								<input type="checkbox" name="weekly_day[]" value="3" /> W
+								<input type="checkbox" name="weekly_day[]" value="4" /> T
+								<input type="checkbox" name="weekly_day[]" value="5" /> F
+								<input type="checkbox" name="weekly_day[]" value="6" /> S
+								<input type="checkbox" name="weekly_day[]" value="0" /> S
+							</td>
+						</tr>
+					</table>
+					</div>
+					
+					
+					<!-- Monthly -->
+					<div id="monthly" style="display:none">
+					<!-- 
+					<table width="100%" cellpadding="0" cellspacing="0">
+						<tr>
+							<td width="90px">Repeat Every</td>
+							<td width="5px">:</td>
+							<td>
+								<select name="monthly_every" style="width: 40px;">
+									<?php /*for($i=1; $i<31; $i++){?>
+										<option value="<?php echo $i;?>"><?php echo $i;?></option>
+									<?php }*/?>
+								</select>
+								Months
+							</td>
+						</tr>
+						<tr>
+							<td>Repeat by</td>
+							<td>:</td>
+							<td>
+								<input type="radio" name="monthly_by" value="1" checked="checked" /> day of the month
+								<input type="radio" name="monthly_by" value="2" /> day of the week
+							</td>
+						</tr>
+					</table>
+					 -->
+					</div>
+					
+						</td>
+					</tr>
+					<tr>
+						<td valign="top">Ends</td>
+						<td valign="top">:</td>
+						<td>
+							<div style="margin: 0 0 6px;">
+								<input type="radio" name="end_until" value="1" /> After <input type="text" name="end_occurence" value="1" style="width:50px;" /> occurrences
+							</div>
+							<div style="margin: 0 0 6px;">
+								<input type="radio" name="end_until" value="2" checked="checked" /> On <input type="text" name="end_date" value="31-12-<?php echo date('Y'); ?>" id="date_end" style="width:85px;" />
+							</div>
+							
+						</td>
+					</tr>
+				</table>
+			</div>
+		</td>
+	</tr>
+</table>
+</form>

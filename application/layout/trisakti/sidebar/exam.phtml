@@ -1,0 +1,32 @@
+
+<div id="vertmenu">
+   <?
+    $auth = Zend_Auth::getInstance(); 
+	        $username = $auth->getIdentity()->username; 
+	         if($username=='norwani'){
+	?>
+	<ul>  
+    <li><h1><?php echo $this->translate("Exam");?></h1></li>  
+        <li><a href="<?php echo $this->url(array('module'=>'exam','controller'=>'examsitting','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Exam Registration ID"); ?></a></li>
+    	<li><a href="<?php echo $this->url(array('module'=>'exam','controller'=>'markentry','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Mark Entry"); ?></a></li>
+    	<li><a href="<?php echo $this->url(array('module'=>'exam','controller'=>'result','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Exam Result"); ?></a></li>    	
+   </ul>
+   <?}else{?>
+	<ul>  
+	    <li><h1><?php echo $this->translate("Exam Setup");?></h1></li>  	
+	    <li><a href="<?php echo $this->url(array('module'=>'exam','controller'=>'grade','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Grade"); ?></a></li>    
+	    <li><a href="<?php echo $this->url(array('module'=>'exam','controller'=>'asscomponent','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Assessment Component"); ?></a></li>
+	</ul>
+	<br>
+	<ul>  
+    <li><h1><?php echo $this->translate("Exam");?></h1></li>  
+        <li><a href="<?php echo $this->url(array('module'=>'exam','controller'=>'examsitting','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Exam Registration ID"); ?></a></li>
+    	<li><a href="<?php echo $this->url(array('module'=>'exam','controller'=>'markentry','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Mark Entry"); ?></a></li>
+    	<li><a href="<?php echo $this->url(array('module'=>'exam','controller'=>'result','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Exam Result"); ?></a></li>    	
+   </ul>
+	<? } ?>
+  
+</div>
+
+
+

@@ -1,0 +1,109 @@
+<?php 
+	//get locale
+	$registry = Zend_Registry::getInstance();
+	$locale = $registry->get('Zend_Locale');
+	$this->locale = $locale->toString();
+	
+	if($locale == 'ar_YE'){
+		$this->direction = "rtl";
+		$this->float = "right";	
+	}else{
+		$this->direction = "ltr";
+		$this->float = "left";
+	}
+	
+	//applicant profile
+	$auth = Zend_Auth::getInstance();
+?>
+
+<?php  echo $this->doctype(); ?>
+<html>
+<head>
+	<?php echo $this->headMeta(); ?>
+	<?php echo $this->headTitle(); ?>
+	
+	<?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/layout.css'); ?>
+	<?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/trisakti/simpletree.css'); ?>
+	<?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/trisakti/topmenu.css'); ?>
+	<?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/trisakti/style.css'); ?>
+	<?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/trisakti/left-menu.css'); ?>
+	
+	<?php
+		$this->jQuery()->enable();
+		$this->jQuery()->setVersion('1.7.2');
+		$this->jQuery()->useCdn(false);
+	 	$this->jQuery()->setLocalPath($this->baseUrl().'/js/jquery/jquery-1.5.0.min.js');
+		
+		$this->jQuery()->uiEnable();
+		$this->jQuery()->setUiVersion('1.8.18');
+		$this->jQuery()->useUiCdn(false);
+		$this->jQuery()->addStylesheet($this->baseUrl().'/js/jquery/themes/smoothness/jquery-ui.css');
+		$this->jQuery()->setUiLocalPath($this->baseUrl().'/js/jquery/jquery-ui-1.8.18.min.js');
+		
+		echo $this->jQuery();
+		
+		echo $this->headLink()->prependStylesheet($this->baseUrl().'/js/jquery/plugin/timepicker/timePicker.css');
+		echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery/plugin/timepicker/jquery.timepicker.js');		
+		echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery/plugin/multiselect-1.12/jquery.multiselect.min.js');
+		echo $this->headLink()->prependStylesheet($this->baseUrl().'/js/jquery/plugin/multiselect-1.12/jquery.multiselect.css');
+	?>
+	
+	
+</head>
+<body >
+<?php $uri = Zend_Controller_Front :: getInstance()->getRequest()->getRequestUri(); ?>
+
+	<div id="container">
+		<div id="header">
+		<!-- Header start -->
+		<div id="logo"><div id="name">&nbsp;</div></div>
+		<div id="appTitle">
+			<?php echo APPLICATION_ENTERPRISE; ?>
+			<br />
+			<i><?php echo $this->translate("Student Portal"); ?></i>
+		</div>
+	</div>
+	<div id="menu">
+		<div id="language">
+			
+		</div>
+		
+		<div id="topmenu">
+		<div class="underlinemenu">
+			<?php echo $this->translate("Welcome")?>&nbsp; 
+			<?php echo $auth->getIdentity()->appl_fname!=""?$auth->getIdentity()->appl_fname. " ":""; ?>
+			<?php echo $auth->getIdentity()->appl_mname!=""?$auth->getIdentity()->appl_mname. " ":""; ?>
+			<?php echo $auth->getIdentity()->appl_lname!=""?$auth->getIdentity()->appl_lname. " ":""; ?>
+			<!--
+			<ul>	  
+				<li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'applicant-portal','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Home")?></a></li>
+				<li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'logout'),'default',true) ?>"><?php echo $this->translate("Logout"); ?></a></li>	
+			</ul>
+			-->
+		</div>
+		</div>
+
+		
+		
+	</div>
+		<!-- Header end -->
+		
+		<div id="body">
+			<!-- Begin Section Content-->
+			
+			<table width="100%" cellpadding="0" cellspacing="0" border="0">
+				<tr>
+					<td valign="top">
+						<?php echo $this->layout()->content; ?>
+					</td>
+				</tr>
+			</table>
+			
+			<!-- End Section Content-->
+		</div>
+		<div id="footer"><!-- Footer start --> <?php echo $this->translate("Copyright"); ?>&copy;<?php echo $this->translate(APPLICATION_ENTERPRISE) ;?>
+		<!-- Footer end --></div>
+	</div>
+
+</body>
+</html>

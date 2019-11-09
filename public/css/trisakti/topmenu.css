@@ -1,0 +1,29 @@
+ul.tabs 
+{ 
+	list-style-type: none; 
+	padding: 0; 
+	margin: 0; 
+} 
+
+ul.tabs li 
+{ 
+	float: left; 
+	padding: 0; 
+	margin: 0; 
+	padding-top: 0; 
+	background: url(../../images/tab_right.png) 
+	no-repeat right top; 
+	margin-right: 1px; 
+} 
+ul.tabs li a 
+{ 
+	display: block; 
+	padding: 0px 10px; 
+	color: #fff; 
+	text-decoration: none; 
+	background: url(../../images/tab_left.png) no-repeat left top; 
+} 
+ul.tabs li a:hover 
+{ 
+	color: #ff0;
+}

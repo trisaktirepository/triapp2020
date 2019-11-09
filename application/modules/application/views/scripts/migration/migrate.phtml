@@ -1,0 +1,34 @@
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<h1><?php echo $this->title; ?></h1>
+
+<table class="table2" width="500px">
+	<tr>
+		<th width="150px">Matrix N0.</th>
+		<td><?php echo $this->student_data['matric_no']; ?></td>
+	</tr>
+	<tr>
+		<th>Student Name</th>
+		<td><?php echo $this->student_data['fullname']; ?></td>
+	</tr>
+	<tr>
+		<th>Admission Date</th>
+		<td><?php echo $this->student_data['admission_date']; ?></td>
+	</tr>
+	<tr>
+		<th>Intake</th>
+		<td><?php echo $this->student_data['admission_intake_id']; ?></td>
+	</tr>
+	<tr>
+		<th>Program Name</th>
+		<td><?php echo $this->student_data['matric_no']; ?></td>
+	</tr>
+</table>

@@ -1,0 +1,358 @@
+<?php /* Set locale to Indonesia */
+	     setlocale(LC_TIME, "id_ID"); ?>
+		
+<style type="text/css">
+.header_title {
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.title {
+	font-size: 12px;
+	font-weight: bold;
+}
+
+
+/* Table */
+.table_head{
+	font-family: "Trebuchet MS", Helvetica, sans-serif;	
+    width: 100%;
+    cellspacing: 0px;
+    cellpadding: 5px;
+    font-weight: bold;
+    font-size: 12px;
+ 
+}
+
+
+/* Table */
+.table_content{
+	font-family: "Trebuchet MS", Helvetica, sans-serif;	
+    width: 100%;
+    cellspacing: 0px;
+    cellpadding: 10px;
+    border:1px solid #000;
+}
+.table_content th{
+	background-color: #767676;
+	color:white;
+	line-height: 10px;
+}
+.table_content tr{
+	line-height: 5px;
+}
+.table_content td{
+	/*border-bottom:1px dotted gray;*/
+	border:1px solid #000;
+	line-height: 16px;
+}
+
+.table_footer{
+	font-family: "Trebuchet MS", Helvetica, sans-serif;	
+    width: 100%;
+    cellspacing: 0px;
+    cellpadding: 5px;
+    font-size: 12px;
+ 
+}
+.table_footer tr{
+	height: 30px;
+}
+.table_footer td{
+	height: 30px;
+}
+
+.table_subject{
+	font-family: "Trebuchet MS", Helvetica, sans-serif;	
+    width: 100%;
+    cellspacing: 0px;
+    cellpadding: 15px;  
+	border:1px solid #000;
+}
+.table_subject tr{
+	font-family: "Trebuchet MS", Helvetica, sans-serif;	
+    width: 100%;
+    cellspacing: 0px;
+    cellpadding: 15px;  
+	border-left:1px solid #000;
+} 
+
+.tdleft{
+	border-left:1px solid #000;
+}
+
+.tdbottom{
+	border-bottom:1px solid #000;
+}
+
+
+
+</style>
+<?php 
+$this->headScript()->prependFile('/js/jquery/plugin/blockui/jquery.blockui.js'); 
+?>
+<script>
+function cetak_transcript(){
+	window.location="<?php echo $this->url(array('controller'=>'student-portal','action'=>'cetak-temp-transcript','id'=>$this->id), 'default', true);?>";
+}
+
+
+</script>
+
+<div class="message toolbar">
+		<h2>&nbsp;</h2>
+	<div class="toolbar-button">
+		<ul>
+		 <li>
+			<a href="#" onclick="cetak_transcript();">
+				<span class='print'></span>
+				Print Transcript
+			</a>
+			
+		</li>
+		</ul>
+	</div>
+</div>
+
+<br>
+<fieldset>
+<table width="100%" border="0" cellpadding="5" cellspacing="0" class="table_head">
+	   <tr>
+	   	<td colspan=2 class="header_title" align="center">DAFTAR PRESTASI AKADEMIK SEMENTARA<BR><i>TEMPORARY ACADEMIC TRANSCRIPT</i><br><br></td>
+	   </tr>	  
+	   <tr>
+			<td width="20%">JURUSAN/PROGRAM STUDI</td>
+			<td>: <?php echo @$this->student["Dept_Bahasa"].'/'.$this->student["ArabicName"];?></td>	     
+	    </tr>
+	    <tr>
+			<td width="20%"><i>DEPARTMENT/STUDY PROGRAM</i></td>
+			<td>: <i><?php echo @$this->student["Departement"].'/'.$this->student["ProgramName"];?></i></td>	     
+	    </tr>
+	    <?php if ($this->student['majoring']!='-') {?>
+	    <tr>
+			<td width="20%">KONSENTRASI</td>
+			<td>: <?php if (!($this->student["majoring"]=='common'|$this->student["majoring"]=='Bersama'))  echo $this->student["majoring"]; else echo '-'; ?></td>	     
+	    </tr>
+	     <tr>
+			<td width="20%"><i>MAJOR IN</i></td>
+			<td>: <i><?php if (!($this->student["majoring"]=='common'|$this->student["majoring"]=='Bersama')) echo $this->student["majoring_english"]; else echo '-'; ?></i></td>	     
+	    </tr>
+	    <?php }?>
+	   <tr>
+			<td width="20%">PROGRAM PENDIDIKAN</td>
+			<td>: <?php echo @$this->student["program_pendidikan"]; ?> | ( <?php echo $this->student["SchemeCode"]; ?> )</td>	     
+	    </tr>
+	     <tr>
+			<td width="20%"><i>PROGRAM</i></td>
+			<td>: <i><?php echo @$this->student["program_eng"]; ?></i></td>	     
+	    </tr>
+</table>
+<br>
+<br>
+<table width="100%" border="0" cellpadding="5" cellspacing="0" class="table_head">
+	   <tr valign="top">
+			<td width="20%">Nama<br><i>Name</i></td>
+			<td>: <?php echo $this->student["appl_fname"].' '.$this->student["appl_mname"].' '.$this->student["appl_lname"];?> </td>
+	        <td width="20%">NPM/NIM<br>NIRM</td>
+			<td>: <?php echo $this->student["registrationId"]; ?> </td>
+	    </tr>
+		   <tr valign="top">
+			<td>Tempat/Tgl Lahir<br><i>Place and Date of Birth</i></td>
+			<td>: <?php  echo  $this->student["appl_birth_place"].', '.strftime("%e %B, %Y", strtotime($this->student["appl_dob"])); ?>  </td>
+			<td><i>Student Registration Number</i></td>
+			<td>&nbsp;</td>
+	    </tr>
+</table>
+<br>
+<table width="100%" border="0" cellpadding="5" cellspacing="0" class="table_content">
+	 <tr valign="top">
+	 	<td align="center">Mata Kuliah <br> <i>Subjects</i></td>
+	 	<td align="center">Kode <br> <i>Code</i></td>
+	 	<td align="center">K <br> <i>Cr</i> </td>
+	 	<td align="center">HM <br> <i>Gr</i></td>
+	 	<td align="center">AM <br> <i>GP</i></td>
+	 	<td align="center">M <br> <i>PE</i></td>
+	 </tr>
+	 <tr>
+	 	<td>Jumlah <br> <i>Total</i></td>
+	 	<td></td>
+	 	<td align="center"><?php echo $this->student_grade['sg_cum_credithour'];
+        
+            //$this->student['TotalCreditHours']; ?></td>
+	 	<td></td>
+	 	<td></td>
+	 	<td align="center"><?php 
+            //echo number_format($this->student_grade['sg_univ_sem_totalpoint'], 2, '.', ''); 
+            echo number_format($this->student_grade['sg_cum_totalpoint'], 2, '.', ''); 
+            
+            ?></td>
+	 </tr>
+	  <tr>
+	 	<td>Indeks Prestasi Kumulatif (IPK) <br> <i>Cummulative Grade Point Average (CGPA)</i></td>
+	 	<td colspan="5"  align="center"><?php 
+        echo number_format($this->student_grade['sg_cgpa'], 2, '.', ''); 
+        ?></td>
+	 </tr>
+	</table>
+<br>
+<table width="100%" border="0" cellpadding="5" cellspacing="5" class="table_footer">
+	 <tr valign="top">
+	 	<td colspan="2">
+	 	Transkrip ini tidak berlaku jika ada koreksi/pembetulan dari siapapun<br>
+	 	<i>This transcript is invalid if there are any correction what soever</i>
+	 	</td>	 	
+	 </tr>
+	  <tr valign="top">
+	 	<td colspan="2">Keterangan/<i>Remarks</i></td>	
+	 </tr>
+	  <tr valign="top">
+	 	<td colspan="2">
+	 	<table width="50%">
+	 		<tr><td width="10%">K/<i>Cr</i></td><td>Kredit SKS/Credit</td></tr>
+	 		<tr><td width="10%">HM/<i>Gr</i></td><td>Huruf Mutu/Grade (A,A-,B+,B,B-,C+,C,D,E) </td></tr>
+	 		<tr><td width="10%">AM/<i>GP</i></td><td>Angka Mutu/Grade (4.00,3.75,3.50,3.00,2.75,2.50,2.00,1.00,0.00) </td></tr>
+	 		<tr><td width="10%">M/<i>PE</i></td><td>Mutu K*M/Point Earned CR*GP</td></tr>
+	 	</table>
+	 	</td>
+	 </tr>
+	  <tr valign="top">
+	 	<td colspan="2">
+	 	Predikat Kelulusan/<i>Academic Distinction IPK/GPA</i><br>
+	 	<?php 
+	 	$count_grade = count($this->grade);
+	 	if($count_grade>0){
+	 	foreach($this->grade as $index=>$grade){
+	 			echo $grade['Minimum'].' - '.$grade['Maximum'].' '.$grade['StatusArabicName'];
+	 			if($index+1 < $count_grade){
+	 				echo '/';
+	 			}
+	 	}
+	 	}?>
+	 	</td>
+	 </tr>
+	  <tr valign="top">
+	 	<td colspan=2>
+	 	<br>
+	 		<table width="100%" border=0>
+	 		    <tr valign="top">
+	 			<td align="center" width="35%"></td>
+	 			<td rowspan=2 width="30%"   align="center"><img src="<?php echo $this->photo_url;?>" width="100px" /></td>
+	 			<td  align="center" width="35%">Jakarta, <?php echo strftime('%d %B %Y'); ?><br>Dekan / Dean</td>
+	 			</tr>
+	 			 <tr valign="top">
+	 			<td  align="center"></td>	 			
+	 			<td  align="center"><?php echo  $this->FrontSalutation['DefinitionDesc'].' '.$this->dean['Fullname'].' '.$this->BackSalutation['DefinitionDesc'];?></td>
+	 			</tr>	 		
+	 		</table>
+	 	</td>	 
+	 </tr>
+</table>
+</fieldset>
+<br><br>
+<fieldset>
+<table width="100%" border="0" cellpadding="5" cellspacing="0" class="table_head">
+	   <tr>
+	   	<td colspan=2 class="header_title" align="center">DAFTAR PRESTASI AKADEMIK SEMENTARA<BR><i>TEMPORARY ACADEMIC TRANSCRIPT</i><br><br></td>
+	   </tr>	  
+	   <tr>
+			<td width="20%">JURUSAN/PROGRAM STUDI</td>
+			<td>: <?php echo @$this->student["Dept_Bahasa"].'/'.$this->student["ArabicName"];?></td>	     
+	    </tr>
+	    <tr>
+			<td width="20%"><i>DEPARTMENT/STUDY PROGRAM</i></td>
+			<td>: <i><?php echo @$this->student["Departement"].'/'.$this->student["ProgramName"];?></i></td>	     
+	    </tr>
+	    <tr>
+			<td width="20%">KONSENTRASI</td>
+			<td>: <?php if (!($this->student["majoring"]=='common'|$this->student["majoring"]=='Bersama')) echo $this->student["majoring"]; else echo '-';  ?></td>	     
+	    </tr>
+	     <tr>
+			<td width="20%"><i>MAJOR IN</i></td>
+			<td>: <i><?php  if (!($this->student["majoring"]=='common'|$this->student["majoring"]=='Bersama')) echo $this->student["majoring_english"]; else echo '-';  ?></i></td>	     
+	    </tr>
+	   <tr>
+			<td width="20%">PROGRAM PENDIDIKAN</td>
+			<td>: <?php echo $this->student["ProgramPendidikan"]; ?> | ( <?php echo $this->student["SchemeCode"]; ?> )</td>	     
+	    </tr>
+	     <tr>
+			<td width="20%"><i>PROGRAM</i></td>
+			<td>: <i><?php echo $this->student["SchemeName"]; ?></i></td>	     
+	    </tr>
+</table><br>
+<br>
+<table width="100%" border="0" cellpadding="5" cellspacing="0" class="table_head">
+	   <tr valign="top">
+			<td width="20%">Nama<br><i>Name</i></td>
+			<td>: <?php echo $this->student["appl_fname"].' '.$this->student["appl_mname"].' '.$this->student["appl_lname"];?> </td>
+	        <td width="20%">NPM/NIM<br>NIRM</td>
+			<td>: <?php echo $this->student["registrationId"]; ?> </td>
+	    </tr>
+		   <tr valign="top">
+			<td>Tempat/Tgl Lahir<br><i>Place and Date of Birth</i></td>
+			<td>: <?php  echo  $this->student["appl_birth_place"].', '.strftime("%e %B, %Y", strtotime($this->student["appl_dob"])); ?>  </td>
+			<td><i>Student Registration Number</i></td>
+			<td>&nbsp;</td>
+	    </tr>
+</table>
+<br>
+<br>
+<br>
+<table width="100%" border="0" cellpadding="5" cellspacing="0" class="table_subject">
+	 <tr valign="top">
+	 	<td class='title tdbottom'  align="center" colspan=2>Mata Kuliah <br> <i>Subjects</i></td>
+	 	<td class='title tdbottom tdleft'  align="center">Kode <br> <i>Code</i></td>
+	 	<td class='title tdbottom tdleft'  align="center">K <br> <i>Cr</i> </td>
+	 	<td class='title tdbottom tdleft'  align="center">HM <br> <i>Gr</i></td>
+	 	<td class='title tdbottom tdleft'  align="center">AM <br> <i>GP</i></td>
+	 	<td class='title tdbottom tdleft'  align="center">M <br> <i>PE</i></td>
+	 </tr>
+
+	 <?php 
+	 $total_category = count($this->subject_category);
+	 foreach($this->subject_category as $index=>$category){
+	
+	 ?>
+	 <tr  valign="top">
+	 	<td  align="center"><?php echo $index+1;?>.</td>
+	 	<td><strong><?php echo strtoupper($category["kategori"]);?><br><i><?php echo strtoupper($category["category"]);?></i></strong></td>
+	 	<td class="tdleft">&nbsp;</td>
+	 	<td class="tdleft">&nbsp;</td>
+	 	<td class="tdleft">&nbsp;</td>
+	 	<td class="tdleft">&nbsp;</td>
+	 	<td class="tdleft">&nbsp;</td>
+	 </tr>	 
+	 	<?php 
+	 	$total_category_subject = count($category["subjects"]);	 
+	 	$count=1;	
+	 	foreach($category["subjects"] as $key=>$subject){	 	
+	 	$total_point = abs($subject["grade_point"]*$subject["CreditHours"]);
+	 	
+	 	 if($index+1 == $total_category){
+	 	 	    $class  = 'tdleft';	
+		 		$class2 = '';		 	 
+	 	 }else{
+	 	 	 if($key+1 == $total_category_subject){
+		 		$class = "tdleft tdbottom";
+		 		$class2 = "tdbottom";
+		 	 }else{
+		 		$class  = 'tdleft';	
+		 		$class2 = '';
+		 	 }
+	 	 }
+	 
+	 	
+	 	?>
+	  <tr valign="top" >	 	
+	 	<td class="<?php echo $class2; ?>" align="center">&nbsp;</td>
+	 	<td class="<?php echo $class2; ?>" align="left"><?php echo $count++;?>.<?php echo $subject["NamaSubjek"]; ?><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i><?php echo $subject["SubjectName"]; ?></i></td>
+	 	<td class="<?php echo $class; ?>" align="center" width="10%"><?php echo $subject["SubCode"]; ?></td>
+	 	<td class="<?php echo $class; ?>" align="center" width="8%"><?php echo number_format($subject["CreditHours"],'0'); ?></td>
+	 	<td class="<?php echo $class; ?>" align="center" width="8%"><?php echo $subject["grade_name"]; ?></td>
+	 	<td class="<?php echo $class; ?>" align="center" width="8%"><?php echo $subject["grade_point"]; ?></td>
+	 	<td class="<?php echo $class; ?>" align="center" width="8%"><?php echo number_format($total_point, 2, '.', ''); ?></td>
+	 </tr>	 
+	 <?php } //end subject
+	 } //end category ?>
+</table>
+</fieldset>
+<br>

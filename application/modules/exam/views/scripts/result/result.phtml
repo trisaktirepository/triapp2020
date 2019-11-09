@@ -1,0 +1,95 @@
+<style type="text/css">
+#sliptbl
+{
+width:800px;
+border-collapse:collapse;
+}
+#sliptbl td, #sliptbl th 
+{
+font-size:1em;
+border:1px solid #98bf21;
+padding:3px 7px 2px 7px;
+}
+#sliptbl th 
+{
+font-size:1.1em;
+text-align:left;
+padding-top:5px;
+padding-bottom:4px;
+background-color:#A7C942;
+color:#ffffff;
+}
+
+#headtbl
+{
+width:100%;
+border-collapse:collapse;
+}
+#headtbl td.head
+{
+font-weight:bold;
+}
+
+</style>
+<p>
+<table id="printbl" ><tr><td align="right">
+<input type="button" value="PRINT" onclick="goprint();"></input></td></tr>
+</table>
+</p>
+
+<table width="800px" border="0" cellspacing="0" cellpadding="5">
+<tr><td><img src="/images/headeribfim.jpg" size="10px" alt="IBFIM LOGO"/></td></tr>
+</table>
+
+
+		
+<table width="800px" border="0" cellspacing="0" cellpadding="5">  
+<tr><td colspan="4" align="left"><hr></td></tr>
+ <tr><td colspan="4" align="left"><?php echo $this->translate("DATE"); ?> : <?php echo date("Y/m/d")?></td></tr>
+  <tr><td colspan="4" align="center"><strong><?php echo $this->translate("EXAMINATION RESULT"); ?></strong><br><br></td>
+  <tr >
+    <td class="head" width="10%"><?php echo $this->translate("Name"); ?></td>
+    <td>: <?php echo $this->student["ARD_NAME"];?></td>
+    <td class="head" width="10%"><?php echo $this->translate("Programme"); ?></td>
+    <td>: <?php echo $this->program_name;?></td>
+  </tr>
+  <tr>
+    <td class="head" ><?php echo $this->translate("IC Number"); ?></td>
+    <td>: <?php echo $this->student["ARD_IC"]; ?></td>
+    <td class="head"><?php echo $this->translate("Company Name"); ?></td>
+    <td>: <?php echo $this->student["company_name"]; ?></td>
+  </tr>
+</table>
+
+<br>
+<table width="800px" border="0" cellspacing="0" cellpadding="5" id="sliptbl">
+  <tr>
+    <th width="10%" align="left"><?php echo $this->translate("Course"); ?> <?php echo $this->translate("Code"); ?></th>
+    <th width="60%" align="left"><?php echo $this->translate("Course Name"); ?></th>    
+    <th width="10%"><div align="center"><?php echo $this->translate("Mark"); ?></div></th>
+    <th width="10%"><div align="center"><?php echo $this->translate("Status"); ?></div></th>
+  </tr> 
+  <?php 		
+  		foreach($this->courses as $course){?>
+  <tr>
+  	<td><?php echo $course["code"]?></td>
+  	<td><?php echo $course["name"]?></td>  	
+  	<td align="center"><?php echo $course["course_mark"]?></td>
+  	<td align="center"><?php echo $course["course_grade"]?></td>
+  </tr>
+  <?php }?>
+ 
+</table>
+
+
+
+
+
+<p>&nbsp;</p>
+<script>
+
+function goprint(){
+	document.getElementById('printbl').style.display = 'none';
+	window.print();
+}
+</script>

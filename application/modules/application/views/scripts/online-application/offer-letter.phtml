@@ -1,0 +1,107 @@
+<?php
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/css/layout.css' );
+echo $this->headLink ()->prependStylesheet ( $this->baseUrl () . '/css/default/style.css' );
+?>
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+
+<?php
+$applyDB = new Application_Model_DbTable_Apply();
+$apply = $applyDB->getData($this->id);
+	
+?>
+
+<table width="100%" border="0" cellpadding="5">
+  <tr>
+    <td>
+    </td>
+  </tr>
+  <tr>
+    <td><?=strtoupper($apply["ARD_NAME"])?><br><?=strtoupper($apply["ARD_ADDRESS1"])?>, <br><?=strtoupper($apply["ARD_ADDRESS2"])?><br><?=strtoupper($apply["ARD_POSTCODE"])?> <?=strtoupper($apply["ARD_STATE"])?></td>
+  </tr>
+  <tr>
+    <td><table border="0" cellspacing="0" cellpadding="0" width="100%">
+      <tr>
+        <td width="12%"><p>Personal ID</p></td>
+        <td width="1%">:</td>
+        <td width="87%"><?=$apply["ARD_IC"]?></td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td><strong>Dear <?=strtoupper($apply["ARD_NAME"])?>, </strong></td>
+  </tr>
+  <tr>
+    <td><table border="0" cellspacing="0" cellpadding="0" width="100%">
+      <tr>
+        <td colspan="3"><strong>RE: CONDITIONAL OFFER LETTER</strong></td>
+      </tr>
+      <tr>
+        <td colspan="3">&nbsp;</td>
+      </tr>
+      
+     
+		<tr>
+        <td colspan="3">We are pleased to inform you that our Academic Board has approved your application for admission to the following programme subject to the following terms and conditions: </td>
+      </tr>
+      <tr>
+        <td colspan="3">&nbsp;</td>
+      </tr>
+      
+      <?
+     // $prog = $aApply->getinfo2("*","sc005_course","sc005id = $prog_id")
+?>
+      <tr>
+        <td width="14%">PROGRAMME NAME</td>
+        <td width="2%">:</td>
+        <td width="84%">
+        <?php 
+			$placeDB = new App_Model_Record_DbTable_Program();
+			$program_name = $placeDB->getData($apply["ARD_PROGRAM_NAME"]);
+			
+			echo $program_name["main_name"];
+			?>
+			</td>
+      </tr>
+      <tr>
+        <td>CAMPUS</td>
+        <td>:</td>
+        <td width="84%">UNIVERSITY OF SCIENCE AND TECHNOLOGY YEMEN
+</td>
+      </tr>
+      <tr>
+        <td colspan="3">&nbsp;</td>
+      </tr>
+      <tr>
+        <td colspan="3">A full offer letter will be given once you  enroll in the course of study during registration day. The College,  however, may add, amend or alter any clause to the benefits of the College and  the Student from time to time should there be a need arising in the future. Please bring along  all necessary documents to complete your registration and enrollment process. <br><br> We welcome you to UNIVERSITY OF SCIENCE AND TECHNOLOGY YEMEN and we wish you success in your  academic achievement.<br>
+        
+          </td>
+      </tr>
+		<tr>
+        <td colspan="3">&nbsp;</td>
+      </tr>
+
+<tr>
+        <td colspan="3">
+          Thank you.
+          <p>Yours sincerely,<br>
+            <strong>UNIVERSITY OF SCIENCE AND TECHNOLOGY YEMEN</strong></p></td>
+      </tr>
+     
+
+     
+ <tr>
+        <td colspan="3"><br><br><input type="button" value="Print Conditional Offer Letter" onclick="window.print()"></td>
+      </tr>
+    </table></td>
+  </tr>
+</table>

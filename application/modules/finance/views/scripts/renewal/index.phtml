@@ -1,0 +1,55 @@
+<script type="text/javascript">
+	function del(title, id){
+		if(confirm('Are you sure to delete '+title+'?')){
+			window.location = "<?php echo $this->url(array('module'=>'finance','controller'=>'paymentmode', 'action'=>'delete')); ?>/id/"+id;
+		}
+	}
+	
+	function add(){
+		window.location="<?php echo $this->url(array('module'=>'finance','controller'=>'paymentmode', 'action'=>'add'));?>";
+	}
+
+	function edit(id){
+		window.location="<?php echo $this->url(array('module'=>'finance','controller'=>'paymentmode', 'action'=>'edit'));?>/id/"+id;
+	}
+
+</script>
+<?php 
+	echo "<h1>". $this->title ."</h1>";
+?>
+
+<div style="width:900px; margin: 0 auto;">
+	<div class="span-7 buttons">
+		<a class="positive addLink" href="#" onClick="add()">Add Payment Mode</a>
+	</div>
+	<br />
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+	<tr>
+		<th>Payment Mode</th>
+		<th width="110px"><i>options</i></th>
+	</tr>
+	
+	<?php 
+	$i=0;
+	foreach ($this->paginator as $entry): 
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<td><?php echo $entry['fr_desc']; ?></td>
+		<td>
+			<a class="editLink" href="#" onClick="edit(<?php echo $entry['fr_paymodeid']; ?>)">Edit</a>&nbsp;
+			<a class="delLink2" href="#" onClick="del('<?php echo $entry['fr_paymodeid']; ?>',<?php echo $entry['fr_paymodeid']; ?>)">Delete</a>
+		</td>
+	</tr>
+	<?php 
+	$i++;
+	endforeach 
+	?>
+
+</table>
+</div>
+<?php 
+	//echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>

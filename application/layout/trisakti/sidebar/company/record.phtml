@@ -1,0 +1,18 @@
+<?php
+/*
+ *  @author Alif
+ *  @created Apr 27, 2012
+ */
+?>
+<div id="vertmenu">
+	<ul>  
+		<li><h1>Records</h1>
+	    <li><a href="<?php echo $this->url(array('module'=>'company','controller'=>'record','action'=>'profile'),'default',true) ?>"><?php echo $this->translate("Candidate Profile"); ?></a></li>
+	    
+	    <li><a href="<?php echo $this->url(array('module'=>'company','controller'=>'record','action'=>'batchprofile'),'default',true) ?>"><?php echo $this->translate("Candidate Profile (Batch)"); ?></a></li>
+	    <br />
+	    <li><h1>Progress Tracking</h1>
+	    <li><a href="<?php echo $this->url(array('module'=>'company','controller'=>'record','action'=>'progress'),'default',true) ?>"><?php echo $this->translate("Candidate Progress"); ?></a></li>
+	    <li><a href="<?php echo $this->url(array('module'=>'company','controller'=>'record','action'=>'progressagent'),'default',true) ?>"><?php echo $this->translate("myAgent (Takaful Operator)"); ?></a></li>
+	</ul>
+</div>

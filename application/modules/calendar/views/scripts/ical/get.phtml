@@ -1,0 +1,14 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//ScoutRank//EN
+<?php foreach ($this->data as $event): ?>
+BEGIN:VEVENT
+DTSTART:<?= date("Ymd\THis", $event['start']) . "\n"; ?>
+DTEND:<?= date("Ymd\THis", $event['end']) . "\n"; ?>
+SUMMARY:<?= $event['title'] . "\n"; ?>
+LOCATION:<?= $event['location'] . "\n"; ?>
+DESCRIPTION:<?= $event['description'] . "\n"; ?>
+PRIORITY:3
+END:VEVENT
+<?php endforeach; ?>
+END:VCALENDAR

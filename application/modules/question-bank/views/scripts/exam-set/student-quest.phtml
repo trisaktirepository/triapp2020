@@ -1,0 +1,68 @@
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+		<li>
+				<a href="<?php echo $this->url(array('module'=>'question-bank','controller'=>'exam-set', 'action'=>'student-list'),'default',true);?>" >
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+
+<? 
+foreach ($this->set as $set){ 
+	
+	//get question from this bank
+	$studentQuestDB =  new App_Model_Tos_DbTable_StudentExamQuestion();
+	$question = $studentQuestDB->getQuestion($set["id"]);
+		
+	echo '<h1>'.$set["bname"].'</h1>';	
+	
+	$table  = '<table class="table3" width="100%" cellpadding="10" cellspacing="1" border="0">';
+	$table .= "<tr valign='top'><th>NO</th><th>Question ID</th><th>Question</th></tr>";
+	
+	$c=1;
+	foreach ($question as $q){
+		
+		$answerDB = new App_Model_Question_DbTable_Answer();
+    	$answer = $answerDB->getAnswerbyQuestion($q["qid"]);    	
+	    	
+		$table .= "<tr valign='top'><td>$c.</td><td align='center'>$q[qid]</td>";
+		$table .= "<td>$q[english]";
+		
+					  $table .= "<p><table>";
+													  
+				       $i=1; 
+				       foreach ($answer as $a){
+			
+			          		switch ($i){
+			          			case 1: $no = "A)";break;
+			          			case 2: $no = "B)";break;
+			          			case 3: $no = "C)";break;
+			          			case 4: $no = "D)";break;
+			          		}
+			          		
+			           $table .= "<tr valign='top'><td width='20px'>".$no."</td><td>".stripslashes($a["english"])."</td></tr>";
+				       $i++;}
+				  
+				     $table .= "</table></p>";
+		
+		
+		$table .= "</td></tr>";
+	$c++;}
+	
+	$table .= '</table>';
+	
+	print $table;
+	
+} ?>

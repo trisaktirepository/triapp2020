@@ -1,0 +1,120 @@
+<script type="text/javascript">
+	function del(){
+		var id = $('input[name=type_id]:checked').val();
+
+		if(!id){
+			alert('Please select any takaful operator first');
+		}else{
+			if(confirm('Are you sure to delete this client type?')){
+				window.location = "<?php echo $this->url(array('module'=>'general-setup','controller'=>'takaful', 'action'=>'delete-type')); ?>/id/"+id;
+			}
+		}
+	}
+	
+	function add(){
+		window.location="<?php echo $this->url(array('module'=>'general-setup','controller'=>'takaful', 'action'=>'add-type'));?>";
+	}
+
+	function edit(){
+		var id = $('input[name=type_id]:checked').val();
+
+		if(!id){
+			alert('Please select any takaful operator first');
+		}else{
+			window.location="<?php echo $this->url(array('module'=>'general-setup','controller'=>'takaful', 'action'=>'edit-type'));?>/id/"+id;
+		}
+	}
+
+
+	/*//To remove flash MSG*/
+	setTimeout(function() {
+		$( "#msg" ).hide( 'blind',null, 1000);
+	}, 5000 );
+
+
+</script>
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+<!--			<li>
+				<a href="#" onclick="javascript:add()">
+					<span class='add'></span>
+					Add
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:edit()">
+					<span class='edit'></span>
+					Edit
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:del()">
+					<span class='delete'></span>
+					Delete
+				</a>
+			</li>
+			<li class="divider"></li>-->
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<?if(isset($this->noticeMessage)){?>
+<div id="msg" class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<form name="f1" method="post" action="<?php echo $this->url(array('module'=>'finance','controller'=>'batch-term','action'=>'setterm','id'=>$this->id),'default',true) ?>">
+<table width="80%" border="0" cellpadding="5">
+  <tr>
+    <td>Company Name</td>
+    <td>:</td>
+    <td><?php echo $this->companyData['name'];?></td>
+  </tr>
+  <tr>
+    <td>Payment Term</td>
+    <td>:</td>
+    <td>
+    <select id="term" name="term">
+    <option value="">-- Please select -- </option>
+    <?php 
+    foreach($this->term as $term){
+    	
+    	if ($term['id'] == $this->batchterm['id_term']) {
+			$selected = "selected";
+		}else{
+			$selected ="";
+		}
+			
+    	echo "<option value='$term[id]' $selected>$term[name]</option>";
+    	
+    }
+    
+    ?>
+    </select></td>
+  </tr>
+</table>
+
+<table>
+	<tr>
+		<td><input type="submit" value="Save" name="submit"></td>
+		<td><input type="submit" value="Reset" /></td>
+	</tr>
+</table>
+</form>
+	

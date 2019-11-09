@@ -1,0 +1,58 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("#start_date").datepicker({
+				"dateFormat":"yy-mm-dd",
+				"changeMonth":"true",
+				beforeShow: function(input, inst) { 
+					if ($("#end").val()) { // Only update when has a value.
+							$( "#start" ).datepicker( "option", "maxDate", $("#end").datepicker("getDate") );
+					}
+				}
+		});
+		
+		$("#end_date").datepicker({
+				"dateFormat":"yy-mm-dd",
+				"changeMonth":"true",
+				beforeShow: function(input, inst) {
+					if ($("#start").val()) { // Only update when has a value.
+							$( "#end" ).datepicker( "option", "minDate", $("#start").datepicker("getDate") );
+					}
+				}
+		});
+
+	});
+</script>
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'anr-setup','controller'=>'calendar', 'action'=>'index'),'default',true);?>">
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<?php 
+	echo $this->form;
+?>

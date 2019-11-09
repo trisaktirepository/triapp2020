@@ -1,0 +1,75 @@
+<script type="text/javascript">
+<!--
+$(document).ready(function() {
+	$(".t1, .t2").timePicker({
+	  	  startTime: "06:00", // Using string. Can take string or Date object.
+	  	  endTime: new Date(0, 0, 0, 23, 0, 0), // Using Date object here.
+	  	  show24Hours: true,
+	  	  separator: ':',
+	  	  step: 10});
+
+	 
+	 var oldTime = $.timePicker("#sc_start_time").getTime();
+
+	// Keep the duration between the two inputs.
+	 $(".t1").change(function() {
+	   if ($(".t2").val()) { // Only update when second input has a value.
+	     // Calculate duration.
+	     var duration = ($.timePicker(".t2").getTime() - oldTime);
+	     var time = $.timePicker(".t1").getTime();
+	     // Calculate and update the time in the second input.
+	     $.timePicker(".t2").setTime(new Date(new Date(time.getTime() + duration)));
+	     oldTime = time;
+	   }
+	 });
+	 // Validate.
+	 $(".t2").change(function() {
+	   if($.timePicker(".t1").getTime() > $.timePicker(this).getTime()) {
+	     $(this).addClass("error");
+	   }
+	   else {
+	     $(this).removeClass("error");
+	   }
+	 });
+
+	 $('.datepicker').datepicker({
+		dateFormat: 'dd/mm/yy',
+		changeMonth: true,
+	    changeYear: true,
+	    numberOfMonths: 3,
+	    onSelect: function(dateText, inst) {
+		    
+	         var weekday=new Array(7);
+	         weekday[0]="Sunday";
+	         weekday[1]="Monday";
+	         weekday[2]="Tuesday";
+	         weekday[3]="Wednesday";
+	         weekday[4]="Thursday";
+	         weekday[5]="Friday";
+	         weekday[6]="Saturday";
+
+	         var date_select = $(this).datepicker( 'getDate' );
+
+	         $('#sc_day').val(weekday[date_select.getDay()]);
+
+	     }
+	});
+});
+
+
+//-->
+</script>
+<?php echo $this->form;
+if ($this->disabled=="1") {
+
+?>
+<script> 
+ 
+$( "#sc_date" ).prop( "disabled", true );
+$( "#sc_day" ).prop( "disabled", true );
+$( "#sc_start_time" ).prop( "disabled", true );
+$( "#sc_end_time" ).prop( "disabled", true );
+</script>
+<?php 
+
+}?>

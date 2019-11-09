@@ -1,0 +1,16 @@
+
+<div id="vertmenu">
+	<ul>  
+		<li><h1><?php echo $this->translate("Menu Navigation"); ?></h1></li>
+		<li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'alumni-portal','action'=>'biodata'),'default',true) ?>"><?php echo $this->translate("Home"); ?></a></li>
+		<li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'skpi','action'=>'index'),'default',true) ?>"><?php echo $this->translate("SKPI"); ?></a></li>
+	    <li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'alumni-portal','action'=>'biodata'),'default',true) ?>"><?php echo $this->translate("Biodata"); ?></a></li>
+		<!--
+		<li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'applicant-portal','action'=>'contact-info'),'default',true) ?>"><?php echo $this->translate("contact_info"); ?></a></li>
+		-->
+		<li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'alumni-portal','action'=>'result'),'default',true) ?>"><?php echo $this->translate("Examination Result"); ?></a></li>
+		<li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'student-portal','action'=>'graduation-process'),'default',true) ?>"><?php echo $this->translate("Graduation"); ?></a></li>
+		<li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'alumni-portal','action'=>'change-password'),'default',true) ?>"><?php echo $this->translate("Change Password"); ?></a></li>
+		<li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'alumni-portal','action'=>'logout'),'default',true) ?>"><?php echo $this->translate("Logout"); ?></a></li>
+	</ul>
+</div>

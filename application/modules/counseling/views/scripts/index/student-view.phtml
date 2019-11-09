@@ -1,0 +1,211 @@
+<script>
+$(function() {
+	$( "#dialog-upload-file" ).dialog({
+		autoOpen: false,
+    	resizable: false,
+      	height:140,
+      	modal: true,
+      	buttons: {
+        	"Upload File": function() {
+        		$('#form_file').submit();
+        	},
+        	Cancel: function() {
+          		$( this ).dialog( "close" );
+        	}
+      	}
+    });
+});
+
+function uploadfile(idstd,idissue,idissuedetail) {
+	$('#IdStudentRegistration').val(idstd);
+	$('#IdIssue').val(idissue);
+	$('#IdIssueDetail').val(idissuedetail);
+	$('#dialog-upload-file').dialog('open');
+}
+
+function toggle_info(id){
+	if( $('#'+id+' div').is(':hidden') ){
+			$('.inv_info').hide(500);
+			 
+	}
+	$('#reply_it'+id+' div').toggle(500);
+	$('#'+id+' div').toggle(500);
+	 
+	return false;
+}
+
+function toggle_reply(id){
+	if ($('#reply_it'+id+' div').is(':hidden') ){
+			$('.reply_it').hide(500);
+	}
+
+	$('#reply_it'+id+' div').toggle(500);
+
+	return false;
+}
+
+ 
+</script>
+ 
+<div class="message toolbar">
+    <h2><?php echo $this->translate('Counseling Issues '); ?></h2>
+    <div class="toolbar-button">
+        <ul>
+        	<li>
+                <a href="/counseling/index/create" >
+                    <span class='add'></span>
+                    <?php echo $this->translate('New Issue');?>
+                </a>
+            </li>
+             
+        </ul>
+    </div>
+</div>
+<br />
+
+<?php if(isset($this->noticeMessage)){?>
+    <div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+    <br />
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+    <div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+    <br />
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+    <div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+    <br />
+<?php }?>
+<form method="post">
+<fieldset><legend><?php echo $this->translate('Search')?></legend>
+
+<table width="100%" border="0" cellpadding="5" cellspacing="0" class="">
+  	<tr>
+			<td>Semester  </td>
+			<td>:					   
+			    <select id="IdSemester" name="IdSemester" >
+						<option value=""><?php echo $this->translate("Please Select"); ?></option>
+					<?php 
+					 foreach($this->semesterlist as $mysem){
+							if($this->idsemester == $mysem["key"]){
+								$selected = "selected";
+							}else{
+								$selected='';
+							}
+						?>
+						<option value="<?php echo $mysem["key"];?>" <?php echo $selected;?>><?php echo $mysem["value"];?></option>
+					<?php  } ?>
+				</select></td>
+	    </tr>
+	    
+	   	 <tr><td>&nbsp;</td><td><input type="submit" value="Search" ></td></tr>
+	</table>
+
+</fieldset>
+</form>
+<br><br>
+
+<table class="table" width="100%">
+    <tr>
+        
+        <th><?php echo $this->translate('NIM'); ?></th>
+        <th><?php echo $this->translate('Student'); ?></th>
+        <th><?php echo $this->translate('Summary'); ?></th>
+        <th><?php echo $this->translate('Problem Type'); ?></th>
+        <th><?php echo $this->translate('Status'); ?></th>
+       
+    </tr>
+    <?php
+    
+    if (count($this->issues)>0) {
+    foreach ($this->issues as $issue) {
+		//$action=$issue['action'];
+        if ($issue['status']=='0') {
+        	 $bg="red";
+        	$status="Need Response";}
+        else if ($issue['status']=='1') {
+        	$bg="green";
+        	$status="Replied";}
+        else   if ($issue['status']=='2'){
+        	$bg="black";
+        	$status="Close";
+        	} 
+    ?>
+        <tr>
+          
+            <td width="20%"><a href="#" onclick="return toggle_info('<?php echo $issue['id']; ?>');"><?php echo $issue['registrationId']; ?></a></td>
+            <td><?php echo $issue['StudentName']?></td>
+             
+            <td><?php echo  $issue['summary']; ?></td>
+  			<td width="10%"><?php echo $issue['name']; ?></td>
+            <td width="5%" bgcolor="<?php echo $bg?>">
+            <?php  echo '<font color="white">'.$this->translate($status).'</font>';?></td>
+            
+        </tr>
+        <tr><td colspan="5" id="<?php echo $issue['id']; ?>">
+			<div class="inv_info" style="display: none">
+			
+				<!-- Issue Detail-->
+				<?php 
+					if(isset($issue['Detail'])) {
+						$detail=$issue['Detail'];
+						$head=$issue['Problem'];
+				?>
+					 <table width="100%" bgcolor="white">
+					 <tr><td colspan="3"><?php echo $head?><br><br></td></tr>
+					 <?php foreach ($detail as $item) {?>
+						 <tr><td colspan="4"><?php echo $item['answer']?> <br><?php echo 'Advisor Action: '.$item['actionname']?></td></tr>
+						 <tr bgcolor="lightgrey"><td align="left"><?php echo $item['dt_answered']?>
+						 <br>
+						 <?php if ($item['file']!='') {
+						 	$dt = explode("triapp",$item['file']['pathupload']);
+							$path = $dt[1];?>
+						 	<a target='_blank' href="<?php echo $path?>"><?php echo $this->translate('Download');?></a>
+						 <?php }?></td>
+						 <td><button name="upload<?php echo $item['IdCounselingIssueDetail']?>" onclick="uploadfile(<?php echo $issue['IdStudentRegistration']?>,<?php echo $issue['id']; ?>,<?php echo $item['IdCounselingIssueDetail']?>)"><?php echo $this->translate("Upload File")?></button></td>
+						 <td align="right"><?php echo $item['by']?></td></tr>
+					 <?php }
+					 
+					if ($status!="Close") {;?>
+				
+					<tr bgcolor="lightgreen"><td align="right" colspan="3"><a href="#" onclick="return toggle_reply('<?php echo $issue['id']; ?>');"><?php echo $this->translate('Reply')?></a></td></tr>
+					<tr><td colspan="3" id="reply_it<?php echo $issue['id']; ?>">
+						<div class="reply_it" style="display: none">
+							<form name="save<?php echo $issue['id']?>" method="post" >
+								<input type="hidden" name="IdIssue" value="<?php echo $issue['id']?>">
+								<table width="100%">
+								<tr><td width="25%"></td><td align="right">
+									<textarea name="reply<?php echo $issue['id']; ?>" id="reply<?php echo $issue['id']; ?>" cols="50" rows="3"></textarea>
+									</td>
+									 
+									<td width="5%"><input type="submit" id="save" name="save"  value="Save" ></td>
+								</tr>
+								</table>
+							</form>
+						</div>
+					</td></tr>
+					</table>
+				<?php 
+					}
+					}
+				?>
+			</div>
+			</td>
+			</tr>
+    <?php
+    }
+    }
+    ?>
+     
+</table>
+
+
+<div id="dialog-upload-file" title="<?php echo $this->translate("Upload File");?>">
+  	<form name="form_file" id="form_file" method="post" action="/counseling/index/upload-file" enctype="multipart/form-data">
+  		<input type="file" name="file" />
+  		<input type="hidden" name="IdIssueDetail" id="IdIssueDetail" />
+  		<input type="hidden" name="IdIssue" id="IdIssue" />
+  		<input type="hidden" name="IdStudentRegistration" id="IdStudentRegistration" />
+  		<input type="hidden" name="redirect_path" value="/counseling/index/student-view" />
+  		 
+  	</form>
+</div>

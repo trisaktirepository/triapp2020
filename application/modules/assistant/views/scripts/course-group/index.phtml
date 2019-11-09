@@ -1,0 +1,186 @@
+<script>
+
+function createGroup(IdSubject,IdSemester,total_student,IdProgram){
+	
+	$( "#dialog-group-form" ).dialog('open');
+	$( "#IdSubject" ).val(IdSubject);
+	$( "#dialog_IdProgram" ).val(IdProgram);
+	$( "#idSemester" ).val(IdSemester);
+	$( "#total_student" ).val(total_student);
+}
+function getLandscape(){
+	
+	var program_id = $("#IdProgram").val();
+	 
+	$.ajax({
+		url: "<?php echo $this->url(array('module'=>'generalsetup','controller'=>'program', 'action'=>'ajax-get-landscape'),'default',true);?>",
+		data: {'program_id':$("#IdProgram").val()},
+		type: 'POST',
+		dataType: 'json'	
+	}).done(function ( data ) {
+
+		 
+		$("#IdLandscape").empty().append('<option value=""> <?php echo $this->translate("All"); ?> </option>');
+	
+		$.each(data, function(index) {
+			$("#IdLandscape").append('<option value="'+data[index].IdLandscape+'"> '+data[index].ProgramDescription+' </option>');
+		});
+	});
+}
+
+$(function() {
+
+	$( "#dialog:ui-dialog" ).dialog( "destroy" );
+	
+    $( "#dialog-group-form" ).dialog({
+      modal: true,
+      autoOpen: false,
+      width: 600,
+      buttons: {
+        "Cancel": function() {
+          $( this ).dialog( "close" );
+        },
+        "Create": function() {
+            
+       	   $("#groupForm").submit();
+       	   $( this ).dialog( "close" );
+       	   
+          }
+      }
+    });
+});
+
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>			
+			
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br>
+<?php if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+<?php }?>
+
+
+<div style="width:100%;">
+
+<div id="search_form" >
+	<?php echo  $this->form;?>
+</div>
+
+<div id="dialog-group-form" title="Create Group">
+<form id="groupForm" method="post" action="<?php echo $this->url(array('module'=>'assistant','controller'=>'course-group','action'=>'create-group'),'default',true);?>">
+<input type="hidden" name="IdProgram" id="dialog_IdProgram" value="">
+<input type="hidden" name="IdSubject" id="IdSubject" value="">
+<input type="hidden" name="idSemester" id="idSemester" value="">
+<input type="hidden" name="total_student" id="total_student" value="0">
+	<table class="" width="100%" cellpadding="5" cellspacing="5" border="0">
+	<tr>
+		<td width="50%"><?php echo $this->translate("No of Group")?></td>
+		<td><input type="text" size=5 name="no_of_group" value="1"></td>
+	</tr>
+	<tr>
+		<td><?php echo $this->translate("Generate Group")?></td>
+		<td>
+		<select name="generate_group_type">
+			<option value="1"><?php echo $this->translate("manual")?></option>
+			<option value="2"><?php echo $this->translate("auto")?></option>
+		</select>
+		</td>
+	</tr>
+	<tr>
+		<td><?php echo $this->translate("Assign Student to Group")?></td>
+		<td><select name="assign_student_type">
+			<option value="1"><?php echo $this->translate("manual")?></option>
+			<option value="2"><?php echo $this->translate("auto")?></option>
+		</select></td>
+	</tr>	
+	</table>
+</form>
+</div>
+
+<?php 
+	//echo $this->paginationControl($this->list_subject,'Sliding','paginationTop.phtml');
+?>
+<?php if(count($this->list_subject)>0){?>
+<form name="copytoform" method="post" action='/assistant/course-group/copy-to'>
+<input type="hidden" name="copyfrom" value ="<?php echo $this->idsemester; ?>">
+<input type="hidden" name="programme" value ="<?php echo $this->idprogram; ?>">
+<Table class="table" width='100%'>
+<tr><th><?php echo "Copy Course schedule in this periode  to"?> </th></tr>
+<tr><td><?php echo $this->form->IdSemester;?>  
+<input type="submit" name="Save" value="Copy">
+<p>Abaikan fasilitas ini jika anda tidak menginginkan menyalin jadwal periode ini ke periode berikutnya</p></td></tr>
+ </Table>
+ <br>
+<table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+	<tr>
+		<th width="25px">&nbsp;</th>
+		<th><?php echo $this->translate("Copy to")?></th>
+		<th><?php echo $this->translate("Course Code")?></th>
+		<th width="40%"><?php echo $this->translate("Course Name")?></th> 
+		<th><?php echo $this->translate("Total Registered Student")?></th>
+		<th><?php echo $this->translate("Total Assigned Student")?></th>
+		<th><?php echo $this->translate("Total UnAssigned Student")?></th>
+		<th><?php echo $this->translate("Total Group of Course")?></th>
+		<th><?php echo $this->translate("Total Group of Assistant")?></th>
+		<th><?php echo $this->translate("Action")?></th>
+	</tr>
+	<?php 
+	$i=1;	
+	
+    foreach ($this->list_subject as $k=>$v){
+    	$tosort[$k]=$v["SubjectName"];
+    	$sublist[$k]=$v;
+    }
+		
+	asort($tosort);
+	
+
+	//foreach($this->list_subject as $subject){
+	foreach($tosort as $idx=>$v){
+		//if($subject["total_student"]>0){
+	?>
+		
+	<tr>
+		<td><?php echo $i;?></td>
+		<td  width="5%" align="center"><input type="checkbox" name="copyto[]" id="copyto[]" value="<?php echo $sublist[$idx]["IdSubject"];?>"></td>
+		<td  width="10%"><?php echo $sublist[$idx]["SubCode"];?></td>
+		<td  width="40%"><?php echo $sublist[$idx]["SubjectName"];?></td> 
+		<td align="center"><?php echo ($sublist[$idx]["total_student"]==0 ? '0':$sublist[$idx]["total_student"]);?></td>
+		<td align="center"><?php echo ($sublist[$idx]["total_assigned"]==0 ? '0':$sublist[$idx]["total_assigned"]);?></td>
+		<td align="center"><?php echo ($sublist[$idx]["total_unassigned"]==0 ? '0':$sublist[$idx]["total_unassigned"]);?></td>
+		<td align="center"><?php echo $sublist[$idx]["total_group"];?></td>
+		<td align="center"><?php echo $sublist[$idx]["total_group_assistant"];?></td>
+		<td>
+		<?php if($sublist[$idx]["total_group_assistant"]!=0){?>
+		<a href="<?php echo $this->url(array('module'=>'assistant','controller'=>'course-group','action'=>'group-list','idSubject'=>$sublist[$idx]["IdSubject"],'idSemester'=>$sublist[$idx]["IdSemester"],'IdProgram'=>$this->idprogram),'default',true);?>" target="_blank"><?php echo $this->translate("Group List")?></a>
+		<?php }else{?>
+		<a href="#" onclick="createGroup('<?php echo $sublist[$idx]["IdSubject"];?>','<?php echo $sublist[$idx]["IdSemester"];?>','<?php echo $sublist[$idx]["total_student"];?>','<?php echo $this->idprogram;?>')"><?php echo $this->translate("Create Group")?></a></td>
+		<?php }?>
+	</tr>
+		<?php 
+		$i++; }?>
+	<?php }?>
+</table>
+<br>
+
+</form> 
+</div>
+<br>

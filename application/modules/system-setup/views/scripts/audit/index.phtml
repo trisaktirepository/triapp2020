@@ -1,0 +1,59 @@
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<br />
+<?}?>
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<br />
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<br />
+<?}?>
+
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+<table class="table" width="100%" cellpadding="5" cellspacing="2">
+	<tr>
+		<th>username</th>
+		<th>hostname / IP Address</th>
+		<th>Path</th>
+		<th>Timestamp</th>
+	</tr>
+	<?php
+		if(isset($this->paginator)){
+
+		$i=0;
+		foreach ($this->paginator as $log): 
+	?>
+		<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+			<td><?php echo $log['username']; ?></td>
+			<td><?php echo $log['hostname'] ."@". $log['ip']; ?></td>
+			<td><?php echo $log['message']; ?></td>
+			<td align="center" width="150px"><?php echo date('d/m/Y  h:i a', strtotime($log['time'])); ?></td>
+		</tr>		
+	<?php 
+		$i++;
+		endforeach;
+	 
+		}
+	?>
+</table>
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>

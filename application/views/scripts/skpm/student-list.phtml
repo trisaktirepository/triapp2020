@@ -1,0 +1,106 @@
+<script type="text/javascript">
+
+function view(){
+			
+	 var isChecked = $('.chk').is(':checked');
+	 
+	 if(isChecked==true){		   
+			$("#formStudent").submit();	
+	 }else{
+		alert("You did not select any student. Please select.");
+	 }
+}
+ 
+$(function () {
+	 
+	 var str = "";
+	 $('#checkall').click(function () {	
+
+		 var isChecked = $('#checkall').is(':checked');
+
+		 if(isChecked==true){			 
+			 $('.chk').prop('checked', true);
+		 }else{
+			 // Un-check
+			 $('.chk').prop('checked', false);
+		 }
+	 });
+	
+	 
+});
+
+ 
+</script>
+<script>
+function draft_list(){
+
+	$("#formStudent").attr("action", "/graduation/skpi/draft-skpi-pdf");
+	$('#formStudent').submit();
+	
+} 
+function official_list(){
+
+	$("#formStudent").attr("action", "/graduation/skpi/official-skpi-pdf");
+	$('#formStudent').submit();
+	
+}
+</script>
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>	
+		<li>
+				<a href="#" onclick="view();" >
+					<span class='view'></span>
+					<?php echo $this->translate('View Draft');?>
+				</a>
+			</li>
+		  
+	 
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br><br>
+
+	<fieldset>
+	<legend><?php echo $this->translate("Search Options");?></legend>
+    <?php echo $this->form;?>
+    </fieldset>
+    
+<fieldset><legend><?php echo $this->translate('Student List')?></legend> 
+<?php if (count($this->student_list)>0) {?>
+<form id="formStudent" name="formStudent" method="post" action="<?php echo $this->url(array('module'=>'graduation','controller'=>'skpi','action'=>'view-skpi'),'default',true);?>">
+ 
+<table class="table" width="100%">
+<thead>
+<th><?php echo $this->translate('NIM')?></th>
+<th><?php echo $this->translate('Student Name')?></th>
+<th><?php echo $this->translate('Place, date of birth')?></th> 
+<th><?php echo $this->translate('View')?>
+<br><input type="checkbox" name="checkall" id="checkall" >&nbsp;<?php echo $this->translate("Check All ?")?></th>
+</th> 
+ </thead> <tbody>
+ <input type="hidden" name="approval" value="<?php echo $this->status;?>">
+ <input type="hidden" name="IdProgram" value="<?php echo $this->idprogram;?>">
+ <?php foreach ($this->student_list as $index=>$student) {
+ 			$reg=$this->escape($student['registrationId']);
+ 			$stdname=$this->escape($student['appl_fname'].' '.$student['appl_mname'].' '.$student['appl_lname']);?>
+  	
+      <tr><td><?php echo $reg; ?>  </a></td>
+      <td><?php echo $stdname; ?>  </td>
+      <td><?php echo $student['appl_birth_place'].', '.$student['appl_dob'];  ?>  </td>
+       
+       <td><input class="chk" type="checkbox" name="chk[]" id="chk[]" value="<?php echo $student['IdStudentRegistration'];?>"></td>
+      </tr>
+  <?php }?>
+ </tbody>
+</table>
+<?php } else echo $this->translate('There is no student Result');?>
+</form>
+</fieldset>

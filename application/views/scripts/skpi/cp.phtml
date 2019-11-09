@@ -1,0 +1,158 @@
+<style type="text/css">
+.zend_form dt {
+    width: 177px;
+}
+.zend_form dd {
+    padding: 2px 187px;
+}
+</style>
+<script type="text/javascript">
+ 
+function edit_cp(n) {
+	 
+	var x = document.getElementById("data_cp").rows[n].cells;
+	
+	document.getElementById("cp_bahasa").value=x[2].innerHTML;
+	document.getElementById("cp_english").value=x[3].innerHTML;
+ 
+	document.getElementById("type").value=x[4].innerHTML;
+	document.getElementById("seq").value=document.getElementById("idhonors["+n+"]").value;
+	document.getElementById("programid").value= x[5].innerHTML;
+	
+	document.getElementById("landscapeid").value=document.getElementById("level["+n+"]").value;
+	document.getElementById("majoringid").value=document.getElementById("field["+n+"]").value;
+	
+}
+ 
+ 
+ 
+    
+ 
+ 
+</script>
+
+
+ 
+<div style="width:100%;">
+<fieldset>
+<form id="cp" method="post"  >
+<input type="hidden" name="idSKPI" id="idSKPI">
+<input type="hidden" name="idProgram" id="idProgram" value="<?php echo $this->programid;?>">
+<input type="hidden" name="idLandscape" id="idLandscape" value="<?php echo $this->landscapeid;?>">
+<table  width="80%" cellpadding="5" cellspacing="0" border="0">
+	<tr>	<td width="20%"><?php echo $this->translate("Majoring");?></td><td>:</td>
+			<td>
+		 
+			<select id="idMajoring" name="idMajoring">
+			    <option value="0"><?php echo $this->translate("Please Select");?></option>
+			    <?php 
+			    	foreach ($this->majoring_list as $level):
+			    ?>
+			    		<option value="<?php echo $level["key"];?>"<?php if($this->levelId == $level["key"]){ echo 'selected';}?>><?php echo $level["value"];?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select>
+		 
+			</td></tr>
+	<tr>	<td width="20%"><?php echo $this->translate("Types");?></td><td>:</td>
+			<td>
+		 
+			<select id="type" name="type">
+			    <option value="0"><?php echo $this->translate("Please Select");?></option>
+			    <?php 
+			    	foreach ($this->types_list as $level):
+			    ?>
+			    		<option value="<?php echo $level["key"];?>"<?php if($this->levelId == $level["key"]){ echo 'selected';}?>><?php echo $level["value"];?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select>
+		 
+			</td></tr>
+	<tr>	<td width="20%"><?php echo $this->translate("Capaian Pembelajaran");?></td><td>:</td>
+			<td> <textarea rows="4" cols="50" id="cp_bahasa" name="cp_bahasa">    
+			</textarea></tr> 
+	<tr>	<td width="20%"><?php echo $this->translate("Learning Outcomes");?></td><td>:</td>
+			<td> <textarea rows="4" cols="50" id="cp_english" name="cp_english">     
+			</textarea></tr>
+	
+	
+	<tr>	<td width="20%"><?php echo $this->translate("Sequence");?></td><td>:</td>
+			<td><input type="text" id="seq" name="seq" size="5">
+			  
+		 
+			</td></tr>
+	
+	<tr><td colspan="3" align="right"><input type="submit" name="submit" value="<?php echo $this->translate('Save')?>" ></td>
+	
+	</tr>
+</table>
+
+</form>
+</fieldset>
+<br>
+ 
+ 
+<table class="table" id="data_cp" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		<th width="5%"><?php echo $this->translate("Status");?></th> 
+		<th width="5%"><?php echo $this->translate("No");?></th>
+		<th width="10%"><?php echo $this->translate("Category");?></th>			
+		<th width="35%"><?php echo $this->translate("Capaian Pembelajaran");?></th>
+		<th width="10%"><?php echo $this->translate("Learning Outcomes");?></th>
+		
+		<th width="10%"><?php echo $this->translate("BahasaDescription");?></th>
+		<th width="10%"><?php echo $this->translate("Action");?></th>
+	</tr>
+	<?php  
+	if (count($this->cps)>0) {
+	foreach($this->cps as $index=>$value){ 
+		$id=$honor['IdSKPI'];
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<input type="hidden" id="idSKPI[<?php echo $index+1;?>]" value="<?php echo $honor['IdSKPI'];?>">
+		 
+		<input type="hidden" id="IdMajoring[<?php echo $index+1;?>]" value="<?php echo $honor['IdMajoring'];?>">
+		 
+		 
+		
+		<td align="center">
+		<?php if ($value['id_user']!=$this->iduser && $value['approved']=='2' ) {
+					 
+					?>
+						<a href="<?php echo $this->url(array('module'=>'default','controller'=>'skpi', 'action'=>'cp-approved','idhonor'=>$value['IdSKPI']),'default',true)?>"><img src='<?php echo $this->baseUrl();?>/images/reject.png' border=0 width='20' height='20' title="do you want to acept" ></a>
+			  
+				<?php } ?>
+		<?php if ($value['id_user']!=$this->iduser && $value['approved']=='1') {
+					 
+					?>
+					 
+						<a href="<?php echo $this->url(array('module'=>'default','controller'=>'skpi', 'action'=>'cp-reject','idhonor'=>$value['IdSKPI']),'default',true)?>"><img src='<?php echo $this->baseUrl();?>/images/accept.png' border=0 width='20' height='20' title="do you want to reject" ></a>
+			<?php }?> 
+						
+		<?php if ($value['approved']=='0' ||$value['approved']=='') {
+					 
+					?>
+					 
+						 <img src='<?php echo $this->baseUrl();?>/images/prohibit.png' border=0 width='20' height='20' title="Not Approved yet" ></a>
+			<?php }?>
+		 
+			 
+		</td>
+		<td><?php echo $index+1;?></td> 
+		<td><?php echo $value["type_name"];?></td>
+		<td><?php  echo $value['CP_Bahasa'];?> </td>
+		<td><?php echo $value['CP_English']; ?></td>
+		<td align="center">
+		<?php if ($value['id_user']==$this->iduser) {?>
+		<img src='<?php echo $this->baseUrl();?>/images/edit.png' border=0 width='16' height='16' title="Edit"  onclick="edit_Honor(<?php echo $value['IdSKPI'];?>)" >
+			<a href="<?php echo $this->url(array('module'=>'default','controller'=>'skpi', 'action'=>'delete-cp','idhonor'=>$value['IdSKPI']),'default',true)?>"><img src='<?php echo $this->baseUrl();?>/images/trash.png' border=0 width='16' height='16' title="Delete" ></a>
+			<?php }?></td>
+	
+	</tr>
+	<?php }
+} ?>
+
+</table>
+  

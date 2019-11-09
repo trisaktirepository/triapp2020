@@ -1,0 +1,176 @@
+<script type="text/javascript">
+    
+   function searchbox(){
+		$( "#dialog-search" ).dialog('open');
+	}
+	
+   $(function() {
+		// a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
+		$( "#dialog:ui-dialog" ).dialog( "destroy" );
+	
+		$( "#dialog-search" ).dialog({
+			modal: true,
+			autoOpen: false,
+			width: 600,
+			buttons: {
+				"Search": function() { 
+					$("#search_form").submit(); 
+				}, 
+				"Cancel": function() { 
+					$(this).dialog("close"); 
+				}
+				
+			}
+		});
+	});
+	
+	function add(){
+		window.location="<?php echo $this->url(array('module'=>'question-bank','controller'=>'tos', 'action'=>'setup-tos','pool_id'=>$this->pool_id));?>";
+	}
+	
+	
+	function del(){
+		var id = $('input[name=tos_id]:checked').val();
+
+		if(!id){
+			alert('Please select any TOS first');
+		}else{
+			if(confirm('Are you sure to delete this set ?')){
+				window.location = "<?php echo $this->url(array('module'=>'question-bank','controller'=>'tos', 'action'=>'del-tos')); ?>/tid/"+id;
+			}
+		}
+	}
+	
+	
+
+	function edit(){
+		var id = $('input[name=tos_id]:checked').val();
+
+		if(!id){
+			alert('Please select any TOS first');
+		}else{
+			window.location="<?php echo $this->url(array('module'=>'question-bank','controller'=>'tos', 'action'=>'edit-tos','pool_id'=>$this->pool_id));?>/tid/"+id;
+		}
+	}
+	
+	
+	function gochange(tos_id,val){
+		
+		if(val){
+			window.location="<?php echo $this->url(array('module'=>'question-bank','controller'=>'tos', 'action'=>'change-status','pool_id'=>$this->pool_id));?>/val/"+val+"/tos_id/"+tos_id;
+		}
+	}
+
+</script>
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="javascript:add()">
+					<span class='add'></span>
+					Add
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:edit()">
+					<span class='edit'></span>
+					Edit
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:del()">
+					<span class='delete'></span>
+					Delete
+				</a>
+			</li>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'question-bank','controller'=>'tos', 'action'=>'list-bank'),'default',true);?>">
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="#" onclick="javascript:searchbox()">
+					<span class='search'></span>
+					Search
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+<table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		<th width="25px">&nbsp;</th>
+		<th>Tos Name</th>		
+		<th width="100px">Status</th>
+		<th width="100px">Action</th>
+	</tr>
+	
+	<?php 
+	$i=0;
+	foreach ($this->paginator as $entry): 
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<td width="25px">
+			<input type="radio" name="tos_id" value="<?php echo $entry['id']; ?>">
+		</td>
+		<td><?php echo $entry['tosname']; ?></td>
+		
+		<td align="center"><?php echo $entry['status']==1?"Active":"Not Active"; ?></td>
+		<td align="center">
+		<select name="status" id="status" onchange="gochange('<?php echo $entry['id']; ?>',this.options[this.selectedIndex].value);">
+			<option value="1" <?php if($entry['status']==1) echo 'selected';?>>Active</option>
+			<option value="2" <?php if($entry['status']==2) echo 'selected';?>>Inactive</option>
+		</select>
+		
+		</td>
+	</tr>
+	<?php 
+	$i++;
+	endforeach 
+	?>
+
+</table>
+
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>
+
+
+
+<div id="dialog-search" title="Search Bank">
+<form name="search_form" id="search_form" action="" method="post">
+	<table width="100%" class="table5">
+		<tr>
+			<td>
+				Bank Name
+			</td>
+			<td width="5px">:</td>
+			<td>
+				<select name="">
+				<?foreach ($this->pool as $p){?>
+				<option value="<?php echo $p["id"]?>"><?php echo $p["name"]?></option>
+				<? } ?>
+				</select>
+			</td>
+		</tr>
+		
+		
+	</table>
+</form>
+</div>

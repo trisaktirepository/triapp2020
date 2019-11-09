@@ -1,0 +1,38 @@
+<?php date_default_timezone_set('Asia/Jakarta'); ?>
+    <table cellspacing="0" cellpadding="0">
+        <tr>
+	<th><a href="#" class="togleSelectAll">Checkbox: check all</a></th>
+        <th>Program</th>
+	<th>Semester</th>
+       <th>Start Date</th>
+       <th>Expire Date</th>
+
+<th style="width:200px">Action</th>
+        </tr>
+        <?php foreach($this->paginateData as $semester) : ?>
+        <tr>
+		<td><div class="innerTd"><div><input type="checkbox" name="markdel" class="mark" value="<?php echo $semester['Semester']['semesterID'];?>"/></div></div></td>
+		<td><div class="innerTd triggerLoad"><div><?php echo $this->escape($semester['Program']['programCode']);?></div></div></td>
+                   <td><div class="innerTd triggerLoad"><div><?php echo $this->escape($semester['Semester']['semester']);?></div></div></td>
+       <td><div class="innerTd"><div><?php echo date("F j, Y", strtotime($semester['Semester']['startDate']));?></div></div></td>
+       <td><div class="innerTd"><div><?php echo date("F j, Y", strtotime($semester['Semester']['expireDate']));?></div></div></td>
+
+            <td><div class="innerTd  triggerLoad"><div>
+                <a  class='editLink'  href="<?php echo $this->url(array('controller'=>'session',
+                'action'=>'edit', 'semesterID'=>$semester['Semester']['semesterID']));?>">
+                <img src="<?php echo $this->CBaseUrl();?>img/icon/edit-icon.png" />
+                </a> | 
+                <a class='deleteLink' href="<?php echo $this->url(array('controller'=>'session',
+                'action'=>'delete', 'semesterID'=>$semester['Semester']['semesterID']));?>">
+                <img src="<?php echo $this->CBaseUrl();?>img/icon/delete-icon.png" />
+                </a>
+            </div></div></td>
+        </tr>
+        <?php endforeach; ?>
+    </table>
+    <?php echo $this->paginationControl(
+                                    $this->paginator,
+                                    'Sliding',
+                                    'pagination.phtml',
+                                    array('filterQuery' => $this->filterQuery)
+                            ); ?>

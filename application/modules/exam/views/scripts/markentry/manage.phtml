@@ -1,0 +1,127 @@
+<script>
+function add(){		
+	document.markfrm.action="<?php echo $this->url(array('module'=>'exam','controller'=>'markentry','action'=>'manage'))?>";
+	document.markfrm.submit();
+}
+
+
+function back(){
+	window.location = "<?php echo $this->url(array('module'=>'exam','controller'=>'markentry', 'action'=>'index'),'default',true); ?>";
+}
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+		  
+			<li>							
+					<a href="#" onClick="add()" title="Save Mark">
+						<span class='save'></span>Save</a>				
+			</li>	
+			<li>							
+					<a href="#" onClick="back()" title="Back">
+						<span class='back'></span>Back</a>				
+			</li>
+		</ul>
+		
+	</div>
+</div>
+
+<br></br>
+<div style="width: 100%;">
+
+
+<table class="table3" width="600px" cellpadding="5" cellspacing="1" border="0">
+<tr>
+	<th>
+		Course Name 
+	</th>					
+	<td>:	
+		<?php echo $this->course["name"]; ?>
+	</td>
+</tr>
+<tr>
+	<th>
+		Student Name 
+	</th>					
+	<td>:	
+		<?php echo $this->student["ARD_NAME"]; ?>
+	</td>
+</tr><tr>
+	<th>
+		IC NO
+	</th>					
+	<td>:	
+		<?php echo $this->student["ARD_IC"]; ?>
+	</td>
+</tr>
+
+</table>
+
+
+
+<br>
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong></div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong></div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong></div>
+<?}?>
+
+<form name="markfrm" action="" method="post" >
+<input type="hidden" size="5" name="rd_id" value="<?php echo $this->rd_id;?>">
+<input type="hidden" size="5" name="course_id" value="<?php echo $this->course_id;?>">
+<input type="hidden" size="5" name="program_id" value="<?php echo $this->program_id;?>">
+<input type="hidden" size="5" name="type" value="<?php echo $this->course["mark_distribution_type"]; ?>">
+
+<table class="table3" width="450px" cellpadding="5" cellspacing="1" >
+<tr align="center">	  
+		<th >Component</th>
+		<th >Mark</th>
+	</tr>
+
+<?php foreach($this->asscomponent_list as $component) { ?>	
+			
+	<tr >	  
+		<td colspan="3" ><?php echo $component["component_name"]?><input type="hidden" size="5" name="component_id[]" value="<?php echo $component["id"]?>"></td>
+	</tr>
+	
+	<?php 	    
+       	//get component item 
+  	     $oCompitem = new App_Model_Exam_DbTable_Asscompitem();	
+  	     $component_item = $oCompitem->getCompitemByCompId($component["id"]);
+  	     if($component_item){
+  	     foreach ($component_item as $item){	
+  	     	
+  	     	//get current mark
+  			$oMark = new App_Model_Exam_DbTable_Markentry();
+  			$mark  = $oMark->getMarkByComponent($this->rd_id,$component["id"],$item["component_item_id"]); 
+  			
+	?>
+	<tr>
+		<td width="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<?php echo $item["component_name"]?>
+		<input type="hidden" size="5" name="component_item_id[]" value="<?php echo $item["component_item_id"]?>">
+		</td>
+		<td width="30%" align="center">
+		<input type="hidden" size="5" name="scm_id[]" value="<?php echo $mark["id"]?>">
+		<input type="text" size="3" name="mark[]" value="<?php echo $mark["component_student_mark"]?>">/<?php echo $item["component_item_total_mark"]?>
+		</td>
+	</tr>
+	<? } } ?>
+
+<? } ?>	
+</table>
+</form>  
+
+
+
+</div>
+
+
+
+

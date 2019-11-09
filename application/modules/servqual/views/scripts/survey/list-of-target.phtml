@@ -1,0 +1,53 @@
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->translate('Assessment of Targets'); ?></h2>
+</div>
+<br />
+
+<?php if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+<br />
+<?php }
+$batch=$this->surveytarget[0];
+?>
+<fieldset><legend><?php echo $this->translate('Expectation of Stakeholder');?></legend>
+<p>
+Dalam penilaian kepuasan pengguna, maka pertama-tama perlu diukur harapan pengguna terhadap proses pendidikan pengajaran
+</p>
+<p>
+	<a href="/servqual/survey/feedback/id/<?php echo $batch['IdSurvey'];?>/idtarget/<?php echo $batch['IdTarget'];?>/idresponden/<?php echo $this->idresponden;?>/type/1"><?php echo $this->translate('Link to give expectation'); ?></a>
+</p>
+</fieldset>
+<fieldset><legend><?php echo $this->translate('Real Assessment of Stakeholder');?></legend>
+<p>
+Setelah harapan pengguna telah diberikan, maka perlu untuk memberikan penilaian kondisi yang sesungguhnya, pada item berikut:
+</p>
+<table width="100%" class="table">
+	<tr>
+		<th><?php echo $this->translate('Name');?></th>
+		<th><?php echo $this->translate('date of Survey');?></th>
+	</tr>
+	<?php 
+	if(count($this->surveytarget)>0 ){
+      foreach($this->surveytarget as $index => $batch){
+	?>
+	<tr <?php echo $index%2==0?"class='shade'":""?> >
+		
+		<td><a href="/servqual/survey/feedback/id/<?php echo $batch['IdSurvey'];?>/idtarget/<?php echo $batch['IdTarget'];?>/idresponden/<?php echo $this->idresponden;?>/type/2"><?php echo $batch['TargetName']; ?></a></td>
+		<td><?php echo $batch['Status']; ?></td>
+	</tr>
+	<?php 
+	  }
+	}
+	?>
+</table>
+</fieldset>

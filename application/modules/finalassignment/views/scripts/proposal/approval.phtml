@@ -1,0 +1,511 @@
+ 
+<script>
+ 
+function onclickUpload() {
+	$('#dialog-upload-approval').dialog('open');
+}
+
+$(function() {
+	$( "#dialog-upload-approval" ).dialog({
+		autoOpen: false,
+    	resizable: false,
+      	height:140,
+      	modal: true,
+      	buttons: {
+        	"Upload Letter": function() {
+        		$('#form_certificate').submit();
+        	},
+        	Cancel: function() {
+          		$( this ).dialog( "close" );
+        	}
+      	}
+    });
+
+	$( ".datepicker" ).datepicker({
+		maxDate: "0",
+		"dateFormat" : 'yy-mm-dd',
+		changeMonth: true,
+	    changeYear: true 
+	});
+});
+ 
+ 
+	function approve(){
+		$( "#dialog-approve" ).dialog('open');
+		
+	}
+	$(function() {
+	 
+	
+		$( "#dialog-approve" ).dialog({
+			modal: true,
+			autoOpen: false,
+			width: 600,
+			buttons: {
+				   "Save": function() { 
+									 			
+						$("#approval").css("border","");
+
+						if( !$("#approval").val() ){
+							 alert("<?php echo $this->translate('Please select Approval Status.') ?> ");
+						 	 $("#approval").css("border","1px solid red");
+						}else{
+						
+							$("#approvalsts").val($("#approval").val());
+							$("#remark").val($("#dialog_remark").val());
+							if ($("#lastapp").val()==1) {
+								$("#nodean").val($("#dialog_nodean").val());
+								$("#dtnodean").val($("#dialog_dtnodean").val());
+								$("#reason").val($("#dialog_reasoning").val());
+							}
+							if ($("#nspan").val()>1) {
+								$("#supervisor").val($("#dialog_supervisor").val());
+								for (i=1;i<$("#nspan").val();i++) {
+									id="#othersupervisor"+i;
+									$(id).val($("#dialog_othersupervisor"+i).val());
+								}
+							}
+							if ($("#req").val()>0) {
+								 
+								for (i=1;i<=$("#req").val();i++) {
+									id="#take"+i;
+									if ($("#dialog_take"+i).prop('checked'))
+										$(id).val($("#dialog_take"+i).val());
+								}
+							}
+							$("#form_acc").submit(); 
+						}
+					}, 
+					"Cancel": function() { 
+						$(this).dialog("close"); 
+					}
+				}//end buttons
+			});
+		
+		$.datepicker.regional[ "fr" ];
+		
+		$( ".dtnodean" ).datepicker({
+			dateFormat: "dd-mm-yy",
+            //defaultDate: "+1w",
+            changeMonth: true,
+            numberOfMonths: 2, 
+            onClose: function( selectedDate ) {
+                $( ".dtnodean" ).datepicker( "option", "minDate", selectedDate );
+            }
+        });
+
+	});
+</script>
+
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>  
+			<li>
+				<a onclick="approve();">
+					<span class='save'></span>
+					<?php echo $this->translate("approve")?>
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<?php if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+<br />
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+
+<br /> 
+<?php }?>
+<br />
+<fieldset><legend ><?php echo $this->translate('Student Info');?></legend>
+<table>
+<tr><td><?php echo $this->translate('NIM');?></td><td>:</td><td><?php echo $this->student['registrationId'];?></td>
+<tr><td><?php echo $this->translate('Name');?></td><td>:</td><td><?php echo $this->student['student_name'];?></td>
+<tr><td><?php echo $this->translate('Majoring');?></td><td>:</td><td><?php echo $this->student['Majoring'];?></td>
+<tr><td><?php echo $this->translate('Credit Hours Transcript/All');?></td><td>:</td><td><?php echo $this->student['credithours'].'/'.$this->student['credithoursall'];?></td>
+<tr><td><?php echo $this->translate('CGPA Transcript/All');?></td><td>:</td><td><?php echo $this->student['cgpa'].'/'.$this->student['cgpaall'];?></td>
+<tr><td><?php echo $this->translate('Prerequisite');?></td><td>:</td>
+		<td><table class="table" width="100%">
+		<tr>
+			<th><?php echo $this->translate('Prerequisite Type');?></th>
+			<th><?php echo $this->translate('Subject Name');?></th>
+			<th><?php echo $this->translate('Minimum Value');?></th>
+			<th><?php echo $this->translate('Status');?></th>
+		</tr>
+		<?php if ($this->prerequisites[0]['completed']=='1') {
+			if (count($this->prerequisites) >0 ) {
+				foreach ($this->prerequisites as $item) {
+					if ($item['PrerequisiteType']=='2') {
+						$type='Credit Hours';
+						$item['SubjectName']='-';
+					}
+					else if ($item['PrerequisiteType']=='3') $type='Co-Prerequisite';
+					else  $type='Subject';
+		?>
+			<tr><td><?php echo $type;?></td>
+			<td><?php echo $item['SubjectName'];?></td>
+			<td align="center"><?php echo $item['PrerequisiteGrade'];?> </td>
+			<td align="center"><?php echo $item['Ok'];?> </td>
+			</tr>
+		<?php 	}
+			} else 	if ($this->prerequisites[0]['completed']=='0') {
+				$disable="disabled";?>
+				<tr colspan="3"><td bgcolor="red"><strong><?php echo $this->translate('Prohibit to take this application')?></strong></td> 
+			<?php 
+			}
+		}  else { ?>
+			<tr><td><?php echo $this->translate("No Prerequisite");?></tr>
+		<?php } ?>
+		
+		</table></td>
+</tr>
+<tr><td><?php echo $this->translate('Subject Related');?></td><td>:</td>
+		<td><table class="table" width="100%">
+		<tr>
+			<th><?php echo $this->translate('Subject Code');?></th>
+			<th><?php echo $this->translate('Subject Name');?></th>
+			<th><?php echo $this->translate('Credit Hours');?></th>
+			<th><?php echo $this->translate('Minimum Grade');?></th> 
+			<th><?php echo $this->translate('Grade');?></th> 
+		</tr>
+		<?php if (count($this->subject_list) >0 ) {
+				foreach ($this->subject_list as $item) {
+					 
+		?>
+			<tr><td><?php echo $item['ShortName'];?></td>
+			<td><?php echo $item['SubjectName'];?></td>
+			<td align="center"><?php echo $item['CreditHours'];?> </td>
+			<td align="center"> 
+			<?php if ($item['Grade_min']=='') echo 'N/A'; else echo $item['Grade_min'];?> </td>
+			<td align="center"><?php echo $item['Grade_name'];?> </td> 
+			</tr>
+		<?php 		
+				}  
+			}
+		  else { ?>
+			<tr><td><?php echo $this->translate("No subject related to");?></tr>
+		<?php } ?>
+		
+		</table></td>
+		
+</tr>
+</table>
+
+</fieldset>
+<br />
+ 
+<fieldset><legend><?php echo $this->translate('Summary of Proposal');?></legend>
+<form name="form_acc" id="form_acc" method="post" action="/finalassignment/proposal/approval">
+<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+	<tr>	<td width="25%"><?php echo $this->translate("Title in Bahasa");?></td><td>:</td>
+			<td><?php echo $this->proposal['title_bahasa'];?></td></tr> 
+	<tr>	<td width="20%"><?php echo $this->translate("Title in English");?></td><td>:</td>
+			<td><?php echo $this->proposal['title'];?>  </td></tr>
+	<tr>	<td width="20%"><?php echo $this->translate("First Problem Statement");?></td><td>:</td>
+			<td> <?php echo $this->proposal['problem1'];?></td></tr>
+	<tr>	<td width="20%"><?php echo $this->translate("Second Problem Statement");?></td><td>:</td>
+			<td> <?php echo $this->proposal['problem2'];?></td></tr>
+	<tr>	<td width="20%"><?php echo $this->translate("Third Problem Statement");?></td><td>:</td>
+			<td><?php echo $this->proposal['problem3'];?></td></tr>
+	<tr>	<td width="20%"><?php echo $this->translate("Abstract");?></td><td>:</td>
+			<td> <?php echo $this->proposal['abstrak'];?></td></tr>
+	 
+</table>
+ <input type="hidden" id="IdTaApproval" name="IdTaApproval" value="<?php echo $this->proposal['IdTAApproval']; ?>">
+ <input type="hidden" id="IdTAApplication" name="IdTAApplication" value="<?php echo $this->proposal['IdTAApplication']; ?>">
+<input type="hidden" id="IdTAFlowMain" name="IdTAFlowMain" value="<?php echo $this->proposal['IdTAFlowMain']; ?>">
+<input type="hidden" id="IdTAFlow" name="IdTAFlow" value="<?php echo $this->proposal['IdTAFlow']; ?>">
+<input type="hidden" id="IdPengaju" name="IdPengaju" value="<?php echo $this->proposal['Approved_by']; ?>">
+<input type="hidden" id="Sequence" name="Sequence" value="<?php echo $this->proposal['Sequence']; ?>">
+<input type="hidden" id="ProcessName" name="ProcessName" value="<?php echo $this->proposal['ProcessName']; ?>">
+<input type="hidden" id="StageCode" name="StageCode" value="<?php echo $this->StageCode; ?>">
+<input type="hidden" id="StaffAs" name="StaffAs" value="<?php echo $this->proposal['StaffAs']; ?>">
+<input type="hidden" id="approval_type" name="approval_type" value="<?php echo $this->approvaltype; ?>">
+<input type="hidden" id="IdProgram" name="IdProgram" value="<?php echo $this->IdProgram; ?>"> 
+<input type="hidden" id="IdStudentRegistration" name="IdStudentRegistration" value="<?php echo $this->student['IdStudentRegistration']; ?>"> 
+ <input type="hidden" id="approvalsts" name="approvalsts" >
+ <input type="hidden" id="remark" name="remark" >
+ <?php If ($this->lastapproval=='1') {?>
+ <input type="hidden" id="nodean" name="nodean" >
+  <input type="hidden" id="dtnodean" name="dtnodean" >
+  <input type="hidden" id="reason" name="reason" >
+ <?php }?>
+ 
+ <input type="hidden" id="nspan" name="nspan"  value="<?php echo $this->nofspan;?>">
+ <input type="hidden" id="lastapp" name="lastapp"  value="<?php echo $this->lastapproval;?>">
+  <?php if (count($this->docrequisite)>0) {?>
+ <input type="hidden" id="take" name="take" >
+ <?php }?>
+ <?php if (count($this->supervisor_list)>0) {?>
+ <input type="hidden" id="supervisor" name="supervisor" >
+ <?php }?>
+ <?php if (count($this->cosupervisor_list)>0 && $this->nofspan>1) {
+			for ($i=1;$i<$this->nofspan; $i++) {?>
+				<input type="hidden" id="othersupervisor<?php echo $i?>" name="othersupervisor<?php echo $i?>" >
+	<?php }
+	}?> 
+	<input type="hidden" id="req" name="req" value="<?php  echo count($this->docrequisite);?>">
+	<?php if (count($this->docrequisite) >0) {
+			$i=1;
+			foreach ($this->docrequisite as $item) { 
+	?>
+		<input type="hidden" id="take<?php echo $i;?>" name="take<?php echo $i;?>"  >
+	<?php $i++;
+		}
+		}	
+	?>
+</fieldset>
+</form> 
+
+
+<fieldset><legend><?php echo $this->translate('History of Process');?></legend>
+<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+<tr>
+	<th><?php echo $this->translate('Stage of Process');?></th>
+	<th><?php echo $this->translate('Name of Process');?></th>
+	<th><?php echo $this->translate('Authority of');?></th>
+	<th><?php echo $this->translate('PIC');?></th>
+	<th><?php echo $this->translate('Approval Type');?></th>
+	<th><?php echo $this->translate('Status of Process');?></th>
+	<th><?php echo $this->translate('Date of entry');?></th>
+	<th><?php echo $this->translate('Latest Date of Approval');?></th>
+	<th><?php echo $this->translate('Date of Approval');?></th>
+	<th><?php echo $this->translate('Remark');?></th>
+	<th><?php echo $this->translate('Printed Doc.');?></th>
+	<th><?php echo $this->translate('Evidence Doc.');?></th>
+</tr>
+<?php  if ($this->process_status) {
+	foreach ($this->process_status as $status) {
+		if ($status['ApprovalStatus']==0) 
+			$statusApp="Waiting for Approval";
+		else if ($status['ApprovalStatus']==1) 
+			$statusApp="Approved";
+		else if ($status['ApprovalStatus']==2) 
+			$statusApp="Pending";
+		?>
+	<tr>
+	<td><?php echo $status['Stage'];?></td>
+	<td><?php echo $status['ProcessName'];?></td>
+	<td><?php echo $status['StaffAs'];?></td>
+	<td><?php echo $status['FullName'];?></td>
+	<td><?php echo $status['approvaltype'];?></td>
+	<td><?php echo $this->translate($statusApp);?></td>
+	<td><?php echo $status['dt_entry'];?></td>
+	<td><?php echo $status['dt_latest'];?></td>
+	<td><?php echo $status['dt_Approved'];?></td>
+	<td><?php echo $status['remark'];?></td>
+	
+	<?php if (isset($status['printed_url']) && $status['printed_url']!='') {?>
+		<td><?php  
+			$path ="<a target='_blank' href=http://".APP_HOSTNAME.$status['printed_url'].">" ;
+		
+		  echo $path;?><img src='<?php echo $this->baseUrl();?>/images/document.png' border=0 width='20' height='20' title="Download Approval" ></a></td></td>
+	<?php } else  {?>
+		<td><?php echo $this->translate('Generate');?></td>
+	<?php }?>
+	
+	<?php if (isset($status['doc_url']) && $status['doc_url']!='') {?>
+		<td><?php  
+			$dt = explode("triapp",$status['doc_url']);
+			//echo var_dump($dt);exit;
+			$path = $dt[1];
+			$path ="<a target='_blank' href=http://".APP_HOSTNAME.$path.">" ;
+		
+		  echo $path;?><img src='<?php echo $this->baseUrl();?>/images/document.png' border=0 width='20' height='20' title="Download Approval Evidence" ></a></td></td>
+	<?php } else  {?>
+		<td><img src='<?php echo $this->baseUrl();?>/images/upload.png' border=0 width='20' height='20' title="Upload"  onclick="onclickUpload()" />
+		</td>
+	<?php }?>
+	
+</tr>
+<?php }
+} else echo '<tr><td> No Status of Process </td></tr>'?>
+ 
+ 
+</table>
+</fieldset>
+
+ <div id="dialog-approve" title="Proposal Approval">
+
+	<h4><?php echo $this->translate("Pls read prerequisite first carefully  before approving it ");?></h4>
+	<table width="100%" class="table5">
+		<tr>
+			<td width="40%">
+				<?php echo $this->translate("Title")?>
+			</td>
+			<td width="5px">:</td>
+			<td>	<?php echo $this->proposal['title_bahasa'];?>			
+				 
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<?php echo $this->translate("Status Approval")?>
+			</td>
+			<td width="5px">:</td>
+			<td>				
+				<select name="approval" id="approval">
+					<option value=""> <?php echo $this->translate('--Please Select--')?> </option>
+					<option value="0"> <?php echo $this->translate('Waiting for Approval')?> </option>
+					<option value="1"> <?php echo $this->translate('Approve')?> </option>
+					<option value="2"> <?php echo $this->translate('Pending')?> </option>
+					<option value="3"> <?php echo $this->translate('Reject')?> </option>
+				</select>
+			</td>
+		</tr>
+		<?php if (count($this->supervisor_list)>0) {?>
+			<tr>
+			<td>
+				<?php echo $this->translate("Main Supervisor/Promotor")?>
+			</td>
+			<td width="5px">:</td>
+			<td>				
+				<select name="dialog_supervisor" id="dialog_supervisor">
+					<?php foreach ($this->supervisor_list as $items) {?>
+					<option value="<?php echo $items['key'];?>"> <?php echo $this->translate($items['value']);?> </option>
+					 <?php }?>
+				</select>
+			</td>
+		</tr>
+		<?php }?>
+		
+		<?php if (count($this->cosupervisor_list)>0 && $this->nofspan>1) {
+			for ($i=1;$i<$this->nofspan; $i++) {?>
+		<tr>
+			<td>
+				<?php echo $this->translate("Other Supervisor/Promotor (Optional)")?>
+			</td>
+			<td width="5px">:</td>
+			<td>				
+				<select name="dialog_othersupervisor<?php echo $i?>" id="dialog_othersupervisor<?php echo $i?>">
+					<option value=""> <?php echo $this->translate('--please select--');?> </option>
+					<?php foreach ($this->cosupervisor_list as $items) {?>
+						<option value="<?php echo $items['key'];?>"> <?php echo $this->translate($items['value']);?> </option>
+					 <?php }?>
+				</select>
+			</td>
+		</tr>
+		<?php }
+	}?>
+	<?php If ($this->lastapproval=='1' && $this->statusapproval=='OTO') {?>
+		<tr>
+			<td>
+				<?php echo 'No. '.$this->StaffAs.$this->translate("Decree")?>
+			</td>
+			<td width="5px">:</td>
+			<td><input type="text" id="dialog_nodean" name="dialog_nodean" size="50"></td>
+			</tr>
+			<tr>
+			<td>
+				<?php echo $this->translate("Date of ").$this->StaffAs." ".$this->translate(" Decree");?>
+			</td>
+			<td width="5px">:</td>
+			<td><input type="text" class="dtnodean" id="dialog_dtnodean" name="dialog_dtnodean" ></td>
+			</tr>
+	<?php } else If ($this->lastapproval=='1' && $this->StageCode=='Change') {?>
+		<tr>
+			<td>
+				<?php echo $this->translate("Reasoning")?>
+			</td>
+			<td width="5px">:</td>
+			<td>				
+				<select name="dialog_reasoning" id="dialog_reasoning">
+					<option value=""> <?php echo $this->translate('--please select--');?> </option>
+					<?php foreach ($this->reasonapproval as $items) {?>
+						<option value="<?php echo $items['key'];?>"> <?php echo $this->translate($items['value']);?> </option>
+					 <?php }?>
+				</select>
+			</td>
+		</tr>			
+	<?php }?>
+		<tr>
+			<td>
+				<?php echo $this->translate("Remark")?>
+			</td>
+			<td width="5px">:</td>
+			<td>
+				<textarea cols="50" rows="5" name="dialog_remark" id="dialog_remark" ></textarea>
+			</td>
+		</tr>
+		
+		 <?php if (count($this->docrequisite)>0) {
+		 	?><table class="table"><tr>
+		 	<th><?php echo $this->translate("Requisite Name");?></th>
+		 	<th><?php echo $this->translate("Quantity");?></th>
+		 	<th><?php echo $this->translate("Remark");?></th>
+		 	<th><?php echo $this->translate("Accepted");?></th>
+		 	</tr><?php $i=1;
+		 	foreach ($this->docrequisite as $item) {
+				?>
+				<tr>
+				<td><?php echo $item['RequisiteName'];?></td>
+				<td><?php echo $item['Quantity'];?></td>
+				<td><?php echo $item['remark'];?></td>
+				<td><input type="checkbox" id="dialog_take<?php echo $i;?>" name="dialog_take<?php echo $i;?>"  value="<?php  echo $item['IdSyaratBerkasDetail'];?>"></td>
+				</tr>
+				<?php  $i++;
+			} ?></table><?php 
+		 }?> 
+		 
+		 <?php if (count($this->examapp)>0 && count($this->examprofile)>0) {
+		 	?><table>
+		 	<?php echo 'Setup Examiner';
+		 	$i=1;
+		 	foreach ($this->examprofile as $item) {
+				if (!($item['RoleAs']!='Panitera' || $item['RoleAs']!='Notulis')) {?>
+				<tr>
+				<td>
+					<?php echo $this->translate($item['RoleAs']); ?>
+				</td>
+				<td width="5px">:</td>
+				<td>				
+					<select name="examiner[]" id="examiner[]">
+						<option value=""> <?php echo $this->translate('--please select--');?> </option>
+						<?php foreach ($this->examiner_list as $items) {?>
+							<option value="<?php echo $items['key'];?>"> <?php echo $this->translate($items['value']);?> </option>
+						 <?php }?>
+					</select>
+				</td>
+			</tr>
+						
+				<?php  } else { ?>
+				<tr>
+				<td>
+					<?php echo $this->translate($item['RoleAs']); ?>
+				</td>
+				<td width="5px">:</td>
+				<td>				
+					<select name="panitera[]" id="panitera[]">
+						<option value=""> <?php echo $this->translate('--please select--');?> </option>
+						<?php foreach ($this->panitera_list as $items) {?>
+							<option value="<?php echo $items['key'];?>"> <?php echo $this->translate($items['value']);?> </option>
+						 <?php }?>
+					</select>
+				</td>
+			</tr>
+				<?php 
+				 	}
+				$i++;
+			} ?></table><?php 
+		 }?> 
+	</table>
+	
+</div>
+
+<div id="dialog-upload-approval" title="<?php echo $this->translate("Upload Approval Letter");?>">
+  	<form name="form_certificate" id="form_certificate" method="post" action="/finalassignment/proposal/upload-letter" enctype="multipart/form-data">
+  		<input type="file" name="file" />
+  		<input type="hidden" id="idTAApproval" name="idTAApproval" value="<?php echo $batch['IdTAApproval'];?>">
+  		<input type="hidden" id="Approved_by" name="Approved_by" value="<?php echo $batch['Approved_by'];?>">
+  		
+  	</form>
+</div>

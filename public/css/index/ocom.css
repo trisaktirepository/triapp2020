@@ -1,0 +1,170 @@
+/**************************************************************************
+BEFORE EDITING this file send an email to webstandards_ww-at-oracle.com
+VERSION: v1d | MODIFIED:08/27/08 | By Prashant.Nirmal-at-oracle.com
+**************************************************************************/
+
+/* CSS Document */
+  HTML,BODY,TD,H1,H2,H3,H4,OL,UL,DL,DT,DD {font-family:trebuchet ms,arial,helvetica,sans-serif;}
+  HTML,BODY,TD,CODE,KBD,TT,DL,DT,DD {font-size:11px;}
+  CODE,KBD,TT {font-family:courier,"courier new",monaco;color:#666;}
+  html, body {padding:0;margin:0;}
+  a:link {color:#9f0404;text-decoration:none;}
+  a:visited {color:#9f0404;text-decoration:none;}
+  a:hover {color:#FF0000;text-decoration:none;}
+  body{padding:10px;margin:0;font-family:trebuchet ms,arial,helvetica,sans-serif;font-size:11px;color:#000;}
+  
+
+  h1 {font-size:18px;}
+  h2, h4, h5 {font-size:13px;}
+  h1,h2,h3,h4,DT {font-weight:bold;}
+  h1,h2,h3,h4,H5 {margin:0px;padding:0px;}
+  h2 {background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/red_triangle.gif') no-repeat 0 4px;padding:2px 0px 0px 12px;}
+  h2 a:link {text-decoration:none;}
+  h2 a:visited {color:#000000;text-decoration:none;}
+  h2 a:hover {color:#FF0000;text-decoration:none;}
+
+h1 {font-size:1.5em;font-weight:bold;line-height:250%;background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/h1-left.gif') left no-repeat;padding:0 0 0 18px;margin:0 0 15px 0;white-space:nowrap;}
+h1 .contents {background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/h1-right.gif') right no-repeat;display:block;width:100%;} 
+.h1twoline {font-size:1.5em;font-weight:bold;line-height:150%;background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/documents/digitalasset/h1-bottom.png') bottom left no-repeat;padding:0 0 3px 0;margin:0 0 15px 0;width:583px;diplay:block;clear:both;white-space:normal;}
+.h1twoline .contents {background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/documents/digitalasset/h1-top.png') 0px 0px no-repeat;width:547px;padding:5px 18px 5px 18px;display:block;margin:0;}  
+
+/*Copied from general styles*/
+h5 {background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/red_box.gif') no-repeat 0 3px;padding-left:12px;margin:5px 0 2px 0;}
+.horidottedH5 {background: url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/6394.gif') repeat-x top; height:17px;}
+.TDleftPadding {padding-left:13px;}
+.skipArea {position: absolute;left: -999px;width: 990px;color:#ffffff;}
+HTML,BODY,TD,H1,H2,H3,H4,DL,DT,DD,.legalese {color:#000;}
+OL,DL {margin-bottom:1px;}
+OL,DL,DT,DD {line-height:14px;}
+DD {margin-bottom:.5em;}
+B {color:#ff0000;}
+P {margin:0px 0px 10px 0px;}
+BLOCKQUOTE {padding:5px 0px 5px 0px;}
+HR {color:#CCC;background-color:#CCC;border:0;height:1px;margin:15px 0px 15px 0px;}
+.genericBoxBgLftTop {background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/anchorbox_topleft.gif') no-repeat #f4f4f4; height:2px; width:2px;}
+.genericBoxBgRptTop {background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/anchorbox_toprpt.gif') repeat-x #f4f4f4; height:2px;}
+.genericBoxBgRtTop {background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/anchorbox_topright.gif') no-repeat #f4f4f4; height:2px; width:2px;}
+.genericBoxBgLftBot {background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/anchorbox_botleft.gif') no-repeat #f4f4f4; height:2px; width:2px;}
+.genericBoxBgRptBot {background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/anchorbox_botrpt.gif') repeat-x #f4f4f4; height:2px;}
+.genericBoxBgRtBot {background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/anchorbox_botright.gif') no-repeat #f4f4f4; height:2px; width:2px;}
+.genericBoxBgLftBotFeat {background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/genericbox_lft_bot_feat.gif') no-repeat; height:26px; width:2px;}
+.genericBoxBgRptBotFeat {background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/genericbox_rpt_bot_feat.gif') repeat-x; height:26px;}
+.genericBoxBgRtBotFeat {background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/genericbox_rt_bot_feat.gif') no-repeat; height:26px; width:2px;}
+.genericBoxSideLft {background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/anchorbox_sideleftrpt.gif') repeat-y #f4f4f4; width:2px;}
+.genericBoxSideRt {background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/anchorbox_siderightrpt.gif') repeat-y #f4f4f4; width:2px;}
+.fifteenpxBotMargin {margin-bottom:15px;}
+.threepxBotMargin {margin-bottom:4px;}
+.dottedspacer {margin:15px 0;}
+.pageSpacer{height:300px;}
+/* New Wireframe Styles */
+.sngHeader {background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/6268.gif') no-repeat; background-position:left; margin:0px 0px 0px 12px; padding-left:12px;color:#000000;font-size:12px;font-weight:bold;line-height:18px;}
+.horidotted {background-image: url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/dotted_horridotted.gif'); background-repeat: repeat;height:1px;}
+ .horipad {margin-top:25px;margin-bottom:-5px;}
+.vertdotted {background-image: url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/6281.gif'); background-repeat: repeat;}
+.sngheading {padding:6px 0px 6px 8px;color:#000;margin:0px 0px 0px 10px; font-size:11px; line-height:13px; font-weight:bold}
+.sngheading a:link {color:#000;text-decoration:none;}
+.sngheading a:hover {color:#ff0000;text-decoration:none;}
+.sngheading a:visited {color:#000;text-decoration:none;}
+
+
+
+
+
+
+  
+
+  /* FOOTER */
+  .footer{ margin-top:5px; float:right; margin-bottom:40px; width:100%; }
+  .infoCompany{float:left; padding:0px 0px 0px 12px;}
+  .footerContent{float:right; font-size:12px; padding:0px 10px 0px 0px; text-align:right;}
+  .footerLinks {font-size:10px;}
+  a.footerLinks:link {color:#000;text-decoration:none;}
+  a.footerLinks:visited {color:#000;text-decoration:none;}
+  a.footerLinks:hover {color:#FF0000;text-decoration:none;}
+  .greyBarBottom{background: #DCDCDC;height: 7px; width:100%; margin-bottom:12px;}
+  .addThisPrintEmail{padding:15px 15px 6px 0px; text-align:right;font-family:arial,helvetica,sans-serif;font-size:10px;line-height:16px;color:#666666;}    
+  a.addThisPrintEmail:link {color:#666666;text-decoration:none;}
+  a.addThisPrintEmail:visited {color:#666666;text-decoration:none;} 
+  a.addThisPrintEmail:hover {color:#FF0000;text-decoration:none;}
+  
+
+  
+  /* NEW STYLES */
+  .contentBlk{float:left; width:100%; margin-bottom:20px;}
+  .centerContentBlk{margin-left:195px;margin-right:218px;margin-top:16px;}
+  .ocomcenterContentBlk{margin-top:-2px;padding-top:0px;width:100%;float:left;position:relative;}
+  .centerContentOcmBlk{margin-left: 191px; margin-top:30px;margin-right:194px; _width:100%;position: relative; top: -10px; _top:20px;}
+  .contentOuterCover{padding:10px 10px 0px 10px; font-size:12px;}
+  .legalese {font-size:10px;font-family:arial,helvetica,sans-serif;}
+  a.legalese:link {color:#000;text-decoration:none;}
+  a.legalese:visited {color:#000;text-decoration:none;}
+  a.legalese:hover {color:#FF0000;text-decoration:none;}
+  #pressReleaseHeader {font-size:18px;font-weight:bold;line-height:250%;background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/h1-left.gif') left no-repeat;height:43px;padding:0 0 0 18px;margin:0 0 15px 0; }
+  #pressReleaseHeader .contents {background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/h1-right.gif') right no-repeat;display:block;height:43px;width:100%;}
+  p {font-size:12px;}
+
+  .viewAllMargin2 {background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/grey_arrow_trans.gif') no-repeat 0 3px;padding-left:10px;font-size:11px;}
+  .viewAllMargin2 a:link {color:#666666;text-decoration:none;}
+  .viewAllMargin2 a:visited {color:#666666;text-decoration:none;}
+  .viewAllMargin2 a:hover {color:#ff0000;text-decoration:none;}
+  
+  .topRptImg {background: url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/anchorbox_toprpt.gif') 0 0 repeat-x;}
+  .bottomRptImg {background: url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/anchorbox_botrpt.gif') 0 100% repeat-x;}
+  .leftRptImg {background: url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/anchorbox_sideleftrpt.gif') 0 0 repeat-y}
+  .rightRptImg {background: url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/anchorbox_siderightrpt.gif') 100% 0 repeat-y}
+  .bottomLeftImg {background: url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/anchorbox_botleft.gif') 0 100% no-repeat}
+  .bottomRightImg {background: url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/anchorbox_botright.gif') 100% 100% no-repeat}
+  .topLeftImg {background: url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/anchorbox_topleft.gif') 0 0 no-repeat}
+  .topRightImg {background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/anchorbox_topright.gif') 100% 0 no-repeat; padding:10px}
+
+  .innerBoxHeaderBgRptDiv {background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/pg_box_hder_bg_rpt.gif') 0 0 repeat-x;}
+  .innerBoxBgRptBotDiv {background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/pg_box_bg_rpt_bot.gif') 0 100% repeat-x }
+  .innerBoxSideLftDiv {background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/pg_box_side_lft.gif') 0 0 repeat-y}
+  .innerBoxSideRtDiv {background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/pg_box_side_rt.gif') 100% 0 repeat-y}
+  .innerBoxBgLftBotDiv {background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/pg_box_bg_lft_bot.gif')  0 100% no-repeat}
+  .innerBoxBgRtBotDiv {background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/pg_box_bg_rt_bot.gif') 100% 100% no-repeat}
+  .innerBoxHeaderBgLftDiv {background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/pg_box_hder_bg_lft.gif') 0 0 no-repeat}
+  .innerBoxHeaderBgRtDiv {background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/pg_box_hder_bg_rt.gif') 100% 0 no-repeat;}
+
+  .innerBoxHeaderBgRpt {background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/pg_box_hder_bg_rpt.gif') repeat-x #f4f4f4; height:22px;padding-left:8px;}
+  .innerBoxBgRptBot {background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/pg_box_bg_rpt_bot.gif') repeat-x #f4f4f4; height:2px;}
+  .innerBoxSideLft {background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/pg_box_side_lft.gif') repeat-y #f4f4f4; width:3px;}
+  .innerBoxSideRt {background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/pg_box_side_rt.gif') repeat-y #f4f4f4; width:3px;}
+  .innerBoxBgLftBot {background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/pg_box_bg_lft_bot.gif') no-repeat #f4f4f4; height:2px; width:3px;}
+  .innerBoxBgRtBot {background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/pg_box_bg_rt_bot.gif') no-repeat #f4f4f4; height:2px; width:3px;}
+  .innerBoxHeaderBgLft {background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/pg_box_hder_bg_lft.gif') no-repeat #f4f4f4; height:22px; width:3px;}
+  .innerBoxHeaderBgRt {background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/pg_box_hder_bg_rt.gif') no-repeat #f4f4f4; height:22px; width:3px;}
+
+  .innerBoxHeaderBgDiv {background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/pg_box_hder_bg_div.gif') no-repeat #f4f4f4;width:3px;height:22px;}
+  .innerBoxHeaderBgDivRpt {background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/pg_box_hder_bg_div_rpt.gif') repeat-y #f4f4f4;width:3px;}
+  .innerBoxBgDivBot {background:url('http://www.oracleimg.com/ocom/groups/systemobject/@mktg_admin/@ocom_admin/documents/digitalasset/pg_box_hder_bg_div_bot.gif') no-repeat #f4f4f4; height:2px; width:3px;}
+  
+  .fifteenpxTopMargin {margin-top:15px;}  
+  .innerBoxHeaderRed {color:#ff0000;}
+  .innerBoxContent {padding:15px 20px 10px 20px; line-height:16px;}
+  .innerBoxContent a:link {color:#9f0404;text-decoration:none;}
+  .innerBoxContent a:visited {color:#000;text-decoration:none;}
+  .innerBoxContent a:hover {color:#ff0000;text-decoration:none;}
+  
+  /** OCOM Content CSS **/
+  .tabletop {font-family:arial,helvetica;font-size:9pt;color:#000000;background-color:#EFEFEF;font-weight:bold}
+  .tabletxtheader {font-family:arial,helvetica;font-size:8pt;color:#000000;background-color:#ffffff;font-weight:bold}
+  .tabletxt {font-family:arial,helvetica;font-size:8pt;color:#000000;background-color:#ffffff;padding:5px;}
+.tableborder {background-color:#dddddd;margin-bottom:10px;}
+.backToTop {font-size:9px; padding:4px 0px 0px 35px;text-align:right;margin-right:17px;}
+.backToTop a:link {color:#666666;text-decoration:none;} 
+.backToTop a:visited {color:#666666;text-decoration:none;} 
+.backToTop a:hover {color:#FF0000;text-decoration:none;} 
+.innerPgSignpost a:link {color:#000;text-decoration:none;}
+.innerPgSignpost a:visited {color:#000;text-decoration:none;}
+.innerPgSignpost a:hover {color:#ff0000;text-decoration:none;}
+.signpostSubsectionHead {font-weight:bold;padding-bottom:5px;}
+.subBullets {font-size:10px;}
+.subBullets a:link{color:#565656;text-decoration:none;}
+.subBullets a:visited{color:#565656;text-decoration:none;}
+.subBullets a:hover{color:#FF0000;text-decoration:none;}
+
+
+
+  
+

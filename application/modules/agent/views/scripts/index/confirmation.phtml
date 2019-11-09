@@ -1,0 +1,51 @@
+	
+	
+
+		
+			
+			<div class="breadcrum">
+				<ul class="tri-steps">
+					<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'agent','controller'=>'index','action'=>'biodata','id'=>$this->transaction_id),'default',true);?>"><?php echo $this->translate("biodata"); ?></a></div></li>
+					<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'agent','controller'=>'index','action'=>'contactinfo','id'=>$this->transaction_id),'default',true);?>"><?php echo $this->translate("contact_info"); ?></a></div></li>
+					
+					<?php if($this->transaction["entry_type"]!=2){ //case agent(manual entry- which is already have no peserta/choose admission type)?>
+					<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'agent','controller'=>'index','action'=>'admission','id'=>$this->transaction_id),'default',true);?>"><?php echo $this->translate("Admission Type"); ?></a></div></li>
+					<?php } //end admission?>
+					<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'agent','controller'=>'index','action'=>'programme','id'=>$this->transaction_id),'default',true);?>"><?php echo $this->translate("programme"); ?></a></div></li>
+					
+					<?php if($this->transaction['at_appl_type']=='1'){?>
+						<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'agent','controller'=>'index','action'=>'uploaddocument','id'=>$this->transaction_id),'default',true);?>"><?php echo $this->translate("upload_document"); ?></a></div></li>
+						<li class="prevDone"><div class="text"><a href="<?php echo $this->url(array('module'=>'agent','controller'=>'index','action'=>'placement-test','id'=>$this->transaction_id),'default',true);?>"><?php echo $this->translate("test_schedule"); ?></a></div></li>
+					<?php }else{?>
+						<li class="prevDone"><div class="text"><a href="<?php echo $this->url(array('module'=>'agent','controller'=>'index','action'=>'uploaddocument','id'=>$this->transaction_id),'default',true);?>"><?php echo $this->translate("upload_document"); ?></a></div></li>
+					<?php }?>
+					<li class="lastCurrent"><div class="text"><a href="<?php echo $this->url(array('module'=>'agent','controller'=>'index','action'=>'confirmation','id'=>$this->transaction_id),'default',true);?>"><?php echo $this->translate("confirmation"); ?></a></div></li>	
+				</ul>
+				<div class="clear"></div>
+			</div>
+			
+			
+			<div class="message toolbar">
+				<h2><?php echo $this->title; ?></h2>
+				<div class="toolbar-button">
+					
+				</div>
+			</div>
+			
+			<form name='myform' method="post" action="<?php echo $this->url(array('module'=>'agent','controller'=>'index','action'=>'confirmation','id'=>$this->transaction_id),'default',true);?>">
+			<br>
+			<br>
+			<br>
+			<br>
+			<br>
+			<table align="center" class="table3" width="50%">
+				<tr><td align="center">				
+					<p><font size="3"><?php echo $this->translate("pre_confirmation_notice")?></font></p>
+					<p><input type="Submit" name="submit"  value="<?php echo $this->translate("submit"); ?>" ></p>
+				</td></tr>
+				
+			</table>
+			</form>
+			
+	
+

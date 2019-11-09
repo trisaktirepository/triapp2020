@@ -1,0 +1,63 @@
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<div style="width:100%;">
+<h2><?php echo $this->translate("Application Details")?></h2>
+<table class="table3" width="100%" cellpadding="5" cellspacing="1" border="0">
+		<tr>
+		    <th width="30%"><?php echo $this->translate("Name")?></th>
+			<td><?php echo $this->applicant["appl_fname"].' '.$this->applicant["appl_mname"].' '.$this->applicant["appl_lname"]; ?></td>			
+		</tr>
+		<tr>
+		    <th><?php echo $this->translate("Applicant ID")?></th>
+			<td><?php echo $this->applicant["at_pes_id"]; ?></td>			
+		</tr>
+		<tr>
+		    <th><?php echo $this->translate("Admission Type")?></th>
+			<td><?php 			
+				if( $this->applicant['at_appl_type']==1 ){
+					echo $this->translate("USM");}
+				else{
+					echo $this->translate("PSSB");
+				}?></td>			
+		</tr>
+		<tr>
+		    <th><?php echo $this->translate("Programme Offered")?></th>
+			<td>	
+				<?php 
+					echo '('.$this->program["program_code"].') '.$this->program["program_name_indonesia"];
+				?>
+			</td>			
+		</tr>
+		<tr>
+		    <th><?php echo $this->translate("Date Applied")?></th>
+			<td><?php echo $this->applicant['at_create_date']!=null?date('d-m-Y', strtotime( $this->applicant['at_submit_date']) ) ."<br />". date('H:i a', strtotime( $this->applicant['at_submit_date']) ) : "-"; ?></td>			
+		</tr>
+		<tr>
+		    <th><?php echo $this->translate("Payment Status")?></th>
+			<td><?php   setlocale(LC_MONETARY, 'id_ID');
+						if($this->payment != 0){
+    						echo $this->translate("Paid").' ('.money_format('%i', $this->payment).')';
+    					}else{
+    						echo $this->translate("Not Paid");
+    					}
+			   ?></td>			
+		</tr>
+</table>
+
+<h2><?php echo $this->translate("Quit Application Form")?></h2>
+<?php echo $this->form;?>
+</div>

@@ -1,0 +1,156 @@
+<style type="text/css">
+.zend_form dt {
+    width: 177px;
+}
+.zend_form dd {
+    padding: 2px 187px;
+}
+</style>
+<script type="text/javascript">
+ 
+function edit_Softskill(n) {
+	 
+	var x = document.getElementById("data_softskill").rows[n].cells;
+	
+	document.getElementById("title_bahasa_softskill").value=x[2].innerHTML;
+	document.getElementById("title_softskill").value=x[3].innerHTML;
+	document.getElementById("idSoftskill").value=document.getElementById("idhonors["+n+"]").value;
+	document.getElementById("datestart").value= x[5].innerHTML;
+	document.getElementById("datestop").value= x[6].innerHTML;
+	document.getElementById("given_by_softskill").value=x[4].innerHTML;
+	document.getElementById("hours").value=x[7].innerHTML;
+}
+
+function onclickDeleteSoft(n) {
+	
+	var r = confirm("Are you sure to delete it?");
+	if (r == true) {
+		var url="skpi/delete-softskill/idSoftskill/"+n;
+		window.open(url);
+	}  
+}
+ 
+ 
+</script>
+
+
+
+ 
+<div style="width:100%;">
+<fieldset>
+<form id="honors" method="post" action="<?php echo $this->baseUrl()?>/skpi/softskill" >
+<input type="hidden" name="idSoftskill" id="idSoftskill">
+<table  width="80%" cellpadding="5" cellspacing="0" border="0">
+	<tr>	<td width="20%"><?php echo $this->translate("Name of Character Building Education in Bahasa");?></td><td>:</td>
+			<td> <textarea rows="4" cols="50" id="title_bahasa_softskill" name="title_bahasa_softskill">    
+			</textarea></tr> 
+	<tr>	<td width="20%"><?php echo $this->translate("Name Of Character Building Education");?></td><td>:</td>
+			<td> <textarea rows="4" cols="50" id="title_softskill" name="title_softskill">     
+			</textarea></tr>
+	
+	<tr>	<td width="20%"><?php echo $this->translate("Provided by");?></td><td>:</td>
+			 
+			 <td>	<input type="text" id="given_by_softskill" name="given_by_softskill" size="50"></tr>		
+	
+	
+			 
+		 </td></tr>
+			<tr>	<td width="20%"><?php echo $this->translate("Date Start");?> </td><td>:</td><td>
+			 <input type="date" id="datestart" name="datestart">
+			<?php echo $this->translate("Date Stop").' : ';?> 
+			 <input type="date" id="datestop" name="datestop">
+			</td>
+			<tr>	<td width="20%"><?php echo $this->translate("Hours Equivalent");?></td><td>:</td>
+			<td><input type="number" id="hours" name="hours">
+			</td></tr>
+		 
+	<tr><td colspan="3" align="right"><input type="submit" name="submit" value="<?php echo $this->translate('Save')?>" ></td>
+	
+	</tr>
+</table>
+
+</form>
+</fieldset>
+<br>
+ 
+ 
+<table class="table" id="data_softskill" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		<th width="5%"><?php echo $this->translate("No");?></th>
+		<th width="5%"><?php echo $this->translate("Status");?></th> 
+		<th width="35%"><?php echo $this->translate("Name of Character Building Education in Bahasa");?></th>
+		<th width="10%"><?php echo $this->translate("Name of Character Building Education");?></th>
+		
+		<th width="10%"><?php echo $this->translate("Provided by");?></th>			
+		<th width="10%"><?php echo $this->translate("Started Date");?></th>
+		<th width="10%"><?php echo $this->translate("Stoped Date");?></th>
+		<th width="10%"><?php echo $this->translate("Hours Eq.");?></th> 
+		<th width="10%"><?php echo $this->translate("Certificate");?></th>
+		<th width="10%"><?php echo $this->translate("Action");?></th>
+	</tr>
+	<?php  
+	if (count($this->softskills)>0) {
+	foreach($this->softskills as $index=>$value){ 
+		$id=$value['idSoftskill'];
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<input type="hidden" id="idSoftskill[<?php echo $index+1;?>]" value="<?php echo $value['idSoftskill'];?>">
+		 
+		<td><?php echo $index+1;?></td> 
+		<td align="center">
+		<?php if ($value['id_user']!=$this->IdStudentRegistration && $value['approved']=='2' ) {
+					 
+					?>
+						<a href="<?php echo $this->url(array('module'=>'default','controller'=>'skpi', 'action'=>'softskill-approved','idSoftskill'=>$value['idSoftskill']),'default',true)?>"><img src='<?php echo $this->baseUrl();?>/images/reject.png' border=0 width='20' height='20' title="do you want to acept" ></a>
+			  
+				<?php } ?>
+		<?php if ($value['id_user']!=$this->IdStudentRegistration && $value['approved']=='1') {
+					 
+					?>
+					 
+						<a href="<?php echo $this->url(array('module'=>'default','controller'=>'skpi', 'action'=>'softskill-reject','idSoftskill'=>$value['idSoftskill']),'default',true)?>"><img src='<?php echo $this->baseUrl();?>/images/accept.png' border=0 width='20' height='20' title="do you want to reject" ></a>
+			<?php }?> 
+						
+		<?php if ($value['approved']=='0' ||$value['approved']=='') {
+					 
+					?>
+					 
+						 <img src='<?php echo $this->baseUrl();?>/images/prohibit.png' border=0 width='20' height='20' title="Not Approved yet" ></a>
+			<?php }?>
+		 
+			 
+		</td>
+		
+
+		<td><?php  echo $value['title_bahasa'];?> </td>
+		<td><?php echo $value['title']; ?>
+		<td><?php echo $value["given_by"];?></td>
+		<td><?php echo $value["datestart"];?></td>
+		<td><?php echo $value["datestop"];?></td>
+		<td><?php echo $value["hours"];?></td>
+		 
+		<?php 
+		$pathupload=$value['path'];
+		if($pathupload!=''){
+			$dt = explode("triapp",$pathupload);
+			//echo var_dump($dt);exit;
+			$path = $dt[1];
+			$path ="<a target='_blank' href=http://".APP_HOSTNAME.$path.">" ;
+		
+		?> <td align="center"><?php  echo $path;?><img src='<?php echo $this->baseUrl();?>/images/document.png' border=0 width='20' height='20' title="Download" ></a></td> <?php 
+		} else {?>
+		<td align="center"><img src='<?php echo $this->baseUrl();?>/images/upload.png' border=0 width='20' height='20' title="Upload"  onclick="onclickUpload(<?php echo $value['idSoftskill']?>,'Softskill','/default/skpi/#Tab4')" /></td>
+		<?php }?>
+		<td align="center">
+		<?php if ($value['id_user']==$this->IdStudentRegistration) {?>
+		<img src='<?php echo $this->baseUrl();?>/images/edit.png' border=0 width='20' height='20' title="Edit"  onclick="edit_Softskill(<?php echo  $index+1;?>)" >
+		<img src='<?php echo $this->baseUrl();?>/images/trash.png' border=0 width='20' height='20' title="Delete"  onclick="onclickDeleteSoft(<?php echo $value['idSoftskill'];?>)">
+			<?php }?></td>
+	
+	</tr>
+	<?php }
+} ?>
+
+</table>
+ 
+ 

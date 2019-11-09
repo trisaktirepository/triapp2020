@@ -1,0 +1,55 @@
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<!--<ul>
+			<li>
+				<a href="#" onclick="javascript:searchbox()">
+					<span class='search'></span>
+					Search
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>-->
+	</div>
+</div>
+
+<div align="center" style="background:#ebebeb; height:30px;">
+<ul class="steps">
+	<li class="current">
+		<span>1.</span> Select Course
+	</li>
+    <li class="next">
+		<span>2.</span> Select Candidate & Schedule
+	</li>
+	<li class="empty">
+		<span>3.</span> Payment Selection
+	</li>
+	<li class="empty">
+		<span>4.</span> Confirmation
+	</li>
+	<li class="empty">
+		<span>5.</span> Receipt
+	</li>
+</ul>
+<br class="clear" />
+</div>
+<br />
+
+<div>
+
+</div>

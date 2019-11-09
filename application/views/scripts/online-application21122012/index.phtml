@@ -1,0 +1,138 @@
+<?php
+$registry = Zend_Registry::getInstance();
+$locale = $registry->get('Zend_Locale');
+$this->locale = $locale->toString();
+?>
+<!--<div class="breadcrum">
+	<ul class="tri-steps">
+		<li class="prevDone" ><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'register'),'default',true);?>"><?php echo $this->translate("apply"); ?></a></div></li>
+		<li class="current" ><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'index'),'default',true);?>"><?php echo $this->translate("login"); ?></a></div></li>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'biodata'),'default',true);?>"><?php echo $this->translate("biodata"); ?></a></div></li>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'contactinfo'),'default',true);?>"><?php echo $this->translate("contact_info"); ?></a></div></li>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'programme'),'default',true);?>"><?php echo $this->translate("programme"); ?></a></div></li>
+		<li class="last"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'uploaddocument'),'default',true);?>"><?php echo $this->translate("upload_document"); ?></a></div></li>	
+	</ul>
+	<div class="clear"></div>
+</div>
+-->
+<?php 
+	echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery/plugin/colorbox/jquery.colorbox-min.js');
+	echo $this->headLink()->prependStylesheet($this->baseUrl().'/js/jquery/plugin/colorbox/colorbox.css');
+?>
+<script type="text/javascript">
+	function viewDocReq(){
+		var pId = $('#programme').val();
+
+		if(pId!=0){
+			$.colorbox({
+				href:"<?php echo $this->url(array('module'=>'default','controller'=>'online-application', 'action'=>'view-document-requirement'),'default',true);?>/pid/"+pId,
+				width: "70%",
+				height: "70%"
+			});
+		}else{
+			alert('<?php echo $this->translate("Please select programme"); ?>');
+		}
+	}
+</script>
+
+<style type="text/css">
+	ol{
+		padding: 0;
+		margin: 0 0 0 18px;	
+	}
+	
+	ol li{
+		padding: 2px 0;
+	}
+</style>
+
+<div style="float:left; width:55%;">
+	<div class="message toolbar">
+		<h2><?php echo $this->title; ?></h2>
+		<div class="toolbar-button">
+			<ul>
+				<li>
+					<a href="/resources/JUKNIS.pdf" target="_blank" >
+						<span class='pdf'></span>
+						<?php echo $this->translate("Juknis 2013/2014")?>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	
+	<?if(isset($this->noticeMessage)){?>
+	<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+	<?}?>
+	<?if(isset($this->noticeSuccess)){?>
+	<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+	<?}?>
+	<?if(isset($this->noticeError)){?>
+	<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+	<?}?>
+	
+	<?php echo $this->form; ?>
+	
+	<table>
+		<tr><td><font size="2pt"><?php echo $this->translate("create_new_account")?>&nbsp;[<a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'register'),'default',true);?>"><?php echo $this->translate("click_here");?></a>].</font></td></tr>
+	</table>
+</div>
+
+<?php if ($this->locale=="en_US") { 
+	$anntitle=$this->rsanntitle["sl_english"];
+	$annmesg=$this->rsannmesg["sl_english"];
+} else if ($this->locale=="id_ID") { 
+	$anntitle=$this->rsanntitle["sl_bahasa"];
+	$annmesg=$this->rsannmesg["sl_bahasa"];
+}
+?>
+
+<div style="float:left; width:20%; margin: 5px 0 0 10px;">
+	<div style="border: 1px solid #111; padding:10px;">
+		<?php echo $this->translate("Pilih Program Studi untuk melihat daftar dokumen, lokasi dan tanggal USM"); ?>
+		
+		<select id="programme" style="width:195px">
+			<option value="0"><?php echo $this->translate("Select Program"); ?></option>
+			<?php 
+				foreach ($this->programList as $program):
+				echo "<option value='".$program['IdProgram']."'>";
+				if ($this->locale=="en_US"){
+					echo $program['ProgramName'];
+				}else{
+					echo $program['ProgramNameIndonesia'];
+				}
+				echo "</option>";
+				endforeach;
+			?>
+		</select>
+		<input type="button" onclick="viewDocReq();" value="<?php echo $this->translate("View"); ?>" />
+		
+		<br />
+		
+		<h3><?php echo $this->translate("Prosedur Pendaftaran");?></h3>
+		<hr />
+		<ol>
+			<li>Calon membuat akun baru jika belum mempunyai akun</li>
+			<li>Login ke sistem online</li>
+			<li>Isi data yang diminta</li>
+			<li>Cetak dokumen pembayaran Ujian Saringan Masuk (USM)</li>
+			<li>Bayar uang USM ke bank BNI dimanapun</li>
+			<li>Kembali ke sistem untuk mencetak kartu peserta USM</li>
+			<li>Ujian USM sesuai jadwal yang tertera di kartu peserta USM</li>
+			<li>Menerima hasil seleksi penerimaan mahasiswa baru melalui email atau melihat ke portal anda</li>
+			<li>Melakukan pembayaran ke Bank BNI menggunakan nomor billing yang ada di surat panggilan.</li>
+			<li>Menggunduh surat perjanjian dan menandatanganinya.</li>
+			<li>Datang ke Fakultas untuk melakukan pendaftaran ulang</li>
+			<li>Selesai</li>
+		</ol>
+	</div>
+</div>
+
+<!-- ANNOUCEMENT -->
+<div style="float:left; width:20%; margin: 5px 0 0 10px;">
+	<div style="border: 1px solid #111; padding:10px;">
+		<h3><?php echo $anntitle?></h3>
+		<hr />
+		<?php echo $annmesg?>
+	</div>
+</div>

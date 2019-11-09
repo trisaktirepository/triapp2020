@@ -1,0 +1,81 @@
+<script type="text/javascript">
+	function del(title, id){
+		if(confirm('Are you sure to delete '+title+'?')){
+			window.location = "<?php echo $this->url(array('module'=>'finance','controller'=>'addfee', 'action'=>'delete')); ?>/id/"+id;
+		}
+	}
+	
+	function add(){
+		window.location="<?php echo $this->url(array('module'=>'finance','controller'=>'addfee', 'action'=>'add'));?>";
+	}
+
+	function edit(id){
+		window.location="<?php echo $this->url(array('module'=>'finance','controller'=>'addfee', 'action'=>'edit'));?>/id/"+id;
+	}
+
+</script>
+<?php 
+	echo "<h1>". $this->title ."</h1>";
+?>
+
+
+<div style="width:900px; margin: 0 auto;">
+	<div class="span-7 buttons">
+		<a class="positive addLink" href="#" onClick="add()">Add Additional Fee</a>
+	</div>
+	<br />
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+	<tr>
+		<th>NUM</th>
+		<th>Additional Name</th>
+		<th>Description</th>
+		<th>Amount (RM)</th>
+		<th width="110px"><i>options</i></th>
+	</tr>
+	
+	<?php 
+	$i=0;
+	foreach ($this->paginator as $entry): 
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<td><?php echo $i+1; ?></td>
+		<td><?php echo strtoupper($entry['additional_name']); ?></td>
+		<td><?php echo strtoupper($entry['additional_desc']); ?></td>
+		<td><?php echo $entry['additional_amount']; ?></td>
+
+		<td>
+			<a class="editLink" href="#" onClick="edit(<?php echo $entry['id']; ?>)">Edit</a>&nbsp;
+			<a class="delLink2" href="#" onClick="del('<?php echo $entry['id']; ?>',<?php echo $entry['id']; ?>)">Delete</a>
+		</td>
+	</tr>
+	<?php 
+	$i++;
+	endforeach 
+	?>
+
+</table>
+</div>
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>
+<div id="addCountry2"></div>
+<?php 
+	echo $this->dialogContainer("addDialog", '', array(
+		'title'=> 'Add placementtest',
+		'autoOpen'=>false,
+		'modal'=>false,
+		'width'=>'480px', 
+		'height'=>'150'
+		));
+		
+	echo $this->dialogContainer("editDialog", '', array(
+		'title'=> 'Edit placementtest',
+		'autoOpen'=>false,
+		'modal'=>false,
+		'width'=>'480px', 
+		'height'=>'200'
+		));
+?>

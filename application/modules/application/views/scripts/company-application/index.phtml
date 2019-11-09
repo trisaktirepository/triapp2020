@@ -1,0 +1,48 @@
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+
+<div align="center" style="background:#ebebeb; height:30px;">
+<ul class="steps">
+	<li class="current">
+		<span>1</span> Company Registration ID
+	</li>
+    <li class="next">
+		<span>2</span> Company Particular
+	</li>   	
+	<li class="empty">
+		<span>3</span> Confirmation of Registration
+	</li>
+</ul>
+<br class="clear" />
+</div>
+
+
+<p>* <?php echo $this->translate("Please enter company Registration ID."); ?></p>
+
+<form name="onlineForm" method="post" action="<?php echo $this->url(array('module'=>'application','controller'=>'company-application','action'=>'index'),'default',true) ?>" onsubmit="return form_Validator()">
+<table class="table2" width="70%" cellpadding="5" cellspacing="0" border="0">	
+<tr bgcolor="#ffffff">
+<td colspan="3"></td>
+</tr>
+    <tr bgcolor="#ffffff">
+		<td valign="top" class="shade"><?php echo $this->translate("Company Registration ID"); ?> </td>
+		<td valign="top">:</td>
+		<td valign="top">
+		<input type="text" name="comp_regID" id="comp_regID" size="30">
+         </td>
+	</tr>
+	
+	<tr bgcolor="#ffffff" align="center">
+		<td colspan="3"><input type="submit" name="Submit" value="Next"> <input type="submit" name="Reset" value="Reset"></td>
+	</tr>
+	
+</table>
+</form>

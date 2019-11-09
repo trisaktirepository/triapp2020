@@ -1,0 +1,118 @@
+
+<script type="text/javascript">
+	function del(){
+		var id = $('input[name=venue_id]:checked').val();
+
+		if(!id){
+			alert('Please select any venue first');
+		}else{
+			if(confirm('Are you sure to delete this venue ?')){
+				window.location = "<?php echo $this->url(array('module'=>'general-setup','controller'=>'venue', 'action'=>'delete'),'default',true); ?>/id/"+id;
+			}
+		}
+	}
+	
+	function add(){
+		window.location="<?php echo $this->url(array('module'=>'general-setup','controller'=>'venue', 'action'=>'add'),'default',true);?>";
+	}
+
+	function edit(){
+		var id = $('input[name=venue_id]:checked').val();
+
+		if(!id){
+			alert('Please select any venue first');
+		}else{
+			window.location="<?php echo $this->url(array('module'=>'general-setup','controller'=>'venue', 'action'=>'edit'),'default',true);?>/id/"+id;
+		}
+	}
+
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="javascript:add();">
+					<span class='add'></span>
+					Add
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:edit()">
+					<span class='edit'></span>
+					Edit
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:del()">
+					<span class='delete'></span>
+					Delete
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+	<tr>
+		<th width="1%">&nbsp;</th>
+		<th width="45%">Name</th>
+		<th width="45%">Address</th>
+		<th width="9%">Total Capacity</th>
+	</tr>
+	
+	<?php 
+	$i=0;
+	foreach ($this->paginator as $entry): 
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<td>
+			<input type="radio" name="venue_id" value="<?php echo $entry['id']; ?>">
+		</td>
+		<td>
+			<a href="<?php echo $this->url(array('module'=>'general-setup','controller'=>'venue', 'action'=>'detail','id'=>$entry['id']),'default',true); ?>">
+			<?php echo $entry['name']; ?>
+			</a>
+		</td>
+		<td align="justify">
+			<div style="padding: 5px 10px;">
+			<?php echo $entry['address1']; ?>
+			<?php echo $entry['address2']!=null?"<br />".$entry['address2']:""; ?>
+			<?php echo $entry['postcode']!=null?"<br />".$entry['postcode']:""; ?>
+			<?php echo $entry['city']!=null?"<br />".$entry['city']:""; ?>
+			<?php echo $entry['state_name']!=null?"<br />".$entry['state_name']:""; ?>
+			<?php echo $entry['country_name']!=null?"<br />".$entry['country_name']:""; ?>
+			</div>
+		</td>
+		<td align="center">
+			<?php 
+				$venueDetailDB = new App_Model_General_DbTable_VenueDetail();
+				$capacity =  $venueDetailDB->getCapacity($entry['id']);
+				echo $capacity['SUM(capacity)'];
+			?>
+		</td>
+	</tr>
+	<?php 
+	$i++;
+	endforeach 
+	?>
+
+</table>
+
+<?php 
+
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>
+<div id="view-dialog" title="Office Details"></div>

@@ -1,0 +1,18 @@
+<?php
+/*
+ *  @author Suliana
+ */
+?>
+<div id="sidebar">
+	<ul id="sliding-navigation">  
+		<li class="sliding-element"><h3>Sponsor Setup</h3></li>  
+	    <li class="sliding-element"><a href="<?php echo $this->url(array('module'=>'finance','controller'=>'sponsor','action'=>'category'),'default',true) ?>"><?php echo $this->translate("Sponsor Category"); ?></a></li>
+	    <li class="sliding-element"><a href="<?php echo $this->url(array('module'=>'finance','controller'=>'sponsor','action'=>'type'),'default',true) ?>"><?php echo $this->translate("Sponsor Type"); ?></a></li>
+	    <li class="sliding-element"><a href="<?php echo $this->url(array('module'=>'finance','controller'=>'setup','action'=>'discmain'),'default',true) ?>"><?php echo $this->translate("Assign Individual Student"); ?></a></li>
+	    <li class="sliding-element"><a href="<?php echo $this->url(array('module'=>'finance','controller'=>'setup','action'=>'billtypegroup'),'default',true) ?>"><?php echo $this->translate("Batch Upload"); ?></a></li>
+	    <li class="sliding-element"><a href="<?php echo $this->url(array('module'=>'finance','controller'=>'setup','action'=>'billtype'),'default',true) ?>"><?php echo $this->translate("Report"); ?></a></li>
+	</ul>
+</div>
+
+
+					    

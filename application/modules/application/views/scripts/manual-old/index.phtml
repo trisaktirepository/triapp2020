@@ -1,0 +1,118 @@
+<script type="text/javascript">
+	function del(){
+		var id = $('input[name=app_id]:checked').val();
+
+		if(!id){
+			alert('Please select any manual first');
+		}else{
+			if(confirm('Are you sure to delete this applicant?')){
+				window.location = "<?php echo $this->url(array('module'=>'application','controller'=>'manual', 'action'=>'delete'),'default',true); ?>/id/"+id;
+			}
+		}
+	}
+	
+	function add(){
+		window.location="<?php echo $this->url(array('module'=>'application','controller'=>'manual', 'action'=>'add'),'default',true);?>";
+	}
+
+	function edit(){
+		var id = $('input[name=app_id]:checked').val();
+
+		if(!id){
+			alert('Please select any manual first');
+		}else{
+			window.location="<?php echo $this->url(array('module'=>'application','controller'=>'manual', 'action'=>'edit'),'default',true);?>/id/"+id;
+		}
+	}
+
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="javascript:add()">
+					<span class='add'></span>
+					Add
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:edit()">
+					<span class='edit'></span>
+					Edit
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:del()">
+					<span class='delete'></span>
+					Delete
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<div style="width:100%;">
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+<table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+	<tr>
+		<th width="25px">&nbsp;</th>
+		<th>Applicant Name</th>
+		<th>Program</th>
+		<th>Status</th>
+		<th>Migrated?</th>
+	</tr>
+	
+	<?php 
+	$i=0;
+	foreach ($this->paginator as $entry): 
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<td>
+			<input type="radio" name="app_id" value="<?php echo $entry['ID']; ?>">
+		</td>
+		<td><?php echo $entry['ARD_NAME']; ?></td>
+		<td><?php 
+		$prog = $entry['ARD_PROGRAM'];
+		$programDB = new App_Model_Record_DbTable_Program();
+    	$program_data = $programDB->getData($prog);
+    	
+    	if ($prog !=0) {
+    		echo strtoupper($program_data['main_name']);
+    	}else echo "N/A";
+    	
+		
+		?></td>
+		<td><?php
+		if ($entry['ARD_OFFERED'] == 1) {
+		 	echo "OFFERED";
+		 }else {
+		 	echo "<font color=red>NOT OFFERED</font>";
+		 }
+		?></td>	
+		<td align="center"><?php 
+		
+		if ($entry['ARD_MIGRATED'] == 1) {
+			echo "Yes";
+		}else echo "<font color=red>No</font>"; ?></td>
+	</tr>
+	<?php 
+	$i++;
+	endforeach 
+	?>
+</table>
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>
+</div>

@@ -1,0 +1,194 @@
+<script type="text/javascript">
+	
+	
+	
+    function editu(id){	
+		
+		var id = $('input[name=id]:checked').val();
+		var grade_group_id =  $("input#grade_group_id").val(); 
+			
+		window.location="<?php echo $this->url(array('module'=>'exam','controller'=>'grade', 'action'=>'editu'),'default',true);?>/id/"+id+"/grade_group_id/"+grade_group_id;
+	}
+	
+	function editgrade(id){	
+		
+		var grade_group_id =  $("input#grade_group_id").val(); 
+			
+		window.location="<?php echo $this->url(array('module'=>'exam','controller'=>'grade', 'action'=>'editgrade'),'default',true);?>/grade_group_id/"+grade_group_id;
+	}
+
+    function print(pageURL,w,h){
+		
+		var left = (screen.width/2)-(w/2);
+		var top = (screen.height/2)-(h/2);
+		var targetWin = window.open (pageURL, 'University Grade Verification Form', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
+				
+	}
+
+
+	function verify(){
+		
+		if(confirm('Are you sure you want to verify this grade. Once the grade has been verified, changes will not be allowed.')){		
+
+			var pageURL = "<?php echo $this->url(array('module'=>'exam','controller'=>'grade', 'action'=>'verify'))?>";
+			var w = 400;
+			var h = 150;
+			var left = (screen.width/2)-(w/2);
+			var top  = (screen.height/2)-(h/2);
+			var targetWin = window.open (pageURL, 'Grade Verification', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=yes, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
+			
+		}
+	}
+
+
+	function back(){
+		window.location = "<?php echo $this->url(array('module'=>'exam','controller'=>'grade', 'action'=>'index'),'default',true); ?>";
+	}
+
+	
+	
+
+</script>
+<script type="text/javascript">
+$(function() {
+	$( "#search-dialog" ).dialog({ 
+		autoOpen: false,
+		width: 400,
+		modal: true,
+		buttons: { 
+			"Search": function() {
+				 
+				$("#search_form").submit();
+				$(this).dialog("close"); 
+			},
+			"Close": function() { 
+				$(this).dialog("close"); 
+			} 
+		} 
+	});
+	
+});
+
+function searchbox(){
+	$( "#search-dialog" ).dialog('open');
+}
+
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title.' : '.$this->group_name; ?></h2>
+
+	
+	<div class="toolbar-button">
+		
+		<ul>
+		<?php if($this->verification_status!=1){?>
+		
+			
+			<li>
+				<a href="#" onClick="editgrade()">
+					<span class='edit'></span>
+					<?php echo $this->translate("Modify");?>
+				</a>
+			</li>
+			
+			
+			<li class="divider"></li>
+			<li>
+				<a id="search" href="#" onclick="javascript:print('<?php echo $this->url(array('module'=>'exam','controller' =>'grade','action'=>'request'));?>',800,600)" title="Print Verification Code">
+					<span class='print'></span>
+					<?php echo $this->translate("Print");?>
+				</a>
+			</li>
+			<li>
+				<a id="search" href="#" onclick="javascript:verify()" title="">
+					<span class='verify'></span>
+					<?php echo $this->translate("Verify");?>
+				</a>
+			</li>
+			<li>
+				<a id="search" href="#" onclick="javascript:searchbox()">
+					<span class='search'></span>
+					<?php echo $this->translate("Search");?>
+				</a>
+			</li>
+		    <?php } ?>
+		    <li>
+				<a id="search" href="#" onclick="javascript:back()">
+					<span class='back'></span>
+					<?php echo $this->translate("Back");?>
+				</a>
+			</li>
+			</ul>
+			
+			
+	</div>
+	
+</div>
+ <br>
+ 
+ 
+
+<?php 
+
+
+	if($this->verification_status==1){?> 
+	<div class="notification">         
+   		<?php echo $this->translate("GRADE_HAS_BEEN_VERIFIED_MESSAGE!")?> 
+   	</div>
+    <br>
+<?php }?>
+
+	  
+<?if(isset($this->noticeMessage)){?>
+<div class="message success"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<br />
+<?}?>
+	  
+<form name="myform" method="post" action="">	  
+<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+	<tr>
+		<th><?php echo $this->translate("Grade Symbol");?></th>
+		<th><?php echo $this->translate("Point Grade");?></th>
+		<th><?php echo $this->translate("Grade Status");?></th>
+		<th><?php echo $this->translate("Min Mark");?></th>
+		<th><?php echo $this->translate("Max Mark");?></th>
+		
+	</tr>
+	<input type="hidden" value="<?php echo $this->grade_group_id?>"  name="grade_group_id" id="grade_group_id"></input>
+	<?php 
+	$i=0;
+	foreach ($this->grade_list as $entry): 
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?> align="center">
+	   
+		<td><?php echo $entry['symbol']; ?></td>
+		<td><?php echo $entry['point']; ?></td>
+		<td><?php echo $entry['status']; ?></td>
+		<td><?php echo $entry['min_mark']; ?></td>
+		<td><?php echo $entry['max_mark']; ?></td>
+		
+	</tr>
+	<?php 
+	$i++;
+	endforeach 
+	?>
+
+</table>
+</form>
+
+<div id="search-dialog" title="Search Group">
+<form name="search_form" id="search_form" action="" method="post">
+	<table width="100%">
+		<tr>
+			<td>
+				<?php echo $this->translate("Grade Group Name");?>
+			</td>
+			<td width="5px">:</td>
+			<td>
+				<input type="text" name="name" value="<?php echo $this->search_name; ?>" />
+			</td>
+		</tr>		
+	</table>
+</form>
+</div>

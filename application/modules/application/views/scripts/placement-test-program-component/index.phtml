@@ -1,0 +1,114 @@
+<script type="text/javascript">
+	function del(){
+
+		var id = $('input[name=id]:checked').val();
+		
+		if(confirm('Are you sure to delete?')){
+			window.location = "<?php echo $this->url(array('module'=>'application','controller'=>'placement-test-component', 'action'=>'delete'),'default',true); ?>/id/"+id;
+		}
+	}
+	
+	function add(){
+		window.location="<?php echo $this->url(array('module'=>'application','controller'=>'placement-test-component', 'action'=>'add'),'default',true);?>";
+	}
+
+	function edit(){
+		var id = $('input[name=id]:checked').val();
+		window.location="<?php echo $this->url(array('module'=>'application','controller'=>'placement-test-component', 'action'=>'edit'),'default',true);?>/id/"+id;
+	}
+
+	function searchbox(){
+		$('#div_search').show();
+	}
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li class="divider"></li>
+			<li>
+				<a id="search" href="#" onclick="javascript:searchbox()">
+					<span class='search'></span>
+					Search
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+<small><?php echo $this->translate("Click on program's name to view component details"); ?></small>
+<div id="div_search" style="display:none;">
+	<fieldset>
+		<legend>Search</legend>
+		<form method="post">
+			<dl class="zend_form">
+				<dt><label>Program Name</label></dt>
+				<dd><input type="text" name="ProgramName" /></dd>
+				
+				<dt><label>Program Code</label></dt>
+				<dd><input type="text" name="ProgramCode" /></dd>
+				
+				<dd id="buttons-element"><div class="buttons">
+					<input type="submit" value="Search" id="btn_search" name="Search">
+					<input type="button" onclick="$('#div_search').hide();" value="Cancel" id="cancel" name="cancel"></div></dd>
+			</dl>
+		</form>
+	</fieldset>
+</div>
+
+<div style="width:100%;">
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+<table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		<th>Program</th>
+		<th>&nbsp</th>
+		<th>Program Code</th>
+		<th>Component</th>
+	</tr>
+	
+	<?php 
+	$i=0;
+	foreach ($this->paginator as $entry): 
+	?>
+	<tr <?php echo $i%2==0?"class='shade'":""; ?>>
+		<td><a href="<?php echo $this->url(array('module'=>'application','controller'=>'placement-test-program-component', 'action'=>'detail','program_id'=>$entry['IdProgram']),'default',true); ?>"><?php echo $entry['ProgramName']; ?></a></td>
+		<td><?php echo $entry['ArabicName']; ?></td>
+		<td align="center"><?php echo $entry['ProgramCode']; ?></td>
+		<td>
+			<ul>
+			<?php
+				$programComponentDb = new App_Model_Application_DbTable_PlacementTestProgramComponent();
+				$componentList = $programComponentDb->getProgramData($entry['IdProgram']);
+				
+				if($componentList){
+					foreach ($componentList as $component):
+						echo "<li>";
+						echo $component['component_name'];
+						echo "</li>";
+					endforeach;
+				}else{
+					echo " - ";
+				}
+			?>
+			</ul>
+		</td>
+	</tr>
+	<?php 
+	$i++;
+	endforeach 
+	?>
+
+</table>
+</div>
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>

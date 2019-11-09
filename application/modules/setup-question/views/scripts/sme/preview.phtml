@@ -1,0 +1,138 @@
+
+<table width="90%" border="0" cellspacing="1" cellpadding="1">
+  <tr> 
+      <td><strong> 
+       <h1><?php echo $this->title;?></h1>
+      </strong></td>
+  </tr>
+  <tr> 
+    <td height="154">
+    <table width="100%" border="0" cellspacing="1" cellpadding="5" align="center">
+        <tr> 
+          <td align="right" bgcolor=""> 
+            <!-- onClick to edit - please check question status..if is approved changes are not allowed.-->
+            <? if($this->q["status"]==1 || $this->q["status"]==3){?>
+            <a href="<?php echo $this->url(array(module=>question ,controller => sme, action => edit,id => $this->q[id]))?>"><img src="<?php echo $this->baseUrl(); ?>/images/button-edit.gif" title="Click to Edit"></a> 
+            <? } ?>
+            <a href="<?php echo $this->url(array(module=>question ,controller => sme, action => view),'default',true)?>"><img src="<?php echo $this->baseUrl(); ?>/images/button-prev.gif" title="Back to previous page"></a> 
+           </td>
+        </tr>
+      </table>
+    
+    <table width="95%" cellspacing="1" cellpadding="5" id="mtable"  align="center"> 
+  <tr bgcolor="#D7EBFF"> 
+    <td width="19%" >Course</td>
+    <td width="81%" >  <?php echo $this->q["course_id"]?>
+      </select> </td>
+  </tr>
+  <tr> 
+    <td>Assessment Type</td>
+    <td><?php echo $this->assessment;?> </td>
+  </tr>
+  <tr bgcolor="#D7EBFF"> 
+    <td>Question Type</td>
+    <td>
+    <?php 
+    if($this->q["question_type"]==1) echo 'ESSAY';
+    if($this->q["question_type"]==2) echo 'MCQ';
+    ?></td>
+  </tr>
+   <tr  > 
+    <td>Topic</td>
+          <td><?php echo $this->q["topic_name"]?></td>
+  </tr>
+  
+  <tr bgcolor="#D7EBFF" > 
+    <td>Taxanomy Level</td>
+          <td> <?php echo $this->q["taxanomy_name"]?></td>
+  </tr>
+ 
+   <tr> 
+    <td>Status</td>
+          <td> <?php echo $this->q["status_name"]?></td>
+  </tr >
+    <tr bgcolor="#D7EBFF"> 
+    <td>Point</td>
+          <td> <?php echo $this->q["point"]?></td>
+  </tr>
+  </table>
+  
+  <br>
+  
+  <?  if($this->q["question_type"]==1)  { ?>
+		<table width="95%" border="0" align="center" cellpadding="1" cellspacing="1" id="mtable">
+        <tr> 
+          <th height="30"  colspan="2"  ><strong>Question & Answer</strong></th>         
+        </tr>
+        
+        <? $i=1; foreach ($this->question as $question) {  if($this->course["total_language"]>1){?>
+        <tr> 
+          <td height="30"  bgcolor="#DFDFDF" colspan="2"><strong>Language <?=$i;?>  </strong></td>
+          </tr>        
+           <? } ?> 
+        <tr> 
+          <td width="10%">Question</td>            
+          <td> <?php echo stripslashes($question["question"])?>   </td>            
+        </tr>
+         <tr>   
+          <td>Answer</td>         
+          <td> &nbsp;<?php echo stripslashes($question["answer"])?>  </td>    
+        </tr>
+        <? $i++;} ?>
+      </table>
+    <? } ?>
+    
+     <?  if($this->q["question_type"]==2)  { ?>
+		<table width="95%" border="0" align="center" cellpadding="1" cellspacing="1" id="mtable">
+        <tr> 
+          <th height="30"  colspan="2"  ><strong>Question & Answer</strong></th>         
+        </tr>
+         <? 
+         
+         $k=1; foreach ($this->question as $question) { 
+         	
+         //get answer
+         $answer = new Question_Model_QuestionMcqAnswer();
+         $answers = $answer->getAnswers($question["id"]);
+         	
+        
+         if($this->course["total_language"]>1){
+         ?>
+        <tr> 
+          <td height="30"  bgcolor="#DFDFDF" colspan="2"><strong>Language <?=$k;?>  </strong></td>
+          </tr>  
+         <? } ?>      
+        <tr> 
+          <td width="10%">Question</td>            
+          <td> <?php echo stripslashes($question["question"])?>   </td>            
+        </tr>
+		
+        
+        
+         <tr valign="top">   
+          <td>Answer</td>         
+          <td>  
+             <table  cellpadding="1" cellspacing="0"  border="0" class="noborder" >
+          	<? $i=1; foreach ($answers as $a){
+          		
+          		switch ($i){
+          			case 1: $no = "a)";break;
+          			case 2: $no = "b)";break;
+          			case 3: $no = "c)";break;
+          			case 4: $no = "d)";break;
+          		}
+          		?>            
+          	
+          	<tr><td  <?php if($a["correct_answer"]==1) echo 'bgcolor="#D9FBCA"';?>><?php echo $no;?></td><td><?php echo stripslashes($a["answer"])?></td></tr>
+          	<? $i++;} ?>
+          </table>
+         </td>    
+        </tr>
+        
+        <?  $k++;} ?>
+         </table>
+     <? } ?>
+     
+     
+     
+        <p>&nbsp;</p>

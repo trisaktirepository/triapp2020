@@ -1,0 +1,54 @@
+<script type="text/javascript">
+
+ 
+ 
+</script>
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		 
+	</div>
+</div>
+<br />
+ <?php if (count($this->conversionmain)>0) {?>
+
+ <form method="post" id="form-conversion" action=/default/conversion/view-conversion-result>
+<fieldset><legend><?php echo $this->translate('Choose Conversion Plan'); ?></legend>
+ <table>
+ <tr>
+ <td id="IdConversionMain-label">
+		<label class="required" for=""IdConversionMain""><?php echo $this->translate("Conversion Name"); ?></label>
+		</td>
+		<td id="IdConversionMain" name="IdConversionMain">
+			<select id="IdConversionMain" name="IdConversionMain">
+			    <option value="0"><?php echo $this->translate("Please Select");?></option>
+			    <?php 
+			    	foreach ($this->conversionmain as $items):
+			    	 
+			    	$select = "";
+			    	if( isset($this->idmain) && $this->idmain==$items['IdConversionMain'] ){
+			    		$select = 'selected="selected"';
+			    	}
+			    	?>
+			    ?>
+			    		<option value="<?php echo $items["IdConversionMain"];?>" <?php echo $select; ?>><?php echo $items["remark"]."-".$items['Major'];?></option>
+			    <?php 
+			    	endforeach;
+			    ?>
+			</select>
+		</td>
+	</tr>
+      
+     <tr><td></td><td></td><td>
+     <div class="form-opt" align="center">
+    	<button type="submit" name="save"><?php echo $this->translate('Search'); ?></button>
+	</div>
+	 </td>
+	 </tr>
+	 
+</table>
+
+</fieldset>
+
+</form> 
+ <?php }?>

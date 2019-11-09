@@ -1,0 +1,60 @@
+
+<style type="text/css">
+select, input[type='text']{
+	width:250px;
+}
+select#appl_dob-day{
+	width:50px;
+}
+select#appl_dob-month{
+	width:100px;
+}
+select#appl_dob-year{
+	width:80px;
+}
+input#appl_no_of_child{
+	width: 20px;
+}
+</style>
+
+<div class="breadcrum">
+	<ul class="tri-steps">
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'biodata'),'default',true);?>"><?php echo $this->translate("biodata"); ?></a></div></li>
+		<li class="prevDone"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'contactinfo'),'default',true);?>"><?php echo $this->translate("contact_info"); ?></a></div></li>
+		<li class="current"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'admission'),'default',true);?>"><?php echo $this->translate("Admission Type"); ?></a></div></li>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'programme'),'default',true);?>"><?php echo $this->translate("programme"); ?></a></div></li>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'uploaddocument'),'default',true);?>"><?php echo $this->translate("upload_document"); ?></a></div></li>
+		<li class="last"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'uploaddocument'),'default',true);?>"><?php echo $this->translate("confirmation"); ?></a></div></li>	
+	</ul>
+	<div class="clear"></div>
+</div>
+
+<?php if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+<?php }?>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		
+	</div>
+</div>
+
+<?php echo $this->form; ?>
+<fieldset><legend><?php echo $this->translate("Remark")?></legend>
+<ul>
+<li><strong>Ujian Saringan Masuk</strong>: merupakan cara seleksi menggunakan ujian tertulis</li>
+<li><strong>PSSB </strong>: merupakan cara seleksi hanya untuk program pendidikan <strong> Diploma dan Sarjana berdasarkan </strong> berdasarkan nilai rapor kelas 10, 11, dan semester satu Kelas 12 (jika sudah ada) </li>
+<li><strong><?php echo $this->translate("Credit Transfer")?> </strong> : merupakan cara seleksi bagi calon mahasiswa pindahan baik pindah antar program studi internal Universitas Trisakti maupun dari luar Universitas Trisakti.</li>
+<li><strong><?php echo $this->translate("Invitation")?>  </strong> : merupakan cara seleksi bagi calon mahasiswa jalur Undangan. Jalur ini hanya dapat diikuti oleh SMA yang terpilih oleh Universitas Trisakti. Seleksi berdasarkan nilai Rapot untuk 5 peringkat teratas kelas XI  dan dijamin diterima</li>
+<li><strong><?php echo $this->translate("Portofolio")?>  </strong> : merupakan cara seleksi bagi calon mahasiswa jalur menggunakan portofolio dengan mengunggah bukti terkait. Misal seorang Karyawan mengunggah pengalaman kerja dan pelatihan yang pernah ditempuh; seorang Atlit mengunggah sertifikat kejuaraan yang pernah diikuti; dan lainnya. Seleksi berdasarkan portofolio yang diakui dan terbukti </li>
+<li><strong><?php echo $this->translate("Scholarship")?>  </strong> : merupakan cara seleksi bagi calon mahasiswa penerima beasiswa. Jalur ini hanya diperuntukan bagi calon mahasiswa yang mengajukan beasiswa</li>
+<li><strong><?php echo $this->translate("Nilai UTBK")?>  </strong> : merupakan cara seleksi bagi calon mahasiswa menggunakan nilai UTBK</li>
+</ul>
+</fieldset>

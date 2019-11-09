@@ -1,0 +1,158 @@
+<script type="text/javascript"><!--
+function addRowToTable()
+{
+  var tbl = document.getElementById('tblComponent');
+  var lastRow = tbl.rows.length; 
+  // if there's no header row in the table, then iteration = lastRow + 1
+  var iteration = lastRow;
+  var row = tbl.insertRow(lastRow);
+ 
+  document.getElementById('iteration').value = iteration
+  
+  // checkbox cell
+  var cellLeft = row.insertCell(0);
+  var textNode = document.createTextNode('');
+  cellLeft.appendChild(textNode);
+
+  // left cell
+  var cellLeft = row.insertCell(1);
+  var textNode = document.createTextNode('Component Item Name '+iteration);
+  cellLeft.appendChild(textNode);
+  
+  // component_name
+  var component_name = row.insertCell(2);
+  var cn = document.createElement('input');
+  cn.type = 'text';
+  cn.name = 'component_item_name' + iteration;
+  cn.id   = 'component_item_name'+ iteration;
+  cn.size = 30;
+  
+  //cn.onkeypress = keyPressTest;
+  component_name.appendChild(cn);
+
+
+
+}
+
+
+function removeRowFromTable(total)
+{
+	
+  var curval=1;
+  newtotal=Math.abs(total)+Math.abs(curval);
+ 
+  var tbl = document.getElementById('tblComponent');
+  var lastRow = tbl.rows.length;
+  
+  curval = document.getElementById('iteration').value;
+  if (lastRow > newtotal) {
+	  tbl.deleteRow(lastRow - 1);  
+      document.getElementById('iteration').value = curval-1;
+  }else{
+      alert('Sorry you cannot remove this component. CLick on checkbox then click delete button to delete.');
+  }
+}
+
+
+
+function save(){	
+		document.form1.action="<?php echo $this->url(array('module'=>'exam','controller'=> 'component','action'=>'editform')); ?>";
+		document.form1.submit();
+	
+}
+
+function del(){
+	
+		document.form1.action="<?php echo $this->url(array('module'=>'exam','controller'=>'component','action'=>'delete-item'),'default',true)?>";
+	    document.form1.submit();	
+	
+
+	/*if(action==1){
+		document.frmcomp.action="<?php echo $this->url(array('module'=>'exam','controller'=>'asscomponent','action'=>'modify'),'default',true)?>";
+	    document.frmcomp.submit();	
+	}*/
+}
+
+function back(){
+	window.location="<?php echo $this->url(array('module'=>'exam','controller'=>'component','action'=>'index'), 'default', true);?>";
+}
+
+
+</script>
+<?php   $total_component = count($this->component_item); ?>
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>	
+		   <li>
+				
+				   <a href="#" onClick="save();">
+					<span class='save'></span>
+					Save
+				</a>
+			</li>
+			<li>
+				<a href="#" onClick="del();">
+					<span class='delete'></span>
+					Delete
+				</a>
+			</li>
+			<li>
+				<a href="#" onClick="back();">
+					<span class='back'></span>
+					Back
+				</a>
+			</li>	
+			<li class="divider"></li>		
+			
+			<li>
+				<a href="#" onClick="addRowToTable('<?php echo $total_component;?>');">
+					<span class='add'></span>
+					Add Item Row
+				</a>
+			</li>
+			<li>
+				<a href="#" onClick="removeRowFromTable('<?php echo $total_component;?>');">
+					<span class='remove' align="center"></span>
+					Remove Item Row
+				</a>
+			</li>
+			
+			</ul>
+			
+	</div>
+</div>
+<br></br>
+
+<br>
+<h2>Instruction</h2>
+<ul style="1">
+	<li>To add more than one(01) component, click on "Add Row" button.</li>
+	<li>To remove row, click on "Remove Row" button.</li>
+	<li>Fill in the information required then click "Save" button to save.</li>
+</ul>
+<br>
+
+<form name="form1" action="" method="post">
+<table id="tblComponent" class="table3" width="80%" cellpadding="5" cellspacing="1" >
+ 
+  <tr> 
+    <td width="5%">&nbsp;</td>
+    <td width="30%">Component Name</td>
+    <td><input type="text" name="component_name" id="component_name" size="30" value="<?php echo $this->component["component_name"]?>"  /></td>    
+  </tr>
+  <? $i=1;
+  	 foreach ($this->component_item as $ci){?>
+  <tr>  
+    <td>
+    <input type="hidden" name="id<?php echo $i;?>" id="id<?php echo $i;?>" value="<?php echo $ci["id"];?>"></input>
+    <input type="checkbox" name="id[]" id="id[]" value="<?php echo $ci["id"]?>"></input></td>
+    <td>Component Item Name</td>
+    <td><input type="text" name="component_item_name<?=$i?>" id="component_item_name<?=$i?>" size="30" value="<?php echo $ci["component_name"];?>"  /></td>    
+  </tr>
+  <? $i++;} ?>
+  
+</table>
+<input type="hidden" name="iteration" id="iteration" value="<?php echo $total_component ?>"></input>
+ <input type="hidden" name="parent_id" value="<?php echo $this->component["id"]?>"  /></input>
+</form>

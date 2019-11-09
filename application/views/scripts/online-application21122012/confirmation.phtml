@@ -1,0 +1,48 @@
+	
+	
+
+		
+			
+			<div class="breadcrum">
+				<ul class="tri-steps">
+					<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'biodata'),'default',true);?>"><?php echo $this->translate("biodata"); ?></a></div></li>
+					<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'contactinfo'),'default',true);?>"><?php echo $this->translate("contact_info"); ?></a></div></li>
+					<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'admission'),'default',true);?>"><?php echo $this->translate("Admission Type"); ?></a></div></li>
+					<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'programme'),'default',true);?>"><?php echo $this->translate("programme"); ?></a></div></li>
+					
+					<?php if($this->applicant['appl_admission_type']=='1'){?>
+						<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'uploaddocument'),'default',true);?>"><?php echo $this->translate("upload_document"); ?></a></div></li>
+						<li class="prevDone"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'placement-test'),'default',true);?>"><?php echo $this->translate("test_schedule"); ?></a></div></li>
+					<?php }else{?>
+						<li class="prevDone"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'uploaddocument'),'default',true);?>"><?php echo $this->translate("upload_document"); ?></a></div></li>
+					<?php }?>
+					<li class="lastCurrent"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'confirmation'),'default',true);?>"><?php echo $this->translate("confirmation"); ?></a></div></li>	
+				</ul>
+				<div class="clear"></div>
+			</div>
+			
+			
+			<div class="message toolbar">
+				<h2><?php echo $this->title; ?></h2>
+				<div class="toolbar-button">
+					
+				</div>
+			</div>
+			
+			<form name='myform' method="post" action="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'confirmation'),'default',true);?>">
+			<br>
+			<br>
+			<br>
+			<br>
+			<br>
+			<table align="center" class="table3" width="50%">
+				<tr><td align="center">				
+					<p><font size="3"><?php echo $this->translate("pre_confirmation_notice")?></font></p>
+					<p><input type="Submit" name="submit"  value="<?php echo $this->translate("submit"); ?>" ></p>
+				</td></tr>
+				
+			</table>
+			</form>
+			
+	
+

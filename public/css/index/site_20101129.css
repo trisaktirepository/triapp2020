@@ -1,0 +1,321 @@
+@CHARSET "ISO-8859-1";
+html, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+caption, tfoot, thead,  {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-size: 100%;
+}
+
+ol, ul {
+	list-style: none;
+}
+hr {color: #fff; background-color: #fff; border: 1px dotted #000; border-style: none none dotted; }
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+
+/* remember to define focus styles! */
+:focus {
+	outline: 0;
+}
+
+/* remember to highlight inserts somehow! */
+ins {
+	text-decoration: none;
+}
+del {
+	text-decoration: line-through;
+}
+
+/* tables still need 'cellspacing="0"' in the markup */
+
+
+/* clearer */
+
+/* clearfix */
+.clearfix:after {content:".";display:block;height:0;clear:both;visibility:hidden;}
+.clearfix {display:inline-table;min-height:1%;}
+/* Hides from IE-mac \*/
+* html .clearfix {height:1%;}
+.clearfix {display:block;}
+/* End hide from IE-mac */
+
+/* reusables */
+.floatLeft {float:left;margin-right:5px;}
+.floatRight {float:right;margin-left:5px;}
+.right {text-align:right;}
+.justify {text-align:justify}
+input.button {cursor:pointer;font-size:11px;}
+input.transparent {background:transparent;color:#003399;border:0;padding:0;font-size:11px;}
+input.fullWidth {width:95%;}
+select.fullWidth {width:90%;}
+.success {color:#009900;}
+.fail, .alert, .error {color:#FF0000;}
+span.label {width:100px;display:block;float:left;}
+p.option {margin:5px 0;}
+	p.option select {width:100%;}
+a.popup {padding-right:12px;background:url(../images/cms/mbb/popup.gif) center right no-repeat;}
+.highlight {background:#000;color:#FFFFFF;font-weight:bold;font-style:normal;padding:2px 5px;}
+.required {color:#FF0000;font-weight:bold;}
+.red {color:#FF0000;}
+.delete,.cancel {text-decoration:line-through;}
+
+/* link */
+
+
+/* layout */
+
+#container {text-align:left;width:100%;margin:0 auto;}
+#wrap {position:relative;background-image:url(../images/cms/mbb/wrap.gif);background-color:#fff;}
+
+/* homeContent */ 
+	#homeContent {position:relative;background:#fff;padding:5px 0 30px;}
+		#homeContent #homeHeadContent {height:60px;position:relative;padding:0 5px;}
+		#homeContent #homeSideContent {position:absolute;top:75px;left:5px;background:#efefef;border:1px solid #ddd;padding:10px 0;width:200px;}
+		#homeContent #homeAnnounceSideContent {position:absolute;top:160px;left:5px;background:#efefef;border:1px solid #ddd;padding:10px 0;width:200px;}
+		#homeContent #homeBannerSideContent {position:absolute;top:450px;left:5px;background:#ffffff;border:1px solid #ddd;padding:10px 0;width:200px;}
+		#homeContent #homeMainContent {position:relative;top:10px;left:250px;width:500px;min-height:450px;height:auto !important;height:450px;/* min-height for IE */}
+		 
+		#homeContent #homeSideContent h3 {font-size:14px;margin:0 5px 10px;}
+		#homeContent #homeSideContent p {font-size:11px;margin:0 5px 10px;}
+		#homeContent #homeSideContent dl.messages {font-size:11px;margin:0 5px 10px;}
+			#homeContent #homeSideContent dl.messages dt {font-weight:bold;}
+			#homeContent #homeSideContent dl.messages dd {margin-bottom:10px;}
+			
+		#homeContent #homeAnnounceSideContent h3 {font-size:14px;margin:0 5px 10px;}
+		#homeContent #homeAnnounceSideContent p {font-size:11px;margin:0 5px 10px;}
+		#homeContent #homeAnnounceSideContent dl.messages {font-size:11px;margin:0 5px 10px;}
+			#homeContent #homeAnnounceSideContent dl.messages dt {font-weight:bold;}
+			#homeContent #homeAnnounceSideContent dl.messages dd {margin-bottom:10px;}
+			
+		#homeContent #homeBannerSideContent h3 {font-size:14px;margin:0 5px 10px;}
+		#homeContent #homeBannerSideContent p {font-size:11px;margin:0 5px 10px;}
+		#homeContent #homeBannerSideContent dl.messages {font-size:11px;margin:0 5px 10px;}
+			#homeContent #homeBannerSideContent dl.messages dt {font-weight:bold;}
+			#homeContent #homeBannerSideContent dl.messages dd {margin-bottom:10px;}
+			
+/* login */
+	/*#login {position:relative;padding:0;}
+		#login #loginHead {padding-top:25px;}
+		#login #loginMain {width:290px;background:#efefef;position:absolute;top:30px;left:5px;}
+		#login #loginSide {position:relative;top:0px;left:310px;padding-bottom:30px;width:470px;min-height:400px;height:auto !important;height:400px;/* min-height for IE */ /*}
+		#login .paddingdiv {padding:10px;}*/
+		
+	#login {position:relative;padding:0;min-height:400px;height:auto !important;height:400px;/* min-height for IE */}
+		#login #loginHead {padding-top:25px;}
+		#login #loginMain {width:300px;background:#efefef;float:left;margin-left:5px;}
+		#login #loginSide {width:460px;float:left;margin-left:10px;}
+		#login .paddingdiv {padding:10px;}
+		
+			#login #loginMain h3 {margin-bottom:10px;font-size:13px;}
+			#login #loginMain p {margin-bottom:10px;}
+			#login #loginMain p.newUsers {font-size:11px;}
+			#login #loginMain blockquote.note {width:265px;margin:0;background:#fff;}
+			
+			table#loginTable {margin:10px 0;}
+				table#loginTable tr td {padding:5px 0;}
+		
+			#login #loginSide h3 {margin-bottom:10px;font-size:13px;}
+			#login #loginSide p {margin-bottom:10px;}
+			#login #loginSide ul {list-style:disc;margin-bottom:10px;margin-left:15px;}
+			
+/* fullContent */
+	#fullContent {position:relative;min-height:400px;height:auto !important;height:400px;/* min-height for IE */}
+		#fullContent #sideContent {width:140px;position:absolute;top:0;left:5px;}
+		#fullContent #mainContent {position:relative;top:0;left:160px;width:630px;background:#fff;padding-bottom:20px;}
+			#fullContent #mainContent div.sectionTitle {background:#ffc;padding:5px;margin-right:5px;}
+			
+/* halfContent */
+	#halfContent {position:relative;background:#fff;padding:0 10px 30px;min-height:400px;height:auto !important;height:400px;/* min-height for IE */}
+			#halfContent div.sectionTitle {background:#ffc;padding:5px;}
+	#halfContent #sideContent {width:140px;position:absolute;top:55px;left:10px;}
+	#halfContent #mainContent {position:relative;top:0;left:160px;width:615px;}
+		#halfContent #mainContent h3.head {margin-top:12px;margin-bottom:10px;}
+
+h2.pageTitle {height:20px;text-indent:-9999px;}
+ul.sectionLink {list-style:none;padding:0 15px 10px;}
+div.sectionTitle h2 {font-size:14px;}
+#sideContent ul.sideLinks {padding:0 5px;}
+	#sideContent ul.sideLinks li {line-height:1.3;font-size:12px;margin-bottom:5px;}
+		#sideContent div.promoBox {font-size:11px;background:#efefef;color:#666;padding:5px;margin-top:10px;}
+			#sideContent div.promoBox p {margin-bottom:5px;}
+			
+div#homeMenu {line-height:normal;margin:10px 0px 10px 0px;border-top:1px dotted #666;}
+	div#homeMenu ul.homeMenuList {width:97%;list-style:none;border-bottom:1px dotted #666;}
+		div#homeMenu ul.homeMenuList li {float:left;width:33%;position:relative;}
+			div#homeMenu ul.homeMenuList li a.wrap {display:block;}
+			div#homeMenu ul.homeMenuList li a.wrap:hover {background:#f2f2f2;}
+			div#homeMenu ul.homeMenuList li dl {padding:5px;}
+				div#homeMenu ul.homeMenuList li dt {font-size:14px;font-weight:bold;margin-bottom:10px;}
+				div#homeMenu ul.homeMenuList li dd {font-size:11px;margin-bottom:2px;}
+				div#homeMenu ul.homeMenuList li a.wrap strong {font-size:14px;padding:15px 10px 0;display:block;}
+				div#homeMenu ul.homeMenuList li a.wrap em {font-size:11px;font-style:normal;color:#333;padding:0 10px 20px;display:block;}
+				span.stockExchange {position:absolute;top:-20px;left:10px;}
+
+div.transferMenuWrap {margin:0 5px;border-bottom:1px dotted #666;}	
+ul.transferMenu {list-style:none;border-top:1px dotted #666;}
+	ul.transferMenu li {float:left;width:25%;}
+		ul.transferMenu li a {display:block;float:left;padding:5px 10px;}
+		ul.transferMenu li a strong {font-size:14px;display:block;margin-bottom:5px;}
+		ul.transferMenu li a span {color:#000;}
+		ul.transferMenu li a em {font-style:normal;display:block;margin-bottom:5px;}
+		ul.transferMenu li a:hover {background:#ffc;}
+		ul.transferMenu li dl {padding:5px 0;}
+		ul.transferMenu li dl dt {padding:0 10px;color:#000;}
+		ul.transferMenu li dl dd {}
+
+#quickLink form#quickLinkForm {position:absolute;top:10px;right:5px;width:300px;text-align:right;display:block;}
+	#quickLink form#quickLinkForm label {font-weight:bold;}
+
+h3.welcome {font-size:14px;margin-bottom:10px;}	
+p.lastLogin {font-weight:bold;font-size:11px;}		
+h3.head {font-size:12px;padding:0 5px;}
+h4.subHead {font-size:12px;padding:0 5px;}
+p.explanation {margin:0 5px 10px;}
+ul.tableLink {list-style:none;margin:0 0 10px 5px;}
+	ul.tableLink li {display:inline;margin-right:5px;}
+blockquote.note {background:#eeeeee;border:1px solid #ccc;margin:10px;width:400px;padding:5px;font-size:11px;}
+	blockquote.note ul {list-style-type:disc;list-style-position:outside;}
+	blockquote.note ol {list-style-type:decimal;list-style-position:outside;}
+		blockquote.note ul li {margin-left:20px;}
+		blockquote.note ol li {margin-left:25px;}
+dl.defList {}
+	dl.defList dt {font-weight:bold;}
+	dl.defList dd {}
+ul.list {margin:5px 0;}	
+
+		
+div.tableWrap {padding:0 5px 10px 5px;background:#fff;}
+
+div.tableWrap p.submit {text-align:right;padding:20px 5px;}	
+
+
+
+ul#floatShowHide {display:none;padding:10px 0;}
+	ul#floatShowHide li {float:left;margin-right:10px;}
+	
+#footer {padding:20px 10px 10px;font-size:11px;color:#666;background:#fff url(../images/cms/mbb/footer.gif) no-repeat;}
+
+ul.previousNext {list-style:none;padding:10px 0;text-align:right;}
+ul.previousNext li {display:inline;}
+
+#loginTAC blockquote {border:1px solid #ccc;background:#eee;padding:10px;margin:10px;}
+#loginTAC blockquote p {margin:0 5px 10px;}
+
+
+
+/*Table */
+
+
+/* style form */
+form dt {
+	width: 100px;
+	display: block;
+	float: left;
+	clear: left;
+}
+
+form dd {
+	margin-left: 0;
+	float: left;
+}
+.button, #button, input, .input {
+		border: 1px solid #A7A7A7;
+		color : #333333;
+		font-family: trebuchet ms,Arial, Helvetica, sans-serif;
+		font-weight : bold;
+		font-size : 11px;
+		background: url(../images/button.png) repeat-x;
+		-moz-border-radius: 2px;	/*mozilla only*/
+	}
+
+form #submitbutton {
+	margin-left:100px;
+}
+
+/* curik from lms */
+h3 {
+	font-size:12px;
+	font-family: trebuchet ms,Verdana, Arial, Helvetica, sans-serif;
+	font-style: normal;
+}
+	.table_div {
+		font-weight: bold;
+		margin: -2px -8px 10px -8px;
+		border-bottom: 1px solid #cdcdcd;
+		padding-left: 15px;
+		padding-bottom: 5px;
+		color:#444444;
+	}
+#whitebox {
+		margin: 5px 5px 0px 5px;
+		background: #ffffff;
+		width: auto !important;
+		width: 100%;
+	}
+	#whitebox div {
+		text-align: left;
+	}
+	
+	#whitebox_t {
+		background: url(../images/cms/curver_white/greyline.png) 0 0 repeat-x;
+	}
+	#whitebox_tl {
+		background: url(../images/cms/curver_white/box_white_tl.png) 0 0 no-repeat
+	}
+	#whitebox_tr {
+		height: 8px;
+		overflow: hidden;
+		background: url(../images/cms/curver_white/box_white_tr.png) 100% 0 no-repeat;
+	}
+	#whitebox_m {
+		border-left: 1px solid #cdcdcd;
+		border-right: 1px solid #cdcdcd;
+		width: auto !important;
+		width: 100%;
+		padding: 1px 8px;
+	}
+	#whitebox_b {
+		background: url(../images/cms/curver_white/greyline.png) 0 100% repeat-x;
+	}
+	#whitebox_bl {
+		background: url(../images/cms/curver_white/box_white_bl.png) 0 0 no-repeat;
+	}
+	#whitebox_br {
+		height: 8px;
+		overflow: hidden;
+		background: url(../images/cms/curver_white/box_white_br.png) 100% 0 no-repeat;
+	}
+	
+
+	
+.data_border, #data_border {
+		border:1px solid #DDDDDD;
+	}
+	.tbmenu {
+	font-weight: bold;
+	color: #333333;
+	background-color: #F9F9F9;
+	border-bottom: 1px solid #f3f3f3;
+	font-family: trebuchet ms,Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	text-align: center;
+	}	
+.bgoff {}
+.bgon {
+	background: #F4F3D3;	/*kuning kekelabuan: sempoi*/
+}

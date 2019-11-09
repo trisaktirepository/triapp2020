@@ -1,0 +1,42 @@
+<div style="padding:15px 15px 0 10px">
+	<div class="message toolbar">
+		<h2 style="position:relative"><?php echo $this->program['ArabicName'];?></h2>
+		<div class="toolbar-button">
+			<ul>
+				
+			</ul>
+		</div>
+	</div>
+	<h3><?php echo $this->translate("Document Required to Upload"); ?></h3>
+	<ul>
+		<li>Gambar 4x6</li>
+		<li>KPT</li>
+		<li>Surat Dokter</li>
+		<li>Rapor untuk PSSB</li>
+	</ul>
+	
+	<h3><?php echo $this->translate("Placement Test Component Weightage"); ?></h3>
+	<ul>
+		<?php
+			$i=0; 
+			foreach ($this->program['component'] as $comp):?>
+				<li><?php echo $comp['component_name_bahasa']?> - <?php echo $this->program['components']['weightage'][$i]['apw_weightage']!=null?$this->program['components']['weightage'][$i]['apw_weightage']."%":""; ?></li>
+		<?php 
+			$i++;
+			endforeach;
+		?>
+	</ul>
+	
+	<h3><?php echo $this->translate("Placement Test Schedule"); ?></h3>
+	<table class="table" style="margin:0 0 20px 10px;">
+		<?php 
+			foreach ($this->placement_test_ScheduleList as $schedule):?>
+				<tr>
+					<td><?php echo $schedule['al_location_name']?></td>
+					<td><?php echo $schedule['aps_test_date']; ?></td>
+				</tr>
+		<?php
+			endforeach;
+		?>
+	</table>
+</div>

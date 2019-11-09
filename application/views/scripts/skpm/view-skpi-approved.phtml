@@ -1,0 +1,413 @@
+<style type="text/css">
+.header_title {
+	font-size: 16px;
+	font-weight: bold;
+}
+.header_title1 {
+	font-size: 10px;
+	font-weight: bold;
+	text-align: center;
+}
+.title {
+	font-size: 12px;
+	font-weight: bold;
+}
+.para {
+	margin-top : 3px;
+	margin-left :20px;
+	margin-bottom: 3px;
+}
+.para1 {
+	margin-top : 5px;
+	margin-left :5px;
+	margin-right :5px;
+	margin-bottom: 5px;
+	text-align: justify;
+}
+/* Table */
+.table_head{
+	font-family: "Trebuchet MS", Helvetica, sans-serif;	
+    width: 100%;
+    cellspacing: 0px;
+    cellpadding: 5px;
+    font-weight: bold;
+    font-size: 12px;
+ 
+}
+
+
+/* Table */
+.table_content2{
+	font-family: "Arial", Helvetica, sans-serif;	
+    width: 100%;
+    cellspacing: 0px;
+    cellpadding: 5px;   
+	font-size: 12px;
+}
+.table_content{
+	font-family: "Trebuchet MS", Helvetica, sans-serif;	
+    width: 100%;
+    cellspacing: 0px;
+    cellpadding: 10px;
+    border:0px solid #000;
+}
+
+.table_content th{
+	background-color: #767676;
+	color:white;
+	line-height: 20px;
+}
+.table_content tr{
+	line-height: 5px;
+}
+.table_content td{
+	/*border-bottom:1px dotted gray;*/
+	border:0px solid #000;
+	line-height: 16px;
+}
+/* Table */
+.table_content1{
+	font-family: "Trebuchet MS", Helvetica, sans-serif;	
+    width: 100%;
+    cellspacing: 0px;
+    cellpadding: 10px;
+    border:1px solid #000;
+}
+
+.table_content1 th{
+	background-color: #767676;
+	color:white;
+	line-height: 12px;
+}
+.table_content1 tr{
+	line-height: 5px;
+}
+.table_content1 td{
+	/*border-bottom:1px dotted gray;*/
+	border:0px solid #000;
+	line-height: 16px;
+}
+
+.table_footer{
+	font-family: "Trebuchet MS", Helvetica, sans-serif;	
+    width: 100%;
+    cellspacing: 0px;
+    cellpadding: 5px;
+    font-size: 12px;
+ 
+}
+.table_footer tr{
+	height: 30px;
+}
+.table_footer td{
+	height: 30px;
+}
+
+.table_subject{
+	font-family: "Trebuchet MS", Helvetica, sans-serif;	
+    width: 100%;
+    cellspacing: 0px;
+    cellpadding: 15px;  
+	border:1px solid #000;
+}
+.table_subject tr{
+	font-family: "Trebuchet MS", Helvetica, sans-serif;	
+    width: 100%;
+    cellspacing: 0px;
+    cellpadding: 15px;  
+	border-left:1px solid #000;
+} 
+
+.tdleft{
+	border-left:1px solid #000;
+}
+
+.tdbottom{
+	border-bottom:1px solid #000;
+}
+
+
+
+</style>
+ 
+<?php 
+$this->headScript()->prependFile('/js/jquery/plugin/blockui/jquery.blockui.js'); 
+?>
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>	
+		  
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br><br>
+
+	<fieldset>
+	<legend><?php echo $this->translate("Search Options");?></legend>
+    <?php echo $this->form;?>
+    </fieldset>
+    <br/>
+    <?php $type='';
+    	foreach ($this->studentlist as $student) {?>
+    	
+	<fieldset><legend><?php echo $this->escape($student['registrationId']);?> - <?php echo $this->escape($student['appl_fname'].' '.$student['appl_mname'].' '.$student['appl_lname']);?></legend>
+		<table width="100%">
+		<tr><td colspan="3" align="center"><h1> <strong>SURAT KETERANGAN PENDAMPING IJAZAH</strong></h1></td>
+		<tr><td colspan="3" align="center"><h3> <strong><i>DIPLOMA SUPPLEMENT</i></strong></h1></td>
+		<tr><td colspan="3" align="center"><h1>&nbsp;</h1></td>
+		<tr><td colspan="3" align="center"><?php echo "No: ".$student['noskpi'];?></h1></td>
+		<tr><td width="45%"> <p class="para1"> Surat Keterangan Pendamping Ijazah sebagai pelengkap ijazah yang menerangkan capaian pembelajaran dan prestasi pemegang ijazah selama masa studi</p></td><td width="4%"></td><td width="45%"><p class="para1">The diploma supplement accompanies a higher education certificate providing a stadardized description of the nature, level, context, and status of the studies completed by the its holder</p></td></tr>  
+		</table>
+		<table class="table_content" width="100%" cellpadding="5" cellspacing="1">
+		<tr align="center" ><th class="header_title" width="48%"><?php echo "1. INFORMASI INDENTITAS PEMEGANG SKPI"?></th><td background-color="white" width="4%"></td><th class="header_title" align="center" width="48%"><?php echo "1. INFORMATION IDENTIFIYING THE HOLDER OF QUALIFICATION"?></th> </tr>
+		<tr><td width="45%"><?php echo '1.1 Nama Lengkap';?></td><td width="4%"></td><td width="45%"><?php echo '1.1 Full Name'?></td></tr>  
+		<tr><td width="45%"> <p class="para"> <?php echo $student['fullname'];?></p></td><td width="4%"></td><td width="45%"><p class="para"><?php  echo $student['fullname'];?></p></td></tr>  
+		<tr><td width="45%"> 
+			<table>
+			<tr><td width="15%"></td><td><?php echo 'Nama Depan';?></td><td>:</td><td><?php echo $student['appl_fname'].' '.$student['appl_mname'];?></td></tr>
+			<tr><td width="15%"></td><td><?php echo 'Nama Belakang';?></td><td>:</td><td><?php echo $student['appl_lname'];?></td></tr>
+			</table>
+			</td><td width="4%"></td>
+			
+			<td width="45%"> 
+			<table>
+			<tr><td width="15%"></td><td><?php echo 'Last Name ';?></td><td>:</td><td><?php echo $student['appl_lname'];?></td></tr>
+			<tr><td width="15%"></td><td><?php echo 'First Name ';?></td><td>:</td><td><?php echo $student['appl_fname'].' '.$student['appl_mname'];?></td></tr>
+			</table>
+			</td>
+		</tr> 
+		<tr><td width="45%"><?php echo '1.2 Tempat Tanggal Lahir';?></td><td width="4%"></td><td width="45%"><?php echo '1.2 Place and Date of Birth'?></td></tr>  
+		<tr><td width="45%"> <p class="para"><?php echo $student['appl_birth_place'].', '.$student['dob'];?></p></td><td width="4%"></td><td width="45%"> <p class="para"><?php echo $student['appl_birth_place'].', '.$student['dobeng'];?></p></td></tr>  
+		<tr><td width="45%"><?php echo '1.3 Nomor Pokok Mahasiswa';?></td><td width="4%"></td><td width="45%"><?php echo '1.3 Student Identification Number'?></td></tr>  
+		<tr><td width="45%"> <p class="para"> <?php echo $student['registrationId'];?></p></td><td width="4%"></td><td width="45%"> <p class="para"><?php echo $student['registrationId'] ;?></p></td></tr>  
+		<tr><td width="45%"><?php echo '1.4 Tanggal Masuk';?></td><td width="4%"></td><td width="45%"><?php echo '1.4 Admission Date'?></td></tr>  
+		<tr><td width="45%">  <p class="para"><?php echo $student['intakedate'] ;?></p></td><td width="4%"></td><td width="45%"> <p class="para"><?php echo $student['intakedateeng'];?></p></td></tr>  
+		<tr><td width="45%"><?php echo '1.5 Tanggal Lulus';?></td><td width="4%"></td><td width="45%"><?php echo '1.5 Graduation Date'?></td></tr>  
+		<tr><td width="45%">  <p class="para"><?php echo $student['YudisiumDate'] ;?></p></td><td width="4%"></td><td width="45%"> <p class="para"> <?php echo $student['YudisiumDateeng'];?></p></td></tr>  
+		<tr><td width="45%"><?php echo '1.6 Nomor Ijasah';?></td><td width="4%"></td><td width="45%"><?php echo '1.6 Certificate Number'?></td></tr>  
+		<tr><td width="45%"> <p class="para"><?php echo $student['NIRLT'] ;?></p></td><td width="4%"></td><td width="45%"> <p class="para"><?php echo $student['NIRLT'];?></p></td></tr>  
+		<tr><td width="45%"><?php echo '1.7 Gelar';?></td><td width="4%"></td><td width="45%"><?php echo '1.7 Salutation'?></td></tr>  
+		<tr><td width="45%"> <p class="para"> <?php echo $student['Gelar'] ;?></p></td><td width="4%"></td><td width="45%"> <p class="para"><?php echo $student['Gelar'];?></p></td></tr>
+		  
+		
+		</table>
+		<br/>
+		<table class="table_content" width="100%" cellpadding="5" cellspacing="1">
+		<tr align="center" ><th class="header_title" width="48%"><?php echo "2. INFORMASI TENTANG PENYELENGGARA PROGRAM"?></th><td background-color="white" width="4%"></td><th class="header_title" align="center" width="48%"><?php echo "2. INFORMATION OF QUALIFICATION PROVIDER"?></th> </tr>
+		<tr><td width="45%"><?php echo '2.1 SK Pendirian';?></td><td width="4%"></td><td width="45%"><?php echo '2.1 Awarding Institution Licence'?></td></tr>  
+		<tr><td width="45%"> <p class="para"><?php echo $this->institution['License'];?></p></td><td width="4%"></td><td width="45%"> <p class="para"><?php echo $this->institution['License'];?></p></td></tr>  
+		<tr><td width="45%"><?php echo '2.2 Nama Perguruan Tinggi';?></td><td width="4%"></td><td width="45%"><?php echo '2.2 Name of Awarding Institution'?></td></tr>  
+		<tr><td width="45%"> <p class="para"><?php echo $this->institution['Univ_ArabicName'];?></p></td><td width="4%"></td><td width="45%"> <p class="para"><?php echo $this->institution['Univ_Name'];?></p></td></tr>  
+		<tr><td width="45%"><?php echo '2.3 Nama Program Studi';?></td><td width="4%"></td><td width="45%"><?php echo '2.3 Main Field of Study for the Qualification'?></td></tr>  
+		<tr><td width="45%"> <p class="para"> <?php echo $this->institution['ArabicName'];?></p></td><td width="4%"></td><td width="45%"> <p class="para"><?php echo $this->institution['ProgramName'] ;?></p></td></tr>  
+		<tr><td width="45%"><?php echo '2.4 Jenjang Pendidikan';?></td><td width="4%"></td><td width="45%"><?php echo '2.4 Level of Education'?></td></tr>  
+		<tr><td width="45%">  <p class="para"><?php echo $this->institution['strata'];?></p></td><td width="4%"></td><td width="45%"> <p class="para"><?php echo $this->institution['StrataName'];?></p></td></tr>  
+		<tr><td width="45%"><?php echo '2.5 Jenjang Kualifikasi Menurut KKNI';?></td><td width="4%"></td><td width="45%"><?php echo '2.5 Level of Qualification in the Indonesia National Qualification Framework'?></td></tr>  
+		<tr><td width="45%">  <p class="para"><?php echo $this->institution['KKNI_level'] ;?></p></td><td width="4%"></td><td width="45%"> <p class="para"> <?php echo $this->institution['KKNI_level'];?></p></td></tr>  
+		<tr><td width="45%"><?php echo '2.6 Persyaratan Penerimaan';?></td><td width="4%"></td><td width="45%"><?php echo '2.6 Entry Requairement'?></td></tr>  
+		<tr><td width="45%"> <p class="para"><?php echo $this->institution['Requirement'] ;?></p></td><td width="4%"></td><td width="45%"> <p class="para"><?php echo $this->institution['Requirementeng'];?></p></td></tr>  
+		<tr><td width="45%"><?php echo '2.7 Bahasa Pengantar Kuliah';?></td><td width="4%"></td><td width="45%"><?php echo '2.7 Language of Instruction'?></td></tr>  
+		<tr><td width="45%"> <p class="para"> <?php echo $student['branch']['Language'] ;?></p></td><td width="4%"></td><td width="45%"> <p class="para"><?php echo  $student['branch']['LanguageEng'];?></p></td></tr>
+		<tr><td width="45%"><?php echo '2.8 Sistem Penilaian';?></td><td width="4%"></td><td width="45%"><?php echo '2.8 Grading Scheme'?></td></tr>  
+		
+		<tr><td width="45%">  <p class="para"> 
+		   <table class="table_content1" width="80%" cellpadding="1" cellspacing="1" border="1">
+			<tr ><th class="header_title1" ><?php echo "Jangkauan Nilai Angka"?></th><th class="header_title1" ><?php echo "Nilai Huruf"?></th><th class="header_title1" ><?php echo "Bobot"?></th> </tr>
+			<?php foreach ($this->larrresult as $item) {?>
+				<tr align="center"><td><?php echo $item['MinPoint'].'-'.$item['MaxPoint'];?></td><td ><?php echo $item['GradeName'];?></td><td ><?php echo $item['GradePoint'];?></td></tr>  
+		 	<?php }?>
+		 </table>
+		 </td><td width="4%"></td>
+		 <td width="45%">  <p class="para"> 
+		 <table class="table_content1" width="80%" cellpadding="1" cellspacing="1" border="1">
+			<tr ><th class="header_title1" ><?php echo "Range of Mark"?></th><th class="header_title1" ><?php echo "Grade Name"?></th><th class="header_title1" ><?php echo "Grade Point"?></th> </tr>
+			<?php foreach ($this->larrresult as $item) {?>
+				<tr align="center"><td><?php echo $item['MinPoint'].'-'.$item['MaxPoint'];?></td><td ><?php echo $item['GradeName'];?></td><td ><?php echo $item['GradePoint'];?></td></tr>  
+		 	<?php }?>
+		 </table></td></tr>
+		<tr><td width="45%"><?php echo '2.9 Lama Studi';?></td><td width="4%"></td><td width="45%"><?php echo '2.9 Official Length of Program'?></td></tr>  
+		<tr><td width="45%"> <p class="para"> <?php echo  $this->institution['OptimalDuration'].' semesters' ;?></p></td><td width="4%"></td><td width="45%"> <p class="para"><?php echo  $this->institution['OptimalDuration'].' semesters';?></p></td></tr>
+		<tr><td width="45%"><?php echo '2.10 Pendidikan Lanjutan';?></td><td width="4%"></td><td width="45%"><?php echo '2.10 Access to Futher Study'?></td></tr>  
+		<tr><td width="45%"> <p class="para"> <?php echo $this->institution['StudiLanjut'] ;?></p></td><td width="4%"></td><td width="45%"> <p class="para"><?php echo $this->institution['StudiLanjutEng'];?></p></td></tr>
+		<tr><td width="45%"><?php echo '2.11 Status Profesi';?></td><td width="4%"></td><td width="45%"><?php echo '2.11 Profession Status (If applicable)'?></td></tr>  
+		<tr><td width="45%"> <p class="para"> <?php echo $this->institution['StatusProfesi'] ;?></p></td><td width="4%"></td><td width="45%"> <p class="para"><?php echo $this->institution['StatusProfesi'];?></p></td></tr>
+		</table>
+		<br/>
+		<table  width="100%" border=0>
+		<tr valign="top">
+	 	<td colspan=2>
+	 	<br>
+	 		<table width="100%" border=0 class='table_content2'>
+	 		    <tr valign="top">
+		 			<td align="center" width="35%">&nbsp;</td>
+		 			<td rowspan=3 width="30%"   align="center">&nbsp;</td>
+		 			<td  align="center" width="35%">Jakarta, <?php echo $student['SKRdate'];?> <br>Rektor / Rector</td>
+	 			</tr>
+	 			<tr>
+	 				<td colspan=2>&nbsp;</td>
+	 			</tr>
+	 			<tr>
+	 				<td colspan=2>&nbsp;</td>
+	 			</tr>
+	 			<tr valign="top">
+	 			<td  align="center"></td><td>&nbsp;</td>	 			
+	 			<td  align="center"><?php echo $student['rectorname'];?></td>
+	 			</tr>
+	 			<tr valign="top">
+	 			<td  align="center"> </td><td>&nbsp;</td>	 			
+	 			<td  align="center"><?php echo $student['rectornik'];?></td>
+	 			</tr>	 		
+	 		</table>
+	 	</td>	 
+	 </tr>
+		</table>
+		<br /><br />
+		<table class="table_content" width="100%" cellpadding="5" cellspacing="1">
+		<tr align="center" ><th class="header_title" width="48%"><?php echo "3. INFORMASI TENTANG HASIL YANG DICAPAI"?></th><td background-color="white" width="4%"></td><th class="header_title" align="center" width="48%"><?php echo "3. INFORMATION ON CONTENTS AND RESULT GAINED"?></th> </tr>
+		</table>
+		<br/>
+		<table class="table_content" width="100%" cellpadding="5" cellspacing="1">
+		<tr align="center" ><th class="header_title" width="48%"><?php echo "A. Capaian Pembelajaran"?></th><td background-color="white" width="4%"></td><th class="header_title" align="center" width="48%"><?php echo "A. Learning Outcomes"?></th> </tr>
+		<?php if (count($student['cp']) > 0) {
+				$coun=1;
+				foreach ($student['cp'] as $item) {
+					if ($type!=$item['typename']) {
+						$type=$item['typename']?>
+						<tr><td width="45%"><strong><?php echo $item['typename'];?></strong></td><td width="4%"></td><td width="45%"><strong><?php echo $item['typenameeng'];?></strong></td></tr>  
+					<?php } ?>
+				<tr><td width="45%">&nbsp;&nbsp;<?php echo $coun.'. ';?><?php echo $item['CP_Bahasa'];?></td><td width="4%"></td><td width="45%">&nbsp;&nbsp;<?php echo $coun; echo '. '?><?php echo $item['CP_English'];?></td></tr>  
+				
+			<?php 
+				$coun++;}
+			 }?>
+		</table>
+		<br />
+		<table class="table_content" width="100%" cellpadding="5" cellspacing="1">
+		<tr align="center" ><th class="header_title" width="48%"><?php echo "A. Capaian Pembelajaran/Informasi Tambahan"?></th><td background-color="white" width="4%"></td><th class="header_title" align="center" width="48%"><?php echo "A. Learning Outcomes/Additional Information"?></th> </tr>
+		</table>
+		<br/>
+		<?php $nomor=0;
+		if (count($student['Honors']) > 0) { 
+			$nomor++;?>
+		<table class="table_content" width="100%" cellpadding="5" cellspacing="1">
+		<tr align="center" ><th class="header_title" width="48%"><?php echo "A.".$nomor.". Penghargaan"?></th><td background-color="white" width="4%"></td><th class="header_title" align="center" width="48%"><?php echo "A.".$nomor.". Awards"?></th> </tr>
+		<?php 
+				$coun=1;
+				foreach ($student['Honors'] as $item) {?>
+				<tr><td width="45%"><?php echo $coun; echo '. '?><?php echo $item['title_bahasa'].'. Tingkat '.$item['level'].'. Bidang '.$item['field'];?></td><td width="4%"></td><td width="45%"><?php echo $coun; echo '. '?><?php echo $item['title'].'. Level of '.$item['leveleng'].'. Field of '.$item['fieldeng'];?></td></tr>  
+				
+			<?php $coun++;}
+			 ?>
+		</table>
+		<?php }?>
+		<br />
+		<?php if (count($student['Organisasi']) > 0) {
+			$nomor++;?>
+		<table class="table_content" width="100%" cellpadding="5" cellspacing="1">
+		<tr align="center" ><th class="header_title" width="48%"><?php echo "A.".$nomor.". Pengalaman Berorganisasi"?></th><td background-color="white" width="4%"></td><th class="header_title" align="center" width="48%"><?php echo "A.".$nomor.". Organisation Experiences"?></th> </tr>
+		<?php 
+				$coun=1;
+				foreach ($student['Organisasi'] as $item) {?>
+				<tr><td width="45%"><?php echo $coun; echo '. '?><?php echo 'Sebagai '.$item['occupacy'].' organisasi '.$item['category'].' '.$item['title_bahasa'].'. Tingkat '.$item['level'].' dari '.$item['year_start'].'-'.$item['year_stop'];?></td><td width="4%"></td><td width="45%"><?php echo $coun; echo '. '?><?php echo 'As a'.$item['occupacyeng'].' of '.$item['categoryeng'].' Organization entitle'.' '.$item['title'].' at  '.$item['leveleng'].' level'.' from '.$item['year_start'].' till '.$item['year_stop'];?></td></tr>  
+				
+			<?php $coun++;}
+			 ?>
+		</table>
+		<?php }?>
+		<br />
+		<?php if (count($this->finals) > 0 ) {
+			$nomor++;?>
+			<table class="table_content" width="100%" cellpadding="5" cellspacing="1">
+		<tr align="center" ><th class="header_title" width="48%"><?php echo "A.".$nomor.". Spesifikasi Tugas Akhir"?></th><td background-color="white" width="4%"></td><th class="header_title" align="center" width="48%"><?php echo "A.".$nomor.". Final Assignment Specification"?></th> </tr>
+		<?php 
+				
+				 ?>
+				<tr><td width="45%">
+				<p class="para"><?php echo $this->finals['TitleBahasa'];?></p></td><td width="4%"></td><td width="45%"><p class="para"><?php echo $this->finals['Title'];?></p></td></tr>  
+				
+			<?php  
+			  ?>
+		</table>
+		<?php }?>
+		<br />
+		<?php if (count($student['Language']) > 0) {
+				$nomor++;?>
+		<table class="table_content" width="100%" cellpadding="5" cellspacing="1">
+		<tr align="center" ><th class="header_title" width="48%"><?php echo "A.".$nomor." Bahasa Internasional"?></th><td background-color="white" width="4%"></td><th class="header_title" align="center" width="48%"><?php echo "A.".$nomor." International Languages"?></th> </tr>
+		<?php 
+				$coun=1;
+				foreach ($student['Language'] as $item) {?>
+				<tr><td width="45%"><?php echo $coun; echo '. '?><?php echo 'Menguasai '.$item['Bahasa'].' dengan skor '.$item['Standart'].' '.$item['Skore'];?></td><td width="4%"></td><td width="45%"><?php echo $coun; echo '. '?><?php echo 'A proficient in '.$item['Bahasaeng'].' with '.$item['Standarteng'].' '.$item['Skore'];?></td></tr>  
+				
+			<?php $coun++;}
+			 ?>
+		</table>
+		<?php }?>
+		<br />
+		<?php if (count($student['Internship']) > 0) {
+				$nomor++;?>
+		<table class="table_content" width="100%" cellpadding="5" cellspacing="1">
+		<tr align="center" ><th class="header_title" width="48%"><?php echo "A.".$nomor." Magang"?></th><td background-color="white" width="4%"></td><th class="header_title" align="center" width="48%"><?php echo "A.".$nomor." Professional Practices"?></th> </tr>
+		
+		<?php 
+				$coun=1;
+				foreach ($student['Internship'] as $item) {?>
+				<tr><td width="45%"><?php echo $coun; echo '. '?><?php echo  $item['title_bahasa'].' sebagai '.$item['position'].' dari '.$item['datestart'].'-'.$item['datestop'];?></td><td width="4%"></td><td width="45%"><?php echo $coun; echo '. '?><?php echo $item['title_bahasa'].' as '.$item['position'].' started on '.$item['datestart'].' till '.$item['datestop'];?></td></tr>  
+				
+			<?php $coun++;}
+			 ?>
+		</table>
+		<?php }?>
+		<br/>
+		<?php if (count($student['Softskill']) > 0) {
+				$nomor++;?>
+		<table class="table_content" width="100%" cellpadding="5" cellspacing="1">
+		<tr align="center" ><th class="header_title" width="48%"><?php echo "A.".$nomor." Pendidikan Karakter"?></th><td background-color="white" width="4%"></td><th class="header_title" align="center" width="48%"><?php echo "A.".$nomor." Character Building"?></th> </tr>
+		<?php 
+				$coun=1;
+				foreach ($student['Softskill'] as $item) {?>
+				<tr><td width="45%"><?php echo $coun; echo '. '?><?php echo 'Pendidikan '.$item['title_bahasa'].' dilaksanakan oleh '.$item['given_by'].' dari '.$item['datestart'].'-'.$item['datestop'].' setara dengan '.$item['hours'].' jam.';?></td><td width="4%"></td><td width="45%"><?php echo $coun; echo '. '?><?php echo $item['title_bahasa'].'Education that conducted by '.$item['given_by'].' started on '.$item['datestart'].' till '.$item['datestop'].' that equivalence to '.$item['hours'].' hours.';?></td></tr>  
+				
+			<?php $coun++;}
+			 }?>
+		</table>
+		<br />
+		<table  width="100%" border=0>
+		<tr valign="top">
+	 	<td colspan=2>
+	 	<br>
+	 		<table width="100%" border=0 class='table_content2'>
+	 		    <tr valign="top">
+		 			<td align="center" width="35%">&nbsp;</td>
+		 			<td rowspan=3 width="30%"   align="center">&nbsp;</td>
+		 			<td  align="center" width="35%">Jakarta, <?php echo $student['YudisiumDate'];?> <br>Dekan / Dean</td>
+	 			</tr>
+	 			<tr>
+	 				<td colspan=2>&nbsp;</td>
+	 			</tr>
+	 			<tr>
+	 				<td colspan=2>&nbsp;</td>
+	 			</tr>
+	 			<tr valign="top">
+	 			<td  align="center"></td><td>&nbsp;</td>	 			
+	 			<td  align="center"><?php echo $student['deanname'];?></td>
+	 			</tr>
+	 			<tr valign="top">
+	 			<td  align="center"> </td><td>&nbsp;</td>	 			
+	 			<td  align="center"><?php echo $student['deannik'];?></td>
+	 			</tr>	 		
+	 		</table>
+	 	</td>	 
+	 </tr>
+		</table>
+	</fieldset>
+	<br />
+	<?php }?>
+

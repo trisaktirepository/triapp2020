@@ -1,0 +1,21 @@
+<form name="f1" method="post" action="<?php echo $this->url(array('module'=>'application','controller'=>'placement-test', 'action'=>'editdetailsave','id'=>$this->id,'place_id'=>$this->mark_component['placement_id']),'default',true);?>">
+<input type="hidden" name="mark_id" id="mark_id" value="<? echo $this->id;?>">
+<table class="table2" cellpadding="5" cellspacing="1" width="100%">
+	<tr>
+		<td>Component Name </td>
+		<td><input type="text" name="component_name" id="component_name" value="<? echo $this->mark_component["component_name"];?>"></td>
+	</tr>
+	<tr>
+		<td>Weightage </td>
+		<td><input type="text" name="component_weightage" id="component_weightage" value="<? echo $this->mark_component["component_weightage"];?>"></td>
+	</tr>
+	<tr>
+		<td>Total Mark </td>
+		<td><input type="text" name="component_total_mark" id="component_total_mark" value="<? echo $this->mark_component["component_total_mark"];?>"></td>
+	</tr>
+</table>
+<br>
+<input type="submit" value="Save" name="save">
+
+</form>
+		

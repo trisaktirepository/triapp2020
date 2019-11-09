@@ -1,0 +1,106 @@
+<script>
+function view(){
+	window.location="<?php echo $this->url(array('module'=>'exam','controller'=>'markentry','action'=>'index'));?>";
+}
+
+function print(pageURL,w,h,program_id,semester_id,course_id,matrix_no,fullname){
+	
+	var pageURL = pageURL+"/program_id/"+program_id+"/semester_id/"+semester_id+"/course_id/"+course_id+"/matrix_no/"+matrix_no+"/fullname/"+fullname;
+	var left = (screen.width/2)-(w/2);
+	var top = (screen.height/2)-(h/2);
+	var targetWin = window.open (pageURL, 'Student Mark Verification Form', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
+}
+
+
+
+function approve(){
+	var pageURL = "<?php echo $this->url(array('module'=>'exam','controller'=>'markentry', 'action'=>'approve'))?>";
+	var w = 400;
+	var h = 150;
+	var left = (screen.width/2)-(w/2);
+	var top  = (screen.height/2)-(h/2);
+	var targetWin = window.open (pageURL, 'Grade Verification', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=yes, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
+
+}
+</script>
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>							
+					<a href="#" onClick="view()">
+						<span class='back'></span>View</a>				
+			</li>	
+			<li>							
+					<a href="#" title="Print Verification Request Form" onClick="print('<?php echo $this->url(array('module'=>'exam','controller'=>'Markentry','action'=>'request'))?>',800,600,'<?php echo $this->program_id?>','<?php echo $this->semester_id?>','<?php echo $this->course_id?>','<?php echo $this->matrix_no?>','<?php echo $this->fullname?>')">
+						<span class='print'></span>Print</a>				
+			</li>			
+			<li>
+								
+					<a href="#" onClick="approve()" title="Approve Student Mark">
+						<span class='verify'></span>Approve</a>
+				
+			</li>		
+		</ul>
+	</div>
+</div>
+
+<br></br>
+<?php if($this->student_list){?>
+
+<form name="verifyfrm" action="<?php echo $this->url(array('module'=>'exam','controller'=>'markentry','action'=>'confirm'))?>" method="post" >
+<input type="hidden" name="request_no" value=""></input>
+<table class="table" width="100%" cellpadding="5" cellspacing="1" >
+
+	<tr align="center">
+	   <th>No.</th>		
+		<th>Student Name</th>		
+		<?php foreach($this->asscomponent_list as $component) { 		
+			echo "<th>$component[component_name]</th>";
+	     }?>	
+	     <th>Total Mark</th>
+	     <th>Grade</th>			
+	</tr>
+	
+	<?php $i=0;
+	foreach($this->student_list as $student){?>	
+	<tr  align="center">
+	    <td width="5%"><?php echo $i+1;?></td>
+	    <td width="20%">	
+	        <input type=hidden value="<?php echo $student["scr_id"];?>" name="scr_id[<?php echo $i ?>]">				
+			<?php echo $student["fullname"];?>
+		</td>
+		    
+			<?php	
+			$final_course_mark=0;						   
+			foreach($this->asscomponent_list as $component) {
+				//get current mark
+    	          $oMark = new App_Model_Exam_DbTable_Markentry();
+    	          $mark  = $oMark->getMarkByComponent($student["scr_id"],$component["id"]); 
+				
+				echo "<td width=15%>(<input type='text' name='mark[$i][]' id='mark[$i][]' value='$mark[component_student_mark]' size=2 disabled >/$component[component_total_mark])*$component[component_weightage]";
+				echo "<input type='hidden' name='scm_id[$i][]' value='$mark[id]'  size=3>";
+				echo "<input type='hidden' name='component_id[$i][]' id='component_id[$i][]' value='$component[id]' size=3 ></td>";
+
+				//kira total mark
+				$total = ($mark["component_student_mark"]/$component["component_total_mark"])*$component["component_weightage"];
+        	    $final_course_mark = $final_course_mark+$total; //total mark per course         	    
+				
+			}?>	
+	         <td><input type="text" name="final_course_mark[<?php echo $i?>]" value="<?php echo $final_course_mark;?>" size=2 readonly></input></td>		
+			<?php 
+				//cek grade
+				$oGrade = new App_Model_Exam_DbTable_Grade();
+				$data= $oGrade->getGradeInfo($this->program_id,$this->semester_id,$final_course_mark);
+			
+			?>
+			
+			 <td><input type="text" name="grade_course_mark[<?php echo $i?>]" value="<?php echo $data["symbol"]?>" size=2 readonly></input></td>
+	</tr>
+	<?php  $i++;} ?>
+	
+</table>
+</form>
+
+<?php }//end if student list?>
+

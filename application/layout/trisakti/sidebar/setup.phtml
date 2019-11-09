@@ -1,0 +1,27 @@
+<?php
+/*
+ *  @author Alif
+ *  @created Jul 17, 2011
+ */
+?>
+<div id="vertmenu">
+
+	<ul> 
+		<li><h1><?php echo $this->translate("General set-up"); ?></h1></li>
+		<li><a href="<?php echo $this->url(array('module'=>'general-setup','controller'=>'language','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Language"); ?></a></li>
+		<!-- move to sis 
+		<li><h1><?php echo $this->translate("High School set-up"); ?></h1></li>
+		<li><a href="<?php echo $this->url(array('module'=>'general-setup','controller'=>'highschool','action'=>'index'),'default',true) ?>"><?php echo $this->translate("High School Set-up"); ?></a></li>
+		<li><a href="<?php echo $this->url(array('module'=>'general-setup','controller'=>'highschool-discipline','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Discipline Set-up"); ?></a></li>
+		<li><a href="<?php echo $this->url(array('module'=>'general-setup','controller'=>'highschool-subject','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Subject Set-up"); ?></a></li>
+		<li><a href="<?php echo $this->url(array('module'=>'general-setup','controller'=>'highschool-discipline-subject','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Discipline-Subject Set-up"); ?></a></li>
+		<li><a href="<?php echo $this->url(array('module'=>'general-setup','controller'=>'highschool-discipline-programme','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Discipline-Program Set-up"); ?></a></li>
+		 -->
+	</ul>
+	<br />
+	<ul>  
+		<li><h1><?php echo $this->translate("Announcement"); ?></h1></li>	    
+	    <li><a href="<?php echo $this->url(array('module'=>'application','controller'=>'announcement','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Announcement"); ?></a></li>
+	</ul>
+
+</div>
