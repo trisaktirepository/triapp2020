@@ -150,6 +150,7 @@ class App_Model_Application_DbTable_ApplicantProfile extends Zend_Db_Table_Abstr
 					  ->joinleft(array('ae'=>'applicant_education'),'ae.ae_appl_id=ap.appl_id',(array('education'=>'ae.ae_discipline_code')))
 					  ->joinleft(array('sd'=>'school_discipline'),'sd.smd_code=ae.ae_discipline_code',array('discipline'=>'sd.smd_desc'))
 					  ->joinleft(array('apt'=>'applicant_ptest'),'apt.apt_at_trans_id=at.at_trans_id',(array('fee'=>'apt.apt_fee_amt','bill_no'=>'apt.apt_bill_no','currency'=>'apt.apt_currency','schedule_id'=>'apt.apt_aps_id')))
+					  ->joinLeft(array('sc'=>'appl_placement_schedule'),'sc.aps_id=apt.apt-aps_id')
 					 // ->where("at.at_status = 'APPLY'")
 					  ->where("ap.appl_id ='".$id."'");
 		// echo $select;			  

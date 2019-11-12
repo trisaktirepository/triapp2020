@@ -45,7 +45,7 @@
 						echo '<li>'.$prog['faculty'].'-'.$prog['program_name_indonesia'].' kelas:'.$prog['kelas'];
 						}?></ol></td>
 				</tr>
-				 <tr><th><?php echo "Tanggal Ujian"?></th><td><?php echo $this->profile['discipline']?></td></tr>
+				<tr><th><?php echo "Tanggal Ujian"?></th><td><?php echo date('d-m-Y',strtotime($this->profile['aps_test_date'])).' Jam:'.$this->profile['aps_start_time']?></td></tr>
 				
 			</table>
 			<form name='myform' method="post" action="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'confirmation'),'default',true);?>">
