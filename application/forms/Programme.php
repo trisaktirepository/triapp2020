@@ -141,13 +141,19 @@ class App_Form_Programme extends Zend_Form {
 		foreach ($schoolMasterDb->getData() as $list){
 			$this->ae_institution->addMultiOption($list['sm_id'],$list['sm_name']);
 		}*/
+		
 		$this->ae_institution->setRegisterInArrayValidator(false);
 		
-		$this->addElement('text','ae_year_from', array(
-			'label'=>"Year From",
-			'required'=>true,
-			'id'=>"from"
+		$this->addElement('select','ae_award', array(
+				'label'=>$this->getView()->translate('Akreditasi')
 		));
+		
+		//$stateDb = new App_Model_General_DbTable_State();
+		$this->ae_award->addMultiOption("A","A");
+		$this->ae_award->addMultiOption("B","B");
+		$this->ae_award->addMultiOption("C","C");
+		$this->ae_award->addMultiOption("","Tidak Terakreditasi");
+		 
 		
 		$this->addElement('text','ae_year_end', array(
 			'label'=>"Year To",
