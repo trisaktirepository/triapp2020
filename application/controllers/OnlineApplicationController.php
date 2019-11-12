@@ -9544,7 +9544,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	$dbInvoice = new Studentfinance_Model_DbTable_InvoiceMain(); 
     	$dbTransaction=new App_Model_Application_DbTable_ApplicantTransaction();
     	$dbAppFee=new Studentfinance_Model_DbTable_ApplicationFee();
-    	$transaction=$dbTransaction->getData($trxid);
+    	$transaction=$dbTransaction->getDataById($trxid);
     	$intakeid=$transaction['at_intake'];
     	$dbIntake=new App_Model_General_DbTable_Intake();
     	$intake=$dbIntake->fngetIntakeById($intakeid);
