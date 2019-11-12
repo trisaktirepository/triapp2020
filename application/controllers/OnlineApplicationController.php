@@ -5313,7 +5313,8 @@ class OnlineApplicationController extends Zend_Controller_Action {
 						$invoiceDb=new Studentfinance_Model_DbTable_InvoiceMain();
 						$invoiceDetailDb=new Studentfinance_Model_DbTable_InvoiceDetail();
 						$inv=$invoiceDb->getInvoiceData($applicantID);
-						echo var_dump($inv); exit;
+						echo var_dump($inv); 
+						exit;
 						if (!$inv)
 							$invoice_id = $invoiceDb->insert($inv_data);
 						else {
