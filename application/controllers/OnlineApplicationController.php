@@ -5022,7 +5022,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 		//get applicant profile
 		$appProfileDB  = new App_Model_Application_DbTable_ApplicantProfile();
 		$applicant = $appProfileDB->getTransProfile($appl_id,$transaction_id);
-		 
+		$this->view->profile=$applicant;
 		//get transaction data
 		$transDB = new App_Model_Application_DbTable_ApplicantTransaction();
 		$transData = $transDB->getTransactionData($transaction_id);
@@ -5059,7 +5059,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 		//*** check programme
 		$applicantProgramDB = new App_Model_Application_DbTable_ApplicantProgram();
 		$applicantProgram = $applicantProgramDB->getPlacementProgram($transaction_id);
-		 
+		$this->view->program=$applicantProgram;
 		if(!$applicantProgram){
 			if($admission_type==2){
 				$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'programme-highschool','msg'=>$this->view->translate('please_fill_in_program_prefered')),'default',true));

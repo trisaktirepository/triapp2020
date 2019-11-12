@@ -33,7 +33,21 @@
 					
 				</div>
 			</div>
-			
+			<table>
+				<tr><th><?php echo "Nama"?></th><td><?php echo $this->profile['appl_fname'].' '.$this->profile['appl_mname'].' '.$this->profile['appl_fname']?></td></tr>
+				<tr><th><?php echo "Alamat"?></th><td><?php echo $this->profile['appl_address1']?></td></tr>
+				<tr><th><?php echo "Tempat/Tgl Lahir"?></th><td><?php echo $this->profile['appl_birth_place'].'/'.date('Y-m-d', strtotime($this->profile['appl_dob']))?></td></tr>
+				
+				<tr><th><?php echo "Disiplin"?></th><td><?php echo $this->profile['discipline']?></td></tr>
+				<tr><th><?php echo "Pendidikan"?></th><td><?php echo $this->profile['education']?></td></tr>
+				<tr><th><?php echo "Pilihan"?></th>
+					<td><ol><?php foreach ($this->program as $prog) {
+						echo '<li>'.$prog['faculty'].'-'.$prog['program_name_indonesia'].' kelas:'.$prog['kelas'];
+						}?></ol></td>
+				</tr>
+				 <tr><th><?php echo "Tanggal Ujian"?></th><td><?php echo $this->profile['discipline']?></td></tr>
+				
+			</table>
 			<form name='myform' method="post" action="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'confirmation'),'default',true);?>">
 			<br>
 			<br>
