@@ -7212,7 +7212,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 		$pesid=$transaction['at_pes_id'];
 		$payment=$dbInvoice->getAllInvoiceData($pesid);
 		if ($payment['status_va']!='PAID') 
-			$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application', 'action'=>'view-payment','id'=>$pesid),'default',true));
+			$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application', 'action'=>'view-payment','id'=>$pesid,'trxid'=>$transaction_id),'default',true));
 			
 		$msg = $this->_getParam('msg',null);
 		$this->view->noticeError = $msg;
@@ -7893,6 +7893,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
  	public function viewPaymentAction(){
  		$this->view->title='Uang Pendaftaran Ujian Saringan Masuk Usakti';
  		$invoice=$this->_getParam('id', 0);
+ 		$this->view->transactionid=$this->_getParam('trxid', 0);
  		$dbInvoice=new Studentfinance_Model_DbTable_InvoiceMain();
  		$this->view->invoice=$dbInvoice->getInvoiceData($invoice);
  	}
