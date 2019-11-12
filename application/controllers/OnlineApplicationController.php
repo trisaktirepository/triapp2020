@@ -5308,7 +5308,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 								'status' => 'A',
 								'date_create' => date('Y-m-d h:i:s')
 						);
-							
+						echo var_dump($inv_data);exit;
 						$invoiceDb=new Studentfinance_Model_DbTable_InvoiceMain();
 						$invoiceDetailDb=new Studentfinance_Model_DbTable_InvoiceDetail();
 						$inv=$invoiceDb->getInvoiceData($applicantID);
