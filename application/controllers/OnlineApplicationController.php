@@ -5265,7 +5265,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 					$appptestDB = new App_Model_Application_DbTable_ApplicantPtest();
 					$info["apt_bill_no"]=$applicantID;
 					$appptestDB->updateData($info,$applicant_placement_test_info["apt_id"]);
-					$ptPeriod   = $periodDB->getCurrentPeriod(date("m",strtotime($applicant_placement_test_info['aps_test_date'])), date("Y",strtotime($applicant_placement_test_info['aps_test_date'])));
+					$ptPeriod   = $periodDB->getCurrentPeriod(date("m",strtotime($applicant_placement_test_info['aps_test_date'])), date("Y",strtotime($applicant_placement_test_info['aps_test_date'])),$transaction['at_intake']);
 					
 						//update transaction period based on ptest schedule
 						//$ptPeriod   = $periodDB->getCurrentPeriod(date("m",strtotime($applicant_placement_test_info['aps_test_date'])), date("Y",strtotime($applicant_placement_test_info['aps_test_date'])),$IdIntake);
