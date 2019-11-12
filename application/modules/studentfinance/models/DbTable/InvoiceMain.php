@@ -547,7 +547,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		//$program=$dbProgram->getDataDetail($idprogram);
 		$clientid='741';//$program['Client_Id'];
 		if ($process=='createbilling')
-			$va= '8'.$clientid.$invoice['bill_number'];
+			$va= '8'.$clientid.'0000'.$invoice['bill_number'];
 		else
 			$va=$invoice['va'];//$billamount=$invoice['bill_balance'];
 		$billamount=$invoice['bill_amount'];
