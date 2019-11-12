@@ -6,7 +6,6 @@ class Accessbni_CallbackBniController extends REST_Controller {
 
 	 	$this->_helper->layout()->disableLayout();
 	 	//$this->_helper->viewRenderer->setNoRender();
-	 	 
 	 	$bni =new Studentfinance_Model_DbTable_BniHashing();
 	 	$dbFinance=new GeneralSetup_Model_DbTable_Bank();
 	 	$dbtxt=new Studentfinance_Model_DbTable_TmpTxt();
