@@ -320,7 +320,7 @@ $pdb = new App_Model_Application_DbTable_ApplicantPtest();
 					
 				}else
 				if($entry['at_status']=="CLOSE"){
-					echo "<a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'get-document','id'=>$entry['at_trans_id'],'typeId'=>32),'default',true)."'>".$this->translate("Download Bank Validation")."</a>";
+					//echo "<a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'get-document','id'=>$entry['at_trans_id'],'typeId'=>32),'default',true)."'>".$this->translate("Download Bank Validation")."</a>";
 				}else 
 				if( $entry['at_status']=="PROCESS" && $entry['at_appl_type']==1 ){
 					//echo $entry['at_appl_type'].$entry['at_selection_status'];
