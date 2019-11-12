@@ -35,6 +35,7 @@
 			</div>
 			<table class="table">
 				<tr><th><?php echo "Nama"?></th><td><?php
+						$name='';
 						 if ($this->profile['appl_fname']!='') $name=$this->profile['appl_fname'];
 						 if ($this->profile['appl_mname']!='') $name=$name.' '.$this->profile['appl_mname'];
 						  if ($this->profile['appl_lname']!='') $name=$name.' '.$this->profile['appl_lname'];
