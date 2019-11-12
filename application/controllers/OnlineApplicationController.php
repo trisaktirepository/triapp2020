@@ -5265,7 +5265,8 @@ class OnlineApplicationController extends Zend_Controller_Action {
 					$appptestDB = new App_Model_Application_DbTable_ApplicantPtest();
 					$info["apt_bill_no"]=$applicantID;
 					$appptestDB->updateData($info,$applicant_placement_test_info["apt_id"]);
-	
+					$ptPeriod   = $periodDB->getCurrentPeriod(date("m",strtotime($applicant_placement_test_info['aps_test_date'])), date("Y",strtotime($applicant_placement_test_info['aps_test_date'])));
+					
 						//update transaction period based on ptest schedule
 						//$ptPeriod   = $periodDB->getCurrentPeriod(date("m",strtotime($applicant_placement_test_info['aps_test_date'])), date("Y",strtotime($applicant_placement_test_info['aps_test_date'])),$IdIntake);
 	
@@ -5308,10 +5309,11 @@ class OnlineApplicationController extends Zend_Controller_Action {
 								'status' => 'A',
 								'date_create' => date('Y-m-d h:i:s')
 						);
-						echo var_dump($inv_data);exit;
+						//echo var_dump($inv_data);exit;
 						$invoiceDb=new Studentfinance_Model_DbTable_InvoiceMain();
 						$invoiceDetailDb=new Studentfinance_Model_DbTable_InvoiceDetail();
 						$inv=$invoiceDb->getInvoiceData($applicantID);
+						echo var_dump($inv); exit;
 						if (!$inv)
 							$invoice_id = $invoiceDb->insert($inv_data);
 						else {
