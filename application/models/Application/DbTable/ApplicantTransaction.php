@@ -136,6 +136,7 @@ class App_Model_Application_DbTable_ApplicantTransaction extends Zend_Db_Table_A
 	
 		$db = Zend_Db_Table::getDefaultAdapter();		
 		if ($admission_type==1) {
+			/*
 			$select=$db->select()
 			->from('appl_pin_to_bank')
 			->where("status = 'E'")
@@ -148,6 +149,26 @@ class App_Model_Application_DbTable_ApplicantTransaction extends Zend_Db_Table_A
 				$db->update('appl_pin_to_bank',array('status' => 'P'),'payee_id='.$row['PAYEE_ID']);
 				return $row['billing_no'];
 			} else return '';
+			*/
+			//create ID and push tagihan ke BNI
+			$select=$db->select()
+			->from(array('a'=>'tbl_intake'))
+			->where('IdIntake=?',$intake);
+			$row=$db->fetchRow($select);
+			$pre=$row['IntakeUSMcode'];
+			//echo $select;
+			$select=$db->select()
+			->from(array('a'=>'applicant_transaction'),array('billing_no'=>'ifnull(max(substr(at_pes_id,-5)) ,0)+1'))
+			->where("at_appl_type = '1'")
+			->where('at_intake=?',$intake);
+			$row=$db->fetchRow($select);
+			//echo $select;exit;
+			$no=$row['billing_no']+100000;
+			//echo $no;
+			$no=substr($no,1, 5);
+			//echo $no;
+			//echo $pre.$no;exit;
+			return $pre.$no;
 		} else if ($admission_type==2) {
 
 			$select=$db->select()

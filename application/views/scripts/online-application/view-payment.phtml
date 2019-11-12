@@ -1,0 +1,28 @@
+ 
+ 
+ 
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		
+	</div>
+</div>
+
+<?php if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+<?php }?>
+ 
+ <table class="table">
+ <tr><th>Nama Pembayaran</th><td><?php echo 'Pendaftaran Ujian Saringan Masuk Usakti'?></td></tr>
+ <tr><th>Nomor Pembayaran</th><td><?php echo $this->invoice['va']?></td></tr>
+ <tr><th>Besar Pembayaran</th><td><?php echo $this->invoice['bill_amount']?></td></tr>
+ <tr><th>Dapat Dibayar di ATM</th><td>BNI46, BRI, MANDIRI</td></tr>
+ 
+ 
+ </table>

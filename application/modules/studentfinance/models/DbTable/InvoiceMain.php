@@ -6,6 +6,13 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 	protected $_name = 'invoice_main';
 	protected $_primary = "id";
 		
+	public function update($data,$key) {
+		 
+		$db = Zend_Db_Table::getDefaultAdapter();
+		 
+		$db->update($this->_name,$data, $key);
+	}
+	
 	public function getData($id){
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$selectData = $db->select()
@@ -415,6 +422,166 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 			return $row['balance'];
 		else return 0;
 		
+	}
+	
+	public function pushToEColl($idinvoice,$dateexprired,$process=null,$mode=null) {
+		date_default_timezone_set('Asia/Bangkok');
+		 
+		$invoiceDet = new Studentfinance_Model_DbTable_InvoiceDetail();
+		$dbInvoice = new Studentfinance_Model_DbTable_InvoiceMain();
+		$dbinvoiceSpc=new Studentfinance_Model_DbTable_InvoiceSpc();
+		$bni = new Studentfinance_Model_DbTable_AccessBni();
+		$dbProgram=new GeneralSetup_Model_DbTable_Program();
+		$dbStd=new Registration_Model_DbTable_Studentregistration();
+		$dbFinance=new GeneralSetup_Model_DbTable_Bank();
+		$bank=$dbFinance->fnGetBankDetails(1);
+		$secretkey=$bank['secret_key'];
+		$url=$bank['url_api'];
+	
+		if ($mode==null) $mode="c";
+		$invoice=$dbinvoiceSpc->getInvoiceByBilling($idinvoice);
+		//echo var_dump($invoice);exit;
+		$idstd=$invoice['IdStudentRegistration'];
+		$std=$dbStd->getData($idstd);
+		$idprogram=$std['IdProgram'];
+		$program=$dbProgram->getDataDetail($idprogram);
+		$clientid=$program['Client_Id'];
+		if ($process=='createbilling')
+			$va= '8'.$clientid.$invoice['bill_number'];
+		else
+			$va=$invoice['va'];//$billamount=$invoice['bill_balance'];
+		$billamount=$invoice['bill_amount'];
+		//get detail
+		$invoicedetail=$invoiceDet->getInvoiceDetailBank($idinvoice, $idprogram,$std['IdBranch']);
+		$desc=array();
+		$amounttotal=0;
+		if ($invoicedetail) {
+			foreach ($invoicedetail as $det) {
+					
+				//echo "kode".$kode;
+				$amount=$det['amount']*1;
+				$amounttotal=$amounttotal+$amount;
+				$desc[]=$det['account_code']."_".$det['fi_code']."_".$amount;
+					
+	
+			}
+		}
+		$desc=implode(';', $desc);
+		//echo $amounttotal.'-'.$billamount.' -'.$desc;exit;
+			
+	
+	
+		if ($billamount>0 && $amounttotal==$billamount && strlen($desc)<=100) {
+			if (!filter_var($std['appl_email'],FILTER_VALIDATE_EMAIL)) $std['appl_email']="" ;
+			$invoiceData= array(
+	
+					'type'=>$process,
+					'client_id'=>utf8_decode( $clientid ),
+					'trx_id'=>utf8_decode($invoice['bill_number']) , // For chars with accents.
+					'trx_amount'=>$billamount,
+					'billing_type'=>$mode,
+					'customer_name'=>$std['StudentName'],
+					'customer_email'=>utf8_decode( $std["appl_email"] ),
+					'customer_phone'=>utf8_decode( $std["appl_phone_hp"] ),
+					'virtual_account'=>utf8_decode($va),
+					'datetime_expired'=>date_format(date_create($dateexprired), 'c'),
+					'description'=>$desc,
+			);
+				
+			//
+			$respone=$bni->accessBni($clientid, $secretkey, $url, $invoiceData);
+	
+				
+			if (!isset($respone['status']) && $process=='createbilling')
+				$dbInvoice->update(array("va"=>$respone['virtual_account'],"dt_va"=>date('Y-m-d h:i:s'),"Client_id"=>$clientid,"billing_type"=>'c',"Description"=>$desc,'va_expired_dt'=>$dateexprired,"status_remark"=>'ok'), "bill_number ='".$respone['trx_id']."'");
+			else if (isset($respone['status'])) {
+				$dbInvoice->update(array("status_remark"=>$respone['message']), "bill_number ='".$invoice['bill_number']."'");
+					
+			}
+			//echo var_dump($invoiceData);
+			//echo var_dump($respone);exit;
+		}
+	}
+	public function pushToECollForEnrollment($idinvoice,$dateexprired,$process=null,$mode=null) {
+		date_default_timezone_set('Asia/Bangkok');
+			
+		$invoiceDet = new Studentfinance_Model_DbTable_InvoiceDetail();
+		$dbInvoice = new Studentfinance_Model_DbTable_InvoiceMain();
+			
+		$bni = new Studentfinance_Model_DbTable_AccessBni();
+		 
+		$dbAppProfile=new App_Model_Application_DbTable_ApplicantProfile();
+		$dbFinance=new GeneralSetup_Model_DbTable_Bank();
+		$bank=$dbFinance->fnGetBankDetails(1);
+		$secretkey=$bank['secret_key'];
+		$url=$bank['url_api'];
+	
+		if ($mode==null) $mode="c";
+		$invoice=$dbInvoice->getInvoiceData($idinvoice);
+		$applid=$invoice['appl_id'];
+		$profil=$dbAppProfile->getData($applid);
+		//echo var_dump($invoice);exit;
+		//$idstd=$invoice['IdStudentRegistration'];
+		//$std=$dbStd->getData($idstd);
+		//$idprogram=$std['IdProgram'];
+		//$program=$dbProgram->getDataDetail($idprogram);
+		$clientid='741';//$program['Client_Id'];
+		if ($process=='createbilling')
+			$va= '8'.$clientid.$invoice['bill_number'];
+		else
+			$va=$invoice['va'];//$billamount=$invoice['bill_balance'];
+		$billamount=$invoice['bill_amount'];
+		//get detail
+		$invoicedetail=$invoiceDet->getInvoiceDetail($invoice['id']);
+		$desc=array();
+		$amounttotal=0;
+		if ($invoicedetail) {
+			foreach ($invoicedetail as $det) {
+					
+				//echo "kode".$kode;
+				$amount=$det['amount']*1;
+				$amounttotal=$amounttotal+$amount;
+				$desc[]='011'."_".Pendaftaran."_".$amount;
+					
+	
+			}
+		}
+		$desc=implode(';', $desc);
+		//echo $amounttotal.'-'.$billamount.' -'.$desc;exit;
+			
+	
+	
+		if ($billamount>0 && $amounttotal==$billamount && strlen($desc)<=100) {
+			if (!filter_var($profil['appl_email'],FILTER_VALIDATE_EMAIL)) $std['appl_email']="" ;
+			$invoiceData= array(
+	
+					'type'=>$process,
+					'client_id'=>utf8_decode( $clientid ),
+					'trx_id'=>utf8_decode($invoice['bill_number']) , // For chars with accents.
+					'trx_amount'=>$billamount,
+					'billing_type'=>$mode,
+					'customer_name'=>$profil['appl_fname'].' '.$profil['appl_mname'].' '.$profil['appl_lname'],
+					'customer_email'=>utf8_decode( $std["appl_email"] ),
+					'customer_phone'=>utf8_decode( $std["appl_phone_hp"] ),
+					'virtual_account'=>utf8_decode($va),
+					'datetime_expired'=>date_format(date_create($dateexprired), 'c'),
+					'description'=>$desc,
+			);
+	
+			//
+			$respone=$bni->accessBni($clientid, $secretkey, $url, $invoiceData);
+	
+	
+			if (!isset($respone['status']) && $process=='createbilling')
+				$dbInvoice->update(array("va"=>$respone['virtual_account'],"dt_va"=>date('Y-m-d h:i:s'),"Client_id"=>$clientid,"billing_type"=>'c',"Description"=>$desc,'va_expired_dt'=>$dateexprired,"status_remark"=>'ok'), "bill_number ='".$respone['trx_id']."'");
+			else if (isset($respone['status'])) {
+				$dbInvoice->update(array("status_remark"=>$respone['message']), "bill_number ='".$invoice['bill_number']."'");
+					
+			}
+			//echo var_dump($invoiceData);
+			//echo var_dump($respone);exit;
+			
+		}
 	}
 }
 ?>

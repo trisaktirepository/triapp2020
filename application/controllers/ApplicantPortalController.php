@@ -151,6 +151,8 @@ class ApplicantPortalController extends Zend_Controller_Action
     	}
     }
     
+    
+    
     public function getDocumentAction(){
     	$txnId = $this->_getParam('id', 0);
     	$type = $this->_getParam('typeId', 0);

@@ -5245,6 +5245,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 						
 					$applicantID = $transData["at_pes_id"];
 				}
+				
 			//	exit;
 			}//end generate no peserta
             //die;
@@ -5271,46 +5272,81 @@ class OnlineApplicationController extends Zend_Controller_Action {
 	
 						$transDB->updateData($upddata,$transaction_id);
 	
-						$status = $this->generateBankValidationPDF($transaction_id);
+						// buat tagihan ke BNI
+						//1st:check how many program apply.
+						$ptestDB = new App_Model_Application_DbTable_ApplicantProgram();
+						$list_program = $ptestDB->getPlacementProgram($transaction_id);
+						$total_program_apply = count($list_program);
+						
+						$feeDB = new App_Model_Application_DbTable_PlacementFeeSetup();
+						$condition = array('type'=>'PROGRAM','value'=>$total_program_apply,'aptcode'=>$code);
+						$fees_info = $feeDB->getFees($condition);
+						$program_fee = $fees_info["apfs_amt"];
+						//insert into invoice and invoice detail
+						$inv_data = array(
+								'bill_number' => $applicantID,
+								'appl_id' => $appl_id,
+								'academic_year' => $academic_year,
+								'semester' =>0,
+								'bill_amount' => $program_fee,
+								'bill_paid' => 0.00,
+								'bill_balance' => $program_fee,
+								'bill_description' => 'Biaya Pendaftaran USM',
+								'college_id' => 0,
+								'program_code' => 0,
+								'creator' => '1',
+								'fs_id' => 0,
+								'status' => 'A',
+								'date_create' => date('Y-m-d h:i:s')
+						);
+							
+						$invoiceDb=new Studentfinance_Model_DbTable_InvoiceMain();
+						$invoiceDetailDb=new Studentfinance_Model_DbTable_InvoiceDetail();
+						$inv=$invoiceDb->getInvoiceData($applicantID);
+						if (!$inv)
+							$invoice_id = $invoiceDb->insert($inv_data);
+						else {
+							$invoice_id=$inv['id'];
+							$invoiceDb->update($inv_data, 'id='.$invoice_id);
+								
+						}
+							
+						//insert invoice detail
+							
+						$inv_detail_data = array(
+								'invoice_main_id' => $invoice_id,
+								'fi_id' => 19,//biaya pendaftaran
+								'fee_item_description' => 'Biaya Pendaftaran USM',
+								'amount' => $program_fee
+						);
+						$detail=$invoiceDetailDb->isIn($applicantID, 19);
+						if (!$detail)
+							$invoiceDetailDb->insert($inv_detail_data);
+						
+						else {
+							$invoiceDetailDb->updateData($inv_detail_data, 'id='.$detail['id']);
+						}
+							
+						
+						/* $status = $this->generateBankValidationPDF($transaction_id);
 	
 						//save file info
-								$output_directory_path = DOCUMENT_PATH."/applicant/".date("mY")."/".$transaction_id;
-								$location_path = "applicant/".date("mY")."/".$transaction_id;
-								$output_filename = $applicantID."_validasi_bank.pdf";
+						$output_directory_path = DOCUMENT_PATH."/applicant/".date("mY")."/".$transaction_id;
+						$location_path = "applicant/".date("mY")."/".$transaction_id;
+						$output_filename = $applicantID."_validasi_bank.pdf";
 									
-								$documentDB = new App_Model_Application_DbTable_ApplicantDocument();
-								$doc["ad_appl_id"]=$transaction_id;
-								$doc["ad_type"]=32;
-								$doc["ad_filepath"]=$location_path;
-								$doc["ad_filename"]=$output_filename;
-								$doc["ad_createddt"]=date("Y-m-d");
-								$documentDB->addData($doc);
+						$documentDB = new App_Model_Application_DbTable_ApplicantDocument();
+						$doc["ad_appl_id"]=$transaction_id;
+						$doc["ad_type"]=32;
+						$doc["ad_filepath"]=$location_path;
+						$doc["ad_filename"]=$output_filename;
+						$doc["ad_createddt"]=date("Y-m-d");
+						$documentDB->addData($doc); */
 	
-	
-								//generate USM Charges invoice
-								if( $transData["entry_type"]==0 ){
-								$data_invoice = array(
-										'bill_number' => $transData['at_pes_id'],
-										'appl_id' => $transData['at_appl_id'],
-										'no_fomulir' =>$transData['at_pes_id'],
-										'academic_year' => $transData['at_academic_year'],
-										'bill_amount' =>$applicant_placement_test_info['apt_fee_amt'],
-										'bill_paid'=>0,
-										'bill_balance'=>$applicant_placement_test_info['apt_fee_amt'],
-										'bill_description' => 'USM Charges',
-										'college_id' => 0,
-										'program_code' => '0000',
-										'date_create' => date('Y-m-d H:i:s'),
-										'creator' => '-1',
-										'fs_id' => 0,
-										'fsp_id' => 0,
-										'status' =>'A'
-								);
-			
-			
-								$invoiceMainDb = new Studentfinance_Model_DbTable_InvoiceMain();
-								$invoiceMainDb->insert($data_invoice);
-							}
+					//bank validation id not printed 
+						$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'push-e-collection','trxid'=>$transaction_id,'invoice'=>$applicantID),'default',true));
+							
+								 
 		
 			}elseif($admission_type==2){
 	
@@ -7149,7 +7185,142 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	
 	}
     
+	public function createUsmCardAction(){
+		/*
+		 * check session for transaction
+		*/
+		$transaction_id=$this->_getParam('id', 0);
+		$auth = Zend_Auth::getInstance();
+		//cek for pembayaran uang pendaftaran
+		$dbInvoice=new Studentfinance_Model_DbTable_InvoiceMain();
+		$dbTransaction=new App_Model_Application_DbTable_ApplicantTransaction();
+		$transaction=$dbTransaction->getData($transaction_id);
+		$pesid=$transaction['at_pes_id'];
+		$payment=$dbInvoice->getAllInvoiceData($pesid);
+		if ($payment['status_va']!='PAID') 
+			$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application', 'action'=>'view-payment','id'=>$pesid),'default',true));
+			
+		$msg = $this->_getParam('msg',null);
+		$this->view->noticeError = $msg;
 	
+		$this->view->title = $this->view->translate("verify_bank_pin");
+	
+		$auth = Zend_Auth::getInstance();
+		$appl_id = $auth->getIdentity()->appl_id;
+		$this->view->appl_id = $appl_id;
+		 
+		$transaction_id = $transaction['at_trans_id'];
+		$this->view->transaction_id = $transaction_id;
+		 
+		$transdb = new App_Model_Application_DbTable_ApplicantTransaction();
+		$rstrans = $transdb->getTransactionData($transaction_id);
+		 
+	
+		//get transaction data
+		$transDB = new App_Model_Application_DbTable_ApplicantTransaction();
+		$transData = $transDB->getTransactionData($transaction_id);
+	
+		$admission_type = $transData["at_appl_type"];  //1:placement test 2:high school
+		 
+		if($admission_type==1){
+			if($rstrans["at_status"]=="PROCESS"){
+				$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application', 'action'=>'viewkartu'),'default',true));
+			}
+		}else{
+			if($rstrans["at_status"]=="PROCESS"){
+				$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application', 'action'=>'viewletter'),'default',true));
+			}
+		}
+		 
+		//echo $auth->getIdentity()->role;
+		 
+		 
+					
+				$billing_no = $pesid; 
+					
+				$profileDB = new App_Model_Application_DbTable_ApplicantProfile();
+				$applicant = $profileDB->getData($transaction['at_appl_id']);
+					
+				//check date USM dah lepas atau belum kalau belum force tukar tarikh
+				$pdb = new App_Model_Application_DbTable_ApplicantPtest();
+				$sched = $pdb->getScheduleInfo($transaction_id);
+					
+				$testcode=$sched['apt_ptest_code'];
+					
+				$dbPlacementHead=new App_Model_Application_DbTable_PlacementTest();
+				$head=$dbPlacementHead->getDataByCode($testcode);
+				if (!$head) $testcode=null;
+				else if ($head['level_kkni']=="6") $testcode=null;
+					
+				if(strtotime($sched["aps_test_date"])<time()){
+					$this->_redirect($this->view->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'change-date','id'=>$transaction_id ,'from'=>'verify'),'default',true));
+					exit;
+				}
+					
+				//end check tarikh
+					
+				$this->view->applicant = $applicant;
+					
+					
+				if($applicant){
+	
+					//to get and update applicantID
+					//$applicantID = $transdb->getApplicantID($rstrans["at_appl_type"]);
+					//$data["at_pes_id"]=$applicantID;
+					//$transdb->updateData($data, $rstrans["at_trans_id"]);
+					 
+	
+	
+					//--------get applicant program  -----------
+					$appprogramDB = new App_Model_Application_DbTable_ApplicantProgram();
+					$app_program = $appprogramDB->getPlacementProgram($transaction_id);
+					 
+					$program_data["program_code1"]="0";
+					$program_data["program_code2"]="0";
+					$program_data["program_name2"]="";
+					$program_data["faculty_name2"]="";
+					 
+					$i=1;
+					foreach($app_program as $program){
+						$program_data["program_name".$i] = $program["program_name"];
+						$program_data["faculty_name".$i] = $program["faculty"];
+						$program_data["program_code".$i] = $program["program_code"];
+							
+						$i++;
+					}
+	
+					//to get and update sit no
+					$appprogramDB = new App_Model_Application_DbTable_ApplicantProgram();
+	
+					if($program_data["program_code2"]=="0"){
+						$program_data["program_code2"] = $program_data["program_code1"];
+					}
+					//echo $transaction_id.",".$program_data["program_code1"].",".$program_data["program_code2"].",".$applicant["apt_aps_id"].",".$testcode;
+					//exit;
+	
+					$data = $appprogramDB->getProcedure($transaction_id,$program_data["program_code1"],$program_data["program_code2"],$applicant["apt_aps_id"],$testcode);
+	
+					if($data[0]["roomid"]==0){
+						$error="Maaf tempat untuk USM telah penuh. Sila hubungi pihak manajemen universitas";
+						$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application', 'action'=>'verification','msg'=>$error),'default',true));
+						exit;
+					}
+	
+					//once submmitted update status=PTOCESS
+					$upddata["at_status"]='PROCESS';
+					$transDB = new App_Model_Application_DbTable_ApplicantTransaction();
+					$transDB->updateData($upddata,$transaction_id);
+	
+					//generate No Pes
+					$ptestDB = new App_Model_Application_DbTable_ApplicantPtest();
+					$ptestDB->generateNoPes($transaction_id);
+	
+					$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application', 'action'=>'viewkartu'),'default',true));
+						
+				} 
+			 
+		 
+	}
 	
 	public function registerAction() {
 		$this->_helper->layout->setLayout('application');
@@ -7705,6 +7876,12 @@ class OnlineApplicationController extends Zend_Controller_Action {
     
     
     
+ 	public function viewPaymentAction(){
+ 		$this->view->title='Uang Pendaftaran Ujian Saringan Masuk Usakti';
+ 		$invoice=$this->_getParam('id', 0);
+ 		$dbInvoice=new Studentfinance_Model_DbTable_InvoiceMain();
+ 		$this->view->invoice=$dbInvoice->getAllInvoiceData($invoice);
+ 	}
  	public function viewkartuAction(){
  		/*
 		 * check session for transaction
@@ -9342,6 +9519,34 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	$this->_redirect( $this->baseUrl . $formData['redirect_path']);
     }
     
+    public function pushECollectionAction(){
+    		
+    	date_default_timezone_set('Asia/Bangkok');
+    	$trxid = $this->_getParam('trxid', null);
+    	$invoice = $this->_getParam('invoice', null);
+    	 
+    	$spcInvoiceDb = new Studentfinance_Model_DbTable_InvoiceSpc();
+    	$invoiceDet = new Studentfinance_Model_DbTable_InvoiceDetail();
+    	$dbInvoice = new Studentfinance_Model_DbTable_InvoiceMain(); 
+    	$dbTransaction=new App_Model_Application_DbTable_ApplicantTransaction();
+    	$dbAppFee=new Studentfinance_Model_DbTable_ApplicationFee();
+    	$transaction=$dbTransaction->getData($trxid);
+    	$intakeid=$transaction['at_intake'];
+    	$dbIntake=new App_Model_General_DbTable_Intake();
+    	$intake=$dbIntake->fngetIntakeById($intakeid);
+    	$bni = new Studentfinance_Model_DbTable_AccessBni();
+    	$dbProgram=new App_Model_General_DbTable_Program(); 
+    	$dbFinance=new App_Model_General_DbTable_Bank();
+    	$bank=$dbFinance->fnGetBankDetails(1);
+    	$secretkey=$bank['secret_key'];
+    	$url=$bank['url_api'];
+    	//create invoice
+    	$dbInvoice->pushToECollForEnrollment($invoice,$intake['ApplicationEndDate'],'createbilling','c');
+    			 
+    	$this->_redirect($this->view->url(array('module'=>'default','controller'=>'applicant-portal','action'=>'index'),'default',true));
+    	
     
+    		
+    }
 }
 ?>

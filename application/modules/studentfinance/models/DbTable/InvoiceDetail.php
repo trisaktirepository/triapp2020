@@ -46,5 +46,29 @@ class Studentfinance_Model_DbTable_InvoiceDetail extends Zend_Db_Table_Abstract 
 			return $row;	
 		}
 	}
+	public function updateData($data,$key) {
+		$this->update($data,$key);
+	}
+	
+	public function insertData($data) {
+		$this->insert($data);
+	}
+	
+	
+	public function isIn($invoice_id,$feeitem){
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$selectData = $db->select()
+		->from(array('idtl'=>$this->_name))
+		->where("idtl.invoice_main_id = ?", $invoice_id)
+		->where('idtl.fi_id=?',$feeitem);
+	
+		$row = $db->fetchRow($selectData);
+	
+		if(!$row){
+			return null;
+		}else{
+			return $row;
+		}
+	}
 }
 ?>

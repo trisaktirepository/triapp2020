@@ -190,6 +190,7 @@ $pdb = new App_Model_Application_DbTable_ApplicantPtest();
 							$chgurl = "<br><a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'change-date','id'=>$entry['at_trans_id']),'default',true)."'>".$this->translate("Change Date")."</a>";
 						}
 					}
+					
 				}
                 elseif( $entry['at_appl_type'] == 3)
                 {
@@ -237,7 +238,7 @@ $pdb = new App_Model_Application_DbTable_ApplicantPtest();
 				}elseif($entry['at_status']=="CLOSE"){
 					echo $this->translate("Pending Payment");
 					echo "<br />";
-					echo "<small><a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'bank-pin-entry','id'=>$entry['at_trans_id']),'default',true)."'>".$this->translate("Enter Bank Pin")."</a></small>";
+					echo "<small><a href='".$this->url(array('module'=>'default','controller'=>'online-application', 'action'=>'create-usm-card','id'=>$entry['at_trans_id']),'default',true)."'>".$this->translate("Create USM Card")."</a></small>";
 				}elseif($entry['at_status']=="PROCESS"){
 						if($entry['at_selection_status']==5){
 							echo $this->translate("Lulus tahap pertama");
