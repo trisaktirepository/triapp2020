@@ -7894,7 +7894,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
  		$this->view->title='Uang Pendaftaran Ujian Saringan Masuk Usakti';
  		$invoice=$this->_getParam('id', 0);
  		$dbInvoice=new Studentfinance_Model_DbTable_InvoiceMain();
- 		$this->view->invoice=$dbInvoice->getAllInvoiceData($invoice);
+ 		$this->view->invoice=$dbInvoice->getInvoiceData($invoice);
  	}
  	public function viewkartuAction(){
  		/*
