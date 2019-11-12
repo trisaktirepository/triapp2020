@@ -6,7 +6,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 	protected $_name = 'invoice_main';
 	protected $_primary = "id";
 		
-	public function update($data,$key) {
+	public function updatedata($data,$key) {
 		 
 		$db = Zend_Db_Table::getDefaultAdapter();
 		 
@@ -373,6 +373,26 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		->where("pi.payee_id ='".$payer."'");
 			
 		$row = $db->fetchAll($select);
+	
+		if(!$row){
+			return null;
+		}else{
+			return $row;
+		}
+	
+	}
+	
+	public function getAllInvoiceData($billing_no, $active=false){
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$selectData = $db->select()
+		->from(array('im'=>$this->_name))
+		->where('im.bill_number = ?', $billing_no);
+			
+		if($active){
+			$selectData->where("im.status = 'A'");
+		}
+	
+		$row = $db->fetchAll($selectData);
 	
 		if(!$row){
 			return null;
