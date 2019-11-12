@@ -7200,7 +7200,8 @@ class OnlineApplicationController extends Zend_Controller_Action {
 		//cek for pembayaran uang pendaftaran
 		$dbInvoice=new Studentfinance_Model_DbTable_InvoiceMain();
 		$dbTransaction=new App_Model_Application_DbTable_ApplicantTransaction();
-		$transaction=$dbTransaction->getData($transaction_id);
+		$transaction=$dbTransaction->getDataById($transaction_id);
+		
 		$pesid=$transaction['at_pes_id'];
 		$payment=$dbInvoice->getAllInvoiceData($pesid);
 		if ($payment['status_va']!='PAID') 
