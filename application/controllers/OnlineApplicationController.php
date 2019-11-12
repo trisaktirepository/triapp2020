@@ -5285,7 +5285,10 @@ class OnlineApplicationController extends Zend_Controller_Action {
 						$total_program_apply = count($list_program);
 						
 						$feeDB = new App_Model_Application_DbTable_PlacementFeeSetup();
-						$condition = array('type'=>'PROGRAM','value'=>$total_program_apply,'aptcode'=>$code);
+						$dbPlaceHead=new App_Model_Application_DbTable_PlacementTest();
+						$head=$dbPlaceHead->getDataByCode($testCode);
+						if ($head['aph_fees_location']== "1") $condition = array('type'=>'LOCATION','value'=>'','aptcode'=>$testCode);
+						if ($head['aph_fees_program']== "1") $condition = array('type'=>'PROGRAM','value'=>$total_program_apply,'aptcode'=>$testCode);
 						$fees_info = $feeDB->getFees($condition);
 						$program_fee = $fees_info["apfs_amt"];
 						//insert into invoice and invoice detail
