@@ -5298,6 +5298,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 								'appl_id' => $appl_id,
 								'academic_year' => $academic_year,
 								'semester' =>0,
+								'no_fomulir' => $applicantID,
 								'bill_amount' => $program_fee,
 								'bill_paid' => 0.00,
 								'bill_balance' => $program_fee,
@@ -9538,7 +9539,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	$trxid = $this->_getParam('trxid', null);
     	$invoice = $this->_getParam('invoice', null);
     	 
-    	$spcInvoiceDb = new Studentfinance_Model_DbTable_InvoiceSpc();
+    	//$spcInvoiceDb = new Studentfinance_Model_DbTable_InvoiceSpc();
     	$invoiceDet = new Studentfinance_Model_DbTable_InvoiceDetail();
     	$dbInvoice = new Studentfinance_Model_DbTable_InvoiceMain(); 
     	$dbTransaction=new App_Model_Application_DbTable_ApplicantTransaction();
