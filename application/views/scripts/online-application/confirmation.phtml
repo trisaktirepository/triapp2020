@@ -33,7 +33,7 @@
 					
 				</div>
 			</div>
-			<table>
+			<table class="table">
 				<tr><th><?php echo "Nama"?></th><td><?php echo $this->profile['appl_fname'].' '.$this->profile['appl_mname'].' '.$this->profile['appl_fname']?></td></tr>
 				<tr><th><?php echo "Alamat"?></th><td><?php echo $this->profile['appl_address1']?></td></tr>
 				<tr><th><?php echo "Tempat/Tgl Lahir"?></th><td><?php echo $this->profile['appl_birth_place'].'/'.date('Y-m-d', strtotime($this->profile['appl_dob']))?></td></tr>
