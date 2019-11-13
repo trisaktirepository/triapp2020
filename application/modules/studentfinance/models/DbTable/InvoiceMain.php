@@ -553,6 +553,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		$url=$bank['url_api'];
 	
 		if ($mode==null) $mode="c";
+		exit;
 		$invoice=$dbInvoice->getInvoiceDataByFormulir($idinvoice);
 		$applid=$invoice['appl_id'];
 		$profil=$dbAppProfile->getData($applid);
@@ -562,7 +563,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		//$idprogram=$std['IdProgram'];
 		//$program=$dbProgram->getDataDetail($idprogram);
 		$clientid='741';//$program['Client_Id'];
-		exit;
+		
 		if ($process=='createbilling') {
 			if ($re=="1") {
 				 exit;
