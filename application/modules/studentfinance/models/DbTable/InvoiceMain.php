@@ -43,7 +43,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$selectData = $db->select()
 		->from(array('im'=>$this->_name))
-		->where("im.fomulir = '".$noform."'");
+		->where("im.no_fomulir = '".$noform."'");
 			
 		$row = $db->fetchRow($selectData);
 	
