@@ -62,8 +62,8 @@ class App_Model_Application_DbTable_ApplicantProgram extends Zend_Db_Table_Abstr
 		$location = "1";*/
 		$db = Zend_Db_Table::getDefaultAdapter();
 			
-		echo "CALL pr_ptest_roomseatno('".$program1."','".$program2."',$scheduleid,@vRoomId, @vSitNo)";
-		exit;
+		//echo "CALL pr_ptest_roomseatno('".$program1."','".$program2."',$scheduleid,@vRoomId, @vSitNo)";
+		//exit;
 		if ($testcode!=null) {
 			//get seat no based on testcode other than S1
 			$room=$this->getSeatNo($transid, $program1, $program2, $scheduleid, $testcode);

@@ -7261,7 +7261,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 				$billing_no = $pesid; 
 					
 				$profileDB = new App_Model_Application_DbTable_ApplicantProfile();
-				$applicant = $profileDB->getData($transaction['at_appl_id']);
+				$applicant = $profileDB->getProfile($transaction['at_appl_id'],$transaction_id);
 					
 				//check date USM dah lepas atau belum kalau belum force tukar tarikh
 				$pdb = new App_Model_Application_DbTable_ApplicantPtest();
