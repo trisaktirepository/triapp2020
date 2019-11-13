@@ -7339,7 +7339,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 	
 						
 				}// else $this->_redirect($this->view->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'index'),'default',true));
-				$this->_redirect('http://online-application/viewkartu/appl_id/'.$appl_id.'/transaction_id/'.$transaction_id);
+				$this->_redirect('http://www.print.trisakti.ac.id/online-application/viewkartu/appl_id/'.$appl_id.'/transaction_id/'.$transaction_id);
 					
 			 
 		 
