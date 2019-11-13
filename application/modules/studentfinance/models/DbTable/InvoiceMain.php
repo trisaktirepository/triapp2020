@@ -565,7 +565,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		if ($process=='createbilling') {
 			if ($re=="1") {
 				 
-				$bill=100000000+mt_rand(9999,99999);
+				$bill=100000000+mt_rand(0,99999);
 				$bill=substr($bill, 1,8);
 				$dbInvoice->updatedata(array('bill_number'=>$bill), 'bill_number="'.$idinvoice.'"');
 			} else $bill=$invoice['bill_number'];
@@ -576,6 +576,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		else
 			$va=$invoice['va'];//$billamount=$invoice['bill_balance'];
 		$billamount=$invoice['bill_amount'];
+		echo $bill;exit;
 		//get detail
 		$invoicedetail=$invoiceDet->getInvoiceDetail($invoice['id']);
 		$desc=array();
@@ -612,8 +613,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 					'datetime_expired'=>date_format(date_create($dateexprired), 'c'),
 					'description'=>$desc,
 			);
-			echo var_dump($invoiceData);
-			exit;
+			
 			//
 			$respone=$bni->accessBni($clientid, $secretkey, $url, $invoiceData);
 	
