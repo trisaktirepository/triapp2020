@@ -39,12 +39,13 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		
 	}
 	
-	public function getInvoiceDataByFormulir($noform){
+	public function getInvoiceDataByFormulir($noform,$addinfo=null){
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$selectData = $db->select()
 		->from(array('im'=>$this->_name))
-		->where("im.no_fomulir = '".$noform."'");
-		//echo $selectData;exit;
+		->where("im.no_fomulir = '".$noform."'")
+		;
+		if ($addinfo!=null) $selectData->where('im.Description like "%'.$addinfo.'_%"');
 		$row = $db->fetchRow($selectData);
 	
 		if(!$row){
