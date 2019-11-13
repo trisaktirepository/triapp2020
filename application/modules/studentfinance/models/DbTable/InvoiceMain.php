@@ -39,6 +39,22 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		
 	}
 	
+	public function getInvoiceDataByFormulir($noform){
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$selectData = $db->select()
+		->from(array('im'=>$this->_name))
+		->where("im.fomulir = '".$noform."'");
+			
+		$row = $db->fetchRow($selectData);
+	
+		if(!$row){
+			return null;
+		}else{
+			return $row;
+		}
+	
+	}
+	
 	public function getIssuedInvoiceData($payee, $program_code=null){
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$selectData = $db->select()
@@ -537,7 +553,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		$url=$bank['url_api'];
 	
 		if ($mode==null) $mode="c";
-		$invoice=$dbInvoice->getInvoiceData($idinvoice);
+		$invoice=$dbInvoice->getInvoiceDataByFormulir($idinvoice);
 		$applid=$invoice['appl_id'];
 		$profil=$dbAppProfile->getData($applid);
 		//echo var_dump($invoice);exit;
