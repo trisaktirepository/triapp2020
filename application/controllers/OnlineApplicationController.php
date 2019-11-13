@@ -7317,8 +7317,8 @@ class OnlineApplicationController extends Zend_Controller_Action {
 					if($program_data["program_code2"]=="0"){
 						$program_data["program_code2"] = $program_data["program_code1"];
 					}
-					//echo $transaction_id.",".$program_data["program_code1"].",".$program_data["program_code2"].",".$applicant["apt_aps_id"].",".$testcode;
-					//exit;
+					echo $transaction_id.",".$program_data["program_code1"].",".$program_data["program_code2"].",".$applicant["apt_aps_id"].",".$testcode;
+					exit;
 	
 					$data = $appprogramDB->getProcedure($transaction_id,$program_data["program_code1"],$program_data["program_code2"],$applicant["apt_aps_id"],$testcode);
 					echo var_dump($data);exit;
