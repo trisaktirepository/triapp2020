@@ -143,16 +143,17 @@ class App_Model_Application_DbTable_ApplicantProfile extends Zend_Db_Table_Abstr
 		return $row;
 	}
 
+	
 	public function getTransProfile ($id="",$transid=""){
 	 
 		$db = Zend_Db_Table::getDefaultAdapter();
 		
 		 $select = $db ->select()
 					  ->from(array('ap'=>$this->_name))
-					  ->join(array('at'=>'applicant_transaction'),'at.at_appl_id=ap.appl_id',array('admission_type'=>'at_appl_type'))
+					  ->join(array('at'=>'applicant_transaction'),'at.at_appl_id=ap.appl_id',array('admission_type'=>'at_appl_type','at_trans_id','at_pes_id'))
 					  ->joinleft(array('ae'=>'applicant_education'),'ae.ae_appl_id=ap.appl_id',(array('education'=>'ae.ae_discipline_code')))
 					  ->joinleft(array('sd'=>'school_discipline'),'sd.smd_code=ae.ae_discipline_code',array('discipline'=>'sd.smd_desc'))
-					  ->joinleft(array('apt'=>'applicant_ptest'),'apt.apt_at_trans_id=at.at_trans_id',(array('fee'=>'apt.apt_fee_amt','bill_no'=>'apt.apt_bill_no','currency'=>'apt.apt_currency','schedule_id'=>'apt.apt_aps_id')))
+					  ->joinleft(array('apt'=>'applicant_ptest'),'apt.apt_at_trans_id=at.at_trans_id',(array('fee'=>'apt.apt_fee_amt','bill_no'=>'apt.apt_bill_no','currency'=>'apt.apt_currency','schedule_id'=>'apt.apt_aps_id','apt_id','apt_room_id','apt_aps_id','apt_sit_no')))
 					  ->joinLeft(array('sc'=>'appl_placement_schedule'),'sc.aps_id=apt.apt_aps_id')
 					 // ->where("at.at_status = 'APPLY'")
 					 ->where('at.at_trans_id='.$transid)
