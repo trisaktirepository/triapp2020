@@ -87,7 +87,8 @@ class App_Model_Application_DbTable_ApplicantProfile extends Zend_Db_Table_Abstr
 			 echo $select;exit;
 			 $row = $db->fetchRow($select);	
 			 
-		}	else{			
+		}	else{		
+			echo $select;exit;
 			$row = $db->fetchAll($select);	
 		}	  
 		echo $select;exit;
