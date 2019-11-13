@@ -154,7 +154,7 @@ class App_Model_Application_DbTable_ApplicantProfile extends Zend_Db_Table_Abstr
 					  ->joinLeft(array('sc'=>'appl_placement_schedule'),'sc.aps_id=apt.apt_aps_id')
 					 // ->where("at.at_status = 'APPLY'")
 					  ->where("ap.appl_id ='".$id."'");
-		// echo $select;			  
+		echo $select;			  
 		// die;
         $row = $db->fetchRow($select);	
 		return $row;
