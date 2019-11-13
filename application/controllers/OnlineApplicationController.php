@@ -5292,6 +5292,14 @@ class OnlineApplicationController extends Zend_Controller_Action {
 						if ($head['aph_fees_program']== "1") $condition = array('type'=>'PROGRAM','value'=>$total_program_apply,'aptcode'=>$testCode);
 						$fees_info = $feeDB->getFees($condition);
 						$program_fee = $fees_info["apfs_amt"];
+						//add 200.000 if prgram fk dan atau fkg
+						$additional=0;
+						foreach ($list_program as $prog) {
+							
+							if ($prog['ap_prog_code']=='0300' ||$prog['ap_prog_code']=='0400' ) 
+								$additional=200000;
+						}
+						$program_fee=$program_fee+$additional;
 						//insert into invoice and invoice detail
 						$inv_data = array(
 								'bill_number' => $applicantID,
@@ -7211,7 +7219,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 		
 		$pesid=$transaction['at_pes_id'];
 		$payment=$dbInvoice->getAllInvoiceData($pesid);
-		if ($payment['status_va']!='PAID') 
+		if ($payment['status_va']!='P') 
 			$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application', 'action'=>'view-payment','id'=>$pesid,'trxid'=>$transaction_id),'default',true));
 			
 		$msg = $this->_getParam('msg',null);
