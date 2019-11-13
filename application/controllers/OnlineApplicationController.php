@@ -7218,7 +7218,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 		$transaction=$dbTransaction->getDataById($transaction_id);
 		
 		$pesid=$transaction['at_pes_id'];
-		$payment=$dbInvoice->getAllInvoiceData($pesid);
+		$payment=$dbInvoice->getInvoiceData($pesid);
 		if ($payment['status_va']!='P') 
 			$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application', 'action'=>'view-payment','id'=>$pesid,'trxid'=>$transaction_id),'default',true));
 			
