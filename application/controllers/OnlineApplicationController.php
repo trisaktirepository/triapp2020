@@ -7904,7 +7904,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
  		$invoice=$this->_getParam('id', 0);
  		$this->view->transactionid=$this->_getParam('trxid', 0);
  		$dbInvoice=new Studentfinance_Model_DbTable_InvoiceMain();
- 		$this->view->invoice=$dbInvoice->getInvoiceData($invoice);
+ 		$this->view->invoice=$dbInvoice->getInvoiceDataByFormulir($invoice);
  	}
  	public function viewkartuAction(){
  		/*
