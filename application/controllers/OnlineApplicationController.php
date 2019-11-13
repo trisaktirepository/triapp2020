@@ -9548,7 +9548,12 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	date_default_timezone_set('Asia/Bangkok');
     	$trxid = $this->_getParam('trxid', null);
     	$invoice = $this->_getParam('invoice', null);
-    	 
+    	$re = $this->_getParam('re', null);
+    	if ($re=="1") {
+    		$invoice=rand(90000, 9999999);
+    		$invoice=100000000+$invoice;
+    		$invoice=substr($invoice, 1,8);
+    	}
     	//$spcInvoiceDb = new Studentfinance_Model_DbTable_InvoiceSpc();
     	$invoiceDet = new Studentfinance_Model_DbTable_InvoiceDetail();
     	$dbInvoice = new Studentfinance_Model_DbTable_InvoiceMain(); 
