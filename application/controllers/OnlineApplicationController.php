@@ -7339,7 +7339,8 @@ class OnlineApplicationController extends Zend_Controller_Action {
 	
 					$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application', 'action'=>'viewkartu'),'default',true));
 						
-				} 
+				} else $this->_redirect($this->view->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'index'),'default',true));
+					
 			 
 		 
 	}
