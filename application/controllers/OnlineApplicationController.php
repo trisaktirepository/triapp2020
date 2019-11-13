@@ -9551,8 +9551,8 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	$invoice = $this->_getParam('invoice', null);
     	$re = $this->_getParam('re', null);
     	if ($re=="1") {
-    		$integer = mt_rand();
-    		$invoice=100000000+$integer;
+    		 
+    		$invoice=100000000+$trxid;
     		$invoice=substr($invoice, 1,8);
     	}
     	//$spcInvoiceDb = new Studentfinance_Model_DbTable_InvoiceSpc();
