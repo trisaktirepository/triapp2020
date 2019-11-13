@@ -550,8 +550,8 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 			if ($re=="1") {
 				 
 				$bill=100000000+mt_rand(9999,99999);
-				 
 				$bill=substr($bill, 1,8);
+				$dbInvoice->updatedata(array('bill_number'=>$bill), 'bill_number="'.$idinvoice.'"');
 			} else $bill=$invoice['bill_number'];
 			 
 			$va= '8'.$clientid.'0000'.$bill;
