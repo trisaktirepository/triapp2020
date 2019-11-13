@@ -9550,14 +9550,8 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	$trxid = $this->_getParam('trxid', null);
     	$invoice = $this->_getParam('invoice', null);
     	$re = $this->_getParam('re', null);
-    	if ($re=="1") {
-    		 
-    		$invoice=100000000+$trxid;
-    		 
-    		$invoice=substr($invoice, 1,8);
-    	}
     	
-    	echo $invoice;exit;
+    	 
     	//$spcInvoiceDb = new Studentfinance_Model_DbTable_InvoiceSpc();
     	$invoiceDet = new Studentfinance_Model_DbTable_InvoiceDetail();
     	$dbInvoice = new Studentfinance_Model_DbTable_InvoiceMain(); 
@@ -9574,7 +9568,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	$secretkey=$bank['secret_key'];
     	$url=$bank['url_api'];
     	//create invoice
-    	$dbInvoice->pushToECollForEnrollment($invoice,$intake['ApplicationEndDate'],'createbilling','c');
+    	$dbInvoice->pushToECollForEnrollment($invoice,$intake['ApplicationEndDate'],'createbilling','c',$re);
     			 
     	$this->_redirect($this->view->url(array('module'=>'default','controller'=>'applicant-portal','action'=>'index'),'default',true));
     	

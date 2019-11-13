@@ -522,7 +522,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 			//echo var_dump($respone);exit;
 		}
 	}
-	public function pushToECollForEnrollment($idinvoice,$dateexprired,$process=null,$mode=null) {
+	public function pushToECollForEnrollment($idinvoice,$dateexprired,$process=null,$mode=null,$re=null) {
 		date_default_timezone_set('Asia/Bangkok');
 			
 		$invoiceDet = new Studentfinance_Model_DbTable_InvoiceDetail();
@@ -546,8 +546,17 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		//$idprogram=$std['IdProgram'];
 		//$program=$dbProgram->getDataDetail($idprogram);
 		$clientid='741';//$program['Client_Id'];
-		if ($process=='createbilling')
-			$va= '8'.$clientid.'0000'.$invoice['bill_number'];
+		if ($process=='createbilling') {
+			if ($re=="1") {
+				 
+				$bill=100000000+mt_rand(9999,99999);
+				 
+				$bill=substr($bill, 1,8);
+			} else $bill=$invoice['bill_number'];
+			 
+			$va= '8'.$clientid.'0000'.$bill;
+			
+		}
 		else
 			$va=$invoice['va'];//$billamount=$invoice['bill_balance'];
 		$billamount=$invoice['bill_amount'];
