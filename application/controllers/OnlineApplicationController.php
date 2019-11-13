@@ -9553,9 +9553,11 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	if ($re=="1") {
     		 
     		$invoice=100000000+$trxid;
-    		echo $invoice;exit;
+    		 
     		$invoice=substr($invoice, 1,8);
     	}
+    	
+    	echo $invoice;exit;
     	//$spcInvoiceDb = new Studentfinance_Model_DbTable_InvoiceSpc();
     	$invoiceDet = new Studentfinance_Model_DbTable_InvoiceDetail();
     	$dbInvoice = new Studentfinance_Model_DbTable_InvoiceMain(); 
