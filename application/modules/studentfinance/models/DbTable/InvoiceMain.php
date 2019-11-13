@@ -44,7 +44,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		$selectData = $db->select()
 		->from(array('im'=>$this->_name))
 		->where("im.no_fomulir = '".$noform."'");
-		echo $selectData;exit;
+		//echo $selectData;exit;
 		$row = $db->fetchRow($selectData);
 	
 		if(!$row){
@@ -558,7 +558,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		$applid=$invoice['appl_id'];
 		
 		$profil=$dbAppProfile->getData($applid);
-		exit;
+		//exit;
 		//echo var_dump($invoice);exit;
 		//$idstd=$invoice['IdStudentRegistration'];
 		//$std=$dbStd->getData($idstd);
@@ -568,9 +568,9 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		
 		if ($process=='createbilling') {
 			if ($re=="1") {
-				 exit;
+				// exit;
 				$bill=100000000+strtotime(date());
-				echo $bill;exit;
+				//echo $bill;exit;
 				$bill=substr($bill, 1,8);
 				$dbInvoice->updatedata(array('bill_number'=>$bill), 'bill_number="'.$idinvoice.'"');
 			} else $bill=$invoice['bill_number'];
