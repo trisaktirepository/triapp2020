@@ -9568,7 +9568,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	$secretkey=$bank['secret_key'];
     	$url=$bank['url_api'];
     	//create invoice
-    	exit;
+    	 
     	$dbInvoice->pushToECollForEnrollment($invoice,$intake['ApplicationEndDate'],'createbilling','c',$re);
     			 
     	$this->_redirect($this->view->url(array('module'=>'default','controller'=>'applicant-portal','action'=>'index'),'default',true));
