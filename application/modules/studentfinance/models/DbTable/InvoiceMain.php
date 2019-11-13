@@ -564,8 +564,8 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		$clientid='741';//$program['Client_Id'];
 		if ($process=='createbilling') {
 			if ($re=="1") {
-				echo strtotime(date('Y-m-d h:s:i'));exit;
-				$bill=100000000+strtotime(date('Y-m-d h:s:i'));
+				 
+				$bill=100000000+strtotime(date());
 				echo $bill;exit;
 				$bill=substr($bill, 1,8);
 				$dbInvoice->updatedata(array('bill_number'=>$bill), 'bill_number="'.$idinvoice.'"');
