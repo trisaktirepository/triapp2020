@@ -9550,7 +9550,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	$invoice = $this->_getParam('invoice', null);
     	$re = $this->_getParam('re', null);
     	if ($re=="1") {
-    		$invoice=rand(90000, 9999999);
+    		$invoice=rand(90000);
     		$invoice=100000000+$invoice;
     		$invoice=substr($invoice, 1,8);
     	}
