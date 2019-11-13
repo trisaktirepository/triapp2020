@@ -84,12 +84,13 @@ class App_Model_Application_DbTable_ApplicantProfile extends Zend_Db_Table_Abstr
 					  
 		if($id!=null)	{			
 			 $select->where("appl_id ='".$id."'");
+			 echo $select;exit;
 			 $row = $db->fetchRow($select);	
 			 
 		}	else{			
 			$row = $db->fetchAll($select);	
 		}	  
-		
+		echo $select;exit;
 		 return $row;
 	}
 	
