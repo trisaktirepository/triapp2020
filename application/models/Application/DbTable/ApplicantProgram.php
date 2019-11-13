@@ -71,7 +71,7 @@ class App_Model_Application_DbTable_ApplicantProgram extends Zend_Db_Table_Abstr
 		} else {
 	     	$stmt = $db->query("CALL pr_ptest_roomseatno($transid,'".$program1."','".$program2."',$scheduleid,@vRoomId, @vSitNo)");	
 	
-			$stmt;
+			echo $stmt; exit;
 			
 			$select = $db->query("SELECT @vRoomId as roomid,@vSitNo as sitno");	 			
 			$row = $select->fetchAll();
