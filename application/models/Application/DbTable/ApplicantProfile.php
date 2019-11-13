@@ -155,7 +155,7 @@ class App_Model_Application_DbTable_ApplicantProfile extends Zend_Db_Table_Abstr
 					 // ->where("at.at_status = 'APPLY'")
 					 ->where('at.at_trans_id='.$transid)
 					  ->where("ap.appl_id ='".$id."'");
-		echo $select;			  
+		//echo $select;			  
 		// die;
         $row = $db->fetchRow($select);	
 		return $row;

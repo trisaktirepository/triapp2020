@@ -7317,11 +7317,11 @@ class OnlineApplicationController extends Zend_Controller_Action {
 					if($program_data["program_code2"]=="0"){
 						$program_data["program_code2"] = $program_data["program_code1"];
 					}
-					echo $transaction_id.",".$program_data["program_code1"].",".$program_data["program_code2"].",".$applicant["apt_aps_id"].",".$testcode;
-					exit;
+					//echo $transaction_id.",".$program_data["program_code1"].",".$program_data["program_code2"].",".$applicant["schedule_id"].",".$testcode;
+					//exit;
 	
-					$data = $appprogramDB->getProcedure($transaction_id,$program_data["program_code1"],$program_data["program_code2"],$applicant["apt_aps_id"],$testcode);
-					echo var_dump($data);exit;
+					$data = $appprogramDB->getProcedure($transaction_id,$program_data["program_code1"],$program_data["program_code2"],$applicant["schedule_id"],$testcode);
+					//echo var_dump($data);exit;
 					if($data[0]["roomid"]==0){
 						$error="Maaf tempat untuk USM telah penuh. Sila hubungi pihak manajemen universitas";
 						$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application', 'action'=>'verification','msg'=>$error),'default',true));
