@@ -564,8 +564,9 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		$clientid='741';//$program['Client_Id'];
 		if ($process=='createbilling') {
 			if ($re=="1") {
-				 
-				$bill=100000000+mt_rand(0,1000);
+				 $x=mt_rand(0,1000);
+				 echo $x;exit;
+				$bill=100000000+$x;
 				$bill=substr($bill, 1,8);
 				$dbInvoice->updatedata(array('bill_number'=>$bill), 'bill_number="'.$idinvoice.'"');
 			} else $bill=$invoice['bill_number'];
