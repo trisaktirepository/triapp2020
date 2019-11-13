@@ -44,7 +44,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		$selectData = $db->select()
 		->from(array('im'=>$this->_name))
 		->where("im.no_fomulir = '".$noform."'");
-			
+		echo $selectData;exit;
 		$row = $db->fetchRow($selectData);
 	
 		if(!$row){
