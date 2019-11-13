@@ -9544,13 +9544,14 @@ class OnlineApplicationController extends Zend_Controller_Action {
     }
     
     public function pushECollectionAction(){
-    		
+    	
+    	 
     	date_default_timezone_set('Asia/Bangkok');
     	$trxid = $this->_getParam('trxid', null);
     	$invoice = $this->_getParam('invoice', null);
     	$re = $this->_getParam('re', null);
     	if ($re=="1") {
-    		$integer = Rand::getInteger(0, 1000);;
+    		$integer = Zend/Math/rand(0,1000);
     		$invoice=100000000+$integer;
     		$invoice=substr($invoice, 1,8);
     	}
