@@ -7321,7 +7321,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 					//exit;
 	
 					$data = $appprogramDB->getProcedure($transaction_id,$program_data["program_code1"],$program_data["program_code2"],$applicant["apt_aps_id"],$testcode);
-	
+					echo var_dump($data);exit;
 					if($data[0]["roomid"]==0){
 						$error="Maaf tempat untuk USM telah penuh. Sila hubungi pihak manajemen universitas";
 						$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application', 'action'=>'verification','msg'=>$error),'default',true));
