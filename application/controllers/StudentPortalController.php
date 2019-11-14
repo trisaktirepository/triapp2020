@@ -618,19 +618,21 @@ class StudentPortalController extends Zend_Controller_Action
     
     public function viewKrsAction(){
     	
-    	$this->view->title = "Kartu Rencana Asli";
-    	
-    	global $subject_list;
-    	    	
     	$idstudentsemsterstatus = $this->_getParam('idstudentsemsterstatus', 0);
     	$this->view->idstudentsemsterstatus = $idstudentsemsterstatus;
-
-		$auth = Zend_Auth::getInstance();
+    	
+    	$auth = Zend_Auth::getInstance();
     	$IdStudentRegistration = $auth->getIdentity()->registration_id;
-    	
+    	 
     	$this->view->IdStudentRegistration = $IdStudentRegistration;
-    	
+    	 
     	$type = $this->_getParam('type', 0);
+    	$this->view->title = "Kartu Rencana Asli";
+    	$this->_redirect("http://www.print.trisakti.ac.id/student-portal/view-krs/idstudentsemsterstatus/'.$idstudentsemsterstatus.'/registration_id/'.$IdStudentRegistration.'/type/".$type);
+    		
+    	global $subject_list;
+    	    	
+    	
 
     	
     	//To get Student Academic Info        
@@ -1166,19 +1168,20 @@ class StudentPortalController extends Zend_Controller_Action
      public function cetakKhsAction(){
     	
     	$this->view->title = "Kartu Hasil Studi";
+    	//get applicant profile
+    	$auth = Zend_Auth::getInstance();
+    	
+    	$registration_id = $auth->getIdentity()->registration_id;
+    	$this->view->IdStudentRegistration = $registration_id;
     	 
-
+    	$idSemesterStatus = $this->_getParam('idSemesterStatus',null);
+    	
+    	$this->_redirect("http://www.print.trisakti.ac.id/student-portal/cetak-khs/idSemesterStatus/".$idSemesterStatus.'/registration_id/'.$registration_id);
+    	 
     	global $semester;
     	global $courses;
     	
-    	//get applicant profile
-    	$auth = Zend_Auth::getInstance();   
-    	 
-    	$registration_id = $auth->getIdentity()->registration_id;
-    	$this->view->IdStudentRegistration = $registration_id;
     	
-    	$idSemesterStatus = $this->_getParam('idSemesterStatus',null);    
-    	 
     	//To get Student Academic Info        
         $studentRegDB = new App_Model_Record_DbTable_StudentRegistration();
         $student = $studentRegDB->getStudentInfo($registration_id);
