@@ -5369,7 +5369,10 @@ class OnlineApplicationController extends Zend_Controller_Action {
 							
 								 
 		
-			}elseif($admission_type==2){
+			}else $this->_redirect('http://www.print.trisakti.ac.id/online-application/print-bukti-daftar/trxid/'.$transaction_id.'/at_appl_type/'.$admission_type);
+						
+			/*
+			if($admission_type==2){
 	
 						//-------- high school cert (PSSB) section -------------
 		
@@ -5424,7 +5427,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 			    				}
 			    				}else{
 			    				$photo_url = "http://".ONNAPP_HOSTNAME."/images/no-photo.jpg";
-			    				}		 */
+			    				}		 *//*
 			    				//once submmitted update status=CLOSE
 			    				$upddata["at_status"]='PROCESS';
 			    				//$upddata["at_intake"]=$IdIntake;
@@ -5484,7 +5487,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 									$this->mailmergeConnection($filepath, $fieldValues,$connection,$output_directory_path, $output_filename);
 									}else{
 									$this->mailmerge($filepath, $fieldValues,$output_directory_path, $output_filename);
-									} */
+									} *//*
 									$html = file_get_contents($html_template_path);
 									//echo $html;exit;
 									//replace variable
@@ -5645,7 +5648,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 									$this->mailmergeConnection($filepath, $fieldValues,$connection,$output_directory_path, $output_filename);
 									}else{
 									$this->mailmerge($filepath, $fieldValues,$output_directory_path, $output_filename);
-									} */
+									} *//*
 									$html = file_get_contents($html_template_path);
 									//echo $html;exit;
 									//replace variable
@@ -5739,7 +5742,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 					 	}
 					 	}else{
 					 	$photo_url = "http://".ONNAPP_HOSTNAME."/images/no-photo.jpg";
-					 	}		 */
+					 	}		 *//*
 					 	//once submmitted update status=CLOSE
 					 	$upddata["at_status"]='PROCESS';
 					 	//$upddata["at_intake"]=$IdIntake;
@@ -5800,7 +5803,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 					 	$this->mailmergeConnection($filepath, $fieldValues,$connection,$output_directory_path, $output_filename);
 					 	}else{
 					 	$this->mailmerge($filepath, $fieldValues,$output_directory_path, $output_filename);
-					 	} */
+					 	} *//*
 					 	$html = file_get_contents($html_template_path);
 					 	//echo $html;exit;
 					 	//replace variable
@@ -5889,7 +5892,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 					 	}
 					 	}else{
 					 	$photo_url = "http://".ONNAPP_HOSTNAME."/images/no-photo.jpg";
-					 	}		 */
+					 	}		  
 					 	//once submmitted update status=CLOSE
 					 	$upddata["at_status"]='PROCESS';
 					 	//$upddata["at_intake"]=$IdIntake;
@@ -5950,7 +5953,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 					 	$this->mailmergeConnection($filepath, $fieldValues,$connection,$output_directory_path, $output_filename);
 					 	}else{
 					 	$this->mailmerge($filepath, $fieldValues,$output_directory_path, $output_filename);
-					 	} */
+					 	} *//*
 					 	$html = file_get_contents($html_template_path);
 					 	//echo $html;exit;
 					 	//replace variable
@@ -6039,7 +6042,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 					 	}
 					 	}else{
 					 	$photo_url = "http://".ONNAPP_HOSTNAME."/images/no-photo.jpg";
-					 	}		 */
+					 	}		  
 					 	//once submmitted update status=CLOSE
 					 	$upddata["at_status"]='PROCESS';
 					 	//$upddata["at_intake"]=$IdIntake;
@@ -6100,7 +6103,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 					 	$this->mailmergeConnection($filepath, $fieldValues,$connection,$output_directory_path, $output_filename);
 					 	}else{
 					 	$this->mailmerge($filepath, $fieldValues,$output_directory_path, $output_filename);
-					 	} */
+					 	} 
 					 	$html = file_get_contents($html_template_path);
 					 	//echo $html;exit;
 					 	//replace variable
@@ -6192,7 +6195,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 					 	}
 					 	}else{
 					 	$photo_url = "http://".ONNAPP_HOSTNAME."/images/no-photo.jpg";
-					 	}		 */
+					 	}		 
 					 	//once submmitted update status=CLOSE
 					 	$upddata["at_status"]='PROCESS';
 					 	//$upddata["at_intake"]=$IdIntake;
@@ -6256,7 +6259,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 					 	$this->mailmergeConnection($filepath, $fieldValues,$connection,$output_directory_path, $output_filename);
 					 	}else{
 					 	$this->mailmerge($filepath, $fieldValues,$output_directory_path, $output_filename);
-					 	} */
+					 	}  
 					 	$html = file_get_contents($html_template_path);
 					 	//echo $html;exit;
 					 	//replace variable
@@ -6293,7 +6296,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 					 						 
 					 	
 					 }
-	
+	*/
 					// --------- Send Email Section  ---------------
 					$attachment_path = $output_directory_path.'/'.$output_filename;
 								
