@@ -3271,7 +3271,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     }
     
     public function offerLetterAction(){
-    	
+    	$this->view->title="SURAT PANGGILAN DITERIMA";
     	$txnId=$this->_getParam('transaction_id',0);
     	$this->view->transaction_id=$txnId;
     	if ($this->getRequest()->isPost()) {

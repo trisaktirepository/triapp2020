@@ -77,24 +77,13 @@ td.bold-text{
 </head>
 <body>
 	<!-- Header -->
-	<table class="table">
-		<tr>
-			<td width="20%">
-				<img src="/var/www/html/triapp/public/images/trisakti_logo.jpg" width="100px" />
-			</td>
-			<td align="center">
-				<div class="header-center-info">
-				<h1>UNIVERSITAS TRISAKTI <br /> JAKARTA</h1>
-				</div>
-			</td>
-			<td width="20%" align="center">
-				 
-				<div class="header-pes-no">
-					<?php echo $this->dataview['NO_PES']?> 
-				</div>
-			</td>
-		</tr>
-	</table>
+	<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		
+	</div>
+</div>
+	 
 	<!-- End Header -->
 	
 	<!-- Applicant Info -->
@@ -149,7 +138,7 @@ td.bold-text{
 	<br />
 	<p>
 		Dinyatakan LULUS Melalui <?php echo $this->dataview['SELECTION_TYPE']?>   Universitas Trisakti Tahun Akademik <?php echo $this->dataview['ACADEMIC_YEAR']?> 
-		$[PERIOD] berdasarkan hasil penilaian dan evaluasi kami, putra/putri Saudara dapat diterima
+		<?php echo $this->dataview['PERIOD']?>  berdasarkan hasil penilaian dan evaluasi kami, putra/putri Saudara dapat diterima
 		pada:
 	</p>
 	
@@ -220,7 +209,7 @@ td.bold-text{
 						
 						$cal_type ="";
 						if($fee_item['fi_amount_calculation_type']==299){
-							$cal_type = "(".$program['fsp_first_sem_sks']."sks X Rp".$fee_item['fsi_amount'].")";
+							$cal_type = "(".$this->program['fsp_first_sem_sks']."sks X Rp".$fee_item['fsi_amount'].")";
 						}
 				?>
 				<tr>
@@ -243,7 +232,7 @@ td.bold-text{
 				</tr>
 				<tr>
 					<td>&nbsp;</td>
-					<td>Dibayar mulai <?php echo date ( 'j F Y' , strtotime ( $reg_date['date_payment'][$plan_index][$key]['start'])); ?> s/d <?php echo date ( 'j F Y' , strtotime ( $reg_date['date_payment'][$plan_index][$key]['end'] )); ?></td>
+					<td>Dibayar mulai <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['date_payment'][$plan_index][$key]['start'])); ?> s/d <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['date_payment'][$plan_index][$key]['end'] )); ?></td>
 					<td colspan="5" class="bold-text">(Billing No:<?php echo $fee['fsp_billing_no']; ?>1$[NO_PES])</td>
 				</tr>
 				<tr><td colspan="7">&nbsp;</td></tr>
@@ -303,7 +292,7 @@ td.bold-text{
 						
 						$cal_type ="";
 						if($fee_item['fi_amount_calculation_type']==299){
-							$cal_type = "(".$program['fsp_first_sem_sks']."sks X Rp".$fee_item['fsi_amount'].")";
+							$cal_type = "(".$this->program['fsp_first_sem_sks']."sks X Rp".$fee_item['fsi_amount'].")";
 						}
 				?>
 					
