@@ -7228,7 +7228,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 		$msg = $this->_getParam('msg',null);
 		$this->view->noticeError = $msg;
 	
-		$this->view->title = $this->view->translate("verify_bank_pin");
+		//$this->view->title = $this->view->translate("verify_bank_pin");
 	
 		$auth = Zend_Auth::getInstance();
 		$appl_id = $auth->getIdentity()->appl_id;
