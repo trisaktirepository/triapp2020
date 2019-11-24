@@ -256,11 +256,14 @@ class Exam_ExamSlipController extends Zend_Controller_Action
 	
 		$auth = Zend_Auth::getInstance();
 		$registration_id = $auth->getIdentity()->registration_id;
-	
+		$redirect="http://www.spmb.trisakti.ac.id/student-portal/exam/exam-slip";
+		$redirect=str_replace('/', '_', $redirect);
+		
 		if ($this->getRequest()->isPost()) {
 	
 			$formData = $this->getRequest()->getPost();
-	
+			$this->_redirect('http://www.print.trisakti.ac.id/student-portal/print-exam-slip-qr/appl_id/0/registration_id/'.$registration_id.'/idsemester/'.$formData['semid'].'/redirectto/'.$redirect.'/examtype/'.$formData['ass_type']);
+				
 			$studentRegistrationDB = new App_Model_Record_DbTable_StudentRegistration();
 			$studentdetails = $studentRegistrationDB->getStudentInfo($registration_id);
 				
