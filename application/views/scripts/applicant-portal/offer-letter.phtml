@@ -1,0 +1,425 @@
+<!-----------------------
+	Name: Template Offer letter
+	version: 1.0
+	Author: Muhamad Alif
+	
+	Revision Changes:
+	
+	12/01/2013: 
+		Initial creation of template
+-->
+
+<html>
+<head>
+<style type="text/css">
+body{
+	font-family: "Trebuchet MS", Helvetica, sans-serif;
+	font-size: 11px;
+	padding:0;
+	margin:0;
+}
+.table{
+	width: 100%;
+}
+
+
+.header-top-notice{
+	font-size: 0.8em;
+	font-style: italic;
+	text-decoration: underline;
+	width: 100%";
+	margin: 5px 0;
+}
+.header-right-info{
+	width:100%;
+	margin: 0;
+	text-align: left;
+	font-size: 1.3em;
+	font-weight: bold;
+}
+.header-center-info h1{
+	font-size: 1.3em;
+}
+.header-pes-no{
+	border: 1px solid black;
+	font-size: 1.1em;
+	padding: 5px 5px;
+	width: 100px;
+}
+div.box{
+	border: 1px solid #111111;
+}
+
+td.paket_title{
+	font-weight: bold;
+	text-decoration: underline;
+}
+td.pad-10{
+	padding-left: 10px;
+}
+td.pad-20{
+	padding-left: 20px;
+}
+td.border-top{
+	border-top: 1px solid #111111;
+}
+td.border-top-bottom{
+	border-top: 1px solid #111111;
+	border-bottom: 1px solid #111111;
+}
+td.bold-text{
+	font-weight: bold;
+}
+.signage{
+	text-align: right;
+}
+</style>
+</head>
+<body>
+	<!-- Header -->
+	<table class="table">
+		<tr>
+			<td width="20%">
+				<img src="/var/www/html/triapp/public/images/trisakti_logo.jpg" width="100px" />
+			</td>
+			<td align="center">
+				<div class="header-center-info">
+				<h1>UNIVERSITAS TRISAKTI <br /> JAKARTA</h1>
+				</div>
+			</td>
+			<td width="20%" align="center">
+				 
+				<div class="header-pes-no">
+					<?php echo $this->dataview['NO_PES']?> 
+				</div>
+			</td>
+		</tr>
+	</table>
+	<!-- End Header -->
+	
+	<!-- Applicant Info -->
+	<br />
+	<table class="table">
+		<tr>
+			<td width="100px">Nomor</td>
+			<td width="5px">:</td>
+			<td><?php echo $this->dataview['NOMOR']?> </td>
+		</tr>
+		<tr>
+			<td>Lampiran</td>
+			<td>:</td>
+			<td><?php echo $this->dataview['LAMPIRAN']?> </td>
+		</tr>
+		<tr>
+			<td>Perihal</td>
+			<td>:</td>
+			<td><?php echo $this->dataview['TITLE_TEMPLATE']?></td>
+		</tr>
+	</table>
+	<!-- End Applicant Info -->
+	<br />
+	<p>
+		Kepada Yth:<br />
+		Sdr. <?php echo $this->dataview['PARENTNAME']?>,<br />
+		Orang Tua Calon Mahasiswa<br />
+		
+		<br />
+		<br />
+		Diberitahukan dengan hormat, bahwa Calon Mahasiswa Universitas Trisakti dibawah ini:
+	</p>
+	<table class="table">
+		<tr>
+			<td width="100px">Nama</td>
+			<td width="5px">:</td>
+			<td><?php echo $this->dataview['APPLICANT_NAME']?></td>
+		</tr>
+		<tr>
+			<td>No. Peserta</td>
+			<td>:</td>
+			<td><?php echo $this->dataview['NO_PES']?></td>
+		</tr>
+		<tr>
+			<td valign="top">Alamat</td>
+			<td valign="top">:</td>
+			<td>
+				<?php echo $this->dataview['ADDRESS']?> 
+			</td>
+		</tr>
+	</table>
+	<br />
+	<p>
+		Dinyatakan LULUS Melalui <?php echo $this->dataview['SELECTION_TYPE']?>   Universitas Trisakti Tahun Akademik <?php echo $this->dataview['ACADEMIC_YEAR']?> 
+		$[PERIOD] berdasarkan hasil penilaian dan evaluasi kami, putra/putri Saudara dapat diterima
+		pada:
+	</p>
+	
+	<table class="table">
+		<tr>
+			<td width="100px">Fakultas</td>
+			<td width="5px">:</td>
+			<td><?php echo $this->dataview['FACULTY']?></td>
+		</tr>
+		<tr>
+			<td>Program Studi</td>
+			<td>:</td>
+			<td><?php echo $this->dataview['PROGRAME']?> </td>
+		</tr>
+		<tr>
+			<td>Peringkat</td>
+			<td>:</td>
+			<td><?php echo $this->dataview['RANK']?> </td>
+		</tr>
+	</table>
+	<br />
+	<p>
+		Berdasarkan peringkat tersebut, kami tetapkan biaya yang harus dibayar adalah sebagai berikut
+	</p>
+	
+	<?php
+		//global $fees;
+		//global $reg_date;
+		//global $program;
+
+		$paket_a_total = 0;
+		$paket_b_total = 0;
+		$paket_b_c1_total =0;
+
+		foreach($this->fees as $plan_index=>$fee):
+
+		if($fee['fsp_bil_installment']==1){							
+	?>
+		<div class="paket_a box">
+			<table border="0" cellpadding="2" cellspacing="0" >
+				<tr>
+					<td colspan="7" class="paket_title">
+						<?php echo $fee['fsp_name']; ?>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="7" class="paket_title pad-10">
+						Dibayar Sekali
+					</td>
+				</tr>
+				<?php
+				$paket_total_amount = 0;
+				foreach($fee['plan_detail'] as $key=>$installment):
+					foreach($installment as $fee_item){
+						$paket_total_amount = $paket_total_amount + ((double)$fee_item['total_amount']);
+						$paket_a_total = $paket_total_amount;
+
+						$mode = "";
+						if($fee_item['fi_frequency_mode'] == 302 || $fee_item['fi_frequency_mode'] == 305  ){
+							$mode="(hanya sekali selama mahasiswa)";
+						}else
+						if($fee_item['fi_frequency_mode'] == 303 ){
+							$mode="(tiap semester)";
+						}else
+						if($fee_item['fi_frequency_mode'] == 304 ){
+							$mode="(tiap tahun)";
+						}
+						
+						$cal_type ="";
+						if($fee_item['fi_amount_calculation_type']==299){
+							$cal_type = "(".$program['fsp_first_sem_sks']."sks X Rp".$fee_item['fsi_amount'].")";
+						}
+				?>
+				<tr>
+					<td width="5%">&nbsp;</td>
+					<td width="70%" class="pad-20"><?php echo $fee_item['fi_name']; ?> <?php echo $mode; ?> <?php echo $cal_type; ?> </td>
+					<td width="5%">Rp</td>
+					<td width="15%" colspan="3"><?php echo number_format($fee_item['total_amount'], 2, '.', ','); ?></td>
+					<td width="5%">&nbsp;</td>
+				</tr>
+				<?php
+					}
+				endforeach;
+				?>
+				<tr>
+					<td>&nbsp;</td>
+					<td>Total Pembayaran Dibayar Sekali</td>
+					<td class="border-top bold-text">Rp</td>
+					<td colspan="3" class="border-top bold-text"><?php echo number_format($paket_total_amount, 2, '.', ','); ?></td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td>Dibayar mulai <?php echo date ( 'j F Y' , strtotime ( $reg_date['date_payment'][$plan_index][$key]['start'])); ?> s/d <?php echo date ( 'j F Y' , strtotime ( $reg_date['date_payment'][$plan_index][$key]['end'] )); ?></td>
+					<td colspan="5" class="bold-text">(Billing No:<?php echo $fee['fsp_billing_no']; ?>1$[NO_PES])</td>
+				</tr>
+				<tr><td colspan="7">&nbsp;</td></tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td>Total Pembayaran Paket A</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td class="border-top-bottom bold-text" >Rp</td>
+					<td class="border-top-bottom bold-text"><?php echo number_format($paket_total_amount, 2, '.', ','); ?></td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr><td colspan="7">&nbsp;</td></tr>
+			</table>
+		</div>
+		<br />
+	<?php
+		}else
+		if($fee['fsp_bil_installment']>1){
+	?>
+		<!-- PAKET B -->
+		<div class="paket_b box">
+			<table border="0" cellpadding="2" cellspacing="0" >
+				<tr>
+					<td colspan="7" class="paket_title">
+						<?php echo $fee['fsp_name']; ?>
+					</td>
+				</tr>
+				<?php
+				$paket_total_amount = 0;
+				foreach($fee['plan_detail'] as $key=>$installment):
+				?>
+					<tr>
+						<td colspan="7" class="paket_title pad-10">
+							Cicilan ke - <?php echo $key ?>
+						</td>
+					</tr>
+				<?php
+					$cicilan_total_amount = 0;
+					foreach($installment as $fee_item){
+						$paket_total_amount = $paket_total_amount + ((double)$fee_item['total_amount']);
+						$cicilan_total_amount = $cicilan_total_amount + ((double)$fee_item['total_amount']);
+
+
+						if($fee_item['total_amount']!=0){
+						
+						$mode = "";
+						if($fee_item['fi_frequency_mode'] == 302 || $fee_item['fi_frequency_mode'] == 305  ){
+							$mode="(hanya sekali selama mahasiswa)";
+						}else
+						if($fee_item['fi_frequency_mode'] == 303 ){
+							$mode="(tiap semester)";
+						}else
+						if($fee_item['fi_frequency_mode'] == 304 ){
+							$mode="(tiap tahun)";
+						}
+						
+						$cal_type ="";
+						if($fee_item['fi_amount_calculation_type']==299){
+							$cal_type = "(".$program['fsp_first_sem_sks']."sks X Rp".$fee_item['fsi_amount'].")";
+						}
+				?>
+					
+					<tr>
+						<td width="5%">&nbsp;</td>
+						<td width="70%" class="pad-20"><?php echo $fee_item['fi_name']; ?> <?php echo $mode; ?>  <?php echo $cal_type; ?></td>
+						<td width="5%">Rp</td>
+						<td width="15%" colspan="3"><?php echo number_format($fee_item['total_amount'], 2, '.', ','); ?></td>
+						<td width="5%">&nbsp;</td>
+					</tr>
+				<?php
+						}
+					}
+
+					if($key==1){
+						$paket_b_c1_total = $cicilan_total_amount;
+					}
+				?>
+				<tr>
+						<td>&nbsp;</td>
+						<td>Total Pembayaran Cicilan ke - <?php echo $key ?></td>
+						<td class="border-top bold-text">Rp</td>
+						<td colspan="3" class="border-top bold-text"><?php echo number_format($cicilan_total_amount, 2, '.', ','); ?></td>
+						<td>&nbsp;</td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<?php 
+							if($key==1){
+						?>
+						<td>Dibayar mulai <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['date_payment'][$plan_index][$key]['start'])); ?> s/d <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['date_payment'][$plan_index][$key]['end'] )); ?></td>
+						<?php
+							}else{
+						?>
+						<td>Dibayar paling lambat akhir <?php echo $this->reg_date['date_payment'][$plan_index][$key]['end']; ?></td>
+						<?php
+							}
+						?>
+						<td colspan="5" class="bold-text">(Billing No:<?php echo $fee['fsp_billing_no']; ?><?php echo $key.$this->dataview['NO_PES'] ?>)</td>
+					</tr>
+					<tr><td colspan="7">&nbsp;</td></tr>
+				<?php
+					
+				endforeach;
+				?>
+				
+				<tr>
+					<td>&nbsp;</td>
+					<td>Total Pembayaran Paket B (<?php echo sizeof($fee['plan_detail']); ?>  kali cicilan)</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td class="border-top-bottom bold-text">Rp</td>
+					<td class="border-top-bottom bold-text"><?php echo number_format($paket_total_amount, 2, '.', ','); ?></td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr><td colspan="7">&nbsp;</td></tr>
+			</table>
+		</div>
+		<!-- END PAKET B -->
+	<?php
+		}
+	endforeach;
+	?>
+
+	
+	<br />
+	<br />
+	Pembayaran dapat dilakukan secara Online di seluruh Cabang BNI atau ATM BNI atau Internet Banking BNI di Indonesia dengan menggunakan Billing No yang tertera diatas, sebagai pengganti No Rekening. 
+	Perhatikan setiap pembayaran mempunyai billing no yang berbeda. Kami menyediakan cara pembayaran:
+	<form name="paket" method="post">
+	<input type="hidden" name="transaction_id" value="<?php echo $this->transaction_id;?>">
+	<ol>
+		<li><input type="radio" name="paket" value="A"> A: di bayar lunas sebesar Rp. <?php echo number_format($paket_a_total, 2, '.', ','); ?> tanggal: <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['REGISTRATION_DATE_START'])); ?>  s/d <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['REGISTRATION_DATE_END'])); ?></li>
+		<li><input type="radio" name="paket" value="B">Paket B: di bayar pertama sebesar Rp. <?php echo number_format($paket_b_c1_total, 2, '.', ','); ?> tanggal: <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['REGISTRATION_DATE_START'])); ?> s/d <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['REGISTRATION_DATE_END'])); ?> sisanya Rp. <?php echo number_format( ($paket_a_total - $paket_b_c1_total), 2, '.', ','); ?> dibayar 4 X angsuran setiap bulan terhitung mulai bulan <?php echo date ( 'F Y' , strtotime ( '+1 month' , strtotime ( $this->reg_date['REGISTRATION_DATE_END'] ) ) ); ?></li>
+	</ol>
+	<input type="submit" name="submit" value="Pilih">
+	</form>
+	Apabila Saudara mendapat kesulitan tentang pembayaran melalui SPC (Student Payment Center) Bank BNI setempat, Saudara dapat menghubungi Bank BNI Trisakti Telp. (021) 5656466
+	<br />
+	<br />
+	Setelah melalukan pembayaran, saudara diwajibkan melakukan registrasi  untuk melengkapi persyaratan akademik (persyaratan akademik dapat dilihat  di petunjuk teknis Penerimaan Mahasiswa Baru Universitas Trisakti yang dapat di unduh di www.spmb.trisakti.ac.id). Registrasi akan dilaksanakan pada tanggal 3 Agustus 2020 sampai dengan 15 Agustus 2020. Untuk kenyamanan pelayanan registrasi, silahkan memilih tanggal registrasi sesuai dengan keinginan saudara secara online di portal masing-masing.
+	<br><br>
+	Untuk penjelasan lebih lanjut, 
+	Saudara dapat menghubungi Kabag Tata Usaha <?php echo $this->dataview['FACULTY_SHORTNAME']?> di <?php echo $this->dataview['FACULTY_ADDRESS1']?> atau telp: <?php echo $this->dataview['FACULTY_PHONE']?>, Fax: <?php echo $this->dataview['FACULTY_FAX']?> 
+	
+	<br />
+	<br />
+	Demikian, yang dapat disampaikan. Atas perhatian Saudara diucapkan terima kasih.
+	<br />
+	<br />
+	<div class="signage">
+		Jakarta. <?php echo $this->dataview['RECTOR_DATE']?> <br />
+		Koordinator/Penanggung Jawab<br />
+		Penyelenggaraan PMB <?php echo $this->dataview['ACADEMIC_YEAR']?> <br />
+		<br /><br />
+		Prof. Ir. Asri Nugrahanti, M.S, Ph.D, IPU
+		
+	</div>
+	
+	<br />
+	<table>
+		<tr>
+			<td width="50px" valign="top" class="bold-text">
+				<br />
+				Catatan:
+			</td>
+			<td class="bold-text">
+				<ol>
+					<li>Estimasi Biaya Kuliah sampai lulus <?php echo $this->dataview['LEARNING_DURATION']?>  adalah sebesar Rp. <?php echo $this->dataview['ESTIMASI_BIAYA']?> </li>
+					<li>Bukti pembayaran mohon di fax ke : <?php echo $this->dataview['FACULTY_FAX']?> </li>
+					<li><?php echo $this->dataview['MESSAGE']?> </li>
+				</ol>
+			</td>
+		</tr>
+	</table>
+	
+ 
+</body>
+</html>

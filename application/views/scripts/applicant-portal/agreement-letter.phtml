@@ -1,0 +1,460 @@
+<!-----------------------
+	Name: Template Agreement letter
+	version: 1.0
+	Author: Muhamad Alif
+	
+	Revision Changes:
+	
+	12/03/2013: 
+		Initial creation of template
+-->
+<?php
+	global $fee;
+	global $reg_date;
+	global $program;
+	global $program_fee_structure;
+?>
+<html>
+<head>
+<style type="text/css">
+body{
+	font-family: "Trebuchet MS", Helvetica, sans-serif;
+	font-size: 12px;
+	padding:0;
+	margin:0;
+}
+.table{
+	width: 100%;
+}
+
+
+.header-top-notice{
+	font-size: 0.8em;
+	font-style: italic;
+	text-decoration: underline;
+	width: 100%";
+	margin: 5px 0;
+}
+.header-right-info{
+	width:100%;
+	margin: 0;
+	text-align: left;
+	font-size: 1.3em;
+	font-weight: bold;
+}
+.header-center-info h1{
+	font-size: 1.3em;
+}
+.header-pes-no{
+	border: 1px solid black;
+	font-size: 1.1em;
+	padding: 5px 5px;
+	width: 100px;
+}
+div.box{
+	border: 1px solid #111111;
+}
+
+td.paket_title{
+	font-weight: bold;
+	text-decoration: underline;
+}
+td.pad-10{
+	padding-left: 10px;
+}
+td.pad-20{
+	padding-left: 20px;
+}
+td.border-top{
+	border-top: 1px solid #111111;
+}
+td.border-top-bottom{
+	border-top: 1px solid #111111;
+	border-bottom: 1px solid #111111;
+}
+td.bold-text{
+	font-weight: bold;
+}
+.signage{
+	text-align: right;
+}
+</style>
+</head>
+<body>
+	<!-- Header -->
+	<table class="table" border="0">
+		<tr>
+			<td style="text-align:center; text-transform: uppercase; font-weight: bold;">
+				PERNYATAAN KESEDIAAN MEMENUHI KEWAJIBAN
+				<br />
+				ADMINISTRASI KEUANGAN, TATA TERTIB, SANKSI-SANKSI
+				<br />
+				MAHASISWA BARU TAHUN AKADEMIK <?php echo $this->dataview['ACADEMIC_YEAR']?>  SEMESTER GASAL
+				<br />
+				<?php echo $this->dataview['PERIOD']?> 
+			</td>
+		</tr>
+	</table>
+	<hr />
+	<!-- End Header -->
+	
+	<!-- Program Info -->
+	<br />
+	<table class="table" border="0">
+		<tr>
+			<td width="150px">
+				Fakultas / Program Studi
+			</td>
+			<td width="5px">:</td>
+			<td><?php echo $this->dataview['FACULTY_NAME']?>  / <?php echo $this->dataview['PROGRAME']?></td>
+		</tr>
+	</table>
+	<p>
+	Sehubungan dengan Surat Keputusan Rektor Universitas Trisakti No: <?php echo $this->dataview['NOMOR']?>  yang menyatakan:
+	</p>
+		
+	<!-- End Applicant Info -->
+	<br />
+	<table class="table">
+		<tr>
+			<td width="150px">Nama</td>
+			<td width="5px">:</td>
+			<td><?php echo $this->dataview['APPLICANT_NAME']?> </td>
+		</tr>
+		<tr>
+			<td>No. Pendaftar</td>
+			<td>:</td>
+			<td><?php echo $this->dataview['NO_PES']?> </td>
+		</tr>
+		<tr>
+			<td>Nama Orang Tua/Wali</td>
+			<td>:</td>
+			<td><?php echo $this->dataview['PARENTNAME']?> </td>
+		</tr>
+		<tr>
+			<td>Pekerjaan Orang Tua/Wali</td>
+			<td>:</td>
+			<td><?php echo $this->dataview['PARENTJOB']?> </td>
+		</tr>
+		<tr>
+			<td valign="top">Alamat</td>
+			<td valign="top">:</td>
+			<td>
+				<?php echo $this->dataview['ADDRESS']?> 
+			</td>
+		</tr>
+	</table>
+	<br />
+	
+	<table>
+		<tr>
+			<td valign="top">
+				Diterima sebagai calon mahasiswa:
+			</td>
+			<td>
+				<table>
+					<tr>
+						<td>-Fakultas</td>
+						<td>:</td>
+						<td><?php echo $this->dataview['FACULTY_NAME']?> </td>
+					</tr>
+					<tr>
+						<td>-Program Studi</td>
+						<td>:</td>
+						<td><?php echo $this->dataview['PROGRAME']?> </td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+	<br />	
+	<p>
+	A. Menyatakan kesediaan membayar: 
+	</p>
+	<p>
+	Memilih dengan Sistem Pembayaran:
+	<?php
+	if($this->fee['fsp_bil_installment']==1){
+	?>
+		Paket A
+	<?php
+	}else
+	if($this->fee['fsp_bil_installment']>1){
+	?>
+		Paket B
+	<?php
+	}
+	?>	 
+	dan berdasarkan PERINGKAT <?php echo $this->dataview['RANK']?>  yang ditetapkan, dengan Rincian Biaya sebagai berikut:
+	</p>
+	
+	
+	<?php
+		
+
+		$paket_a_total = 0;
+		$paket_b_total = 0;
+		$paket_b_c1_total =0;
+
+		if($this->fee['fsp_bil_installment']==1){							
+	?>
+		<div class="paket_a box">
+			<table border="0" cellpadding="2" cellspacing="0" >
+				<tr>
+					<td colspan="7" class="paket_title">
+						<?php echo $this->fee['fsp_name']; ?>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="7" class="paket_title pad-10">
+						Dibayar Sekali
+					</td>
+				</tr>
+				<?php
+				$paket_total_amount = 0;
+				foreach($this->fee['installment_detail'] as $key=>$installment):
+					foreach($installment as $fee_item){
+						$paket_total_amount = $paket_total_amount + ((double)$fee_item['total_amount']);
+						$paket_a_total = $paket_total_amount;
+
+						$mode = "";
+						if($fee_item['fi_frequency_mode'] == 302 || $fee_item['fi_frequency_mode'] == 305  ){
+							$mode="(hanya sekali selama mahasiswa)";
+						}else
+						if($fee_item['fi_frequency_mode'] == 303 ){
+							$mode="(tiap semester)";
+						}else
+						if($fee_item['fi_frequency_mode'] == 304 ){
+							$mode="(tiap tahun)";
+						}
+						
+						$cal_type ="";
+						if($fee_item['fi_amount_calculation_type']==299){
+							$cal_type = "(".$program_fee_structure['fsp_first_sem_sks']." sks X Rp".$fee_item['fsi_amount'].")";
+						}
+				?>
+				<tr>
+					<td width="5%">&nbsp;</td>
+					<td width="70%" class="pad-20"><?php echo $fee_item['fi_name']; ?> <?php echo $mode; ?> <?php echo $cal_type; ?> </td>
+					<td width="5%">Rp</td>
+					<td width="15%" colspan="3"><?php echo number_format($fee_item['total_amount'], 2, '.', ','); ?></td>
+					<td width="5%">&nbsp;</td>
+				</tr>
+				<?php
+					}
+				endforeach;
+				?>
+				<tr>
+					<td>&nbsp;</td>
+					<td>Total Pembayaran Dibayar Sekali</td>
+					<td class="border-top bold-text">Rp</td>
+					<td colspan="3" class="border-top bold-text"><?php echo number_format($paket_total_amount, 2, '.', ','); ?></td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td><b>Dibayar <?php echo date ( 'j F Y' , strtotime ( $this->fee['payment_date'][$key]['start'])); ?> s/d <?php echo date ( 'j F Y' , strtotime ( $this->fee['payment_date'][$key]['end'] )); ?></b></td>
+					<td colspan="5" class="bold-text">(Billing No:<?php echo $this->fee['fsp_billing_no']; ?>1<?php echo $this->dataview['NO_PES']?> )</td>
+				</tr>
+				<tr><td colspan="7">&nbsp;</td></tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td>Total Pembayaran Paket A</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td class="border-top-bottom bold-text" >Rp</td>
+					<td class="border-top-bottom bold-text"><?php echo number_format($paket_total_amount, 2, '.', ','); ?></td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr><td colspan="7">&nbsp;</td></tr>
+			</table>
+		</div>
+		<br />
+	<?php
+		}else
+		if($this->fee['fsp_bil_installment']>1){
+	?>
+		<!-- PAKET B -->
+		<div class="paket_b box">
+			<table border="0" cellpadding="2" cellspacing="0" >
+				<tr>
+					<td colspan="7" class="paket_title">
+						<?php echo $this->fee['fsp_name']; ?>
+					</td>
+				</tr>
+				<?php
+				$paket_total_amount = 0;
+				foreach($this->fee['installment_detail'] as $key=>$installment):
+				?>
+					<tr>
+						<td colspan="7" class="paket_title pad-10">
+							Cicilan ke - <?php echo $key ?>
+						</td>
+					</tr>
+				<?php
+					$cicilan_total_amount = 0;
+					foreach($installment as $fee_item){
+						$paket_total_amount = $paket_total_amount + ((double)$fee_item['total_amount']);
+						$cicilan_total_amount = $cicilan_total_amount + ((double)$fee_item['total_amount']);
+
+
+						if($fee_item['total_amount']!=0){
+						
+						$mode = "";
+						if($fee_item['fi_frequency_mode'] == 302 || $fee_item['fi_frequency_mode'] == 305  ){
+							$mode="(hanya sekali selama mahasiswa)";
+						}else
+						if($fee_item['fi_frequency_mode'] == 303 ){
+							$mode="(tiap semester)";
+						}else
+						if($fee_item['fi_frequency_mode'] == 304 ){
+							$mode="(tiap tahun)";
+						}
+						
+						$cal_type ="";
+						if($fee_item['fi_amount_calculation_type']==299){
+							$cal_type = "(".$program_fee_structure['fsp_first_sem_sks']." sks X Rp".$fee_item['fsi_amount'].")";
+						}
+				?>
+					
+					<tr>
+						<td width="5%">&nbsp;</td>
+						<td width="70%" class="pad-20"><?php echo $fee_item['fi_name']; ?> <?php echo $mode; ?>  <?php echo $cal_type; ?></td>
+						<td width="5%">Rp</td>
+						<td width="15%" colspan="3"><?php echo number_format($fee_item['total_amount'], 2, '.', ','); ?></td>
+						<td width="5%">&nbsp;</td>
+					</tr>
+				<?php
+						}
+					}
+
+					if($key==1){
+						$paket_b_c1_total = $cicilan_total_amount;
+					}
+				?>
+				<tr>
+						<td>&nbsp;</td>
+						<td>Total Pembayaran Cicilan ke - <?php echo $key ?></td>
+						<td class="border-top bold-text">Rp</td>
+						<td colspan="3" class="border-top bold-text"><?php echo number_format($cicilan_total_amount, 2, '.', ','); ?></td>
+						<td>&nbsp;</td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<?php 
+							if($key==1){
+						?>
+						<td>Dibayar mulai <?php echo date ( 'j F Y' , strtotime ( $this->fee['payment_date'][$key]['start'])); ?> s/d <?php echo date ( 'j F Y' , strtotime ( $this->fee['payment_date'][$key]['end'] )); ?></td>
+						<?php
+							}else{
+						?>
+						<td><b>Dibayar paling lambat akhir <?php echo $this->fee['payment_date'][$key]['end']; ?></b></td>
+						<?php
+							}
+						?>
+						<td colspan="5" class="bold-text">(Billing No:<?php echo $this->fee['fsp_billing_no']; ?><?php echo $key ?> <?php echo $this->dataview['NO_PES']?> )</td>
+					</tr>
+					<tr><td colspan="7">&nbsp;</td></tr>
+				<?php
+					
+				endforeach;
+				?>
+				
+				<tr>
+					<td>&nbsp;</td>
+					<td>Total Pembayaran Paket B (<?php echo $this->fee['fsp_bil_installment']; ?>  kali cicilan)</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td class="border-top-bottom bold-text">Rp</td>
+					<td class="border-top-bottom bold-text"><?php echo number_format($paket_total_amount, 2, '.', ','); ?></td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr><td colspan="7">&nbsp;</td></tr>
+			</table>
+		</div>
+		<!-- END PAKET B -->
+	<?php
+		}
+	?>
+
+	
+	<br />
+	<br />
+	<p>
+	Jika kami mengundur diri, maka kami sanggup mengikuti peraturan seperti yang tercantum dalam Buku Petunjuk Pendaftaran Mahasiswa Baru <?php echo $this->dataview['ACADEMIC_YEAR']?> 
+	</p>
+	<br />
+	B. Saya Menyatakan : 
+	<br />
+	<ol>
+		<li>Jika selambat-lambatnya tanggal <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['REGISTRATION_DATE_END'])); ?> tidak melaksanakan pembayaran, maka dianggap mengundur diri</li>
+		<li>Bersedia mentaati jadwal pembayaran dan peraturan yang ada tentang kewajiban pembayaran untuk Mahasiswa Baru</li>
+	</ol>
+	<br />
+	
+	C. Tata Tertib dan Sanksi-Sanksi :
+	<br />
+	<ol>
+		<li>
+			Mentaati ketentuan besaran Biaya Penyelenggaraan Pendidikan (Pokok dan Tambahan). Jika waktu studi melebihi 10(sepuluh) semester atau 5(lima) tahun maka untuk tahun ke-6(enam) dan seterusnya akan mengikuti ketentuan tarif Biaya Penyelenggaraan Pendidikan Mahasiswa Baru yang berlaku pada saat itu.
+		</li>
+		<li>
+			Mentaati Surat Keputusan Rektor Universitas Trisakti Nomor : 342/USAKTI/SKRXII/1999 tanggal 2 Desember 1999 tentang pemberian Sanksi terhadap Pengedar dan Penyalahgunaan Narkotika dan Obat Terlarang(Narkoba) di lingkungan Universitas Trisakti.
+		</li>
+		<li>
+			Mentaati Surat Keputusan Rektor Universitas Trisakti Nomor : 189/USAKTI/SKR/VII/2006 tanggal 14 Juli 2006 tentang Pedoman Pendidikan Program Sarjana (S1) dan SKR No : 288/USAKTI/SKR/VII/2005 tanggal 30 Agustus 2005 tentang Peraturan Kemahasiswaan Universitas Trisakti.
+		</li>
+		<li>
+			Apabila ternyata Mahasiswa baru Angkatan <?php echo $this->dataview['ACADEMIC_YEAR']?>  menyerahkan ijazah palsu atau belum lulus SMA, maka yang bersangkutan bersedia untuk dikeluarkan.
+		</li>
+	</ol>
+	
+	<p>
+		Demikian Pernyataan ini saya buat dengan penuh kesadaran dan tidak di bawah paksaan.
+	</p>
+	
+	<br />
+	<div class="signage">
+		Jakarta. <?php echo $this->dataview['RECTOR_DATE']?> <br />
+	</div>
+	<table width="100%" cellpadding="10" cellspacing="10">
+		<tr>
+			<td width="50%">
+				Menyetujui/Mengetahui
+				<br />
+				Orang Tua / Wali
+				<br />
+				<br />
+				<br />
+				(......................................)
+				<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nama Terang
+			</td>
+			<td width="50%">
+				Yang membuat Pernyataan
+				<br />
+				Materai Rp. 6,000
+				<br />
+				<br />
+				<br />
+				(......................................)
+				<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nama Terang
+			</td>
+			
+		</tr>
+	</table>
+	<br />
+	<br />
+	<div style="font-size: 8px">
+	Catatan:
+	<ol>
+		<li>Pernyataan Asli ditahan Wakil Dekan II Fakultas masing-masing</li>
+		<li>Copy ke 1(satu) Pernyataan ini harus dibawa pada waktu Pembayaran angsuran berikutnya.</li>
+	</ol>
+	</div>
+			
+	
+	 
+</body>
+</html>
