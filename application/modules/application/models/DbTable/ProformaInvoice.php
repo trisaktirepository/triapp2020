@@ -2040,21 +2040,7 @@ class Application_Model_DbTable_ProformaInvoice extends Zend_Db_Table {
 			$arr_profoma[0]['detail'][]=array('fi_id'=>$item['fi_id'],'description'=>$item['fi_name_bahasa'],'amount'=>$item['total_amount']);
 		}
 		$arr_profoma[0]['amount_total'] = $total_amount;
-	
-		//date payment
-		/* foreach($feeStructureData['payment_plan'] as $key=>$plan){
-			$start = $assessmentData['aar_reg_start_date'];
-			$end = $assessmentData['aar_reg_end_date'];
-	
-			foreach ($plan['plan_detail'] as $key2=>$installment){
-				$reg_date['date_payment'][$key][$key2]['start'] = $start;
-				$reg_date['date_payment'][$key][$key2]['end'] = $end;
-					
-				$end = date ( 'F Y' , strtotime ( '+1 month' , strtotime ( $end) ) );
-			}
-	
-			$end = $assessmentData['aar_reg_end_date'];
-		} */
+	 
 		if ($paymentPlanData[1]['fsp_id']!=null) {
 			/*
 			 * paket B
