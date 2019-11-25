@@ -3541,7 +3541,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     		$proformaInvoiceDb->moveToInvoiceBasedOnPaket($txnData['at_pes_id'], $formData['paket']);
     		//push to BANK
     		$inv=$dbInv->getApplicantInvoice($txnData['at_pes_id']);
-    		echo var_dump($inv);exit;
+    		//echo var_dump($inv);exit;
     		foreach ($inv as $value) {
     			$dbInv->pushToECollForEnrollmentPerBilling($value['bill_number'],'createbilling');
     		}
