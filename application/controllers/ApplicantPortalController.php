@@ -3503,7 +3503,8 @@ class ApplicantPortalController extends Zend_Controller_Action
     	 
     	//regenerate performa invoice
     	$proformaInvoiceDb = new Application_Model_DbTable_ProformaInvoice();
-    	$proformaInvoiceDb->regenerateProformaInvoice($txnId);
+    	if (!$proformaInvoiceDb->getTxnData($txnId)) 
+    		$proformaInvoiceDb->regenerateProformaInvoice($txnId);
     	
     	
     	
