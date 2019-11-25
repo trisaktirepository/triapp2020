@@ -1927,7 +1927,7 @@ class Application_Model_DbTable_ProformaInvoice extends Zend_Db_Table {
 			
 		$invoices=$db->fetchAll($select);
 		foreach ($invoices as $value) {
-			$idpro=$value[id];
+			$idpro=$value['id'];
 			unset($value['id']);
 			$inv=$dbInvoice->isIn($value['bill_number']);
 			if (!$inv) {
