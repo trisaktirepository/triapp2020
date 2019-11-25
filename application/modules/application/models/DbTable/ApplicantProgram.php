@@ -443,9 +443,9 @@ public function getProgramOffered($transaction_id,$appl_type=null){
 					->where("ap.ap_at_trans_id  = '".$transaction_id."'");			
 		
 				    //jika usm kene check program mana yg offer sebab usm ada 2 pilihan
-				    if(isset($appl_type) && ($appl_type==1)){
+				    //if(isset($appl_type) && ($appl_type==1)){
 						$select->where("ap.ap_usm_status  = 1");	
-					}
+					//}
 					
         $row = $db->fetchRow($select);
         
