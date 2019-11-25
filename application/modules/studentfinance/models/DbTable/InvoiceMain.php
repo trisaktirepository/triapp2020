@@ -809,7 +809,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 	
 		$profil=$dbAppProfile->getData($applid);
 		//exit;
-		echo var_dump($invoice);exit;
+		//echo var_dump($invoice);exit;
 		//$idstd=$invoice['IdStudentRegistration'];
 		//$std=$dbStd->getData($idstd);
 		//$idprogram=$std['IdProgram'];
@@ -850,7 +850,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 			}
 		}
 		$desc=implode(';', $desc);
-		//echo $amounttotal.'-'.$billamount.' -'.$desc;exit;
+		echo $amounttotal.'-'.$billamount.' -'.$desc;exit;
 			
 	
 	
