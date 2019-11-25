@@ -876,7 +876,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 	
 	
 			if (!isset($respone['status']) && $process=='createbilling')
-				$dbInvoice->update(array("va"=>$respone['virtual_account'],"dt_va"=>date('Y-m-d h:i:s'),"Client_id"=>$clientid,"billing_type"=>'c',"Description"=>$desc ,"status_remark"=>'ok'), "bill_number ='".$respone['trx_id']."'");
+				$dbInvoice->update(array("va"=>$respone['virtual_account'],"dt_va"=>date('Y-m-d h:i:s'),"Client_id"=>$clientid,"billing_type"=>'c',"Description"=>$desc,"status_remark"=>'ok'), "bill_number ='".$respone['trx_id']."'");
 			else if (isset($respone['status'])) {
 				$dbInvoice->update(array("status_remark"=>$respone['message']), "bill_number ='".$invoice['bill_number']."'");
 					
