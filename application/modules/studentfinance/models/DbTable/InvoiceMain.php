@@ -795,7 +795,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		$dbInvoice = new Studentfinance_Model_DbTable_InvoiceMain();
 		$dbAppProgram=new Application_Model_DbTable_ApplicantProgram();
 		$program=$dbAppProgram->getProgramOffered($trxid);
-			
+	echo var_dump($program);exit;
 		$bni = new Studentfinance_Model_DbTable_AccessBni();
 			
 		$dbAppProfile=new App_Model_Application_DbTable_ApplicantProfile();
