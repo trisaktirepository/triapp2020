@@ -795,7 +795,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		$dbInvoice = new Studentfinance_Model_DbTable_InvoiceMain();
 		$dbAppProgram=new Application_Model_DbTable_ApplicantProgram();
 		$program=$dbAppProgram->getProgramOffered($trxid);
-	echo var_dump($program);exit;
+	//echo var_dump($program);exit;
 		$bni = new Studentfinance_Model_DbTable_AccessBni();
 			
 		$dbAppProfile=new App_Model_Application_DbTable_ApplicantProfile();
@@ -837,7 +837,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		$billamount=$invoice['bill_amount'];
 			
 		//get detail
-		$invoicedetail=$invoiceDet->getInvoiceDetailBank($invoice['id'], $program['IdProgramOffer'],$program['IdBranchOffer']);
+		$invoicedetail=$invoiceDet->getInvoiceDetailBank($invoice['id'], $program['program_id'],$program['IdBranchOffer']);
 		
 		//$invoicedetail=$invoiceDet->getInvoiceDetail($invoice['id']);
 		$desc=array();
