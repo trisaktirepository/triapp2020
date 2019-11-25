@@ -3543,7 +3543,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     		$inv=$dbInv->getApplicantInvoice($txnData['at_pes_id']);
     		//echo var_dump($inv);exit;
     		foreach ($inv as $value) {
-    			$dbInv->pushToECollForEnrollmentPerBilling($value['bill_number'],'createbilling');
+    			$dbInv->pushToECollForEnrollmentPerBilling($formData['transaction_id'],$value['bill_number'],'createbilling');
     		}
     		
     		$this->_redirect('/applicant-portal/account');

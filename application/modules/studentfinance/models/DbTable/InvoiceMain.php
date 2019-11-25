@@ -788,7 +788,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		}
 	}
 	
-	public function pushToECollForEnrollmentPerBilling($billno,$process=null,$mode=null,$re=null) {
+	public function pushToECollForEnrollmentPerBilling($trxid,$billno,$process=null,$mode=null,$re=null) {
 		date_default_timezone_set('Asia/Bangkok');
 			
 		$invoiceDet = new Studentfinance_Model_DbTable_InvoiceDetail();
