@@ -1912,15 +1912,18 @@ class Application_Model_DbTable_ProformaInvoice extends Zend_Db_Table {
 		}
 		
 	}
-	public function moveToInvoiceBasedOnPaket($trxid,$paket){
+	public function moveToInvoiceBasedOnPaket($noform,$paket){
 	
 		$db = $this->lobjDbAdpt;
 		if ($paket=="A") $paket="0"; else $paket="1";
+		
 		$dbInvoice=new Studentfinance_Model_DbTable_InvoiceMain();
 		$dbInvoiceDet=new Studentfinance_Model_DbTable_InvoiceDetail();
+		
 		$select = $db ->select()
 		->from($this->_name)
 		->where('LEFT(billing_no,1)=?',$paket)
+		->where('no_fomulir=?',$noform)
 		->order("id desc");
 			
 		$invoices=$db->fetchAll($select);
@@ -2130,7 +2133,7 @@ class Application_Model_DbTable_ProformaInvoice extends Zend_Db_Table {
 	
 			$query = $this->lobjDbAdpt->commit();
 			$status = true;
-			echo "od";exit;
+			 
 		 }catch(Exception $e){
 			$status = false;
 	

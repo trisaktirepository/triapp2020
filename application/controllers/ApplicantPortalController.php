@@ -3526,6 +3526,9 @@ class ApplicantPortalController extends Zend_Controller_Action
     	$paket=$this->_getParam('paket',0);
     	$this->view->paket=$paket;
     	$this->view->transaction_id=$txnId;
+    	//get transaction info
+    	$applicantTxnDB = new App_Model_Application_DbTable_ApplicantTransaction();
+    	$txnData = $applicantTxnDB->getTransaction($txnId);
     	if ($this->getRequest()->isPost()) {
     		$formData = $this->getRequest()->getPost();
     		//echo var_dump($formData);exit;
@@ -3533,7 +3536,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     		$proformaInvoiceDb = new Application_Model_DbTable_ProformaInvoice();
     		//regenerate performa invoice
     		$proformaInvoiceDb->generateProformaInvoiceEcollection($formData['transaction_id']);
-    		$proformaInvoiceDb->moveToInvoiceBasedOnPaket($formData['transaction_id'], $formData['paket']);
+    		$proformaInvoiceDb->moveToInvoiceBasedOnPaket($txnData['at_pes_id'], $formData['paket']);
     		//push to BANK
     		
     		$this->_redirect('/applicant-portal/account');
@@ -3542,9 +3545,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     	$applicantDB = new App_Model_Application_DbTable_ApplicantProfile();
     	$applicant = $applicantDB->getAllProfile($txnId);
     	 
-    	//get transaction info
-    	$applicantTxnDB = new App_Model_Application_DbTable_ApplicantTransaction();
-    	$txnData = $applicantTxnDB->getTransaction($txnId);
+    	
     
     
     	//getapplicantprogram
