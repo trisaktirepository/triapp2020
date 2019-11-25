@@ -3524,6 +3524,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     	$translate = Zend_Registry::get('Zend_Translate');
     	$txnId=$this->_getParam('transaction_id',0);
     	$paket=$this->_getParam('paket',0);
+    	$this->view->paket=$paket;
     	$this->view->transaction_id=$txnId;
     	if ($this->getRequest()->isPost()) {
     		$formData = $this->getRequest()->getPost();
