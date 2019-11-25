@@ -2029,7 +2029,7 @@ class Application_Model_DbTable_ProformaInvoice extends Zend_Db_Table {
 				'bill_description' => 'Paket A Lunas',
 				'academic_year' => $txnData['at_academic_year'],
 				'fs_id'=>$feeStructureData['fs_id'],
-				'va_expired_dt'=>$end,
+				'expired_dt'=>$end,
 				//'offer_date' => $assessmentData['asd_decree_date']
 		);
 	
