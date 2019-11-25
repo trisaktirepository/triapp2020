@@ -70,5 +70,37 @@ class Studentfinance_Model_DbTable_InvoiceDetail extends Zend_Db_Table_Abstract 
 			return $row;
 		}
 	}
+	
+	public function getInvoiceDetailBank($invoice_id,$program,$branch){
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$selectData = $db->select()
+		->from(array('idtl'=>$this->_name),array('amount'))
+		->join(array('item'=>'fee_item'),'item.fi_id=idtl.fi_id',array('bni_code','fi_code'))
+		->join(array('ia'=>'fee_item_account'),'item.fi_id=ia.fiacc_fee_item',array())
+		->join(array('acc'=>'tbl_bank_account'),'ia.fiacc_account=acc.account',array('account_code'))
+		->where("idtl.invoice_main_id = ?", $invoice_id)
+		->where('ia.fiacc_program_id=?',$program)
+		->where('ia.fiacc_branch_id=?',$branch);
+	
+		$row = $db->fetchAll($selectData);
+	
+		if(!$row){
+			$selectData = $db->select()
+			->from(array('idtl'=>$this->_name),array('amount'))
+			->join(array('item'=>'fee_item'),'item.fi_id=idtl.fi_id',array('bni_code','fi_code'))
+			->join(array('ia'=>'fee_item_account'),'item.fi_id=ia.fiacc_fee_item',array())
+			->join(array('acc'=>'tbl_bank_account'),'ia.fiacc_account=acc.account',array('account_code'))
+			->where("idtl.invoice_main_id = ?", $invoice_id)
+			->where('ia.fiacc_program_id=?',$program)
+			->where('ia.fiacc_branch_id is null');
+				
+			$row = $db->fetchAll($selectData);
+	
+		}
+		//echo $selectData;
+		//echo var_dump($row);exit;
+		return $row;
+			
+	}
 }
 ?>
