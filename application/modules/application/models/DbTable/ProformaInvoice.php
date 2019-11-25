@@ -2084,9 +2084,9 @@ class Application_Model_DbTable_ProformaInvoice extends Zend_Db_Table {
 		/**
 		 * insert into db
 		 */
-		//$this->lobjDbAdpt->beginTransaction();
+		$this->lobjDbAdpt->beginTransaction();
 	
-		//try{
+		try{
 	
 			foreach ($arr_profoma as $key=>$data){
 				$inv_data = array(
@@ -2128,10 +2128,10 @@ class Application_Model_DbTable_ProformaInvoice extends Zend_Db_Table {
 					
 			}
 	
-			//$query = $this->lobjDbAdpt->commit();
+			$query = $this->lobjDbAdpt->commit();
 			$status = true;
-	
-		/* }catch(Exception $e){
+			echo "od";exit;
+		 }catch(Exception $e){
 			$status = false;
 	
 			$this->lobjDbAdpt->rollBack();
@@ -2142,7 +2142,7 @@ class Application_Model_DbTable_ProformaInvoice extends Zend_Db_Table {
 			$error_result[0] = $message;
 			$error_result[1] = $code;
 	
-		} */
+		} 
 		//	exit;
 		return $status;
 	}
