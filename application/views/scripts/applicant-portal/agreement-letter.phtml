@@ -16,9 +16,9 @@
 ?>
 <script>
 	function fAgree() {
-		alert('ok');
+		//alert('ok');
 		if ($('#agreed').is(":checked")) {
-				$('#agreement').submit();
+				$('#agreementform').submit();
 		} else alert('Silahkan centang persetujuan terhadap aturan yang berlaku');
 		
 	}
@@ -465,7 +465,7 @@ td.bold-text{
 			
 	<br><br>
 	<fieldset ><legend><?php echo "Persetujuan"?></legend>
-	<form id="agreement" method="post" >
+	<form id="agreementform" name="agreementform" method="post" >
 	<table bgcolor="lightgreen">
 	<tr><td>
 		<input type="hidden" name="transaction_id" value="<?php echo $this->transaction_id;?>">
