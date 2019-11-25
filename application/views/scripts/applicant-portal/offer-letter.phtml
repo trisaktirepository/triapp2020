@@ -233,7 +233,7 @@ td.bold-text{
 				<tr>
 					<td>&nbsp;</td>
 					<td>Dibayar mulai <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['date_payment'][$plan_index][$key]['start'])); ?> s/d <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['date_payment'][$plan_index][$key]['end'] )); ?></td>
-					<td colspan="5" class="bold-text">(Billing No:<?php echo $fee['fsp_billing_no']; ?>1<?php echo $this->dataview['NO_PES']?>)</td>
+					<td colspan="5" class="bold-text"></td>
 				</tr>
 				<tr><td colspan="7">&nbsp;</td></tr>
 				<tr>
@@ -331,7 +331,7 @@ td.bold-text{
 						<?php
 							}
 						?>
-						<td colspan="5" class="bold-text">(Billing No:<?php echo $fee['fsp_billing_no']; ?><?php echo $key.$this->dataview['NO_PES'] ?>)</td>
+						<td colspan="5" class="bold-text"> </td>
 					</tr>
 					<tr><td colspan="7">&nbsp;</td></tr>
 				<?php
