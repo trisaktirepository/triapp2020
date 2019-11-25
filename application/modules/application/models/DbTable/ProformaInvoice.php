@@ -1921,10 +1921,9 @@ class Application_Model_DbTable_ProformaInvoice extends Zend_Db_Table {
 		$dbInvoiceDet=new Studentfinance_Model_DbTable_InvoiceDetail();
 		
 		$select = $db ->select()
-		->from($this->_name)
-		->where('LEFT(billing_no,1)=?',$paket)
-		->where('no_fomulir=?',$noform)
-		->order("id desc");
+		->from('proforma_invoice_va')
+		->where('LEFT(bill_number,1)=?',$paket)
+		->where('no_fomulir=?',$noform);
 			
 		$invoices=$db->fetchAll($select);
 		foreach ($invoices as $value) {
