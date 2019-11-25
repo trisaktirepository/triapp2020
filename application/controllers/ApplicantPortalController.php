@@ -3708,11 +3708,11 @@ class ApplicantPortalController extends Zend_Controller_Action
     		//315 is foreigner in lookup db
     		$fee_structure = $feeStructureDb->getApplicantFeeStructure($intakeData[0]['IdIntake'],$programid,315,$branch);
     		$biaya = $biaya*2;
-    		$biaya = number_format($biaya, 2, '.', ',');
+    		$biaya = number_format($biaya, 2);
     	}else{
     		//default to local
     		$fee_structure = $feeStructureDb->getApplicantFeeStructure($intakeData[0]['IdIntake'],$programid,314,$branch);
-    		$biaya = number_format($biaya, 2, '.', ',');
+    		$biaya = number_format($biaya, 2);
     	}
     
     	//$feeStructureDb = new Studentfinance_Model_DbTable_FeeStructure();
@@ -3720,7 +3720,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     
     	//get selected payment plan
     	$paymentplanDb = new Studentfinance_Model_DbTable_FeeStructurePlan();
-    	$payment_plan = $paymentplanDb->getBillingPlanByPackage($fee_structure['fs_id'],$payment[0]['billing_no']);
+    	$payment_plan = $paymentplanDb->getBillingPlanByPackage($fee_structure['fs_id'],$paket);
     
     	//inject plan detail (installment)
     	$paymentPlanDetailDb = new Studentfinance_Model_DbTable_FeeStructurePlanDetail();
