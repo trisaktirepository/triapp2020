@@ -44,7 +44,7 @@ class App_Model_Application_DbTable_ApplicantAssessmentUsm extends Zend_Db_Table
 		
 		$select = $db ->select()
 					  ->from(array('aau'=>$this->_name),array('aau.*','aar_rating_rector'=>'aau_rector_ranking'))
-					  ->joinLeft(array('aaud'=>'applicant_assessment_usm_detl'), 'aaud.aaud_id = aau.aau_rector_selectionid',array('aaud.*','asd_nomor'=>'aaud_nomor','aar_reg_start_date'=>'aaud_reg_start_date','aar_reg_end_date'=>'aaud_reg_end_date'))
+					  ->joinLeft(array('aaud'=>'applicant_assessment_usm_detl'), 'aaud.aaud_id = aau.aau_rector_selectionid',array('aaud.*','asd_decree_date'=>'aaud_decree_date','asd_nomor'=>'aaud_nomor','aar_reg_start_date'=>'aaud_reg_start_date','aar_reg_end_date'=>'aaud_reg_end_date'))
 					  ->where("aau.aau_trans_id = '".$transaction_id."'")
 					  ->order('aau.aau_id desc');
 				  
