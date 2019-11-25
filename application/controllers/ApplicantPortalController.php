@@ -3686,12 +3686,12 @@ class ApplicantPortalController extends Zend_Controller_Action
     
     
     	//payment data
-    	$paymentMainDb = new App_Model_Finance_DbTable_PaymentMain();
+    	$paymentMainDb = new Studentfinance_Model_DbTable_PaymentMain();
     	$payment = $paymentMainDb->getApplicantPaymentInfo($txnData['at_pes_id']);
     
     	//get fee structure
     	//TODO:check local or foreign
-    	$feeStructureDb = new App_Model_Finance_DbTable_FeeStructure();
+    	$feeStructureDb = new Studentfinance_Model_DbTable_FeeStructure();
     	if(!$this->islocalNationality($txnId)){
     		//315 is foreigner in lookup db
     		$fee_structure = $feeStructureDb->getApplicantFeeStructure($intakeData[0]['IdIntake'],$programid,315,$branch);
@@ -3707,11 +3707,11 @@ class ApplicantPortalController extends Zend_Controller_Action
     	//$fee_structure = $feeStructureDb->getApplicantFeeStructure($txnData['at_intake'], $programData['IdProgram']);
     
     	//get selected payment plan
-    	$paymentplanDb = new App_Model_Finance_DbTable_FeeStructurePlan();
+    	$paymentplanDb = new Studentfinance_Model_DbTable_FeeStructurePlan();
     	$payment_plan = $paymentplanDb->getBillingPlan($fee_structure['fs_id'],$payment[0]['billing_no']);
     
     	//inject plan detail (installment)
-    	$paymentPlanDetailDb = new App_Model_Finance_DbTable_FeeStructurePlanDetail();
+    	$paymentPlanDetailDb = new Studentfinance_Model_DbTable_FeeStructurePlanDetail();
     	$payment_plan['installment_detail'] = array();
     	for($i=1;$i<=$payment_plan['fsp_bil_installment']; $i++){
     		$payment_plan['installment_detail'][$i] = $paymentPlanDetailDb->getPlanData($fee_structure['fs_id'], $payment_plan['fsp_id'], $i, 1, $programData['IdProgram'], $assessmentData['rank']);
