@@ -3287,7 +3287,10 @@ class ApplicantPortalController extends Zend_Controller_Action
     	//get transaction info
     	$applicantTxnDB = new App_Model_Application_DbTable_ApplicantTransaction();
     	$txnData = $applicantTxnDB->getTransaction($txnId);
-    	
+    	if ($txnData['at_appl_type']=="1") {
+    		$typeselection="Program Seleksi USM";
+    		$message="-";
+    	}else
     	if ($txnData['at_appl_type']=="2") {
     		$typeselection="Program Seleksi Siswa Berpotensi";
     		$message="-";
