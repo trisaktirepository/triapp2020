@@ -844,7 +844,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 				//echo "kode".$kode;
 				$amount=$det['amount']*1;
 				$amounttotal=$amounttotal+$amount;
-				$desc[]='110'."_".'Pendaftaran'."_".$amount;
+				$desc[]=$det['account_code']."_".$det['fi_code']."_".$amount;
 					
 	
 			}
