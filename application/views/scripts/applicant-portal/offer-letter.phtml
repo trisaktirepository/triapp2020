@@ -233,7 +233,7 @@ td.bold-text{
 				<tr>
 					<td>&nbsp;</td>
 					<td>Dibayar mulai <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['date_payment'][$plan_index][$key]['start'])); ?> s/d <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['date_payment'][$plan_index][$key]['end'] )); ?></td>
-					<td colspan="5" class="bold-text">(Billing No:<?php echo $fee['fsp_billing_no']; ?>1$[NO_PES])</td>
+					<td colspan="5" class="bold-text">(Billing No:<?php echo $fee['fsp_billing_no']; ?>1<?php echo $this->dataview['NO_PES']?>)</td>
 				</tr>
 				<tr><td colspan="7">&nbsp;</td></tr>
 				<tr>
@@ -362,14 +362,18 @@ td.bold-text{
 	<br />
 	Pembayaran dapat dilakukan secara Online di seluruh Cabang BNI atau ATM BNI atau Internet Banking BNI di Indonesia dengan menggunakan Billing No yang tertera diatas, sebagai pengganti No Rekening. 
 	Perhatikan setiap pembayaran mempunyai billing no yang berbeda. Kami menyediakan cara pembayaran:
+	<fieldset><legend><?php echo "Silahkan Pilih Skema Pembayaran"?></legend>
 	<form name="paket" method="post">
 	<input type="hidden" name="transaction_id" value="<?php echo $this->transaction_id;?>">
+	
 	<ol>
 		<li><input type="radio" name="paket" value="A"> A: di bayar lunas sebesar Rp. <?php echo number_format($paket_a_total, 2, '.', ','); ?> tanggal: <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['REGISTRATION_DATE_START'])); ?>  s/d <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['REGISTRATION_DATE_END'])); ?></li>
-		<li><input type="radio" name="paket" value="B">Paket B: di bayar pertama sebesar Rp. <?php echo number_format($paket_b_c1_total, 2, '.', ','); ?> tanggal: <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['REGISTRATION_DATE_START'])); ?> s/d <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['REGISTRATION_DATE_END'])); ?> sisanya Rp. <?php echo number_format( ($paket_a_total - $paket_b_c1_total), 2, '.', ','); ?> dibayar 4 X angsuran setiap bulan terhitung mulai bulan <?php echo date ( 'F Y' , strtotime ( '+1 month' , strtotime ( $this->reg_date['REGISTRATION_DATE_END'] ) ) ); ?></li>
+		<li><input type="radio" name="paket" value="B">Paket B: di bayar pertama sebesar Rp. <?php echo number_format($paket_b_c1_total, 2, '.', ','); ?> tanggal: <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['REGISTRATION_DATE_START'])); ?> s/d <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['REGISTRATION_DATE_END'])); ?> sisanya Rp. <?php echo number_format( ($paket_a_total - $paket_b_c1_total), 2, '.', ','); ?> dibayar <?php echo sizeof($fee['plan_detail'])-1?> X angsuran setiap bulan terhitung mulai bulan <?php echo date ( 'F Y' , strtotime ( '+1 month' , strtotime ( $this->reg_date['REGISTRATION_DATE_END'] ) ) ); ?></li>
 	</ol>
-	<input type="submit" name="submit" value="Pilih">
+	<input type="submit" name="submit" value="Pilih Paket">
 	</form>
+	</fieldset>
+	<br>
 	Apabila Saudara mendapat kesulitan tentang pembayaran melalui SPC (Student Payment Center) Bank BNI setempat, Saudara dapat menghubungi Bank BNI Trisakti Telp. (021) 5656466
 	<br />
 	<br />

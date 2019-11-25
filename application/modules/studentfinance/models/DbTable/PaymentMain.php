@@ -111,7 +111,7 @@ class Studentfinance_Model_DbTable_PaymentMain extends Zend_Db_Table_Abstract {
 			$data['payment_date'] = date('Y-m-d H:i:s');
 		}
 			
-		return parent::insert( $data );
+		return $this->insert( $data );
 	}
 	
 	private function getTransaction($payer_id){

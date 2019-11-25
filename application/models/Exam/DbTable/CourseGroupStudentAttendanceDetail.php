@@ -88,7 +88,7 @@ class App_Model_Exam_DbTable_CourseGroupStudentAttendanceDetail extends Zend_Db_
 			$data['last_edit_date'] = date('Y-m-d H:i:a');
 		}
 	
-		return parent::insert($data);
+		return $this->insert($data);
 	}
 	
 	public function update(array $data= array(),$where){

@@ -597,7 +597,7 @@ class Application_Model_DbTable_ProformaInvoice extends Zend_Db_Table {
 		
     	//getapplicantprogram
 		$appProgramDB = new App_Model_Application_DbTable_ApplicantProgram();		
-		$program = $appProgramDB->getProgramFaculty($txnId);
+		$program = $appProgramDB->getProgramFaculty($txnId,$txnData['at_appl_type']);
 		
 		//program data
 		$programDb = new GeneralSetup_Model_DbTable_Program();

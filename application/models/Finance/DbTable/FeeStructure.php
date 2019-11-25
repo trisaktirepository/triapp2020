@@ -46,7 +46,7 @@ class App_Model_Finance_DbTable_FeeStructure extends Zend_Db_Table_Abstract {
 			
 		$row = $db->fetchRow($selectData);
 		
-		if(!row){
+		if(!$row){
 			$selectData = $db->select()
 				->from(array('fs'=>$this->_name))
 				->join( array('fsp'=>'fee_structure_program'), 'fsp.fsp_fs_id = fs.fs_id and fsp.fsp_program_id = '.$program_id)

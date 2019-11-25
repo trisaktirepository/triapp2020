@@ -3474,7 +3474,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     			'REGISTRATION_DATE_START'=> $assessmentData['aar_reg_start_date'],
     			'REGISTRATION_DATE_END'=> $assessmentData['aar_reg_end_date']
     	);
-    	$this->view->reg_date=$reg_date;
+    	
     	
     	//date payment
     	foreach($feeStructureData['payment_plan'] as $key=>$plan){
@@ -3491,7 +3491,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     		$end = $assessmentData['aar_reg_end_date'];
     	}
     	
-    	
+    	$this->view->reg_date=$reg_date;
     	//fee data
     	//global $fees;
     	$fees = $feeStructureData['payment_plan'];
@@ -3509,7 +3509,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     	
     }
      
-    public function  aggrementLetterAction(){
+    public function  agreementLetterAction(){
     
     	$translate = Zend_Registry::get('Zend_Translate');
     	$txnId=$this->_getParam('transaction_id',0);
@@ -3724,7 +3724,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     			'REGISTRATION_DATE_START'=> $assessmentData['registration_start_date'],
     			'REGISTRATION_DATE_END'=> $assessmentData['registration_end_date']
     	);
-    	$this->view->reg_date=$reg_date;
+    	
     	//date payment
     	$start = $assessmentData['registration_start_date'];
     	$end = $assessmentData['registration_end_date'];
@@ -3737,7 +3737,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     	}
     
     	$end = $assessmentData['registration_end_date'];
-    
+    	$this->view->reg_date=$reg_date;
     	//global $fee;
     	//$fee = $payment_plan;
     	$this->view->fee=$payment_plan;
