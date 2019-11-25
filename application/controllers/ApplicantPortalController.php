@@ -3311,8 +3311,14 @@ class ApplicantPortalController extends Zend_Controller_Action
     		$message="-";
     	}
     	//get assessment data
-    	$assessmentDb = new App_Model_Application_DbTable_ApplicantAssessment();
-    	$assessmentData = $assessmentDb->getData($txnId);
+    	if ($txnData['at_appl_type']=="1") {
+    		$assessmentDb = new App_Model_Application_DbTable_ApplicantAssessmentUsm();
+    		$assessmentData=$assessmentDb->getData($txnId);
+    	} else {
+    		$assessmentDb = new App_Model_Application_DbTable_ApplicantAssessment();
+    		$assessmentData = $assessmentDb->getData($txnId);
+    	}
+    	
     	
     	//get transaction info
     	$applicantTxnDB = new App_Model_Application_DbTable_ApplicantTransaction();
