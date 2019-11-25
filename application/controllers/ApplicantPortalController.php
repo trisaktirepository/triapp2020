@@ -3534,10 +3534,16 @@ class ApplicantPortalController extends Zend_Controller_Action
     		//echo var_dump($formData);exit;
     		//generate payment
     		$proformaInvoiceDb = new Application_Model_DbTable_ProformaInvoice();
+    		$dbInv=new Studentfinance_Model_DbTable_InvoiceMain();
+    		
     		//regenerate performa invoice
     		$proformaInvoiceDb->generateProformaInvoiceEcollection($formData['transaction_id']);
     		$proformaInvoiceDb->moveToInvoiceBasedOnPaket($txnData['at_pes_id'], $formData['paket']);
     		//push to BANK
+    		$inv=$dbInv->getApplicantInvoice($txnData['at_pes_id']);
+    		foreach ($inv as $value) {
+    			$dbInv->pushToECollForEnrollmentPerBilling($value['bill_number'],'createbilling');
+    		}
     		
     		$this->_redirect('/applicant-portal/account');
     	}
