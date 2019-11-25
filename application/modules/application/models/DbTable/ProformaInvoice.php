@@ -2158,4 +2158,27 @@ class Application_Model_DbTable_ProformaInvoice extends Zend_Db_Table {
 		//	exit;
 		return $status;
 	}
+	private function islocalNationality($txn_id){
+		//get profile
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$select = $db ->select()
+		->from(array('at'=>'applicant_transaction'))
+		->join(array('ap'=>'applicant_profile'),'ap.appl_id = at.at_appl_id')
+		->where("at_trans_id = ".$txn_id);
+	
+		$row = $db->fetchRow($select);
+	
+		//nationality
+		if( isset($row['appl_nationality']) ){
+				
+			if($row['appl_nationality']==96){
+				return true;
+			}else{
+				return false;
+			}
+		}else{
+			//default to local if null data
+			return true;
+		}
+	}
 }
