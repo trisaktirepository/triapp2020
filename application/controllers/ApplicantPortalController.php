@@ -3714,6 +3714,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     		$fee_structure = $feeStructureDb->getApplicantFeeStructure($intakeData[0]['IdIntake'],$programid,315,$branch);
     		$biaya = $biaya*2;
     		$biaya = number_format($biaya, 2);
+    		
     	}else{
     		//default to local
     		$fee_structure = $feeStructureDb->getApplicantFeeStructure($intakeData[0]['IdIntake'],$programid,314,$branch);
