@@ -2057,7 +2057,7 @@ class Application_Model_DbTable_ProformaInvoice extends Zend_Db_Table {
 			/*
 			 * paket B
 			*/
-			$feeStrucPlan=$feeStructurePlanDb->getStructureDataByPacket($feeStructureData['fs_id'], 'Paket B');
+			$feeStrucPlan=$feeStructurePlanDb->getBillingPlanByPackage($feeStructureData['fs_id'], 'Paket B');
 			//echo var_dump($feeStrucPlan);exit;
 			if ($feeStrucPlan) {
 				$fspbillinstallment=$feeStrucPlan['fsp_bil_installment'];
