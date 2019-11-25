@@ -3270,15 +3270,20 @@ class ApplicantPortalController extends Zend_Controller_Action
     
     }
     
+    
     public function offerLetterAction(){
     	$this->view->title="SURAT PANGGILAN DITERIMA";
     	$txnId=$this->_getParam('transaction_id',0);
     	$this->view->transaction_id=$txnId;
     	if ($this->getRequest()->isPost()) {
     		$formData = $this->getRequest()->getPost();
-    		$txnId=$formData['transaction_id'];
-    		$paket=$formData['paket'];
-    		$this->_redirect('/applicant-portal/agreement-letter/transaction_id/'.$txnId.'/paket/'.$paket);
+    		if (isset($formData['cetak'])) {
+    			$this->_redirect('http://www.print.trisakti.ac.id/online-application/generate-offer-letter/transaction_id/'.$txnId);
+    		} else {
+    			$txnId=$formData['transaction_id'];
+    			$paket=$formData['paket'];
+    			$this->_redirect('/applicant-portal/agreement-letter/transaction_id/'.$txnId.'/paket/'.$paket);
+    		}
     	}
     	//get applicant info
     	$applicantDB = new App_Model_Application_DbTable_ApplicantProfile();
