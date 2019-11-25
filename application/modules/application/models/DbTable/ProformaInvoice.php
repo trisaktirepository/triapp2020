@@ -1912,4 +1912,250 @@ class Application_Model_DbTable_ProformaInvoice extends Zend_Db_Table {
 		}
 		
 	}
+	public function moveToInvoiceBasedOnPaket($trxid,$paket){
+	
+		$db = $this->lobjDbAdpt;
+		if ($paket=="A") $paket="0"; else $paket="1";
+		$dbInvoice=new Studentfinance_Model_DbTable_InvoiceMain();
+		$dbInvoiceDet=new Studentfinance_Model_DbTable_InvoiceDetail();
+		$select = $db ->select()
+		->from($this->_name)
+		->where('LEFT(bill_number,1)=?',$paket)
+		->order("id desc");
+			
+		$invoices=$db->fetchAll($select);
+		foreach ($invoices as $value) {
+			unset($value['id']);
+			if (!$dbInvoice->isIn($value['bill_number'])) {
+				$id=$dbInvoice->insert($value);
+				//get detail
+				$select = $db ->select()
+				->from('proforma_invoice_detail')
+				->where('invoice_main_id=?',$id);
+				$detail=$db->fetchAll($select);
+				foreach ($detail as $det) {
+					unset($det['id']);
+					$det['invoice_main_id']=$id;
+					if (!$dbInvoiceDet->isIn($id, $det['fi_id'])) $dbInvoiceDet->insertData($det);
+				}
+			}
+		}
+	}
+	public function generateProformaInvoiceEcollection($txnId){
+	
+		$dbInvoiceVa=new Application_Model_DbTable_ProformaInvoiceVa();
+		$dbInvoiceDetailVa=new Application_Model_DbTable_ProformaInvoiceDetail();
+		//get applicant info
+		$applicantDB = new App_Model_Application_DbTable_ApplicantProfile();
+		$applicant = $applicantDB->getAllProfile($txnId);
+			
+		//get transaction info
+		$applicantTxnDB = new App_Model_Application_DbTable_ApplicantTransaction();
+		$txnData = $applicantTxnDB->getTransaction($txnId);
+	
+		//get assessment data
+		if ($txnData['at_appl_type']=="1") {
+			$assessmentDb = new App_Model_Application_DbTable_ApplicantAssessmentUsm();
+			$assessmentData=$assessmentDb->getData($txnId);
+		} else {
+			$assessmentDb = new App_Model_Application_DbTable_ApplicantAssessment();
+			$assessmentData = $assessmentDb->getData($txnId);
+		}
+	
+		//getapplicantprogram
+		$appProgramDB = new App_Model_Application_DbTable_ApplicantProgram();
+		$program = $appProgramDB->getProgramFaculty($txnId,null,$txnData['at_appl_type']);
+	
+		//program data
+		$programDb = new GeneralSetup_Model_DbTable_Program();
+		$programData = $programDb->fngetProgramData($program[0]['program_id']);
+	
+		//faculty data
+		$collegeMasterDb = new GeneralSetup_Model_DbTable_Collegemaster();
+		$facultyData = $collegeMasterDb->fngetCollegemasterData($program[0]['faculty_id']);
+			
+		//get intake data
+		$intakeDb = new App_Model_Record_DbTable_Intake();
+		$intakeData = $intakeDb->getData($txnData['at_intake']);
+			
+		//get fee structure
+		//check local or foreign student
+		$feeStructureDb = new Studentfinance_Model_DbTable_FeeStructure();
+	
+		if($this->islocalNationality($txnId)){
+			$feeStructureData = $feeStructureDb->getApplicantFeeStructure($intakeData['IdIntake'],$program[0]["program_id"],$program[0]['IdBranchOffer']);
+		}else{
+			//315 is foreigner in lookup db
+			$feeStructureData = $feeStructureDb->getApplicantFeeStructure($intakeData['IdIntake'],$program[0]["program_id"],null,315);
+		}
+	
+		//echo var_dump($feeStructureData);exit;
+		//fee structure plan
+		$feeStructurePlanDb = new Studentfinance_Model_DbTable_FeeStructurePlan();
+		$paymentPlanData = $feeStructurePlanDb->getStructureData($feeStructureData['fs_id']);
+		$feeStructureData['payment_plan'] = $paymentPlanData;
+	
+		//fee structure program
+		$feeStructureProgramDb = new Studentfinance_Model_DbTable_FeeStructureProgram();
+		$feeStructureProgramData = $feeStructureProgramDb->getStructureData($feeStructureData['fs_id'],$program[0]["program_id"],$program[0]['IdBranchOffer']);
+		//echo var_dump($feeStructureProgramData);exit;
+		//fee structure plan detail
+		$fspdDb = new Studentfinance_Model_DbTable_FeeStructurePlanDetail();
+	
+		$arr_profoma = array();
+		$dbProformaDetail=new Application_Model_DbTable_ProformaInvoiceDetail();
+		$reg_date = array(
+				'REGISTRATION_DATE_START'=> $assessmentData['aar_reg_start_date'],
+				'REGISTRATION_DATE_END'=> $assessmentData['aar_reg_end_date']
+		);
+			
+		$end=$reg_date['REGISTRATION_DATE_END'];
+	
+			
+	
+		/*
+		 * paket A
+		*/
+		$paket_a_plan = $fspdDb->getPlanData($feeStructureData['fs_id'], $paymentPlanData[0]['fsp_id'], 1, 1,$feeStructureProgramData['fsp_program_id'],$assessmentData['aar_rating_rector']);
+	
+		$arr_profoma[0] = array(
+				'billing_no' => '01'.$txnData['at_pes_id'],
+				'no_fomulir' => $txnData['at_pes_id'],
+				'appl_id' => $txnData['at_appl_id'],
+				'college_id' => $programData['IdCollege'],
+				'program_code'=>$programData['ProgramCode'],
+				'bill_description' => 'Paket A Lunas',
+				'academic_year' => $txnData['at_academic_year'],
+				'fs_id'=>$feeStructureData['fs_id'],
+				'va_expired_dt'=>$end,
+				//'offer_date' => $assessmentData['asd_decree_date']
+		);
+	
+	
+		$total_amount = 0;
+		foreach ($paket_a_plan as $key=>$item){
+			$total_amount += $item['total_amount'];
+			$arr_profoma[0]['detail'][]=array('fi_id'=>$item['fi_id'],'description'=>$item['fi_name_bahasa'],'amount'=>$item['total_amount']);
+		}
+		$arr_profoma[0]['amount_total'] = $total_amount;
+	
+		//date payment
+		foreach($feeStructureData['payment_plan'] as $key=>$plan){
+			$start = $assessmentData['aar_reg_start_date'];
+			$end = $assessmentData['aar_reg_end_date'];
+	
+			foreach ($plan['plan_detail'] as $key2=>$installment){
+				$reg_date['date_payment'][$key][$key2]['start'] = $start;
+				$reg_date['date_payment'][$key][$key2]['end'] = $end;
+					
+				$end = date ( 'F Y' , strtotime ( '+1 month' , strtotime ( $end) ) );
+			}
+	
+			$end = $assessmentData['aar_reg_end_date'];
+		}
+		if ($paymentPlanData[1]['fsp_id']!=null) {
+			/*
+			 * paket B
+			*/
+			$feeStrucPlan=$feeStructurePlanDb->getStructureDataByPacket($feeStructureData['fs_id'], 'Paket B');
+			//echo var_dump($feeStrucPlan);exit;
+			if ($feeStrucPlan) {
+				$fspbillinstallment=$feeStrucPlan['fsp_bil_installment'];
+				$end=$reg_date['REGISTRATION_DATE_END'];
+				for ($i=1;$i<=$fspbillinstallment;$i++){
+	
+					$paket_b_plan_cicilan = $fspdDb->getPlanData($feeStructureData['fs_id'], $paymentPlanData[1]['fsp_id'], $i, 1,$feeStructureProgramData['fsp_program_id'],$assessmentData['aar_rating_rector']);
+					$arr_profoma[$i] = array(
+							'billing_no' => $feeStrucPlan['fsp_billing_no'].$i.$txnData['at_pes_id'],
+							'no_fomulir' => $txnData['at_pes_id'],
+							'appl_id' => $txnData['at_appl_id'],
+							'college_id' => $programData['IdCollege'],
+							'program_code'=>$programData['ProgramCode'],
+							'bill_description' => 'Paket B Cicilan '.$i,
+							'academic_year' => $txnData['at_academic_year'],
+							'fs_id'=>$feeStructureData['fs_id'],
+							'expired_dt'=> $end
+							//'offer_date' => $assessmentData['asd_decree_date']
+					);
+					$end=date ( 'F Y' , strtotime ( '+1 month' , strtotime ( $end) ) );
+						
+					$total_amount = 0;
+					foreach ($paket_b_plan_cicilan as $key=>$item){
+						$total_amount += $item['total_amount'];
+						if ($item['total_amount']>0)
+							$arr_profoma[$i]['detail'][]=array('fi_id'=>$item['fi_id'],'description'=>$item['fi_name_bahasa'],'amount'=>$item['total_amount']);
+					}
+					if ($total_amount>0)
+						$arr_profoma[$i]['amount_total'] = $total_amount;
+					else unset($arr_profoma[$i]);
+				}
+			}
+	
+		}
+		//echo var_dump($arr_profoma);exit;
+		/**
+		 * insert into db
+		 */
+		$this->lobjDbAdpt->beginTransaction();
+	
+		try{
+	
+			foreach ($arr_profoma as $key=>$data){
+				$inv_data = array(
+						'bill_number' => $data['billing_no'],
+						'no_fomulir' => $data['no_fomulir'],
+						'appl_id' => $data['appl_id'],
+						'IdStudentRegistration' => null,
+						'academic_year' => $data['academic_year'],
+						'bill_amount' => $data['amount_total'],
+						'bill_paid' => 0.00,
+						'bill_balance' => $data['amount_total'],
+						'bill_description' => $data['bill_description'],
+						'college_id' => $data['college_id'],
+						'program_code' => $data['program_code'],
+						'creator' => '1',
+						'fs_id' => $data['fs_id'],
+						'status' => 'A',
+						'va_expired_dt'=>$data['expired_dt'],
+						'date_create' => date('Y-m-d H:i:s')
+				);
+				//echo var_dump($inv_data);exit;
+				$row=$dbInvoiceVa->isIn($inv_data['bill_number'],$inv_data['appl_id']);
+				if ($row) {
+					$idinvoice=$row['id'];
+					$dbInvoiceVa->updateData($inv_data,$idinvoice );
+				}
+				else $idinvoice=$dbInvoiceVa->addData($inv_data);
+				$detail=$data['detail'];
+				foreach ($detail as $det) {
+					$detail_inv=array('invoice_main_id'=>$idinvoice,
+							'fi_id'=>$det['fi_id'],
+							'fee_item_description'=>$det['description'],
+							'amount'=>$det['amount']
+					);
+					$row=$dbInvoiceDetailVa->isIn($idinvoice, $det['fi_id']);
+					if ($row) $dbInvoiceDetailVa->updateData($detail_inv, $row['id']);
+					else $dbInvoiceDetailVa->addData($detail_inv);
+				}
+					
+			}
+	
+			$query = $this->lobjDbAdpt->commit();
+			$status = true;
+	
+		}catch(Exception $e){
+			$status = false;
+	
+			$this->lobjDbAdpt->rollBack();
+	
+			$error_result = Array();
+			$message = $e->getMessage();
+			$code = $e->getCode();
+			$error_result[0] = $message;
+			$error_result[1] = $code;
+	
+		}
+		//	exit;
+		return $status;
+	}
 }
