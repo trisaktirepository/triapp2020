@@ -3535,7 +3535,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     		$proformaInvoiceDb->moveToInvoiceBasedOnPaket($formData['transaction_id'], $formData['paket']);
     		//push to BANK
     		
-    		$this->_redirect('/applicant-portal/push-to-bank/transaction_id/'.$txnId.'/paket/'.$paket);
+    		$this->_redirect('/applicant-portal/account);
     	}
     	//get applicant info
     	$applicantDB = new App_Model_Application_DbTable_ApplicantProfile();
