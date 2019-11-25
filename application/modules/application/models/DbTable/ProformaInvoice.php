@@ -1983,7 +1983,7 @@ class Application_Model_DbTable_ProformaInvoice extends Zend_Db_Table {
 		$feeStructureDb = new Studentfinance_Model_DbTable_FeeStructure();
 	
 		if($this->islocalNationality($txnId)){
-			$feeStructureData = $feeStructureDb->getApplicantFeeStructure($intakeData['IdIntake'],$program[0]["program_id"],$program[0]['IdBranchOffer']);
+			$feeStructureData = $feeStructureDb->getApplicantFeeStructure($intakeData['IdIntake'],$program[0]["program_id"],314,$program[0]['IdBranchOffer']);
 		}else{
 			//315 is foreigner in lookup db
 			$feeStructureData = $feeStructureDb->getApplicantFeeStructure($intakeData['IdIntake'],$program[0]["program_id"],null,315);
