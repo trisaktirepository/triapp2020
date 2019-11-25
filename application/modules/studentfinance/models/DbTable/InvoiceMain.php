@@ -829,7 +829,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 			}
 			$bill=$invoice['bill_number'];
 	
-			$va= '8'.$clientid.'8888'.$bill;
+			$va= '8'.$clientid.'88'.$bill;
 				
 		}
 		else
