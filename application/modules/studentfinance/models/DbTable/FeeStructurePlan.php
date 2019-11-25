@@ -47,6 +47,23 @@ class Studentfinance_Model_DbTable_FeeStructurePlan extends Zend_Db_Table_Abstra
 		}
 	}
 	
+	public function getBillingPlanByPackage($fee_structure_id,$paket){
+		$db = Zend_Db_Table::getDefaultAdapter();
+		if ($paket=="A") $paket=0; else $paket=1;
+		$selectData = $db->select()
+		->from(array('fsp'=>$this->_name))
+		->where("fsp.fsp_structure_id = '".$fee_structure_id."'")
+		->where('fsp.fsp_billing_no = '.$paket );
+	
+		$row = $db->fetchRow($selectData);
+	
+		if($row){
+			return $row;
+		}else{
+			return null;
+		}
+	}
+	
 	public function getPaginateData($search=null){
 		$db = Zend_Db_Table::getDefaultAdapter();
 		

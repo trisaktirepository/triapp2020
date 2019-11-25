@@ -3684,7 +3684,6 @@ class ApplicantPortalController extends Zend_Controller_Action
     	$this->view->dataview=$fieldValues;
     
     	 
-    echo var_dump($fieldValues);exit;
     
     	//payment data
     	$paymentMainDb = new Studentfinance_Model_DbTable_PaymentMain();
@@ -3709,7 +3708,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     
     	//get selected payment plan
     	$paymentplanDb = new Studentfinance_Model_DbTable_FeeStructurePlan();
-    	$payment_plan = $paymentplanDb->getBillingPlan($fee_structure['fs_id'],$payment[0]['billing_no']);
+    	$payment_plan = $paymentplanDb->getBillingPlanByPackage($fee_structure['fs_id'],$payment[0]['billing_no']);
     
     	//inject plan detail (installment)
     	$paymentPlanDetailDb = new Studentfinance_Model_DbTable_FeeStructurePlanDetail();
