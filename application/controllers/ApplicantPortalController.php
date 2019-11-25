@@ -3527,8 +3527,13 @@ class ApplicantPortalController extends Zend_Controller_Action
     	$this->view->transaction_id=$txnId;
     	if ($this->getRequest()->isPost()) {
     		$formData = $this->getRequest()->getPost();
-    		echo var_dump($formData);exit;
+    		//echo var_dump($formData);exit;
     		//generate payment
+    		$proformaInvoiceDb = new Application_Model_DbTable_ProformaInvoice();
+    		//regenerate performa invoice
+    		$proformaInvoiceDb->generateProformaInvoiceEcollection($formData['transaction_id']);
+    		$proformaInvoiceDb->moveToInvoiceBasedOnPaket($formData['transaction_id'], $formData['paket']);
+    		//push to BANK
     		
     		$this->_redirect('/applicant-portal/push-to-bank/transaction_id/'.$txnId.'/paket/'.$paket);
     	}

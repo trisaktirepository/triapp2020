@@ -282,6 +282,156 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		}
 	}
 	
+	public function generateApplicantInvoiceByPaket($payer_id, $paket, $paid=null){
+	
+		try {
+			if ($paket=="A") $paket="0"; else $paket="1";
+			//get proforma invoice
+			$db = Zend_Db_Table::getDefaultAdapter();
+			$select = $db->select()
+			->from(array('api'=>'applicant_proforma_invoice'))
+			->where('api.payee_id = ?', $payer_id)
+			->where('api.billing_no = ?', $billing);
+			$row = $db->fetchAll($select);
+				
+			if($row!=null){
+				//loop each invoice
+				for($i=0; $i<sizeof($row); $i++){
+						
+					$proforma_invoice = $row[$i];
+						
+					//check not in invoice table
+					$select = $db->select()
+					->from(array('api'=>'applicant_proforma_invoice'))
+					->joinLeft(array('im'=>$this->_name), 'api.billing_no = im.bill_number')
+					->where("im.bill_number is null")
+					->where('api.billing_no = ?', $proforma_invoice['billing_no']);
+	
+	
+					$row_invoice = $db->fetchRow($select);
+						
+					if($row_invoice){
+	
+						$date_invoice = null;
+						if( isset($row_invoice['offer_date']) && $row_invoice['offer_date'] != '0000-00-00' ){
+							$date_invoice = date('Y-m-d H:i:s', strtotime($row_invoice['offer_date']));
+						}
+	
+						//get transaction data
+						$transaction = $this->getTransaction($payer_id);
+	
+						//get selection rank
+						$selection_rank = $this->getSelectionRank($transaction['at_trans_id'], $transaction['at_appl_type']);
+	
+						//get program data (code & college)
+						$program = $this->getProgram($payer_id);
+	
+						//get fee structure
+						$feeStructureDb = new Studentfinance_Model_DbTable_FeeStructure();
+						if(!$this->islocalNationality($transaction['at_trans_id'])){
+							//315 is foreigner in lookup db
+							$fee_structure = $feeStructureDb->getApplicantFeeStructure($transaction['at_intake'],$program['IdProgram'],315);
+	
+						}else{
+							//default to local
+							$fee_structure = $feeStructureDb->getApplicantFeeStructure($transaction['at_intake'],$program['IdProgram']);
+	
+						}
+	
+						//get selected payment plan
+						$paymentplanDb = new Studentfinance_Model_DbTable_FeeStructurePlan();
+						$payment_plan = $paymentplanDb->getBillingPlan($fee_structure['fs_id'],$billing);
+	
+						//inject plan detail (installment)
+						$paymentPlanDetailDb = new Studentfinance_Model_DbTable_FeeStructurePlanDetail();
+						$payment_plan['installment_detail'] = array();
+						for($i=1;$i<=$payment_plan['fsp_bil_installment']; $i++){
+							$payment_plan['installment_detail'][$i] = $paymentPlanDetailDb->getPlanData($fee_structure['fs_id'], $payment_plan['fsp_id'], $i, 1, $program['IdProgram'], $selection_rank );
+								
+								
+						}
+	
+	
+	
+						//loop each cicilan
+						for($i=1;$i<=$payment_plan['fsp_bil_installment']; $i++){
+							set_time_limit(0);
+								
+							//total amount for each cicilan
+							$total_invoice_amount = 0;
+							foreach ($payment_plan['installment_detail'][$i] as $cicilan){
+								$total_invoice_amount = $total_invoice_amount + $cicilan['total_amount'];
+							}
+								
+							//desc cicilan
+							$paket_info = "";
+							if($payment_plan['fsp_bil_installment']==1){
+								$paket_info = "Lunas";
+							}else
+							if($payment_plan['fsp_bil_installment']>1){
+								$paket_info = "Cicilan ".$i;
+							}
+								
+							//insert main bill
+							$data = array(
+									'bill_number' => $payment_plan['fsp_billing_no'].$i.$payer_id,
+									'appl_id' => $transaction['at_appl_id'],
+									'no_fomulir' => $payer_id,
+									'academic_year' => $transaction['at_academic_year'],
+									//'semester' => '',
+									'bill_amount' => $total_invoice_amount,
+									'bill_description' => $program['ShortName']."-"."P".$selection_rank."-".$payment_plan['fsp_name']." ".$paket_info,
+									'college_id' => $program['IdCollege'],
+									'program_code' => $program['ProgramCode'],
+									'creator' => '1',
+									'fs_id' => $payment_plan['fsp_structure_id'],
+									'fsp_id' => $payment_plan['fsp_id'],
+									'status' => 'A',
+									'date_create' => $date_invoice
+							);
+							$data['bill_balance'] = $total_invoice_amount;
+								
+							if(isset($paid) && $paid!=null){
+								$data['bill_paid'] = $paid;
+								$data['bill_balance'] = $total_invoice_amount - $paid;
+							}
+								
+							$main_id = $this->insert($data);
+								
+							//insert bill detail
+							$invoiceDetailDb = new Studentfinance_Model_DbTable_InvoiceDetail();
+							foreach ($payment_plan['installment_detail'][$i] as $detail){
+	
+								$data_detail = array(
+										'invoice_main_id' => $main_id,
+										'fi_id' => $detail['fi_id'],
+										'fee_item_description' => $detail['fi_name_bahasa'],
+										'amount' => $detail['amount']
+								);
+	
+	
+								$invoiceDetailDb->insert($data_detail);
+							}
+						}
+	
+	
+	
+					}
+				}
+			}
+				
+		}catch (Exception $e) {
+				
+			echo $e->getMessage();
+				
+			echo "<pre>";
+			print_r($e->getTrace());
+			echo "</pre>";
+				
+			throw new Exception('Error in Invoice Main');
+		}
+	}
+	
 	private function getTransaction($payer_id){
 		$db = Zend_Db_Table::getDefaultAdapter();
 		
