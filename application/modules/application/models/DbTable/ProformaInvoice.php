@@ -207,9 +207,9 @@ class Application_Model_DbTable_ProformaInvoice extends Zend_Db_Table {
 		//check local or foreign student
 		$feeStructureDb = new Studentfinance_Model_DbTable_FeeStructure();
 		if($applicant['appl_nationality']!=96){
-			$feeStructureData = $feeStructureDb->getApplicantFeeStructure($intakeData['IdIntake'],$program[0]["program_id"],315);
+			$feeStructureData = $feeStructureDb->getApplicantFeeStructure($intakeData['IdIntake'],$program[0]["program_id"],$program[0]['IdBranchOffer'],315);
 		}else{
-			$feeStructureData = $feeStructureDb->getApplicantFeeStructure($intakeData['IdIntake'],$program[0]["program_id"]);
+			$feeStructureData = $feeStructureDb->getApplicantFeeStructure($intakeData['IdIntake'],$program[0]["program_id"],$program[0]['IdBranchOffer']);
 		}
 		
 		//fee structure plan
@@ -219,7 +219,7 @@ class Application_Model_DbTable_ProformaInvoice extends Zend_Db_Table {
 		
 		//fee structure program
 		$feeStructureProgramDb = new Studentfinance_Model_DbTable_FeeStructureProgram();
-		$feeStructureProgramData = $feeStructureProgramDb->getStructureData($feeStructureData['fs_id'],$program[0]["program_id"]);
+		$feeStructureProgramData = $feeStructureProgramDb->getStructureData($feeStructureData['fs_id'],$program[0]["program_id"],$program[0]['IdBranchOffer']);
 		
 		//fee structure plan detail
 		$fspdDb = new Studentfinance_Model_DbTable_FeeStructurePlanDetail();
@@ -615,9 +615,9 @@ class Application_Model_DbTable_ProformaInvoice extends Zend_Db_Table {
 		//check local or foreign student
     	$feeStructureDb = new Studentfinance_Model_DbTable_FeeStructure();
     	if($applicant['appl_nationality']!=96){
-    		$feeStructureData = $feeStructureDb->getApplicantFeeStructure($intakeData['IdIntake'],$program[0]["program_id"],315);
+    		$feeStructureData = $feeStructureDb->getApplicantFeeStructure($intakeData['IdIntake'],$program[0]["program_id"],$program[0]['IdBranchOffer'],315);
     	}else{
-    		$feeStructureData = $feeStructureDb->getApplicantFeeStructure($intakeData['IdIntake'],$program[0]["program_id"]);
+    		$feeStructureData = $feeStructureDb->getApplicantFeeStructure($intakeData['IdIntake'],$program[0]["program_id"],$program[0]['IdBranchOffer']);
     	}
     	
 		
@@ -628,7 +628,7 @@ class Application_Model_DbTable_ProformaInvoice extends Zend_Db_Table {
 		
 		//fee structure program
 		$feeStructureProgramDb = new Studentfinance_Model_DbTable_FeeStructureProgram();
-		$feeStructureProgramData = $feeStructureProgramDb->getStructureData($feeStructureData['fs_id'],$program[0]["program_id"]);
+		$feeStructureProgramData = $feeStructureProgramDb->getStructureData($feeStructureData['fs_id'],$program[0]["program_id"],$program[0]['IdBranchOffer']);
 		
 		//fee structure plan detail
 		$fspdDb = new Studentfinance_Model_DbTable_FeeStructurePlanDetail();

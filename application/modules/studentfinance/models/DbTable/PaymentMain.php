@@ -105,7 +105,7 @@ class Studentfinance_Model_DbTable_PaymentMain extends Zend_Db_Table_Abstract {
 	 * Overite Insert function
 	 */
 	
-	public function insert($data){
+	public function insertData($data){
 		
 		if( !isset($data['payment_date']) ){
 			$data['payment_date'] = date('Y-m-d H:i:s');
