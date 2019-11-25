@@ -1926,8 +1926,10 @@ class Application_Model_DbTable_ProformaInvoice extends Zend_Db_Table {
 		$invoices=$db->fetchAll($select);
 		foreach ($invoices as $value) {
 			unset($value['id']);
-			if (!$dbInvoice->isIn($value['bill_number'])) {
+			$inv=$dbInvoice->isIn($value['bill_number']);
+			if (!$inv) {
 				$id=$dbInvoice->insert($value);
+			} else $id=$inv['id'];
 				//get detail
 				$select = $db ->select()
 				->from('proforma_invoice_detail')
@@ -1938,7 +1940,7 @@ class Application_Model_DbTable_ProformaInvoice extends Zend_Db_Table {
 					$det['invoice_main_id']=$id;
 					if (!$dbInvoiceDet->isIn($id, $det['fi_id'])) $dbInvoiceDet->insertData($det);
 				}
-			}
+			
 		}
 	}
 	public function generateProformaInvoiceEcollection($txnId){
