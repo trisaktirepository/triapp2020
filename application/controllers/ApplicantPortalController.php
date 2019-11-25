@@ -3375,7 +3375,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     	//get fee structure
     	if($applicant["appl_nationality"]==96){
     		//local
-    		$feeStructureDb = new App_Model_Finance_DbTable_FeeStructure();
+    		$feeStructureDb = new Studentfinance_Model_DbTable_FeeStructure();
     		$feeStructureData = $feeStructureDb->getApplicantFeeStructure($intakeData['IdIntake'],$program[0]["program_id"]);
     		$biaya = number_format($biaya, 2, '.', ',');
     	
@@ -3388,16 +3388,16 @@ class ApplicantPortalController extends Zend_Controller_Action
     	
     	
     	//fee structure plan
-    	$feeStructurePlanDb = new App_Model_Finance_DbTable_FeeStructurePlan();
+    	$feeStructurePlanDb = new Studentfinance_Model_DbTable_FeeStructurePlan();
     	$paymentPlanData = $feeStructurePlanDb->getStructureData($feeStructureData['fs_id']);
     	$feeStructureData['payment_plan'] = $paymentPlanData;
     	
     	//fee structure program
-    	$feeStructureProgramDb = new App_Model_Finance_DbTable_FeeStructureProgram();
+    	$feeStructureProgramDb = new Studentfinance_Model_DbTable_FeeStructureProgram();
     	$feeStructureProgramData = $feeStructureProgramDb->getStructureData($feeStructureData['fs_id'],$program[0]["program_id"]);
     	
     	//fee structure plan detail
-    	$fspdDb = new App_Model_Finance_DbTable_FeeStructurePlanDetail();
+    	$fspdDb = new Studentfinance_Model_DbTable_FeeStructurePlanDetail();
     	
     	foreach ($feeStructureData['payment_plan'] as $key=>$plan){
     			
