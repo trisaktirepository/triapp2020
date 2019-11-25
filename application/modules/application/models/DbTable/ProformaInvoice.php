@@ -1989,7 +1989,7 @@ class Application_Model_DbTable_ProformaInvoice extends Zend_Db_Table {
 			$feeStructureData = $feeStructureDb->getApplicantFeeStructure($intakeData['IdIntake'],$program[0]["program_id"],null,315);
 		}
 	
-		//echo var_dump($feeStructureData);exit;
+		echo var_dump($feeStructureData);exit;
 		//fee structure plan
 		$feeStructurePlanDb = new Studentfinance_Model_DbTable_FeeStructurePlan();
 		$paymentPlanData = $feeStructurePlanDb->getStructureData($feeStructureData['fs_id']);
