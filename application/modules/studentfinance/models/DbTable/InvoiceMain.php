@@ -886,5 +886,16 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 				
 		}
 	}
+	public function isIn($bill){
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$selectData = $db->select()
+		->from(array('im'=>$this->_name))
+		->where('im.bill_numbet = ?', $bill);
+	
+		$row = $db->fetchRow($selectData);
+	
+		return $row;
+	
+	}
 }
 ?>
