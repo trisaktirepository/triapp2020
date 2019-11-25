@@ -9,11 +9,19 @@
 		Initial creation of template
 -->
 <?php
-	global $fee;
-	global $reg_date;
-	global $program;
-	global $program_fee_structure;
+	//global $fee;
+	//global $reg_date;
+	//global $program;
+	//global $program_fee_structure;
 ?>
+<script>
+	function agree() {
+		alert('ok');
+		if ($('#agree').is(":checked")) {
+				$('#agreement').submit();
+		} else alert('Silahkan centang persetujuan terhadap aturan yang berlaku');
+	}
+</script>
 <html>
 <head>
 <style type="text/css">
@@ -454,7 +462,25 @@ td.bold-text{
 	</ol>
 	</div>
 			
+	<br><br>
+	<fieldset ><legend><?php echo "Persetujuan"?></legend>
+	<form id="agreement" method="post" >
+	<table bgcolor="lightgreen">
+	<tr><td>
+		<input type="hidden" name="transaction_id" value="<?php echo $this->transaction_id;?>">
+		<input type="hidden" name="paket" value="<?php echo $this->paket;?>">
+	 	<input type="checkbox" id="agree" name="agree" > Saya memahami dan mengerti aturan yang berlaku di Universistas Trisakti seperti yang tercantum dalam penjelasan di atas. 
+	 	<br>Note: Jika anda menyetujui maka tagihan ini akan dikirim ke Bank dan untuk selanjutnya ada dapat melalukan pembayaran menggunakan virtual account (VA) yang dapat dilihat di menu Status Keuangan
 	
+	<input type="button" name="submit" value="Saya Memahami dan Taat" onclick="agree()">
+	</td><tr>
+	</table>
+	</form>
+	
+	
+	</fieldset>
+	<br>
+	<br>
 	 
 </body>
 </html>

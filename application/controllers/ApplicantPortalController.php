@@ -3517,8 +3517,10 @@ class ApplicantPortalController extends Zend_Controller_Action
     	$this->view->transaction_id=$txnId;
     	if ($this->getRequest()->isPost()) {
     		$formData = $this->getRequest()->getPost();
-    		 
-    		$this->_redirect('/applicant-portal/agreement-letter/transaction_id/'.$txnId.'/paket/'.$paket);
+    		echo var_dump($formData);exit;
+    		//generate payment
+    		
+    		$this->_redirect('/applicant-portal/push-to-bank/transaction_id/'.$txnId.'/paket/'.$paket);
     	}
     	//get applicant info
     	$applicantDB = new App_Model_Application_DbTable_ApplicantProfile();
