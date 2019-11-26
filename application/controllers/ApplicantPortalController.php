@@ -3540,17 +3540,23 @@ class ApplicantPortalController extends Zend_Controller_Action
     		//generate payment
     		$proformaInvoiceDb = new Application_Model_DbTable_ProformaInvoice();
     		$dbInv=new Studentfinance_Model_DbTable_InvoiceMain();
-    		
+    		$dbinvVa=new Application_Model_DbTable_ProformaInvoiceVa();
+    		if (!$dbinvVa->isInByTrx($txnId)) 
     		//regenerate performa invoice
-    		$proformaInvoiceDb->generateProformaInvoiceEcollection($formData['transaction_id']);
-    		$proformaInvoiceDb->moveToInvoiceBasedOnPaket($txnData['at_pes_id'], $formData['paket']);
-    		//push to BANK
+    			$proformaInvoiceDb->generateProformaInvoiceEcollection($formData['transaction_id']);
     		$inv=$dbInv->getApplicantInvoice($txnData['at_pes_id']);
-    		//echo var_dump($inv);exit;
-    		foreach ($inv as $value) {
-    			$dbInv->pushToECollForEnrollmentPerBilling($formData['transaction_id'],$value['bill_number'],'createbilling');
+    		if (!$inv) {
+    			$proformaInvoiceDb->moveToInvoiceBasedOnPaket($txnData['at_pes_id'], $formData['paket']);
+    			$inv=$dbInv->getApplicantInvoice($txnData['at_pes_id']);
     		}
+    		//echo var_dump($inv);exit;
     		
+    		foreach ($inv as $value) {
+    			if (!$dbInv->getDataByVA($value['va']))
+    				$dbInv->pushToECollForEnrollmentPerBilling($formData['transaction_id'],$value['bill_number'],'createbilling');
+    		}
+    		//print aggrement
+    		$this->_redirect('http://www.print.trisakti.ac.id/online-application/generate-agreement-letter/transaction_id/'.$txnId.'/paket/'.$paket);
     		$this->_redirect('/applicant-portal/account');
     	}
     	//get applicant info

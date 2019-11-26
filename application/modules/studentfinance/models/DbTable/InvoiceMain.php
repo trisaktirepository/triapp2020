@@ -23,6 +23,16 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		return $row;
 	}
 	
+	public function getDataByVa($va){
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$selectData = $db->select()
+		->from(array('im'=>$this->_name))
+		->where("im.va = ?", $va);
+	
+		$row = $db->fetchRow($selectData);
+		return $row;
+	}
+	
 	public function getInvoiceData($billing_no){
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$selectData = $db->select()

@@ -38,6 +38,21 @@ class Application_Model_DbTable_ProformaInvoiceVa extends Zend_Db_Table {
 		->from($this->_name) 
 		->where("bill_number =?",$billnumber);
 		if ($applid!=null) $select->where('appl_id=?',$applid);
+		
+		return $db->fetchRow($select);
+	
+	}
+	
+	public function isInByTrx($trx){
+	
+		$db = $this->lobjDbAdpt;
+	
+		$select = $db ->select()
+		->from(array('a'=>$this->_name))
+		->join(array('b'=>'applicant_transaction'),'a.appl_id=b.at_appl_id')
+		
+		->where("at_trans_id =?",$trx); 
+	
 		return $db->fetchRow($select);
 	
 	}
