@@ -3557,7 +3557,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     		}
     		//print aggrement
     		$this->_redirect('http://www.print.trisakti.ac.id/online-application/generate-agreement-letter/transaction_id/'.$txnId.'/paket/'.$paket);
-    		$this->_redirect('/applicant-portal/account');
+    		//$this->_redirect('/applicant-portal/account');
     	}
     	//get applicant info
     	$applicantDB = new App_Model_Application_DbTable_ApplicantProfile();

@@ -2386,7 +2386,7 @@ class StudentPortalController extends Zend_Controller_Action
         
         //$IdStudentRegistration = $this->_getParam('id',null);  
 		$this->view->id= $IdStudentRegistration;
-        
+        $this->_redirect('http://www.print.trisakti.ac.id/student-portal/cetak-temp-transcript/appl_id/'.$appl_id.'/registration_id/'.$IdStudentRegistration);
          //To get Student Academic Info        
         $studentRegDB = new App_Model_Exam_DbTable_StudentRegistration();
         $student = $studentRegDB->getStudentInfo($IdStudentRegistration);
@@ -2576,7 +2576,8 @@ class StudentPortalController extends Zend_Controller_Action
 	
 		//$IdStudentRegistration = $this->_getParam('id',null);
 		$this->view->id= $IdStudentRegistration;
-	
+		$this->_redirect('http://www.print.trisakti.ac.id/student-portal/cetak-all-transcript/appl_id/'.$appl_id.'/registration_id/'.$IdStudentRegistration);
+		
 		//To get Student Academic Info
 		$studentRegDB = new App_Model_Exam_DbTable_StudentRegistration();
 		$student = $studentRegDB->getStudentInfo($IdStudentRegistration);
@@ -2745,7 +2746,10 @@ class StudentPortalController extends Zend_Controller_Action
 		 //To get Student Academic Info        
         $studentRegDB = new App_Model_Exam_DbTable_StudentRegistration();
         $student = $studentRegDB->getStudentInfo($IdStudentRegistration);
-                    
+        
+        
+        $this->_redirect('http://www.print.trisakti.ac.id/student-portal/cetak-transcript/appl_id/'.$appl_id.'/registration_id/'.$IdStudentRegistration);
+        
          //get photo student
     	$uploadFileDb = new App_Model_Application_DbTable_UploadFile();
     	$file = $uploadFileDb->getFile($student["transaction_id"],51);
