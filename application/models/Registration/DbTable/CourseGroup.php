@@ -30,15 +30,16 @@ class App_Model_Registration_DbTable_CourseGroup extends Zend_Db_Table_Abstract 
 		$select1 = $db ->select()
 		->from(array('srs'=>'tbl_studentregsubjects_assistant'),array('IdStudentRegistration','IdSubject','IdSemesterMain'))
 		->join(array('cg'=>'tbl_course_tagging_group_assistant'),'cg.IdCourseTaggingGroup=srs.IdCourseTaggingGroup',array())
-		->join(array('p'=>'course_group_program_assistant'),'p.group_id=cg.IdCourseTaggingGroup',array())
 		->where('cg.IdLecturer=?',$id_user)
 		->where('cg.IdSemester=?',$idSemester)
-		
 		->group('srs.IdStudentRegistration')
 		->group('srs.IdSubject')
 		->group('srs.IdSemesterMain');
 		
-		if ($idprogram!=null) $select1->where('cg.programcreator=?',$idprogram);
+		if ($idprogram!=null) {
+			$select1->join(array('p'=>'course_group_program_assistant'),'p.group_id=cg.IdCourseTaggingGroup',array())
+					->where('cg.programcreator=?',$idprogram);
+		}
 		 
 		$operator=$db->select()
 		->from(array('op'=>'tbl_mark_operator'),array('IdCourseTaggingGroup'))
@@ -74,6 +75,7 @@ class App_Model_Registration_DbTable_CourseGroup extends Zend_Db_Table_Abstract 
 		//	$select->joinLeft(array('br'=>'course_group_branch'),'br.group_id=cg.IdCourseTaggingGroup');
 		//	$select->where('br.branch_id=?',$branch);
 		//}
+		echo $select;exit;
 		$rows = $db->fetchAll($select);
 		//echo var_dump($rows);exit;
 		return $rows;
