@@ -734,9 +734,10 @@ class Assistant_MarkEntryController extends Zend_Controller_Action { //Controlle
 			$dbbranch=new App_Model_General_DbTable_Branchofficevenue();
 			
 			foreach($groups as $i=>$group){
-				$branch=$dbbranch->getData($group['BranchCreator']);
-				if ($branch) $groups[$i]['Branch']=$branch['BranchName'];//['BranchName'];
-				else $groups[$i]['Branch']='No Branch';
+				//$branch=$dbbranch->getData($group['BranchCreator']);
+				//if ($branch) $groups[$i]['Branch']=$branch['BranchName'];//['BranchName'];
+				//else 
+				$groups[$i]['Branch']='No Branch';
 				$courseGroupStudent = new Assistant_Model_DbTable_CourseGroupStudent();
 				$total_student = $courseGroupStudent->getStudentbyGroup($group["IdCourseTaggingGroup"]);
 				 
