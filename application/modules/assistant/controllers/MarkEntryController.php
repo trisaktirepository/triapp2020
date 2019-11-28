@@ -292,7 +292,7 @@ class Assistant_MarkEntryController extends Zend_Controller_Action { //Controlle
     	$courseGroupDb = new App_Model_Registration_DbTable_CourseGroup();
     	$group=$courseGroupDb->getInfo($gid);
     	$this->view->group = $group;
-    	$idBranch=$group['BranchCreator'];
+    	//$idBranch=$group['BranchCreator'];
     	$idProgram=$group['ProgramCreator'];
     	
     	 
