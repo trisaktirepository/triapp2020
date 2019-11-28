@@ -729,7 +729,7 @@ class Assistant_MarkEntryController extends Zend_Controller_Action { //Controlle
 			//if ($idbranch=='') $idBranch=0;  
 			//$this->view->idBranch = $idbranch;
 			
-			$courseGroupDb = new App_Model_Registration_DbTable_CourseGroup();
+			$courseGroupDb = new Assistant_Model_DbTable_CourseGroup();
 			$groups = $courseGroupDb->getCourseTaggingGroupList($idSemester);//,$idProgram,null,$idbranch);
 			$dbbranch=new App_Model_General_DbTable_Branchofficevenue();
 			
