@@ -118,7 +118,7 @@ function validate(){
 	<tr>
 		
 		<td>
-		 <a href="<?php echo $this->url(array('module'=>'assistant','controller'=>'mark-entry','action'=>'student-list-all-assistant','idSemester'=>$this->idSemester,'idProgram'=>$group['ProgramCreator'],'idSubject'=>$group["IdSubject"],'id'=>$group["IdCourseTaggingGroup"],'idBranch'=>$group['BranchCreator'],'idstaff'=>$this->idstaff),'default',true)?>" target="_blank"><img src="/images/icon/all.png"  style="width:25px;height:25px;" title="All"></a>
+		 <a href="<?php echo $this->url(array('module'=>'assistant','controller'=>'mark-entry','action'=>'student-list-all-assistant','idSemester'=>$this->idSemester,'idProgram'=>$group['ProgramCreator'],'idSubject'=>$group["IdSubject"],'id'=>$group["IdCourseTaggingGroup"],'idBranch'=>0,'idstaff'=>$this->idstaff),'default',true)?>" target="_blank"><img src="/images/icon/all.png"  style="width:25px;height:25px;" title="All"></a>
 		
 		</td>
 		<td><?php echo $group["GroupName"];?></td>
