@@ -75,9 +75,9 @@ class App_Model_Registration_DbTable_CourseGroup extends Zend_Db_Table_Abstract 
 		//	$select->joinLeft(array('br'=>'course_group_branch'),'br.group_id=cg.IdCourseTaggingGroup');
 		//	$select->where('br.branch_id=?',$branch);
 		//}
-		echo $select; 
+		//echo $select; 
 		$rows = $db->fetchAll($select);
-		echo var_dump($rows);exit;
+		//echo var_dump($rows);exit;
 		return $rows;
 	}
 	public function getCourseBranch($idCoursetaggingGroup){
