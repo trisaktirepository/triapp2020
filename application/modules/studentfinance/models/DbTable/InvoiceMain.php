@@ -896,7 +896,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 					
 			}
 			//echo var_dump($invoiceData);
-			echo var_dump($respone);exit;
+			//echo var_dump($respone);exit;
 				
 		} 
 	}
