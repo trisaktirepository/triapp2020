@@ -3549,7 +3549,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     			$proformaInvoiceDb->moveToInvoiceBasedOnPaket($txnData['at_pes_id'], $formData['paket']);
     			$inv=$dbInv->getApplicantInvoice($txnData['at_pes_id']);
     		}
-    		//echo var_dump($inv);exit;
+    		echo var_dump($inv);exit;
     		
     		foreach ($inv as $value) {
     			if (!$dbInv->getDataByVA($value['va']))
