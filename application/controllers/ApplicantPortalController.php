@@ -3552,7 +3552,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     		//echo var_dump($inv);exit;
     		
     		foreach ($inv as $value) {
-    			if (!$dbInv->getDataByVA($value['va']))
+    			if (!$dbInv->getDataByVA($value['va']) || $value['va']=="")
     				$dbInv->pushToECollForEnrollmentPerBilling($formData['transaction_id'],$value['bill_number'],'createbilling');
     		}
     		//print aggrement
