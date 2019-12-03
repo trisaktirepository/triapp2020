@@ -60,7 +60,8 @@ class App_Model_Smsgateway_DbTable_SmsGateways extends Zend_Db_Table {
 						'password'   => $this->getPassword(),
 						'GSM' => $hp,
 						'SMSText'   => $message_sms,
-						'output'=>'json'
+						'output'=>'json',
+						'otp'=>'Y'
 				);
 				$ret=$this->HttpResponse($url,$param);
 				$ret=json_decode($ret,TRUE);
