@@ -2913,6 +2913,7 @@ class StudentPortalController extends Zend_Controller_Action
 		$classGroup['class_att_permission'] = $courseGroupStudentAttendanceDb->getAttendanceStatusCount($classGroup['IdCourseTaggingGroup'],$studId,396);
 		$classGroup['class_att_sick'] = $courseGroupStudentAttendanceDb->getAttendanceStatusCount($classGroup['IdCourseTaggingGroup'],$studId,397);
 		$classGroup['class_att_absent'] = $courseGroupStudentAttendanceDb->getAttendanceStatusCount($classGroup['IdCourseTaggingGroup'],$studId,398);
+		$classGroup['class_att_dispen'] = $courseGroupStudentAttendanceDb->getAttendanceStatusCount($classGroup['IdCourseTaggingGroup'],$studId,1701);
 		if ($attendancemode=="124") {
 					if ($classGroup['class_session']>16) {
 						if ($classGroup['class_att_sick']+$classGroup['class_att_permission']>1) $nOfattend=$classGroup['class_att_attended']+2;
@@ -2926,7 +2927,8 @@ class StudentPortalController extends Zend_Controller_Action
 		if ($attendancemode=="123") $nOfattend =$classGroup['class_att_permission']+$classGroup['class_att_sick']+$classGroup['class_att_attended'];
 		else if ($attendancemode=="12") $nOfattend=$classGroup['class_att_sick']+$classGroup['class_att_attended'];
 		else if ($attendancemode=="1") $nOfattend =$classGroup['class_att_attended'];
-	
+		else if ($attendancemode=="200") $nOfattend =$classGroup['class_att_permission']+$classGroup['class_att_sick']+$classGroup['class_att_attended']+$classGroup['class_att_dispen'];
+		
 		if ($classGroup['class_session'] >0) $classGroup['class_attendance_percentage'] = ($nOfattend/$classGroup['class_session'] )*100; else $classGroup['class_attendance_percentage'] ='N/A';
 	
 		$this->view->class_group = $classGroup;
@@ -2941,6 +2943,7 @@ class StudentPortalController extends Zend_Controller_Action
 					else if ($attdet['status']=="396") $status="Permission";
 					else if ($attdet['status']=="397") $status="Sick";
 					else if ($attdet['status']=="398") $status="Absent";
+					else if ($attdet['status']=="1701") $status="Dispensasi";
 				} else $status="n/a";
 				$lectatt[$key]['Status']=$status;
 			}
