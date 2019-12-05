@@ -1,7 +1,7 @@
 <?php 
-class App_Model_Application_DbTable_ApplicantPtest extends Zend_Db_Table_Abstract
+class App_Model_Application_DbTable_ApplicantPtestDetail extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'applicant_ptest_detail';
+    protected $_name = 'application_ptest_detail';
 	protected $_primary = 'apd_id';
 	
 	public function getData(){
@@ -68,6 +68,7 @@ class App_Model_Application_DbTable_ApplicantPtest extends Zend_Db_Table_Abstrac
 		->where("app_comp_code='".$compcode."'");
 		 
 		$row = $db->fetchRow($select);
+		//echo var_dump($row);echo $select;
 		return $row;
 	}
 	

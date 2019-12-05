@@ -115,8 +115,18 @@ $pdb = new App_Model_Application_DbTable_ApplicantPtest();
 	<?php 
 	if( sizeof($this->paginator) >0 ){
 	$i=0;
+	$dbInvoice=new Studentfinance_Model_DbTable_InvoiceMain();
 	foreach ($this->paginator as $entry): 
 	
+		$va="";
+	 	$paid='';
+		$pesid=$entry['at_pes_id']; 
+		if ($pesid!='') {
+			$payment=$dbInvoice->getInvoiceDataByFormulir($pesid,'Pendaftaran');
+			if ($payment['status_va']!='P') $paid="";else $paid="1";
+			if (trim($payment['va'])=='') $va="";else $va="1";
+		} 
+
 		//GET DECREE DATE
 		if($entry['at_appl_type']==1){
 			$assessmentDB = new App_Model_Application_DbTable_ApplicantAssessmentUsm();
@@ -236,10 +246,16 @@ $pdb = new App_Model_Application_DbTable_ApplicantPtest();
 					echo "<small><a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'continue-application','id'=>$entry['at_trans_id']),'default',true)."'>".$this->translate("Continue")."</a></small>";
 					
 				}elseif($entry['at_status']=="CLOSE"){
-					echo $this->translate("Pending Payment");
-					echo "<br />";
-					echo "<small><a href='".$this->url(array('module'=>'default','controller'=>'online-application', 'action'=>'create-usm-card','id'=>$entry['at_trans_id']),'default',true)."'>".$this->translate("Create USM Card")."</a></small>";
-				}elseif($entry['at_status']=="PROCESS"){
+					
+					if ($paid=="1") echo "<small> <a href='".$this->url(array('module'=>'default','controller'=>'online-application', 'action'=>'create-usm-card','id'=>$entry['at_trans_id']),'default',true)."'>".$this->translate("Create USM Card")."</a></small>";
+					else {
+						echo $this->translate("Pending Payment");
+						echo "<br />";
+						if ($va=="") 
+								echo "<small> <a href='".$this->url(array('module'=>'default','controller'=>'online-application', 'action'=>'create-usm-card','id'=>$entry['at_trans_id']),'default',true)."'>".$this->translate("Buat Pembayaran Pendaftaran")."</a></small>";
+						else echo "<small> <a href='".$this->url(array('module'=>'default','controller'=>'online-application', 'action'=>'create-usm-card','id'=>$entry['at_trans_id']),'default',true)."'>".$this->translate("Lihat Nomor Pembayaran Pendaftaran")."</a></small>";
+					}
+					}elseif($entry['at_status']=="PROCESS"){
 						if($entry['at_selection_status']==5){
 							echo $this->translate("Lulus tahap pertama");
 							echo "<br />";

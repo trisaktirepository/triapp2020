@@ -7275,7 +7275,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 				$dbPlacementHead=new App_Model_Application_DbTable_PlacementTest();
 				$head=$dbPlacementHead->getDataByCode($testcode);
 				if (!$head) $testcode=null;
-				else if ($head['level_kkni']=="6") $testcode=null;
+				//else if ($head['level_kkni']=="6") $testcode=null;
 					
 				if(strtotime($sched["aps_test_date"])<time()){
 					$this->_redirect($this->view->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'change-date','id'=>$transaction_id ,'from'=>'verify'),'default',true));
@@ -7304,32 +7304,55 @@ class OnlineApplicationController extends Zend_Controller_Action {
 					$program_data["program_code2"]="0";
 					$program_data["program_name2"]="";
 					$program_data["faculty_name2"]="";
-					 
+					$programset=array();
 					$i=1;
 					foreach($app_program as $program){
 						$program_data["program_name".$i] = $program["program_name"];
 						$program_data["faculty_name".$i] = $program["faculty"];
 						$program_data["program_code".$i] = $program["program_code"];
-							
+						$programset[]=$program['program_id'];
 						$i++;
 					}
-	
 					//to get and update sit no
 					$appprogramDB = new App_Model_Application_DbTable_ApplicantProgram();
 	
 					if($program_data["program_code2"]=="0"){
 						$program_data["program_code2"] = $program_data["program_code1"];
 					}
-					//echo $transaction_id.",".$program_data["program_code1"].",".$program_data["program_code2"].",".$applicant["schedule_id"].",".$testcode;
-					//exit;
-	
-					$data = $appprogramDB->getProcedure($transaction_id,$program_data["program_code1"],$program_data["program_code2"],$applicant["schedule_id"],$testcode);
-					//echo var_dump($data);exit;
-					if($data[0]["roomid"]==0){
-						$error="Maaf tempat untuk USM telah penuh. Sila hubungi pihak manajemen universitas";
-						$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application', 'action'=>'verification','msg'=>$error),'default',true));
-						exit;
+					$programset=implode(',', $programset);
+					$dbCompoment=new App_Model_Application_DbTable_PlacementTestProgramComponent();
+					$components=$dbCompoment->getComponenByProgram($programset, '0');
+					$dbDetailTest=new App_Model_Application_DbTable_ApplicantPtestDetail();
+					// echo var_dump($components);exit;
+					foreach ($components as $value) {
+						$testtype=$value['ac_test_type'];
+						if ($testtype=='1' || $testtype=='14') {
+							if (!$dbDetailTest->isIn($sched['apt_id'], $testtype)) {
+								
+								$data = $appprogramDB->getProcedure($transaction_id,$program_data["program_code1"],$program_data["program_code2"],$applicant["schedule_id"],$testcode,$testtype,null);
+								//echo var_dump($data);exit;
+								if($data[0]["roomid"]==0){
+										$error="Maaf tempat untuk USM telah penuh. Sila hubungi pihak manajemen universitas";
+										$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application', 'action'=>'verification','msg'=>$error),'default',true));
+									exit;
+								}
+								echo $data[0]["roomid"];
+							}
+						 
+						} else {
+							if (!$dbDetailTest->isIn($sched['apt_id'], $testtype)) {
+										
+								$data = $appprogramDB->getProcedure($transaction_id,null,null,$applicant["schedule_id"],$testcode,$testtype,null);
+								//echo var_dump($data);exit;
+								if($data[0]["roomid"]==0){
+									$error="Maaf tempat untuk USM telah penuh. Sila hubungi pihak manajemen universitas";
+									$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application', 'action'=>'verification','msg'=>$error),'default',true));
+									exit;
+								}
+							}
+						}
 					}
+					
 	
 					//once submmitted update status=PTOCESS
 					$upddata["at_status"]='PROCESS';

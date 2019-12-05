@@ -36,6 +36,7 @@ class ApplicantPortalController extends Zend_Controller_Action
         
         
         $list = $transactionDb->getApplicantPaginateData($appl_id);
+         
 		$paginator = new Zend_Paginator(new Zend_Paginator_Adapter_DbSelect($list));
 		$paginator->setItemCountPerPage(50);
 		$paginator->setCurrentPageNumber($this->_getParam('page',1));
@@ -47,7 +48,7 @@ class ApplicantPortalController extends Zend_Controller_Action
 		$i=0;
 		$txnProgram = array();
 		
-		foreach ($paginator as $txn){
+		foreach ($paginator as  $txn){
 			$txnProgram[$i] = $applicantProgramDb->getApplicantProgramByID($txn['at_trans_id']);
 			if ($txn['at_intake']>0) $idintake=$txn['at_intake'];
 			$i++;

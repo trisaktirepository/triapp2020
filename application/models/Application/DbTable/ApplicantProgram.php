@@ -55,7 +55,7 @@ class App_Model_Application_DbTable_ApplicantProgram extends Zend_Db_Table_Abstr
 	}
 	
 	
-	public function getProcedure($transid,$program1,$program2,$scheduleid=1,$testcode=null){
+	public function getProcedure($transid,$program1,$program2,$scheduleid=1,$testcode=null,$testtype=null,$roomtype=null){
 		//echo 'ini program:'.$program1;
 	/*	$program1 = "0220";
 		$program2 = "0210";
@@ -66,7 +66,7 @@ class App_Model_Application_DbTable_ApplicantProgram extends Zend_Db_Table_Abstr
 		//exit;
 		if ($testcode!=null) {
 			//get seat no based on testcode other than S1
-			$room=$this->getSeatNo($transid, $program1, $program2, $scheduleid, $testcode);
+			$room=$this->getSeatNo($transid, $program1, $program2, $scheduleid, $testcode,$testtype,$roomtype);
 			return array('0'=>array('roomid'=>$room));
 			
 		} else {
@@ -529,6 +529,26 @@ public function getProgramOffered($transaction_id,$appl_type=null){
 			//echo $select;exit;
 			$vRoomType=$row['ara_room'];
 		}  
+		if ($vRoomType=='') {
+			$select = $db ->select()
+			->from(array('a'=>'testtype_roomtype_map'))
+			->where('a.act_id=?',$vTestType);
+			$map=$db->fetchRow($select);
+			//echo $select;
+			if ($map) $vRoomType=$map['artt_id'];
+			else return 0;
+		}
+		$vstart="";
+		$vstop="";
+		if ($vTestType!=null ) {
+			$data['apss_comp_test']=$vTestType;
+			$select = $db ->select()
+			->from(array('a'=>'appl_test_type'))
+			->where('a.act_id=?',$vTestType);
+			$testtype=$db->fetchRow($select);
+			$vstart=$testtype['act_start_time'];
+			$vstop=$testtype['act_end_time'];
+		}
 		$select = $db ->select()
 		->from(array('a'=>'appl_placement_schedule'))
 		->join(array('b'=>'appl_placement_schedule_seatno'),'a.aps_id = b.apss_aps_id')
@@ -537,9 +557,11 @@ public function getProgramOffered($transaction_id,$appl_type=null){
 		->where('a.aps_id=?',$vScheduleId)
 		->where('art_test_type=?',$vRoomType)
 		->where('aps_placement_code=?',$vTestCode)
+		 
 		->where('apss_exam_apply<apss_exam_capasity');
-		if ($vTestType!=null ) $select->where('b.apps_comp_test=?',$vTestType);
 		//echo $select;exit;
+		if ($vTestType!=null ) $select->where('b.apss_comp_test=?',$vTestType);
+			
 		$row=$db->fetchRow($select);
 		 
 		if (!$row) {
@@ -558,9 +580,9 @@ public function getProgramOffered($transaction_id,$appl_type=null){
 			$smtin = $db ->select()
 			->from(array('a'=>'appl_placement_schedule'),array())
 			->join(array('b'=>'appl_placement_schedule_seatno'),'a.aps_id = b.apss_aps_id and b.apss_exam_apply=b.apss_exam_capasity',array('apss_room_id'))
-			//->join(array('c'=>''))
+			 
 			->where('aps_id=?',$vScheduleId);
-			if ($vTestType!=null ) $select->where('b.apps_comp_test=?',$vTestType);
+			if ($vTestType!=null ) $select->where('b.apss_comp_test=?',$vTestType);
 			
 			
 			$select = $db ->select()
@@ -574,7 +596,7 @@ public function getProgramOffered($transaction_id,$appl_type=null){
 			->order('av_seq');
 			//echo $select;exit;
 			$row=$db->fetchRow($select);
-			if (!row) return 0;
+			if (!$row) return 0;
 			
 			$vRoomId=$row['av_id'];
 			$vRoomNameShort=$row['av_room_name_short'];
@@ -587,17 +609,16 @@ public function getProgramOffered($transaction_id,$appl_type=null){
 			$vExamNo = $vExamno_f + 1;
 			$data=array('apss_room_id'=>$vRoomId,
 					 	'apss_aps_id'=>$vScheduleId,
-					 	'apss_exam_capasity'=>vExamCapacity,
+					 	'apss_exam_capasity'=>$vExamCapacity,
 						'apss_exam_apply'=>1,		
 						'apss_examno_flag'=>'L', 
 						'apss_examno_f'=>1, 
 						'apss_examno_l'=>0
 			);
-			if ($vTestType!=null ) $data['apps_comp_test']=$vTestType;
-			
-			
+			if ($vTestType!=null ) $data['apss_comp_test']=$vTestType;
+						
 			$db->insert('appl_placement_schedule_seatno',$data);
-			$vSeatNo = $vRoomNameShort.'-'.substr(vExamNo+1000,1,3);
+			$vSeatNo = $vRoomNameShort.'-'.substr($vExamNo+1000,1,3);
 			
 			if ($vTestType!=null ) {
 				$select = $db ->select()
@@ -606,12 +627,19 @@ public function getProgramOffered($transaction_id,$appl_type=null){
 				$apt=$db->fetchRow($select);
 				
 				$select = $db ->select()
-				->from(array('a'=>'applicant_ptest_detail'),array())
+				->from(array('a'=>'application_ptest_detail'))
 				->where('apt_id=?',$apt['apt_id'])
 				->where('app_comp_code=?',$vTestType);
+				
 				$aptdet=$db->fetchRow($select);
 				if (!$aptdet) 
-					$db->insert('applicant_ptest_detail',array('apt_sit_no'=>$vSeatNo,'apt_room_id'=>$vRoomId,'apt_id'=>$apt['apt_id'],'app_comp_code'=>$vTestType));
+					$db->insert('application_ptest_detail',array('apt_sit_no'=>$vSeatNo,
+											'apt_room_id'=>$vRoomId,
+											'apt_id'=>$apt['apt_id'],
+											'app_comp_code'=>$vTestType,
+											'time_start'=>$vstart,
+											'time_stop'=>$vstop
+								));
 					 
 					
 			} else $db->update('applicant_ptest',array('apt_sit_no'=>$vSeatNo,'apt_room_id'=>$vRoomId),'apt_at_trans_id='.$vAppTransId);
@@ -635,7 +663,7 @@ public function getProgramOffered($transaction_id,$appl_type=null){
 				else 
 				{
 					if ($vExamno_l==0) $vExamNo=$vExamCapacity;
-					else $vExamNo=$vExamNo-1;
+					else $vExamNo=$vExamno_l-1;
 					$data=array('apss_examno_l'=>$vExamNo,'apss_exam_apply'=>$apss_exam_apply+1,'apss_examno_flag'=>'F');
 					$db->update('appl_placement_schedule_seatno',$data,'apss_id='.$vApss_id);
 					
@@ -648,13 +676,19 @@ public function getProgramOffered($transaction_id,$appl_type=null){
 					$apt=$db->fetchRow($select);
 				
 					$select = $db ->select()
-					->from(array('a'=>'applicant_ptest_detail'),array())
+					->from(array('a'=>'application_ptest_detail'))
 					->where('apt_id=?',$apt['apt_id'])
 					->where('app_comp_code=?',$vTestType);
+					 
 					$aptdet=$db->fetchRow($select);
 					if (!$aptdet)
-						$db->insert('applicant_ptest_detail',array('apt_sit_no'=>$vSeatNo,'apt_room_id'=>$vRoomId,'apt_id'=>$apt['apt_id'],'app_comp_code'=>$vTestType));
-				
+						$db->insert('application_ptest_detail',array('apt_sit_no'=>$vSeatNo,
+											'apt_room_id'=>$vRoomId,
+											'apt_id'=>$apt['apt_id'],
+											'app_comp_code'=>$vTestType,
+											'time_start'=>$vstart,
+											'time_stop'=>$vstop
+								));
 						
 				} else //$db->update('applicant_ptest',array('apt_sit_no'=>$vSeatNo,'apt_room_id'=>$vRoomId),'apt_at_trans_id='.$vAppTransId);
 					
