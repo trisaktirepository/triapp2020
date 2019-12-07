@@ -172,8 +172,8 @@ function showSlides() {
 	 		<?php foreach ($this->schedule as $sch) {?>
 	 			<tr><td><?php echo $sch['ap_desc']?></td>
 	 			<td><?php echo date('d-m-Y',strtotime($sch['ap_usm_date']))?></td>
-	 			<td><?php echo date('d-m-Y h:s:i',strtotime($sch['ap_va_expired']))?></td>
-	 			<td><?php echo date('d-m-Y h:s:i',strtotime($sch['ap_card_datelimit']))?></td></tr>
+	 			<td><?php echo date('d-m-Y H:s:i',strtotime($sch['ap_va_expired']))?></td>
+	 			<td><?php echo date('d-m-Y H:s:i',strtotime($sch['ap_card_datelimit']))?></td></tr>
 	 		<?php }?>
 	 	</table>
 	 </td> </tr>
