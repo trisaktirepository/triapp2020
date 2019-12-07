@@ -7683,8 +7683,8 @@ class OnlineApplicationController extends Zend_Controller_Action {
 		if (! $data) {
 			$this->_redirect ( 'index/index' );
 		}
-	$select_aps = $this->_getParam('select_aps', 0);
-
+		$select_aps = $this->_getParam('select_aps', 0);
+		$placementcode = $this->_getParam('placement_code', 0);
     	$select_date = $this->_getParam('select_date', 0);
     	$select_time = $this->_getParam('select_time', 0);
      
@@ -7697,7 +7697,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
         $ajaxContext->initContext();
         
         $applicantPlacementScheduleDB = new App_Model_Application_DbTable_ApplicantPlacementSchedule();
-    	$location_list = $applicantPlacementScheduleDB->getLocationByDate($select_date,$select_time,$select_aps);
+    	$location_list = $applicantPlacementScheduleDB->getLocationByDate($select_date,$select_time,$placementcode);
     	
 		$ajaxContext->addActionContext('view', 'html')
                     ->addActionContext('form', 'html')
@@ -9600,9 +9600,13 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	$bank=$dbFinance->fnGetBankDetails(1);
     	$secretkey=$bank['secret_key'];
     	$url=$bank['url_api'];
+    	$dbPeriod=new App_Model_Record_DbTable_AcademicPeriod();
+    	$vaexpired=$dbPeriod->getData($transaction['at_period']);
+    	$vaexpired=$vaexpired['ap_va_expired'];
+    	//echo $vaexpired;exit;
     	//create invoice
-    	 
-    	$dbInvoice->pushToECollForEnrollment($invoice,$intake['ApplicationEndDate'],'createbilling','c',$re);
+    	
+    	$dbInvoice->pushToECollForEnrollment($invoice,$vaexpired,'createbilling','c',$re);
     			 
     	$this->_redirect($this->view->url(array('module'=>'default','controller'=>'applicant-portal','action'=>'index'),'default',true));
     	

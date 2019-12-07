@@ -15,6 +15,7 @@ $(document).ready(function(){
 function getLocation(element){
 	//appl_province
 	var select_date =  $("#aps_test_date").val()
+	var placement_code =  $("#aph_placement_code").val()
 	var datetime= $("#aps_test_date option:selected").text();
 	var date=datetime.substring(0,11);
 	var time=datetime.substring(12,20);
@@ -23,7 +24,7 @@ function getLocation(element){
 	 
 	$.ajax({ 
 		type: "POST",
-		url: "<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'ajax-get-location'),'default',true);?>/select_date/"+date+"/select_time/"+time, 
+		url: "<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'ajax-get-location'),'default',true);?>/select_date/"+date+"/select_time/"+time+'/placement_code/'+placement_code, 
 		data: "",
 		dataType: 'json',
 		beforeSend: function() {
@@ -73,7 +74,7 @@ function getDate(element){
 		    	$("#aph_fees_location").val(data[0].aph_fees_location);
 			}
 			for (var index = 0; index < data.length; index++) {
-				append_html += '<option value="'+data[index].aps_id+'"> '+data[index].aps_test_date+' '+data[index].aps_start_time+' </option>';
+				append_html += '<option value="'+data[index].aps_id+'"> '+data[index].aps_test_date+' (YYYY-MM-DD) </option>';//' '+data[index].aps_start_time+' </option>';
 			}	
 
 			testdate.append(append_html);
