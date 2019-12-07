@@ -83,6 +83,19 @@ class App_Model_Record_DbTable_AcademicPeriod extends Zend_Db_Table_Abstract
 		
 		return $row;
 	}
+	
+	public function getActivePeriod(){
+		 
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$select = $db->select()
+		->from($this->_name)
+	 	->where('ap_usm_date > ?',date('Y-m-d',strtotime(time())));
+		$row = $db->fetchAll($select);
+	
+	
+	
+		return $row;
+	}
 	public function getDataByIntake($id=0){
 		$id = (int)$id;
 		$db = Zend_Db_Table::getDefaultAdapter();

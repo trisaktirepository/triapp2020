@@ -254,6 +254,10 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	}
     	
     	$this->view->form = $form;
+    	
+    	//get usm info
+    	$dbPeriod=new App_Model_Record_DbTable_AcademicPeriod();
+    	$this->view->schedule=$dbPeriod->getActivePeriod();
 	}
 	
 	public function adminAction(){
@@ -6984,6 +6988,9 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	
     	$this->view->form = $form;
     	
+    	//get usm info
+    	$dbPeriod=new App_Model_Record_DbTable_AcademicPeriod();
+    	$this->view->schedule=$dbPeriod->getActivePeriod();
     	
 	}
 	

@@ -164,7 +164,19 @@ function showSlides() {
 	<?php echo "Login bagi yang sudah mempunyai Akun"?></h2>
 	<br>
 	<?php echo $this->form; ?></td>
-	 </tr>
+	
+	 <td>
+	 	JADWAL USM <br>
+	 	<table class="table">
+	 		<tr><th>Periode</th><th>Tanggal USM</th><th>Batas Pembayaran</th><th>Batas Pembuatan Kartu USM</th></tr>
+	 		<?php foreach ($this->schedule as $sch) {?>
+	 			<tr><td><?php echo $sch['ap_desc']?></td>
+	 			<td><?php echo date('d-m-Y',strtotime($sch['ap_usm_date']))?></td>
+	 			<td><?php echo date('d-m-Y h:s:i',strtotime($sch['ap_va_expired']))?></td>
+	 			<td><?php echo date('d-m-Y h:s:i',strtotime($sch['ap_card_datelimit']))?></td></tr>
+	 		<?php }?>
+	 	</table>
+	 </td> </tr>
 	</table>
 	
 	 

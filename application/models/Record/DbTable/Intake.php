@@ -87,6 +87,7 @@ class App_Model_Record_DbTable_Intake extends Zend_Db_Table_Abstract {
 		return $row;
 	}
 	
+	 	
 	public function getData($id=0){
 		$id = (int)$id;
 		
