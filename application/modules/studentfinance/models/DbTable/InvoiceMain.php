@@ -554,7 +554,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 			$id=$value['id'];
 			$select = $db ->select()
 			->from(array('im'=>'invoice_detail'))
-			->where(array('im.invoice_main_id=?',$id));
+			->where('im.invoice_main_id=?',$id);
 			$det=$db->fetchRow($select);
 			if (!$det) return null;
 		}
