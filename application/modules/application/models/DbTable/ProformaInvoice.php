@@ -1938,6 +1938,7 @@ class Application_Model_DbTable_ProformaInvoice extends Zend_Db_Table {
 				->from('proforma_invoice_detail')
 				->where('invoice_main_id=?',$idpro);
 				$detail=$db->fetchAll($select);
+				echo $id;echo var_dump($detail);exit;
 				foreach ($detail as $det) {
 					unset($det['id']);
 					$det['invoice_main_id']=$id;
