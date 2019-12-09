@@ -546,22 +546,23 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$select = $db ->select()
 		->from(array('im'=>'invoice_main'))
-		->join(array('pi'=>'applicant_proforma_invoice'),'im.bill_number = pi.billing_no')
+		->join(array('pi'=>'applicant_proforma_invoice'),'im.bill_number = pi.billing_no',array())
 		->where("pi.payee_id ='".$payer."'");
-			
+		
 		$row = $db->fetchAll($select);
-		foreach ($row as $value) {
-			$id=$value['id'];
-			$select = $db ->select()
-			->from(array('im'=>'invoice_detail'))
-			->where('im.invoice_main_id=?',$id);
-			$det=$db->fetchRow($select);
-			if (!$det) return null;
-		}
+		
 	
 		if(!$row){
 			return null;
 		}else{
+			foreach ($row as $value) {
+				$id=$value['id'];
+				$select = $db ->select()
+				->from(array('im'=>'invoice_detail'))
+				->where('im.invoice_main_id=?',$id);
+				$det=$db->fetchRow($select);
+				if (!$det) return null;
+			}
 			return $row;
 		}
 	
