@@ -194,7 +194,9 @@ class ApplicantPortalController extends Zend_Controller_Action
     		}
     		//$docData=null;
     		if($docData){
-    			
+    			if($typeId==30){
+    				$this->_redirect('/online-application/create-usm-card/id/'.$txnId);
+    			}
     			return DOCUMENT_PATH.DIRECTORY_SEPARATOR.$docData['ad_filepath'].DIRECTORY_SEPARATOR.$docData['ad_filename'];
     		
     		}else{
