@@ -819,12 +819,13 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 			
 		$dbAppProfile=new App_Model_Application_DbTable_ApplicantProfile();
 		$dbFinance=new App_Model_General_DbTable_Bank();
+		echo var_dump($program);exit;
 		$bank=$dbFinance->fnGetBankDetails(1);
 		$secretkey=$bank['secret_key'];
 		$url=$bank['url_api'];
 	
 		if ($mode==null) $mode="c";
-		echo $billno;exit;
+		//echo $billno;exit;
 		$invoice=$dbInvoice->getInvoiceData($billno);
 		$applid=$invoice['appl_id'];
 	
