@@ -830,7 +830,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 	
 		$profil=$dbAppProfile->getData($applid);
 		//exit;
-		//echo var_dump($invoice);exit;
+		echo var_dump($invoice);exit;
 		//$idstd=$invoice['IdStudentRegistration'];
 		//$std=$dbStd->getData($idstd);
 		//$idprogram=$std['IdProgram'];
@@ -854,7 +854,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		else
 			$va=$invoice['va'];//$billamount=$invoice['bill_balance'];
 		$billamount=$invoice['bill_amount'];
-		echo $amounttotal.'-'.$billamount.' -'.$desc;exit;
+		 
 		//get detail
 		$invoicedetail=$invoiceDet->getInvoiceDetailBank($invoice['id'], $program['program_id'],$program['IdBranchOffer']);
 		
@@ -875,7 +875,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		}
 		$desc=implode(';', $desc);
 		
-		echo $amounttotal.'-'.$billamount.' -'.$desc;exit;
+		//echo $amounttotal.'-'.$billamount.' -'.$desc;exit;
 	
 	
 		if ($billamount>0 && $amounttotal==$billamount && strlen($desc)<=100) {
