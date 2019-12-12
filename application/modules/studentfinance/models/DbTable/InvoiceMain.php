@@ -861,6 +861,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		//$invoicedetail=$invoiceDet->getInvoiceDetail($invoice['id']);
 		$desc=array();
 		$amounttotal=0;
+		echo var_dump($invoicedetail);exit;
 		if ($invoicedetail) {
 			foreach ($invoicedetail as $det) {
 					
@@ -873,8 +874,8 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 			}
 		}
 		$desc=implode(';', $desc);
+		
 		echo $amounttotal.'-'.$billamount.' -'.$desc;exit;
-			
 	
 	
 		if ($billamount>0 && $amounttotal==$billamount && strlen($desc)<=100) {
