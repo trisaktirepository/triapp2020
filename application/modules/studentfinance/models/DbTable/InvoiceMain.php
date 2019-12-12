@@ -24,11 +24,12 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 	}
 	
 	public function getDataByVa($va){
+		if ($va=="") return false;
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$selectData = $db->select()
 		->from(array('im'=>$this->_name))
 		->where("im.va = ?", $va);
-		echo $selectData;exit;
+		 
 		$row = $db->fetchRow($selectData);
 		
 		return $row;
