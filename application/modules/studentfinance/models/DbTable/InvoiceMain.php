@@ -30,6 +30,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		->where("im.va = ?", $va);
 	
 		$row = $db->fetchRow($selectData);
+		echo var_dump($row);exit;
 		return $row;
 	}
 	
@@ -819,7 +820,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 			
 		$dbAppProfile=new App_Model_Application_DbTable_ApplicantProfile();
 		$dbFinance=new App_Model_General_DbTable_Bank();
-		echo var_dump($program);exit;
+		 
 		$bank=$dbFinance->fnGetBankDetails(1);
 		$secretkey=$bank['secret_key'];
 		$url=$bank['url_api'];
