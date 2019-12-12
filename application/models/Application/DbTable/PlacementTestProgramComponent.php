@@ -58,7 +58,8 @@ class App_Model_Application_DbTable_PlacementTestProgramComponent extends Zend_D
 		->join(array('c'=>'appl_component'),'c.ac_comp_code = apps.apps_comp_code', array('ac_test_type'))
 		//->join(array('ct'=>'appl_test_type'),'ct.act_id = c.ac_test_type', array('component_type'=>'act_name'))
 		->where('apps.apps_program_id in ( '. $programset.')')
-		->where('apps.aph_type=?',$testtype);
+		->where('apps.aph_type=?',$testtype)
+		->order('c.ac_test_type ASC');
 	
 		$row = $db->fetchAll($select);
 	

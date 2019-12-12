@@ -124,10 +124,12 @@ class Exam_ExamSlipController extends Zend_Controller_Action
 					$hadir = (int)$courseGroupStudentAttendanceDb->getAttendanceStatusCount($classGroup['IdCourseTaggingGroup'],$registration_id,395);
 					$ijin  = (int)$courseGroupStudentAttendanceDb->getAttendanceStatusCount($classGroup['IdCourseTaggingGroup'],$registration_id,396);
 					$sakit = (int)$courseGroupStudentAttendanceDb->getAttendanceStatusCount($classGroup['IdCourseTaggingGroup'],$registration_id,397);
-					 
+					$dispensasi = (int)$courseGroupStudentAttendanceDb->getAttendanceStatusCount($classGroup['IdCourseTaggingGroup'],$registration_id,1701);
+						
 					if ($mode=="1") $classGroup['class_attended'] = $hadir;
 					if ($mode=="12") $classGroup['class_attended'] = $hadir+$sakit;
 					if ($mode=="123" || trim($mode)=="") $classGroup['class_attended'] = $hadir+$ijin+$sakit;
+					if ($mode=="200" || trim($mode)=="") $classGroup['class_attended'] = $hadir+$ijin+$sakit+$dispensasi;
 						
 					//$courseGroupStudentAttendanceDb->getAttendanceStatusCount($classGroup['IdCourseTaggingGroup'],$formData['sid'],395);
 					
