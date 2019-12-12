@@ -28,9 +28,9 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		$selectData = $db->select()
 		->from(array('im'=>$this->_name))
 		->where("im.va = ?", $va);
-	
+		echo $selectData;exit;
 		$row = $db->fetchRow($selectData);
-		echo var_dump($row);exit;
+		
 		return $row;
 	}
 	
