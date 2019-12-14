@@ -1176,7 +1176,7 @@ class StudentPortalController extends Zend_Controller_Action
     	 
     	$idSemesterStatus = $this->_getParam('idSemesterStatus',null);
     	
-    	$this->_redirect("http://www.print.trisakti.ac.id/student-portal/cetak-khs/idSemesterStatus/".$idSemesterStatus.'/registration_id/'.$registration_id);
+    	//$this->_redirect("http://www.print.trisakti.ac.id/student-portal/cetak-khs/idSemesterStatus/".$idSemesterStatus.'/registration_id/'.$registration_id);
     	 
     	global $semester;
     	global $courses;
@@ -2386,7 +2386,7 @@ class StudentPortalController extends Zend_Controller_Action
         
         //$IdStudentRegistration = $this->_getParam('id',null);  
 		$this->view->id= $IdStudentRegistration;
-        $this->_redirect('http://www.print.trisakti.ac.id/student-portal/cetak-temp-transcript/appl_id/'.$appl_id.'/registration_id/'.$IdStudentRegistration);
+      //  $this->_redirect('http://www.print.trisakti.ac.id/student-portal/cetak-temp-transcript/appl_id/'.$appl_id.'/registration_id/'.$IdStudentRegistration);
          //To get Student Academic Info        
         $studentRegDB = new App_Model_Exam_DbTable_StudentRegistration();
         $student = $studentRegDB->getStudentInfo($IdStudentRegistration);
@@ -2576,7 +2576,7 @@ class StudentPortalController extends Zend_Controller_Action
 	
 		//$IdStudentRegistration = $this->_getParam('id',null);
 		$this->view->id= $IdStudentRegistration;
-		$this->_redirect('http://www.print.trisakti.ac.id/student-portal/cetak-all-transcript/appl_id/'.$appl_id.'/registration_id/'.$IdStudentRegistration);
+		//$this->_redirect('http://www.print.trisakti.ac.id/student-portal/cetak-all-transcript/appl_id/'.$appl_id.'/registration_id/'.$IdStudentRegistration);
 		
 		//To get Student Academic Info
 		$studentRegDB = new App_Model_Exam_DbTable_StudentRegistration();
