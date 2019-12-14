@@ -174,7 +174,7 @@ class Exam_ExamSlipController extends Zend_Controller_Action
 			$courses_data = $courses;
 	
 			Global $assessment_type;
-			$assessment_type = $assessmentType[0];
+			$assessment_type = $assessmentType;
 			
 			
 			
