@@ -43,7 +43,7 @@ class Exam_ExamSlipController extends Zend_Controller_Action
 		$auth = Zend_Auth::getInstance();
 		$registration_id = $auth->getIdentity()->registration_id;
 		//$redirect="http://www.spmb.trisakti.ac.id/student-portal/exam/exam-slip";
-		$redirect=str_replace('/', '_', $redirect);
+		//$redirect=str_replace('/', '_', $redirect);
 		if ($this->getRequest()->isPost()) {
 	
 			$formData = $this->getRequest()->getPost();
@@ -259,7 +259,7 @@ class Exam_ExamSlipController extends Zend_Controller_Action
 		$auth = Zend_Auth::getInstance();
 		$registration_id = $auth->getIdentity()->registration_id;
 		//$redirect="http://www.spmb.trisakti.ac.id/student-portal/exam/exam-slip";
-		$redirect=str_replace('/', '_', $redirect);
+		//$redirect=str_replace('/', '_', $redirect);
 		
 		if ($this->getRequest()->isPost()) {
 	
