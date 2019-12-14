@@ -146,7 +146,7 @@ class Exam_ExamSlipController extends Zend_Controller_Action
 			
 			//echo var_dump($courses);exit;			
 			//assessment type
-			$assessmentTypeDb = new App_Model_Exam_DbTable_Assessmenttype();
+			$assessmentTypeDb = new App_Model_Exam_DbTable_AssessmentType();
 			$assessmentType = $assessmentTypeDb->fnGetAssesmentTypeNamebyID($formData['ass_type']);
 
 			//program
