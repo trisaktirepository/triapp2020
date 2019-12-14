@@ -1409,10 +1409,10 @@ class StudentPortalController extends Zend_Controller_Action
 		$dompdf = new DOMPDF();
 		$dompdf->load_html($html);
 		$dompdf->set_paper('a4', 'potrait');
-		$dompdf->render();
+		@$dompdf->render();
 		
 		//$dompdf = $dompdf->output();
-		$dompdf->stream($output_filename);						
+		@$dompdf->stream($output_filename);						
 		
 		file_put_contents($output_file_path, $dompdf);
 		
@@ -2534,7 +2534,7 @@ class StudentPortalController extends Zend_Controller_Action
 		$dompdf = new DOMPDF();
 		$dompdf->load_html($html);
 		$dompdf->set_paper('a4', 'potrait');
-		$dompdf->render();
+		@$dompdf->render();
 	
 		//echo $html;exit;
 	
@@ -2549,7 +2549,7 @@ class StudentPortalController extends Zend_Controller_Action
 		$output_filename = "transcript_temp_".$student['registrationId'].".pdf";
 				
 		//$dompdf = $dompdf->output();
-		$dompdf->stream($output_filename);						
+		@$dompdf->stream($output_filename);						
 							
 		//to rename output file						
 	    $output_file_path = $output_directory_path.'/'.$output_filename;
@@ -2705,7 +2705,7 @@ class StudentPortalController extends Zend_Controller_Action
 		$dompdf = new DOMPDF();
 		$dompdf->load_html($html);
 		$dompdf->set_paper('a4', 'potrait');
-		$dompdf->render();
+		@$dompdf->render();
 	
 		//echo $html;exit;
 	
@@ -2720,7 +2720,7 @@ class StudentPortalController extends Zend_Controller_Action
 		$output_filename = "transcript_temp_".$student['registrationId'].".pdf";
 	
 		//$dompdf = $dompdf->output();
-		$dompdf->stream($output_filename);
+		@$dompdf->stream($output_filename);
 			
 		//to rename output file
 		$output_file_path = $output_directory_path.'/'.$output_filename;
@@ -2748,7 +2748,7 @@ class StudentPortalController extends Zend_Controller_Action
         $student = $studentRegDB->getStudentInfo($IdStudentRegistration);
         
         
-        $this->_redirect('http://www.print.trisakti.ac.id/student-portal/cetak-transcript/appl_id/'.$appl_id.'/registration_id/'.$IdStudentRegistration);
+       // $this->_redirect('http://www.print.trisakti.ac.id/student-portal/cetak-transcript/appl_id/'.$appl_id.'/registration_id/'.$IdStudentRegistration);
         
          //get photo student
     	$uploadFileDb = new App_Model_Application_DbTable_UploadFile();
@@ -2847,10 +2847,17 @@ class StudentPortalController extends Zend_Controller_Action
 		$dompdf = new DOMPDF();
 		$dompdf->load_html($html);
 		$dompdf->set_paper('a4', 'potrait');
-		$dompdf->render();
+		@$dompdf->render();
+		//echo $html;exit;
+		$output_directory_path = DOCUMENT_PATH."/student/transcript";
+		
+		//output filename
+		$output_filename = "transcript_".$student['registrationId'].".pdf";
 		
 		//$dompdf = $dompdf->output();
-		$dompdf->stream($output_filename);						
+		$output_file_path = $output_directory_path.'/'.$output_filename;
+		
+		@$dompdf->stream($output_filename);						
 		
 		file_put_contents($output_file_path, $dompdf);
 		
