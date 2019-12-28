@@ -1253,7 +1253,8 @@ class OnlineApplicationController extends Zend_Controller_Action {
 							'ae_institution' => $formData['ae_institution'],
 							'ae_discipline_code' => $aedicipline,
 							'ae_year_from' => date('y-m-d', strtotime($formData['ae_year_from'])),
-							'ae_year_end' => date('y-m-d', strtotime($formData['ae_year_end']))
+							'ae_year_end' => date('y-m-d', strtotime($formData['ae_year_end'])),
+							'ae_award'=>$formData['ae_award']
 					);
 	
 					$aed_id = $educationDb->addData($data);
