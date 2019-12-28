@@ -175,7 +175,7 @@ function showSlides() {
 	 	Awal Semester : <?php echo  $placement['IntakeDefaultLanguage'].' Kuliah Mulai :'.date('d-m-Y',strtotime($placement['class_start']))?><br>
 	 	<table class="table">
 	 		<tr><th>Periode</th><th>Tanggal USM</th><th>Batas Pembayaran</th><th>Batas Pembuatan Kartu USM</th></tr>
-	 		<?php foreach ($this->$periodes as $period) {?>
+	 		<?php foreach ($periodes as $period) {?>
 	 			<tr><td><?php echo $period['ap_desc']?></td>
 	 			<td><?php echo $period('d-m-Y',strtotime($period['ap_usm_date']))?></td>
 	 			<td><?php echo $period('d-m-Y H:s:i',strtotime($period['ap_va_expired']))?></td>
