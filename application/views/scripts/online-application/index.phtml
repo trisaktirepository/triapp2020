@@ -177,9 +177,9 @@ function showSlides() {
 	 		<tr><th>Periode</th><th>Tanggal USM</th><th>Batas Pembayaran</th><th>Batas Pembuatan Kartu USM</th></tr>
 	 		<?php foreach ($periodes as $period) {?>
 	 			<tr><td><?php echo $period['ap_desc']?></td>
-	 			<td><?php echo $period('d-m-Y',strtotime($period['ap_usm_date']))?></td>
-	 			<td><?php echo $period('d-m-Y H:s:i',strtotime($period['ap_va_expired']))?></td>
-	 			<td><?php echo $period('d-m-Y H:s:i',strtotime($period['ap_card_datelimit']))?></td></tr>
+	 			<td><?php echo date('d-m-Y',strtotime($period['ap_usm_date']))?></td>
+	 			<td><?php echo date('d-m-Y H:s:i',strtotime($period['ap_va_expired']))?></td>
+	 			<td><?php echo date('d-m-Y H:s:i',strtotime($period['ap_card_datelimit']))?></td></tr>
 	 		<?php }?>
 	 	</table>
 	 	<?php }?>
