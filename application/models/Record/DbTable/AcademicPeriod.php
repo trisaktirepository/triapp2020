@@ -84,12 +84,15 @@ class App_Model_Record_DbTable_AcademicPeriod extends Zend_Db_Table_Abstract
 		return $row;
 	}
 	
-	public function getActivePeriod(){
+	public function getActivePeriod($ptestcode){
 		 
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$select = $db->select()
-		->from($this->_name)
-	 	->where('ap_usm_date > ?',date('Y-m-d',strtotime(time())));
+		->from(array('a'=>$this->_name))
+		->join(array('b'=>'appl_placement_head'),'b.aph_academic_year=a.ap_intake_id')
+	 	->where('ap_usm_date > ?',date('Y-m-d',strtotime(time())))
+	 	->where('b.aph_placement_code=?',$ptestcode)
+		->order('a.ap_usm_date');
 		$row = $db->fetchAll($select);
 	
 	

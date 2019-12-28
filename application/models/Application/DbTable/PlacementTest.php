@@ -114,6 +114,7 @@ class App_Model_Application_DbTable_PlacementTest extends Zend_Db_Table_Abstract
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$selectData = $db ->select()
 		->from(array('aph'=>$this->_name))
+		->join(array('b'=>'tbl_intake'),'aph.aph_academic_year=b.idintake')
 		->joinLeft(array('u'=>'tbl_user'),'u.idUser = aph.aph_create_by', array('aph_create_by_name'=>'fName'))
 		->where('aph.aph_testtype="0"')
 		->where('aph.aph_end_date >= curdate()')

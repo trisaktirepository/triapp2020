@@ -166,16 +166,23 @@ function showSlides() {
 	<?php echo $this->form; ?></td>
 	
 	 <td>
-	 	JADWAL USM <br>
+	 	
+	 	<?php foreach ($this->schedule as $placement) {
+	 		$periodes=$placement['periode'];
+	 		
+	 	?>
+	 	JADWAL USM <?php echo  $placement['aph_placement_name']?><br>
+	 	Awal Semester : <?php echo  $placement['IntakeDefaultLanguage'].' Kuliah Mulai :'.date('d-m-Y',strtotime($placement['class_start']))?><br>
 	 	<table class="table">
 	 		<tr><th>Periode</th><th>Tanggal USM</th><th>Batas Pembayaran</th><th>Batas Pembuatan Kartu USM</th></tr>
-	 		<?php foreach ($this->schedule as $sch) {?>
-	 			<tr><td><?php echo $sch['ap_desc']?></td>
-	 			<td><?php echo date('d-m-Y',strtotime($sch['ap_usm_date']))?></td>
-	 			<td><?php echo date('d-m-Y H:s:i',strtotime($sch['ap_va_expired']))?></td>
-	 			<td><?php echo date('d-m-Y H:s:i',strtotime($sch['ap_card_datelimit']))?></td></tr>
+	 		<?php foreach ($this->$periodes as $period) {?>
+	 			<tr><td><?php echo $period['ap_desc']?></td>
+	 			<td><?php echo $period('d-m-Y',strtotime($period['ap_usm_date']))?></td>
+	 			<td><?php echo $period('d-m-Y H:s:i',strtotime($period['ap_va_expired']))?></td>
+	 			<td><?php echo $period('d-m-Y H:s:i',strtotime($period['ap_card_datelimit']))?></td></tr>
 	 		<?php }?>
 	 	</table>
+	 	<?php }?>
 	 </td> </tr>
 	</table>
 	

@@ -256,8 +256,16 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	$this->view->form = $form;
     	
     	//get usm info
+    	$pstest=new App_Model_Application_DbTable_PlacementTest();
     	$dbPeriod=new App_Model_Record_DbTable_AcademicPeriod();
-    	$this->view->schedule=$dbPeriod->getActivePeriod();
+    	$placementtest=$pstest->getPlacementTest();
+    	foreach ($placementtest as $key=>$value) {
+    		$period=$dbPeriod->getActivePeriod($value['aph_placement_code']);
+    		$placementtest[$key]['periode']=$period;
+    	}
+    	
+    	$this->view->schedule=$placementtest;
+    	
 	}
 	
 	public function adminAction(){
@@ -6989,8 +6997,15 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	$this->view->form = $form;
     	
     	//get usm info
+    	$pstest=new App_Model_Application_DbTable_PlacementTest();
     	$dbPeriod=new App_Model_Record_DbTable_AcademicPeriod();
-    	$this->view->schedule=$dbPeriod->getActivePeriod();
+    	$placementtest=$pstest->getPlacementTest();
+    	foreach ($placementtest as $key=>$value) {
+    		$period=$dbPeriod->getActivePeriod($value['aph_placement_code']);
+    		$placementtest[$key]['periode']=$period;
+    	}
+    	
+    	$this->view->schedule=$placementtest;
     	
 	}
 	
