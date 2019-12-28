@@ -8047,65 +8047,77 @@ class OnlineApplicationController extends Zend_Controller_Action {
     		   	$rs_component = $componentDB->getComponentSchedulebytype($transaction_id,1,$applicant["apt_aps_id"]);	
 
     			//$x=1;
-    			$comp['comp_program1']="";
-    			$comp['exam_date_time1']="";
-    			$comp['comp_program2']="";
-    			$comp['exam_date_time2']="";
-    			$comp['location_venue_sitno1']="";
-    			$comp['location_venue_sitno2']="";
-    		
-    			
-    			foreach($rs_component as $component){
-    				if ($locale=="en_US"){
-						$comp['comp_program1'] .= $component["ac_comp_name"].", ";
-					}else if($locale=="id_ID"){
-						$comp['comp_program1'] .= $component["ac_comp_name_bahasa"].", ";
-					}
-					//$comp['comp_program1'] .= $component["ac_comp_name_bahasa"].", ";
-					
-					$comp['exam_date_time1']=date('M d Y',strtotime($component["aps_test_date"])).' '.$component["ac_start_time"];											
-    				$comp['location_venue_sitno1'] = $room["av_room_name"]." - ".$applicant["apt_sit_no"];
-					//$x++;
-    			}
-    			//exit;
-    			$rs_component2 = $componentDB->getComponentSchedulebytype($transaction_id,2,$applicant["apt_aps_id"]);									    	
-		    	if($rs_component2){
-	    			foreach($rs_component2 as $component2){
-	    				if ($locale=="en_US"){
-							$comp['comp_program2'] .= $component2["ac_comp_name"].", ";
+				$comp['comp_program1']="";
+				$comp['exam_date_time1']="";
+				$comp['comp_program2']="";
+				$comp['exam_date_time2']="";
+				$comp['location_venue_sitno1']="";
+				$comp['location_venue_sitno2']="";
+				$comp['comp_program3'] = "";
+				$comp['exam_date_time3']="";
+				$comp['location_venue_sitno3'] = "";
+				$comp['comp_program4'] = "";
+				$comp['exam_date_time4']="";
+				$comp['location_venue_sitno4'] = "";
+				$comp['comp_program5'] = "";
+				$comp['exam_date_time5']="";
+				$comp['location_venue_sitno5'] = "";
+				$dbApplComp=new App_Model_Application_DbTable_PlacementTestComponent();
+				//echo var_dump($comp);exit;
+				$testdetail=$dbTestDetail->getPtestDetail($transaction_id, $applicant['apt_ptest_code']);
+				$i=1;
+				
+				 
+				foreach ($testdetail as $test) {
+					$compcode=$test['app_comp_code'];
+					$compents=$dbApplComp->getDataByComponent($programset, $compcode);
+					foreach ($compents as $component) {
+						if ($locale=="en_US"){
+							$comp['comp_program'.$i] .= $component["ac_comp_name"].", ";
 						}else if($locale=="id_ID"){
-							$comp['comp_program2'] .= $component2["ac_comp_name_bahasa"].", ";
-						}
-						//$comp['comp_program2'] .= $component2["ac_comp_name"].", ";
+							$comp['comp_program'.$i] .= $component["ac_comp_name_bahasa"].", ";
+						};
+					}
+					$comp['exam_date_time'.$i]=date('M d Y',strtotime($applicant["aps_test_date"])).' '.$test["time_start"];
+					$comp['location_venue_sitno'.$i] = $test["av_room_name"]." - ".$test["apt_sit_no"];
 						
-						$comp['exam_date_time2']=date('M d Y',strtotime($component2["aps_test_date"])).' '.$component2["ac_start_time"];											
-	    				$comp['location_venue_sitno2'] = $room["av_room_name"]." - ".$applicant["apt_sit_no"];
-						//$x++;
-	    			}	
-		    	}	
-
-
+					$i++;
+				}
+				 
+				 
+					
+				//echo var_dump($comp); exit;
 				$fieldValues = array (
-				     '$[pinnumber]' => $applicantID, 
-				 	 '$[Applicantname]' => $applicant["appl_fname"].' '.$applicant["appl_mname"].' '.$applicant["appl_lname"],
-				     '$[Address1]' => $applicant["appl_address1"],
-				     '$[Address2]' => $applicant["appl_address2"],
-					 '$[Mobilenumber]' => $applicant["appl_phone_hp"],
-					 '$[Facultyname1]' => $program_data["faculty_name1"], 
-				     '$[Facultyname2]' => $program_data["faculty_name2"], 
-					 '$[Programme1]' => $program_data["program_name1"],
-					 '$[Programme2]' => $program_data["program_name2"],
-					 '$[Comp_Program1]' => $comp["comp_program1"],
-					 '$[Exam_Date_Time1]' => $comp["exam_date_time1"],
-				     '$[location_venue_sitno1]' => $comp['location_venue_sitno1'],
-					 '$[Comp_Program2]' => $comp["comp_program2"],
-					 '$[Exam_Date_Time2]' => $comp["exam_date_time2"],
-				     '$[location_venue_sitno2]' => $comp['location_venue_sitno2'],
-				     '$[username]' => $applicant["appl_email"],
-				     '$[password]' => $applicant["appl_password"],
-					 '$[photodetail]' => $photodetail
-				);		    	
-				//print_r($fieldValues);exit;
+						'$[pinnumber]' => $applicantID,
+						'$[Applicantname]' => $applicant["appl_fname"].' '.$applicant["appl_mname"].' '.$applicant["appl_lname"],
+						'$[Address1]' => $applicant["appl_address1"],
+						'$[Address2]' => $applicant["appl_address2"],
+						'$[Mobilenumber]' => $applicant["appl_phone_hp"],
+						'$[Facultyname1]' => $program_data["faculty_name1"],
+						'$[Facultyname2]' => $program_data["faculty_name2"],
+						'$[Programme1]' => $program_data["program_name1"],
+						'$[Programme2]' => $program_data["program_name2"],
+						'$[Comp_Program1]' => $comp["comp_program1"],
+						'$[Exam_Date_Time1]' => $comp["exam_date_time1"],
+						'$[location_venue_sitno1]' => $comp['location_venue_sitno1'],
+						'$[Comp_Program2]' => $comp["comp_program2"],
+						'$[Exam_Date_Time2]' => $comp["exam_date_time2"],
+						'$[location_venue_sitno2]' => $comp['location_venue_sitno2'],
+						'$[Comp_Program3]' => $comp["comp_program3"],
+						'$[Exam_Date_Time3]' => $comp["exam_date_time3"],
+						'$[location_venue_sitno3]' => $comp['location_venue_sitno3'],
+						'$[Comp_Program4]' => $comp["comp_program4"],
+						'$[Exam_Date_Time4]' => $comp["exam_date_time4"],
+						'$[location_venue_sitno4]' => $comp['location_venue_sitno4'],
+						'$[Comp_Program5]' => $comp["comp_program5"],
+						'$[Exam_Date_Time5]' => $comp["exam_date_time5"],
+						'$[location_venue_sitno5]' => $comp['location_venue_sitno5'],
+						
+						'$[username]' => $applicant["appl_email"],
+						'$[password]' => $applicant["appl_password"],
+						'$[photodetail]' => $photodetail
+				);
+				 
 				$monthyearfolder=date("mY");
 
 				// ------ create kartu peserta ujian in PDF	----					    	
@@ -8157,9 +8169,9 @@ class OnlineApplicationController extends Zend_Controller_Action {
 					$dompdf = new DOMPDF();
 					$dompdf->load_html($html);
 					$dompdf->set_paper('a4', 'potrait');
-					$dompdf->render();
+					@$dompdf->render();
 					
-					$dompdf = $dompdf->output();
+					$dompdf = @$dompdf->output();
 					
 					
 					
