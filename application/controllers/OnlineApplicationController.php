@@ -2258,13 +2258,15 @@ class OnlineApplicationController extends Zend_Controller_Action {
 	
 				}
 				 
-				if($applicantProgram !=null){
+				if($applicantProgram){
 					$this->view->programe_selected = $applicantProgram;
 	
 					$dataToPopulate['ap_prog_code'] = $applicantProgram[0]['ap_prog_code'];
-					$dataToPopulate['ap_prog_code_2'] = $applicantProgram[1]['ap_prog_code'];
-					$dataToPopulate['ap_prog_code_3'] = $applicantProgram[2]['ap_prog_code'];
-					$dataToPopulate['ap_prog_code_4'] = $applicantProgram[3]['ap_prog_code'];
+					if (count($applicantProgram)>1) {
+						$dataToPopulate['ap_prog_code_2'] = $applicantProgram[1]['ap_prog_code'];
+						$dataToPopulate['ap_prog_code_3'] = $applicantProgram[2]['ap_prog_code'];
+						$dataToPopulate['ap_prog_code_4'] = $applicantProgram[3]['ap_prog_code'];
+					}
 				}
 					
 				//$form->populate($dataToPopulate);
