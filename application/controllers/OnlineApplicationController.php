@@ -834,10 +834,10 @@ class OnlineApplicationController extends Zend_Controller_Action {
 	    			/** END EDUCATION **/
 	    			
 	    			/*** PREFERED PRGORRAMME ***/
-	    			$applicantProgram = new App_Model_Application_DbTable_ApplicantProgram();
+	    			$applicantProgramDb = new App_Model_Application_DbTable_ApplicantProgram();
 	    			
 	    			//delete ptest
-	    			$applicantProgram->deleteTransactionData($transaction['at_trans_id']);
+	    			$applicantProgramDb->deleteTransactionData($transaction['at_trans_id']);
 	    			
 	    			//getPTestProgram Data
 	    			$ptestProgram = new App_Model_Application_DbTable_PlacementTestProgram();
@@ -855,11 +855,11 @@ class OnlineApplicationController extends Zend_Controller_Action {
 	    				'IdProgramBranch'=>$formData['group1'],
 	    				'IdBranch'=>$branch['IdBranch']
 	    			);
-	    			$row=$applicantProgram->IsIn($transaction['at_trans_id'], '1');
+	    			$row=$applicantProgramDb->IsIn($transaction['at_trans_id'], '1');
 		    			if (!$row)
-		    				$applicantProgram->insert($data1);
+		    				$applicantProgramDb->insert($data1);
 		    			else 
-		    				$applicantProgram->updateData($data1, $row['ap_id']);
+		    				$applicantProgramDb->updateData($data1, $row['ap_id']);
 		    		
 		    		//$dbPeriod=new App_Model_DbTable_Appl
 		    		$dbTransaction=new App_Model_Application_DbTable_ApplicantTransaction();
@@ -880,11 +880,11 @@ class OnlineApplicationController extends Zend_Controller_Action {
 		    				'IdProgramBranch'=>$formData['group2'],
 		    				'IdBranch'=>$branch['IdBranch']
 		    			);
-		    			$row=$applicantProgram->IsIn($transaction['at_trans_id'], '2');
+		    			$row=$applicantProgramDb->IsIn($transaction['at_trans_id'], '2');
 		    			if (!$row)
-		    				$applicantProgram->insert($data2);
+		    				$applicantProgramDb->insert($data2);
 		    			else 
-		    				$applicantProgram->updateData($data2, $row['ap_id']);
+		    				$applicantProgramDb->updateData($data2, $row['ap_id']);
 	    			}
 	    			
 	    			//redirect
@@ -1472,10 +1472,10 @@ class OnlineApplicationController extends Zend_Controller_Action {
 					/** END EDUCATION **/
 	
 					/*** PREFERED PRGORRAMME ***/
-					$applicantProgram = new App_Model_Application_DbTable_ApplicantProgram();
+					$applicantProgramDb = new App_Model_Application_DbTable_ApplicantProgram();
 	
 					//delete ptest
-					$applicantProgram->deleteTransactionData($transaction['at_trans_id']);
+					$applicantProgramDb->deleteTransactionData($transaction['at_trans_id']);
 	
 					//getPTestProgram Data
 					$ptestProgram = new App_Model_Application_DbTable_PlacementTestProgram();
@@ -1493,11 +1493,11 @@ class OnlineApplicationController extends Zend_Controller_Action {
 							'IdProgramBranch'=>$formData['group1'],
 							'IdBranch'=>$branch['IdBranch']
 					);
-					$row=$applicantProgram->IsIn($transaction['at_trans_id'], '1');
+					$row=$applicantProgramDb->IsIn($transaction['at_trans_id'], '1');
 					if (!$row)
-						$applicantProgram->insert($data1);
+						$applicantProgramDb->insert($data1);
 					else
-						$applicantProgram->updateData($data1, $row['ap_id']);
+						$applicantProgramDb->updateData($data1, $row['ap_id']);
 	
 					$dbTransaction=new App_Model_Application_DbTable_ApplicantTransaction();
 					$dbTransaction->updateData(array('at_intake'=>$intake,'at_academic_year'=>$yearacad), $transaction_id);
@@ -1516,11 +1516,11 @@ class OnlineApplicationController extends Zend_Controller_Action {
 								'IdProgramBranch'=>$formData['group2'],
 								'IdBranch'=>$branch['IdBranch']
 						);
-						$row=$applicantProgram->IsIn($transaction['at_trans_id'], '2');
+						$row=$applicantProgramDb->IsIn($transaction['at_trans_id'], '2');
 						if (!$row)
-							$applicantProgram->insert($data2);
+							$applicantProgramDb->insert($data2);
 						else
-							$applicantProgram->updateData($data2, $row['ap_id']);
+							$applicantProgramDb->updateData($data2, $row['ap_id']);
 					}
 	
 					//redirect
@@ -1632,7 +1632,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
         	$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'programme-scholar'),'default',true));
         }
         else{//admission type = high school(2)
-			$form = new App_Form_Programme(array('ae_appl_id'=>$applicant['appl_id'], 'admissiontype'=>2));
+			$form = new App_Form_Programme(array('ae_appl_id'=>$applicant['appl_id'], 'admissiontype'=>2,'testcode'=>''));
 
 			if ($this->getRequest()->isPost()) {  
 				$formData = $this->getRequest()->getPost();
@@ -1692,10 +1692,10 @@ class OnlineApplicationController extends Zend_Controller_Action {
 						}
 						
 						/*** PREFERED PRGORRAMME ***/
-		    			$applicantProgram = new App_Model_Application_DbTable_ApplicantProgram();
+		    			$applicantProgramDb = new App_Model_Application_DbTable_ApplicantProgram();
 		    			
 		    			//delete ptest
-		    			$applicantProgram->deleteTransactionData($transaction['at_trans_id']);
+		    			$applicantProgramDb->deleteTransactionData($transaction['at_trans_id']);
 		    			$dbbranch=new App_Model_General_DbTable_Branchofficevenue();
 		    			$branch=$dbbranch->getData($formData['grouppssb']);
 		    			//add ptest program prefered 1
@@ -1709,11 +1709,11 @@ class OnlineApplicationController extends Zend_Controller_Action {
 		    			
 		    			//checking for selected programme
 		    			if( isset($data1['ap_prog_code']) && $data1['ap_prog_code']!=null && $data1['ap_prog_code']!="" && $data1['ap_prog_code']!=0 ){
-		    				$row=$applicantProgram->IsIn($transaction['at_trans_id'], '2');
+		    				$row=$applicantProgramDb->IsIn($transaction['at_trans_id'], '2');
 		    				if (!$row)
-		    					$applicantProgram->insert($data1);
+		    					$applicantProgramDb->insert($data1);
 		    				else
-		    					$applicantProgram->updateData($data1, $row['ap_id']);
+		    					$applicantProgramDb->updateData($data1, $row['ap_id']);
 		    				 
 		    			}else{
 		    				$this->view->noticeError = $this->translate("Silalah pilih program studi");
@@ -1886,10 +1886,10 @@ class OnlineApplicationController extends Zend_Controller_Action {
 						}
 	
 						/*** PREFERED PRGORRAMME ***/
-						$applicantProgram = new App_Model_Application_DbTable_ApplicantProgram();
+						$applicantProgramDb = new App_Model_Application_DbTable_ApplicantProgram();
 						 
 						//delete ptest
-						$applicantProgram->deleteTransactionData($transaction['at_trans_id']);
+						$applicantProgramDb->deleteTransactionData($transaction['at_trans_id']);
 						$dbbranch=new App_Model_General_DbTable_Branchofficevenue();
 						$branch=$dbbranch->getData($formData['grouppssb']);
 						//add ptest program prefered 1
@@ -1903,11 +1903,11 @@ class OnlineApplicationController extends Zend_Controller_Action {
 						 
 						//checking for selected programme
 						if( isset($data1['ap_prog_code']) && $data1['ap_prog_code']!=null && $data1['ap_prog_code']!="" && $data1['ap_prog_code']!=0 ){
-							$row=$applicantProgram->IsIn($transaction['at_trans_id'], '2');
+							$row=$applicantProgramDb->IsIn($transaction['at_trans_id'], '2');
 							if (!$row)
-								$applicantProgram->insert($data1);
+								$applicantProgramDb->insert($data1);
 							else
-								$applicantProgram->updateData($data1, $row['ap_id']);
+								$applicantProgramDb->updateData($data1, $row['ap_id']);
 							 
 						}else{
 							$this->view->noticeError = $this->translate("Silalah pilih program studi");
@@ -1928,11 +1928,11 @@ class OnlineApplicationController extends Zend_Controller_Action {
 							
 						//checking for selected programme
 						if( isset($data2['ap_prog_code']) && $data2['ap_prog_code']!=null && $data2['ap_prog_code']!=""  ){
-							$row=$applicantProgram->IsIn($transaction['at_trans_id'], '2');
+							$row=$applicantProgramDb->IsIn($transaction['at_trans_id'], '2');
 							if (!$row)
-								$applicantProgram->insert($data2);
+								$applicantProgramDb->insert($data2);
 							else
-								$applicantProgram->updateData($data2, $row['ap_id']);
+								$applicantProgramDb->updateData($data2, $row['ap_id']);
 						
 						}else{
 							$this->view->noticeError = $this->translate("Silalah pilih program studi ke-2");
@@ -2124,10 +2124,10 @@ class OnlineApplicationController extends Zend_Controller_Action {
 						}
 	
 						/*** PREFERED PRGORRAMME ***/
-						$applicantProgram = new App_Model_Application_DbTable_ApplicantProgram();
+						$applicantProgramDb = new App_Model_Application_DbTable_ApplicantProgram();
 							
 						//delete ptest
-						$applicantProgram->deleteTransactionData($transaction['at_trans_id']);
+						$applicantProgramDb->deleteTransactionData($transaction['at_trans_id']);
 						$dbbranch=new App_Model_General_DbTable_Branchofficevenue();
 						$branch=$dbbranch->getData($formData['grouppssb']);
 						//add ptest program prefered 1
@@ -2141,11 +2141,11 @@ class OnlineApplicationController extends Zend_Controller_Action {
 							
 						//checking for selected programme
 						if( isset($data1['ap_prog_code']) && $data1['ap_prog_code']!=null && $data1['ap_prog_code']!="" && $data1['ap_prog_code']!=0 ){
-							$row=$applicantProgram->IsIn($transaction['at_trans_id'], '1');
+							$row=$applicantProgramDb->IsIn($transaction['at_trans_id'], '1');
 							if (!$row)
-								$applicantProgram->insert($data1);
+								$applicantProgramDb->insert($data1);
 							else
-								$applicantProgram->updateData($data1, $row['ap_id']);
+								$applicantProgramDb->updateData($data1, $row['ap_id']);
 	
 						}else{
 							$this->view->noticeError = $this->translate("Silalah pilih program studi");
@@ -2166,11 +2166,11 @@ class OnlineApplicationController extends Zend_Controller_Action {
 							
 						//checking for selected programme
 						if( isset($data2['ap_prog_code']) && $data2['ap_prog_code']!=null && $data2['ap_prog_code']!=""  ){
-							$row=$applicantProgram->IsIn($transaction['at_trans_id'], '2');
+							$row=$applicantProgramDb->IsIn($transaction['at_trans_id'], '2');
 							if (!$row)
-								$applicantProgram->insert($data2);
+								$applicantProgramDb->insert($data2);
 							else
-								$applicantProgram->updateData($data2, $row['ap_id']);
+								$applicantProgramDb->updateData($data2, $row['ap_id']);
 	
 						}else{
 							$this->view->noticeError = $this->translate("Silalah pilih program studi ke-2");
@@ -2191,11 +2191,11 @@ class OnlineApplicationController extends Zend_Controller_Action {
 							
 						//checking for selected programme
 						if( isset($data3['ap_prog_code']) && $data3['ap_prog_code']!=null && $data3['ap_prog_code']!=""  ){
-							$row=$applicantProgram->IsIn($transaction['at_trans_id'], '3');
+							$row=$applicantProgramDb->IsIn($transaction['at_trans_id'], '3');
 							if (!$row)
-								$applicantProgram->insert($data3);
+								$applicantProgramDb->insert($data3);
 							else
-								$applicantProgram->updateData($data3, $row['ap_id']);
+								$applicantProgramDb->updateData($data3, $row['ap_id']);
 						
 						}else{
 							$this->view->noticeError = $this->translate("Silalah pilih program studi ke-3");
@@ -2217,11 +2217,11 @@ class OnlineApplicationController extends Zend_Controller_Action {
 							
 						//checking for selected programme
 						if( isset($data4['ap_prog_code']) && $data4['ap_prog_code']!=null && $data4['ap_prog_code']!=""  ){
-							$row=$applicantProgram->IsIn($transaction['at_trans_id'], '4');
+							$row=$applicantProgramDb->IsIn($transaction['at_trans_id'], '4');
 							if (!$row)
-								$applicantProgram->insert($data4);
+								$applicantProgramDb->insert($data4);
 							else
-								$applicantProgram->updateData($data4, $row['ap_id']);
+								$applicantProgramDb->updateData($data4, $row['ap_id']);
 						
 						}else{
 							$this->view->noticeError = $this->translate("Silalah pilih program studi ke-4");
@@ -8209,7 +8209,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 			}	
 
 			
-			
+			/* 
 			
 			//----------SURAT undangan orang tua section------
 				$suratDB = new App_Model_Application_DbTable_ApplicantDocument();
@@ -8292,7 +8292,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 						$this->view->download_surat_undangan = "http://".APP_HOSTNAME."/documents/applicant/".date("mY")."/".$transaction_id."/".$output_filename_surat;
 	    		}else{
 	    			    $this->view->download_surat_undangan = "http://".APP_HOSTNAME."/documents/".$document["ad_filepath"]."/".$surat["ad_filename"];
-	    		}
+	    		} */
 				//-----------------end SURAT undangan orang tua section --------------------
 		}
     }
