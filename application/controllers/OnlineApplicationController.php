@@ -8066,6 +8066,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 				$comp['location_venue_sitno5'] = "";
 				$dbApplComp=new App_Model_Application_DbTable_PlacementTestComponent();
 				//echo var_dump($comp);exit;
+				$dbTestDetail=new App_Model_Application_DbTable_ApplicantPtestDetail();
 				$testdetail=$dbTestDetail->getPtestDetail($transaction_id, $applicant['apt_ptest_code']);
 				$i=1;
 				
