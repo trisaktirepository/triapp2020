@@ -2258,7 +2258,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 	
 				}
 				 
-				if($applicantProgram){
+				if($applicantProgram !=null){
 					$this->view->programe_selected = $applicantProgram;
 	
 					$dataToPopulate['ap_prog_code'] = $applicantProgram[0]['ap_prog_code'];
