@@ -30,7 +30,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 		
 		//student profile
 		$studentProfileDb = new App_Model_Student_DbTable_StudentProfile();
-		$profile = $studentProfileDb->fnGetStudentProfileByApplicationId($registration['IdApplication']);
+		$profile = $studentProfileDb->getData($registration['IdApplication']);
 		$this->view->profile = $profile;
 		//-------
 		$dbStd=new App_Model_Record_DbTable_StudentRegistration();
