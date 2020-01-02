@@ -161,7 +161,7 @@ class Studentfinance_Model_DbTable_FeeStructure extends Zend_Db_Table_Abstract {
 				//if ($branch!=null) $selectData->where('fsp.fsp_branch_id=?',$branch);
 				$row = $db->fetchRow($selectData);
 			}
-			//echo $selectData;exit;
+			echo $selectData;exit;
 		}
 		 
 		if(!$row){
