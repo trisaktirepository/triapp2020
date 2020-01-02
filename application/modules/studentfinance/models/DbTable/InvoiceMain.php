@@ -944,8 +944,16 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		->where('b.EndDate >= CURDATE()');
 		//echo $selectData;exit;
 		$row = $db->fetchRow($selectData);
-	
-		return $row;
+		if ($row) {
+			//cek invoice main
+			$selectData = $db->select()
+			->from(array('im'=>'invoice_main'))
+			->where('im.IdStudentRegistration=?',$idstd)
+			->where('im.idactivity=?',$row['idActivity']);
+			$row = $db->fetchRow($selectData);
+			if ($row) return false;
+			else return true;
+		} else return false;
 	
 	}
 	
