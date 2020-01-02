@@ -637,7 +637,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		 
 		$invoiceDet = new Studentfinance_Model_DbTable_InvoiceDetail();
 		$dbInvoice = new Studentfinance_Model_DbTable_InvoiceMain();
-		$dbinvoiceSpc=new Studentfinance_Model_DbTable_InvoiceSpc();
+		//$dbinvoiceSpc=new Studentfinance_Model_DbTable_InvoiceSpc();
 		$bni = new Studentfinance_Model_DbTable_AccessBni();
 		$dbProgram=new GeneralSetup_Model_DbTable_Program();
 		$dbStd=new Registration_Model_DbTable_Studentregistration();
@@ -647,7 +647,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		$url=$bank['url_api'];
 	
 		if ($mode==null) $mode="c";
-		$invoice=$dbinvoiceSpc->getInvoiceByBilling($idinvoice);
+		$invoice=$dbInvoice->getData($idinvoice);
 		//echo var_dump($invoice);exit;
 		$idstd=$invoice['IdStudentRegistration'];
 		$std=$dbStd->getData($idstd);
