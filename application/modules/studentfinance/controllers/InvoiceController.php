@@ -107,20 +107,21 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 							'date_create' => date('Y-m-d H:i:s'),
 							'idactivity'=>$formData['idactivity']
 					);
-					
-					$invoice_id = $invoiceDb->insert($inv_data);
-					$dbFeeitem=new Studentfinance_Model_DbTable_FeeItem();
-					//insert invoice detail
-					foreach ($formData['item'] as $itemid=>$amount){
-						$item=$dbFeeitem->getData($itemid);
-						$inv_detail_data = array(
-								'invoice_main_id' => $invoice_id,
-								'fi_id' => $itemid,
-								'fee_item_description' => $item['fi_name_bahasa'],
-								'amount' => $amount
-						);
-					
-						$invoiceDetailDb->insert($inv_detail_data);
+					if ($formData["idinvoice"]!='') {
+						$invoice_id = $invoiceDb->insert($inv_data);
+						$dbFeeitem=new Studentfinance_Model_DbTable_FeeItem();
+						//insert invoice detail
+						foreach ($formData['item'] as $itemid=>$amount){
+							$item=$dbFeeitem->getData($itemid);
+							$inv_detail_data = array(
+									'invoice_main_id' => $invoice_id,
+									'fi_id' => $itemid,
+									'fee_item_description' => $item['fi_name_bahasa'],
+									'amount' => $amount
+							);
+						
+							$invoiceDetailDb->insert($inv_detail_data);
+						}
 					}
 					
 					//push to BNI
