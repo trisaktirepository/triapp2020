@@ -1,0 +1,131 @@
+<script>
+  
+</script>
+  
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		 
+		<ul>
+			 
+		</ul>
+	 </div>
+</div>
+<br />
+
+<fieldset>
+	<legend>Student Information</legend>
+	<table>
+		<tr>
+			<td><?php echo $this->translate('Name');?></td>
+			<td>:</td>
+			<td>
+				<?php echo $this->profile['appl_fname']!=null?$this->profile['appl_fname']." ":""; ?>
+				<?php echo $this->profile['appl_mname']!=null?$this->profile['appl_mname']." ":""; ?>
+				<?php echo $this->profile['appl_lname']!=null?$this->profile['appl_lname']." ":""; ?>
+			</td>
+		</tr>
+		<tr>
+			<td><?php echo $this->translate('Email');?></td>
+			<td>:</td>
+			<td><?php echo $this->profile['appl_email']?></td>
+		</tr>
+		<tr>
+			<td><?php echo $this->translate('NIM');?></td>
+			<td>:</td>
+			<td><?php echo $this->registration['registrationId']?></td>
+		</tr>
+		 
+		<tr>
+			<td><?php echo $this->translate('Program');?></td>
+			<td>:</td>
+			<td><?php echo $this->registration['ProgramName']?></td>
+		</tr>
+		<tr>
+			<td><?php echo $this->translate('Intake');?></td>
+			<td>:</td>
+			<td><?php echo $this->registration['IntakeDesc']?></td>
+		</tr>
+	</table>
+</fieldset>
+
+<fieldset><legend><?php echo $this->translate('Invoice Detail')?></legend>
+	<form name="formDetail" method="post">
+	<input type="hidden" name="IdApplication" value="<?php echo $this->registration['IdApplication'] ?>">
+	<input type="hidden" name="IdStudentRegistration" value="<?php echo $this->registration['IdStudentRegistration'] ?>">
+	<input type="hidden" name="idsemester" value="<?php echo $this->semester['IdSemesterMaster'] ?>">
+	<input type="hidden" name="idacadyear" value="<?php echo $this->semester['idacadyear'] ?>">
+	<input type="hidden" name="description" value="<?php echo $this->bundle['bundlename'].' '.$this->activity['SemesterMainName'] ?>">
+	<input type="hidden" name="IdCollege" value="<?php echo $this->program['IdCollege']?>">
+	<input type="hidden" name="ProgramCode" value="<?php echo $this->program['ProgramCode']?>">
+	<input type="hidden" name="fs_id" value="<?php echo $this->fee_structure['fs_id'] ?>">
+	<input type="hidden" name="id" value="<?php echo $this->activity['id'] ?>">
+	<input type="hidden" name="idactivity" value="<?php echo $this->activity['idActivity'] ?>">
+	
+	<table class="table">
+		<tr>
+			<td><?php echo $this->translate('Payment Name');?></td>
+			<td>:</td>
+			<td>
+				 <?php echo $this->bundle['bundlename']?>
+			</td>
+		</tr>
+		<tr>
+			<td><?php echo $this->translate('Semester');?></td>
+			<td>:</td>
+			<td><?php echo $this->activity['SemesterMainName']?></td>
+		</tr>
+	</table>
+	<br><br>
+	<table class="table">
+		<tr>
+			<th><?php echo $this->translate('No');?></th>
+			<th><?php echo $this->translate('Component Name');?></th>
+			<th><?php echo $this->translate('Amount');?></th>
+			
+		</tr>
+		<?php $i=1;$total=0;
+			foreach ($this->bundleDetail as $item) {
+				$fee=$item['fee'];
+				$total=$total+$fee['amount'];
+			?>
+			<input type="hidden" name="item[<?php echo $item['fi_id']?>]" value="<?php echo $fee['amount'];?>">
+		<tr>
+			<td><?php echo $i;?></td>
+			<td><?php echo $item['fi_name_bahasa'];?></td>
+			<td><?php echo $fee['amount'];?></td>
+			
+		</tr>
+		<?php $i++;
+			}?>
+		<input type="hidden" name="totalamount" value="<?php echo $total?>">
+		<tr>
+			<th colspan="2"><?php echo $this->translate('Total');?></th>
+			<th><?php echo $total;?></th>
+		</tr>
+		<?php 
+		//echo var_dump($this->invoice);
+		if (count($this->invoice)>0) {
+			?>
+			<tr>
+			<th colspan="2" align="right"><?php echo $this->translate('Virtual Account');?></th>
+			<th><?php echo $this->invoice['va'];?></th>
+			
+		</tr>
+		<tr>
+			<th colspan="2" align="right"><?php echo $this->translate('Expired Date');?></th>
+			<th><?php echo date('d-m-Y H:s:i',strtotime($this->invoice['va_expired_dt']));?></th>
+			
+		</tr>
+			<?php 
+		}?>
+	</table>
+	<br>
+	<?php if (count($this->invoice)==0) { ?>
+	<input type="checkbox" name="agree" > Saya memahami jumlah total dan rincian pembayaran ini, dan akan melakukan pembayaran sesuai dengan ketentuan yang berlaku
+	<br>
+	<input type="submit" name="submit" value="Buat Virtual Account Pembayaran">
+	<?php }?>
+</form>
+</fieldset>
+ 
