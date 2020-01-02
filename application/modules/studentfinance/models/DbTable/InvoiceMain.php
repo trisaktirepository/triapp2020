@@ -641,7 +641,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		$bni = new Studentfinance_Model_DbTable_AccessBni();
 		$dbProgram=new GeneralSetup_Model_DbTable_Program();
 		$dbStd=new Registration_Model_DbTable_Studentregistration();
-		$dbFinance=new GeneralSetup_Model_DbTable_Bank();
+		$dbFinance=new App_Model_General_DbTable_Bank();
 		$bank=$dbFinance->fnGetBankDetails(1);
 		$secretkey=$bank['secret_key'];
 		$url=$bank['url_api'];
