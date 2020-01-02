@@ -121,7 +121,7 @@
 		}?>
 	</table>
 	<br>
-	<?php if (count($this->invoice)==0) { ?>
+	<?php if (count($this->invoice)==0 || $this->invoice['va']=='') { ?>
 	<input type="checkbox" name="agree" > Saya memahami jumlah total dan rincian pembayaran ini, dan akan melakukan pembayaran sesuai dengan ketentuan yang berlaku
 	<br>
 	<input type="submit" name="submit" value="Buat Virtual Account Pembayaran">
