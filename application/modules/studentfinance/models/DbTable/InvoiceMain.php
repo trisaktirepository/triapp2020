@@ -675,7 +675,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 			}
 		}
 		$desc=implode(';', $desc);
-		//echo $amounttotal.'-'.$billamount.' -'.$desc;exit;
+		echo $amounttotal.'-'.$billamount.' -'.$desc;exit;
 			
 	
 	
