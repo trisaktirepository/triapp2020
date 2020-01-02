@@ -4,7 +4,7 @@
  * @version 1.0
  */
 
-class Studentfinance_InvoiceController extends Base_Base {
+class Studentfinance_InvoiceController extends Zend_Controller_Action {
 	
 	private $_DbObj;
 	
