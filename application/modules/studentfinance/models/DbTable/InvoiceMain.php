@@ -925,5 +925,273 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		return $row;
 	
 	}
+	
+	public function isAnyOpenInvoice($idstd){
+		$db = Zend_Db_Table::getDefaultAdapter();
+	
+		//get student id
+		$selectData = $db->select()
+		->from(array('im'=>'tbl_studentregistration'))
+		->where('im.IdStudentRegistration = ?', $idstd);
+		$std=$db->fetchRow($selectData);
+		//get payment activity
+	
+		$selectData = $db->select()
+		->from(array('im'=>'tbl_activity'))
+		->join(array('b'=>'tbl_activity_calender'),'im.idActivity=b.IdActivity')
+		->where('b.IdProgram = ?', $std['IdProgram'])
+		->where('b.StartDate <= CURDATE()')
+		->where('b.EndtDate >= CURDATE()');
+		//echo $selectData;exit;
+		$row = $db->fetchRow($selectData);
+	
+		return $row;
+	
+	}
+	
+	public function isInByActivity($idsemester,$idstd,$idactivity){
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$selectData = $db->select()
+		->from(array('im'=>$this->_name))
+		->where('im.IdStudentRegistration = ?', $idstd)
+		->where('im.idactivity = ?', $idactivity)
+		->where('im.semester = ?', $idsemester);
+		//echo $selectData;exit;
+		$row = $db->fetchRow($selectData);
+	
+		return $row;
+	
+	}
+	public  function getInvoiceFee($idsemester,$idRegistration, $feeStructureId,$feeitem,$percentage,$allmode=""){
+			
+			
+		$dbInvoiceDeatil=new Studentfinance_Model_DbTable_InvoiceDetail();
+		$percentage=$percentage/100;
+		//registration detail
+		$studentRegistrationDb = new App_Model_Record_DbTable_StudentRegistration();
+		$registrationData = $studentRegistrationDb->getStudentInfo($idRegistration);
+	
+		//student profile
+		$studentProfileDb = new Records_Model_DbTable_Studentprofile();
+		$profile = $studentProfileDb->fnViewStudentAppnDetails($registrationData['IdApplication']);
+	
+			
+		//fee structure detail
+		$feeStructureItemDb = new Studentfinance_Model_DbTable_FeeStructureItem();
+		$fee_item = $feeStructureItemDb->getStructureData($feeStructureId);
+	
+		//get registered course in particular semester
+		$subjectRegisterDb = new Registration_Model_DbTable_Studentregsubjects();
+		//if ($ses_batch_invoice->ulang=="0")
+		$registered_subject = $subjectRegisterDb->getUnInvoiceRegisteredSubject($idRegistration,$idsemester, '1,3');
+		//else
+		//	$registered_subject = $subjectRegisterDb->getUnInvoiceRepeatRegisteredSubject($idRegistration,$semester, '1,3');
+			
+		$registered_subject=array_values($registered_subject);
+		//semester info
+		$semesterDb = new GeneralSetup_Model_DbTable_Semestermaster();
+		$semester = $semesterDb->getData($idsemester);
+			
+			
+		//filter only selected fee item
+		foreach ($fee_item as $index=>$fee){
+			if($fee['fi_id']!=$feeitem){
+				unset($fee_item[$index]);
+			}
+	
+		}
+	
+		if ($allmode=="1") {
+			//get uncalculate payment
+			$recordfee=$dbInvoiceDeatil->isInInvoice($idsemester, $idRegistration );
+			if ($recordfee) {
+				foreach ($recordfee as $recfee) {
+					$recfees[]=$recfee['fi_id'];
+				}
+				foreach ($fee_item as $index=>$fee){
+					if ($fee['fi_id']==2 ||
+					$fee['fi_id']==6 ||
+					$fee['fi_id']==7 ||
+					$fee['fi_id']==10 ||
+					$fee['fi_id']==11
+					) {
+						if( in_array($fee['fi_id'],$recfees) ){
+							unset($fee_item[$index]);
+						}
+					}
+				}
+			}
+		}
+		//get current semester level
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$sql = $db->select()
+		->from(array('sss' => 'tbl_studentsemesterstatus'), array(new Zend_Db_Expr('max(Level) as Level')))
+		->where('sss.IdStudentRegistration  = ?', $idRegistration);
+	
+		$result = $db->fetchRow($sql);
+	
+		if( $result['Level'] ){
+			$student_sem = $result['Level']+1;
+		}else{
+	
+			//check if senior student then hardcode level
+			$intake_year = substr($registrationData['IntakeId'], 0,4);
+			$cur_sem_year = substr($semester['SemesterMainCode'], 0,4);
+	
+			if($intake_year<2013){
+				$student_sem=0;
+				while($intake_year<=$cur_sem_year){
+	
+					//check current gasal or genap for currencty
+					if($intake_year == $cur_sem_year){
+						if($semester['SemesterCountType']==1){
+							$student_sem += 1;
+						}else{
+							$student_sem += 2;
+						}
+					}else{
+						$student_sem += 2;
+					}
+	
+					$intake_year++;
+				}
+			}else{
+				$student_sem = 1;
+			}
+		}
+	
+		//get fee item frequency type
+		$sem_fee_item = array();
+		foreach ($fee_item as $fs){
+	
+			//1st sem
+			if($student_sem==1 && $fs['fi_frequency_mode']== 302 ){
+				$sem_fee_item[] = $fs;
+			}
+	
+			//every sem
+			if($fs['fi_frequency_mode']== 303 || $fs['fi_frequency_mode']== 453){
+				$sem_fee_item[] = $fs;
+			}
+	
+			//every senior semester
+			if($student_sem>0 && $fs['fi_frequency_mode']== 304){
+				$sem_fee_item[] = $fs;
+			}
+	
+			//defined semester
+			if($fs['fi_frequency_mode']== 305){
+					
+				foreach ($fs['semester'] as $sem_defined){
+					if($sem_defined['fsis_semester'] == $student_sem+1){
+						$sem_fee_item[] = $fs;
+					}
+				}
+			}
+	
+			//every gasal regular
+			if($fs['fi_frequency_mode']== 460 && $semester['SemesterCountType']==1 && $semester['SemesterFunctionType']==0){
+				$sem_fee_item[] = $fs;
+			}
+	
+		}
+			
+		//get fee item calculation type
+		$invoice['amount']=0.00;
+		$regid=array();
+		foreach ($sem_fee_item as $item){
+	
+			//nilai tetap
+			if($item['fi_amount_calculation_type']==300){
+				$invoice['amount'] +=  $item['fsi_amount']*$percentage;
+				$item['total_amount'] = $item['fsi_amount']*$percentage;
+				$invoice['fee_item'][] = $item;
+			}else
+	
+			//pendaraban SKS
+			if($item['fi_amount_calculation_type']==299){
+				$total_sks = 0;
+	
+				for($i=0; $i<sizeof($registered_subject); $i++){
+					$total_sks +=$registered_subject[$i]['CreditHours'];
+					$regid[$registered_subject[$i]['IdStudentRegistration']][]=$registered_subject[$i]['IdStudentRegSubjects'];
+				}
+				// echo var_dump($regid);exit;
+				if($total_sks!=0){
+					$invoice['amount'] +=  $item['fsi_amount']*$total_sks*$percentage;
+					$item['total_amount'] = $item['fsi_amount']*$total_sks*$percentage;
+					$item['total_sks'] = $total_sks;
+					$invoice['fee_item'][] = $item;
+				}
+					
+			}else
+	
+			//pendaraban jumlah subject
+			if($item['fi_amount_calculation_type']==301){
+				$total_subject = sizeof($registered_subject);
+					
+				if($total_subject!=0){
+					for($i=0; $i<sizeof($registered_subject); $i++){
+						$regid[$registered_subject[$i]['IdStudentRegistration']][]=$registered_subject[$i]['IdStudentRegSubjects'];
+					}
+					$invoice['amount'] +=  $item['fsi_amount']*$total_subject*$percentage;
+					$item['total_amount'] = $item['fsi_amount']*$total_subject*$percentage;
+					$item['total_subject'] = $total_subject;
+					$invoice['fee_item'][] = $item;
+				}
+			} else
+	
+			//registered subject
+			if($item['fi_amount_calculation_type']==459){
+					
+				$item['total_amount'] = 0;
+	
+				//put registered subject subject id as key
+				$arr_registered_subject = array();
+				for($i=0; $i<sizeof($registered_subject); $i++){
+					$arr_registered_subject[$registered_subject[$i]['IdSubject']] = $registered_subject[$i];
+				}
+	
+				//echo var_dump($arr_registered_subject);
+				// echo "<br>";echo "-----";
+				// echo var_dump($item['subject']);
+				// exit;
+				if(isset($item['subject'])){
+					//$itemamount=0;
+					foreach ($item['subject'] as $subject){
+	
+						if( isset($arr_registered_subject[$subject['fsisub_subject_id']]) ){
+							//echo $subject['fsisub_subject_id']."<br>";
+							//echo $item['fsi_amount']."<br>";
+							// $itemamount+=$item['fsi_amount']*$percentage;
+							$invoice['amount'] +=  $item['fsi_amount']*$percentage;
+							$item['total_amount'] += $item['fsi_amount']*$percentage;
+						}
+	
+					}
+					// echo var_dump($invoice);exit;
+	
+				}
+	
+				if($item['total_amount']>0){
+					$invoice['fee_item'][] = $item;
+	
+	
+				}
+	
+	
+					
+			}
+	
+		}
+		if ( $regid!=array())  $invoice['regid'] = $regid;
+		return $invoice;
+	}
+	
+	public function dispatcher($idstd) {
+		$this->_redirect('/studentfinance/invoice/generate-std-invoice/id/'.$idstd);
+	}
+	
+	
 }
 ?>
