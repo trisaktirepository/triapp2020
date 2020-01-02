@@ -36,6 +36,7 @@ class Studentfinance_Model_DbTable_InvoiceDetail extends Zend_Db_Table_Abstract 
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$selectData = $db->select()
 					->from(array('idtl'=>$this->_name))
+					->join(array('b'=>'fee_item'),'b.fi_id=idtl.fee_item')
 					->where("idtl.invoice_main_id = ?", $invoice_id);
 
 		$row = $db->fetchAll($selectData);
