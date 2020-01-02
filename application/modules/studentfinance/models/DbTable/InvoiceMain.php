@@ -972,16 +972,15 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		$registrationData = $studentRegistrationDb->getStudentInfo($idRegistration);
 	
 		//student profile
-		$studentProfileDb = new Records_Model_DbTable_Studentprofile();
+		$studentProfileDb = new App_Model_Student_DbTable_StudentProfile();
 		$profile = $studentProfileDb->fnViewStudentAppnDetails($registrationData['IdApplication']);
-	
-			
+				
 		//fee structure detail
 		$feeStructureItemDb = new Studentfinance_Model_DbTable_FeeStructureItem();
 		$fee_item = $feeStructureItemDb->getStructureData($feeStructureId);
 	
 		//get registered course in particular semester
-		$subjectRegisterDb = new Registration_Model_DbTable_Studentregsubjects();
+		$subjectRegisterDb = new App_Model_Record_DbTable_StudentRegSubjects();
 		//if ($ses_batch_invoice->ulang=="0")
 		$registered_subject = $subjectRegisterDb->getUnInvoiceRegisteredSubject($idRegistration,$idsemester, '1,3');
 		//else
@@ -989,8 +988,8 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 			
 		$registered_subject=array_values($registered_subject);
 		//semester info
-		$semesterDb = new GeneralSetup_Model_DbTable_Semestermaster();
-		$semester = $semesterDb->getData($idsemester);
+		$semesterDb = new App_Model_General_DbTable_Semestermaster();
+		$semester = $semesterDb->fngetSemestermainDetails($idsemester);
 			
 			
 		//filter only selected fee item

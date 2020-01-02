@@ -835,6 +835,78 @@ class App_Model_Record_DbTable_StudentRegSubjects extends Zend_Db_Table_Abstract
     	$row = $db->fetchRow($sql);
     	if ($row) return $row['credithours']; else return 0;
     }
+    
+    public function getUnInvoiceRegisteredSubject($idStudentRegistration,$semester_id, $type=null){
+    
+    	$db = Zend_Db_Table::getDefaultAdapter();
+    
+    	$select =$db->select()
+    	->from(array('srs'=>'tbl_studentregsubjects'))
+    	->join(array('s'=>'tbl_subjectmaster'),'s.IdSubject = srs.IdSubject')
+    	->where('srs.IdStudentRegistration = ?',$idStudentRegistration)
+    	->where('srs.invoice < 100')
+    	->where('srs.IdSemesterMain = ?',$semester_id);
+    		
+    	if($type){
+    		$select->where('srs.subjectlandscapetype in ('.$type.')');
+    	}
+    
+    	$row = $db->fetchAll($select);
+    
+    	return $row;
+    
+    }
+    
+    public function getUnInvoiceRepeatRegisteredSubject($idStudentRegistration,$semester_id, $type=null){
+    
+    	$db = Zend_Db_Table::getDefaultAdapter();
+    
+    	$select =$db->select()
+    	->from(array('srs'=>'tbl_studentregsubjects'))
+    	->join(array('s'=>'tbl_subjectmaster'),'s.IdSubject = srs.IdSubject')
+    	->where('srs.IdStudentRegistration = ?',$idStudentRegistration)
+    	->where('srs.invoice < 100')
+    	->where('srs.IdSemesterMain = ?',$semester_id);
+    		
+    	if($type){
+    		$select->where('srs.subjectlandscapetype in ('.$type.')');
+    	}
+    
+    	$row = $db->fetchAll($select);
+    
+    	foreach ($row as $key=>$value) {
+    		//remove new subjects
+    		$select =$db->select()
+    		->from(array('srs'=>'tbl_studentregsubjects'))
+    		->where('srs.IdStudentRegistration = ?',$value['IdStudentRegistration'])
+    		->where('srs.IdSubject = ?',$value['IdSubject'])
+    		->where('srs.IdSemesterMain != ?',$value['IdSemesterMain']);
+    		$ulang=$db->fetchRow($select);
+    		if (!$ulang)
+    			unset($row[$key]);
+    	}
+    	//echo var_dump($row);exit;
+    	return $row;
+    
+    }
+    
+    public function getRegisteredSubjectByProgram($idprogram,$semester_id){
+    
+    	$db = Zend_Db_Table::getDefaultAdapter();
+    
+    	$select =$db->select()
+    	->from(array('srs'=>'tbl_studentregsubjects'),array())
+    	->join(array('s'=>'tbl_subjectmaster'),'s.IdSubject = srs.IdSubject',array('IdSubject','SubCode','SubjectName'=>'BahasaIndonesia'))
+    	->join(array('sr'=>'tbl_studentregistration'),'sr.IdStudentRegistration=srs.IdStudentRegistration',array())
+    	->where('sr.IdProgram = ?',$idprogram)
+    	->where('srs.IdSemesterMain = ?',$semester_id)
+    	->group('s.IdSubject');
+    		
+    	$row = $db->fetchAll($select);
+    
+    	return $row;
+    
+    }
 }
 
 
