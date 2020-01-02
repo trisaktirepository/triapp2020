@@ -973,7 +973,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 	
 		//student profile
 		$studentProfileDb = new App_Model_Student_DbTable_StudentProfile();
-		$profile = $studentProfileDb->fnViewStudentAppnDetails($registrationData['IdApplication']);
+		$profile = $studentProfileDb->getData($registrationData['IdApplication']);
 				
 		//fee structure detail
 		$feeStructureItemDb = new Studentfinance_Model_DbTable_FeeStructureItem();
