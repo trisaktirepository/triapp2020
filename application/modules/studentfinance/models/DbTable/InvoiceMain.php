@@ -941,10 +941,11 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		->join(array('b'=>'tbl_activity_calender'),'im.idActivity=b.IdActivity')
 		->where('b.IdProgram = ?', $std['IdProgram'])
 		->where('b.StartDate <= CURDATE()')
-		->where('b.EndDate >= CURDATE()');
+		->where('b.EndDate >= CURDATE()')
+		->where('im.setter="2"');
 		 
 		$row = $db->fetchRow($selectData);
-		echo var_dump($row);exit;
+		//echo var_dump($row);exit;
 		if ($row) {
 			//cek invoice main
 			$selectData = $db->select()
