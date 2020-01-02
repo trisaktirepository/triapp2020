@@ -1189,7 +1189,8 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 	}
 	
 	public function dispatcher($idstd) {
-		$this->_redirect('/studentfinance/invoice/generate-std-invoice/id/'.$idstd);
+		$redirector = Zend_Controller_Action_HelperBroker::getStaticHelper('Redirector');
+		$redirector->gotoUrl('/studentfinance/invoice/generate-std-invoice/id/'.$idstd);
 	}
 	
 	
