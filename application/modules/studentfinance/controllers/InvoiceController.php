@@ -29,7 +29,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 		$this->view->registration = $registration;
 		
 		//student profile
-		$studentProfileDb = new Records_Model_DbTable_Studentprofile();
+		$studentProfileDb = new App_Model_Record_DbTable_Studentprofile();
 		$profile = $studentProfileDb->fnGetStudentProfileByApplicationId($registration['IdApplication']);
 		$this->view->profile = $profile;
 		//-------
@@ -44,7 +44,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 				
 			$idsemester=$act['IdSemesterMain'];
 			//semester
-			$semesterDb = new GeneralSetup_Model_DbTable_Semestermaster();
+			$semesterDb = new App_Model_General_DbTable_Semestermaster();
 			$semester = $semesterDb->fnGetSemestermaster($idsemester);
 			$this->view->semester=$semester;
 			
@@ -56,7 +56,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 			$academicYear = $academicYearDb->getData($semester['idacadyear']);
 			 
 			//program
-			$programDb = new GeneralSetup_Model_DbTable_Program();
+			$programDb = new App_Model_General_DbTable_Program();
 			$program = $programDb->fngetProgramData($std['IdProgram']);
 			$this->view->program=$program;
 	
@@ -69,13 +69,10 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 			$dbBudleDetail=new Studentfinance_Model_DbTable_BundleFeeDetail();
 			$bundleDetail=$dbBudleDetail->getDataByBudle($bundle['idfeebundle']);
 			
-			$dbregsub=new Registration_Model_DbTable_Studentregsubjects();
+			$dbregsub=new App_Model_Record_DbTable_StudentRegSubjects();
 			 
 			$invoiceDb = new Studentfinance_Model_DbTable_InvoiceMain();
-			$invoiceDetailDb = new Studentfinance_Model_DbTable_InvoiceDetail();
-			$invoiceBatchDetailDb = new Studentfinance_Model_DbTable_InvoiceBatchDetail();
-			$invoiceSpcDb = new Studentfinance_Model_DbTable_InvoiceSpc();
-				
+			$invoiceDetailDb = new Studentfinance_Model_DbTable_InvoiceDetail(); 
 			 
 			$db = Zend_Db_Table::getDefaultAdapter();
 			if ($this->getRequest()->isPost()) {
