@@ -639,8 +639,8 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		$dbInvoice = new Studentfinance_Model_DbTable_InvoiceMain();
 		//$dbinvoiceSpc=new Studentfinance_Model_DbTable_InvoiceSpc();
 		$bni = new Studentfinance_Model_DbTable_AccessBni();
-		$dbProgram=new GeneralSetup_Model_DbTable_Program();
-		$dbStd=new Registration_Model_DbTable_Studentregistration();
+		$dbProgram=new App_Model_General_DbTable_Program();
+		$dbStd=new App_Model_Record_DbTable_StudentRegistration();
 		$dbFinance=new App_Model_General_DbTable_Bank();
 		$bank=$dbFinance->fnGetBankDetails(1);
 		$secretkey=$bank['secret_key'];
@@ -650,9 +650,9 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		$invoice=$dbInvoice->getData($idinvoice);
 		//echo var_dump($invoice);exit;
 		$idstd=$invoice['IdStudentRegistration'];
-		$std=$dbStd->getData($idstd);
+		$std=$dbStd->getById($idstd);
 		$idprogram=$std['IdProgram'];
-		$program=$dbProgram->getDataDetail($idprogram);
+		$program=$dbProgram->getData($idprogram);
 		$clientid=$program['Client_Id'];
 		if ($process=='createbilling')
 			$va= '8'.$clientid.$invoice['bill_number'];
