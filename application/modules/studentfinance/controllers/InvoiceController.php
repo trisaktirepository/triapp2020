@@ -34,7 +34,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 		$this->view->profile = $profile;
 		//-------
 		$dbStd=new App_Model_Record_DbTable_StudentRegistration();
-		$std=$dbStd->getById($IdStudentRegistration);
+		$std=$dbStd->getStudentInfo($IdStudentRegistration);
 		//get type of active invoice from active activity
 		$dbActivity=new App_Model_General_DbTable_Activity();
 		$act=$dbActivity->getActiveData($std['IdProgram']);
