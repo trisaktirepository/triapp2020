@@ -197,7 +197,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 					}else{
 						$student_category = 314;
 					}
-					$row =$feeStructure->getApplicantFeeStructure($intake['IdIntake'],$std['IdProgram'],$std['IdBranch'],$student_category,$std['IdProgramMajoring']);
+					$row =$feeStructure->getApplicantFeeStructure($intake['IdIntake'],$std['IdProgram'],$student_category,$std['IdBranch'],$std['IdProgramMajoring']);
 					 
 					if ($row) {
 						$fee_structure = $row;
