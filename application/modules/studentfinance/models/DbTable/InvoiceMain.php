@@ -650,7 +650,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		$invoice=$dbInvoice->getData($idinvoice);
 		//echo var_dump($invoice);exit;
 		$idstd=$invoice['IdStudentRegistration'];
-		$std=$dbStd->getById($idstd);
+		$std=$dbStd->getStudentInfo($idstd);
 		$idprogram=$std['IdProgram'];
 		$program=$dbProgram->getData($idprogram);
 		$clientid=$program['Client_Id'];
