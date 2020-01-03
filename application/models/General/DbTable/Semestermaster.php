@@ -161,6 +161,27 @@ class App_Model_General_DbTable_Semestermaster extends Zend_Db_Table_Abstract
 		 
 		return $lstrSelect;
 	}
+	
+	
+	public function getAllSemesterCanDefer($idstd){
+		
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$sem=$db->select()
+			->from('tbl_studentregsubjects',array('IdSemesterMain'))
+			->where('IdStudentRegistration=?',$idstd);
+		
+		$lstrSelect = $db->select()
+		->from(array("a"=>"tbl_semestermaster"),array('IdSemesterMaster'))
+		->where("a.IdSemesterMaster  not in (".$sem.")")
+		->where('a.SemesterFunctionType=0')
+		->where('a.IdCountable=1')
+		->where('a.SemesterMainEndDate <= CURDATE()');
+		$row=$db->fetchAll($lstrSelect);
+		
+		return $row;
+	}
+	
+	
 	public function getCurrentSemesterTA($scheme=null){
 		$db = Zend_Db_Table::getDefaultAdapter();
 	

@@ -470,6 +470,7 @@ class StudentPortalController extends Zend_Controller_Action
     		$this->view->form = $form;
     	}
     }
+    
     public function indexAction()
     {
     	
@@ -525,6 +526,57 @@ class StudentPortalController extends Zend_Controller_Action
          $registered_semester = $studentSemesterDB->getRegisteredSemester($registration_id);
     	 $this->view->registered_semester = $registered_semester;
     	
+    }
+    public function applyDeferAction()
+    {
+    	 
+    	//survey
+    	 
+    	$this->view->title = $this->view->translate("Defer");
+    
+    	//get applicant profile
+    	$auth = Zend_Auth::getInstance();
+    
+    	//print_r($auth->getIdentity());
+    	 
+    	$appl_id = $auth->getIdentity()->appl_id;
+    	$registration_id = $auth->getIdentity()->registration_id;
+    
+    	$this->view->appl_id = $appl_id;
+    	$this->view->IdStudentRegistration = $registration_id;
+    	 
+    	$studentSemesterDB = new App_Model_Record_DbTable_Studentsemesterstatus();
+    	 
+    	$appProfileDB  = new App_Model_Application_DbTable_ApplicantProfile();
+    	$applicant = $appProfileDB->getData($appl_id);
+    	$this->view->applicant = $applicant;
+    	$dbDefer=new App_Model_Registration_DbTable_ApplyDefer();
+    	//print_r($applicant);
+    	if($this->getRequest()->isPost())
+    	{
+    		$formData = $this->getRequest()->getPost();
+    		$data=array('IdStudentRegistration'=>$formData['IdStudentRegistration'],
+    					'IdSemesterMain'=>$formData['IdSemesterMain'],
+    					'reason'=>$formData['reason'],
+    					'created_at'=>date('Y-m-d H:s:i'),
+    					'created_by'=>$auth->getIdentity()->id,
+    					'request_type'=>$formData['request_type']);
+    		if (!$dbDefer->isIn($registration_id, $formData['IdSemesterMain'])) $dbDefer->addData($data);
+    		
+    	}
+    	//To get Student Academic Info
+    	$studentRegDB = new App_Model_Record_DbTable_StudentRegistration();
+    	$student = $studentRegDB->getStudentInfo($registration_id);
+    	$this->view->student = $student;
+    	 
+    	$dbSemester=new App_Model_General_DbTable_Semestermaster();
+    	$this->view->semester=$dbSemester->getAllSemesterCanDefer($registration_id);
+    	 
+    	$dbDeferReson=new App_Model_Registration_DbTable_DeferType();
+    	$this->view->defertype=$dbDeferReson->getData();
+    	
+    	
+    	$this->view->deferhistory=$dbDefer->getDeferHistory($registration_id);
     }
     
     

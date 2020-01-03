@@ -1,0 +1,78 @@
+<script type="text/javascript">
+ 
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		
+	</div>
+</div>
+<br />  
+ <form name="activity" method="post">
+ <input type="hidden" name="IdStudentRegistration" value="<?php echo $this->student['IdStudentRegistration'];?>">
+ <input type="hidden" name="name" value="<?php echo $this->student["appl_fname"].' '.$this->student["appl_mname"].' '.$this->student["appl_lname"]?>">
+ 
+ <table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		<th width="30%"><?php echo $this->translate("Student ID"); ?></th>
+		<td><?php echo $this->student["registrationId"]?></td>
+	</tr>
+	<tr>
+		<th width="30%"><?php echo $this->translate("Name"); ?></th>
+		<td><?php echo $this->student["appl_fname"].' '.$this->student["appl_mname"].' '.$this->student["appl_lname"]?></td>
+	</tr>
+	<tr>
+		<th width="30%"><?php echo $this->translate("Semester Defer"); ?></th>
+		<td>
+		<select name="IdSemesterMain" >
+		<?php foreach ($this->semester as $item) {?>
+			<option value="<?php echo $item['IdSemesterMaster']?>"><?php echo $item['SemesterMainName']?></option>
+		<?php }?>
+		</select></td>
+	</tr>
+	<tr>
+		<th width="30%"><?php echo $this->translate("Reason"); ?></th>
+		<td><textarea name="reason" col="50" row="5"><?php echo "Cuti karena Sakit"?></textarea></td>
+	</tr>
+	<tr>
+		<th width="30%"><?php echo $this->translate("Defer Type"); ?></th>
+		<td>
+		<select name="request_type" >
+		<?php foreach ($this->defertype as $item) {?>
+			<option value="<?php echo $item['IdRecordResonDefer']?>"><?php echo $item['DeferDescription']?></option>
+		<?php }?>
+		</select></td>
+	</tr>
+	<tr>
+		<td  colspan="2"><input name="submit" value="Save"></td>
+	</tr>
+	
+</table>
+
+<br> 
+<?php echo $this->translate("Defer History")?>
+<table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
+	 <tr><th>No</th>
+	 <th><?php echo $this->translate('Semester')?> </th>
+	 <th><?php echo $this->translate('Reason')?> </th>
+	 <th><?php echo $this->translate('Type')?> </th>
+	  <th><?php echo $this->translate('Apply Date')?> </th>
+	 <th><?php echo $this->translate('Approval Status')?> </th>
+	 <th><?php echo $this->translate('Approved Date')?> </th>
+	 </tr>
+	 <?php $i=1;
+	 	foreach ($this->deferhistory as $item) {?>
+	 	<tr><td><?php echo $i;?></td>
+	 		<td><?php echo $item['SemesterMainName']?></td>
+	 		<td><?php echo $item['reason']?></td>
+	 		<td><?php echo $item['DeferDescription']?></td>
+	 		<td><?php echo $item['created_at']?></td>
+	 		<td><?php echo $item['ApprovalStatus']?></td>
+	 		<td><?php echo $item['updated_at']?></td>
+	 	</tr>
+	 <?php $i++;}?>
+	 
+</table>
+ 
+ </form>
