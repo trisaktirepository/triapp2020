@@ -25,7 +25,7 @@
 		<td><?php echo $this->student["appl_fname"].' '.$this->student["appl_mname"].' '.$this->student["appl_lname"]?></td>
 	</tr>
 	<tr>
-		<th width="30%"><?php echo $this->translate("Semester Defer"); ?></th>
+		<th width="30%"><?php echo $this->translate("Semester").' '.$this->translate("Defer"); ?></th>
 		<td>
 		<select name="IdSemesterMain" >
 		<?php foreach ($this->semester as $item) {?>
@@ -51,17 +51,22 @@
 			?><table><tr><th>No</th>
 			<th>No</th>
 			<th><?php echo $this->translate('Payment Component')?></th>
-			<th><?php echo $this->translate('Amount')?></th></tr><?php 
-			$i=1;
+			<th><?php echo $this->translate('Amount')?></th>
+			</tr><?php 
+			$i=1;$total=0;
 			foreach ($this->invoicedetail as $value) {
 				?>
 				<tr><td><?php echo $i?></td>
 				<td><?php echo $value['fi_name_bahasa']?></td>
-				<td><?php echo $value['amount']?></td></tr>
+				<td><?php echo $value['amount']?></td>
+				</tr>
 				<?php 
-			$i++;
+			$i++;$total=$total+$value['amount'];
 			}
-			?></table><?php 
+			
+			?>
+			<tr><td colspan="2">Total</td><td><?php echo $total?></td></tr>
+			</table><?php 
 		} else {?>
 		<input type="button" value="Create BPP Pokok" onclick="createBPP('<?php echo $this->student['IdStudentRegistration']?>')">
 		<?php }?>
