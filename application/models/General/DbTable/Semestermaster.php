@@ -171,7 +171,7 @@ class App_Model_General_DbTable_Semestermaster extends Zend_Db_Table_Abstract
 			->where('IdStudentRegistration=?',$idstd);
 		
 		$lstrSelect = $db->select()
-		->from(array("a"=>"tbl_semestermaster"),array('IdSemesterMaster'))
+		->from(array("a"=>"tbl_semestermaster"))
 		->where("a.IdSemesterMaster  not in (".$sem.")")
 		->where('a.SemesterFunctionType=0')
 		->where('a.IsCountable=1')
