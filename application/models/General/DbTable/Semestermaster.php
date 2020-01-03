@@ -174,7 +174,7 @@ class App_Model_General_DbTable_Semestermaster extends Zend_Db_Table_Abstract
 		->from(array("a"=>"tbl_semestermaster"),array('IdSemesterMaster'))
 		->where("a.IdSemesterMaster  not in (".$sem.")")
 		->where('a.SemesterFunctionType=0')
-		->where('a.IdCountable=1')
+		->where('a.IsCountable=1')
 		->where('a.SemesterMainEndDate <= CURDATE()');
 		$row=$db->fetchAll($lstrSelect);
 		
