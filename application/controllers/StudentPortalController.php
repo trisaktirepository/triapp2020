@@ -564,7 +564,7 @@ class StudentPortalController extends Zend_Controller_Action
     		if (!$row=$dbDefer->isIn($registration_id, $formData['IdSemesterMain'])) 
     			 $dbDefer->addData($data);
     		else 
-    			$dbDefer->update($data, 'id='.$row['id']);
+    			$dbDefer->update($data, 'id='.$row['id'].' and status=1');
     		
     	}
     	//To get Student Academic Info
@@ -580,6 +580,14 @@ class StudentPortalController extends Zend_Controller_Action
     	
     	
     	$this->view->deferhistory=$dbDefer->getDeferHistory($registration_id);
+    	$dbInvoice=new Studentfinance_Model_DbTable_InvoiceMain();
+    	$invoicedet='';
+    	$invoice=$dbInvoice->getInvoiceByStd($registration_id,$this->view->semester[0]['IdSemesterMaster'],38);
+    	if ($invoice) {
+    		$dbInvoiceDetail=new Studentfinance_Model_DbTable_InvoiceDetail();
+    		$invoicedet=$dbInvoiceDetail->getInvoiceDetail($invoice['id']);
+    		$this->view->invoicedetail=$invoicedet;
+    	}
     }
     
     

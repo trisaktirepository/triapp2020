@@ -51,6 +51,24 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		
 	}
 	
+	public function getInvoiceByStd($stdid,$semester,$idactivity){
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$selectData = $db->select()
+		->from(array('im'=>$this->_name))
+		->where("im.IdStudentRegistration = ?",$stdid)
+		->where("im.semester=?",$semester)
+		->where('im.IdActivity=?',$idactivity);
+			
+		$row = $db->fetchRow($selectData);
+	
+		if(!$row){
+			return null;
+		}else{
+			return $row;
+		}
+	
+	}
+	
 	public function getInvoiceDataByFormulir($noform,$addinfo=null){
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$selectData = $db->select()

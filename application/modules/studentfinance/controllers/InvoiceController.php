@@ -216,9 +216,13 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 					}
 			 
 				}
+				$this->view->bundleDetail= $bundleDetail;
+			} else {
+				echo "Jadwal Pembuatan Invoice Belum dibuka, Hubungi admin Fakultas masing-masing";
+				exit;
 			}
 		 
-		$this->view->bundleDetail= $bundleDetail;
+		
 	}
 	
 	  

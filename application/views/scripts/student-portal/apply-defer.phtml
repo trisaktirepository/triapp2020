@@ -1,5 +1,7 @@
 <script type="text/javascript">
- 
+ function createBPP(idstd) {
+	 window.open('/studentfinance/invoice/generate-std-invoice/id/'+idstd);
+ }
 </script>
 
 <div class="message toolbar">
@@ -44,6 +46,26 @@
 		<?php }?>
 		</select></td>
 	</tr>
+	<tr><td colspan="2">
+		<?php if ($this->invoicedetail!='') {
+			?><table><tr><th>No</th>
+			<th>No</th>
+			<th><?php echo $this->translate('Payment Component')?></th>
+			<th><?php echo $this->translate('Amount')?></th></tr><?php 
+			$i=1;
+			foreach ($this->invoicedetail as $value) {
+				?>
+				<tr><td><?php echo $i?></td>
+				<td><?php echo $value['fi_name_bahasa']?></td>
+				<td><?php echo $value['amount']?></td></tr>
+				<?php 
+			$i++;
+			}
+			?></table><?php 
+		} else {?>
+		<input type="button" value="Create BPP Pokok" onclick="createBPP('<?php echo $this->student['IdStudentRegistration']?>')">
+		<?php }?>
+	</td></tr>
 	<tr>
 		<td  colspan="2"><input type="submit" name="submit" value="Save"></td>
 	</tr>
