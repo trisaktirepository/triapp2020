@@ -561,7 +561,10 @@ class StudentPortalController extends Zend_Controller_Action
     					'created_at'=>date('Y-m-d H:s:i'),
     					'created_by'=>$auth->getIdentity()->id,
     					'request_type'=>$formData['request_type']);
-    		if (!$dbDefer->isIn($registration_id, $formData['IdSemesterMain'])) $dbDefer->addData($data);
+    		if (!$row=$dbDefer->isIn($registration_id, $formData['IdSemesterMain'])) 
+    			 $dbDefer->addData($data);
+    		else 
+    			$dbDefer->update($data, 'id='.$row['id']);
     		
     	}
     	//To get Student Academic Info
