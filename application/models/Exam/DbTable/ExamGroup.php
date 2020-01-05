@@ -40,6 +40,27 @@ class App_Model_Exam_DbTable_ExamGroup extends Zend_Db_Table_Abstract {
 	
 		return $row;
 	}
+	
+	public function getDataByExamtype($semester,$subject,$program,$examtype){
+	
+		$db = Zend_Db_Table::getDefaultAdapter();
+	
+		$select = $db ->select()
+		->from(array('eg'=>$this->_name))
+		->join(array('egp'=>'exam_group_program'),'eg.eg_id=egp.egp_eg_id')
+		->joinLeft(array('sm'=>'tbl_subjectmaster'),'sm.IdSubject=eg.eg_sub_id',array('subject_code'=>'SubCode','subject_name'=>'BahasaIndonesia','faculty_id'=>'IdFaculty'))
+		->joinLeft(array('s'=>'tbl_semestermaster'),'s.IdSemesterMaster=eg.eg_sem_id',array('semester_name'=>'SemesterMainName'))
+		//->joinLeft(array('r'=>'appl_room'),'r.av_id=eg.eg_room_id')
+		//->join(array('eat'=>'tbl_examination_assessment_type'), 'eat.IdExaminationAssessmentType = eg.eg_assessment_type', array('eg_exam_name'=>'DescriptionDefaultlang'))
+		->where('eg.eg_sem_id = ?',$semester)
+		->where('egp.egp_program_id = ?',$program)
+		->where('eg.eg_sub_id =?',$subject)
+		->where('eg.eg_assessment_type=?',$examtype);
+	
+		$row = $db->fetchRow($select);
+	
+		return $row;
+	}
 	public function getDataBySubjectAll($semester,$subject,$program){
 	
 		$db = Zend_Db_Table::getDefaultAdapter();

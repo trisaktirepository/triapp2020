@@ -1687,7 +1687,8 @@ class StudentPortalController extends Zend_Controller_Action
     	 		$charge=$formData['charge'];
     	 	else $charge=0;
     	 	//$IdStudentRegistration = $this->_getParam('IdStudentRegistration', 0);
-    	 	 
+    	 	$std=$dbStd->getStudentRegistrationDetail($IdStudentRegistration);
+    	 	
     	 	//if ($IdStudentRegistration=='')  $IdStudentRegistration=$auth->getIdentity()->registration_id;
     	 	
     	 	$row=$resitmasterDb->isInMaster($IdStudentRegistration, $idSemester,$idSubject);
@@ -1724,6 +1725,90 @@ class StudentPortalController extends Zend_Controller_Action
     	 		$id=$rowresit['sr_id'];
     	 		$resitDb->updateData($data,$id);
     	 	}
+    	 	//componenttype
+    	 	$dbCompnent=new App_Model_Exam_DbTable_Assessmenttype();
+    	 	$comp=$dbCompnent->fnGetAssesmentTypeNamebyID($mark['IdComponentType']);
+    	 	
+    	 	//subject
+    	 	$dbSubject=new App_Model_General_DbTable_Subjectmaster();
+    	 	$subject=$dbSubject->getData($idSubject);
+    	 	
+    	 	$semesterDb = new App_Model_General_DbTable_Semestermaster();
+    	 	$semester = $semesterDb->fnGetSemestermaster($idSemester);
+    	 		
+    	 	$description="Pembayaran Resit -".$comp['IdDescription'].'-'.$subject['ShortName'].'-'.$semester['SemesterMainName'];
+    	 	//Intake
+			$dbIntake=new App_Model_Record_DbTable_Intake();
+			$intake=$dbIntake->getData($std['IdIntake']);
+			
+			//academic year
+			$academicYearDb = new App_Model_Record_DbTable_AcademicYear();
+			$academicYear = $academicYearDb->getData($semester['idacadyear']);
+
+			 
+			//program
+			$programDb = new App_Model_General_DbTable_Program();
+			$program = $programDb->fngetProgramData($std['IdProgram']);
+			$this->view->program=$program;
+			
+			//exam grouping
+			$dbExam=new App_Model_Exam_DbTable_ExamGroup();
+			$exam=$dbExam->getDataByExamtype($idSemester, $idSubject, $program['IdProgram'],406);
+			$examdate=$exam['eg_date'];
+			$expireddate=$examdate->sub(new DateInterval('P1D'));
+    	 	$dbInvoice=new Studentfinance_Model_DbTable_InvoiceMain();
+    	 	$dbInvoiceDet=new Studentfinance_Model_DbTable_InvoiceDetail();
+    	 	$seq_data = array(
+    	 			date('y',strtotime($academicYear['ay_start_date'])),
+    	 			substr($intake['IntakeId'],2,2),
+    	 			$program['ProgramCode'], 0
+    	 	);
+    	 	
+    	 	$db = Zend_Db_Table::getDefaultAdapter();
+    	 	$stmt = $db->prepare("SELECT invoice_seq(?,?,?,?) AS invoice_no");
+    	 	$stmt->execute($seq_data);
+    	 	$invoice_no = $stmt->fetch();
+    	 	
+    	 	$inv_data = array(
+    	 			'bill_number' => $invoice_no['invoice_no'],
+    	 			'appl_id' => $std['IdApplication'],
+    	 			'IdStudentRegistration' => $IdStudentRegistration,
+    	 			'academic_year' => $semester['idacadyear'],
+    	 			'semester' => $idSemester,
+    	 			'bill_amount' =>$charge,
+    	 			'bill_paid' => 0.00,
+    	 			'bill_balance' => $charge,
+    	 			'bill_description' => $description,
+    	 			'college_id' => $program['IdCollege'],
+    	 			'program_code' => $program['ProgramCode'],
+    	 			'creator' => '1',
+    	 			'fs_id' => 0,
+    	 			'status' => 'A',
+    	 			'date_create' => date('Y-m-d H:i:s'),
+    	 			'idactivity'=>43 //43 pembayaran resit
+    	 	);
+    	 	if ($formData["idinvoice"]!='') {
+    	 		$invoice_id = $dbInvoice->insert($inv_data);
+    	 		$dbFeeitem=new Studentfinance_Model_DbTable_FeeItem();
+    	 		//insert invoice detail
+    	 		 
+    	 			$inv_detail_data = array(
+    	 					'invoice_main_id' => $invoice_id,
+    	 					'fi_id' => 42,
+    	 					'fee_item_description' => 'Biaya Resit',
+    	 					'amount' => $charge
+    	 			);
+    	 	
+    	 			$dbInvoiceDet->insert($inv_detail_data);
+    	 		 
+    	 	}
+    	 		
+    	 	 
+    	 	$dateexprired=date('Y-m-d H:s:i',strtotime($expireddate));
+    	 	$dbInvoice->pushToEColl($invoice_id, $dateexprired,'createbilling');
+    	 	 
+    	 	 
+    	 	
     	 	 
     	 }
     	 //get course info
