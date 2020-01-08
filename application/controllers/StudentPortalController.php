@@ -756,7 +756,7 @@ class StudentPortalController extends Zend_Controller_Action
 					$subject_list[$index]['end_sc_date'] = $schedule[sizeof($schedule)-1]['sc_date'];
 						
 					$subject_list[$index]['GroupName'] = $schedule[0]['GroupName'];
-				} 
+				} else $subject_list[$index]['GroupName']='-';
 			} else {
 				//medical Profession
 				$schedule=$dbGroupStdMinor->getScheduleMinor($semester["IdSemesterMain"], $IdStudentRegistration, $subject['IdCourseTaggingGroup']);
@@ -765,7 +765,7 @@ class StudentPortalController extends Zend_Controller_Action
 					$subject_list[$index]['end_sc_date'] = $schedule[0]['sc_date_end'];
 				
 					$subject_list[$index]['GroupName'] = $schedule[0]['GroupName'];
-				}
+				} else $subject_list[$index]['GroupName']='-';
 			}
 			
 		}
