@@ -691,7 +691,7 @@ class StudentPortalController extends Zend_Controller_Action
     	 
     	$type = $this->_getParam('type', 0);
     	$this->view->title = "Kartu Rencana Asli";
-    	$this->_redirect("http://www.print.trisakti.ac.id/student-portal/view-krs/idstudentsemsterstatus/'.$idstudentsemsterstatus.'/registration_id/'.$IdStudentRegistration.'/type/".$type);
+    	//$this->_redirect("http://www.print.trisakti.ac.id/student-portal/view-krs/idstudentsemsterstatus/'.$idstudentsemsterstatus.'/registration_id/'.$IdStudentRegistration.'/type/".$type);
     		
     	global $subject_list;
     	    	
@@ -973,9 +973,9 @@ class StudentPortalController extends Zend_Controller_Action
 		$dompdf = new DOMPDF();
 		$dompdf->load_html($html);
 		$dompdf->set_paper('a4', 'potrait');
-		$dompdf->render();
+		@$dompdf->render();
 		
-		$dompdf = $dompdf->output();
+		$dompdf = @$dompdf->output();
 		//$dompdf->stream($output_filename);						
 		
 		file_put_contents($output_file_path, $dompdf);

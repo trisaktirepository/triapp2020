@@ -128,17 +128,7 @@ and al_id = aps_location_id
 		
 public function getComponentSchedulebytype($transaction_id,$com_type=1,$schedule_id=""){
 		
-		/*
-		 * select distinct(ac_comp_name),aps_test_date, ac_start_time, al_location_name
-  from applicant_program, appl_placement_weightage,appl_placement_detl,appl_component,
-appl_placement_schedule,appl_location 
-where ap_at_trans_id = 1
-and ap_ptest_prog_id  = apw_app_id
-and apw_apd_id =apd_id
-and apd_comp_code = ac_comp_code
-and aps_placement_code = apd_placement_code
-and al_id = aps_location_id
-		 */
+		 
 		if($com_type==1){
 			$where = "c.ac_test_type  = '".$com_type."'";
 		}else{
@@ -156,18 +146,7 @@ and al_id = aps_location_id
 					->joinLeft(array('l'=>'appl_location'),'l.al_id = s.aps_location_id',array('al_location_name'=>'l.al_location_name'),array())
 					->where("ap.ap_at_trans_id  = '".$transaction_id."' and s.aps_id = '".$schedule_id."'" )
 					->where($where);	
-	/*$select = $db ->select()
-	                ->distinct('c.ac_comp_name')
-					->from(array('ap'=>'applicant_ptest'),array())
-					->joinLeft(array('w'=>'appl_placement_weightage'))					
-					->joinLeft(array('w'=>'appl_placement_weightage'),'ap.ap_ptest_prog_id  = w.apw_app_id')
-					->joinLeft(array('d'=>'appl_placement_detl'),'w.apw_apd_id = d.apd_id')					
-					->joinLeft(array('c'=>'appl_component'),'d.apd_comp_code = c.ac_comp_code',array('ac_comp_name'=>'c.ac_comp_name'))					
-					->joinLeft(array('s'=>'appl_placement_schedule'),'s.aps_placement_code = d.apd_placement_code',array('aps_test_date'=>'s.aps_test_date','aps_start_time'=>'s.aps_start_time'))
-					->joinLeft(array('l'=>'appl_location'),'l.al_id = s.aps_location_id',array('al_location_name'=>'l.al_location_name'))
-					->where("ap.ap_at_trans_id  = '".$transaction_id."'")
-					->where($where);*/	
-	 	//echo $select;exit;
+	 
         $stmt = $db->query($select);
         $row = $stmt->fetchAll();
         
