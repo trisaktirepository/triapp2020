@@ -257,12 +257,12 @@ class icampus_Function_Application_Agreementletter extends Zend_View_Helper_Abst
 				$dompdf = new DOMPDF();
 				$dompdf->load_html($html);
 				$dompdf->set_paper('a4', 'potrait');
-				$dompdf->render();
+				@$dompdf->render();
 				
 				
 				//$dompdf->stream($txnData["at_pes_id"]."_agreement_letter.pdf");
 				//exit;
-				$pdf = $dompdf->output();
+				$pdf = @$dompdf->output();
 				
 				
 				//$location_path

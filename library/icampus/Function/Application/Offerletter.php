@@ -313,11 +313,11 @@ class icampus_Function_Application_Offerletter extends Zend_View_Helper_Abstract
 		$dompdf = new DOMPDF();
 		$dompdf->load_html($html);
 		$dompdf->set_paper('a4', 'potrait');
-		$dompdf->render();
+		@$dompdf->render();
 		
 		
 		//$dompdf->stream($txnData["at_pes_id"]."_offer_letter.pdf");
-		$pdf = $dompdf->output();
+		$pdf = @$dompdf->output();
 		//exit;
 		
 		//$location_path
@@ -679,10 +679,10 @@ class icampus_Function_Application_Offerletter extends Zend_View_Helper_Abstract
 		$dompdf = new DOMPDF();
 		$dompdf->load_html($html);
 		$dompdf->set_paper('a4', 'potrait');
-		$dompdf->render();
+		@$dompdf->render();
 		
 		//$dompdf->stream($txnData["at_pes_id"]."_offer_letter.pdf");
-		$pdf = $dompdf->output();
+		$pdf = @$dompdf->output();
 		//exit;
 		
 		//$location_path
