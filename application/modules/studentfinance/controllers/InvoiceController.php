@@ -46,7 +46,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 			//semester
 			$semesterDb = new App_Model_General_DbTable_Semestermaster();
 			$semester = $semesterDb->fnGetSemestermaster($idsemester);
-			echo $semester;echo "semesterif=".$idsemester;
+			//echo $semester;echo "semesterif=".$idsemester;
 			$this->view->semester=$semester;
 			
 			//Intake
@@ -65,7 +65,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 			$dbBundle=new Studentfinance_Model_DbTable_BundleFee();
 			$bundle=$dbBundle->getCurrentSetup(1, $program['IdCollege'], $std['IdProgram'], $std['IdBranch'], $idsemester, $act['idActivity']);
 			$this->view->bundle=$bundle;
-			echo var_dump($bundle);exit;
+		//	echo var_dump($bundle);exit;
 			//get item detail
 			$dbBudleDetail=new Studentfinance_Model_DbTable_BundleFeeDetail();
 			$bundleDetail=$dbBudleDetail->getDataByBudle($bundle['idfeebundle']);
