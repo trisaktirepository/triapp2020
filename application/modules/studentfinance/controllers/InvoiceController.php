@@ -46,6 +46,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 			//semester
 			$semesterDb = new App_Model_General_DbTable_Semestermaster();
 			$semester = $semesterDb->fnGetSemestermaster($idsemester);
+			echo $semester;echo "semesterif=".$idsemester;
 			$this->view->semester=$semester;
 			
 			//Intake
