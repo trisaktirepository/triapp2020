@@ -966,6 +966,23 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		//echo var_dump($row);exit;
 		if ($row) {
 			//cek invoice main
+			if ($row['idActivity']==39 || $row['idActivity']==40 || $row['idActivity']==42) {
+				//cek krs
+				$selectData = $db->select()
+				->from(array('im'=>'tbl_studentregsubjects'))
+				->where('im.IdStudentRegistration=?',$idstd)
+				->where('im.IdSemesterMain=?',$row['IdSemesterMain']);
+				$rowkrs = $db->fetchRow($selectData);
+				if ($rowkrs) {
+					$selectData = $db->select()
+					->from(array('im'=>'invoice_main'))
+					->where('im.IdStudentRegistration=?',$idstd)
+					->where('im.idactivity=?',$row['idActivity']);
+					$row = $db->fetchRow($selectData);
+					if ($row) return false;
+					else return true;
+				} else return false;
+			}
 			$selectData = $db->select()
 			->from(array('im'=>'invoice_main'))
 			->where('im.IdStudentRegistration=?',$idstd)
