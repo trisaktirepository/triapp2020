@@ -30,6 +30,7 @@ class Studentfinance_Model_DbTable_BundleFee extends Zend_Db_Table { //Model Cla
 		$semesterFunctionType=$sem['SemesterFunctionType'];
 		$semesterCountTtype=$sem['SemesterCountType'];
 		
+		
 		$select=$this->lobjDbAdpt->select()
 		->from(array('a'=>$this->_name))
 		->join(array('b'=>'tbl_semestermaster'),'a.idsemestermain=b.idsemestermaster')
@@ -40,7 +41,7 @@ class Studentfinance_Model_DbTable_BundleFee extends Zend_Db_Table { //Model Cla
 		->where('idcollege=?',$college)
 		->where('idprogram=?',$program)
 		->where('idbranch=?',$branch)
-		->where('b.SemesterMainStartDate <=?',$datestart)
+		//->where('b.SemesterMainStartDate <=?',$datestart)
 		->order('b.SemesterMainStartDate DESC');
 		$row=$this->lobjDbAdpt->fetchRow($select);
 		if (!$row) {
@@ -53,7 +54,7 @@ class Studentfinance_Model_DbTable_BundleFee extends Zend_Db_Table { //Model Cla
 			->where('iduniv=?',$univ)
 			->where('idcollege=?',$college)
 			->where('idprogram=?',$program)
-			->where('b.SemesterMainStartDate <=?',$datestart)
+			//->where('b.SemesterMainStartDate <=?',$datestart)
 			->order('b.SemesterMainStartDate DESC');
 			$row=$this->lobjDbAdpt->fetchRow($select);
 			if (!$row) {
@@ -65,7 +66,7 @@ class Studentfinance_Model_DbTable_BundleFee extends Zend_Db_Table { //Model Cla
 				->where('b.SemesterFunctionType=?',$semesterFunctionType)
 				->where('iduniv=?',$univ)
 				->where('idcollege=?',$college)
-				->where('b.SemesterMainStartDate <=?',$datestart)
+				//->where('b.SemesterMainStartDate <=?',$datestart)
 				->order('b.SemesterMainStartDate DESC');
 				$row=$this->lobjDbAdpt->fetchRow($select);
 				if (!$row) {
@@ -76,7 +77,7 @@ class Studentfinance_Model_DbTable_BundleFee extends Zend_Db_Table { //Model Cla
 					->where('b.SemesterCountType=?',$semesterCountTtype)
 					->where('b.SemesterFunctionType=?',$semesterFunctionType)
 					->where('iduniv=?',$univ)
-					->where('b.SemesterMainStartDate <=?',$datestart)
+					//->where('b.SemesterMainStartDate <=?',$datestart)
 					->order('b.SemesterMainStartDate DESC');
 					$row=$this->lobjDbAdpt->fetchRow($select);
 					 
