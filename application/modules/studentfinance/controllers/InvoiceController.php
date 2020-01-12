@@ -66,9 +66,9 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 			$dbBundle=new Studentfinance_Model_DbTable_BundleFee();
 			$bundle=$dbBundle->getCurrentSetup(1, $program['IdCollege'], $std['IdProgram'], $std['IdBranch'], $idsemester, $act['idActivity']);
 			$this->view->bundle=$bundle;
-		if (!$bundle)	{
-			echo var_dump($bundle);exit;
-		}
+		//if (!$bundle)	{
+			//echo var_dump($bundle);exit;
+		//}
 			//get item detail
 			$dbBudleDetail=new Studentfinance_Model_DbTable_BundleFeeDetail();
 			$bundleDetail=$dbBudleDetail->getDataByBudle($bundle['idfeebundle']);
@@ -211,7 +211,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 						foreach ($bundleDetail as $key=>$value) {
 							 
 							$invoice = $invoiceDb->getInvoiceFee($idsemester,$std['IdStudentRegistration'], $fee_structure['fs_id'], $value['fee_item'], $value['percentage'],"1");
-						//	echo var_dump($invoice);
+							echo var_dump($invoice);exit;
 							if ($invoice['amount']>0) $bundleDetail[$key]['fee']=$invoice;
 							else unset($bundleDetail[$key]);
 							$amount=$amount+$invoice['amount'];
