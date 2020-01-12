@@ -34,8 +34,8 @@ class Studentfinance_Model_DbTable_BundleFee extends Zend_Db_Table { //Model Cla
 		->from(array('a'=>$this->_name))
 		->join(array('b'=>'tbl_semestermaster'),'a.idsemestermain=b.idsemestermaster')
 		->where('idactivity=?',$idactivity)
-		->where('b.SemesterCountType=?',$semesterCountTtype)
-		->where('b.SemesterFunctionType=?',$semesterFunctionType)
+		//->where('b.SemesterCountType=?',$semesterCountTtype)
+		//->where('b.SemesterFunctionType=?',$semesterFunctionType)
 		->where('iduniv=?',$univ)
 		->where('idcollege=?',$college)
 		->where('idprogram=?',$program)
@@ -83,6 +83,7 @@ class Studentfinance_Model_DbTable_BundleFee extends Zend_Db_Table { //Model Cla
 				}
 			}
 		}
+		echo $select;
 		return $row;
 	}
 	
