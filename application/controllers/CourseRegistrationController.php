@@ -2485,7 +2485,10 @@ public function registerAction(){
     		$formData = $this->getRequest()->getPost();
     		foreach ($formData['drop'] as $key=>$value) {
     			$dbSub->drop($key);
+    			
     		}
+    		//check invoice if paid move to advantage
+    		
     		$dbconfirm->inactive($formData['confirm'], $formData['IdStudentRegistration']);
     		$this->_redirect( $this->baseUrl . '/default/course-registration/course-register');
     			

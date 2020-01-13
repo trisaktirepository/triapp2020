@@ -390,6 +390,70 @@ class App_Model_Record_DbTable_StudentRegSubjects extends Zend_Db_Table_Abstract
         	 
 	       		$db->delete($this->_name,"IdStudentRegSubjects =".$sregid);
 	       		if ($this->hasGroupMinor($data['IdCourseTaggingGroup'])) $this->dropMinor($data);//$this->dropStudentMapping($data);
+        		//check invoice
+	       		$sql = $db->select()
+	       				->from('invoice_main')
+	       				->where('IdStudentRegistration=?',$iddrop)
+	       				->where('idactivity in (39,40,42)')
+	       				->where('status_va<>"P"')
+	       				->where('semester=?',$data['IdSemesterMain']);
+	       		$invoice=$db->fetchRow($sql);
+	       		if ($invoice) $db->delete('invoice_main',"id =".$invoice['id']);
+	       		else {
+	       			$sql = $db->select()
+	       			->from('invoice_main')
+	       			->where('IdStudentRegistration=?',$iddrop)
+	       			->where('idactivity in (39,40,42)')
+	       			->where('status_va="P"')
+	       			->where('semester=?',$data['IdSemesterMain']);
+	       			$invoice=$db->fetchRow($sql);
+	       			if ($invoice) {
+	       				$sql = $db->select()
+	       				->from('payment_main')
+	       				->where('IdStudentRegistration=?',$iddrop)
+	       				->where('no_billing=?',$invoice['bill_number']);
+	       				$payment=$db->fetchRow($sql);
+	       				
+	       				$advancePaymentDb = new Studentfinance_Model_DbTable_AdvancePayment();
+	       				$idsubject=$data['IdSubject'];
+	       				//get payment
+	       				$sql = $db->select()
+	       				->from('tbl_subjectmaster')
+	       				->where('IdSubject=?',$idsubject);
+	       				$sksrec=$db->fetchRow($sql);
+	       				$sks=$sksrec['CreditHours'];
+	       				//advantage
+	       				$adv_amount = $sks*300000;
+	       				$data = array(
+	       						'advpy_appl_id' => $invoice['appl_id'],
+	       						'advpy_acad_year_id' => $invoice['academic_year'],
+	       						'advpy_sem_id' => $invoice['semester'],
+	       						'advpy_prog_code' => $invoice['program_code'],
+	       						'advpy_fomulir' => $invoice['no_fomulir'],
+	       						'advpy_invoice_no' => $invoice['bill_number'],
+	       						'advpy_invoice_id' => $invoice['id'],
+	       						'advpy_payment_id' => $payment['id'],
+	       						'advpy_description' => 'Excess Payment for invoice no:'.$invoice['bill_number'],
+	       						'advpy_amount' => $adv_amount,
+	       						'advpy_total_paid' => 0,
+	       						'advpy_total_balance' => $adv_amount,
+	       						'advpy_status' => 'A'
+	       				
+	       				);
+	       				$advancePaymentDb->insert($data);
+	       				
+	       				//$amt_paid = $tot_amount - $adv_amount;
+	       				$paid = $invoice['bill_paid'] - $adv_amount;
+	       				$amount = $invoice['bill_amount'] - $adv_amount; 
+	       				
+	       				$data = array(
+	       						'bill_paid' => $paid,
+	       						'bill_amount' => $amount
+	       				);
+	       				$db->update('invoice_main', 'id = '.$invoice['id']);
+	       			}
+	       		}
+        	
         	}
         	$data['id_userdrop']=$iddrop;
         	$data['id_admin']=$idadmin;
