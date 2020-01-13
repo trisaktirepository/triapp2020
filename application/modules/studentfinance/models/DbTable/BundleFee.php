@@ -54,6 +54,7 @@ class Studentfinance_Model_DbTable_BundleFee extends Zend_Db_Table { //Model Cla
 			->where('iduniv=?',$univ)
 			->where('idcollege=?',$college)
 			->where('idprogram=?',$program)
+			->where('idbranch is null or idbranch=0')
 			//->where('b.SemesterMainStartDate <=?',$datestart)
 			->order('b.SemesterMainStartDate DESC');
 			$row=$this->lobjDbAdpt->fetchRow($select);
@@ -66,6 +67,8 @@ class Studentfinance_Model_DbTable_BundleFee extends Zend_Db_Table { //Model Cla
 				->where('b.SemesterFunctionType=?',$semesterFunctionType)
 				->where('iduniv=?',$univ)
 				->where('idcollege=?',$college)
+				->where('idprogram is null or idprogram=0')
+				->where('idbranch is null or idbranch=0')
 				//->where('b.SemesterMainStartDate <=?',$datestart)
 				->order('b.SemesterMainStartDate DESC');
 				$row=$this->lobjDbAdpt->fetchRow($select);
@@ -77,6 +80,9 @@ class Studentfinance_Model_DbTable_BundleFee extends Zend_Db_Table { //Model Cla
 					->where('b.SemesterCountType=?',$semesterCountTtype)
 					->where('b.SemesterFunctionType=?',$semesterFunctionType)
 					->where('iduniv=?',$univ)
+					->where('idcollege is null or idcollege=0')
+					->where('idprogram is null or idprogram=0')
+					->where('idbranch is null or idbranch=0')
 					//->where('b.SemesterMainStartDate <=?',$datestart)
 					->order('b.SemesterMainStartDate DESC');
 					$row=$this->lobjDbAdpt->fetchRow($select);
