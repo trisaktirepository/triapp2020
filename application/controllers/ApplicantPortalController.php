@@ -4136,7 +4136,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     		$documentDB->addData($doc);
     	}
     	//$dompdf->stream("Perjanjian_".$txnId."_".date('Ymd_Hi').".pdf");
-    	//$this->redirect('http://www.spmb.trisakti.ac.id/applicant-portal/account');
+    	$this->redirect('applicant-portal/account');
     	//exit;
     
     }
