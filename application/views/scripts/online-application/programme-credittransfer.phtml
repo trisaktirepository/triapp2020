@@ -121,7 +121,23 @@ function getGroup(){
 
 	});
 }
- 
+function save(index) {
+	subject=$("#subjectname"+index).val();
+	subcode=$("#subjectcode"+index).val();
+	sks=$("#sks"+index).val();
+	grade=$("#grade"+index).val();
+	if (subject!='' && subcode!='' && sks !='' && grade!='') {
+		$.ajax({
+			url: "<?php echo $this->url(array('module'=>'default','controller'=>'online-application', 'action'=>'ajax-save-mk'),'default',true);?>",
+			data: {'subject':subject,'subcode':subcode,'sks':sks,'grade':grade},
+			type: 'POST',
+			dataType: 'json',
+			 
+		}).done(function ( data ) {
+			
+		});
+	}else alert('Kode matakuliah, Nama matakuliah, sks, dan Nilai harus diisi');
+}
 
 function setSubject(){
 	var n=$('#nofsubject').val();
@@ -132,10 +148,10 @@ function setSubject(){
 	//alert(n);
 	append_html="";
 	for (var index = nofrow+1; index < nofrow+n+1; index++) {
-		append_html += '<tr><td>'+index+'</td><td><input type="text" name="subjectcode['+index+']" size="15"> </td>';
-		append_html += '<td><input type="text" name="subjectname['+index+']" size="60"> </td>';
-		append_html += '<td><input type="text" name="sks['+index+']" size="4"> </td>';
-		append_html += '<td><input type="text" name="grade['+index+']" size="4" > </td></tr>';
+		append_html += '<tr><td>'+index+'</td><td><input type="text" name="subjectcode['+index+']" id="subjectcode'+index+'" size="15" onblur="save('+index+')" > </td>';
+		append_html += '<td><input type="text" name="subjectname['+index+']" id="subjectname'+index+'"  size="60" onblur="save('+index+')" > </td>';
+		append_html += '<td><input type="text" name="sks['+index+']" id="sks'+index+'" size="4" onblur="save('+index+')" > </td>';
+		append_html += '<td><input type="text" name="grade['+index+']" id="grade'+index+'" size="4" onblur="save('+index+')" > </td></tr>';
 	}	
 	//alert(append_html);
 	tables.append(append_html);
@@ -199,7 +215,35 @@ function continues(){
 </table>
 </fieldset>
 <br>
-<?php }?>
+
+<fieldset><legend><?php echo $this->translate("Subject List")?></legend>
+
+
+<input type="hidden" id="nofrow" value="<?php echo count($this->subjects);?>">
+<table class="table" id="table_subject">
+<tr><th><?php echo $this->translate("No")?></th>
+<th><?php echo $this->translate("Subject Code")?></th>
+<th><?php echo $this->translate("Subject Name")?></th>
+<th><?php echo $this->translate("Credit Hour")?></th>
+<th><?php echo $this->translate("Grade")?></th>
+<th><?php echo $this->translate("Drop")?></th>
+</tr>
+<?php if (count($this->subjects)>0) {
+	$i=1;
+	foreach ($this->subjects as $subject) {
+		?>
+	<tr><td><?php echo $i?></td>
+	<td><input type="text" name="subjectcode[<?php echo $i?>]" value="<?php echo $subject['SubjectCode']?>" size="15"></td>
+	<td><input type="text" name="subjectname[<?php echo $i?>]" value="<?php echo $subject['SubjectName']?>" size="60"></td>
+	<td><input type="text" name="sks[<?php echo $i?>]" value="<?php echo $subject['sks'] ?>" size="4"></td>
+	<td><input type="text" name="grade[<?php echo $i?>]" value="<?php echo $subject['Grade'] ?>" size="4"></td>
+	<td><input type="checkbox" name="drop[]" value="<?php echo $subject['SubjectCode'] ?>" ></td>
+</tr>
+<?php $i++;}
+ }?>
+</table>
+</fieldset>
+<?php } else {?>
 <fieldset><legend><?php echo $this->translate("Program Detail")?></legend>
 <form name="credittransfer" action="" method="post">
 <input type="hidden" name="transactionId" value="<?php echo $this->transaction_id;?>">
@@ -306,32 +350,21 @@ function continues(){
  
 </table>
 </fieldset> 
-<fieldset><legend><?php echo $this->translate("Subject List")?></legend>
-<?php echo $this->translate('Add Number of Subject:')?> <input type="text" id="nofsubject" onchange="setSubject()" size="5">
-<input type="hidden" id="nofrow" value="<?php echo count($this->subjects);?>">
-<table class="table" id="table_subject">
-<tr><th><?php echo $this->translate("No")?></th>
-<th><?php echo $this->translate("Subject Code")?></th>
-<th><?php echo $this->translate("Subject Name")?></th>
-<th><?php echo $this->translate("Credit Hour")?></th>
-<th><?php echo $this->translate("Grade")?></th>
-<th><?php echo $this->translate("Drop")?></th>
-</tr>
-<?php if (count($this->subjects)>0) {
-	$i=1;
-	foreach ($this->subjects as $subject) {
-		?>
-	<tr><td><?php echo $i?></td>
-	<td><input type="text" name="subjectcode[<?php echo $i?>]" value="<?php echo $subject['SubjectCode']?>" size="15"></td>
-	<td><input type="text" name="subjectname[<?php echo $i?>]" value="<?php echo $subject['SubjectName']?>" size="60"></td>
-	<td><input type="text" name="sks[<?php echo $i?>]" value="<?php echo $subject['sks'] ?>" size="4"></td>
-	<td><input type="text" name="grade[<?php echo $i?>]" value="<?php echo $subject['Grade'] ?>" size="4"></td>
-	<td><input type="checkbox" name="drop[]" value="<?php echo $subject['SubjectCode'] ?>" ></td>
-</tr>
-<?php $i++;}
- }?>
-</table>
 </fieldset>
+<table>
+	<tr><th><?php echo $this->translate('IPK :')?></th>
+	<td> <input type="text" id="ipk" name="ipk" size="5"></td>
+	</tr>
+	<tr><th><?php echo $this->translate('sks Total :')?></th>
+	<td> <input type="text" id="skstotal"  name="skstotal" size="5"> sks</td>
+	</tr>
+	<tr><th><?php echo $this->translate('Jumlah Mata Kuliah :')?></th>
+	<td> <input type="text" id="nofsubject" name="nofsubject" onchange="setSubject()" size="5"></td>
+	</tr>
+</table>
+<?php }
+?>
+
  
  <input type="submit" value="Kirim"> <input type="button" value="Teruskan" onclick="window.location = '<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'uploaddocument'),'default',true);?>' "> 
 </fieldset>

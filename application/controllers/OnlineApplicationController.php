@@ -2500,6 +2500,36 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	echo $json;
     	exit();
     }
+    
+    public function ajaxSaveMkAction(){
+    
+    	$pt = $this->_getParam('pt', 0);
+    	//if ($this->getRequest()->isXmlHttpRequest()) {
+    	$this->_helper->layout->disableLayout();
+    	//}
+    
+    	$ajaxContext = $this->_helper->getHelper('AjaxContext');
+    	$ajaxContext->addActionContext('view', 'html');
+    	$ajaxContext->initContext();
+    	if($this->getRequest()->isPost())
+    	{
+    		$formData = $this->getRequest()->getPost();
+    		$data=array('');
+    	}
+    	$db = Zend_Db_Table::getDefaultAdapter();
+    	$select=$db->select()
+    	->form();
+    	//	echo var_dump($row);exit;
+    	$ajaxContext->addActionContext('view', 'html')
+    	->addActionContext('form', 'html')
+    	->addActionContext('process', 'json')
+    	->initContext();
+    
+    	$json = Zend_Json::encode($row);
+    
+    	echo $json;
+    	exit();
+    }
     public function ajaxGetBranchAction(){
     	$program_id = $this->_getParam('program_id', 0);
     	$type = $this->_getParam('type', 0);
@@ -8992,99 +9022,12 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	if ($this->getRequest()->isPost()) {
     		
     		$formData = $this->getRequest()->getPost();
-    		$intake=$formData['intake_id'];
-    		$dbIntake=new App_Model_Record_DbTable_IntakeAcademicYear();
-    		$yearacad=$dbIntake->getDataByIntake($intake);
-    		if ($yearacad)
-    			$yearacad=$yearacad['acad_year'];
-    		else $yearacad=0;
-    			
-    		$placementDB = new App_Model_Record_DbTable_PlacementHead();
-    		$applicantTransactionDn->updateData(array('at_intake'=>$intake,'at_academic_year'=>$yearacad), $transaction_id);
-    		
-    		$subjectcode=$formData['subjectcode'];
-    		$subjectnames=$formData['subjectname'];
-    		$skss=$formData['sks'];
-    		$grades=$formData['grade'];
-    		$row=$dbApply->isIn($formData['transactionId']);
-    		if ($row) $idapply=$row['idApply']; else $idapply=0;
-	    	if ($formData['nim_asal']!='') {
-	    		$data=array( 'PT_Asal'=>$formData['pt_asal'], 
-	    				'Prodi_Asal'=>$formData['prodi_asal'],
-	    				'nim_asal'=>$formData['nim_asal'],
-	    				'transaction_id'=>$formData['transactionId'],
-	    				'dt_entry'=>date('Y-m-d h:s:i'),
-	    				'user_id'=>$auth->getIdentity()->appl_id,
-	    				'IdProgram'=>$formData['ap_prog_code']);
-	    		
-	    		if ($row) {
-	    			///update
-	    			$dbApply->updateData($data, $row['idApply']);
-	    			$idapply=$row['idApply'];
-	    		} else {
-	    			//add
-	    			$idapply=$dbApply->addData($data);
-	    		}
-	    		//appply program
-	    		//delete ptest
-	    		$applicantProgramDb=new App_Model_Application_DbTable_ApplicantProgram();
-	    		$applicantProgramDb->deleteTransactionData($transaction['at_trans_id']);
-	    		$dbProgram=new App_Model_General_DbTable_Program();
-	    		$prog=$dbProgram->getData($formData['ap_prog_code']);
-	    		
-	    		$dbbranch=new App_Model_General_DbTable_Branchofficevenue();
-	    		$branch=$dbbranch->getData($formData['grouppssb']);
-	    		//add ptest program prefered 1
-	    		$data1 = array(
-	    				'ap_at_trans_id' =>$transaction['at_trans_id'],
-	    				'ap_prog_code' => $prog['ProgramCode'],
-	    				'ap_preference' =>1,
-	    				'IdProgramBranch'=>$formData['grouppssb'],
-	    				'IdBranch'=>$branch['IdBranch']
-	    		);
-	    		 
-	    		//checking for selected programme
-	    		if( isset($data1['ap_prog_code']) && $data1['ap_prog_code']!=null && $data1['ap_prog_code']!="" && $data1['ap_prog_code']!=0 ){
-	    			$row=$applicantProgramDb->IsIn($transaction['at_trans_id'], '2');
-	    			if (!$row)
-	    				$applicantProgramDb->insert($data1);
-	    			else
-	    				$applicantProgramDb->updateData($data1, $row['ap_id']);
-	    			 
-	    		}else{
-	    			$this->view->noticeError = $this->translate("Silalah pilih program studi");
-	    		
-	    			 
-	    		}
-	    	}
-	    	
-	    	if ($idapply!=0) {
-	    		foreach ($subjectcode as $key=>$value) {
-	    			$subject=$subjectnames[$key];
-	    			$sks = $skss[$key];
-	    			$grade=$grades[$key];
-	    			$data=array('SubjectCode'=>$value,
-	    						'SubjectName'=>$subject, 
-	    						'sks'=>$sks,
-	    						'Grade'=>$grade,
-	    						'dt_entry'=>date('Y-m-d h:s:i'),
-	    						'idApply'=>$idapply);
-	    			$row=$dbAppySubject->isIn($idapply, $value);
-	    			if ($row) {
-	    				//update
-	    				$dbAppySubject->updateData($data, $row['idCTSubject']);
-	    			} else {
-	    				//insert
-	    				$dbAppySubject->addData($data);
-	    			}
-	    			
-	    		}
-	    		if (isset($formData['drop'])) {
-	    			foreach ($formData['drop'] as $value) {
-	    				$dbAppySubject->deleteDataBySubcode($idapply, $value);
-	    			}
-	    		}
-	    	}
+    		$this->saveCreditTransfer($formData);
+    		if (isset($formData['drop'])) {
+    			foreach ($formData['drop'] as $value) {
+    				$dbAppySubject->deleteDataBySubcode($idapply, $value);
+    			}
+    		}
     		//echo var_dump($formData);exit;
     	}
     	
@@ -9105,6 +9048,107 @@ class OnlineApplicationController extends Zend_Controller_Action {
          
         
         $this->view->title = $this->view->translate("Programme");
+    }
+    
+    public function saveCreditTransfer($formData) {
+    	
+    	$dbApply=new App_Model_Application_DbTable_CreditTransfer();
+    	$dbAppySubject=new App_Model_Application_DbTable_CreditTransferSubject();
+    	$auth = Zend_Auth::getInstance();
+    	$applicantTransactionDn = new App_Model_Application_DbTable_ApplicantTransaction();
+    	 
+    	$intake=$formData['intake_id'];
+    	$dbIntake=new App_Model_Record_DbTable_IntakeAcademicYear();
+    	$yearacad=$dbIntake->getDataByIntake($intake);
+    	if ($yearacad)
+    		$yearacad=$yearacad['acad_year'];
+    	else $yearacad=0;
+    	 
+    	$placementDB = new App_Model_Record_DbTable_PlacementHead();
+    	$applicantTransactionDn->updateData(array('at_intake'=>$intake,'at_academic_year'=>$yearacad), $formData['transactionId']);
+    	
+    	$subjectcode=$formData['subjectcode'];
+    	$subjectnames=$formData['subjectname'];
+    	$skss=$formData['sks'];
+    	$grades=$formData['grade'];
+    	$row=$dbApply->isIn($formData['transactionId']);
+    	if ($row) $idapply=$row['idApply']; else $idapply=0;
+    	if ($formData['nim_asal']!='') {
+    		$data=array('PT_Asal'=>$formData['pt_asal'],
+    				'Prodi_Asal'=>$formData['prodi_asal'],
+    				'nim_asal'=>$formData['nim_asal'],
+    				'transaction_id'=>$formData['transactionId'],
+    				'ipk_asal'=>$formData['ipk'],
+    				'sks_total'=>$formData['skstotal'],
+    				'jml_mk'=>$formData['jmlmk'],
+    				'dt_entry'=>date('Y-m-d h:s:i'),
+    				'user_id'=>$auth->getIdentity()->appl_id,
+    				'IdProgram'=>$formData['ap_prog_code']);
+    		 
+    		if ($row) {
+    			///update
+    			$dbApply->updateData($data, $row['idApply']);
+    			$idapply=$row['idApply'];
+    		} else {
+    			//add
+    			$idapply=$dbApply->addData($data);
+    		}
+    		//appply program
+    		//delete ptest
+    		$applicantProgramDb=new App_Model_Application_DbTable_ApplicantProgram();
+    		$applicantProgramDb->deleteTransactionData($formData['transactionId']);
+    		$dbProgram=new App_Model_General_DbTable_Program();
+    		$prog=$dbProgram->getData($formData['ap_prog_code']);
+    		 
+    		$dbbranch=new App_Model_General_DbTable_Branchofficevenue();
+    		$branch=$dbbranch->getData($formData['grouppssb']);
+    		//add ptest program prefered 1
+    		$data1 = array(
+    				'ap_at_trans_id' =>$formData['transactionId'],
+    				'ap_prog_code' => $prog['ProgramCode'],
+    				'ap_preference' =>1,
+    				'IdProgramBranch'=>$formData['grouppssb'],
+    				'IdBranch'=>$branch['IdBranch']
+    		);
+    	
+    		//checking for selected programme
+    		if( isset($data1['ap_prog_code']) && $data1['ap_prog_code']!=null && $data1['ap_prog_code']!="" && $data1['ap_prog_code']!=0 ){
+    			$row=$applicantProgramDb->IsIn($formData['transactionId'], '2');
+    			if (!$row)
+    				$applicantProgramDb->insert($data1);
+    			else
+    				$applicantProgramDb->updateData($data1, $row['ap_id']);
+    			 
+    		}else{
+    			$this->view->noticeError = $this->translate("Silalah pilih program studi");
+    			 
+    			 
+    		}
+    	}
+    	
+    	if ($idapply!=0) {
+    		foreach ($subjectcode as $key=>$value) {
+    			$subject=$subjectnames[$key];
+    			$sks = $skss[$key];
+    			$grade=$grades[$key];
+    			$data=array('SubjectCode'=>$value,
+    					'SubjectName'=>$subject,
+    					'sks'=>$sks,
+    					'Grade'=>$grade,
+    					'dt_entry'=>date('Y-m-d h:s:i'),
+    					'idApply'=>$idapply);
+    			$row=$dbAppySubject->isIn($idapply, $value);
+    			if ($row) {
+    				//update
+    				$dbAppySubject->updateData($data, $row['idCTSubject']);
+    			} else {
+    				//insert
+    				$dbAppySubject->addData($data);
+    			}
+    	
+    		}
+    		
+    	}
     }
     
     private function encrypt_decrypt ($data, $encrypt) {

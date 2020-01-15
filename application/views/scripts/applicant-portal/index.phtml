@@ -113,6 +113,7 @@ $pdb = new App_Model_Application_DbTable_ApplicantPtest();
 	</tr>
 	
 	<?php 
+	$dialogregistration="";
 	if( sizeof($this->paginator) >0 ){
 	$i=0;
 	$dbInvoice=new Studentfinance_Model_DbTable_InvoiceMain();
@@ -419,7 +420,7 @@ $pdb = new App_Model_Application_DbTable_ApplicantPtest();
 						$paymentMainDb = new Studentfinance_Model_DbTable_PaymentMain();
 						$payment = $paymentMainDb->getApplicantPaymentInfo($entry['at_pes_id']);
 
-						If ($entry['at_appl_type']!=3)
+						if ($entry['at_appl_type']!=3)
                         {
                             if(date('Y-m-d') >= $reg_start_date){
                             
@@ -445,6 +446,7 @@ $pdb = new App_Model_Application_DbTable_ApplicantPtest();
 	                                    echo "<a href='#' onclick='DownloadAppVerifikasi(".$entry['at_trans_id'].")'>Data Verifikasi</a>";
 	                                     
 									}else{
+										$dialogregistration="1";
 	                                    echo "<a href='#' onclick='jadwal(".$entry['at_trans_id'].")'>Pesan tanggal pendaftaran ulang</a>";		
 	                                }	
                                 }
@@ -518,6 +520,7 @@ $pdb = new App_Model_Application_DbTable_ApplicantPtest();
 
 
 <div id="dialog-box" title="Jadwal Pendaftaran">
+<?php if ($dialogregistration=="1") {?>
 <form name="form1" id="form1" method="post" action="<?php echo $this->url(array('module'=>'default','controller'=>'applicant-portal','action'=>'jadwal-pendaftaran'), 'default', true);?>">
 <input type='hidden' name='txn_id' id='txn_id' value=''>
 
@@ -550,6 +553,7 @@ Pastikan semua kelengkapan dokumen daftar ulang dapat dipenuhi sebelum tanggal y
 		} ?>
 	</table>
 </form>
+<?php }?>
 </div>
 
 <div id="dialog-grade">

@@ -3564,7 +3564,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     				$dbInv->pushToECollForEnrollmentPerBilling($formData['transaction_id'],$value['bill_number'],'createbilling');
     		}
     		//print aggrement
-    		$this->_redirect('online-application/generate-agreement-letter/transaction_id/'.$txnId.'/paket/'.$paket);
+    		$this->_redirect('applicant-portal/generate-agreement-letter/transaction_id/'.$txnId.'/paket/'.$paket);
     		//$this->_redirect('/applicant-portal/account');
     	}
     	//get applicant info
