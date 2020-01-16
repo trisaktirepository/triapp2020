@@ -2544,6 +2544,42 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	echo $json;
     	exit();
     }
+    public function ajaxSaveAttAction(){
+    
+    	 
+    	//if ($this->getRequest()->isXmlHttpRequest()) {
+    	$this->_helper->layout->disableLayout();
+    	//}
+    	$dbApply=new App_Model_Application_DbTable_CreditTransfer();
+    	$auth = Zend_Auth::getInstance();
+    	$ajaxContext = $this->_helper->getHelper('AjaxContext');
+    	$ajaxContext->addActionContext('view', 'html');
+    	$ajaxContext->initContext();
+    	if($this->getRequest()->isPost())
+    	{
+    		$formData = $this->getRequest()->getPost();
+    		$data=array('ipk_asal'=>$formData['ipk'],
+    				'sks_total'=>$formData['skstotal'],
+    				'jml_mk'=>$formData['nofsubject']);
+    		 
+    			$dbApply->update($data, 'idApply='.$formData['idapp']);
+    		 
+    	}
+    	
+    	$db = Zend_Db_Table::getDefaultAdapter();
+    
+    	//	echo var_dump($row);exit;
+    	$ajaxContext->addActionContext('view', 'html')
+    	->addActionContext('form', 'html')
+    	->addActionContext('process', 'json')
+    	->initContext();
+    
+    	$json = Zend_Json::encode($row);
+    
+    	echo $json;
+    	exit();
+    }
+    
     public function ajaxGetBranchAction(){
     	$program_id = $this->_getParam('program_id', 0);
     	$type = $this->_getParam('type', 0);
@@ -9142,7 +9178,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     		}
     	}
     	
-    	if ($idapply!=0) {
+    	/* if ($idapply!=0) {
     		foreach ($subjectcode as $key=>$value) {
     			$subject=$subjectnames[$key];
     			$sks = $skss[$key];
@@ -9164,7 +9200,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	
     		}
     		
-    	}
+    	} */
     }
     
     private function encrypt_decrypt ($data, $encrypt) {

@@ -139,6 +139,23 @@ function save(index) {
 	} 
 }
 
+function saveatt(idapp) {
+	ipk=$("#ipk").val();
+	skstotal=$("#skstotal").val();
+	nofsubject=$("#nofsubject").val();
+	 
+		$.ajax({
+			url: "<?php echo $this->url(array('module'=>'default','controller'=>'online-application', 'action'=>'ajax-save-att'),'default',true);?>",
+			data: {'idapp':idapp,'ipk':ipk,'skstotal':skstotal,'nofsubject':nofsubject},
+			type: 'POST',
+			dataType: 'json',
+			 
+		}).done(function ( data ) {
+			
+		});
+	 
+}
+
 function setSubject(){
 	var n=$('#nofsubject').val();
 	var nofrow=$('#nofrow').val();
@@ -219,13 +236,13 @@ function continues(){
 
 <table>
 	<tr><th><?php echo $this->translate('IPK :')?></th>
-	<td> <input type="text" id="ipk" name="ipk" size="5" value="<?php echo $this->application['ipk_asal']?>"></td>
+	<td> <input type="text" id="ipk" name="ipk" size="5" value="<?php echo $this->application['ipk_asal']?>" onblur="saveatt('<?php echo $this->application['idApply'];?>')"></td>
 	</tr>
 	<tr><th><?php echo $this->translate('sks Total :')?></th>
-	<td> <input type="text" id="skstotal"  name="skstotal" size="5" value="<?php echo $this->application['sks_total']?>"> sks</td>
+	<td> <input type="text" id="skstotal"  name="skstotal" size="5" value="<?php echo $this->application['sks_total']?>" onblur="saveatt('<?php echo $this->application['idApply'];?>')"> sks</td>
 	</tr>
 	<tr><th><?php echo $this->translate('Jumlah Mata Kuliah :')?></th>
-	<td> <input type="text" id="nofsubject" name="nofsubject" onchange="setSubject()" size="5" value="<?php echo $this->application['jml_mk']?>"></td>
+	<td> <input type="text" id="nofsubject" name="nofsubject" onchange="setSubject()" size="5" value="<?php echo $this->application['jml_mk']?>" onblur="saveatt('<?php echo $this->application['idApply'];?>')"></td>
 	</tr>
 </table>
 
@@ -390,10 +407,12 @@ function continues(){
 	</tr>
 </table>
 <?php }
-?>
+if ($this->application) {?>
 
  
- <input type="submit" value="Kirim"> <input type="button" value="Teruskan" onclick="window.location = '<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'uploaddocument'),'default',true);?>' "> 
+ <input type="submit" value="Kirim"> 
+<?php }?>
+ <input type="button" value="Teruskan" onclick="window.location = '<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'uploaddocument'),'default',true);?>' "> 
 </fieldset>
 
  </form> 
