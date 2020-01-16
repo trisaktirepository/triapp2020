@@ -232,6 +232,8 @@ function continues(){
 <fieldset><legend><?php echo $this->translate("Subject List")?></legend>
 
 
+<input type="hidden" name="transactionId" value="<?php echo $this->transaction_id;?>">
+
 <input type="hidden" id="nofrow" value="<?php echo count($this->subjects);?>">
 <table class="table" id="table_subject">
 <tr><th><?php echo $this->translate("No")?></th>
