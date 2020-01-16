@@ -2069,7 +2069,7 @@ class Application_Model_DbTable_ProformaInvoice extends Zend_Db_Table {
 							'expired_dt'=> $end
 							//'offer_date' => $assessmentData['asd_decree_date']
 					);
-					$end=date ( 'Y-m-d' , strtotime ( '+1 month' , strtotime ( $end) ) );
+					$end=date ( 'Y-m-d H:s:i' , strtotime ( '+1 month' , strtotime ( $end) ) );
 						
 					$total_amount = 0;
 					foreach ($paket_b_plan_cicilan as $key=>$item){
