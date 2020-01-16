@@ -2015,7 +2015,7 @@ class Application_Model_DbTable_ProformaInvoice extends Zend_Db_Table {
 				'REGISTRATION_DATE_END'=> $assessmentData['aar_reg_end_date']
 		);
 			
-		$end=date('Y-m-d H:s:i',strtotime($reg_date['REGISTRATION_DATE_END'].' 23:59:00'));
+		$end=date('Y-m-d H:s:i',strtotime($reg_date['REGISTRATION_DATE_END'].' 23:59:59'));
 	
 			
 	
@@ -2053,7 +2053,7 @@ class Application_Model_DbTable_ProformaInvoice extends Zend_Db_Table {
 			//echo var_dump($feeStrucPlan);exit;
 			if ($feeStrucPlan) {
 				$fspbillinstallment=$feeStrucPlan['fsp_bil_installment'];
-				$end=$end=date('Y-m-d H:s:i',strtotime($reg_date['REGISTRATION_DATE_END'].' 23:59:00'));
+				$end=date('Y-m-d H:s:i',strtotime($reg_date['REGISTRATION_DATE_END'].' 23:59:59'));
 				for ($i=1;$i<=$fspbillinstallment;$i++){
 	
 					$paket_b_plan_cicilan = $fspdDb->getPlanData($feeStructureData['fs_id'], $paymentPlanData[1]['fsp_id'], $i, 1,$feeStructureProgramData['fsp_program_id'],$assessmentData['aar_rating_rector']);
