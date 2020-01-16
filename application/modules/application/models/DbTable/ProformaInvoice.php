@@ -2089,7 +2089,7 @@ class Application_Model_DbTable_ProformaInvoice extends Zend_Db_Table {
 		 * insert into db
 		 */
 		$this->lobjDbAdpt->beginTransaction();
-		echo var_dump($arr_profoma);exit;
+		//echo var_dump($arr_profoma);exit;
 		try{
 	
 			foreach ($arr_profoma as $key=>$data){
