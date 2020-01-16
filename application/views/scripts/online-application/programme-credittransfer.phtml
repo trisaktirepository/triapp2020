@@ -203,8 +203,9 @@ function continues(){
 		
 	</div>
 </div>
-
+<form name="credittransfer" action="" method="post">
 <?php if ($this->application) {?>
+
 <fieldset><legend><?php echo $this->translate('Credit Transfer Program')?></legend>
 <table class="table">
 <tr><th><?php echo $this->translate("Destination Program")?></th><td><?php echo $this->application['programdest']?></td></tr>
@@ -215,6 +216,18 @@ function continues(){
 </table>
 </fieldset>
 <br>
+
+<table>
+	<tr><th><?php echo $this->translate('IPK :')?></th>
+	<td> <input type="text" id="ipk" name="ipk" size="5" value="<?php echo $this->application['ipk_asal']?>"></td>
+	</tr>
+	<tr><th><?php echo $this->translate('sks Total :')?></th>
+	<td> <input type="text" id="skstotal"  name="skstotal" size="5" value="<?php echo $this->application['sks_total']?>"> sks</td>
+	</tr>
+	<tr><th><?php echo $this->translate('Jumlah Mata Kuliah :')?></th>
+	<td> <input type="text" id="nofsubject" name="nofsubject" onchange="setSubject()" size="5" value="<?php echo $this->application['jml_mk']?>"></td>
+	</tr>
+</table>
 
 <fieldset><legend><?php echo $this->translate("Subject List")?></legend>
 
@@ -240,12 +253,24 @@ function continues(){
 	<td><input type="checkbox" name="drop[]" value="<?php echo $subject['SubjectCode'] ?>" ></td>
 </tr>
 <?php $i++;}
- }?>
+ } else {
+	for ($i=0;$i<$this->application['jml_mk'];$i++) {?>
+	<tr><td><?php echo $i?></td>
+	<td><input type="text" name="subjectcode[<?php echo $i?>]"  size="15"></td>
+	<td><input type="text" name="subjectname[<?php echo $i?>]"  size="60"></td>
+	<td><input type="text" name="sks[<?php echo $i?>]" size="4"></td>
+	<td><input type="text" name="grade[<?php echo $i?>]"  size="4"></td>
+	<td> </td>
+</tr>
+	
+	<?php 
+	}
+}?>
 </table>
 </fieldset>
 <?php } else {?>
 <fieldset><legend><?php echo $this->translate("Program Detail")?></legend>
-<form name="credittransfer" action="" method="post">
+
 <input type="hidden" name="transactionId" value="<?php echo $this->transaction_id;?>">
 
 <fieldset><legend><?php echo $this->translate('Program Destination')?></legend>

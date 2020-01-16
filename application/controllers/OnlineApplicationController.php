@@ -9022,8 +9022,10 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	if ($this->getRequest()->isPost()) {
     		
     		$formData = $this->getRequest()->getPost();
+    		$row=$dbApply->isIn($formData['transactionId']);
+    		if ($row) $idapply=$row['idApply']; else $idapply=0;
     		$this->saveCreditTransfer($formData);
-    		if (isset($formData['drop'])) {
+    		if (isset($formData['drop']) && $idapply>0) {
     			foreach ($formData['drop'] as $value) {
     				$dbAppySubject->deleteDataBySubcode($idapply, $value);
     			}
