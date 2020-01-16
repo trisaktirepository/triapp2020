@@ -265,10 +265,10 @@ function continues(){
 	foreach ($this->subjects as $subject) {
 		?>
 	<tr><td><?php echo $i?></td>
-	<td><input type="text" name="subjectcode[<?php echo $i?>]" id="subjectcode".<?php echo $i?> value="<?php echo $subject['SubjectCode']?>" size="15" onblur="save('<?php echo $i?>')" ></td>
-	<td><input type="text" name="subjectname[<?php echo $i?>]" id="subjectname".<?php echo $i?> value="<?php echo $subject['SubjectName']?>" size="60" onblur="save('<?php echo $i?>')" ></td>
-	<td><input type="text" name="sks[<?php echo $i?>]" id="sks".<?php echo $i?> value="<?php echo $subject['sks'] ?>" size="4" onblur="save('<?php echo $i?>')" ></td>
-	<td><input type="text" name="grade[<?php echo $i?>]" id="grade".<?php echo $i?> value="<?php echo $subject['Grade'] ?>" size="4" onblur="save('<?php echo $i?>')" ></td>
+	<td><input type="text" name="subjectcode[<?php echo $i?>]" id="subjectcode<?php echo $i?>" value="<?php echo $subject['SubjectCode']?>" size="15" onblur="save('<?php echo $i?>')" ></td>
+	<td><input type="text" name="subjectname[<?php echo $i?>]" id="subjectname<?php echo $i?>"  value="<?php echo $subject['SubjectName']?>" size="60" onblur="save('<?php echo $i?>')" ></td>
+	<td><input type="text" name="sks[<?php echo $i?>]" id="sks<?php echo $i?>"  value="<?php echo $subject['sks'] ?>" size="4" onblur="save('<?php echo $i?>')" ></td>
+	<td><input type="text" name="grade[<?php echo $i?>]" id="grade<?php echo $i?>" value="<?php echo $subject['Grade'] ?>" size="4" onblur="save('<?php echo $i?>')" ></td>
 	<td><input type="checkbox" name="drop[]"   value="<?php echo $subject['SubjectCode'] ?>" ></td>
 </tr>
 <?php $i++;}
