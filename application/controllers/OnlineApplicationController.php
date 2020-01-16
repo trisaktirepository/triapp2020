@@ -2507,18 +2507,32 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	//if ($this->getRequest()->isXmlHttpRequest()) {
     	$this->_helper->layout->disableLayout();
     	//}
-    
+    	$dbApply=new App_Model_Application_DbTable_CreditTransfer();
+    	$dbAppySubject=new App_Model_Application_DbTable_CreditTransferSubject();
+    	$auth = Zend_Auth::getInstance();
     	$ajaxContext = $this->_helper->getHelper('AjaxContext');
     	$ajaxContext->addActionContext('view', 'html');
     	$ajaxContext->initContext();
     	if($this->getRequest()->isPost())
     	{
     		$formData = $this->getRequest()->getPost();
-    		$data=array('');
+    			$data=array('SubjectCode'=>$formData['subcode'],
+    					'SubjectName'=>$formData['subject'],
+    					'sks'=>$formData['sks'],
+    					'Grade'=>$formData['grade'],
+    					'dt_entry'=>date('Y-m-d h:s:i'),
+    					'idApply'=>$formData['idapp']);
+    			$row=$dbAppySubject->isIn($formData['idapp'], $formData['subcode']);
+    			if ($row) {
+    				//update
+    				$dbAppySubject->updateData($data, $row['idCTSubject']);
+    			} else {
+    				//insert
+    				$dbAppySubject->addData($data);
+    			}
     	}
     	$db = Zend_Db_Table::getDefaultAdapter();
-    	$select=$db->select()
-    	->form();
+    	 
     	//	echo var_dump($row);exit;
     	$ajaxContext->addActionContext('view', 'html')
     	->addActionContext('form', 'html')

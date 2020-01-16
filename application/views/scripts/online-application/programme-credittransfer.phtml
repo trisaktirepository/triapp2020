@@ -129,14 +129,14 @@ function save(index) {
 	if (subject!='' && subcode!='' && sks !='' && grade!='') {
 		$.ajax({
 			url: "<?php echo $this->url(array('module'=>'default','controller'=>'online-application', 'action'=>'ajax-save-mk'),'default',true);?>",
-			data: {'subject':subject,'subcode':subcode,'sks':sks,'grade':grade},
+			data: {'idapp':$("#idapp").val(),'subject':subject,'subcode':subcode,'sks':sks,'grade':grade},
 			type: 'POST',
 			dataType: 'json',
 			 
 		}).done(function ( data ) {
 			
 		});
-	}else alert('Kode matakuliah, Nama matakuliah, sks, dan Nilai harus diisi');
+	} 
 }
 
 function setSubject(){
@@ -205,7 +205,7 @@ function continues(){
 </div>
 <form name="credittransfer" action="" method="post">
 <?php if ($this->application) {?>
-
+<input type="hidden" id="idapp" value="<?php echo $this->application['idApply']?>">
 <fieldset><legend><?php echo $this->translate('Credit Transfer Program')?></legend>
 <table class="table">
 <tr><th><?php echo $this->translate("Destination Program")?></th><td><?php echo $this->application['programdest']?></td></tr>
