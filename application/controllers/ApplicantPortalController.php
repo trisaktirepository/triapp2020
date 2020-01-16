@@ -1166,7 +1166,8 @@ class ApplicantPortalController extends Zend_Controller_Action
 		$feeStructurePlanDb = new App_Model_Finance_DbTable_FeeStructurePlan();
 		$paymentPlanData = $feeStructurePlanDb->getStructureData($feeStructureData['fs_id']);
 		$feeStructureData['payment_plan'] = $paymentPlanData;
-		
+		global $feestructureplan;
+		$feestructureplan=$paymentPlanData;
 		//fee structure program
 		$feeStructureProgramDb = new App_Model_Finance_DbTable_FeeStructureProgram();
 		$feeStructureProgramData = $feeStructureProgramDb->getStructureData($feeStructureData['fs_id'],$program[0]["program_id"]);
@@ -1385,7 +1386,7 @@ class ApplicantPortalController extends Zend_Controller_Action
 		$dompdf = new DOMPDF();
 		$dompdf->load_html($html);
 		$dompdf->set_paper('a4', 'potrait');
-		$dompdf->render();
+		@$dompdf->render();
 		
 		
 		//$location_path
@@ -1396,7 +1397,7 @@ class ApplicantPortalController extends Zend_Controller_Action
 		//$dompdf->stream($txnData["at_pes_id"]."_offer_letter.pdf");
 			
 		//untuk save ke db
-		$pdf = $dompdf->output();
+		$pdf = @$dompdf->output();
 		//exit;
 		
 		//output_directory_path
@@ -3285,7 +3286,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     	if ($this->getRequest()->isPost()) {
     		$formData = $this->getRequest()->getPost();
     		if (isset($formData['cetak'])) {
-    			$this->_redirect('http://www.print.trisakti.ac.id/online-application/generate-offer-letter/transaction_id/'.$txnId);
+    			$this->_redirect('online-application/generate-offer-letter-pdf/transaction_id/'.$txnId);
     		} else {
     			$txnId=$formData['transaction_id'];
     			$paket=$formData['paket'];
@@ -3761,7 +3762,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     	$payment_plan['installment_detail'] = array();
     	for($i=1;$i<=$payment_plan['fsp_bil_installment']; $i++){
     		$payment_plan['installment_detail'][$i] = $paymentPlanDetailDb->getPlanData($fee_structure['fs_id'], $payment_plan['fsp_id'], $i, 1, $programData['IdProgram'], $assessmentData['rank']);
-    			
+    		
     	}
     
     	//registration date

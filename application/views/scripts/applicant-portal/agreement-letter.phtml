@@ -204,8 +204,10 @@ td.bold-text{
 		$paket_a_total = 0;
 		$paket_b_total = 0;
 		$paket_b_c1_total =0;
-
-		if($this->fee['fsp_bil_installment']==1){							
+		$discount=0;
+		 
+		if($this->fee['fsp_bil_installment']==1){	
+			$discount=$this->fee['discount_amount'];					
 	?>
 		<div class="paket_a box">
 			<table border="0" cellpadding="2" cellspacing="0" >
@@ -216,7 +218,8 @@ td.bold-text{
 				</tr>
 				<tr>
 					<td colspan="7" class="paket_title pad-10">
-						Dibayar Sekali
+						Dibayar Sekali 
+						<?php if ($discount>0) echo ' <strong>( Pengurangan Pembayaran Rp. '.number_format($discount, 2, '.', ',').')</strong>';?>
 					</td>
 				</tr>
 				<?php
@@ -257,7 +260,7 @@ td.bold-text{
 					<td>&nbsp;</td>
 					<td>Total Pembayaran Dibayar Sekali</td>
 					<td class="border-top bold-text">Rp</td>
-					<td colspan="3" class="border-top bold-text"><?php echo number_format($paket_total_amount, 2, '.', ','); ?></td>
+					<td colspan="3" class="border-top bold-text"><?php echo number_format($paket_total_amount-$discount, 2, '.', ','); ?></td>
 					<td>&nbsp;</td>
 				</tr>
 				<tr>
@@ -272,7 +275,7 @@ td.bold-text{
 					<td>&nbsp;</td>
 					<td>&nbsp;</td>
 					<td class="border-top-bottom bold-text" >Rp</td>
-					<td class="border-top-bottom bold-text"><?php echo number_format($paket_total_amount, 2, '.', ','); ?></td>
+					<td class="border-top-bottom bold-text"><?php echo number_format($paket_total_amount-$discount, 2, '.', ','); ?></td>
 					<td>&nbsp;</td>
 				</tr>
 				<tr><td colspan="7">&nbsp;</td></tr>
