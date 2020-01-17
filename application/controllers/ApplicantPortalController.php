@@ -4270,7 +4270,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     	//to list available placement test from schedule
     	$applicantPlacementScheduleDB = new App_Model_Application_DbTable_ApplicantPlacementSchedule();
     	//$placement_test_info = $applicantPlacementScheduleDB->getInfo();
-    	$this->view->testdate = $applicantPlacementScheduleDB->getAvailableDate($applid,$transaction_id);
+    	$this->view->testdate = $applicantPlacementScheduleDB->getAvailableDate($appl_id,$transaction_id);
     	  
     	
 	}
