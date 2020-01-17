@@ -8038,6 +8038,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
  		$dbInvoice=new Studentfinance_Model_DbTable_InvoiceMain();
  		$this->view->invoice=$dbInvoice->getInvoiceDataByFormulir($invoice);
  	}
+ 	
  	public function viewkartuAction(){
  		/*
 		 * check session for transaction

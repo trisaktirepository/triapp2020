@@ -4141,4 +4141,136 @@ class ApplicantPortalController extends Zend_Controller_Action
     	//exit;
     
     }
+    
+	public function applyTpaTestAction() {
+		/*
+		 * check session for transaction
+		 */
+		$auth = Zend_Auth::getInstance(); 
+		 
+		//title
+    	$this->view->title = $this->view->translate("Pendaftaran Test TPA dan MPPI");
+    	
+    	$auth = Zend_Auth::getInstance(); 
+    	$appl_id = $auth->getIdentity()->appl_id; 
+    	//$appl_id = $this->_getParam('id', 0);    	
+    	$this->view->appl_id = $appl_id;
+    	
+    	$transaction_id = $auth->getIdentity()->transaction_id; 
+    	$this->view->transaction_id = $transaction_id;
+    	
+	
+    	//get applicant profile
+    	$appProfileDB  = new App_Model_Application_DbTable_ApplicantProfile();	
+    	$applicant = $appProfileDB->getData($appl_id);
+    	$this->view->applicant = $applicant;
+    	
+    	//transaction data
+    	$applicantTransactionDn = new App_Model_Application_DbTable_ApplicantTransaction();
+    	$transaction = $applicantTransactionDn->getTransactionData($auth->getIdentity()->transaction_id);
+    	$this->view->transaction = $transaction;    		
+    	$applicantID=$transaction['at_pes_id'];
+    	 
+    	$ptestinfo = new App_Model_Application_DbTable_ApplicantPtest();   
+    	$applicant_placement_test_info = $ptestinfo->getScheduleInfo($transaction_id);
+    	
+    	$this->view->aps_id = $applicant_placement_test_info["aps_id"];
+    		
+    	 
+    	if ($this->getRequest()->isPost()) {    		
+    		
+    		$formData = $this->getRequest()->getPost(); 
+    		//echo var_dump($formData);exit;
+    		 	    		
+				 	
+	    		$info["apt_at_trans_id"]=	$transaction_id;
+				$info["apt_ptest_code"]	=	"USM2020";
+				$info["apt_aps_id"]		=	$formData["aps_test_date"]; //appl_placement_location
+				$info["apt_fee_amt"]	=	200000;
+				
+				$appptestDB = new App_Model_Application_DbTable_ApplicantPtest();
+				
+				if($applicant_placement_test_info){
+					//echo 'update';echo var_dump($info);exit;
+					$appptestDB->updateData($info,$applicant_placement_test_info["apt_id"]);
+				}else{
+					//echo 'insert';exit;
+	    				$appptestDB->addData($info);
+				}   
+				
+				//generate payment
+				$appptestDB = new App_Model_Application_DbTable_ApplicantPtest();
+				$info["apt_bill_no"]=$applicantID;
+				$appptestDB->updateData($info,$applicant_placement_test_info["apt_id"]);
+				 
+				 
+				// buat tagihan ke BNI
+				//1st:check how many program apply.
+				$ptestDB = new App_Model_Application_DbTable_ApplicantProgram();
+				$list_program = $ptestDB->getPlacementProgram($transaction_id);
+				 
+				 
+				//insert into invoice and invoice detail
+				$inv_data = array(
+						'bill_number' => $applicantID,
+						'appl_id' => $appl_id,
+						'academic_year' => $transaction['at_academic_year'],
+						'semester' =>0,
+						'no_fomulir' => $applicantID,
+						'bill_amount' => 200000,
+						'bill_paid' => 0.00,
+						'bill_balance' => 200000,
+						'bill_description' => 'Biaya Pendaftaran TPA dan MPPI',
+						'college_id' => 0,
+						'program_code' => 0,
+						'creator' => '1',
+						'fs_id' => 0,
+						'status' => 'A',
+						'date_create' => date('Y-m-d h:i:s')
+				);
+				//echo var_dump($inv_data);exit;
+				$invoiceDb=new Studentfinance_Model_DbTable_InvoiceMain();
+				$invoiceDetailDb=new Studentfinance_Model_DbTable_InvoiceDetail();
+				$inv=$invoiceDb->getInvoiceData($applicantID);
+				//echo var_dump($inv);
+				//exit;
+				if (!$inv)
+					$invoice_id = $invoiceDb->insert($inv_data);
+				else {
+					$invoice_id=$inv['id'];
+					$invoiceDb->update($inv_data, 'id='.$invoice_id);
+				
+				}
+					
+				//insert invoice detail
+					
+				$inv_detail_data = array(
+						'invoice_main_id' => $invoice_id,
+						'fi_id' => 19,//biaya pendaftaran
+						'fee_item_description' => 'Biaya Pendaftaran TPA dan MPPI',
+						'amount' => 200000
+				);
+				
+				$detail=$invoiceDetailDb->isIn($applicantID, 19);
+				if (!$detail)
+					$invoiceDetailDb->insert($inv_detail_data);
+				
+				else {
+					$invoiceDetailDb->updateData($inv_detail_data, 'id='.$detail['id']);
+				}
+					
+				//bank validation id not printed
+				$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'push-e-collection','trxid'=>$transaction_id,'invoice'=>$applicantID),'default',true));
+					
+				
+    	 
+			
+    	} 
+    	//to list available placement test from schedule
+    	$applicantPlacementScheduleDB = new App_Model_Application_DbTable_ApplicantPlacementSchedule();
+    	//$placement_test_info = $applicantPlacementScheduleDB->getInfo();
+    	$this->view->testdate = $applicantPlacementScheduleDB->getAvailableDate($applid,$transaction_id);
+    	  
+    	
+	}
 }
