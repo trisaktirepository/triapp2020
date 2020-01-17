@@ -359,7 +359,9 @@ $pdb = new App_Model_Application_DbTable_ApplicantPtest();
 							$invoice=$dbInvoice->getInvoiceData($entry['at_pes_id']); //&& $applicant_ptestDb->tpaExamToAttend($entry['at_trans_id'])){
 							if ($invoice['va']=='')
 								echo "<a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'apply-tpa-test','id'=>$entry['at_trans_id']),'default',true)."'>".$this->translate("Daftar Seleksi Tahap Ke-2")."</a>";
-							else 
+							else if ($invoice['status_va']=="P") {
+								echo "<a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'get-document','id'=>$entry['at_trans_id'],'typeId'=>30),'default',true)."'>".$this->translate("USM Card")."</a>";
+							} else
 								echo "Nomor Pembayaran Test TPA MPPI ".$invoice['va'].' sebesar Rp 200.000,-';
 							echo "<br />";
 						}
