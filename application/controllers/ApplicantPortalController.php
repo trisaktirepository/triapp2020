@@ -4272,6 +4272,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     	//$placement_test_info = $applicantPlacementScheduleDB->getInfo();
     	$this->view->testdate = $applicantPlacementScheduleDB->getAvailableDate($appl_id,$transaction_id);
     	  
-    	
+    	$dbInvoice=new Studentfinance_Model_DbTable_InvoiceMain();
+    	$this->view->invoice=$dbInvoice->getInvoiceData($applicantID);
 	}
 }
