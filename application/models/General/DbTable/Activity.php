@@ -46,7 +46,7 @@ class App_Model_General_DbTable_Activity extends Zend_Db_Table_Abstract
 		->join(array('c'=>'tbl_semestermaster'),'c.IdSemesterMaster=b.IdSemesterMain')
 		->where('a.setter="2"')
 		->where('b.IdProgram=?',$idprogram)
-		->where('b.StartDate < CURDATE()');
+		->where('b.StartDate <= CURDATE()');
 		
 		$row = $db->fetchRow($select);
 		 
