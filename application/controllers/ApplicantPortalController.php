@@ -4167,7 +4167,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     	
     	//transaction data
     	$applicantTransactionDn = new App_Model_Application_DbTable_ApplicantTransaction();
-    	$transaction = $applicantTransactionDn->getTransactionData($auth->getIdentity()->transaction_id);
+    	$transaction = $applicantTransactionDn->getTransactionData($transaction_id);
     	$this->view->transaction = $transaction;    		
     	$applicantID=$transaction['at_pes_id'];
     	 
