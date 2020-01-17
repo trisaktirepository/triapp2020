@@ -4158,7 +4158,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     	
     	$transaction_id = $auth->getIdentity()->transaction_id; 
     	$this->view->transaction_id = $transaction_id;
-    	
+    	echo $transaction_id;exit;
 	
     	//get applicant profile
     	$appProfileDB  = new App_Model_Application_DbTable_ApplicantProfile();	
