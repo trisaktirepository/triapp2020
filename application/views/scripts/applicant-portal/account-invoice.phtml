@@ -84,7 +84,11 @@ function print_bank_slip(invoice_id,bank_id){
 		<td align="center"><?php echo $i+1;?></td>
 		<td align="center"><?php echo date('d-m-Y', strtotime($entry['record_date']) ); ?></td>
 		<td><?php if ($entry['IdBank']==1) echo $entry['document']; else echo "-"; ?></td>
-		<td><?php echo $entry['va']; ?></td>
+		<td><?php if ($entry['va']=='') {
+				if ($entry['IdStudentRegistration']!='') {
+					?><a href="/studentfinance/invoice/generate-std-invoice/id/<?php echo $entry['IdStudentRegistration']?>" ><?php $this->translate('Create Virtual Account');?></a>
+				<?php }
+		} else echo $entry['va']; ?></td>
 		<td><?php echo $entry['description']; ?></td>
 		<td><?php echo number_format($entry['bill_amount'], 2, '.', ','); ?></td>
 		<td><?php echo number_format($entry['bill_paid'], 2, '.', ','); ?></td>

@@ -83,6 +83,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 				$formData=$this->getRequest()->getPost();
 				if (isset($formData['agree'])) {
 					//get invoice no from sequence
+					 
 					$seq_data = array(
 							date('y',strtotime($academicYear['ay_start_date'])),
 							substr($intake['IntakeId'],2,2),
