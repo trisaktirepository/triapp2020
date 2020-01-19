@@ -1965,6 +1965,7 @@ class ApplicantPortalController extends Zend_Controller_Action
 		$select = $db->select()
 						->from(array('im'=>'invoice_main'),array(
 							'id'=>'im.id',
+							'IdStudentRegistration'=>'im.IdStudentRegistration',
 							'record_date'=>'im.date_create',
 							'description' => 'im.bill_description',
 							'txn_type' => new Zend_Db_Expr ('"Invoice"'),
