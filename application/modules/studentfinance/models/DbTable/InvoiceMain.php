@@ -978,7 +978,8 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 					$selectData = $db->select()
 					->from(array('im'=>'invoice_main'))
 					->where('im.IdStudentRegistration=?',$idstd)
-					->where('im.idactivity=?',$row['idActivity']);
+					->where('im.idactivity=?',$row['idActivity'])
+					->where('im.semester=?',$rowkrs['IdSemesterMain']);
 					$row = $db->fetchRow($selectData);
 				//	echo var_dump($row);exit;
 					if ($row) return false;
