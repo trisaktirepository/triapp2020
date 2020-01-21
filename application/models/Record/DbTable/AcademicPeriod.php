@@ -117,7 +117,7 @@ class App_Model_Record_DbTable_AcademicPeriod extends Zend_Db_Table_Abstract
 	}
 	
 	public function getDataFilter($filter){
-		$id = (int)$id;
+		 
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$select = $db->select()
 		->from($this->_name);
