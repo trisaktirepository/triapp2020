@@ -228,7 +228,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 				}
 				$this->view->bundleDetail= $bundleDetail;
 				} else {
-					echo 'Skema pembayaran '.$idactivity.' tidak ditermukan';
+					echo 'Skema pembayaran '.$idactivity.' dan semester '.$idsemester. 'tidak ditermukan';
 					exit;
 				}
 			} else {
