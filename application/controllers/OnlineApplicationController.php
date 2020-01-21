@@ -9744,7 +9744,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	}
     		
     	$vaexpired=$vaexpired['ap_va_expired'];
-    	echo $vaexpired;exit;
+    	//echo $vaexpired;exit;
     	//create invoice
     	
     	$dbInvoice->pushToECollForEnrollment($invoice,$vaexpired,'createbilling','c',$re);

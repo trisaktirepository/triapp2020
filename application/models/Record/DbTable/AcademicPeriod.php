@@ -136,7 +136,7 @@ class App_Model_Record_DbTable_AcademicPeriod extends Zend_Db_Table_Abstract
 			
 		$row = $db->fetchRow($select);
 	
-	echo $select;
+	//echo $select;
 	
 		return $row;
 	}
