@@ -116,6 +116,31 @@ class App_Model_Record_DbTable_AcademicPeriod extends Zend_Db_Table_Abstract
 		return $row;
 	}
 	
+	public function getDataFilter($filter){
+		$id = (int)$id;
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$select = $db->select()
+		->from($this->_name);
+	
+		if(isset($filter['ap_month'])){
+			$select->where("ap_month='".$filter['ap_month']."'");
+		}
+		
+		if(isset($filter['ap_year'])){
+			$select->where("ap_year='".$filter['ap_year']."'");
+		}
+		
+		if(isset($filter['ap_intake_id'])){
+			$select->where("ap_intake_id='".$filter['ap_intake_id']."'");
+		}
+			
+		$row = $db->fetchRow($select);
+	
+	
+	
+		return $row;
+	}
+	
 	public function getCurrentPeriod($month,$year,$intake){
 			
 			$db = Zend_Db_Table::getDefaultAdapter();

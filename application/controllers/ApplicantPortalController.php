@@ -4262,7 +4262,7 @@ class ApplicantPortalController extends Zend_Controller_Action
 				}
 					
 				//bank validation id not printed
-				$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'push-e-collection','trxid'=>$transaction_id,'invoice'=>$applicantID),'default',true));
+				$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'push-e-collection','trxid'=>$transaction_id,'invoice'=>$applicantID,'apsid'=>$formData["aps_test_date"]),'default',true));
 					
 				
     	 

@@ -9711,6 +9711,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	date_default_timezone_set('Asia/Bangkok');
     	$trxid = $this->_getParam('trxid', null);
     	$invoice = $this->_getParam('invoice', null);
+    	$apsid = $this->_getParam('apsid', null);
     	$re = $this->_getParam('re', null);
     	
     	 
@@ -9726,11 +9727,22 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	$bni = new Studentfinance_Model_DbTable_AccessBni();
     	$dbProgram=new App_Model_General_DbTable_Program(); 
     	$dbFinance=new App_Model_General_DbTable_Bank();
+    	$dbSchedule=new App_Model_Application_DbTable_PlacementTestSchedule();
+    	
     	$bank=$dbFinance->fnGetBankDetails(1);
     	$secretkey=$bank['secret_key'];
     	$url=$bank['url_api'];
     	$dbPeriod=new App_Model_Record_DbTable_AcademicPeriod();
-    	$vaexpired=$dbPeriod->getData($transaction['at_period']);
+    	if ($apsid==null || $apsid=="") 
+    		$vaexpired=$dbPeriod->getData($transaction['at_period']);
+    	else {
+    		$sch=$dbSchedule->getData($apsid);
+    		$year=date('Y',strtotime($sch['aps_test_date']));
+    		$moth=date('m',strtotime($sch['aps_test_date']));
+    		$filter=array('ap_month'=>$moth,'ap_year'=>$year,'ap_intake_id'=>$transaction['at_intake']);
+    		$vaexpired=$dbPeriod->getDataFilter($filter);
+    	}
+    		
     	$vaexpired=$vaexpired['ap_va_expired'];
     	//echo $vaexpired;exit;
     	//create invoice
