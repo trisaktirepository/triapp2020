@@ -123,7 +123,7 @@ class App_Model_Record_DbTable_AcademicPeriod extends Zend_Db_Table_Abstract
 		->from($this->_name);
 	
 		if(isset($filter['ap_month'])){
-			$select->where("ap_month='".$filter['ap_month']."'");
+			$select->where("ap_month='".(int)$filter['ap_month']."'");
 		}
 		
 		if(isset($filter['ap_year'])){
