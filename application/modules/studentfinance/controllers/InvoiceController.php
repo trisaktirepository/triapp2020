@@ -66,6 +66,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 			//get current payment setup
 			$dbBundle=new Studentfinance_Model_DbTable_BundleFee();
 			$bundle=$dbBundle->getCurrentSetup(1, $program['IdCollege'], $std['IdProgram'], $std['IdBranch'], $idsemester, $act['idActivity']);
+			if ($bundle) {
 			$this->view->bundle=$bundle;
 		//if (!$bundle)	{
 			//echo var_dump($bundle);exit;
@@ -226,6 +227,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 			 
 				}
 				$this->view->bundleDetail= $bundleDetail;
+				}
 			} else {
 				echo "Jadwal Pembuatan Invoice Belum dibuka, Hubungi admin Fakultas masing-masing";
 				exit;
