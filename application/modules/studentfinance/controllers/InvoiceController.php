@@ -18,6 +18,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 		 
 		
 		$IdStudentRegistration = $this->_getParam('id', null);
+		$idactivity = $this->_getParam('idactivity', null);
 		$this->view->student_registration_id = $IdStudentRegistration;
 		
 		//title
@@ -37,7 +38,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 		$std=$dbStd->getStudentInfo($IdStudentRegistration);
 		//get type of active invoice from active activity
 		$dbActivity=new App_Model_General_DbTable_Activity();
-		$act=$dbActivity->getActiveData($std['IdProgram']);
+		$act=$dbActivity->getActiveDataActivity($std['IdProgram'],$idactivity);
 		$this->view->activity=$act;
 		$bundleDetail=array();
 		if ($act) {

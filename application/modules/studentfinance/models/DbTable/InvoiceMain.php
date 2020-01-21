@@ -983,9 +983,9 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 						->where('im.IdStudentRegistration=?',$idstd)
 						->where('im.idactivity=?',$row['idActivity'])
 						->where('im.semester=?',$rowkrs['IdSemesterMain']);
-						$row = $db->fetchRow($selectData);
+						$invoice = $db->fetchRow($selectData);
 					//	echo var_dump($row);exit;
-						if (!$row) return true;
+						if (!$invoice) return $row['idActivity'];
 						else {
 							//cek for compatibility
 							$selectData = $db->select()
@@ -1007,11 +1007,11 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 								if ($feestructure['fi_amount_calculation_type']==299) {
 									//per sks
 									$actualamount=$rowkrs['sks']*$feestructure['fsi_amount'];
-									if ($amount<$actualamount) return true;
+									if ($amount<$actualamount) return $row['idActivity'];
 								} else if ($feestructure['fi_amount_calculation_type']==301) {
 									//per MK
 									$actualamount=$rowkrs['jmlmk']*$feestructure['fsi_amount'];
-									if ($amount<$actualamount) return true;
+									if ($amount<$actualamount) return $row['idActivity'];
 									
 								} 
 							}
@@ -1025,11 +1025,11 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 					->where('im.IdStudentRegistration=?',$idstd)
 					->where('im.idactivity=?',$row['idActivity']);
 					$row = $db->fetchRow($selectData);
-					if (!$row) return true;
+					if (!$row) return $row['idActivity'];
 				}
 			}
-			return false;
-		} else return false;
+			return 0;
+		} else return 0;
 	
 	}
 	
@@ -1271,9 +1271,9 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		return $invoice;
 	}
 	
-	public function dispatcher($idstd) {
+	public function dispatcher($idstd,$idactivity) {
 		$redirector = Zend_Controller_Action_HelperBroker::getStaticHelper('Redirector');
-		$redirector->gotoUrl('/studentfinance/invoice/generate-std-invoice/id/'.$idstd);
+		$redirector->gotoUrl('/studentfinance/invoice/generate-std-invoice/id/'.$idstd.'/idactivity/'.$idactivity);
 	}
 	
 	

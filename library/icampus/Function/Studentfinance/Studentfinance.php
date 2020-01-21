@@ -13,10 +13,11 @@ class icampus_Function_Studentfinance_Studentfinance extends Zend_View_Helper_Ab
 			$registration_id = $user->getIdentity()->registration_id;
   			if ($registration_id!='') {
   			 // echo $dbSurvey->isAnyOpenSurvey($registration_id);exit;
-				if ( !($action=='generate-std-invoice'||$action=='logout') && $dbInvoiceMain->isAnyOpenInvoice($registration_id) && ($role=='Student'||$role=='student')) {
+  			 	$idactivity=$dbInvoiceMain->isAnyOpenInvoice($registration_id);
+				if ( !($action=='generate-std-invoice'||$action=='logout') && ($idactivity!=0) && ($role=='Student'||$role=='student')) {
 					///$survey=new Servqual_SurveyController();
 					 
-					$dbInvoiceMain->dispatcher($registration_id);
+					$dbInvoiceMain->dispatcher($registration_id,$idactivity);
 				}
 			}
 		}

@@ -289,6 +289,7 @@ class App_Model_Record_DbTable_StudentRegistration extends Zend_Db_Table_Abstrac
 		
 		$row=$db->fetchRow($select);
 		$intake=substr($row['IntakeId'], 0,4);
+		$semester=array();
 		for ($i=0;$i<$row['semestermax']/2;$i++) {
 			$semester[$i]=$intake;
 			$intake++;
