@@ -2001,6 +2001,7 @@ class ApplicantPortalController extends Zend_Controller_Action
 							->where('fsi.invoice_main_id=?',$invoiceid);
 				
 					$bank=$db->fetchRow($select);
+					if (!$bank) $bank=array('IdBank'=>'1','BankName'=>'BNI46');
 				} else $bank=array('IdBank'=>'1','BankName'=>'BNI46');
 				$row[$key]=array_merge($row[$key],$bank);
 			}
