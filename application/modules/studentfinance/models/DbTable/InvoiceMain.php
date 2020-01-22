@@ -1001,7 +1001,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 							->join(array('fsp'=>'fee_structure_program'),'fsp.fsp_fs_id=im.fs_id')
 							->where('fsi_item_id=?',$detail['fi_id'])
 							->where('im.fs_intake_start=?',$std['IdIntake'])
-							->where('fsp.program_id=?',$std['IdProgram']);
+							->where('fsp.fsp_program_id=?',$std['IdProgram']);
 							$feestructure=$db->fetchRow($selectData);
 							if ($feestructure) {
 								if ($feestructure['fi_amount_calculation_type']==299) {
