@@ -112,7 +112,7 @@ class App_Model_General_DbTable_Semestermaster extends Zend_Db_Table_Abstract
 			->from(array("a"=>"tbl_semestermaster"))
 			->where("a.SemesterCountType=1")
 			->where("a.SemesterFunctionType=0")
-			->where("a.IdCountable=1")
+			->where("a.IsCountable=1")
 			->where("a.idacadyear=?",$acadid);
 			
 			$sem=$db->fetchRow($lstrSelect);
