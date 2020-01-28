@@ -464,7 +464,7 @@ class App_Model_Exam_DbTable_ExamGroupStudent extends Zend_Db_Table_Abstract {
 		$db->insert($this->_name,$data);
 	}
 	
-	public function update($data,$where) {
+	public function update(array $data,$where) {
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$db->update($this->_name,$data,$where);
 	}

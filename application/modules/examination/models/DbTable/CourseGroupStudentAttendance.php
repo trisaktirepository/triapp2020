@@ -64,7 +64,7 @@ class Examination_Model_DbTable_CourseGroupStudentAttendance extends Zend_Db_Tab
 		return $row;
 	}
 	
-	public function insert($data=array()){
+	public function insert(array $data=array()){
 	
 		if( !isset($data['create_by']) ){
 			$auth = $auth = Zend_Auth::getInstance();
