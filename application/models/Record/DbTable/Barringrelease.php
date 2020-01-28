@@ -18,6 +18,18 @@ class App_Model_Record_DbTable_Barringrelease extends Zend_Db_Table_Abstract {
         $result = $db->fetchAll($select);
         return $result;
     }
+    
+    public function isIn($idregister,$idsemester){
+    	$db = Zend_Db_Table::getDefaultAdapter();
+    	$select = $db->select()
+    	->from(array('a'=>'tbl_barringrelease'), array('value'=>'*'))
+    	->where('a.tbr_category = "2"')
+    	->where('a.tbr_intake = ?', $idsemester)
+    	->where('a.tbr_appstud_id = ?', $idregister);
+    	//echo $select;exit;
+    	$result = $db->fetchRow($select);
+    	return $result;
+    }
     public function getBarringApplicant($idregister,$idsemester){
     	$db = Zend_Db_Table::getDefaultAdapter();
     	$select = $db->select()
