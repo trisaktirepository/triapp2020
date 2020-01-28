@@ -757,7 +757,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		$clientid='741';//$program['Client_Id'];
 		
 		if ($process=='createbilling') {
-			if ($re=="1") {
+			if ($re=="1" || $invoice['status_remark']!='') {
 				// exit;
 				$bill=199900000+mt_rand(999999, 9999999);
 				//echo $bill;exit;
