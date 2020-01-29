@@ -1019,7 +1019,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 							
 						}
 						 
-					}  
+					}  else return 0;
 				} else {
 					$selectData = $db->select()
 					->from(array('im'=>'invoice_main'))
