@@ -8049,6 +8049,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 				if ($voucer) {
 					$dbInvoice->update(array('cn_amount'=>$voucer['amount']), 'id='.$formData['id']);
 					$dbVoucer->updateData(array('status'=>"1",'dt_process'=>date('Y-m-d H:s:i')), $voucer['idvoucher']);
+				
 				}
 				else $this->view->msg="Kode Voucher tidak ditemukan/sudah digunakan";
 			}
