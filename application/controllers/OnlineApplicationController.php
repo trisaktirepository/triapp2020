@@ -8042,7 +8042,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
  		if ($this->getRequest()->isPost()) {
 			
 			$formData = $this->getRequest()->getPost();
-			echo var_dump($formData);exit;
+			//echo var_dump($formData);exit;
 			if ($formData['voucher']!='') {
 				//update payment
 				$voucer=$dbVoucer->getDataByVoucher($formData['voucher']);

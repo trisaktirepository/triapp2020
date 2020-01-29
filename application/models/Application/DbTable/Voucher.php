@@ -38,7 +38,7 @@ class App_Model_Application_DbTable_Voucher extends Zend_Db_Table_Abstract {
 		if ($telp!=null) $select->where('phone=?',$telp);
 	
 		$row = $db->fetchRow($select);
-		//echo $select;exit;
+		echo $select;exit;
 			
 	
 		return $row;
