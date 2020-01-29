@@ -64,7 +64,7 @@ class App_Model_Application_DbTable_Voucher extends Zend_Db_Table_Abstract {
 		
 		 
 		
-		$this->update($data, $this->_primary .' = '. (int)$id);
+		$this->update($postData, $this->_primary .' = '. (int)$id);
 	}
 	
 	 
