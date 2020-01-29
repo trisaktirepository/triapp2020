@@ -8042,12 +8042,12 @@ class OnlineApplicationController extends Zend_Controller_Action {
  		if ($this->getRequest()->isPost()) {
 			
 			$formData = $this->getRequest()->getPost();
-			if ($formData['voucher']>0) {
+			if ($formData['voucher']!='') {
 				//update payment
 				$voucer=$dbVoucer->getDataByVoucher($formData['voucher']);
 				if ($voucer) {
 					$dbInvoice->update(array('cn_amount'=>$voucer['amount']), 'id='.$formData['id']);
-					$dbVoucer->updateData(array('status'=>"1"), $voucer['idvoucher']);
+					$dbVoucer->updateData(array('status'=>"1",'dt_process'=>date('Y-m-d H:s:i')), $voucer['idvoucher']);
 				}
 				else $this->view->msg="Kode Voucher tidak ditemukan/sudah digunakan";
 			}
