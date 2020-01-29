@@ -1187,7 +1187,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		$invoice['amount']=0.00;
 		$regid=array();
 		
-		echo var_dump($fee_item);exit;
+		//echo var_dump($fee_item);exit;
 		foreach ($sem_fee_item as $item){
 	
 			//nilai tetap
