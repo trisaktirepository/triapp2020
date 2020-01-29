@@ -5460,9 +5460,11 @@ class OnlineApplicationController extends Zend_Controller_Action {
 						$documentDB->addData($doc); */
 	
 					//bank validation id not printed 
-						$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'push-e-collection','trxid'=>$transaction_id,'invoice'=>$applicantID),'default',true));
+						//$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'push-e-collection','trxid'=>$transaction_id,'invoice'=>$applicantID),'default',true));
 							
-								 
+						$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'view-payment','trxid'=>$transaction_id,'id'=>$applicantID),'default',true));
+							
+						
 		
 			}else $this->_redirect('http://www.print.trisakti.ac.id/online-application/print-bukti-daftar/trxid/'.$transaction_id.'/at_appl_type/'.$admission_type);
 						
@@ -8036,6 +8038,23 @@ class OnlineApplicationController extends Zend_Controller_Action {
  		$invoice=$this->_getParam('id', 0);
  		$this->view->transactionid=$this->_getParam('trxid', 0);
  		$dbInvoice=new Studentfinance_Model_DbTable_InvoiceMain();
+ 		$dbVoucer=new App_Model_Application_DbTable_Voucher();
+ 		if ($this->getRequest()->isPost()) {
+			
+			$formData = $this->getRequest()->getPost();
+			if ($formData['voucher']>0) {
+				//update payment
+				$voucer=$dbVoucer->getDataByVoucher($formData['voucher']);
+				if ($voucer) {
+					$dbInvoice->update(array('cn_amount'=>$voucer['amount']), 'id='.$formData['id']);
+					$dbVoucer->updateData(array('status'=>"1"), $voucer['idvoucher']);
+				}
+				else $this->view->msg="Kode Voucher tidak ditemukan/sudah digunakan";
+			}
+			
+			
+			$invoice=$formData['noform'];
+ 		}
  		$this->view->invoice=$dbInvoice->getInvoiceDataByFormulir($invoice);
  	}
  	

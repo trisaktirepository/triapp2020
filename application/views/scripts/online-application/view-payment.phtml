@@ -1,5 +1,13 @@
  
- 
+<script>
+ function savevoucher(element) {
+
+	 $("#voucherform").submit();
+	 
+ }
+
+
+ </script>
  
 <div class="message toolbar">
 	<h2><?php echo $this->title; ?></h2>
@@ -21,10 +29,20 @@
  <table class="table">
  <tr><th>Nama Pembayaran</th><td><?php echo 'Pendaftaran Ujian Saringan Masuk Usakti'?></td></tr>
  <tr><th>Nomor Pembayaran</th><td bgcolor="white"><?php if ($this->invoice['va']!='') echo $this->invoice['va']; else echo '<a href="/online-application/push-e-collection/trxid/'.$this->transactionid.'/invoice/'.$this->invoice['no_fomulir'].'/re/1">Buat Nomor Pembayaran</a>'?></td></tr>
- <tr><th>Besar Pembayaran</th><td bgcolor="white"><?php echo $this->invoice['bill_amount']?></td></tr>
+ <tr><th>Besar Pembayaran</th><td bgcolor="white"><?php echo $this->invoice['bill_amount']-$this->invoice['cn_amount']?></td></tr>
  <tr><th>Batas Waktu Pembayaran</th><td bgcolor="white"><?php echo date('d-m-Y H:s:i',strtotime($this->invoice['va_expired_dt']))?></td></tr>
  <tr><th>Dapat Dibayar di ATM</th><td>BNI46, BRI, MANDIRI</td></tr>
  
  
  </table>
  Silahkan dilakukan pembayaran menggunakan nomor pembayaran. Setelah pembayaran dilakukan, kartu peserta ujian dapat dibuat dan diunduh
+ 
+ <fieldset><legend><?php echo $this->translate("Voucher (if any)");?></legend>
+ <form name="voucherform" id="voucherform" method="post">
+ 	Masukan kode voucher yang anda miliki <input type="text" name="voucher" id="voucher" size="20" onblur="savevoucher(this)">
+	<input type="hidden" name="id" value="<?php echo $this->invoice['id']?>">
+	<input type="hidden" name="noform" value="<?php echo $this->invoice['no_fomulir']?>">
+	<br>
+	<font color="red"><?php echo $this->msg;?></font>
+ </form>
+ </fieldset>
