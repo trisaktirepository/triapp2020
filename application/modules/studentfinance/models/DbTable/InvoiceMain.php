@@ -51,6 +51,22 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		
 	}
 	
+
+	public function getInvoiceDataPendaftaran($billing_no){
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$selectData = $db->select()
+					->from(array('im'=>$this->_name))
+					->where("im.no_fomulir = '".$billing_no."' and bill_description like '%Pendaftaran%'");
+					
+		$row = $db->fetchRow($selectData);
+
+		if(!$row){
+			return null;
+		}else{
+			return $row;	
+		}
+		
+	}
 	public function getInvoiceByStd($stdid,$semester,$idactivity){
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$selectData = $db->select()
@@ -764,7 +780,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 				$bill=substr($bill, 1,8);
 				$dbInvoice->updatedata(array('bill_number'=>$bill), 'bill_number="'.$invoice['bill_number'].'"');
 				$invoice=$dbInvoice->getInvoiceDataByFormulir($idinvoice);
-			} 
+			}  
 			$bill=$invoice['bill_number'];
 			 
 			$va= '8'.$clientid.'8888'.$bill;
@@ -929,12 +945,13 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 					
 			}
 			//echo var_dump($invoiceData);
+
 			//echo var_dump($respone);exit;
 				
 		} 
 	}
 	public function isIn($bill){
-		$db = Zend_Db_Table::getDefaultAdapter();
+		$db = Zend_Db_Table::getDefaultAdapter(); 
 		$selectData = $db->select()
 		->from(array('im'=>$this->_name))
 		->where('im.bill_number = ?', $bill);

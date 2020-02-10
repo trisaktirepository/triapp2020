@@ -88,7 +88,9 @@ class CourseRegistrationController extends Zend_Controller_Action
     	
     	$this->view->title = $this->view->translate("Pre Course Registration");
     	
-    	 
+        $Dbinvoice=new Studentfinance_Model_DbTable_InvoiceMain();
+	$activity=$Dbinvoice->isAnyOpenInvoice($registration_id);
+	if ($activity!=0) $Dbinvoice->dispatcher($registration_id,$activity);    	 
     	// check barring Registration
     	$dbRelease=new App_Model_Record_DbTable_Barringrelease();
     	$GroupList = new App_Model_Registration_DbTable_CourseGroup();
