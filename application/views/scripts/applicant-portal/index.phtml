@@ -356,7 +356,7 @@ $pdb = new App_Model_Application_DbTable_ApplicantPtest();
 						
 						if($entry['at_selection_status']==5 ) {
 							$dbInvoice=new Studentfinance_Model_DbTable_InvoiceMain();
-							$invoice=$dbInvoice->getInvoiceData($entry['at_pes_id']); //&& $applicant_ptestDb->tpaExamToAttend($entry['at_trans_id'])){
+							$invoice=$dbInvoice->getInvoiceDataPendaftaran($entry['at_pes_id']); //&& $applicant_ptestDb->tpaExamToAttend($entry['at_trans_id'])){
 							if ($invoice['va']=='')
 								echo "<a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'apply-tpa-test','id'=>$entry['at_trans_id']),'default',true)."'>".$this->translate("Daftar Seleksi Tahap Ke-2")."</a>";
 							else if ($invoice['status_va']=="P") {

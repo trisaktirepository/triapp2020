@@ -18,6 +18,8 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 		 
 		
 		$IdStudentRegistration = $this->_getParam('id', null);
+$idinvoice=$this->_getParam('idinvoice');
+$this->view->idinvoice=$idinvoice;
 		$idactivity = $this->_getParam('idactivity', null);
 		$this->view->student_registration_id = $IdStudentRegistration;
 		
@@ -87,17 +89,28 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 					//get invoice no from sequence
 					$idsemester=$formData['idsemester'];
 					$IdStudentRegistration=$formData['IdStudentRegistration'];
-					$seq_data = array(
+$idinvoice=$formData['idinvoice'];
+					
+$seq_data = array(
 							date('y',strtotime($academicYear['ay_start_date'])),
 							substr($intake['IntakeId'],2,2),
 							$program['ProgramCode'], 0
 					);
 					
 					$db = Zend_Db_Table::getDefaultAdapter();
+if ($idinvoice=='') {
 					$stmt = $db->prepare("SELECT invoice_seq(?,?,?,?) AS invoice_no");
 					$stmt->execute($seq_data);
 					$invoice_no = $stmt->fetch();
-					$inv_data = array(
+}
+else {
+ $smt=$db->select()
+->from('invoice_main',array('invoice_no'=>'bill_number'))
+->where('id=?',$idinvoice);
+$invoice_no=$db->fetchRow($smt);
+
+}		
+			$inv_data = array(
 							'bill_number' => $invoice_no['invoice_no'],
 							'appl_id' => $formData['IdApplication'],
 							'IdStudentRegistration' => $formData['IdStudentRegistration'],
@@ -115,7 +128,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 							'date_create' => date('Y-m-d H:i:s'),
 							'idactivity'=>$formData['idactivity']
 					);
-					if ($formData["idinvoice"]!='') {
+					if ($formData["idinvoice"]=='') {
 						$invoice_id = $invoiceDb->insert($inv_data);
 						$dbFeeitem=new Studentfinance_Model_DbTable_FeeItem();
 						//insert invoice detail
@@ -130,7 +143,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 						
 							$invoiceDetailDb->insert($inv_detail_data);
 						}
-					}
+					} else $invoice_id=$formData['idinvoice'];
 					
 					//push to BNI
 					$dbActCalendar=new App_Model_General_DbTable_ActivityCalendar();

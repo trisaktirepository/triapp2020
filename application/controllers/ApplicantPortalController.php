@@ -1916,8 +1916,9 @@ class ApplicantPortalController extends Zend_Controller_Action
 		if(!$row){
 			$row = null;
 		}
-		
+//	echo var_dump($row);exit;
 		$this->view->account = $row;
+
 	}
 	
 	public function accountInvoiceAction(){
@@ -1978,6 +1979,7 @@ class ApplicantPortalController extends Zend_Controller_Action
 							'cn_amount' => 'cn_amount',
 							'dn_amount' => 'dn_amount',
 							'va'=>'va',
+'idactivity'=>'idactivity',
 							'status' => 'status'
 							)
 						)
@@ -4254,7 +4256,7 @@ class ApplicantPortalController extends Zend_Controller_Action
 						'amount' => 200000
 				);
 				
-				$detail=$invoiceDetailDb->isIn($applicantID, 19);
+				$detail=$invoiceDetailDb->isIn($invoice_id, 19);
 				if (!$detail)
 					$invoiceDetailDb->insert($inv_detail_data);
 				

@@ -86,7 +86,7 @@ function print_bank_slip(invoice_id,bank_id){
 		<td><?php if ($entry['IdBank']==1) echo $entry['document']; else echo "-"; ?></td>
 		<td><?php if ($entry['va']=='') {
 				if ($entry['IdStudentRegistration']!='') {
-					?><a href="/studentfinance/invoice/generate-std-invoice/id/<?php echo $entry['IdStudentRegistration']?>" ><?php echo $this->translate('Create Virtual Account');?></a>
+					?><a href="/studentfinance/invoice/generate-std-invoice/id/<?php echo $entry['IdStudentRegistration']?>/idactivity/<?php echo $entry['idactivity']?>/idinvoice/<?php echo $entry['id']?>"" ><?php echo $this->translate('Create Virtual Account');?></a>
 				<?php }
 		} else echo $entry['va']; ?></td>
 		<td><?php echo $entry['description']; ?></td>

@@ -6,7 +6,7 @@ class icampus_Plugin_Studentfinance extends Zend_Controller_Plugin_Abstract
 	 
     	$fn=new icampus_Function_Studentfinance_Studentfinance();
     	 
-    	$fn->dispacthStudentfinance(); 
+////    	$fn->dispacthStudentfinance(); 
        //	if ($user->getIdentity()->hasIdentity) {
            
 	}
