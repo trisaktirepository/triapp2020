@@ -1733,7 +1733,7 @@ public function registerAction(){
     		if (!isset($formData[$radioGroup])) {
     			$radioGroup = "radiominor_".$idSubject;
     			$idGroupMinor=$formData[$radioGroup];
-	    		if($idGroupMinor) {
+	    		if($idGroupMinor!='') {
 	    			$grpminor=$dbGrpMinor->getInfo($idGroupMinor);
 	    			//echo var_dump($grpminor);exit;
 	    			$idGroup=$grpminor['group_id'];
@@ -1936,27 +1936,29 @@ public function registerAction(){
     		if (!isset($formData[$radioGroup])) {
     			$radioGroup = "radiominor_".$idSubject;
     			$idGroupMinor=$formData[$radioGroup];
-    			$grpminor=$dbGrpMinor->getInfo($idGroupMinor);
-    			//echo var_dump($grpminor);exit;
-    			$idGroup=$grpminor['group_id'];
-    			$formData["radio_".$idSubject]=$idGroup;
-    			//echo 'ik';
-    			//echo var_dump($formData);exit;
-    			$schedule=$dbSchMinor->getSchedule($idGroupMinor);
-    			foreach ($schedule as $sch) {
-    				$newschedulesMinor[]=array('IdCourseTaggingGroupMinor'=>$idGroupMinor,
-    						'IdSubject'=>$idSubject,
-    						'group_id'=>$idGroup,
-    						'SubCode'=>$subjs['SubCode'],
-    						'SubjectName'=>$subjs['BahasaIndonesia'],
-    						'sc_date'=>$sch['sc_date'],
-    						'sc_date_end'=>$sch['sc_date_end'],
-    						'sc_day'=>$sch['sc_day'],
-    						'sc_start_time'=>$sch['sc_start_time'],
-    						'sc_end_time'=>$sch['sc_end_time']);
-    			}
-    			//echo var_dump($newschedulesMinor);
-    			$newschedulesMinor=$this->removeclashMinor($newschedulesMinor,$msg);
+	    		if ($idGroupMinor!='') {
+	    			$grpminor=$dbGrpMinor->getInfo($idGroupMinor);
+	    			//echo var_dump($grpminor);exit;
+	    			$idGroup=$grpminor['group_id'];
+	    			$formData["radio_".$idSubject]=$idGroup;
+	    			//echo 'ik';
+	    			//echo var_dump($formData);exit;
+	    			$schedule=$dbSchMinor->getSchedule($idGroupMinor);
+	    			foreach ($schedule as $sch) {
+	    				$newschedulesMinor[]=array('IdCourseTaggingGroupMinor'=>$idGroupMinor,
+	    						'IdSubject'=>$idSubject,
+	    						'group_id'=>$idGroup,
+	    						'SubCode'=>$subjs['SubCode'],
+	    						'SubjectName'=>$subjs['BahasaIndonesia'],
+	    						'sc_date'=>$sch['sc_date'],
+	    						'sc_date_end'=>$sch['sc_date_end'],
+	    						'sc_day'=>$sch['sc_day'],
+	    						'sc_start_time'=>$sch['sc_start_time'],
+	    						'sc_end_time'=>$sch['sc_end_time']);
+	    			}
+	    			//echo var_dump($newschedulesMinor);
+	    			$newschedulesMinor=$this->removeclashMinor($newschedulesMinor,$msg);
+	    		}
     			//echo 'after';
     			//echo var_dump($newschedulesMinor);echo "---<br>";
     		} else
