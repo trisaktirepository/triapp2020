@@ -74,11 +74,15 @@ class CourseRegistrationController extends Zend_Controller_Action
     	$dbCourseMinorStd=new App_Model_General_DbTable_CourseGroupStudentMinor();
     	$dbCourseMinorSch=new App_Model_Registration_DbTable_CourseGroupScheduleMinor();
     	$dbStdRegsubject=new App_Model_Record_DbTable_StudentRegSubjects();
+    	 
     	$appl_id = $auth->getIdentity()->appl_id; 
     	$registration_id = $auth->getIdentity()->registration_id;    
         //print_r($auth->getIdentity());
     	$this->view->appl_id = $appl_id;
     	$this->view->IdStudentRegistration = $registration_id;
+    	$studentRegDB = new App_Model_Record_DbTable_StudentRegistration();
+    	$student = $studentRegDB->getStudentInfo($registration_id);
+    	
     	
     	$idSemester = $this->_getParam('idSemester', 0);
     	$this->view->idSemester = $idSemester;
@@ -89,8 +93,8 @@ class CourseRegistrationController extends Zend_Controller_Action
     	$this->view->title = $this->view->translate("Pre Course Registration");
     	
         $Dbinvoice=new Studentfinance_Model_DbTable_InvoiceMain();
-	$activity=$Dbinvoice->isAnyOpenInvoice($registration_id);
-	if ($activity!=0) $Dbinvoice->dispatcher($registration_id,$activity);    	 
+		$activity=$Dbinvoice->isAnyOpenInvoice($registration_id);
+		if ($activity!=0 && $student!=60) $Dbinvoice->dispatcher($registration_id,$activity);    	 
     	// check barring Registration
     	$dbRelease=new App_Model_Record_DbTable_Barringrelease();
     	$GroupList = new App_Model_Registration_DbTable_CourseGroup();
@@ -102,9 +106,7 @@ class CourseRegistrationController extends Zend_Controller_Action
     	//=============================================
     	
     	//1) Get Student Academic Info
-    	$studentRegDB = new App_Model_Record_DbTable_StudentRegistration();
-    	$student = $studentRegDB->getStudentInfo($registration_id);
-    	 
+    	
     	//get pprogram
     	$dbProgram= new App_Model_General_DbTable_Program();
     	$program=$dbProgram->getData($student['IdProgram']);
