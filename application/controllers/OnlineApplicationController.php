@@ -8310,9 +8310,10 @@ class OnlineApplicationController extends Zend_Controller_Action {
 				$doc["ad_filepath"]=$location_path;
 				$doc["ad_filename"]=$output_filename;
 				$doc["ad_createddt"]=date("Y-m-d");
+				
 				$documentDB->addData($doc);	
 								
-				
+				echo var_dump($doc);exit;
 			
 				$this->view->download_file = "http://".APP_HOSTNAME."/documents/applicant/".$monthyearfolder."/".$transaction_id."/".$output_filename;
 				
