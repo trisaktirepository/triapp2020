@@ -118,7 +118,7 @@ public function getScheduleInfo($transaction_id){
 			//Period code mesti berdasarkan schedule date\
 			$periodDB = new App_Model_Record_DbTable_AcademicPeriod();
 			$sched=$this->getScheduleInfo($transactionID);
-			$ptPeriod   = $periodDB->getCurrentPeriod(date("n",strtotime($sched['aps_test_date'])), date("Y",strtotime($sched['aps_test_date'])));
+			$ptPeriod   = $periodDB->getCurrentPeriod(date("n",strtotime($sched['aps_test_date'])), date("Y",strtotime($sched['aps_test_date'])),$row['at_intake']);
 			
 			if(strlen($sched["aps_location_id"])==1){
 				$pes[1]="0".$sched["aps_location_id"];
