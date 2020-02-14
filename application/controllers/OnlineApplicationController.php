@@ -8263,7 +8263,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 									
 		    	
 				// ------- create PDF File section	--------   
-				try{
+				//try{
 					require_once 'dompdf_config.inc.php';
 					
 					$autoloader = Zend_Loader_Autoloader::getInstance(); // assuming we're in a controller
@@ -8297,11 +8297,11 @@ class OnlineApplicationController extends Zend_Controller_Action {
 					// ------- End PDF File section	--------
 					
 					$status = true;
-				
+				/*
 				}catch (Exception $e) {
 					$status = false;	
 				}
-
+				*/
     			//return $status;				
 		    	//save file info
 				$documentDB = new App_Model_Application_DbTable_ApplicantDocument();
