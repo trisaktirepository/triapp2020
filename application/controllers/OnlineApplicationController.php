@@ -7440,7 +7440,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 								//echo var_dump($data);exit;
 								if($data[0]["roomid"]==0){
 										$error="Maaf tempat untuk USM telah penuh. Sila hubungi pihak manajemen universitas";
-										$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application', 'action'=>'verification','msg'=>$error),'default',true));
+										//$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application', 'action'=>'verification','msg'=>$error),'default',true));
 									exit;
 								}
 								echo $data[0]["roomid"];
@@ -7453,7 +7453,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 								//echo var_dump($data);exit;
 								if($data[0]["roomid"]==0){
 									$error="Maaf tempat untuk USM telah penuh. Sila hubungi pihak manajemen universitas";
-									$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application', 'action'=>'verification','msg'=>$error),'default',true));
+									//$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application', 'action'=>'verification','msg'=>$error),'default',true));
 									exit;
 								}
 							}
@@ -8047,9 +8047,18 @@ class OnlineApplicationController extends Zend_Controller_Action {
 				//update payment
 				$voucer=$dbVoucer->getDataByVoucher($formData['voucher']);
 				if ($voucer) {
-					$dbInvoice->update(array('cn_amount'=>$voucer['amount']), 'id='.$formData['id']);
+					$invoiceid=$dbInvoice->getData($formData['id']);
+					
+					$dbInvoice->update(array('cn_amount'=>$voucer['amount'],'bill_balance'=>$invoiceid['bill_amount']-$voucer['amount']), 'id='.$formData['id']);
 					$dbVoucer->updateData(array('status'=>"1",'dt_process'=>date('Y-m-d H:s:i')), $voucer['idvoucher']);
-				
+					
+					if ($invoiceid['bill_amount']-$voucer['amount']==0)	{
+						$dbInvoice->update(array('status_va'=>'P'), 'id='.$formData['id']);
+							
+						//create Kartu USM
+						$this->_redirect('/online-application/create-usm-card/id/'.$formData['transactionid']);
+					}
+					
 				}
 				else $this->view->msg="Kode Voucher tidak ditemukan/sudah digunakan";
 			}

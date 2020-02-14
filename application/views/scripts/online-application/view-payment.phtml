@@ -43,6 +43,7 @@
  	Masukan kode voucher yang anda miliki <input type="text" name="voucher" id="voucher" size="20" onblur="savevoucher(this)">
 	<input type="hidden" name="id" value="<?php echo $this->invoice['id']?>">
 	<input type="hidden" name="noform" value="<?php echo $this->invoice['no_fomulir']?>">
+	<input type="hidden" name="transactionid" value="<?php echo $this->transactionid?>">
 	<br>
 	<font color="red"><?php echo $this->msg;?></font>
  </form>
