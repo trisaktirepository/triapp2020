@@ -94,7 +94,7 @@ class CourseRegistrationController extends Zend_Controller_Action
     	
         $Dbinvoice=new Studentfinance_Model_DbTable_InvoiceMain();
 		$activity=$Dbinvoice->isAnyOpenInvoice($registration_id);
-		if ($activity!=0 && $student!=60) $Dbinvoice->dispatcher($registration_id,$activity);    	 
+		if ($activity!=0 && $student['IdProgram']!=60) $Dbinvoice->dispatcher($registration_id,$activity);    	 
     	// check barring Registration
     	$dbRelease=new App_Model_Record_DbTable_Barringrelease();
     	$GroupList = new App_Model_Registration_DbTable_CourseGroup();

@@ -1805,8 +1805,15 @@ class ApplicantPortalController extends Zend_Controller_Action
     	$appl_id = $auth->getIdentity()->appl_id; 
     	
 		$this->view->appl_id = $appl_id;
+		$registration_id = $auth->getIdentity()->registration_id;
+		$Dbinvoice=new Studentfinance_Model_DbTable_InvoiceMain();
 		
+		$studentRegDB = new App_Model_Record_DbTable_StudentRegistration();
+		$student = $studentRegDB->getStudentInfo($registration_id);
 		
+		$activity=$Dbinvoice->isAnyOpenInvoice($registration_id);
+		if ($activity!=0 && $student['IdProgram']!=60) $Dbinvoice->dispatcher($registration_id,$activity);
+		 
     	//profile
     	$applicantProfileDb = new App_Model_Application_DbTable_ApplicantProfile();
     	$this->view->profile = $applicantProfileDb->getData($appl_id);
