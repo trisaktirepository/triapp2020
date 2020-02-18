@@ -356,9 +356,10 @@ class App_Model_General_DbTable_Semestermaster extends Zend_Db_Table_Abstract
 		
        
             $select = $db->select()
-                             ->from(array('sm'=>'tbl_semestermaster'))
+                              
                              ->from(array('tp'=>'tbl_program'))
-                             ->join(array('ac'=>'tbl_activity_calender'),'ac.IdSemesterMain = sm.IdSemesterMaster')
+                             ->join(array('ac'=>'tbl_activity_calender'),'ac.IdProgram = tp.IdProgram')
+							 ->join(array('sm'=>'tbl_semestermaster'),'ac.idsemestermain=sm.IdSemesterMaster')
                              ->where('NOW()	BETWEEN TIMESTAMP(ac.StartDate,ac.StartTime) AND TIMESTAMP(ac.EndDate,ac.EndTime)')
                              ->where('ac.idActivity=18')
                              ->where('ac.IdSemesterMain=?',(int)$semester_id)
