@@ -89,27 +89,27 @@ $this->view->idinvoice=$idinvoice;
 					//get invoice no from sequence
 					$idsemester=$formData['idsemester'];
 					$IdStudentRegistration=$formData['IdStudentRegistration'];
-$idinvoice=$formData['idinvoice'];
+					$idinvoice=$formData['idinvoice'];
 					
-$seq_data = array(
+					$seq_data = array(
 							date('y',strtotime($academicYear['ay_start_date'])),
 							substr($intake['IntakeId'],2,2),
 							$program['ProgramCode'], 0
 					);
 					
 					$db = Zend_Db_Table::getDefaultAdapter();
-if ($idinvoice=='') {
+			if ($idinvoice=='') {
 					$stmt = $db->prepare("SELECT invoice_seq(?,?,?,?) AS invoice_no");
 					$stmt->execute($seq_data);
 					$invoice_no = $stmt->fetch();
-}
-else {
- $smt=$db->select()
-->from('invoice_main',array('invoice_no'=>'bill_number'))
-->where('id=?',$idinvoice);
-$invoice_no=$db->fetchRow($smt);
+			}
+			else {
+ 				$smt=$db->select()
+				->from('invoice_main',array('invoice_no'=>'bill_number'))
+				->where('id=?',$idinvoice);
+				$invoice_no=$db->fetchRow($smt);
 
-}		
+			}		
 			$inv_data = array(
 							'bill_number' => $invoice_no['invoice_no'],
 							'appl_id' => $formData['IdApplication'],
