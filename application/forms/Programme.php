@@ -163,7 +163,7 @@ class App_Form_Programme extends Zend_Form {
 		
 		$this->addElement('select','ae_discpline', array(
 			'label'=>"Discpline",
-			//'onchange'=> 'changeProgramme(this)',
+			'onchange'=> 'changeProgramme(this)',
 			'required'=>true
 		));
 		$schoolDiscplineDb = new App_Model_General_DbTable_SchoolDiscipline();

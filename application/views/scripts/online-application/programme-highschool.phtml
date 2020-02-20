@@ -379,6 +379,7 @@ function changeProgram(discipline){
 	var intake=$('#intake_id').val();
 	var discipline=$('#ae_discpline').val();
 	//alert("online-application/ajax-get-programme-hs/discipline_code/"+discipline+"/intake_id/"+intake);
+	$('#ap_prog_code').empty().append('<option value=""> <?php echo $this->translate('please_select'); ?> </option>');
 	
 	if(discipline!="" && intake!="" ){
 		$.ajax({
