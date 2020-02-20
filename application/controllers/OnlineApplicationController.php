@@ -2851,7 +2851,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 			$yearend = $formData['ae_year_end'];
 			if ($discipline_code !=0 && $intake !=0 && $yearend != ''){
 		        $yearend=explode(" ", $yearend);
-		        echo var_dump($yearend);
+		       // echo var_dump($yearend);
 		        $yearend=$yearend[1];
 		        $select=$db->select()
 		        ->from('tbl_intake')
