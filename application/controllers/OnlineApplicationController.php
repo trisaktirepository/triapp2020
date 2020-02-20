@@ -3096,7 +3096,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
        
             
         //program in placement test with discipline filter
-		 
+		if ($yeargap < 2) {
         //transaction data
 		$auth = Zend_Auth::getInstance();
 		$appl_id = $auth->getIdentity()->appl_id;    	
@@ -3136,7 +3136,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 	    
 	  	// check program offer
 	  	$select->where("p.PssbOffer = 1");
-	  	if ($yeargap > 2) {
+	  	if ($yeargap > 0) {
 	  		$select->where('p.ProgramCode not in ("0300","0400")');
 	  	}
 	    if($discipline_code!=0){
@@ -3150,7 +3150,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
         $stmt = $db->query($select);
         $row = $stmt->fetchAll();
         
-		 
+		} else $row=array();
 		} else $row=array();
         } else $row=array();
 	  	
