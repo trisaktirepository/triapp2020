@@ -2845,7 +2845,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 			$discipline_code = $formData['discipline_code'];
 			$intake = $formData['intake_id'];
 			$yearend = $formData['ae_year_end'];
-			
+			if ($discipline_code !=0 && $intake !=0 && $yearend != ''){
 		        $yearend=explode(" ", $yearend);
 		        echo var_dump($yearend);
 		        $yearend=$yearend[1];
@@ -2899,7 +2899,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 			  	}
 		        $stmt = $db->query($select);
 		        $row = $stmt->fetchAll();
-		        
+			}else $row=array();  
 		} else $row=array();
 	  	
 		$ajaxContext->addActionContext('view', 'html')
