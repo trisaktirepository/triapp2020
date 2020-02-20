@@ -890,7 +890,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		}
 		else
 			$va=$invoice['va'];//$billamount=$invoice['bill_balance'];
-		$billamount=$invoice['bill_amount'];
+		$billamount=$invoice['bill_amount']-$invoice['cn_amount'];
 		 
 		//get detail
 		$invoicedetail=$invoiceDet->getInvoiceDetailBank($invoice['id'], $program['program_id'],$program['IdBranchOffer']);
@@ -928,7 +928,8 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 					'customer_email'=>utf8_decode( $profil["appl_email"] ),
 					'customer_phone'=>utf8_decode( $profil["appl_phone_hp"] ),
 					'virtual_account'=>utf8_decode($va),
-					'datetime_expired'=>date_format(date_create($invoice['va_expired_dt']), 'c'),
+					//'datetime_expired'=>date_format(date_create($invoice['va_expired_dt']), 'c'),
+					'datetime_expired'=>date_format(date_create(strtotime('2020-08-10 23:00:00')), 'c'),
 					'description'=>$desc,
 			);
 				

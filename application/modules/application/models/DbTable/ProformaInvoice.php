@@ -1921,32 +1921,83 @@ class Application_Model_DbTable_ProformaInvoice extends Zend_Db_Table {
 		$dbInvoiceDet=new Studentfinance_Model_DbTable_InvoiceDetail();
 		
 		$select = $db ->select()
+		->from('applicant_transaction')
+		->where('at_pes_id=?',$noform);
+		$applicant=$db->fetchRow($select);
+		
+		$select = $db ->select()
+		->from(array('a'=>'applicant_program'))
+		->join(array('b'=>'tbl_program'),'a.ap_prog_code=b.ProgramCode')
+		->where('ap_at_trans_id=?',$applicant['at_trans_id'])
+		->where('ap_usm_status="1"');
+		$program=$db->fetchRow($select);
+		
+		$feeStructureDb = new Studentfinance_Model_DbTable_FeeStructure();
+		if(!$this->islocalNationality($applicant['at_trans_id'])){
+			//315 is foreigner in lookup db
+			$fee_structure = $feeStructureDb->getApplicantFeeStructure($applicant['at_intake'],$program['IdProgram'],315,$program['IdBranchOffer']);
+			 
+		
+		}else{
+			//default to local
+			$fee_structure = $feeStructureDb->getApplicantFeeStructure($applicant['at_intake'],$program['IdProgram'],314,$program['IdBranchOffer']);
+			 
+		}
+		
+		//$feeStructureDb = new Studentfinance_Model_DbTable_FeeStructure();
+		//$fee_structure = $feeStructureDb->getApplicantFeeStructure($txnData['at_intake'], $programData['IdProgram']);
+		
+		//get selected payment plan
+		$paymentplanDb = new Studentfinance_Model_DbTable_FeeStructurePlan();
+		$payment_plan = $paymentplanDb->getBillingPlanByPackage($fee_structure['fs_id'],$paket);
+		$discount=$payment_plan['discount_amount'];
+		
+		$select = $db ->select()
 		->from('proforma_invoice_va')
 		->where('LEFT(bill_number,1)=?',$paket)
 		->where('no_fomulir=?',$noform);
 			
 		$invoices=$db->fetchAll($select);
-		foreach ($invoices as $value) {
-			$idpro=$value['id'];
-			unset($value['id']);
-			$inv=$dbInvoice->isIn($value['bill_number']);
-			if (!$inv) {
-				$id=$dbInvoice->insert($value);
-			} else $id=$inv['id'];
-				//get detail
-				$select = $db ->select()
-				->from('proforma_invoice_detail')
-				->where('invoice_main_id=?',$idpro);
-				$detail=$db->fetchAll($select);
-				//echo $id;echo var_dump($detail);exit;
-				foreach ($detail as $det) {
-					unset($det['id']);
-					$det['invoice_main_id']=$id;
-					if (!$dbInvoiceDet->isIn($id, $det['fi_id'])) $dbInvoiceDet->insertData($det);
+		//cek for invoice
+		$select = $db ->select()
+		->from('invoice_main') 
+		->where('no_fomulir=?',$noform);
+		$invoicemain=$db->fetchAll($select);
+		if (!$invoicemain) {
+			foreach ($invoices as $value) {
+				$idpro=$value['id'];
+				if ($discount>0 ) {
+					$value['cn_amount']=$discount;
+					 
 				}
-			
+				unset($value['id']);
+				$inv=$dbInvoice->isIn($value['bill_number']);
+				if (!$inv) {
+					$id=$dbInvoice->insert($value);
+				} else {
+					$id=$inv['id'];
+					$dbInvoice->update($value, 'id='.$id);
+				}
+					//get detail
+					$select = $db ->select()
+					->from('proforma_invoice_detail')
+					->where('invoice_main_id=?',$idpro);
+					$detail=$db->fetchAll($select);
+					//echo $id;echo var_dump($detail);exit;
+					foreach ($detail as $det) {
+						unset($det['id']);
+						$det['invoice_main_id']=$id;
+						if ($det['fi_id']==1 && $discount>0) {
+							$det['amount']= $det['amount']-$discount;
+							$discount=0;
+						}
+						if (!$dbInvoiceDet->isIn($id, $det['fi_id'])) $dbInvoiceDet->insertData($det);
+					}
+				
+			}
 		}
 	}
+	
 	public function generateProformaInvoiceEcollection($txnId){
 	
 		$dbInvoiceVa=new Application_Model_DbTable_ProformaInvoiceVa();

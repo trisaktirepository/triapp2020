@@ -176,7 +176,7 @@ td.bold-text{
 		foreach($this->fees as $plan_index=>$fee):
 		$discount=$fee['discount_amount'];
 		if($fee['fsp_bil_installment']==1){	
-			 						
+			 $discountA=$fee['discount_amount'];		
 	?>
 		<div class="paket_a box">
 			<table border="0" cellpadding="2" cellspacing="0" >
@@ -228,7 +228,10 @@ td.bold-text{
 					<td>&nbsp;</td>
 					<td>Total Pembayaran Dibayar Sekali</td>
 					<td class="border-top bold-text">Rp</td>
-					<td colspan="3" class="border-top bold-text"><?php echo number_format($paket_total_amount, 2, '.', ','); ?></td>
+					<td colspan="3" class="border-top bold-text">
+					<?php echo number_format($paket_total_amount, 2, '.', ','); ?>
+					<?php if ($discount>0) echo "(Potongan sebesar ".number_format($discount, 2, '.', ',')." )";  ?>
+					</td>
 					<td>&nbsp;</td>
 				</tr>
 				<tr>
@@ -346,7 +349,9 @@ td.bold-text{
 					<td>&nbsp;</td>
 					<td>&nbsp;</td>
 					<td class="border-top-bottom bold-text">Rp</td>
-					<td class="border-top-bottom bold-text"><?php echo number_format($paket_total_amount, 2, '.', ','); ?></td>
+					<td class="border-top-bottom bold-text"><?php echo number_format($paket_total_amount, 2, '.', ','); ?>
+					<?php if ($discount>0) echo "(Potongan sebesar ".number_format($discount, 2, '.', ',')." )"; ?>)" ?>
+					</td>
 					<td>&nbsp;</td>
 				</tr>
 				<tr><td colspan="7">&nbsp;</td></tr>
@@ -371,7 +376,7 @@ td.bold-text{
 	<input type="hidden" name="transaction_id" value="<?php echo $this->transaction_id;?>">
 	
 	<ol>
-		<li><input type="radio" name="paket" value="A"> A: di bayar lunas sebesar Rp. <?php echo number_format($paket_a_total, 2, '.', ','); ?> tanggal: <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['REGISTRATION_DATE_START'])); ?>  s/d <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['REGISTRATION_DATE_END'])); ?> <?php if ($discount>0) echo ' ( dengan pengurangan pembayaran sebesar Rp '.number_format( $discount, 2, '.', ',').')'?></li>
+		<li><input type="radio" name="paket" value="A">Paket A: di bayar lunas sebesar Rp. <?php echo number_format($paket_a_total, 2, '.', ','); ?> tanggal: <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['REGISTRATION_DATE_START'])); ?>  s/d <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['REGISTRATION_DATE_END'])); ?> <?php if ($discountA>0) echo ' ( dengan pengurangan pembayaran sebesar Rp '.number_format( $discountA, 2, '.', ',').')'?><?php if ($discountA>0) echo '<strong> Paket A mendapatkan potongan sebesar Rp '.number_format($discountA, 2, '.', ',').' </strong>';?></li>
 		<li><input type="radio" name="paket" value="B">Paket B: di bayar pertama sebesar Rp. <?php echo number_format($paket_b_c1_total, 2, '.', ','); ?> tanggal: <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['REGISTRATION_DATE_START'])); ?> s/d <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['REGISTRATION_DATE_END'])); ?> sisanya Rp. <?php echo number_format( ($paket_a_total - $paket_b_c1_total), 2, '.', ','); ?> dibayar <?php echo sizeof($fee['plan_detail'])-1?> X angsuran setiap bulan terhitung mulai bulan <?php echo date ( 'F Y' , strtotime ( '+1 month' , strtotime ( $this->reg_date['REGISTRATION_DATE_END'] ) ) ); ?></li>
 	</ol>
 	<input type="submit" name="submit" value="Pilih Paket"> <input type="submit" name="cetak" value="Cetak Surat Panggilan">
