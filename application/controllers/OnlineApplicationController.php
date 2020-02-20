@@ -3082,7 +3082,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
         	$discipline_code = $formData['discipline_code'];
         	$intake = $formData['intake_id'];
         	$yearend = $formData['ae_year_end'];
-        if ($intake>0 && $discipline_code>0 && $yearend!='') {
+        if ($discipline_code !=0 && $intake !=0 && $yearend != '') {
         $yearend=explode(" ", $yearend);
         $yearend=$yearend[1];
         $select=$db->select()
@@ -3096,7 +3096,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
        
             
         //program in placement test with discipline filter
-		if ($yeargap <=1) {
+		 
         //transaction data
 		$auth = Zend_Auth::getInstance();
 		$appl_id = $auth->getIdentity()->appl_id;    	
@@ -3150,7 +3150,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
         $stmt = $db->query($select);
         $row = $stmt->fetchAll();
         
-		} else $row=array();
+		 
 		} else $row=array();
         } else $row=array();
 	  	
