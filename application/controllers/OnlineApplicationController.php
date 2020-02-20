@@ -3093,7 +3093,9 @@ class OnlineApplicationController extends Zend_Controller_Action {
         $yearnow=$yearnow[0];
         $yeargap=$yearnow-$yearend;
         //-----------------------------year gap end
-       
+        echo $yearend;
+        echo $yearnow;
+        echo $yeargap;
             
         //program in placement test with discipline filter
 		if ($yeargap < 2) {
