@@ -2834,67 +2834,72 @@ class OnlineApplicationController extends Zend_Controller_Action {
 	public function ajaxGetProgrammePtAction(){
     	$discipline_code = $this->_getParam('discipline_code', 0);
     	$intake = $this->_getParam('intake_id', 0);
+    	$yearend = $this->_getParam('ae_year_end', "");
         $this->_helper->layout->disableLayout();
 		
 		$db = Zend_Db_Table::getDefaultAdapter();
 		
 		//-----calculate year gap
-        $yearend = $this->_getParam('ae_year_end', "");
-        $yearend=explode(" ", $yearend);
-        echo var_dump($yearend);
-        $yearend=$yearend[1];
-        $select=$db->select()
-        ->from('tbl_intake')
-        ->where('idintake=?',$intake);
-        $row=$db->fetchRow($select);
-        $yearnow=explode("/", $row['IntakeId']);
-        $yearnow=$yearnow[0];
-        $yeargap=$yearend-$yearnow;
-        //-----------------------------year gap end
-        
-     	$ajaxContext = $this->_helper->getHelper('AjaxContext');
-        $ajaxContext->addActionContext('view', 'html');
-        $ajaxContext->initContext();
-            
-        //program in placement test with discipline filter
-
-        //transaction data
-		$auth = Zend_Auth::getInstance();    	
-    	$transaction_id = $auth->getIdentity()->transaction_id;
-    	$transDB = new App_Model_Application_DbTable_ApplicantTransaction();
-        $transaction_data= $transDB->getTransactionData($transaction_id);
-    	
+		if ($this->getRequest()->isPost()) {
+			$formData = $this->getRequest()->getPost();
+			$discipline_code = $formData['discipline_code'];
+			$intake = $formData['intake_id'];
+			$yearend = $formData['ae_year_end'];
+		        $yearend=explode(" ", $yearend);
+		        echo var_dump($yearend);
+		        $yearend=$yearend[1];
+		        $select=$db->select()
+		        ->from('tbl_intake')
+		        ->where('idintake=?',$intake);
+		        $row=$db->fetchRow($select);
+		        $yearnow=explode("/", $row['IntakeId']);
+		        $yearnow=$yearnow[0];
+		        $yeargap=$yearend-$yearnow;
+		        //-----------------------------year gap end
+		        
+		     	$ajaxContext = $this->_helper->getHelper('AjaxContext');
+		        $ajaxContext->addActionContext('view', 'html');
+		        $ajaxContext->initContext();
+		            
+		        //program in placement test with discipline filter
 		
-		//get placement test data
-		$select = $db->select(array('apt_ptest_code'))
-	                 ->from(array('ap'=>'applicant_ptest'))
-	                 ->where('ap.apt_at_trans_id = ?', $transaction_id);
-	                 
-	    $stmt = $db->query($select);
-        $placementTestCode = $stmt->fetch();
-        
-        
-        
-        
-        //get placementest program data filtered with discipline
-	  	$select = $db->select()
-	                 ->from(array('app'=>'appl_placement_program'))
-	                 ->join(array('p'=>'tbl_program'),'p.ProgramCode = app.app_program_code', array('ArabicName','ProgramName','ProgramCode','IdProgram','strata') )
-	                 ->joinLeft(array('apr'=>'appl_program_req'),"apr.apr_program_code = app.app_program_code and apr.apr_decipline_code = '".$discipline_code."'")
-	                 ->join(array('ip'=>'appl_placement_intake_program'),'p.IdProgram=ip.IdProgram',array())
-	                 ->where('app.app_placement_code  = ?', $placementTestCode['apt_ptest_code'])
-	                 ->where('ip.IdIntake=?',$intake)
-	                 ->order('p.ArabicName ASC');
-			
-	  	// check program offer
-	  	$select->where("p.UsmOffer = 1");
-	  	if ($yearnow>3) {
-	  		 $select->where('p.ProgramCode not in ("0300","0400")');
-	  	}
-        $stmt = $db->query($select);
-        $row = $stmt->fetchAll();
-        
-        
+		        //transaction data
+				$auth = Zend_Auth::getInstance();    	
+		    	$transaction_id = $auth->getIdentity()->transaction_id;
+		    	$transDB = new App_Model_Application_DbTable_ApplicantTransaction();
+		        $transaction_data= $transDB->getTransactionData($transaction_id);
+		    	
+				
+				//get placement test data
+				$select = $db->select(array('apt_ptest_code'))
+			                 ->from(array('ap'=>'applicant_ptest'))
+			                 ->where('ap.apt_at_trans_id = ?', $transaction_id);
+			                 
+			    $stmt = $db->query($select);
+		        $placementTestCode = $stmt->fetch();
+		        
+		        
+		        
+		        
+		        //get placementest program data filtered with discipline
+			  	$select = $db->select()
+			                 ->from(array('app'=>'appl_placement_program'))
+			                 ->join(array('p'=>'tbl_program'),'p.ProgramCode = app.app_program_code', array('ArabicName','ProgramName','ProgramCode','IdProgram','strata') )
+			                 ->joinLeft(array('apr'=>'appl_program_req'),"apr.apr_program_code = app.app_program_code and apr.apr_decipline_code = '".$discipline_code."'")
+			                 ->join(array('ip'=>'appl_placement_intake_program'),'p.IdProgram=ip.IdProgram',array())
+			                 ->where('app.app_placement_code  = ?', $placementTestCode['apt_ptest_code'])
+			                 ->where('ip.IdIntake=?',$intake)
+			                 ->order('p.ArabicName ASC');
+					
+			  	// check program offer
+			  	$select->where("p.UsmOffer = 1");
+			  	if ($yearnow>3) {
+			  		 $select->where('p.ProgramCode not in ("0300","0400")');
+			  	}
+		        $stmt = $db->query($select);
+		        $row = $stmt->fetchAll();
+		        
+		} else $row=array();
 	  	
 		$ajaxContext->addActionContext('view', 'html')
                     ->addActionContext('form', 'html')
