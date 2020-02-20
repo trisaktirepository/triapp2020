@@ -2859,7 +2859,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 		        $row=$db->fetchRow($select);
 		        $yearnow=explode("/", $row['IntakeId']);
 		        $yearnow=$yearnow[0];
-		        $yeargap=$yearend-$yearnow;
+		        $yeargap=$yearnow-$yearend;
 		        //-----------------------------year gap end
 		       
 		        //program in placement test with discipline filter
@@ -2894,9 +2894,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 					
 			  	// check program offer
 			  	$select->where("p.UsmOffer = 1");
-			  	echo "yeargap:".$yeargap;
-			  	echo "yearend:".$yearend;
-			  	echo "yearnw:".$yearnow;
+			  	 
 			  	if ($yeargap > 2) {
 			  		 $select->where('p.ProgramCode not in ("0300","0400")');
 			  	}
@@ -3093,7 +3091,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
         $row=$db->fetchRow($select);
         $yearnow=explode("/", $row['IntakeId']);
         $yearnow=$yearnow[0];
-        $yeargap=$yearend-$yearnow;
+        $yeargap=$yearnow-$yearend;
         //-----------------------------year gap end
        
             
