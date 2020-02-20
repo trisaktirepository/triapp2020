@@ -3082,6 +3082,9 @@ class OnlineApplicationController extends Zend_Controller_Action {
         	$discipline_code = $formData['discipline_code'];
         	$intake = $formData['intake_id'];
         	$yearend = $formData['ae_year_end'];
+        	echo $discipline_code;
+        	echo $intake;
+        	echo $yearend;
         if ($discipline_code !=0 && $intake !=0 && $yearend != '') {
         $yearend=explode(" ", $yearend);
         $yearend=$yearend[1];
