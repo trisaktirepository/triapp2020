@@ -2897,6 +2897,9 @@ class OnlineApplicationController extends Zend_Controller_Action {
 			  	if ($yeargap > 2) {
 			  		 $select->where('p.ProgramCode not in ("0300","0400")');
 			  	}
+			  	if($discipline_code!=0){
+			  		$select->where('apr.apr_decipline_code  = ?', $discipline_code);
+			  	}
 		        $stmt = $db->query($select);
 		        $row = $stmt->fetchAll();
 			}else $row=array();  
