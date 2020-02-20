@@ -2894,7 +2894,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 					
 			  	// check program offer
 			  	$select->where("p.UsmOffer = 1");
-			  	if ($yearnow>3) {
+			  	if ($yeargap > 2) {
 			  		 $select->where('p.ProgramCode not in ("0300","0400")');
 			  	}
 		        $stmt = $db->query($select);
@@ -3065,12 +3065,20 @@ class OnlineApplicationController extends Zend_Controller_Action {
 	public function ajaxGetProgrammeHsAction(){
     	$discipline_code = $this->_getParam('discipline_code', 0);
     	$intake = $this->_getParam('intake_id', 0);
+    	$yearend = $this->_getParam('ae_year_end', "");
     	$db = Zend_Db_Table::getDefaultAdapter();
         $this->_helper->layout->disableLayout();
-        
+
+        $ajaxContext = $this->_helper->getHelper('AjaxContext');
+        $ajaxContext->addActionContext('view', 'html');
+        $ajaxContext->initContext();
         //-----calculate year gap
-        $yearend = $this->_getParam('ae_year_end', "");
-        if ($intake>0 && $discipline>0 && $yearend!='') {
+        if ($this->getRequest()->isPost()) {
+        	$formData = $this->getRequest()->getPost();
+        	$discipline_code = $formData['discipline_code'];
+        	$intake = $formData['intake_id'];
+        	$yearend = $formData['ae_year_end'];
+        if ($intake>0 && $discipline_code>0 && $yearend!='') {
         $yearend=explode(" ", $yearend);
         $yearend=$yearend[1];
         $select=$db->select()
@@ -3081,10 +3089,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
         $yearnow=$yearnow[0];
         $yeargap=$yearend-$yearnow;
         //-----------------------------year gap end
-        
-     	$ajaxContext = $this->_helper->getHelper('AjaxContext');
-        $ajaxContext->addActionContext('view', 'html');
-        $ajaxContext->initContext();
+       
             
         //program in placement test with discipline filter
 		if ($yeargap <=1) {
@@ -3127,7 +3132,9 @@ class OnlineApplicationController extends Zend_Controller_Action {
 	    
 	  	// check program offer
 	  	$select->where("p.PssbOffer = 1");
-	                 
+	  	if ($yeargap > 2) {
+	  		$select->where('p.ProgramCode not in ("0300","0400")');
+	  	}
 	    if($discipline_code!=0){
 	    	$select->where('apr.apr_decipline_code  = ?', $discipline_code);
 	    }
@@ -3139,6 +3146,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
         $stmt = $db->query($select);
         $row = $stmt->fetchAll();
         
+		} else $row=array();
 		} else $row=array();
         } else $row=array();
 	  	
