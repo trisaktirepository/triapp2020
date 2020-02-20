@@ -383,7 +383,7 @@ function changeProgram(discipline){
 	if(discipline!="" && intake!="" ){
 		$.ajax({
 			url: "<?php echo $this->url(array('module'=>'default','controller'=>'online-application', 'action'=>'ajax-get-programme-hs'),'default',true);?>",
-			data: {'discipline_code':discipline,'intake_id':intake,'ae_year_end':$("#ae_year_end"),val()},
+			data: {'discipline_code':discipline,'intake_id':intake,'ae_year_end':$("#ae_year_end").val()},
 			type: 'POST',
 			dataType: 'json',
 			beforeSend: function() {
