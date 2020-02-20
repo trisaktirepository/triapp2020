@@ -2835,7 +2835,21 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	$discipline_code = $this->_getParam('discipline_code', 0);
     	$intake = $this->_getParam('intake_id', 0);
         $this->_helper->layout->disableLayout();
-        
+		
+		$db = Zend_Db_Table::getDefaultAdapter();
+		
+		//-----calculate year gap
+        $yearend = $this->_getParam('ae_year_end', "");
+        $yearend=explode(" ", $yearend);
+        $yearend=$yearend[1];
+        $select=$db->select()
+        ->from('tbl_intake')
+        ->where('idintake=?',$intake);
+        $row=$db->fetchRow($select);
+        $yearnow=explode("/", $row['IntakeId']);
+        $yearnow=$yearnow[0];
+        $yeargap=$yearend-$yearnow;
+        //-----------------------------year gap end
         
      	$ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext->addActionContext('view', 'html');
@@ -2849,7 +2863,6 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	$transDB = new App_Model_Application_DbTable_ApplicantTransaction();
         $transaction_data= $transDB->getTransactionData($transaction_id);
     	
-		$db = Zend_Db_Table::getDefaultAdapter();
 		
 		//get placement test data
 		$select = $db->select(array('apt_ptest_code'))
@@ -2858,6 +2871,9 @@ class OnlineApplicationController extends Zend_Controller_Action {
 	                 
 	    $stmt = $db->query($select);
         $placementTestCode = $stmt->fetch();
+        
+        
+        
         
         //get placementest program data filtered with discipline
 	  	$select = $db->select()
@@ -2871,7 +2887,9 @@ class OnlineApplicationController extends Zend_Controller_Action {
 			
 	  	// check program offer
 	  	$select->where("p.UsmOffer = 1");
-	  	
+	  	if ($yearnow>3) {
+	  		 $select->where('p.ProgramCode not in ("0300","0400")');
+	  	}
         $stmt = $db->query($select);
         $row = $stmt->fetchAll();
         
@@ -3040,16 +3058,29 @@ class OnlineApplicationController extends Zend_Controller_Action {
 	public function ajaxGetProgrammeHsAction(){
     	$discipline_code = $this->_getParam('discipline_code', 0);
     	$intake = $this->_getParam('intake_id', 0);
-    	
+    	$db = Zend_Db_Table::getDefaultAdapter();
         $this->_helper->layout->disableLayout();
         
+        //-----calculate year gap
+        $yearend = $this->_getParam('ae_year_end', "");
+        if ($intake>0 && $discipline>0 && $yearend!='') {
+        $yearend=explode(" ", $yearend);
+        $yearend=$yearend[1];
+        $select=$db->select()
+        ->from('tbl_intake')
+        ->where('idintake=?',$intake);
+        $row=$db->fetchRow($select);
+        $yearnow=explode("/", $row['IntakeId']);
+        $yearnow=$yearnow[0];
+        $yeargap=$yearend-$yearnow;
+        //-----------------------------year gap end
         
      	$ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext->addActionContext('view', 'html');
         $ajaxContext->initContext();
             
         //program in placement test with discipline filter
-
+		if ($yeargap <=1) {
         //transaction data
 		$auth = Zend_Auth::getInstance();
 		$appl_id = $auth->getIdentity()->appl_id;    	
@@ -3057,7 +3088,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	$transDB = new App_Model_Application_DbTable_ApplicantTransaction();
         $transaction_data= $transDB->getTransactionData($transaction_id);
     	
-		$db = Zend_Db_Table::getDefaultAdapter();
+		
 		
 	                 
 		//get transaction data
@@ -3101,8 +3132,10 @@ class OnlineApplicationController extends Zend_Controller_Action {
         $stmt = $db->query($select);
         $row = $stmt->fetchAll();
         
-        
+		} else $row=array();
+        } else $row=array();
 	  	
+		
 		$ajaxContext->addActionContext('view', 'html')
                     ->addActionContext('form', 'html')
                     ->addActionContext('process', 'json')
