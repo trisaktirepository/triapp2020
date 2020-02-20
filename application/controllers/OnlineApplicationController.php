@@ -2841,6 +2841,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 		//-----calculate year gap
         $yearend = $this->_getParam('ae_year_end', "");
         $yearend=explode(" ", $yearend);
+        echo var_dump($yearend);
         $yearend=$yearend[1];
         $select=$db->select()
         ->from('tbl_intake')
