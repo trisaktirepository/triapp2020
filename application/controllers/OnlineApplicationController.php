@@ -2836,7 +2836,11 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	$intake = $this->_getParam('intake_id', 0);
     	$yearend = $this->_getParam('ae_year_end', "");
         $this->_helper->layout->disableLayout();
-		
+
+        $ajaxContext = $this->_helper->getHelper('AjaxContext');
+        $ajaxContext->addActionContext('view', 'html');
+        $ajaxContext->initContext();
+        
 		$db = Zend_Db_Table::getDefaultAdapter();
 		
 		//-----calculate year gap
@@ -2857,11 +2861,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 		        $yearnow=$yearnow[0];
 		        $yeargap=$yearend-$yearnow;
 		        //-----------------------------year gap end
-		        
-		     	$ajaxContext = $this->_helper->getHelper('AjaxContext');
-		        $ajaxContext->addActionContext('view', 'html');
-		        $ajaxContext->initContext();
-		            
+		       
 		        //program in placement test with discipline filter
 		
 		        //transaction data
