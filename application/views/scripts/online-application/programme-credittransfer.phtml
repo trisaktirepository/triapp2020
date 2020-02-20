@@ -287,7 +287,7 @@ function continues(){
 }?>
 </table>
 </fieldset>
-<?php } else {?>
+<?php } ?>
 <fieldset><legend><?php echo $this->translate("Program Detail")?></legend>
 
 <input type="hidden" name="transactionId" value="<?php echo $this->transaction_id;?>">
@@ -405,13 +405,11 @@ function continues(){
 	<tr><th><?php echo $this->translate('Jumlah Mata Kuliah :')?></th>
 	<td> <input type="text" id="nofsubject" name="nofsubject" onchange="setSubject()" size="5"></td>
 	</tr>
-</table>
-<?php }
-if (!$this->application) {?>
+</table> 
 
  
  <input type="submit" value="Kirim"> 
-<?php }?>
+ 
  <input type="button" value="Teruskan" onclick="window.location = '<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'uploaddocument'),'default',true);?>' "> 
 </fieldset>
 

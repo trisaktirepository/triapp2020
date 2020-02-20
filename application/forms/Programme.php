@@ -158,7 +158,8 @@ class App_Form_Programme extends Zend_Form {
 		$this->addElement('text','ae_year_end', array(
 			'label'=>"Year To",
 			'required'=>true,
-			'id'=>"to"
+			'id'=>"to",
+			'onChange'=>"changeProgramme(this)"
 		));
 		
 		$this->addElement('select','ae_discpline', array(
@@ -1516,7 +1517,8 @@ class App_Form_Programme extends Zend_Form {
 		$this->addElement('text','ae_year_end', array(
 			'label'=>"Year To",
 			'required'=>true,
-			'id'=>"to"
+			'id'=>"to",
+			'onChange'=>"changeProgramme(this)"
 		));
 		
 		$this->addElement('select','ae_discpline', array(
