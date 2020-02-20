@@ -3082,9 +3082,9 @@ class OnlineApplicationController extends Zend_Controller_Action {
         	$discipline_code = $formData['discipline_code'];
         	$intake = $formData['intake_id'];
         	$yearend = $formData['ae_year_end'];
-        	echo 'dis='.$discipline_code;
-        	echo 'intake='.$intake;
-        	echo 'yearend='.$yearend;
+        	//echo 'dis='.$discipline_code;
+        	//echo 'intake='.$intake;
+        	//echo 'yearend='.$yearend;
         if ($discipline_code !=0 && $intake !=0 && $yearend != '') {
         $yearend=explode(" ", $yearend);
         $yearend=$yearend[1];
@@ -3096,9 +3096,9 @@ class OnlineApplicationController extends Zend_Controller_Action {
         $yearnow=$yearnow[0];
         $yeargap=$yearnow-$yearend;
         //-----------------------------year gap end
-        echo $yearend;
-        echo $yearnow;
-        echo $yeargap;
+        //echo $yearend;
+        //echo $yearnow;
+       // echo $yeargap;
             
         //program in placement test with discipline filter
 		if ($yeargap < 2) {
