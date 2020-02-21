@@ -729,7 +729,7 @@ class App_Model_Record_DbTable_StudentRegSubjects extends Zend_Db_Table_Abstract
 				
 			} else if($type==6){
 				//passed cummulative credit hours
-				if($passtotal_credit >= $grade){
+				if($passtotal_credit >= $grade*1){
 					return true;
 				}else{
 					return false;
