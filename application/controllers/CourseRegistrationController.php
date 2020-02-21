@@ -690,7 +690,7 @@ class CourseRegistrationController extends Zend_Controller_Action
 	                            			}else if ($preq["PrerequisiteType"]=='6') {
 	                            				//max credit hours in semester
 	                            				$minsks=$preq["PrerequisiteGrade"];
-	                            				if ($minsks>=$all_creditthours_pass) $regcompleted=true;
+	                            				if ($minsks<=$all_creditthours_pass) $regcompleted=true;
 	                            			}else
 	                            			if($preq["PrerequisiteType"]=='1' && $preq["MinCreditHours"]>0) {
 	                            				//echo "Syaraf <br>";
