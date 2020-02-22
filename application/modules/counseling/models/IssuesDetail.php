@@ -22,7 +22,7 @@ class Counseling_Model_IssuesDetail extends Zend_Db_Table
         return($status);
     }
 
-    public function update($data,$id)
+    public function update(array $data,$id)
     {
     	$db = Zend_Db_Table::getDefaultAdapter();
         

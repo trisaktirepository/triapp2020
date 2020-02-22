@@ -29,7 +29,7 @@ class Counseling_Model_UploadFile extends Zend_Db_Table
         return (true);
     }
     
-    public function update($data,$id)
+    public function update(array $data,$id)
     {
     	$db = Zend_Db_Table::getDefaultAdapter();
     	$db->update($this->_name,$data,'auf_id='.$id);
