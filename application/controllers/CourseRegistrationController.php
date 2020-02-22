@@ -148,7 +148,7 @@ class CourseRegistrationController extends Zend_Controller_Action
                          **Check if the semester still open, if not redirect it back to 0 semester id
                          **/
                         $semesterValidate = $semesterDB->getSemesterCourseRegistrationValidate($student["IdProgram"],$student['scheme'],$idSemester,$student['IdIntake']);
-                        echo 'semester='.var_dump($semesterValidate);exit;
+                        //echo 'semester='.var_dump($semesterValidate);exit;
                         if(empty($semesterValidate))
                         {
                         	//check for exception

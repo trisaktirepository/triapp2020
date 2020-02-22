@@ -371,7 +371,7 @@ class App_Model_General_DbTable_Semestermaster extends Zend_Db_Table_Abstract
         
             
        
-       //echo $select;
+       echo $select;exit;
 		
 		$row = $db->fetchRow($select);
 		
