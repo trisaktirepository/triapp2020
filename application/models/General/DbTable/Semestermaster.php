@@ -374,7 +374,8 @@ class App_Model_General_DbTable_Semestermaster extends Zend_Db_Table_Abstract
         
 		
 		$row = $db->fetchRow($select);
-		
+		echo $select;
+		echo var_dump($row);exit;
 		if ($row) {
 			//check for detail calendar wheter open or close
 			$select = $db->select()
