@@ -284,7 +284,7 @@ class App_Model_General_DbTable_Semestermaster extends Zend_Db_Table_Abstract
                              ->group('sm.SemesterMainName');
         
        
-     	echo $select;exit;
+     	//echo $select;exit;
 		
 		$row = $db->fetchAll($select);
 		if ($row) {
