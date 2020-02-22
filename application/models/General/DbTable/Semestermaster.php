@@ -381,8 +381,8 @@ class App_Model_General_DbTable_Semestermaster extends Zend_Db_Table_Abstract
 			->from(array('det'=>'tbl_activity_calender_intake'))
 			->where('det.IdActivityCalendar=?',$row['id']);
 			$rowdetail=$db->fetchRow($select);
-			echo $select;
-			echo var_dump($rowdetail);exit;
+			//echo $select;
+			//echo var_dump($rowdetail);exit;
 			if ($rowdetail && $intake!=null) {
 				$select = $db->select()
 				->from(array('det'=>'tbl_activity_calender_intake'))
