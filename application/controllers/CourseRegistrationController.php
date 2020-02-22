@@ -120,7 +120,7 @@ class CourseRegistrationController extends Zend_Controller_Action
     	$sem=$dbsem->getSemester($idSemester);
     	
     	//student should ask for dosen wali permission in MeetAdvisor equal to 1
-    	
+    	echo 'semester='.$idSemester;exit;
     	if ($student['MeetAdvisor']=="1" && $idSemester>0 && $sem['IsCountable']=='1') {
     		$dbConseling=new Counseling_Model_IssuesDetail();
     		if (!$dbConseling->isPermit($registration_id, $idSemester))
