@@ -379,7 +379,8 @@ class App_Model_General_DbTable_Semestermaster extends Zend_Db_Table_Abstract
 			//check for detail calendar wheter open or close
 			$select = $db->select()
 			->from(array('det'=>'tbl_activity_calender_intake'))
-			->where('det.IdActivityCalendar=?',$row['id']);
+			->where('det.IdActivityCalendar=?',$row['id'])
+			->where('det.IdIntake=?',$intake);
 			$rowdetail=$db->fetchRow($select);
 			//echo $select;
 			//echo var_dump($rowdetail);exit;
@@ -390,6 +391,7 @@ class App_Model_General_DbTable_Semestermaster extends Zend_Db_Table_Abstract
 				->where('det.IdIntake=?',$intake)
 				->where('NOW()	BETWEEN TIMESTAMP(det.StartDate,det.StartTime) AND TIMESTAMP(det.EndDate,det.EndTime)');
 				$rowdetail=$db->fetchRow($select);
+				 
 				if (!$rowdetail) return false;
 			}
 		}
