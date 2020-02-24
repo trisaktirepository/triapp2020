@@ -934,8 +934,8 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 			);
 				
 			//
-			echo date_format(date_create($invoice['va_expired_dt']), 'c');
-			echo var_dump($invoiceData);exit;
+			//echo date_format(date_create($invoice['va_expired_dt']), 'c');
+			//echo var_dump($invoiceData);exit;
 			$respone=$bni->accessBni($clientid, $secretkey, $url, $invoiceData);
 	
 	
