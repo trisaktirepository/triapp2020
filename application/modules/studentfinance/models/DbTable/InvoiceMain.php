@@ -929,7 +929,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 					'customer_phone'=>utf8_decode( $profil["appl_phone_hp"] ),
 					'virtual_account'=>utf8_decode($va),
 					//'datetime_expired'=>date_format(date_create($invoice['va_expired_dt']), 'c'),
-					'datetime_expired'=>date_format(date_create(strtotime('2020-08-10 23:00:00')), 'c'),
+					'datetime_expired'=>date_format(date_create('2020-08-10 23:00:00'), 'c'),
 					'description'=>$desc,
 			);
 				
