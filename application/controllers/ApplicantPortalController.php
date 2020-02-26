@@ -1444,7 +1444,7 @@ class ApplicantPortalController extends Zend_Controller_Action
 		//$proformaInvoiceDb = new Application_Model_DbTable_ProformaInvoice();
 		//$proformaInvoiceDb->regenerateProformaInvoice($txnId);
 				
-		exit();
+		//exit();
 		
 	}
 	

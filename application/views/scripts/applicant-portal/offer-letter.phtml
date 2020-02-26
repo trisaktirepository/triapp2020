@@ -380,7 +380,16 @@ td.bold-text{
 		<li><input type="radio" name="paket" value="B">Paket B: di bayar pertama sebesar Rp. <?php echo number_format($paket_b_c1_total, 2, '.', ','); ?> tanggal: <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['REGISTRATION_DATE_START'])); ?> s/d <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['REGISTRATION_DATE_END'])); ?> sisanya Rp. <?php echo number_format( ($paket_a_total - $paket_b_c1_total), 2, '.', ','); ?> dibayar <?php echo sizeof($fee['plan_detail'])-1?> X angsuran setiap bulan terhitung mulai bulan <?php echo date ( 'F Y' , strtotime ( '+1 month' , strtotime ( $this->reg_date['REGISTRATION_DATE_END'] ) ) ); ?></li>
 	</ol>
 	<input type="submit" name="submit" value="Pilih Paket"> 
-	<input type="submit" name="cetak" value="Cetak Surat Panggilan">
+	<?php $dbUploadfile=new App_Model_Application_DbTable_UploadFile();
+		$file=$dbUploadfile->getFile($this->transaction_id,45);
+		if (!$file) {?>
+			<input type="submit" name="cetak" value="Cetak Surat Panggilan">
+	<?php } else {
+			$dt = explode("triapp",$file['pathupload']);
+			$path = $dt[1];
+			$download ="<a target='_blank' href=".$path.">".$this->translate('Download')."</a>"; 
+			echo $download;
+	  }?>
 	</td><tr>
 	</table>
 	</form>
