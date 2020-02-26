@@ -1053,16 +1053,19 @@ class ApplicantPortalController extends Zend_Controller_Action
    }
 
    
-	private function generateOfferLetterPdf($txnId){
+	private function generateOfferLetterPdfAction(){
 	
 		//get applicant info
 		$applicantDB = new App_Model_Application_DbTable_ApplicantProfile();
     	$applicant = $applicantDB->getAllProfile($txnId);
-    	
+    	$txnId=$this->_request->getParam('transaction_id');
     	//get transaction info
     	$applicantTxnDB = new App_Model_Application_DbTable_ApplicantTransaction();
 		$txnData = $applicantTxnDB->getTransaction($txnId);
-		
+		if ($txnData['at_appl_type']=="1") {
+			$typeselection="Ujian Saringan Masuk (USM)";
+			$message="-";
+		}else
 		if ($txnData['at_appl_type']=="2") {
 			$typeselection="Program Seleksi Siswa Berpotensi";
 			$message="-";
@@ -1084,7 +1087,7 @@ class ApplicantPortalController extends Zend_Controller_Action
 		} else if ($txnData['at_appl_type']=="7") {
 			$typeselection="Program Seleksi Nilai UTBK";
 			$message="-";
-		}
+		}  
 		//get assessment data
 		$assessmentDb = new App_Model_Application_DbTable_ApplicantAssessment();
 		$assessmentData = $assessmentDb->getData($txnId);
@@ -1337,7 +1340,7 @@ class ApplicantPortalController extends Zend_Controller_Action
 		$autoloader = Zend_Loader_Autoloader::getInstance(); // assuming we're in a controller
 		$autoloader->pushAutoloader('DOMPDF_autoload');
 		
-		$html_template_path = DOCUMENT_PATH."/template/OfferLetter.html";
+		$html_template_path = DOCUMENT_PATH."/template/OfferLetter2020.html";
 		
 		$html = file_get_contents($html_template_path);
 		
@@ -1436,10 +1439,10 @@ class ApplicantPortalController extends Zend_Controller_Action
 		
 
 		//regenerate performa invoice
-		$proformaInvoiceDb = new Application_Model_DbTable_ProformaInvoice();
-		$proformaInvoiceDb->regenerateProformaInvoice($txnId);
+		//$proformaInvoiceDb = new Application_Model_DbTable_ProformaInvoice();
+		//$proformaInvoiceDb->regenerateProformaInvoice($txnId);
 				
-		
+		exit();
 		
 	}
 	
