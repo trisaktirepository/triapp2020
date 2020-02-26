@@ -1057,11 +1057,13 @@ class ApplicantPortalController extends Zend_Controller_Action
 	
 		//get applicant info
 		$applicantDB = new App_Model_Application_DbTable_ApplicantProfile();
-    	$applicant = $applicantDB->getAllProfile($txnId);
+    	
     	$txnId=$this->_request->getParam('transaction_id');
+    	$applicant = $applicantDB->getAllProfile($txnId);
     	//get transaction info
     	$applicantTxnDB = new App_Model_Application_DbTable_ApplicantTransaction();
 		$txnData = $applicantTxnDB->getTransaction($txnId);
+		
 		if ($txnData['at_appl_type']=="1") {
 			$typeselection="Ujian Saringan Masuk (USM)";
 			$message="-";
