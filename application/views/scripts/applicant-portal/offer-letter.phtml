@@ -379,7 +379,8 @@ td.bold-text{
 		<li><input type="radio" name="paket" value="A">Paket A: di bayar lunas sebesar Rp. <?php echo number_format($paket_a_total, 2, '.', ','); ?> tanggal: <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['REGISTRATION_DATE_START'])); ?>  s/d <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['REGISTRATION_DATE_END'])); ?> <?php if ($discountA>0) echo ' ( dengan pengurangan pembayaran sebesar Rp '.number_format( $discountA, 2, '.', ',').')'?><?php if ($discountA>0) echo '<strong> Paket A mendapatkan potongan sebesar Rp '.number_format($discountA, 2, '.', ',').' </strong>';?></li>
 		<li><input type="radio" name="paket" value="B">Paket B: di bayar pertama sebesar Rp. <?php echo number_format($paket_b_c1_total, 2, '.', ','); ?> tanggal: <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['REGISTRATION_DATE_START'])); ?> s/d <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['REGISTRATION_DATE_END'])); ?> sisanya Rp. <?php echo number_format( ($paket_a_total - $paket_b_c1_total), 2, '.', ','); ?> dibayar <?php echo sizeof($fee['plan_detail'])-1?> X angsuran setiap bulan terhitung mulai bulan <?php echo date ( 'F Y' , strtotime ( '+1 month' , strtotime ( $this->reg_date['REGISTRATION_DATE_END'] ) ) ); ?></li>
 	</ol>
-	<input type="submit" name="submit" value="Pilih Paket"> <input type="submit" name="cetak" value="Cetak Surat Panggilan">
+	<input type="submit" name="submit" value="Pilih Paket"> 
+	<input type="submit" name="cetak" value="Cetak Surat Panggilan">
 	</td><tr>
 	</table>
 	</form>

@@ -18,8 +18,8 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 		 
 		
 		$IdStudentRegistration = $this->_getParam('id', null);
-$idinvoice=$this->_getParam('idinvoice');
-$this->view->idinvoice=$idinvoice;
+		$idinvoice=$this->_getParam('idinvoice');
+		$this->view->idinvoice=$idinvoice;
 		$idactivity = $this->_getParam('idactivity', null);
 		$this->view->student_registration_id = $IdStudentRegistration;
 		
