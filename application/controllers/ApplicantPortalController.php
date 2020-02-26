@@ -1053,12 +1053,12 @@ class ApplicantPortalController extends Zend_Controller_Action
    }
 
    
-	private function generateOfferLetterPdfAction(){
+	private function generateOfferLetterPdf($txnId){
 	
 		//get applicant info
 		$applicantDB = new App_Model_Application_DbTable_ApplicantProfile();
     	
-    	$txnId=$this->_request->getParam('transaction_id');
+    	//$txnId=$this->_request->getParam('transaction_id');
     	$applicant = $applicantDB->getAllProfile($txnId);
     	//get transaction info
     	$applicantTxnDB = new App_Model_Application_DbTable_ApplicantTransaction();
@@ -3303,7 +3303,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     	if ($this->getRequest()->isPost()) {
     		$formData = $this->getRequest()->getPost();
     		if (isset($formData['cetak'])) {
-    			$this->_redirect('applicant-portal/generate-offer-letter-pdf/transaction_id/'.$txnId);
+    			$this->generateOfferLetterPdf($txnId);
     		} else {
     			$txnId=$formData['transaction_id'];
     			$paket=$formData['paket'];
