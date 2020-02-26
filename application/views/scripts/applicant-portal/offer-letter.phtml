@@ -386,8 +386,8 @@ td.bold-text{
 			<input type="submit" name="cetak" value="Cetak Surat Panggilan">
 	<?php } else {
 			 
-			$path = DOCUMENT_PATH.'/'.$file['ad_filepath'].'/'.$file['ad_filename'];
-			$download ="<a target='_blank' href=".$path.">".$this->translate('Download')."</a>"; 
+			$path = 'documents/'.$file['ad_filepath'].'/'.$file['ad_filename'];
+			$download ="<a target='_blank' href=".$path.">".$this->translate('Download')." Surat Panggilan Diterima</a>"; 
 			echo $download;
 	  }?>
 	</td><tr>
