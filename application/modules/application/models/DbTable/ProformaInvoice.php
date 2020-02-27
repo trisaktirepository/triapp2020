@@ -1958,12 +1958,8 @@ class Application_Model_DbTable_ProformaInvoice extends Zend_Db_Table {
 		->where('no_fomulir=?',$noform);
 			
 		$invoices=$db->fetchAll($select);
-		//cek for invoice
-		$select = $db ->select()
-		->from('invoice_main') 
-		->where('no_fomulir=?',$noform);
-		$invoicemain=$db->fetchAll($select);
-		if (!$invoicemain) {
+		
+		if ($invoices) {
 			foreach ($invoices as $value) {
 				$idpro=$value['id'];
 				if ($discount>0 ) {

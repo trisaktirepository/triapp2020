@@ -3570,7 +3570,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     		//regenerate performa invoice
     			$proformaInvoiceDb->generateProformaInvoiceEcollection($formData['transaction_id']);
     		$inv=$dbInv->getApplicantInvoice($txnData['at_pes_id']);
-    		echo var_dump($inv);exit;
+    		//echo var_dump($inv);exit;
     		if (!$inv) {
     			$proformaInvoiceDb->moveToInvoiceBasedOnPaket($txnData['at_pes_id'], $formData['paket']);
     			$inv=$dbInv->getApplicantInvoice($txnData['at_pes_id']);
