@@ -964,11 +964,15 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 	}
 	
 	public function isAnyOpenInvoice($idstd){
+		
+		
+		$feeStructure = new Studentfinance_Model_DbTable_FeeStructure();
 		$db = Zend_Db_Table::getDefaultAdapter();
 	
 		//get student id
 		$selectData = $db->select()
 		->from(array('im'=>'tbl_studentregistration'))
+		->join(array('p'=>'tbl_program'),'p.IdProgram=im.IdProgram')
 		->where('im.IdStudentRegistration = ?', $idstd);
 		$std=$db->fetchRow($selectData);
 		//get payment activity
@@ -986,59 +990,127 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		if ($rows) {
 			foreach ($rows as $row) {
 				//cek invoice main
-				if ($row['idActivity']==39 || $row['idActivity']==40 || $row['idActivity']==42) {
-					//cek krs
-					$selectData = $db->select()
-					->from(array('im'=>'tbl_studentregsubjects'),array('IdSemesterMain'))
-					->join(array('sb'=>'tbl_subjectmaster'),'im.IdSubject=sb.IdSubject',array('sks'=>'SUM(CreditHours)','jmlmk'=>'COUNT(*)'))
-					->where('im.IdStudentRegistration=?',$idstd)
-					->where('im.IdSemesterMain=?',$row['IdSemesterMain'])
-					->group('im.IdSemesterMain');
-					$rowkrs = $db->fetchRow($selectData);
-					//echo var_dump($rowkrs);exit;
-					if ($rowkrs) {
+				 
+				$dbBundle=new Studentfinance_Model_DbTable_BundleFee();
+				$bundle=$dbBundle->getCurrentSetup(1, $std['IdCollege'], $std['IdProgram'], $std['IdBranch'], $row['IdSemesterMain'], $row['idActivity']);
+				if ($bundle) {
+					//get fee structure item
+					if($std['appl_nationality']!=96){
+						$student_category = 315;
+					}else{
+						$student_category = 314;
+					}
+					$feestrucs =$feeStructure->getApplicantFeeStructure($std['IdIntake'],$std['IdProgram'],$student_category,$std['IdBranch'],$std['IdProgramMajoring']);
+					if ($feestrucs) {
 						$selectData = $db->select()
-						->from(array('im'=>'invoice_main'))
-						->where('im.IdStudentRegistration=?',$idstd)
-						->where('im.idactivity=?',$row['idActivity'])
-						->where('im.semester=?',$rowkrs['IdSemesterMain']);
-						$invoice = $db->fetchRow($selectData);
-					//	echo var_dump($row);exit;
-						if (!$invoice) return $row['idActivity'];
-						else {
-							//cek for compatibility
-							$selectData = $db->select()
-							->from(array('im'=>'invoice_detail'))
-							->where('invoice_main_id=?',$row['id']);
-							$detail= $db->fetchRow($selectData);
-							$amount=$detail['amount'];
-							//get fee structure
-							$selectData = $db->select()
-							->from(array('im'=>'fee_structure'))
-							->join(array('dt'=>'fee_structure_item'),'im.fs_id=dt.fsi_structure_id')
-							->join(array('fi'=>'fee_item'),'fi.fi_id=dt.fsi_item_id')
-							->join(array('fsp'=>'fee_structure_program'),'fsp.fsp_fs_id=im.fs_id')
-							->where('fsi_item_id=?',$detail['fi_id'])
-							->where('im.fs_intake_start=?',$std['IdIntake'])
-							->where('fsp.fsp_program_id=?',$std['IdProgram']);
-							$feestructure=$db->fetchRow($selectData);
-							if ($feestructure) {
-								if ($feestructure['fi_amount_calculation_type']==299) {
-									//per sks
-									$actualamount=$rowkrs['sks']*$feestructure['fsi_amount'];
-									if ($amount<$actualamount) return $row['idActivity'];
-								} else if ($feestructure['fi_amount_calculation_type']==301) {
-									//per MK
-									$actualamount=$rowkrs['jmlmk']*$feestructure['fsi_amount'];
-									if ($amount<$actualamount) return $row['idActivity'];
-									
-								} 
-							}
+						->from(array('fsi'=>'fee_structure_item'),array('fsi_item_id'))
+						->where("fsi.fsi_structure_id = '".$feestrucs['fs_id']."'");
+						$items = $db->fetchAll($selectData);
 							
-						}
-						 
-					}  else return 0;
-				} else {
+					} else return 0;
+					//get item detail
+					$selectData = $db->select()
+					->from(array('a'=>'fee_budle_detail'),array('fee_item'))
+					->where("a.idfeebundle = '".$bundle['idfeebundle']."'");
+					$bundleDetail = $db->fetchAll($selectData);
+						
+					$dbBudleDetail=new Studentfinance_Model_DbTable_BundleFeeDetail();
+					$bundleDetail=$dbBudleDetail->getDataByBudle($bundle['idfeebundle']);
+					if ($bundleDetail) {
+						$status="0";
+						$items=array_intersect($items, $bundleDetail);
+						if (!empty($items)) {
+							foreach ($items as $item) {
+								$selectData = $db->select()
+								->from(array('a'=>'fee_item'),array('fi_amount_calculation_type','fi_frequency_mode'))
+								->where("a.fi_id = '".$item."'");
+								$itemdetail = $db->fetchRow($selectData);
+								if ($itemdetail['fi_frequency_mode']==305) {
+									//semester ditetapkan
+									$selectData = $db->select()
+									->from(array('a'=>'fee_structure_item_semester'))
+									->where("a.fsis_item_id = '".$item."'")
+									->where("a.fsis_semester = '".$row['IdSemesterMain']."'");
+									$itemsem = $db->fetchRow($selectData);
+									if ($itemsem) $status="1";
+								}
+								if ($itemdetail['fi_amount_calculation_type']==459) {
+									//tergantung subject
+									$subjectset = $db->select()
+									->from(array('im'=>'tbl_studentregsubjects'),array('IdSubject'))
+									->where('im.IdStudentRegistration=?',$idstd)
+									->where('im.IdSemesterMain=?',$row['IdSemesterMain']);
+									 
+										
+									$selectData = $db->select()
+									->from(array('a'=>'fee_structure_item_subject'))
+									->where("a.fsisub_fsi_id = '".$item."'")
+									->where("a.fsisub_subject_id in (".$subjectset.")");
+									$subject = $db->fetchRow($selectData);
+									if ($subject) $status="1";
+								}
+								if ($itemdetail['fi_amount_calculation_type']==299) {
+									//tergantung sks
+									//cek krs
+									$selectData = $db->select()
+									->from(array('im'=>'tbl_studentregsubjects'),array('IdSemesterMain'))
+									->join(array('sb'=>'tbl_subjectmaster'),'im.IdSubject=sb.IdSubject',array('sks'=>'SUM(CreditHours)','jmlmk'=>'COUNT(*)'))
+									->where('im.IdStudentRegistration=?',$idstd)
+									->where('im.IdSemesterMain=?',$row['IdSemesterMain'])
+									->group('im.IdSemesterMain');
+									$rowkrs = $db->fetchRow($selectData);
+									//echo var_dump($rowkrs);exit;
+									if ($rowkrs) {
+										$selectData = $db->select()
+										->from(array('im'=>'invoice_main'))
+										->where('im.IdStudentRegistration=?',$idstd)
+										->where('im.idactivity=?',$row['idActivity'])
+										->where('im.semester=?',$rowkrs['IdSemesterMain']);
+										$invoice = $db->fetchRow($selectData);
+										//	echo var_dump($row);exit;
+										if ($invoice)
+										{
+											
+											//cek for compatibility
+											$selectData = $db->select()
+											->from(array('im'=>'invoice_detail'))
+											->where('invoice_main_id=?',$row['id']);
+											$detail= $db->fetchRow($selectData);
+											$amount=$detail['amount'];
+											//get fee structure
+											$selectData = $db->select()
+											->from(array('dt'=>'fee_structure_item'))
+											->join(array('fi'=>'fee_item'),'fi.fi_id=dt.fsi_item_id')
+											->where('fsi_item_id=?',$detail['fi_id'])
+											->where('dt.fsi_structure_id=?',$feestrucs['fs_id']);
+											$feestructure=$db->fetchRow($selectData);
+											if ($feestructure) {
+												if ($feestructure['fi_amount_calculation_type']==299) {
+													//per sks
+													$actualamount=$rowkrs['sks']*$feestructure['fsi_amount'];
+													if ($amount<$actualamount) $status="1"; 
+												} else if ($feestructure['fi_amount_calculation_type']==301) {
+													//per MK
+													$actualamount=$rowkrs['jmlmk']*$feestructure['fsi_amount'];
+													if ($amount<$actualamount) $status="1";
+														
+												}
+											}
+												
+										}
+											
+									}  
+								}
+								
+								
+								
+							}
+							if ($status=="1") return $row['idActivity'];
+						} else return 0;
+					} else return 0;
+				} else return 0;
+				if (!($row['idActivity']==39 || $row['idActivity']==40 || $row['idActivity']==42)) {
+				 
 					$selectData = $db->select()
 					->from(array('im'=>'invoice_main'))
 					->where('im.IdStudentRegistration=?',$idstd)
