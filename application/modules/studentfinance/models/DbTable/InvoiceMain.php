@@ -963,6 +963,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 	
 	}
 	
+	
 	public function isAnyOpenInvoice($idstd){
 		
 		
