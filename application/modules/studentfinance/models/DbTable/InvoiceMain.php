@@ -1007,7 +1007,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 						$selectData = $db->select()
 						->from(array('fsi'=>'fee_structure_item'),array('fsi_item_id'))
 						->where("fsi.fsi_structure_id = '".$feestrucs['fs_id']."'");
-						$items = $db->fetchAll($selectData);
+						$fiitems = $db->fetchAll($selectData);
 							
 					} else return 0;
 					//get item detail
@@ -1015,12 +1015,10 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 					->from(array('a'=>'fee_budle_detail'),array('fee_item'))
 					->where("a.idfeebundle = '".$bundle['idfeebundle']."'");
 					$bundleDetail = $db->fetchAll($selectData);
-						
-					$dbBudleDetail=new Studentfinance_Model_DbTable_BundleFeeDetail();
-					$bundleDetail=$dbBudleDetail->getDataByBudle($bundle['idfeebundle']);
+					 
 					if ($bundleDetail) {
 						$status="0";
-						$items=array_intersect($items, $bundleDetail);
+						$items=array_intersect($fiitems, $bundleDetail);
 						if (!empty($items)) {
 							foreach ($items as $item) {
 								$selectData = $db->select()
