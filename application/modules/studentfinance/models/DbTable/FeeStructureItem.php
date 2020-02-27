@@ -37,6 +37,13 @@ class Studentfinance_Model_DbTable_FeeStructureItem extends Zend_Db_Table_Abstra
 				$i++;
 			}
 			
+			//insert subject item data
+			$feeStructureItemSubjectDb = new Studentfinance_Model_DbTable_FeeStructureItemSubject();
+			$i=0;
+			foreach ($row as $data){
+				$row[$i]['subject'] = $feeStructureItemSubjectDb->getStructureItemData($data['fsi_id']);
+				$i++;
+			}
 			return $row;
 		}else{
 			return null;

@@ -171,11 +171,25 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 				$dbBranch=new App_Model_General_DbTable_Branchofficevenue();
 				 
 				//get current semester level
-				$sql = $db->select()
-					->from(array('sss' => 'tbl_studentsemesterstatus'), array(new Zend_Db_Expr('max(Level) as Level')))
-					->where('sss.IdStudentRegistration  = ?',$std['IdStudentRegistration']);
-				
-				$result = $db->fetchRow($sql);
+			$sql = $db->select()
+				  ->from(array('sss' => 'tbl_studentsemesterstatus'), array('Level'))
+					->join(array('b'=>'tbl_semestermaster'),'b.IdSemesterMaster=sss.IdSemesterMain')
+				  ->where('sss.IdStudentRegistration  = ?', $IdStudentRegistration)
+				  ->where('b.IdSemesterMaster=?',$idsemester);
+				   
+				  $result = $db->fetchRow($sql);
+				  if (!$result) {
+				  
+					  $sql = $db->select()
+					  ->from(array('sss' => 'tbl_studentsemesterstatus'), array(new Zend_Db_Expr('max(Level) as Level')))
+					  ->join(array('b'=>'tbl_semestermaster'),'b.IdSemesterMaster=sss.IdSemesterMain')
+					  ->where('sss.IdStudentRegistration  = ?', $IdStudentRegistration)
+					  ->where('b.SemesterMainStartDate<=?',$idsemester);
+					  
+					  $result = $db->fetchRow($sql);
+					  $result['Level']=$result['Level']+1;
+					  //echo $sql;
+				  } 
 				if( $result['Level'] ){
 						$current_level = $result['Level'];
 				}else{
@@ -219,6 +233,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 					}else{
 						$student_category = 314;
 					}
+					
 					$row =$feeStructure->getApplicantFeeStructure($intake['IdIntake'],$std['IdProgram'],$student_category,$std['IdBranch'],$std['IdProgramMajoring']);
 					 
 					if ($row) {
