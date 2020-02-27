@@ -1022,7 +1022,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 					if ($bundleDetail) {
 						$status="0";
 						foreach ($bundleDetail as $itm) {
-							$bundls[]=$itm['fsi_item_id'];
+							$bundls[]=$itm['fee_item'];
 						}
 						$items=array_intersect($itemsfi, $bundls);
 						if (!empty($items)) {
