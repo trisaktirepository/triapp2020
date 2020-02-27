@@ -973,6 +973,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		//get student id
 		$selectData = $db->select()
 		->from(array('im'=>'tbl_studentregistration'))
+		->join(array('sp'=>'student_profile'),'sp.appl_id=im.applicationId',array('appl_nationality'))
 		->join(array('p'=>'tbl_program'),'p.IdProgram=im.IdProgram')
 		->where('im.IdStudentRegistration = ?', $idstd);
 		$std=$db->fetchRow($selectData);
