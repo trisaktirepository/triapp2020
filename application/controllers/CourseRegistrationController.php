@@ -118,7 +118,6 @@ class CourseRegistrationController extends Zend_Controller_Action
     	//get semester info
     	$dbsem=new App_Model_General_DbTable_Semestermaster();
     	$sem=$dbsem->getSemester($idSemester);
-    	
     	//student should ask for dosen wali permission in MeetAdvisor equal to 1
     	
     	if ($student['MeetAdvisor']=="1" && $idSemester>0 && $sem['IsCountable']=='1') {

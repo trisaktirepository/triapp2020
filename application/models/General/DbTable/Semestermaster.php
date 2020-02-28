@@ -260,68 +260,45 @@ class App_Model_General_DbTable_Semestermaster extends Zend_Db_Table_Abstract
 	public function getSemesterCourseRegistration($progid,$scheme,$intake=null){
 		$db = Zend_Db_Table::getDefaultAdapter();
 		
-		/*
-    	 *  SELECT sm.`IdSemesterMaster` , sm.`SemesterMainName` , ac . *
-			FROM `tbl_semestermaster` AS sm
-			JOIN tbl_activity_calender AS ac ON ac.IdSemesterMain = sm.`IdSemesterMaster`
-			WHERE CURDATE( )
-			BETWEEN ac.StartDate
-			AND ac.EndDate
-			LIMIT 0 , 30
-    	 */
+		 
 		
        
-            $select = $db->select()
-                             ->from(array('sm'=>'tbl_semestermaster'))
-                             //->from(array('tp'=>'tbl_program'))
-                             ->join(array('ac'=>'tbl_activity_calender'),'ac.IdSemesterMain = sm.IdSemesterMaster')
-                             ->where('NOW()	BETWEEN TIMESTAMP(ac.StartDate,ac.StartTime) AND TIMESTAMP(ac.EndDate,ac.EndTime)')
-                             ->where('ac.idActivity=18')
-                             //->where('ac.IdProgram=?',$progid)
-                             ->where('ac.IdProgram=?',(int)$progid)
-                             //->where('Allowreg=1')
-                            // ->where('sm.Scheme=?',(int)$scheme)
-                             ->group('sm.SemesterMainName');
+        $select = $db->select()
+                    ->from(array('sm'=>'tbl_semestermaster'))
+                         
+                     ->join(array('ac'=>'tbl_activity_calender'),'ac.IdSemesterMain = sm.IdSemesterMaster')
+                     ->where('NOW()	BETWEEN TIMESTAMP(ac.StartDate,ac.StartTime) AND TIMESTAMP(ac.EndDate,ac.EndTime)')
+                     ->where('ac.idActivity=18') 
+                     ->where('ac.IdProgram=?',(int)$progid) 
+                     ->group('sm.SemesterMainName');
         
        
      	//echo $select;exit;
 		
 		$row = $db->fetchAll($select);
 		if ($row) {
-			$select = $db->select()
-			->from(array('det'=>'tbl_activity_calender_intake'))
-			->where('det.IdActivityCalendar=?',$row[0]['id'])
-			->where('det.IdIntake=?',$intake);
-			
-			$rowdetail=$db->fetchRow($select);
-			if ($rowdetail) {
+			foreach ($row as $key=>$value) {
+				 
 				$select = $db->select()
 				->from(array('det'=>'tbl_activity_calender_intake'))
-				->where('det.IdActivityCalendar=?',$row[0]['id'])
-				->where('det.IdIntake=?',$intake)
-				->where('NOW()	BETWEEN TIMESTAMP(det.StartDate,det.StartTime) AND TIMESTAMP(det.EndDate,det.EndTime)');
+				->where('det.IdActivityCalendar=?',$value['id'])
+				->where('det.idActivity=18')
+				->where('det.IdIntake=?',$intake);
+				
 				$rowdetail=$db->fetchRow($select);
-				if (!$rowdetail) return false;
+				if ($rowdetail) {
+					$select = $db->select()
+					->from(array('det'=>'tbl_activity_calender_intake'))
+					->where('det.IdActivityCalendar=?',$value['id'])
+					->where('det.IdIntake=?',$intake)
+					->where('det.idActivity=18')
+					->where('NOW()	BETWEEN TIMESTAMP(det.StartDate,det.StartTime) AND TIMESTAMP(det.EndDate,det.EndTime)');
+					$rowdetail=$db->fetchRow($select);
+					if (!$rowdetail) unset($row[$key]);
+				}
 			}
 		}
-        /* if (!isset($row[0]))
-        {
-        	//all program setup
-            $sql = $db->select()
-					     ->from(array('sm'=>'tbl_semestermaster'))
-						 ->from(array('tp'=>'tbl_program'))
-						 ->join(array('ac'=>'tbl_activity_calender'),'ac.IdSemesterMain = sm.IdSemesterMaster')
-						 ->where('CURDATE()	BETWEEN ac.StartDate AND ac.EndDate')
-						 ->where('idActivity=18')
-						 ->where('ac.idProgram IS NULL')
-						 //->where('Allowreg=1')
-						 //->where('sm.Scheme=?',(int)$scheme)
-                         ->group('sm.SemesterMainName');
         
-            $row = $db->fetchAll($sql);
-        } */
-        
-        //echo $sql;
 		return $row;
 	}
     
