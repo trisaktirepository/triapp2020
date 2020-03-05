@@ -1065,7 +1065,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 									->where('im.IdSemesterMain=?',$row['IdSemesterMain'])
 									->group('im.IdSemesterMain');
 									$rowkrs = $db->fetchRow($selectData);
-									//echo var_dump($rowkrs);exit;
+									//echo var_dump($rowkrs); 
 									if ($rowkrs) {
 										$selectData = $db->select()
 										->from(array('im'=>'invoice_main'))
@@ -1103,7 +1103,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 												}
 											}
 												
-										}
+										} else $status="1";
 											
 									}  
 								}
@@ -1124,7 +1124,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 					->where('im.idactivity=?',$row['idActivity']);
 					
 					$rowbpp = $db->fetchRow($selectData);
-					echo var_dump($row); echo $selectData;exit;
+					//echo var_dump($rowbpp); echo $selectData;exit;
 					if (!$rowbpp) return $row['idActivity'];
 				}
 			}
