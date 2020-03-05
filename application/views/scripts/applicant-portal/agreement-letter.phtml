@@ -474,6 +474,7 @@ td.bold-text{
 	<br><br>
 	<fieldset ><legend><?php echo "Persetujuan"?></legend>
 	<form id="agreementform" name="agreementform" method="post" >
+	<input type="hidden" name="paket" value="<?php echo $this->paket;?>">
 	<table bgcolor="lightgreen">
 	<tr><td>
 		<input type="hidden" name="transaction_id" value="<?php echo $this->transaction_id;?>">
