@@ -180,6 +180,8 @@ class CourseRegistrationController extends Zend_Controller_Action
 		        $landscapeSubjectDB = new App_Model_Record_DbTable_LandscapeSubject();
 		         
 		        $this->view->landscape = $landscape;
+		        //ceh for package
+		        
 		        //cek for package course register
 		        if ($paket=='1') {
 		        	//-- if Level > max semester curriculum then not package
@@ -192,7 +194,7 @@ class CourseRegistrationController extends Zend_Controller_Action
 		        	} else $landscapeSem=$level+2;
 		        	//echo $landscapeSem;exit;
 		        	//get from landscape subject offered from current level
-		        	if ($landscapeSem<$landscape['SemsterCount']) $paket="0";
+		        	if ($landscapeSem>$landscape['SemsterCount']) $paket="0";
 		        }
 		        $prerequisiteDb = new App_Model_Record_DbTable_LandscapeSubject();
                 $Schedule = new App_Model_Record_DbTable_StudentRegistration();
