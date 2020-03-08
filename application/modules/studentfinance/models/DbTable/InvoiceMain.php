@@ -1189,7 +1189,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		if ($allmode=="1") {
 			//get uncalculate payment
 			$recordfee=$dbInvoiceDeatil->isInInvoice($idsemester, $idRegistration );
-			echo var_dump($recordfee);exit;
+			//echo var_dump($recordfee);exit;
 			if ($recordfee) {
 				foreach ($recordfee as $recfee) {
 					$recfees[]=$recfee['fi_id'];
