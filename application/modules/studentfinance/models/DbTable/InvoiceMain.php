@@ -995,7 +995,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 				 
 				$dbBundle=new Studentfinance_Model_DbTable_BundleFee();
 				$bundle=$dbBundle->getCurrentSetup(1, $std['IdCollege'], $std['IdProgram'], $std['IdBranch'], $row['IdSemesterMain'], $row['idActivity']);
-				echo var_dump($bundle);exit;
+				//echo var_dump($bundle);exit;
 				if ($bundle) {
 					//get fee structure item
 					if($std['appl_nationality']!=96){
