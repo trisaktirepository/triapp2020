@@ -1112,7 +1112,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 								
 								
 							}
-							echo var_dump($row);
+							//echo var_dump($row);
 							if ($status=="1") return $row['idActivity'];
 						} //else return 0;
 					} //else return 0;
@@ -1126,7 +1126,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 					->where('im.idactivity=?',$row['idActivity']);
 					
 					$rowbpp = $db->fetchRow($selectData);
-					echo var_dump($rowbpp); echo $selectData;exit;
+					//echo var_dump($rowbpp); echo $selectData;exit;
 					if (!$rowbpp) return $row['idActivity'];
 				}
 			}
