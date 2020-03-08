@@ -98,19 +98,19 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 					);
 					
 					$db = Zend_Db_Table::getDefaultAdapter();
-			if ($idinvoice=='') {
-					$stmt = $db->prepare("SELECT invoice_seq(?,?,?,?) AS invoice_no");
-					$stmt->execute($seq_data);
-					$invoice_no = $stmt->fetch();
-			}
-			else {
- 				$smt=$db->select()
-				->from('invoice_main',array('invoice_no'=>'bill_number'))
-				->where('id=?',$idinvoice);
-				$invoice_no=$db->fetchRow($smt);
+					if ($idinvoice=='') {
+							$stmt = $db->prepare("SELECT invoice_seq(?,?,?,?) AS invoice_no");
+							$stmt->execute($seq_data);
+							$invoice_no = $stmt->fetch();
+					}
+					else {
+ 						$smt=$db->select()
+						->from('invoice_main',array('invoice_no'=>'bill_number'))
+						->where('id=?',$idinvoice);
+						$invoice_no=$db->fetchRow($smt);
 
-			}		
-			$inv_data = array(
+					}		
+					$inv_data = array(
 							'bill_number' => $invoice_no['invoice_no'],
 							'appl_id' => $formData['IdApplication'],
 							'IdStudentRegistration' => $formData['IdStudentRegistration'],
@@ -144,7 +144,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 							$invoiceDetailDb->insert($inv_detail_data);
 						}
 					} else $invoice_id=$formData['idinvoice'];
-					
+					$this->view->idinvoice=$invoice_id;
 					//push to BNI
 					$dbActCalendar=new App_Model_General_DbTable_ActivityCalendar();
 					$calendar=$dbActCalendar->getData($formData['id']);
@@ -161,6 +161,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 					$bundleDetail[$key]['fee']=array('amount'=>$value['amount']);
 					//$amount=$amount+$invoice['amount'];
 				}
+				$this->view->idinvoice=$invoice['id'];
 				$this->view->invoice=$invoice;
 			} else {
 				$this->view->invoice=array();
