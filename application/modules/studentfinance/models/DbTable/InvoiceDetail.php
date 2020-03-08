@@ -111,7 +111,7 @@ class Studentfinance_Model_DbTable_InvoiceDetail extends Zend_Db_Table_Abstract 
 		->where("im.semester =?", $semester)
 		->where("im.IdStudentRegistration=?",$idstd);
 		//echo $selectData;exit;
-		$row = $db->fetchRow($selectData);
+		$row = $db->fetchAll($selectData);
 	
 		return $row;
 	}
