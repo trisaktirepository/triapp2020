@@ -69,7 +69,7 @@ class App_Model_General_DbTable_Activity extends Zend_Db_Table_Abstract
 		->where('b.StartDate <= CURDATE()')
 		->where('b.EndDate >= CURDATE()');
 		$row = $db->fetchAll($select);
-		echo var_dump($row);exit;
+		//echo var_dump($row);exit;
 	
 		return $row;
 	}
