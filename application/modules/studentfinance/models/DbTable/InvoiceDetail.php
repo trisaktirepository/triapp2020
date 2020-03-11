@@ -109,7 +109,23 @@ class Studentfinance_Model_DbTable_InvoiceDetail extends Zend_Db_Table_Abstract 
 		->from(array('im'=>'invoice_main'),array())
 		->join(array('idtl'=>'invoice_detail'), 'idtl.invoice_main_id = im.id',array('idtl.fi_id'))
 		->where("im.semester =?", $semester)
-		->where("im.IdStudentRegistration=?",$idstd);
+		->where("im.IdStudentRegistration=?",$idstd)
+		//->where('idtl.fi_id=?',$item)
+		;
+		//echo $selectData;exit;
+		$row = $db->fetchRow($selectData);
+	
+		return $row;
+	}
+	
+	public function getInvoiceDetailByActivity($semester,$idstd,$idactivity){
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$selectData = $db->select()
+		->from(array('im'=>'invoice_main'),array())
+		->join(array('idtl'=>'invoice_detail'), 'idtl.invoice_main_id = im.id',array('idtl.fi_id'))
+		->where("im.semester =?", $semester)
+		->where("im.IdStudentRegistration=?",$idstd)
+		->where('im.idactivity=?',$idactivity);
 		//echo $selectData;exit;
 		$row = $db->fetchAll($selectData);
 	
