@@ -987,7 +987,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		->where('im.setter="2"');
 		 
 		$rows = $db->fetchAll($selectData);
-		//echo var_dump($rows); 
+		echo var_dump($rows); exit;
 		if ($rows) {
 			foreach ($rows as $row) {
 				//cek invoice main
@@ -1073,7 +1073,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 										->where('im.idactivity=?',$row['idActivity'])
 										->where('im.semester=?',$rowkrs['IdSemesterMain']);
 										$invoice = $db->fetchRow($selectData);
-										echo var_dump($row);exit;
+										//echo var_dump($row);exit;
 										if ($invoice)
 										{
 											
