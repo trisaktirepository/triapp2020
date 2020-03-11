@@ -1083,32 +1083,42 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 											->from(array('im'=>'invoice_detail'))
 											->join(array('i'=>'fee_item'),'im.fi_id=i.fi_id')
 											->where('invoice_main_id=?',$invoice['id']);
-											$detail= $db->fetchAll($selectData);
-											$amount=0;
-											foreach ($detail as $det) {
-												if ($det['fi_amount_calculation_type']==299 || $det['fi_amount_calculation_type']==301 ) $amount=$amount+$detail['amount'];
+											$details= $db->fetchAll($selectData);
+											foreach ($details as $det) {
+												if ($det['fi_amount_calculation_type']==299 || $det['fi_amount_calculation_type']==301 ) {
+													$amount[$det['fi_id']]=0;
+												}
+												 
+											}
+											foreach ($details as $det) {
+												if ($det['fi_amount_calculation_type']==299 || $det['fi_amount_calculation_type']==301 ) {
+													$amount[$det['fi_id']]=$amount[$det['fi_id']]+$det['amount'];
+													
+												} else unset($amount[$det['fi_id']]);
 											}
 											
-											//get fee structure
-											$selectData = $db->select()
-											->from(array('dt'=>'fee_structure_item'))
-											->join(array('fi'=>'fee_item'),'fi.fi_id=dt.fsi_item_id')
-											->where('fsi_item_id=?',$detail['fi_id'])
-											->where('dt.fsi_structure_id=?',$feestrucs['fs_id']);
-											echo $selectData;echo $amount;exit;
-											$feestructure=$db->fetchRow($selectData);
+											foreach ($amount as $fiid=>$itemamount) {
+												//get fee structure
+												$selectData = $db->select()
+													->from(array('dt'=>'fee_structure_item'))
+													->join(array('fi'=>'fee_item'),'fi.fi_id=dt.fsi_item_id')
+													->where('fsi_item_id=?',$fiid)
+													->where('dt.fsi_structure_id=?',$feestrucs['fs_id']);
+													 
+												$feestructure=$db->fetchRow($selectData);
 											
-											if ($feestructure) {
-												if ($feestructure['fi_amount_calculation_type']==299) {
-													//per sks
-													
-													$actualamount=$rowkrs['sks']*$feestructure['fsi_amount'];
-													if ($amount<$actualamount) $status="1"; 
-												} else if ($feestructure['fi_amount_calculation_type']==301) {
-													//per MK
-													$actualamount=$rowkrs['jmlmk']*$feestructure['fsi_amount'];
-													if ($amount<$actualamount) $status="1";
-														
+												if ($feestructure) {
+													if ($feestructure['fi_amount_calculation_type']==299) {
+														//per sks
+														$actualamount=$rowkrs['sks']*$feestructure['fsi_amount'];
+														echo $actualamount;echo $itemamount;exit;
+														if ($itemamount<$actualamount) $status="1"; 
+													} else if ($feestructure['fi_amount_calculation_type']==301) {
+														//per MK
+														$actualamount=$rowkrs['jmlmk']*$feestructure['fsi_amount'];
+														if ($itemamount<$actualamount) $status="1";
+															
+													}
 												}
 											}
 												
