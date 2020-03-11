@@ -615,12 +615,14 @@ class StudentPortalController extends Zend_Controller_Action
     	$group = $courseGroupDb->getInfo($idGroup);
     	$this->view->group = $group;
     	//chect hide status
+    	$dbStd=new App_Model_Registration_DbTable_Studentregistration();
+    	$std=$dbStd->getStudentRegistrationDetail($idstd);
     	$dbSemeseter=new App_Model_General_DbTable_Semestermaster();
     	$idsemster=$group['IdSemester'];
     	$progid=$group['ProgramCreator'];
     	if ($progid=='') $progid=0;
     	$this->view->open="";
-    	if ($dbSemeseter->getSemesterCourseRegistrationValidate($progid, null, $idsemster,null)) $this->view->open=1;
+    	if ($dbSemeseter->getSemesterCourseRegistrationValidate($progid, null, $idsemster,$std['IdIntake'])) $this->view->open=1;
     	
     	
     	$dbProgram=new App_Model_General_DbTable_Program();
