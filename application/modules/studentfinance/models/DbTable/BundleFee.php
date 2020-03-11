@@ -20,7 +20,7 @@ class Studentfinance_Model_DbTable_BundleFee extends Zend_Db_Table { //Model Cla
 		return $this->lobjDbAdpt->delete($this->_name,$where);
 	}
 	 
-	public function getCurrentSetup($univ,$college,$program,$branch,$semester,$idactivity,$idmajoring=null) {
+	public function getCurrentSetup($univ,$college,$program,$branch,$semester,$idactivity,$idmajoring) {
 		
 		$selectsmt=$this->lobjDbAdpt->select()
 		->from('tbl_semestermaster')
