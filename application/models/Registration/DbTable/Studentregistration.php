@@ -1537,6 +1537,7 @@ class  App_Model_Registration_DbTable_Studentregistration extends Zend_Db_Table_
                         ->joinLeft(array('f' => 'tbl_definationms'), "a.SpecialTreatmentType = f.idDefinition", array("f.DefinitionDesc as specialtreatment"))
                         ->joinLeft(array('e' => 'tbl_scheme'), "b.IdScheme = e.IdScheme", array("e.EnglishDescription"))
                         ->where("a.IdStudentRegistration =?", $id);
+        echo $sql;exit;
         $result = $this->lobjDbAdpt->fetchRow($sql);
         return $result;
     }
