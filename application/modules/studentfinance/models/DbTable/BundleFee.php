@@ -41,9 +41,10 @@ class Studentfinance_Model_DbTable_BundleFee extends Zend_Db_Table { //Model Cla
 		->where('idcollege=?',$college)
 		->where('idprogram=?',$program)
 		->where('idbranch=?',$branch)
+		->where('a.majoring=?',$idmajoring)
 		//->where('b.SemesterMainStartDate <=?',$datestart)
 		->order('b.SemesterMainStartDate DESC');
-		if ($idmajoring!=null) $select->where('a.majoring=?',$idmajoring);
+		
 		$row=$this->lobjDbAdpt->fetchRow($select);
 		if (!$row) {
 			$select=$this->lobjDbAdpt->select()
@@ -55,10 +56,10 @@ class Studentfinance_Model_DbTable_BundleFee extends Zend_Db_Table { //Model Cla
 			->where('iduniv=?',$univ)
 			->where('idcollege=?',$college)
 			->where('idprogram=?',$program)
+			->where('a.majoring=?',$idmajoring)
 			->where('idbranch is null or idbranch=0')
 			//->where('b.SemesterMainStartDate <=?',$datestart)
 			->order('b.SemesterMainStartDate DESC');
-			if ($idmajoring!=null) $select->where('a.majoring=?',$idmajoring);
 			$row=$this->lobjDbAdpt->fetchRow($select);
 			echo var_dump($row);echo $select;exit;
 			if (!$row) {
@@ -72,6 +73,7 @@ class Studentfinance_Model_DbTable_BundleFee extends Zend_Db_Table { //Model Cla
 				->where('idcollege=?',$college)
 				->where('idprogram=?',$program)
 				->where('idbranch is null or idbranch=0')
+				->where('majoring is null or majoring=0')
 				//->where('b.SemesterMainStartDate <=?',$datestart)
 				->order('b.SemesterMainStartDate DESC');
 				$row=$this->lobjDbAdpt->fetchRow($select);
@@ -86,6 +88,7 @@ class Studentfinance_Model_DbTable_BundleFee extends Zend_Db_Table { //Model Cla
 					->where('idcollege=?',$college)
 					->where('idprogram is null or idprogram=0')
 					->where('idbranch is null or idbranch=0')
+					->where('majoring is null or majoring=0')
 					//->where('b.SemesterMainStartDate <=?',$datestart)
 					->order('b.SemesterMainStartDate DESC');
 					$row=$this->lobjDbAdpt->fetchRow($select);
@@ -101,6 +104,7 @@ class Studentfinance_Model_DbTable_BundleFee extends Zend_Db_Table { //Model Cla
 						->where('idcollege is null or idcollege=0')
 						->where('idprogram is null or idprogram=0')
 						->where('idbranch is null or idbranch=0')
+						->where('majoring is null or majoring=0')
 						//->where('b.SemesterMainStartDate <=?',$datestart)
 						->order('b.SemesterMainStartDate DESC');
 						$row=$this->lobjDbAdpt->fetchRow($select);
