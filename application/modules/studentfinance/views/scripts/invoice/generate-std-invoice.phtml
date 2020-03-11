@@ -83,7 +83,7 @@
 		<tr>
 			<th><?php echo $this->translate('No');?></th>
 			<th><?php echo $this->translate('Component Name');?></th>
-			<th><?php echo $this->translate('Amount');?></th>
+			<th><?php echo $this->translate('Amount');?></th> 
 			
 		</tr>
 		<?php $i=1;$total=0;
@@ -95,7 +95,7 @@
 		<tr>
 			<td><?php echo $i;?></td>
 			<td><?php echo $item['fi_name_bahasa'];?></td>
-			<td><?php echo $fee['amount'];?></td>
+			<td><?php echo $fee['amount'];?></td> 
 			
 		</tr>
 		<?php $i++;
@@ -119,6 +119,11 @@
 			<th><?php echo date('d-m-Y H:s:i',strtotime($this->invoice['va_expired_dt']));?></th>
 			
 		</tr>
+		<tr>
+			<th colspan="2" align="right"><?php echo $this->translate('Payment Status');?></th>
+			<th><?php  if ($this->invoice['status_va']!='') echo $this->invoice['status_va']; else echo "Belum Dibayar";?></th>
+			
+		</tr>
 			<?php 
 		}?>
 	</table>
@@ -127,7 +132,46 @@
 	<input type="checkbox" name="agree" > Saya memahami jumlah total dan rincian pembayaran ini, dan akan melakukan pembayaran sesuai dengan ketentuan yang berlaku
 	<br>
 	<input type="submit" name="submit" value="Buat Virtual Account Pembayaran">
-	<?php }?>
+	<?php } 
+	
+	if (count($this->invoicerest) >0) {?>
+	
+	<br><h2>Kekurangan Pembayaran</h2><br>
+	<input type="hidden" name="restpayment">
+	<table class="table">
+		<tr>
+			<th><?php echo $this->translate('No');?></th>
+			<th><?php echo $this->translate('Component Name');?></th>
+			<th><?php echo $this->translate('Amount');?></th> 
+			
+		</tr>
+		<?php $i=1;$total=0;
+			foreach ($this->invoicerest as $fiid=>$item) {
+				//$fee=$item['fee'];
+				$total=$total+$item['amount'];
+			?>
+			<input type="hidden" name="item[<?php echo $fiid?>]" value="<?php echo $item['amount'];?>">
+		<tr>
+			<td><?php echo $i;?></td>
+			<td><?php echo $item['fi_name_bahasa'];?></td>
+			<td><?php echo $item['amount'];?></td> 
+			
+		</tr>
+		<?php $i++;
+			}?>
+		<input type="hidden" name="totalamount" value="<?php echo $total?>">
+		<tr>
+			<th colspan="2"><?php echo $this->translate('Total');?></th>
+			<th><?php echo $total;?></th>
+		</tr>
+		 
+	</table>
+	<br>
+	 
+	<input type="checkbox" name="agree" > Saya memahami jumlah total dan rincian pembayaran ini, dan akan melakukan pembayaran sesuai dengan ketentuan yang berlaku
+	<br>
+	<input type="submit" name="submit" value="Buat Virtual Account Pembayaran">
+	 <?php }?>
 </form>
 </fieldset>
  
