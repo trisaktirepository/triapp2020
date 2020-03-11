@@ -1111,7 +1111,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 													if ($feestructure['fi_amount_calculation_type']==299) {
 														//per sks
 														$actualamount=$rowkrs['sks']*$feestructure['fsi_amount'];
-														echo $actualamount;echo $itemamount;exit;
+													//	echo $actualamount;echo $itemamount;exit;
 														if ($itemamount<$actualamount) $status="1"; 
 													} else if ($feestructure['fi_amount_calculation_type']==301) {
 														//per MK
