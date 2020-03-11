@@ -1248,6 +1248,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 	
 		//get fee item frequency type
 		$sem_fee_item = array();
+		echo var_dump($fee_item);
 		foreach ($fee_item as $fs){
 	
 			//1st sem
@@ -1286,7 +1287,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		$invoice['amount']=0.00;
 		$regid=array();
 		
-		//echo var_dump($fee_item);exit;
+		echo var_dump($sem_fee_item);exit;
 		foreach ($sem_fee_item as $item){
 	
 			//nilai tetap
