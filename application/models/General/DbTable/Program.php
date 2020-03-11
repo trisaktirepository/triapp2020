@@ -508,8 +508,8 @@ class App_Model_General_DbTable_Program extends Zend_Db_Table_Abstract {
   
   	$select = $db->select()
   	->from(array('a' => 'tbl_program'))
-  	->join(array("tbl_countries"=>"tbl_countries"),'a.Country = tbl_countries.idCountry',array("tbl_countries.CountryName"))
-  	->join(array("tbl_state"=>"tbl_state"),'a.State = tbl_state.idState',array("tbl_state.StateName"))
+  	->joinLeft(array("tbl_countries"=>"tbl_countries"),'a.Country = tbl_countries.idCountry',array("tbl_countries.CountryName"))
+  	->joinLeft(array("tbl_state"=>"tbl_state"),'a.State = tbl_state.idState',array("tbl_state.StateName"))
   	->where("a.IdProgram  = ?",$id);
   	//echo $select;die();
   	$result = $db->fetchRow($select);
