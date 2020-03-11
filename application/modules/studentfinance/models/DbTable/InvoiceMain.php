@@ -1261,7 +1261,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 											//cek for compatibility
 											$selectData = $db->select()
 											->from(array('im'=>'invoice_detail'))
-											->join(array('inv'=>'invoice_main'),'im.id_invoice_main=inv.id')
+											->join(array('inv'=>'invoice_main'),'im.invoice_main_id=inv.id')
 											->join(array('i'=>'fee_item'),'im.fi_id=i.fi_id')
 											->where('inv.semester=?',$idsemester)
 											->where('inv.idactivity=?',$idactivity)
