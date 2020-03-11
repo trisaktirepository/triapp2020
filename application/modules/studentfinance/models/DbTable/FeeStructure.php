@@ -145,8 +145,9 @@ class Studentfinance_Model_DbTable_FeeStructure extends Zend_Db_Table_Abstract {
 				->joinLeft(array('d'=>'tbl_definationms'),'d.idDefinition = fs.fs_student_category')
 				->where("fs.fs_student_category = '".$student_category."'")
 				->where("fs.fs_intake_start = '".$intake_id."'")
+				->where('fsp.fsp_branch_id is null or fsp.fsp_branch_id=0')
 				->order('i.ApplicationStartDate DESC');
-			if ($branch!=null) $selectData->where('fsp.fsp_branch_id=?',$branch);
+			if ($majoring!=null) $selectData->where('fsp.fsp_majoring_id=?',$majoring);
 			$row = $db->fetchRow($selectData);
 			if(!$row){
 				$selectData = $db->select()
@@ -157,6 +158,8 @@ class Studentfinance_Model_DbTable_FeeStructure extends Zend_Db_Table_Abstract {
 				->joinLeft(array('d'=>'tbl_definationms'),'d.idDefinition = fs.fs_student_category')
 				->where("fs.fs_student_category = '".$student_category."'")
 				->where("fs.fs_intake_start = '".$intake_id."'")
+				->where('fsp.fsp_branch_id is null or fsp.fsp_branch_id=0')
+				->where('fsp.fsp_majoring_id is null or fsp.fsp_majoring_id=0')
 				->order('i.ApplicationStartDate DESC');
 				//if ($branch!=null) $selectData->where('fsp.fsp_branch_id=?',$branch);
 				$row = $db->fetchRow($selectData);
