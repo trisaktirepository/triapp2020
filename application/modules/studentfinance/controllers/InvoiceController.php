@@ -86,71 +86,136 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 			if ($this->getRequest()->isPost()) {
 				$formData=$this->getRequest()->getPost();
 				if (isset($formData['agree'])) {
-					//get invoice no from sequence
-					$idsemester=$formData['idsemester'];
-					$IdStudentRegistration=$formData['IdStudentRegistration'];
-					$idinvoice=$formData['idinvoice'];
-					
-					$seq_data = array(
-							date('y',strtotime($academicYear['ay_start_date'])),
-							substr($intake['IntakeId'],2,2),
-							$program['ProgramCode'], 0
-					);
-					
-					$db = Zend_Db_Table::getDefaultAdapter();
-					if ($idinvoice=='') {
-							$stmt = $db->prepare("SELECT invoice_seq(?,?,?,?) AS invoice_no");
-							$stmt->execute($seq_data);
-							$invoice_no = $stmt->fetch();
-					}
-					else {
- 						$smt=$db->select()
-						->from('invoice_main',array('invoice_no'=>'bill_number'))
-						->where('id=?',$idinvoice);
-						$invoice_no=$db->fetchRow($smt);
-
-					}		
-					$inv_data = array(
-							'bill_number' => $invoice_no['invoice_no'],
-							'appl_id' => $formData['IdApplication'],
-							'IdStudentRegistration' => $formData['IdStudentRegistration'],
-							'academic_year' => $formData['idacadyear'],
-							'semester' => $formData['idsemester'],
-							'bill_amount' =>$formData['totalamount'],
-							'bill_paid' => 0.00,
-							'bill_balance' => $formData['totalamount'],
-							'bill_description' => $formData['description'],
-							'college_id' => $formData['IdCollege'],
-							'program_code' => $formData['ProgramCode'],
-							'creator' => '1',
-							'fs_id' => $formData['fs_id'],
-							'status' => 'A',
-							'date_create' => date('Y-m-d H:i:s'),
-							'idactivity'=>$formData['idactivity']
-					);
-					if ($formData["idinvoice"]=='') {
-						$invoice_id = $invoiceDb->insert($inv_data);
-						$dbFeeitem=new Studentfinance_Model_DbTable_FeeItem();
-						//insert invoice detail
-						foreach ($formData['item'] as $itemid=>$amount){
-							$item=$dbFeeitem->getData($itemid);
-							$inv_detail_data = array(
-									'invoice_main_id' => $invoice_id,
-									'fi_id' => $itemid,
-									'fee_item_description' => $item['fi_name_bahasa'],
-									'amount' => $amount
-							);
+					if (!isset($formData['restpayment'])) {
+						//get invoice no from sequence
+						$idsemester=$formData['idsemester'];
+						$IdStudentRegistration=$formData['IdStudentRegistration'];
+						$idinvoice=$formData['idinvoice'];
 						
-							$invoiceDetailDb->insert($inv_detail_data);
+						$seq_data = array(
+								date('y',strtotime($academicYear['ay_start_date'])),
+								substr($intake['IntakeId'],2,2),
+								$program['ProgramCode'], 0
+						);
+						
+						$db = Zend_Db_Table::getDefaultAdapter();
+						if ($idinvoice=='') {
+								$stmt = $db->prepare("SELECT invoice_seq(?,?,?,?) AS invoice_no");
+								$stmt->execute($seq_data);
+								$invoice_no = $stmt->fetch();
 						}
-					} else $invoice_id=$formData['idinvoice'];
-					$this->view->idinvoice=$invoice_id;
-					//push to BNI
-					$dbActCalendar=new App_Model_General_DbTable_ActivityCalendar();
-					$calendar=$dbActCalendar->getData($formData['id']);
-					if ($calendar) {
-						$dateexprired=date('Y-m-d H:s:i',strtotime($calendar['EndDate'].' '.$calendar['EndTime']));
-						$invoiceDb->pushToEColl($invoice_id, $dateexprired,'createbilling');
+						else {
+	 						$smt=$db->select()
+							->from('invoice_main',array('invoice_no'=>'bill_number'))
+							->where('id=?',$idinvoice);
+							$invoice_no=$db->fetchRow($smt);
+	
+						}		
+						$inv_data = array(
+								'bill_number' => $invoice_no['invoice_no'],
+								'appl_id' => $formData['IdApplication'],
+								'IdStudentRegistration' => $formData['IdStudentRegistration'],
+								'academic_year' => $formData['idacadyear'],
+								'semester' => $formData['idsemester'],
+								'bill_amount' =>$formData['totalamount'],
+								'bill_paid' => 0.00,
+								'bill_balance' => $formData['totalamount'],
+								'bill_description' => $formData['description'],
+								'college_id' => $formData['IdCollege'],
+								'program_code' => $formData['ProgramCode'],
+								'creator' => '1',
+								'fs_id' => $formData['fs_id'],
+								'status' => 'A',
+								'date_create' => date('Y-m-d H:i:s'),
+								'idactivity'=>$formData['idactivity']
+						);
+						if ($formData["idinvoice"]=='') {
+							$invoice_id = $invoiceDb->insert($inv_data);
+							$dbFeeitem=new Studentfinance_Model_DbTable_FeeItem();
+							//insert invoice detail
+							foreach ($formData['item'] as $itemid=>$amount){
+								$item=$dbFeeitem->getData($itemid);
+								$inv_detail_data = array(
+										'invoice_main_id' => $invoice_id,
+										'fi_id' => $itemid,
+										'fee_item_description' => $item['fi_name_bahasa'],
+										'amount' => $amount
+								);
+							
+								$invoiceDetailDb->insert($inv_detail_data);
+							}
+						} else $invoice_id=$formData['idinvoice'];
+						$this->view->idinvoice=$invoice_id;
+						//push to BNI
+						$dbActCalendar=new App_Model_General_DbTable_ActivityCalendar();
+						$calendar=$dbActCalendar->getData($formData['id']);
+						if ($calendar) {
+							$dateexprired=date('Y-m-d H:s:i',strtotime($calendar['EndDate'].' '.$calendar['EndTime']));
+							$invoiceDb->pushToEColl($invoice_id, $dateexprired,'createbilling');
+						}
+					}
+					 else {
+						//get invoice no from sequence
+						$idsemester=$formData['idsemester'];
+						$IdStudentRegistration=$formData['IdStudentRegistration'];
+						 
+						
+						$seq_data = array(
+								date('y',strtotime($academicYear['ay_start_date'])),
+								substr($intake['IntakeId'],2,2),
+								$program['ProgramCode'], 0
+						);
+						
+						$db = Zend_Db_Table::getDefaultAdapter();
+						 
+							$smt=$db->select()
+							->from('invoice_main',array('invoice_no'=>'bill_number'))
+							->where('id=?',$idinvoice);
+							$invoice_no=$db->fetchRow($smt);
+						
+						 
+						$inv_data = array(
+								'bill_number' => $invoice_no['invoice_no'],
+								'appl_id' => $formData['IdApplication'],
+								'IdStudentRegistration' => $formData['IdStudentRegistration'],
+								'academic_year' => $formData['idacadyear'],
+								'semester' => $formData['idsemester'],
+								'bill_amount' =>$formData['totalamountrest'],
+								'bill_paid' => 0.00,
+								'bill_balance' => $formData['totalamountrest'],
+								'bill_description' => $formData['description'],
+								'college_id' => $formData['IdCollege'],
+								'program_code' => $formData['ProgramCode'],
+								'creator' => '1',
+								'fs_id' => $formData['fs_id'],
+								'status' => 'A',
+								'date_create' => date('Y-m-d H:i:s'),
+								'idactivity'=>$formData['idactivity']
+						);
+						 
+							$invoice_id = $invoiceDb->insert($inv_data);
+							$dbFeeitem=new Studentfinance_Model_DbTable_FeeItem();
+							//insert invoice detail
+							foreach ($formData['itemrest'] as $itemid=>$amount){
+								$item=$dbFeeitem->getData($itemid);
+								$inv_detail_data = array(
+										'invoice_main_id' => $invoice_id,
+										'fi_id' => $itemid,
+										'fee_item_description' => $item['fi_name_bahasa'],
+										'amount' => $amount
+								);
+									
+								$invoiceDetailDb->insert($inv_detail_data);
+							}
+						  
+						//push to BNI
+						$dbActCalendar=new App_Model_General_DbTable_ActivityCalendar();
+						$calendar=$dbActCalendar->getData($formData['id']);
+						if ($calendar) {
+							$dateexprired=date('Y-m-d H:s:i',strtotime($calendar['EndDate'].' '.$calendar['EndTime']));
+							$invoiceDb->pushToEColl($invoice_id, $dateexprired,'createbilling');
+						}
+						$this->_redirect('/applicant-portal/account');
 					}
 				}
 			}
