@@ -732,15 +732,14 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 			//
 			$respone=$bni->accessBni($clientid, $secretkey, $url, $invoiceData);
 	
-				
 			if (!isset($respone['status']) && $process=='createbilling')
 				$dbInvoice->update(array("va"=>$respone['virtual_account'],"dt_va"=>date('Y-m-d h:i:s'),"Client_id"=>$clientid,"billing_type"=>'c',"Description"=>$desc,'va_expired_dt'=>$dateexprired,"status_remark"=>'ok'), "bill_number ='".$respone['trx_id']."'");
 			else if (isset($respone['status'])) {
 				$dbInvoice->update(array("status_remark"=>$respone['message']), "bill_number ='".$invoice['bill_number']."'");
 					
 			}
-			echo var_dump($invoiceData);
-			echo var_dump($respone);exit;
+			//echo var_dump($invoiceData);
+			//echo var_dump($respone);exit;
 		}
 	}
 	public function pushToECollForEnrollment($idinvoice,$dateexprired,$process=null,$mode=null,$re=null) {
