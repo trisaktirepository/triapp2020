@@ -1095,8 +1095,9 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 											->join(array('fi'=>'fee_item'),'fi.fi_id=dt.fsi_item_id')
 											->where('fsi_item_id=?',$detail['fi_id'])
 											->where('dt.fsi_structure_id=?',$feestrucs['fs_id']);
-											$feestructure=$db->fetchRow($selectData);
 											echo $selectData;echo $amount;exit;
+											$feestructure=$db->fetchRow($selectData);
+											
 											if ($feestructure) {
 												if ($feestructure['fi_amount_calculation_type']==299) {
 													//per sks
