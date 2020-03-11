@@ -167,12 +167,9 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 						);
 						
 						$db = Zend_Db_Table::getDefaultAdapter();
-						 
-							$smt=$db->select()
-							->from('invoice_main',array('invoice_no'=>'bill_number'))
-							->where('id=?',$idinvoice);
-							$invoice_no=$db->fetchRow($smt);
-						
+						$stmt = $db->prepare("SELECT invoice_seq(?,?,?,?) AS invoice_no");
+						$stmt->execute($seq_data);
+						$invoice_no = $stmt->fetch();
 						 
 						$inv_data = array(
 								'bill_number' => $invoice_no['invoice_no'],
