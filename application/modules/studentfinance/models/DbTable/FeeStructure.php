@@ -166,7 +166,7 @@ class Studentfinance_Model_DbTable_FeeStructure extends Zend_Db_Table_Abstract {
 			}
 			//echo $selectData;exit;
 		}
-		echo $selectData;exit;
+		echo var_dump($row);exit;
 		if(!$row){
 			throw new Exception("No Fee Structure setup for this program or student category");
 		}else{
