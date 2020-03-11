@@ -1081,9 +1081,14 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 											//cek for compatibility
 											$selectData = $db->select()
 											->from(array('im'=>'invoice_detail'))
-											->where('invoice_main_id=?',$row['id']);
-											$detail= $db->fetchRow($selectData);
-											$amount=$detail['amount'];
+											->join(array('i'=>'fee_item'),'im.fi_id=i.fi_id')
+											->where('invoice_main_id=?',$invoice['id']);
+											$detail= $db->fetchAll($selectData);
+											$amount=0;
+											foreach ($detail as $det) {
+												if ($det['fi_amount_calculation_type']==299 || $det['fi_amount_calculation_type']==301 ) $amount=$amount+$detail['amount'];
+											}
+											
 											//get fee structure
 											$selectData = $db->select()
 											->from(array('dt'=>'fee_structure_item'))
@@ -1091,7 +1096,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 											->where('fsi_item_id=?',$detail['fi_id'])
 											->where('dt.fsi_structure_id=?',$feestrucs['fs_id']);
 											$feestructure=$db->fetchRow($selectData);
-											//echo var_dump($feeStructure);echo $amount;exit;
+											echo var_dump($feestructure);echo $amount;exit;
 											if ($feestructure) {
 												if ($feestructure['fi_amount_calculation_type']==299) {
 													//per sks
