@@ -987,7 +987,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		->where('im.setter="2"');
 		 
 		$rows = $db->fetchAll($selectData);
-		echo var_dump($rows); exit;
+		//echo var_dump($rows); exit;
 		if ($rows) {
 			foreach ($rows as $row) {
 				//cek invoice main
@@ -1018,7 +1018,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 					->from(array('a'=>'fee_budle_detail'),array('fee_item'))
 					->where("a.idfeebundle = '".$bundle['idfeebundle']."'");
 					$bundleDetail = $db->fetchAll($selectData);
-					 
+					// echo var_dump($bundleDetail);
 					if ($bundleDetail) {
 						$status="0";
 						foreach ($bundleDetail as $itm) {
@@ -1133,7 +1133,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 								
 							}
 							//echo var_dump($row);
-							if ($status=="1") return $row['idActivity'];
+							if ($status=="1") $activity= $row['idActivity'];
 						} //else return 0;
 					} //else return 0;
 				}  //else return 0;
@@ -1147,11 +1147,12 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 					
 					$rowbpp = $db->fetchRow($selectData);
 					//echo var_dump($rowbpp); echo $selectData;exit;
-					if (!$rowbpp) return $row['idActivity'];
-					else return 0;
+					if (!$rowbpp) $activity= $row['idActivity'];
+					 
 				}
 			}
-			return 0;
+			if ($status=="1") return $activity;
+			else return 0;
 		} else return 0;
 	
 	}
