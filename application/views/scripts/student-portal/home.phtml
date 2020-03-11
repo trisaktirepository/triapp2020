@@ -61,7 +61,7 @@ function validate(IdStudentRegSubjects){
 			  		<?php 
 			  		if($course["Active"]==1 || $course["Active"]==3){
 			  			if($course["IdCourseTaggingGroup"]!=0){?>
-			  			<a href="<?php echo $this->url(array('module'=>'default','controller'=>'student-portal','action'=>'view-schedule','idGroup'=>$course["IdCourseTaggingGroup"]),'default',true);?>"><?php  echo $this->translate("View Schedule"); ?></a>
+			  			<a href="<?php echo $this->url(array('module'=>'default','controller'=>'student-portal','action'=>'view-schedule','idGroup'=>$course["IdCourseTaggingGroup"],'idstd'=>$this->IdStudentRegistration),'default',true);?>"><?php  echo $this->translate("View Schedule"); ?></a>
 			  		<?php }else { echo $this->translate("Currently Not Available");} }?>
 			  	</td>
 			  	
