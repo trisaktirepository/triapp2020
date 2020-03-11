@@ -27,7 +27,7 @@ class Studentfinance_Model_DbTable_FeeStructureItem extends Zend_Db_Table_Abstra
 					->where("fsi.fsi_structure_id = '".$fee_structure_id."'");
 		
 		$row = $db->fetchAll($selectData);
-		echo $selectData;
+		//echo $selectData;
 		if($row){
 			//insert semester item data
 			$feeStructureItemSemesterDb = new Studentfinance_Model_DbTable_FeeStructureItemSemester();
