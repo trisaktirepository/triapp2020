@@ -620,7 +620,7 @@ class StudentPortalController extends Zend_Controller_Action
     	$dbSemeseter=new App_Model_General_DbTable_Semestermaster();
     	$idsemster=$group['IdSemester'];
     	$progid=$group['ProgramCreator'];
-    	if ($progid=='') $progid=0;
+    	echo var_dump($std);exit;
     	$this->view->open="";
     	if ($dbSemeseter->getSemesterCourseRegistrationValidate($progid, null, $idsemster,$std['IdIntake'])) $this->view->open=1;
     	
