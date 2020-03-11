@@ -1177,7 +1177,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		$semesterDb = new App_Model_General_DbTable_Semestermaster();
 		$semester = $semesterDb->fngetSemestermainDetails($idsemester);
 			
-		echo $feeitem;
+		//echo $feeitem;
 		//filter only selected fee item
 		foreach ($fee_item as $index=>$fee){
 			if($fee['fi_id']!=$feeitem){
@@ -1185,7 +1185,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 			}
 	
 		}
-		echo var_dump($fee_item);exit;
+		//echo var_dump($fee_item);exit;
 		if ($allmode=="1") {
 			//get uncalculate payment
 			$recordfee=$dbInvoiceDeatil->getInvoiceDetailByActivity($idsemester, $idRegistration,$idactivity );
