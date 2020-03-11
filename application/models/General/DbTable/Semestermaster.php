@@ -353,8 +353,8 @@ class App_Model_General_DbTable_Semestermaster extends Zend_Db_Table_Abstract
         
 		
 		$row = $db->fetchRow($select);
-		//echo $select;
-		//echo var_dump($row);exit;
+		echo $select;
+		echo var_dump($row);exit;
 		if ($row) {
 			//check for detail calendar wheter open or close
 			$select = $db->select()
@@ -362,8 +362,7 @@ class App_Model_General_DbTable_Semestermaster extends Zend_Db_Table_Abstract
 			->where('det.IdActivityCalendar=?',$row['id'])
 			->where('det.IdIntake=?',$intake);
 			$rowdetail=$db->fetchRow($select);
-			echo $select;
-			echo var_dump($rowdetail);exit;
+			
 			if ($rowdetail && $intake!=null) {
 				$select = $db->select()
 				->from(array('det'=>'tbl_activity_calender_intake'))
