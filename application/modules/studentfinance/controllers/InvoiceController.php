@@ -67,7 +67,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 			
 			//get current payment setup
 			$dbBundle=new Studentfinance_Model_DbTable_BundleFee();
-			$bundle=$dbBundle->getCurrentSetup(1, $program['IdCollege'], $std['IdProgram'], $std['IdBranch'], $idsemester, $act['idActivity']);
+			$bundle=$dbBundle->getCurrentSetup(1, $program['IdCollege'], $std['IdProgram'], $std['IdBranch'], $idsemester, $act['idActivity'],$std['IdProgramMajoring']);
 			if ($bundle) {
 			$this->view->bundle=$bundle;
 		//if (!$bundle)	{

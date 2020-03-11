@@ -20,7 +20,7 @@ class Studentfinance_Model_DbTable_BundleFee extends Zend_Db_Table { //Model Cla
 		return $this->lobjDbAdpt->delete($this->_name,$where);
 	}
 	 
-	public function getCurrentSetup($univ,$college,$program,$branch,$semester,$idactivity) {
+	public function getCurrentSetup($univ,$college,$program,$branch,$semester,$idactivity,$idmajoring=null) {
 		
 		$selectsmt=$this->lobjDbAdpt->select()
 		->from('tbl_semestermaster')
@@ -43,6 +43,7 @@ class Studentfinance_Model_DbTable_BundleFee extends Zend_Db_Table { //Model Cla
 		->where('idbranch=?',$branch)
 		//->where('b.SemesterMainStartDate <=?',$datestart)
 		->order('b.SemesterMainStartDate DESC');
+		if ($idmajoring!=null) $select->where('a.majoring=?',$idmajoring);
 		$row=$this->lobjDbAdpt->fetchRow($select);
 		if (!$row) {
 			$select=$this->lobjDbAdpt->select()
@@ -57,7 +58,9 @@ class Studentfinance_Model_DbTable_BundleFee extends Zend_Db_Table { //Model Cla
 			->where('idbranch is null or idbranch=0')
 			//->where('b.SemesterMainStartDate <=?',$datestart)
 			->order('b.SemesterMainStartDate DESC');
+			if ($idmajoring!=null) $select->where('a.majoring=?',$idmajoring);
 			$row=$this->lobjDbAdpt->fetchRow($select);
+			echo var_dump($row);echo $select;exit;
 			if (!$row) {
 				$select=$this->lobjDbAdpt->select()
 				->from(array('a'=>$this->_name))
@@ -67,7 +70,7 @@ class Studentfinance_Model_DbTable_BundleFee extends Zend_Db_Table { //Model Cla
 				->where('b.SemesterFunctionType=?',$semesterFunctionType)
 				->where('iduniv=?',$univ)
 				->where('idcollege=?',$college)
-				->where('idprogram is null or idprogram=0')
+				->where('idprogram=?',$program)
 				->where('idbranch is null or idbranch=0')
 				//->where('b.SemesterMainStartDate <=?',$datestart)
 				->order('b.SemesterMainStartDate DESC');
@@ -80,13 +83,29 @@ class Studentfinance_Model_DbTable_BundleFee extends Zend_Db_Table { //Model Cla
 					->where('b.SemesterCountType=?',$semesterCountTtype)
 					->where('b.SemesterFunctionType=?',$semesterFunctionType)
 					->where('iduniv=?',$univ)
-					->where('idcollege is null or idcollege=0')
+					->where('idcollege=?',$college)
 					->where('idprogram is null or idprogram=0')
 					->where('idbranch is null or idbranch=0')
 					//->where('b.SemesterMainStartDate <=?',$datestart)
 					->order('b.SemesterMainStartDate DESC');
 					$row=$this->lobjDbAdpt->fetchRow($select);
-					 
+					
+					if (!$row) {
+						$select=$this->lobjDbAdpt->select()
+						->from(array('a'=>$this->_name))
+						->join(array('b'=>'tbl_semestermaster'),'a.idsemestermain=b.idsemestermaster')
+						->where('idactivity=?',$idactivity)
+						->where('b.SemesterCountType=?',$semesterCountTtype)
+						->where('b.SemesterFunctionType=?',$semesterFunctionType)
+						->where('iduniv=?',$univ)
+						->where('idcollege is null or idcollege=0')
+						->where('idprogram is null or idprogram=0')
+						->where('idbranch is null or idbranch=0')
+						//->where('b.SemesterMainStartDate <=?',$datestart)
+						->order('b.SemesterMainStartDate DESC');
+						$row=$this->lobjDbAdpt->fetchRow($select);
+						 
+					}
 				}
 			}
 		}
@@ -104,6 +123,7 @@ class Studentfinance_Model_DbTable_BundleFee extends Zend_Db_Table { //Model Cla
 		->join(array('b'=>'tbl_semestermaster'),'a.idsemestermain=b.idsemestermaster')
 		->joinleft(array('c'=>'tbl_collegemaster'),'c.idcollege=a.idcollege')
 		->joinleft(array('p'=>'tbl_program'),'p.IdProgram=a.idprogram')
+		->joinleft(array('mj'=>'tbl_programmajoring'),'mj.IDProgramMajoring=a.majoring',array('Majoring'=>'BahasaDescription'))
 		->joinleft(array('d'=>'tbl_branchofficevenue'),'d.IdBranch=a.idbranch')
 		->where('iduniv=?',$univ);
 		$row=$this->lobjDbAdpt->fetchAll($select);
@@ -119,6 +139,8 @@ class Studentfinance_Model_DbTable_BundleFee extends Zend_Db_Table { //Model Cla
 		->join(array('b'=>'tbl_semestermaster'),'a.idsemestermain=b.idsemestermaster')
 		->joinleft(array('c'=>'tbl_collegemaster'),'c.idcollege=a.idcollege')
 		->joinleft(array('p'=>'tbl_program'),'p.IdProgram=a.idprogram')
+		->joinleft(array('mj'=>'tbl_programmajoring'),'mj.IDProgramMajoring=a.majoring',array('Majoring'=>'BahasaDescription'))
+		
 		->joinleft(array('d'=>'tbl_branchofficevenue'),'d.IdBranch=a.idbranch')
 		->where('idfeebundle=?',$id);
 		$row=$this->lobjDbAdpt->fetchRow($select);
