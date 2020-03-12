@@ -189,10 +189,10 @@ class CourseRegistrationController extends Zend_Controller_Action
 		        	$level=$dbSemesterStatus->getMaxLevelPrevious($registration_id,$idSemester);
 		        	$semester=$dbSemester->fnGetSemestermaster($idSemester);
 		        	$semcounttype=$semester['SemesterCountType'];
-		        	if (($level+1)%2 == $semcounttype%2) {
+		        	//if (($level+1)%2 == $semcounttype%2) {
 		        		$landscapeSem=$level+1;
-		        	} else $landscapeSem=$level+2;
-		        	echo $landscapeSem;exit;
+		        //	} else $landscapeSem=$level+2;
+		        	//echo $landscapeSem;exit;
 		        	//get from landscape subject offered from current level
 		        	if ($landscapeSem>$landscape['SemsterCount']) $paket="0";
 		        }
