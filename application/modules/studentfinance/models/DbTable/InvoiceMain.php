@@ -1082,8 +1082,8 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 											->from(array('im'=>'invoice_detail'))
 											->join(array('inv'=>'invoice_main'),'im.invoice_main_id=inv.id')
 											->join(array('i'=>'fee_item'),'im.fi_id=i.fi_id')
-											->where('inv.semester=?',$idsemester)
-											->where('inv.idactivity=?',$idactivity)
+											->where('inv.semester=?',$rowkrs['IdSemesterMain'])
+											->where('inv.idactivity=?',$row['idActivity'])
 											->where('inv.IdStudentRegistration=?',$idstd);
 											$details= $db->fetchAll($selectData);
 											foreach ($details as $det) {
