@@ -130,19 +130,12 @@ if(count($barred)==0){
 		<td align='center'><?php echo number_format($course["CreditHours"], 1, '.', '');?></td>		
 		<?php if ($course['publish']=='1') { ?>
 		<td align='center'><?php echo $course["final_course_mark"];?></td>
-		<td align='center'><?php 
-      //  $replace_grade = array('MG','IN','NR','W','F','FR');
-       // if(in_array($course["exam_status"],$replace_grade))
-       // {
-            echo $course["exam_status"];
-       // }
-        //else?></td>
-         <td align='center'> <?php
-        //{
+		
+        <td align='center'> <?php
+        
             echo $course["grade_name"];
-        //}
+        
         ?></td>
-       
 		<td align='center'><?php if(isset($course["grade_point"])) { echo number_format($bobot, 2, '.', ''); }?></td>
 		
         <td><?php 
@@ -155,6 +148,11 @@ if(count($barred)==0){
 		};
 			?>
 		</td>
+		<td align='center'><?php 
+       
+            echo $course["exam_status"];
+        ?></td>
+        
 		<td><?php echo (isset($course["mark_approveby"]) && $course["mark_approveby"]!=0) ? $this->translate("Approved"):$this->translate("Waiting for Approval");?></td>
 	 	<?php } else {?> 
         <td colspan="5" align="center"><?php echo $this->translate('Mark is not publish yet')?></td><?php }?>
