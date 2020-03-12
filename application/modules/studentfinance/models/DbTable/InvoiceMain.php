@@ -1135,7 +1135,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 								
 								
 							}
-							echo $status;exit;
+							 
 							//echo var_dump($row);
 							if ($status=="1") $activity= $row['idActivity'];
 						} //else return 0;
@@ -1158,6 +1158,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 					 
 				}
 			}
+			echo $status;exit;
 			if ($status=="1") return $activity;
 			else return 0;
 		} else return 0;
