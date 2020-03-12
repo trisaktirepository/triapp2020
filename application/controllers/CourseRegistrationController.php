@@ -192,7 +192,7 @@ class CourseRegistrationController extends Zend_Controller_Action
 		        	if (($level+1)%2 == $semcounttype%2) {
 		        		$landscapeSem=$level+1;
 		        	} else $landscapeSem=$level+2;
-		        	//echo $landscapeSem;exit;
+		        	echo $landscapeSem;exit;
 		        	//get from landscape subject offered from current level
 		        	if ($landscapeSem>$landscape['SemsterCount']) $paket="0";
 		        }
