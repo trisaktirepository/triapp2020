@@ -1078,28 +1078,27 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 										if ($invoice)
 										{
 											
-											//cek for compatibility
 											$selectData = $db->select()
 											->from(array('im'=>'invoice_detail'))
-											->join(array('m'=>'invoice_main'),'im.invoice_main_id=m.id')
+											->join(array('inv'=>'invoice_main'),'im.invoice_main_id=inv.id')
 											->join(array('i'=>'fee_item'),'im.fi_id=i.fi_id')
-											->where('m.IdStudentRegistration=?',$idstd)
-											->where('m.idactivity=?',$row['idActivity'])
-											->where('m.semester=?',$rowkrs['IdSemesterMain']);
+											->where('inv.semester=?',$idsemester)
+											->where('inv.idactivity=?',$idactivity)
+											->where('inv.IdStudentRegistration=?',$idstd);
 											$details= $db->fetchAll($selectData);
 											foreach ($details as $det) {
 												if ($det['fi_amount_calculation_type']==299 || $det['fi_amount_calculation_type']==301 ) {
 													$amount[$det['fi_id']]=0;
 												}
-												 
+													
 											}
 											foreach ($details as $det) {
 												if ($det['fi_amount_calculation_type']==299 || $det['fi_amount_calculation_type']==301 ) {
 													$amount[$det['fi_id']]=$amount[$det['fi_id']]+$det['amount'];
-													
+											
 												} else unset($amount[$det['fi_id']]);
 											}
-											
+											 
 											foreach ($amount as $fiid=>$itemamount) {
 												//get fee structure
 												$selectData = $db->select()
