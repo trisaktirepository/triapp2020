@@ -1303,13 +1303,17 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 														//per sks
 														$actualamount=$rowkrs['sks']*$feestructure['fsi_amount'];
 														//	echo $actualamount;echo $itemamount;exit;
-														$restamount[$fiid]['amount']=$actualamount-$itemamount;
-														$restamount[$fiid]['fi_name_bahasa']=$feestructure['fi_name_bahasa'];
+														if ($actualamount-$itemamount>0) {
+															$restamount[$fiid]['amount']=$actualamount-$itemamount;
+															$restamount[$fiid]['fi_name_bahasa']=$feestructure['fi_name_bahasa'];
+														}
 													} else if ($feestructure['fi_amount_calculation_type']==301) {
 														//per MK
-														$actualamount=$rowkrs['jmlmk']*$feestructure['fsi_amount'];
-														$restamount[$fiid]['amount']=$actualamount-$itemamount;
-														$restamount[$fiid]['fi_name_bahasa']=$feestructure['fi_name_bahasa'];
+														if ($actualamount-$itemamount>0) {
+															$actualamount=$rowkrs['jmlmk']*$feestructure['fsi_amount'];
+															$restamount[$fiid]['amount']=$actualamount-$itemamount;
+															$restamount[$fiid]['fi_name_bahasa']=$feestructure['fi_name_bahasa'];
+														}
 													}
 												}
 											}
