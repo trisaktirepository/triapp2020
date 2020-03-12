@@ -1139,6 +1139,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 							 
 							//echo var_dump($row);
 							if ($status=="1") $activity= $row['idActivity'];
+							
 						} //else return 0;
 					} //else return 0;
 				}  //else return 0;
@@ -1156,7 +1157,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 						$status="1";
 						$activity= $row['idActivity'];
 					}
-					 
+					 echo "tetap - ".$status;
 				}
 			}
 			echo $status;exit;
