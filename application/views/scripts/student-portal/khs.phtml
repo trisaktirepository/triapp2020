@@ -72,7 +72,16 @@ $(function() {
 	</table>
 	
 <br><br>
-
+<fieldset><legend><?php echo $this->translate('Keterangan Status Nilai')?></legend>
+	<ul>
+	<li>C 	: Complete artinya nilai ditempuh paripurna dan diperhitungkan dalam transkrip</li>
+	<li>IN 	: Incomplete artinya ada komponen nilai selain UTS dan UAS yang belum ada nilainya dan tidak diperhitungkan dalam transkrip</li>
+	<li>MG 	: Missing Grade artinya ada komponen nilai UTS dan atau  UAS yang belum ada nilainya dan tidak diperhitungkan dalam transkrip</li>
+	<li>F 	: Fraud artinya ada pelanggaran akademik dan nilai tidak diperhitungkan dalam transkrip</li>
+	<li>DR 	: DROP artinya nilai tidak digunakan dan tidak diperhitungkan dalam transkrip</li>
+	
+	</ul>
+</fieldset>
 <?php 
 $today = date("d-m-Y"); 
 $barredDB = new App_Model_Record_DbTable_Barringrelease();
