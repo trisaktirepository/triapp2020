@@ -1032,7 +1032,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 								->from(array('a'=>'fee_item'),array('fi_amount_calculation_type','fi_frequency_mode'))
 								->where("a.fi_id = '".$item."'");
 								$itemdetail = $db->fetchRow($selectData);
-								if ($itemdetail['fi_frequency_mode']==305) {
+								/* if ($itemdetail['fi_frequency_mode']==305) {
 									//semester ditetapkan
 									$selectData = $db->select()
 									->from(array('a'=>'fee_structure_item_semester'))
@@ -1040,7 +1040,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 									->where("a.fsis_semester = '".$row['IdSemesterMain']."'");
 									$itemsem = $db->fetchRow($selectData);
 									if ($itemsem) $status="1";
-								}
+								} */
 								if ($itemdetail['fi_amount_calculation_type']==459) {
 									//tergantung subject
 									$subjectset = $db->select()

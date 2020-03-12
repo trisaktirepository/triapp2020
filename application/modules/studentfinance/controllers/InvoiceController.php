@@ -228,6 +228,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 				//chek for incompatibility
 				$restamount=$invoiceDb->inCompatibilityInvoice($IdStudentRegistration, $idsemester, $act['idActivity']);
 				$this->view->invoicerest=$restamount;
+				//if ($invoice['va']!='' && $restamount!=array()) $this->_redirect('/applicant-portal/account');
 			} else {
 				$this->view->invoice=array();
 				$note=$bundle['bundlename'].' '.$semester['SemesterMainName'];
