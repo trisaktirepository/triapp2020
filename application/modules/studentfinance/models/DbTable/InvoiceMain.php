@@ -1143,7 +1143,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 						} //else return 0;
 					} //else return 0;
 				}  //else return 0;
-				if (!($row['idActivity']==39 || $row['idActivity']==40 || $row['idActivity']==42)) {
+				/* if (!($row['idActivity']==39 || $row['idActivity']==40 || $row['idActivity']==42)) {
 				 
 					$selectData = $db->select()
 					->from(array('im'=>'invoice_main'))
@@ -1158,9 +1158,9 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 						$activity= $row['idActivity'];
 					}
 					// echo "tetap - ".$status;
-				}
+				} */
 			}
-			echo $activity;exit;
+			//echo $activity;exit;
 			if ($status=="1") return $activity;
 			else return 0;
 		} else return 0;
