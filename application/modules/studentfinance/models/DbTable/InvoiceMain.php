@@ -1041,7 +1041,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 									$itemsem = $db->fetchRow($selectData);
 									if ($itemsem) $status="1";
 								} */
-								if ($itemdetail['fi_amount_calculation_type']==459) {
+								/* if ($itemdetail['fi_amount_calculation_type']==459) {
 									//tergantung subject
 									$subjectset = $db->select()
 									->from(array('im'=>'tbl_studentregsubjects'),array('IdSubject'))
@@ -1055,7 +1055,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 									->where("a.fsisub_subject_id in (".$subjectset.")");
 									$subject = $db->fetchRow($selectData);
 									if ($subject) $status="1";
-								}
+								} */
 								if ($itemdetail['fi_amount_calculation_type']==299) {
 									//tergantung sks
 									//cek krs
