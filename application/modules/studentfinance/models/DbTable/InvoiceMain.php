@@ -1124,10 +1124,10 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 													}
 												}
 											}
-											echo $actualamount;echo '-';echo $items; 
+											//echo $actualamount;echo '-';echo $items; 
 											if ($actualamount-$items>0) $status="1";
 											
-											echo $status;echo '<br>';
+											//echo $status;echo '<br>';
 										} else $status="1";
 											
 									}  
@@ -1150,17 +1150,17 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 					->where('im.IdStudentRegistration=?',$idstd)
 					->where('im.semester=?',$row['IdSemesterMain'])
 					->where('im.idactivity=?',$row['idActivity']);
-					echo $selectData;
+					//echo $selectData;
 					$rowbpp = $db->fetchRow($selectData);
 					 
 					if (!$rowbpp) {
 						$status="1";
 						$activity= $row['idActivity'];
 					}
-					 echo "tetap - ".$status;
+					// echo "tetap - ".$status;
 				}
 			}
-			echo $status;exit;
+			//echo $status;exit;
 			if ($status=="1") return $activity;
 			else return 0;
 		} else return 0;
