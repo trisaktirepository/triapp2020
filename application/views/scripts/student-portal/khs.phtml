@@ -137,7 +137,10 @@ if(count($barred)==0){
         
         ?></td>
 		<td align='center'><?php if(isset($course["grade_point"])) { echo number_format($bobot, 2, '.', ''); }?></td>
-		
+		<td align='center'><?php 
+       
+            echo $course["exam_status"];
+        ?></td>
         <td><?php 
 		if(isset($course["grade_status"]) && $course['publish']=='1'){
 				  if($course["grade_status"]=='Pass'){ 
@@ -148,10 +151,7 @@ if(count($barred)==0){
 		};
 			?>
 		</td>
-		<td align='center'><?php 
-       
-            echo $course["exam_status"];
-        ?></td>
+		
         
 		<td><?php echo (isset($course["mark_approveby"]) && $course["mark_approveby"]!=0) ? $this->translate("Approved"):$this->translate("Waiting for Approval");?></td>
 	 	<?php } else {?> 
