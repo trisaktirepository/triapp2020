@@ -1123,7 +1123,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 													}
 												}
 											}
-											//echo $actualamount;echo $items;exit;
+											echo $actualamount;echo $items; 
 											if ($actualamount-$items>0) $status="1";
 											
 												
@@ -1155,7 +1155,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 						$status="1";
 						$activity= $row['idActivity'];
 					}
-					echo $status;exit;
+					 
 				}
 			}
 			echo $status;exit;
