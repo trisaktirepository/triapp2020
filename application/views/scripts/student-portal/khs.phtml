@@ -108,7 +108,8 @@ if(count($barred)==0){
 		<th width="8%"><?php echo $this->translate("Total");?></th>
 		<th width="8%"><?php echo $this->translate("Nilai");?></th>
 		<th width="8%"><?php echo $this->translate("Bobot");?></th>
-		<th width="8%"><?php echo $this->translate("Status");?></th>
+		<th width="8%"><?php echo $this->translate("Status Nilai");?></th>
+		<th width="8%"><?php echo $this->translate("Status Kelulusan");?></th>
 		<th width="10%"><?php echo $this->translate("Approval Status");?></th>
 	</tr>
 	<?php  
@@ -130,15 +131,16 @@ if(count($barred)==0){
 		<?php if ($course['publish']=='1') { ?>
 		<td align='center'><?php echo $course["final_course_mark"];?></td>
 		<td align='center'><?php 
-        $replace_grade = array('MG','IN','NR','W','F','FR');
-        if(in_array($course["exam_status"],$replace_grade))
-        {
+      //  $replace_grade = array('MG','IN','NR','W','F','FR');
+       // if(in_array($course["exam_status"],$replace_grade))
+       // {
             echo $course["exam_status"];
-        }
-        else
-        {
+       // }
+        //else?></td>
+         <td align='center'> <?php
+        //{
             echo $course["grade_name"];
-        }
+        //}
         ?></td>
        
 		<td align='center'><?php if(isset($course["grade_point"])) { echo number_format($bobot, 2, '.', ''); }?></td>
