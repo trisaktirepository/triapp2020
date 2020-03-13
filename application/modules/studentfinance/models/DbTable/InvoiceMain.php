@@ -1141,24 +1141,26 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 							if ($status=="1") $activity= $row['idActivity'];
 							
 						} //else return 0;
-					} //else return 0;
-				}  //else return 0;
-				 if (!($row['idActivity']==39 || $row['idActivity']==40 || $row['idActivity']==42)) {
-				 
-					$selectData = $db->select()
-					->from(array('im'=>'invoice_main'))
-					->where('im.IdStudentRegistration=?',$idstd)
-					->where('im.semester=?',$row['IdSemesterMain'])
-					->where('im.idactivity=?',$row['idActivity']);
-					//echo $selectData;
-					$rowbpp = $db->fetchRow($selectData);
-					 
-					if (!$rowbpp) {
-						$status="1";
-						$activity= $row['idActivity'];
 					}
-					// echo "tetap - ".$status;
-				} 
+					if (!($row['idActivity']==39 || $row['idActivity']==40 || $row['idActivity']==42)) {
+							
+						$selectData = $db->select()
+						->from(array('im'=>'invoice_main'))
+						->where('im.IdStudentRegistration=?',$idstd)
+						->where('im.semester=?',$row['IdSemesterMain'])
+						->where('im.idactivity=?',$row['idActivity']);
+						//echo $selectData;
+						$rowbpp = $db->fetchRow($selectData);
+					
+						if (!$rowbpp) {
+							$status="1";
+							$activity= $row['idActivity'];
+						}
+						// echo "tetap - ".$status;
+					}
+					 //else return 0;
+				}  
+				 
 			}
 			//echo $activity;exit;
 			if ($status=="1") return $activity;
