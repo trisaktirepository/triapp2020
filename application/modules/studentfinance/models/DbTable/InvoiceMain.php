@@ -997,6 +997,8 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 				$bundle=$dbBundle->getCurrentSetup(1, $std['IdCollege'], $std['IdProgram'], $std['IdBranch'], $row['IdSemesterMain'], $row['idActivity'],$std['IdProgramMajoring']);
 				//echo var_dump($bundle);exit;
 				if ($bundle) {
+					if (($row['idActivity']==39 || $row['idActivity']==40 || $row['idActivity']==42)) {
+							
 					//get fee structure item
 					if($std['appl_nationality']!=96){
 						$student_category = 315;
@@ -1075,7 +1077,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 										->where('im.semester=?',$rowkrs['IdSemesterMain']);
 										$invoice = $db->fetchRow($selectData);
 										
-										 
+										 echo 'aciviyi='.$row['idActivity'];
 										if ($invoice)
 										{
 											
@@ -1124,11 +1126,11 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 													}
 												}
 											}
-											//echo $actualamount;echo '-';echo $items; 
-											if ($actualamount-$items>0) $status="1";
+											echo $actualamount;echo '-';echo $items; exit;
+											if ($actualamount-$items>0) return $row['idActivity'];
 											
 											//echo $status;echo '<br>';
-										} else $status="1";
+										} else return $row['idActivity'];
 											
 									}  
 								}
@@ -1138,11 +1140,11 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 							}
 							 
 							//echo var_dump($row);
-							if ($status=="1") $activity= $row['idActivity'];
+						//	if ($status=="1") $activity= $row['idActivity'];
 							
 						} //else return 0;
-					}
-					if (!($row['idActivity']==39 || $row['idActivity']==40 || $row['idActivity']==42)) {
+					} 
+					}else {
 							
 						$selectData = $db->select()
 						->from(array('im'=>'invoice_main'))
@@ -1153,8 +1155,8 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 						$rowbpp = $db->fetchRow($selectData);
 					
 						if (!$rowbpp) {
-							$status="1";
-							$activity= $row['idActivity'];
+							 
+							return $row['idActivity'];
 						}
 						// echo "tetap - ".$status;
 					}
@@ -1163,10 +1165,10 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 				 
 			}
 			//echo $activity;exit;
-			if ($status=="1") return $activity;
-			else return 0;
-		} else return 0;
-	
+			//if ($status=="1") return $activity;
+			//else return 0;
+		} 
+		return 0;
 	}
 	
 	public function inCompatibilityInvoice($idstd,$idsemester,$idactivity){
