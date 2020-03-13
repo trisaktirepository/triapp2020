@@ -1077,7 +1077,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 										->where('im.semester=?',$rowkrs['IdSemesterMain']);
 										$invoice = $db->fetchRow($selectData);
 										
-										 echo 'aciviyi='.$row['idActivity'];
+										// echo 'aciviyi='.$row['idActivity'];
 										if ($invoice)
 										{
 											
@@ -1126,7 +1126,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 													}
 												}
 											}
-											echo $actualamount;echo '-';echo $items; exit;
+											//echo $actualamount;echo '-';echo $items; exit;
 											if ($actualamount-$items>0) return $row['idActivity'];
 											
 											//echo $status;echo '<br>';
