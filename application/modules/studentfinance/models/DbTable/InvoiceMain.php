@@ -1384,7 +1384,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		//semester info
 		$semesterDb = new App_Model_General_DbTable_Semestermaster();
 		$semester = $semesterDb->fngetSemestermainDetails($idsemester);
-			
+		echo var_dump($fee_item); echo $feeitem;exit;
 		//echo $feeitem;
 		//filter only selected fee item
 		foreach ($fee_item as $index=>$fee){
@@ -1458,7 +1458,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		//get fee item frequency type
 		$sem_fee_item = array();
 		//echo $student_sem;
-		echo var_dump($fee_item); exit;
+		 
 		foreach ($fee_item as $fs){
 	
 			//1st sem
