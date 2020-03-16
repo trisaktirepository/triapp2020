@@ -1457,8 +1457,9 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 	
 		//get fee item frequency type
 		$sem_fee_item = array();
-		//echo $student_sem;
-		 
+		if ($feeitem==5) {echo $student_sem;
+			echo var_dump($fee_item);exit;
+		}
 		foreach ($fee_item as $fs){
 	
 			//1st sem
