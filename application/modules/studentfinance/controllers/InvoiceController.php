@@ -247,19 +247,25 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 				  $result = $db->fetchRow($sql);
 				  if (!$result) {
 				  
+				  		$semselect=$db->select()
+				  		->from('tbl_semestermaster')
+				  		->where('IdSemesterMaster=?',$idsemester);
+				  		$sem=$db->fetchRow($semselect);
+				  		
 					  $sql = $db->select()
 					  ->from(array('sss' => 'tbl_studentsemesterstatus'), array(new Zend_Db_Expr('max(Level) as Level')))
 					  ->join(array('b'=>'tbl_semestermaster'),'b.IdSemesterMaster=sss.IdSemesterMain')
 					  ->where('sss.IdStudentRegistration  = ?', $IdStudentRegistration)
-					  ->where('b.SemesterMainStartDate<=?',$idsemester);
+					  ->where('b.SemesterMainStartDate<= ?',$sem['SemesterMainStartDate']);
 					  
 					  $result = $db->fetchRow($sql);
-					  $result['Level']=$result['Level']+1;
+					  if (!$result) $result['Level']=1;
+					  else $result['Level']=$result['Level']+1;
 					  //echo $sql;
 				  } 
-				if( $result['Level'] ){
+					else if( $result['Level'] ){
 						$current_level = $result['Level'];
-				}else{
+					}else{
 						//check if senior student then hardcode level
 						$intake_year = substr($intake['IntakeId'], 0,4);
 						$cur_sem_year = substr($semester['SemesterMainCode'], 0,4);
