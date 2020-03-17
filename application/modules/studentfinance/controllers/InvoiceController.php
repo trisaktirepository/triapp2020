@@ -220,6 +220,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 					//get item detail
 					$bundleDetail=$dbBudleDetail->getDataByBudle($bundle['idfeebundle']);
 					$invoice=$invoiceDb->isInByActivity($idsemester, $IdStudentRegistration, $idactivity);
+					$act[$key]['invoicerest']=array();
 					if ($invoice) {
 						$current_level='';
 						$bundleDetail=$invoiceDetailDb->getInvoiceDetail($invoice['id']);
