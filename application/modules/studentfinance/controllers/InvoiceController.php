@@ -260,7 +260,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 					  
 					  $result = $db->fetchRow($sql);
 					  if (!$result) $result['Level']=1;
-					  else $result['Level']=$result['Level']+1;
+					  else $result['Level']=$result['Level'];
 					  //echo $sql;
 				  } 
 					else if( $result['Level'] ){

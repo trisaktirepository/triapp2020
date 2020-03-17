@@ -1407,8 +1407,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 					$fee['fi_id']==6 ||
 					$fee['fi_id']==7 ||
 					$fee['fi_id']==10 ||
-					$fee['fi_id']==11 ||
-					$fee['fi_id']==5
+					$fee['fi_id']==11  
 					) {
 						if( in_array($fee['fi_id'],$recfees) ){
 							unset($fee_item[$index]);
