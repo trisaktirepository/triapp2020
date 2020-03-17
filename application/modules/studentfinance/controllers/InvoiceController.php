@@ -329,7 +329,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 					}
 			 
 				} 
-				
+				$this->view->level=$current_level;
 				 
 				$this->view->bundleDetail= $bundleDetail;
 				 } else {
