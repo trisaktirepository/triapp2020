@@ -239,7 +239,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 				 
 				//get current semester level
 			$sql = $db->select()
-				  ->from(array('sss' => 'tbl_studentsemesterstatus'), array('Level'))
+				  ->from(array('sss' => 'tbl_studentsemesterstatus'), array(new Zend_Db_Expr('max(Level) as Level')))
 					->join(array('b'=>'tbl_semestermaster'),'b.IdSemesterMaster=sss.IdSemesterMain')
 				  ->where('sss.IdStudentRegistration  = ?', $IdStudentRegistration)
 				  ->where('b.IdSemesterMaster=?',$idsemester);
@@ -308,7 +308,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 					}
 					
 					$row =$feeStructure->getApplicantFeeStructure($intake['IdIntake'],$std['IdProgram'],$student_category,$std['IdBranch'],$std['IdProgramMajoring']);
-					 
+					echo var_dump($row);exit;
 					if ($row) {
 						$fee_structure = $row;
 						//echo var_dump($row);
