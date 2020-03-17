@@ -61,10 +61,10 @@
 	<form name="formDetail" method="post">
 	<input type="hidden" name="IdApplication" value="<?php echo $this->registration['IdApplication'] ?>">
 	<input type="hidden" name="IdStudentRegistration" value="<?php echo $this->registration['IdStudentRegistration'] ?>">
-	<input type="hidden" name="idinvoice" value="<?php echo $this->idinvoice ?>">
+	<input type="hidden" name="idinvoice" value="<?php echo $act['idinvoice']; ?>">
 	<input type="hidden" name="idsemester" value="<?php echo $act['IdSemesterMaster'] ?>">
 	<input type="hidden" name="idacadyear" value="<?php echo $act['idacadyear'] ?>">
-	<input type="hidden" name="description" value="<?php echo $this->bundle['bundlename'].' '.$act['SemesterMainName'] ?>">
+	<input type="hidden" name="description" value="<?php echo $act['bundle']['bundlename'].' '.$act['SemesterMainName'] ?>">
 	<input type="hidden" name="IdCollege" value="<?php echo $this->program['IdCollege']?>">
 	<input type="hidden" name="ProgramCode" value="<?php echo $this->program['ProgramCode']?>">
 	<input type="hidden" name="fs_id" value="<?php echo $this->fee_structure['fs_id'] ?>">
