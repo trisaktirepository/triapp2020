@@ -341,7 +341,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 						 
 						$this->view->activity= $act;
 					
-					 }  
+					 }  else unset($act[$key]);
 				}
 			} else {
 				echo "Jadwal Pembuatan Invoice Belum dibuka, Hubungi admin Fakultas masing-masing";
