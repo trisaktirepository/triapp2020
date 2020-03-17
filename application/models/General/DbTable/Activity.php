@@ -54,7 +54,7 @@ class App_Model_General_DbTable_Activity extends Zend_Db_Table_Abstract
 		return $row;
 	}
 	
-	public function getActiveDataActivity($idprogram,$idact){
+	public function getActiveDataActivity($idprogram,$idact,$startclass){
 	
 		$db = Zend_Db_Table::getDefaultAdapter();
 			
@@ -66,6 +66,7 @@ class App_Model_General_DbTable_Activity extends Zend_Db_Table_Abstract
 		->where('a.setter="2"')
 		->where('b.IdProgram=?',$idprogram)
 		->where('a.idActivity=?',$idact)
+		->where('c.SemesterMainStartDate>=?',$startclass)
 		->where('b.StartDate <= CURDATE()')
 		->where('b.EndDate >= CURDATE()');
 		$row = $db->fetchAll($select);

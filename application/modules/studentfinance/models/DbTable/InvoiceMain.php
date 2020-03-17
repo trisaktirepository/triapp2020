@@ -974,6 +974,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		->from(array('im'=>'tbl_studentregistration'))
 		->join(array('sp'=>'student_profile'),'sp.appl_id=im.IdApplication',array('appl_nationality'))
 		->join(array('p'=>'tbl_program'),'p.IdProgram=im.IdProgram')
+		->join(array('i'=>'tbl_intake'),'i.IdIntake=im.IdIntake')
 		->where('im.IdStudentRegistration = ?', $idstd);
 		$std=$db->fetchRow($selectData);
 		//get payment activity
@@ -981,7 +982,9 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		$selectData = $db->select()
 		->from(array('im'=>'tbl_activity'))
 		->join(array('b'=>'tbl_activity_calender'),'im.idActivity=b.IdActivity')
+		->join(array('c'=>'tbl_semestermaster'),'c.IdSemesterMaster=b.IdSemesterMain')
 		->where('b.IdProgram = ?', $std['IdProgram'])
+		->where('c.SemesterMainStartDate>=?',$std['class_start'])
 		->where('b.StartDate <= CURDATE()')
 		->where('b.EndDate >= CURDATE()')
 		->where('im.setter="2"');

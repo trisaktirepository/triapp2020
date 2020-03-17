@@ -51,7 +51,8 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 		$dbActivity=new App_Model_General_DbTable_Activity();
 		$dbIntake=new App_Model_Record_DbTable_Intake();
 		$intake=$dbIntake->getData($std['IdIntake']);
-		$act=$dbActivity->getActiveDataActivity($std['IdProgram'],$idactivity);
+		$startclass=$intake['class_start'];
+		$act=$dbActivity->getActiveDataActivity($std['IdProgram'],$idactivity,$startclass);
 		$this->view->activity=$act;
 		
 		//program
