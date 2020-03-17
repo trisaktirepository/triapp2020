@@ -204,6 +204,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 				$idsemester=$value['IdSemesterMain'];
 				$act[$key]['bundledetail']=array();
 				$act[$key]['bundle']=array();
+				$act[$key]['idinvoice']='';
 				//semester
 				$semester = $semesterDb->fnGetSemestermaster($idsemester);
 				//echo $semester;echo "semesterif=".$idsemester;
