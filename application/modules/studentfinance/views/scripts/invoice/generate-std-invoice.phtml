@@ -55,7 +55,7 @@
 </fieldset>
 <?php foreach ($this->activity as $act) {
 	$bundledetail=$act['bundledetail'];
-	
+	if ($bundledetail!=array()) {
 ?>
 <fieldset><legend><?php echo $this->translate('Invoice Detail')?></legend>
 	<form name="formDetail" method="post">
@@ -183,5 +183,7 @@
 	 <?php }?>
 </form>
 </fieldset>
-<?php }?>
+<?php 
+	}
+}?>
  
