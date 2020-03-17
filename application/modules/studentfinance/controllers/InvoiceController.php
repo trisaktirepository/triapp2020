@@ -212,8 +212,9 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 				//echo var_dump($std);exit;
 				//get current payment setup
 				$bundle=$dbBundle->getCurrentSetup(1, $program['IdCollege'], $std['IdProgram'], $std['IdBranch'], $idsemester, $value['idActivity'],$std['IdProgramMajoring']);
+				$act[$key]['bundle']=$bundle;
 				if ($bundle) {
-					$$act[$key]['bundle']=$bundle;
+					
 				//if (!$bundle)	{
 					//echo var_dump($bundle);exit;
 				//}
@@ -221,6 +222,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 					$bundleDetail=$dbBudleDetail->getDataByBudle($bundle['idfeebundle']);
 					$invoice=$invoiceDb->isInByActivity($idsemester, $IdStudentRegistration, $idactivity);
 					$act[$key]['invoicerest']=array();
+					$act[$key]['invoice']=$invoice;
 					if ($invoice) {
 						$current_level='';
 						$bundleDetail=$invoiceDetailDb->getInvoiceDetail($invoice['id']);
@@ -235,7 +237,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 						$act[$key]['invoicerest']=$restamount;
 						//if ($invoice['va']!='' && $restamount!=array()) $this->_redirect('/applicant-portal/account');
 					} else {
-						$act[$key]['invoice']=array();
+						 
 						$note=$bundle['bundlename'].' '.$semester['SemesterMainName'];
 						
 						//foreach ($ses_batch_invoice->student_list as $student):
