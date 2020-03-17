@@ -213,7 +213,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 				//get current payment setup
 				$bundle=$dbBundle->getCurrentSetup(1, $program['IdCollege'], $std['IdProgram'], $std['IdBranch'], $idsemester, $value['idActivity'],$std['IdProgramMajoring']);
 				if ($bundle) {
-					$this->view->bundle=$bundle;
+					$$act[$key]['bundle']=$bundle;
 				//if (!$bundle)	{
 					//echo var_dump($bundle);exit;
 				//}
@@ -334,7 +334,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 							}
 					 
 						} 
-						$act[$key]['bundle']=$bundleDetail;
+						$act[$key]['bundledetail']=$bundleDetail;
 						$this->view->level=$current_level;
 						 
 						$this->view->activity= $act;
