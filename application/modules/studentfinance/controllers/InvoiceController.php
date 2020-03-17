@@ -36,52 +36,31 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 		$profile = $studentProfileDb->getData($registration['IdApplication']);
 		$this->view->profile = $profile;
 		//-------
+		//echo var_dump($bundleDetail);exit;
+		$dbregsub=new App_Model_Record_DbTable_StudentRegSubjects();
+		$invoiceDb = new Studentfinance_Model_DbTable_InvoiceMain();
 		$dbStd=new App_Model_Record_DbTable_StudentRegistration();
 		$std=$dbStd->getStudentInfo($IdStudentRegistration);
+		$dbBudleDetail=new Studentfinance_Model_DbTable_BundleFeeDetail();
+		$invoiceDetailDb = new Studentfinance_Model_DbTable_InvoiceDetail();
+		$semesterDb = new App_Model_General_DbTable_Semestermaster();
+		$academicYearDb = new App_Model_Record_DbTable_AcademicYear();
+
+		$dbBundle=new Studentfinance_Model_DbTable_BundleFee();
 		//get type of active invoice from active activity
 		$dbActivity=new App_Model_General_DbTable_Activity();
+		$dbIntake=new App_Model_Record_DbTable_Intake();
+		$intake=$dbIntake->getData($std['IdIntake']);
 		$act=$dbActivity->getActiveDataActivity($std['IdProgram'],$idactivity);
 		$this->view->activity=$act;
+		
+		//program
+		$programDb = new App_Model_General_DbTable_Program();
+		$program = $programDb->fngetProgramData($std['IdProgram']);
+		$this->view->program=$program;
+		
 		$bundleDetail=array();
 		if ($act) {
-				
-			$idsemester=$act['IdSemesterMain'];
-			//semester
-			$semesterDb = new App_Model_General_DbTable_Semestermaster();
-			$semester = $semesterDb->fnGetSemestermaster($idsemester);
-			//echo $semester;echo "semesterif=".$idsemester;
-			$this->view->semester=$semester;
-			
-			//Intake
-			$dbIntake=new App_Model_Record_DbTable_Intake();
-			$intake=$dbIntake->getData($std['IdIntake']);
-			//academic year
-			$academicYearDb = new App_Model_Record_DbTable_AcademicYear();
-			$academicYear = $academicYearDb->getData($semester['idacadyear']);
-			 
-			//program
-			$programDb = new App_Model_General_DbTable_Program();
-			$program = $programDb->fngetProgramData($std['IdProgram']);
-			$this->view->program=$program;
-	
-			//echo var_dump($std);exit;
-			//get current payment setup
-			$dbBundle=new Studentfinance_Model_DbTable_BundleFee();
-			$bundle=$dbBundle->getCurrentSetup(1, $program['IdCollege'], $std['IdProgram'], $std['IdBranch'], $idsemester, $act['idActivity'],$std['IdProgramMajoring']);
-			if ($bundle) {
-			$this->view->bundle=$bundle;
-		//if (!$bundle)	{
-			//echo var_dump($bundle);exit;
-		//}
-			//get item detail
-			$dbBudleDetail=new Studentfinance_Model_DbTable_BundleFeeDetail();
-			$bundleDetail=$dbBudleDetail->getDataByBudle($bundle['idfeebundle']);
-			//echo var_dump($bundleDetail);exit;
-			$dbregsub=new App_Model_Record_DbTable_StudentRegSubjects();
-			 
-			$invoiceDb = new Studentfinance_Model_DbTable_InvoiceMain();
-			$invoiceDetailDb = new Studentfinance_Model_DbTable_InvoiceDetail(); 
-			 
 			$db = Zend_Db_Table::getDefaultAdapter();
 			if ($this->getRequest()->isPost()) {
 				$formData=$this->getRequest()->getPost();
@@ -89,28 +68,31 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 					if (!isset($formData['restpayment'])) {
 						//get invoice no from sequence
 						$idsemester=$formData['idsemester'];
+						$semester = $semesterDb->fnGetSemestermaster($idsemester);
+						$academicYear = $academicYearDb->getData($semester['idacadyear']);
+						
 						$IdStudentRegistration=$formData['IdStudentRegistration'];
 						$idinvoice=$formData['idinvoice'];
-						
+			
 						$seq_data = array(
 								date('y',strtotime($academicYear['ay_start_date'])),
 								substr($intake['IntakeId'],2,2),
 								$program['ProgramCode'], 0
 						);
-						
-						$db = Zend_Db_Table::getDefaultAdapter();
+			
+						 
 						if ($idinvoice=='') {
-								$stmt = $db->prepare("SELECT invoice_seq(?,?,?,?) AS invoice_no");
-								$stmt->execute($seq_data);
-								$invoice_no = $stmt->fetch();
+							$stmt = $db->prepare("SELECT invoice_seq(?,?,?,?) AS invoice_no");
+							$stmt->execute($seq_data);
+							$invoice_no = $stmt->fetch();
 						}
 						else {
-	 						$smt=$db->select()
+							$smt=$db->select()
 							->from('invoice_main',array('invoice_no'=>'bill_number'))
 							->where('id=?',$idinvoice);
 							$invoice_no=$db->fetchRow($smt);
-	
-						}		
+								
+						}
 						$inv_data = array(
 								'bill_number' => $invoice_no['invoice_no'],
 								'appl_id' => $formData['IdApplication'],
@@ -141,7 +123,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 										'fee_item_description' => $item['fi_name_bahasa'],
 										'amount' => $amount
 								);
-							
+									
 								$invoiceDetailDb->insert($inv_detail_data);
 							}
 						} else $invoice_id=$formData['idinvoice'];
@@ -154,23 +136,23 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 							$invoiceDb->pushToEColl($invoice_id, $dateexprired,'createbilling');
 						}
 					}
-					 else {
+					else {
 						//get invoice no from sequence
 						$idsemester=$formData['idsemester'];
 						$IdStudentRegistration=$formData['IdStudentRegistration'];
-						 
-						
+							
+			
 						$seq_data = array(
 								date('y',strtotime($academicYear['ay_start_date'])),
 								substr($intake['IntakeId'],2,2),
 								$program['ProgramCode'], 0
 						);
-						
+			
 						$db = Zend_Db_Table::getDefaultAdapter();
 						$stmt = $db->prepare("SELECT invoice_seq(?,?,?,?) AS invoice_no");
 						$stmt->execute($seq_data);
 						$invoice_no = $stmt->fetch();
-						 
+							
 						$inv_data = array(
 								'bill_number' => $invoice_no['invoice_no'],
 								'appl_id' => $formData['IdApplication'],
@@ -189,22 +171,22 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 								'date_create' => date('Y-m-d H:i:s'),
 								'idactivity'=>$formData['idactivity']
 						);
-						 
-							$invoice_id = $invoiceDb->insert($inv_data);
-							$dbFeeitem=new Studentfinance_Model_DbTable_FeeItem();
-							//insert invoice detail
-							foreach ($formData['itemrest'] as $itemid=>$amount){
-								$item=$dbFeeitem->getData($itemid);
-								$inv_detail_data = array(
-										'invoice_main_id' => $invoice_id,
-										'fi_id' => $itemid,
-										'fee_item_description' => $item['fi_name_bahasa'],
-										'amount' => $amount
-								);
-									
-								$invoiceDetailDb->insert($inv_detail_data);
-							}
-						  
+							
+						$invoice_id = $invoiceDb->insert($inv_data);
+						$dbFeeitem=new Studentfinance_Model_DbTable_FeeItem();
+						//insert invoice detail
+						foreach ($formData['itemrest'] as $itemid=>$amount){
+							$item=$dbFeeitem->getData($itemid);
+							$inv_detail_data = array(
+									'invoice_main_id' => $invoice_id,
+									'fi_id' => $itemid,
+									'fee_item_description' => $item['fi_name_bahasa'],
+									'amount' => $amount
+							);
+								
+							$invoiceDetailDb->insert($inv_detail_data);
+						}
+			
 						//push to BNI
 						$dbActCalendar=new App_Model_General_DbTable_ActivityCalendar();
 						$calendar=$dbActCalendar->getData($formData['id']);
@@ -216,125 +198,147 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 					}
 				}
 			}
-			$invoice=$invoiceDb->isInByActivity($idsemester, $IdStudentRegistration, $act['idActivity']);
-			if ($invoice) {
-				$bundleDetail=$invoiceDetailDb->getInvoiceDetail($invoice['id']);
-				foreach ($bundleDetail as $key=>$value) {
-					$bundleDetail[$key]['fee']=array('amount'=>$value['amount']);
-					//$amount=$amount+$invoice['amount'];
-				}
-				$this->view->idinvoice=$invoice['id'];
-				$this->view->invoice=$invoice;
-				//chek for incompatibility
-				$restamount=$invoiceDb->inCompatibilityInvoice($IdStudentRegistration, $idsemester, $act['idActivity']);
-				$this->view->invoicerest=$restamount;
-				//if ($invoice['va']!='' && $restamount!=array()) $this->_redirect('/applicant-portal/account');
-			} else {
-				$this->view->invoice=array();
-				$note=$bundle['bundlename'].' '.$semester['SemesterMainName'];
-				
-				//foreach ($ses_batch_invoice->student_list as $student):
-				$feeStructure = new Studentfinance_Model_DbTable_FeeStructure();
-				$dbBranch=new App_Model_General_DbTable_Branchofficevenue();
+			foreach ($act as $key=>$value) {
 				 
-				//get current semester level
-			$sql = $db->select()
-				  ->from(array('sss' => 'tbl_studentsemesterstatus'), array(new Zend_Db_Expr('max(Level) as Level')))
-					->join(array('b'=>'tbl_semestermaster'),'b.IdSemesterMaster=sss.IdSemesterMain')
-				  ->where('sss.IdStudentRegistration  = ?', $IdStudentRegistration)
-				  ->where('b.IdSemesterMaster=?',$idsemester);
-				   
-				  $result = $db->fetchRow($sql);
-				  if (!$result) {
-				  
-				  		$semselect=$db->select()
-				  		->from('tbl_semestermaster')
-				  		->where('IdSemesterMaster=?',$idsemester);
-				  		$sem=$db->fetchRow($semselect);
-				  		
-					  $sql = $db->select()
-					  ->from(array('sss' => 'tbl_studentsemesterstatus'), array(new Zend_Db_Expr('max(Level) as Level')))
-					  ->join(array('b'=>'tbl_semestermaster'),'b.IdSemesterMaster=sss.IdSemesterMain')
-					  ->where('sss.IdStudentRegistration  = ?', $IdStudentRegistration)
-					  ->where('b.SemesterMainStartDate<= ?',$sem['SemesterMainStartDate']);
-					  
-					  $result = $db->fetchRow($sql);
-					  if (!$result) $result['Level']=1;
-					  else $result['Level']=$result['Level'];
-					  //echo $sql;
-				  } 
-					else if( $result['Level'] ){
-						$current_level = $result['Level'];
-					}else{
-						//check if senior student then hardcode level
-						$intake_year = substr($intake['IntakeId'], 0,4);
-						$cur_sem_year = substr($semester['SemesterMainCode'], 0,4);
-				
-						if($intake_year<2013){
-							$current_level=0;
-				
-							while($intake_year<=$cur_sem_year){
-								//check current gasal or genap for currencty
-								if($intake_year == $cur_sem_year){
-				
-									if($semester['SemesterCountType']==1){
-										$current_level += 1;
-									}else{
-										$current_level += 2;
-									}
-				
-								}else{
-									$current_level+= 2;
-								}
-				
-								$intake_year++;
-							}
-				
-							//remove 1 because we will add 1 in view
-							$current_level -= 1;
-				
-						}else{
-							$current_level = 0;
-				
-							//unset($student_list[$i]);
-						}
-					}
-				
-					//get fee structure
-					if($std['appl_nationality']!=96){
-						$student_category = 315;
-					}else{
-						$student_category = 314;
-					}
-					
-					$row =$feeStructure->getApplicantFeeStructure($intake['IdIntake'],$std['IdProgram'],$student_category,$std['IdBranch'],$std['IdProgramMajoring']);
-					//echo var_dump($row); 
-					if ($row) {
-						$fee_structure = $row;
-						//echo var_dump($row);
-						$this->view->fee_structure=$fee_structure;
-						$amount=0;
-					//	echo var_dump($bundleDetail);exit;
+				$idsemester=$value['IdSemesterMain'];
+				//semester
+				$semester = $semesterDb->fnGetSemestermaster($idsemester);
+				//echo $semester;echo "semesterif=".$idsemester;
+				$this->view->semester=$semester;
+				 
+				//academic year
+				$academicYear = $academicYearDb->getData($semester['idacadyear']);
+				 
+				//echo var_dump($std);exit;
+				//get current payment setup
+				$bundle=$dbBundle->getCurrentSetup(1, $program['IdCollege'], $std['IdProgram'], $std['IdBranch'], $idsemester, $value['idActivity'],$std['IdProgramMajoring']);
+				if ($bundle) {
+					$this->view->bundle=$bundle;
+				//if (!$bundle)	{
+					//echo var_dump($bundle);exit;
+				//}
+					//get item detail
+					$bundleDetail=$dbBudleDetail->getDataByBudle($bundle['idfeebundle']);
+					$invoice=$invoiceDb->isInByActivity($idsemester, $IdStudentRegistration, $idactivity);
+					if ($invoice) {
+						$current_level='';
+						$bundleDetail=$invoiceDetailDb->getInvoiceDetail($invoice['id']);
 						foreach ($bundleDetail as $key=>$value) {
-							 
-							$invoicedet = $invoiceDb->getInvoiceFee($idsemester,$std['IdStudentRegistration'], $fee_structure['fs_id'], $value['fee_item'], $value['percentage'],"1",$idactivity);
-							//echo  $value['fee_item'];
-							//echo var_dump($invoicedet);
-							if ($invoicedet['amount']>0) $bundleDetail[$key]['fee']=$invoicedet;
-							else unset($bundleDetail[$key]);
-							$amount=$amount+$invoicedet['amount'];
+							$bundleDetail[$key]['fee']=array('amount'=>$value['amount']);
+							//$amount=$amount+$invoice['amount'];
 						}
-				
-						//exit;
-					}
-			 
-				} 
-				$this->view->level=$current_level;
-				 
-				$this->view->bundleDetail= $bundleDetail;
-				 } else {
-					echo 'Skema pembayaran '.$idactivity.' dan semester '.$idsemester. 'tidak ditermukan';
-					exit;
+						$act[$key]['idinvoice']=$invoice['id'];
+						//$this->view->invoice=$invoice;
+						//chek for incompatibility
+						$restamount=$invoiceDb->inCompatibilityInvoice($IdStudentRegistration, $idsemester, $idactivity);
+						$act[$key]['invoicerest']=$restamount;
+						//if ($invoice['va']!='' && $restamount!=array()) $this->_redirect('/applicant-portal/account');
+					} else {
+						$act[$key]['invoice']=array();
+						$note=$bundle['bundlename'].' '.$semester['SemesterMainName'];
+						
+						//foreach ($ses_batch_invoice->student_list as $student):
+						$feeStructure = new Studentfinance_Model_DbTable_FeeStructure();
+						$dbBranch=new App_Model_General_DbTable_Branchofficevenue();
+						 
+						//get current semester level
+					$sql = $db->select()
+						  ->from(array('sss' => 'tbl_studentsemesterstatus'), array(new Zend_Db_Expr('max(Level) as Level')))
+							->join(array('b'=>'tbl_semestermaster'),'b.IdSemesterMaster=sss.IdSemesterMain')
+						  ->where('sss.IdStudentRegistration  = ?', $IdStudentRegistration)
+						  ->where('b.IdSemesterMaster=?',$idsemester);
+						   
+						  $result = $db->fetchRow($sql);
+						  if (!$result) {
+						  
+						  		$semselect=$db->select()
+						  		->from('tbl_semestermaster')
+						  		->where('IdSemesterMaster=?',$idsemester);
+						  		$sem=$db->fetchRow($semselect);
+						  		
+							  $sql = $db->select()
+							  ->from(array('sss' => 'tbl_studentsemesterstatus'), array(new Zend_Db_Expr('max(Level) as Level')))
+							  ->join(array('b'=>'tbl_semestermaster'),'b.IdSemesterMaster=sss.IdSemesterMain')
+							  ->where('sss.IdStudentRegistration  = ?', $IdStudentRegistration)
+							  ->where('b.SemesterMainStartDate<= ?',$sem['SemesterMainStartDate']);
+							  
+							  $result = $db->fetchRow($sql);
+							  if (!$result) $result['Level']=1;
+							  else $result['Level']=$result['Level'];
+							  //echo $sql;
+						  } 
+							else if( $result['Level'] ){
+								$current_level = $result['Level'];
+							}else{
+								//check if senior student then hardcode level
+								$intake_year = substr($intake['IntakeId'], 0,4);
+								$cur_sem_year = substr($semester['SemesterMainCode'], 0,4);
+						
+								if($intake_year<2013){
+									$current_level=0;
+						
+									while($intake_year<=$cur_sem_year){
+										//check current gasal or genap for currencty
+										if($intake_year == $cur_sem_year){
+						
+											if($semester['SemesterCountType']==1){
+												$current_level += 1;
+											}else{
+												$current_level += 2;
+											}
+						
+										}else{
+											$current_level+= 2;
+										}
+						
+										$intake_year++;
+									}
+						
+									//remove 1 because we will add 1 in view
+									$current_level -= 1;
+						
+								}else{
+									$current_level = 0;
+						
+									//unset($student_list[$i]);
+								}
+							}
+						
+							//get fee structure
+							if($std['appl_nationality']!=96){
+								$student_category = 315;
+							}else{
+								$student_category = 314;
+							}
+							
+							$row =$feeStructure->getApplicantFeeStructure($intake['IdIntake'],$std['IdProgram'],$student_category,$std['IdBranch'],$std['IdProgramMajoring']);
+							//echo var_dump($row); 
+							if ($row) {
+								$fee_structure = $row;
+								//echo var_dump($row);
+								$this->view->fee_structure=$fee_structure;
+								$amount=0;
+							//	echo var_dump($bundleDetail);exit;
+								foreach ($bundleDetail as $key=>$value) {
+									 
+									$invoicedet = $invoiceDb->getInvoiceFee($idsemester,$std['IdStudentRegistration'], $fee_structure['fs_id'], $value['fee_item'], $value['percentage'],"1",$idactivity);
+									//echo  $value['fee_item'];
+									//echo var_dump($invoicedet);
+									if ($invoicedet['amount']>0) $bundleDetail[$key]['fee']=$invoicedet;
+									else unset($bundleDetail[$key]);
+									$amount=$amount+$invoicedet['amount'];
+								}
+						
+								//exit;
+							}
+					 
+						} 
+						$act[$key]['bundle']=$bundleDetail;
+						$this->view->level=$current_level;
+						 
+						$this->view->activity= $act;
+					
+					 }  
 				}
 			} else {
 				echo "Jadwal Pembuatan Invoice Belum dibuka, Hubungi admin Fakultas masing-masing";
