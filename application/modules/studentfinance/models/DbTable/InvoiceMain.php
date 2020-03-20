@@ -1425,7 +1425,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 						$sql = $db->select()
 						  ->from(array('sss' => 'tbl_studentsemesterstatus'), array('Level'))
 							->join(array('b'=>'tbl_semestermaster'),'b.IdSemesterMaster=sss.IdSemesterMain')
-						  ->where('sss.IdStudentRegistration  = ?', $s)
+						  ->where('sss.IdStudentRegistration  = ?', $idRegistration)
 						  ->where('b.IdSemesterMaster=?',$idsemester);
 						   
 						  $result = $db->fetchRow($sql);
