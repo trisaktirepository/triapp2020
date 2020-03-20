@@ -1425,7 +1425,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 						$sql = $db->select()
 						  ->from(array('sss' => 'tbl_studentsemesterstatus'), array('Level'))
 							->join(array('b'=>'tbl_semestermaster'),'b.IdSemesterMaster=sss.IdSemesterMain')
-						  ->where('sss.IdStudentRegistration  = ?', $idRegistration)
+						  ->where('sss.IdStudentRegistration  = ?', $s)
 						  ->where('b.IdSemesterMaster=?',$idsemester);
 						   
 						  $result = $db->fetchRow($sql);
@@ -1448,7 +1448,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 							  //echo $sql;
 						  } 
 							else if( $result['Level'] ){
-								$current_level = $result['Level'];
+								$student_sem = $result['Level'];
 							}else{
 								//check if senior student then hardcode level
 								$intake_year = substr($intake['IntakeId'], 0,4);
@@ -1462,23 +1462,23 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 										if($intake_year == $cur_sem_year){
 						
 											if($semester['SemesterCountType']==1){
-												$current_level += 1;
+												$student_sem += 1;
 											}else{
-												$current_level += 2;
+												$student_sem += 2;
 											}
 						
 										}else{
-											$current_level+= 2;
+											$student_sem+= 2;
 										}
 						
 										$intake_year++;
 									}
 						
 									//remove 1 because we will add 1 in view
-									$current_level -= 1;
+									$student_sem -= 1;
 						
 								}else{
-									$current_level = 0;
+									$student_sem = 0;
 						
 									//unset($student_list[$i]);
 								}
