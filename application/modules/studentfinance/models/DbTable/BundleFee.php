@@ -72,12 +72,28 @@ class Studentfinance_Model_DbTable_BundleFee extends Zend_Db_Table { //Model Cla
 				->where('iduniv=?',$univ)
 				->where('idcollege=?',$college)
 				->where('idprogram=?',$program)
-				->where('idbranch is null or idbranch=0')
+				->where('idbranch=?',$branch)
 				->where('majoring is null or majoring=0')
 				//->where('b.SemesterMainStartDate <=?',$datestart)
 				->order('b.SemesterMainStartDate DESC');
 				$row=$this->lobjDbAdpt->fetchRow($select);
 				if (!$row) {
+					 
+						$select=$this->lobjDbAdpt->select()
+						->from(array('a'=>$this->_name))
+						->join(array('b'=>'tbl_semestermaster'),'a.idsemestermain=b.idsemestermaster')
+						->where('idactivity=?',$idactivity)
+						->where('b.SemesterCountType=?',$semesterCountTtype)
+						->where('b.SemesterFunctionType=?',$semesterFunctionType)
+						->where('iduniv=?',$univ)
+						->where('idcollege=?',$college)
+						->where('idprogram=?',$program)
+						->where('idbranch is null or idbranch=0')
+						->where('majoring is null or majoring=0')
+						//->where('b.SemesterMainStartDate <=?',$datestart)
+						->order('b.SemesterMainStartDate DESC');
+						$row=$this->lobjDbAdpt->fetchRow($select);
+					if (!$row) {
 					$select=$this->lobjDbAdpt->select()
 					->from(array('a'=>$this->_name))
 					->join(array('b'=>'tbl_semestermaster'),'a.idsemestermain=b.idsemestermaster')
@@ -109,6 +125,7 @@ class Studentfinance_Model_DbTable_BundleFee extends Zend_Db_Table { //Model Cla
 						->order('b.SemesterMainStartDate DESC');
 						$row=$this->lobjDbAdpt->fetchRow($select);
 						 
+					}
 					}
 				}
 			}
