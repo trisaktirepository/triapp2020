@@ -1396,7 +1396,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 			}
 	
 		}
-		//echo var_dump($fee_item);exit;
+		echo var_dump($fee_item);exit;
 		if ($allmode=="1") {
 			//get uncalculate payment
 			$recordfee=$dbInvoiceDeatil->getInvoiceDetailByActivity($idsemester, $idRegistration,$idactivity );
@@ -1489,7 +1489,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		/* if ($feeitem==5) {echo $student_sem;
 			
 		} */
-		echo var_dump($fee_item);exit;
+		 
 		foreach ($fee_item as $fs){
 	
 			//1st sem
