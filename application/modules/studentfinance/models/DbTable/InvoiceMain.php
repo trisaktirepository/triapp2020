@@ -1581,10 +1581,10 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 					$arr_registered_subject[$registered_subject[$i]['IdSubject']] = $registered_subject[$i];
 				}
 	
-				//echo var_dump($arr_registered_subject);
-				// echo "<br>";echo "-----";
-				// echo var_dump($item['subject']);
-				// exit;
+				echo var_dump($arr_registered_subject);
+			 	echo "<br>";echo "-----";
+				echo var_dump($item['subject']);
+				exit;
 				if(isset($item['subject'])){
 					//$itemamount=0;
 					foreach ($item['subject'] as $subject){
