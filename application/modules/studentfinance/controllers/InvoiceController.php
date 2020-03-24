@@ -275,7 +275,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 							  else $result['Level']=$result['Level'];
 							  //echo $sql;
 						  } 
-							else if( $result['Level'] ){
+							if( $result['Level'] ){
 								$current_level = $result['Level'];
 							}else{
 								//check if senior student then hardcode level
