@@ -1447,7 +1447,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 							  else $result['Level']=$result['Level'];
 							  //echo $sql;
 						  } 
-							else if( $result['Level'] ){
+							if( $result['Level'] ){
 								$student_sem = $result['Level'];
 							}else{
 								//check if senior student then hardcode level
