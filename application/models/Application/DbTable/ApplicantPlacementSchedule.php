@@ -78,7 +78,7 @@ public function getAvailableDate($appl_id=0, $txn_id=0,$aphtype=0,$placementcode
 		
 		    $select = $db ->select()
 						->from(array('aps'=>$this->_name))
-						->join(array('per'=>'tbl_academic_period'),'aps.aps_test_date=per.ap_usm_date')
+						//->join(array('per'=>'tbl_academic_period'),'aps.aps_test_date=per.ap_usm_date')
 						->join(array('aph'=>'appl_placement_head'),'aps.aps_placement_code=aph.aph_placement_code',array('aph_fees_program','aph_fees_location'))
 						->where("aph.aph_testtype = '".$aphtype."'")
 						//->where("ap_va_expired >=NOW()")
