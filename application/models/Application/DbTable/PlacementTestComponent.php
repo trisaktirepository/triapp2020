@@ -38,7 +38,7 @@ class App_Model_Application_DbTable_PlacementTestComponent extends Zend_Db_Table
 			$db = Zend_Db_Table::getDefaultAdapter();
 			$select = $db->select()
 			->from(array('ac'=>$this->_name)) 
-			->where('ac.app_comp_code = '.$id);
+			->where('ac.ac_test_type = '.$id);
 				
 			$row = $db->fetchAll($select);
 		 
