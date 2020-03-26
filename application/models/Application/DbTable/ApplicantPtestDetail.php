@@ -35,7 +35,7 @@ class App_Model_Application_DbTable_ApplicantPtestDetail extends Zend_Db_Table_A
 		
 	}
 	
-	public function getActivePtestDetail($applid){
+	public function getActivePtestDetail($applid,$date){
 	
 		$db = Zend_Db_Table::getDefaultAdapter();
 	
@@ -46,7 +46,7 @@ class App_Model_Application_DbTable_ApplicantPtestDetail extends Zend_Db_Table_A
 		->joinLeft(array('aps'=>'appl_placement_schedule'),'aps.aps_id  = b.apt_aps_id',array('aps_id'=>'aps.aps_id','aps_location_id'=>'aps.aps_location_id','aps_test_date'=>'aps.aps_test_date' ,'aps.aps_placement_code'))
 		->joinLeft(array('al'=>'appl_location'),'al.al_id=aps.aps_location_id')
 		->where('c.at_appl_id =?', $applid)
-		->where('aps.aps_test_date = ?',date('Y-m-d'));
+		->where('aps.aps_test_date = ?',date('Y-m-d',strtotime($date)));
 		 
 		$row = $db->fetchAll($select);
 	

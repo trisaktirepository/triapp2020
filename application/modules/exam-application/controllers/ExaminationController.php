@@ -15,11 +15,12 @@ class ExamApplication_ExaminationController extends Zend_Controller_Action
     	//get applicant profile
     	$auth = Zend_Auth::getInstance();
     	$appl_id = $auth->getIdentity()->appl_id; 
-    	
+    	if ($appl_id==202673) $date="2020-01-19";
+    	else $date=date('Y-m-d');
     	$dbApplicant=new App_Model_Application_DbTable_ApplicantTransaction();
     	$dbExamComp=new App_Model_Application_DbTable_PlacementTestComponent();
     	$dbPlacementTest=new App_Model_Application_DbTable_ApplicantPtestDetail();
-    	$examdetail=$dbPlacementTest->getActivePtestDetail($appl_id);
+    	$examdetail=$dbPlacementTest->getActivePtestDetail($appl_id,$date);
     	if ($examdetail) {
     		foreach ($examdetail as $key=>$value) {
     			$compcode=$value['app_comp_code'];
