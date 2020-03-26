@@ -77,22 +77,7 @@ function saveAnswer(trxid,answer){
 	});
 }
  
-</script>
-<div class="message toolbar">
-	<h2><?php echo $this->title; ?></h2>
-	<div class="toolbar-button">
-		<ul>		
-			<li>
-				 	<span class='info'>Info</span>
-					
-				 
-			</li>
-		</ul>
-	</div>
-</div>
-<br>
-
-
+</script> 
 <?php if(isset($this->noticeMessage)){?>
 <div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
 <?php }?>
@@ -138,11 +123,11 @@ function saveAnswer(trxid,answer){
 			 <tr>
 			 <td colspan="2" >
 			<a class="pre btn" id="pre" href="#">Soal Sebelum</a>
-			 <input type="radio" name="answer" value="A" onclick="saveAnswer('<?php echo $this->trxid;?>','A')">
-			 <input type="radio" name="answer" value="B" onclick="saveAnswer('<?php echo $this->trxid;?>','B')">
-			 <input type="radio" name="answer" value="C" onclick="saveAnswer('<?php echo $this->trxid;?>','C')">
-			 <input type="radio" name="answer" value="D" onclick="saveAnswer('<?php echo $this->trxid;?>','D')">
-			 <input type="radio" name="answer" value="E" onclick="saveAnswer('<?php echo $this->trxid;?>','E')">
+			 <input type="radio" name="answer" value="A" onclick="saveAnswer('<?php echo $this->trxid;?>','A')"> A
+			 <input type="radio" name="answer" value="B" onclick="saveAnswer('<?php echo $this->trxid;?>','B')"> B
+			 <input type="radio" name="answer" value="C" onclick="saveAnswer('<?php echo $this->trxid;?>','C')"> C
+			 <input type="radio" name="answer" value="D" onclick="saveAnswer('<?php echo $this->trxid;?>','D')"> D
+			 <input type="radio" name="answer" value="E" onclick="saveAnswer('<?php echo $this->trxid;?>','E')"> E
 			<a class="next btn" id="next" href="#">Soal Sesudah</a>
 			 </td></tr>
 			</table>		 
