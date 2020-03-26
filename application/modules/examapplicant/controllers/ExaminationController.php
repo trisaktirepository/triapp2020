@@ -65,34 +65,36 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
         // action body
         
     	$this->_helper->layout->setLayout('exam');
-    	$this->view->title="Start Examination";
-    	
-   		if ($this->getRequest()->isPost()) {
-			
-			echo $formData = $this->getRequest()->getPost();
-			echo $date = $formData['start_date'];
-			$this->view->datepicker = $date;
-    	}else{
-    		echo $date = date('Y-m-d');
-    	}
-    	
-    	
+    	$trxid=$this->_getParam('idtrx',0);
+    	$this->view->title="Examination :";
+    	 
     	$auth = Zend_Auth::getInstance();
-		$idUpd = $auth->getIdentity()->id;
-    	
-    	$scheduleDB = new App_Model_Schedule_DbTable_Schedule();
-    	$checkSchedule = $scheduleDB->getScheduleByExamCenter($date,$idUpd);
-    	if($checkSchedule){
-    		$this->view->noticeSuccess = "Takaful Basic Examination on $date";
-    		echo "<pre>";
-    		print_r($checkSchedule);
-    		echo "</pre>";
-    		$this->view->schedule = $checkSchedule;
-    		
-    	}else{
-    		$this->view->noticeError = "NO Takaful Basic Examination on $date";
+		$appl_id = $auth->getIdentity()->appl_id;
+		if ($appl_id==202673) {
+			$date="2020-01-19";
+			$time="09:00:00";
+		}
+		else {
+			$date=date('Y-m-d');
+			$time=date('h:s:i');
+		}
+    	//generate personal exam
+    	$dbPtest=new App_Model_Application_DbTable_ApplicantPtest();
+    	$ptest=$dbPtest->getPtest($trxid);
+    	if ($ptest) {
+    		$dbPestDetail=new App_Model_Application_DbTable_ApplicantPtestDetail();
+    		$currenttest=$dbPestDetail->getActiveTest($trxid, $date, $time);
+    		if ($currenttest) {
+    			$appcomp=$currenttest['app_comp_code'];
+    			$dbPlacementComp=new App_Model_Application_DbTable_PlacementTestProgramComponent();
+    			$comps=$dbPlacementComp->getComponenByTransaction($trxid, "0");
+    			foreach ($comps as $comp) {
+    				$this->view->title=$this->view->title.', '.$comp['ac_comp_name_bahasa'];
+			
+    			}
+    			$this->view->starttest="1";
+    		} else $this->view->starttest="0";
     	}
-    	
     	
 		
     }

@@ -1,0 +1,151 @@
+<style>
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/2.4.5/fabric.js"></script>
+<script type="text/javascript">
+
+
+$(function() {
+	 
+	$(".next").click(function(){
+	var order=$("#order").val();
+
+		 	$.ajax({
+					url: '<?php echo $this->baseUrl();?>/examapplicant/examination/ajax-get-question,
+					type: 'POST',
+					data: {idQuestion: idQuestion,order:order+1},
+					dataType: 'json',
+					error: function(){
+							alert("Terjadi masalah saat menghapus data !");
+						}, 
+					}).done(function ( data ) {
+		 					$("#QuestionTxt").val(data.question);
+		 					$("#seqno").val(data.seqno);
+		 					$("#answer_mc").val(data.answer_mc);
+		 					$("#idQuestion").val(data.idQuestion);
+		 					$("#parent").val(data.parent); 
+		 					var urllink=data.question_url;
+		 					//var canvas = document.getElementById('Question');
+		 					const canvas = new fabric.Canvas("Question")
+		 					const imgEl = document.createElement("img");
+		 					imgEl.src = urllink;
+		 					imgEl.onload = () => {
+		 					  const img = new fabric.Image(imgEl)
+		 					  img.set({
+		 					    left: 50,
+		 					    top: 50,
+		 					    scaleX: 1,
+		 					    scaleY: 1
+		 					  });
+		 					  canvas.add(img);
+		 					  canvas.requestRenderAll();
+		 					  
+		 					  canvas.setWidth(img.getScaledWidth());
+		 					  canvas.setHeight(img.getScaledHeight());
+		 					  img.set({
+		 					      left: 0,
+		 					      top: 0
+		 					   });
+		 					  img.setCoords();
+		 					  canvas.requestRenderAll();
+		 					   
+		 					}
+
+		 					
+		 				     
+		 					
+		 			});
+		 
+		});
+
+ 
+});
+
+function saveAnswer(trxid,answer){
+	 
+	var idQuestion=$("#idQuestion").val();
+	 
+	$.ajax({
+		  type: "POST",
+		  url: "/examapplicant/examination/save-answer",
+		  data: {'idQuestion':idQuestion,'trxid':trxid,'answer':answer}
+		})
+		.done(function(respond){
+			 $("#id")
+			})
+		.fail(function(respond){console.log("fail");})
+		.always(function(respond){console.log("always");
+	});
+}
+ 
+</script>
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>		
+			<li>
+				 	<span class='info'>Info</span>
+					
+				 
+			</li>
+		</ul>
+	</div>
+</div>
+<br>
+
+
+<?php if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+<?php }?>
+
+<div>
+	<fieldset>
+		<legend><?php echo $this->translate("Answer Result");?></legend>
+			<table class="table">
+			<tr><?php for ($i=1;$i<=40;$i++) {?><td bgcolor="darkgrey" align="center"><font color="white"><?php echo $i;?></font></td><?php }?></tr>
+			<tr><?php for ($i=1;$i<=40;$i++) {?><td><div id="<?php echo $i;?>"></div></div></td><?php }?></tr>
+			<tr><?php for ($i=1;$i<=40;$i++) {?><td bgcolor="darkgrey" align="center"><font color="white"><?php echo $i;?></font></td><?php }?></tr>
+			<tr><?php for ($i=1;$i<=40;$i++) {?><td><div id="<?php echo $i;?>"></div></div></td><?php }?></tr>
+			<tr><?php for ($i=1;$i<=40;$i++) {?><td bgcolor="darkgrey" align="center"><font color="white"><?php echo $i;?></font></td><?php }?></tr>
+			<tr><?php for ($i=1;$i<=40;$i++) {?><td><div id="<?php echo $i;?>"></div></div></td><?php }?></tr>
+			
+			</table>		 
+	</fieldset>
+</div> 
+<div>
+	<fieldset>
+		<legend><?php echo $this->translate("Exam Quetion");?></legend>
+			<input type="hidden" id="idQuestion" value="">
+			<table class="table">
+			 
+			 <tr>
+			
+			 <td colspan="2">
+			 	<canvas style="border:1px solid grey;" id="parent" width="800" height="0"></canvas>
+			 </td>
+			 </tr>
+			 <tr>
+			 <td><div id="order"></div></td>
+			 <td>
+			 	<canvas style="border:1px solid grey;" id="Question" width="800" height="300"></canvas>
+			 </td>
+			 </tr>
+			 <tr>
+			 <td colspan="2" >
+			<a class="pre btn" id="pre" href="#">Soal Sebelum</a>
+			 <input type="radio" name="answer" value="A" onclick="saveAnswer('<?php echo $this->trxid;?>','A')">
+			 <input type="radio" name="answer" value="B" onclick="saveAnswer('<?php echo $this->trxid;?>','B')">
+			 <input type="radio" name="answer" value="C" onclick="saveAnswer('<?php echo $this->trxid;?>','C')">
+			 <input type="radio" name="answer" value="D" onclick="saveAnswer('<?php echo $this->trxid;?>','D')">
+			 <input type="radio" name="answer" value="E" onclick="saveAnswer('<?php echo $this->trxid;?>','E')">
+			<a class="next btn" id="next" href="#">Soal Sesudah</a>
+			 </td></tr>
+			</table>		 
+	</fieldset>
+</div>
+ 

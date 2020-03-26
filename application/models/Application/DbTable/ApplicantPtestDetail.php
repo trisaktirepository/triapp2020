@@ -58,6 +58,30 @@ class App_Model_Application_DbTable_ApplicantPtestDetail extends Zend_Db_Table_A
 	
 	}
 	
+	public function getActiveTest($transid,$date,$time){
+	
+		$db = Zend_Db_Table::getDefaultAdapter();
+	
+		$select = $db ->select()
+		->from(array('a'=>$this->_name))
+		->join(array('ac'=>'appl_test_type'),'ac.act_id=a.app_comp_code',array('act_name'))
+		->join(array('b'=>'applicant_ptest'),'a.apt_id=b.apt_id')
+		->join(array('aps'=>'appl_placement_schedule'),'aps.aps_id  = b.apt_aps_id',array('aps_id'=>'aps.aps_id','aps_location_id'=>'aps.aps_location_id','aps_test_date'=>'aps.aps_test_date' ,'aps.aps_placement_code'))
+		->where('b.apt_at_appl_id =?', $transid)
+		->where('aps.aps_test_date = ?',date('Y-m-d',strtotime($date)))
+		->where('a.start_time >= ?',date('H:s:i',strtotime($time)))
+		->where('a.stop_time <= ?',date('H:s:i',strtotime($time)));
+			
+		$row = $db->fetchRow($select);
+	
+		if($row){
+			return $row;
+		}else{
+			return null;
+		}
+	
+	}
+	
 	public function addData($data){		
 	   $id = $this->insert($data);
 	   return $id;

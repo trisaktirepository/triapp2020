@@ -1,7 +1,9 @@
 <style>
 </style>
  <script type="text/javascript">
- 
+  function startExam(idtrx) {
+	  window.open('/examapplicant/examination/start-exam/idtrx/'+idtrx);
+  }
 </script>
 <div class="message toolbar">
 	<h2><?php echo $this->title; ?></h2>
@@ -34,7 +36,7 @@
 			<?php if ($this->test=="1") {?>
 			<table class="table">
 			<tr><td colspan="2" bgcolor="lightgreen" align="center">
-				 <input type="button" value="<?php echo $this->translate('Start Exam');?>" onclick="startExam('<?php echo $this->transaction["at_trans_id"];?>')">
+				 <input class="btn" type="button" value="<?php echo $this->translate('Start Exam');?>" onclick="startExam('<?php echo $this->transaction["at_trans_id"];?>')">
 				</td></tr>
 			 <tr><td><?php 
 					if($this->photo!=null){
@@ -64,11 +66,11 @@
 			 	<tr>
 			 	<tr>
 			 		<th><?php echo $this->translate('Program Study')?></th>
-			 		<td><?php $i=1;
-			 			foreach ($this->program as $prog) {
-			 				echo $prog['program_code'.$i].' '.$prog['program_name'.$i].'<br>';
-							$i++;
-						}?></td>
+			 		<td><?php  
+			 			 
+			 				echo 'Pilihan I 	:'.$this->program['program_code1'].' '.$this->program['program_name1'].'<br>';
+			 				echo 'Pilihan II	:'.$this->program['program_code2'].' '.$this->program['program_name2'].'<br>';
+						?></td>
 			 	<tr>
 			 </table></td>
 			 </tr>

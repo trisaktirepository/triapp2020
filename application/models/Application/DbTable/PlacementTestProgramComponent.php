@@ -71,6 +71,33 @@ class App_Model_Application_DbTable_PlacementTestProgramComponent extends Zend_D
 	
 	}
 	
+	
+	public function getComponenByTransaction($trxid,$testtype){
+	
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$programset=$db->select()
+		->from('applicant_program',array('ap_prog_code'))
+		->where('ap_at_trans_id=?',$trxid);
+		
+		$select = $db->select()
+		->distinct()
+		->from(array('apps'=>$this->_name),array())
+		->join(array('p'=>'tbl_program'),'p.IdProgram=apps.apps_program_id')
+		->join(array('c'=>'appl_component'),'c.ac_comp_code = apps.apps_comp_code', array('ac_id','ac_comp_code','ac_comp_name_bahasa')) 
+		->where('p.ProgramCode in ( '. $programset.')')
+		->where('apps.aph_type=?',$testtype)
+		->order('c.ac_test_type ASC');
+	
+		$row = $db->fetchAll($select);
+	
+		if($row){
+			return $row;
+		}else{
+			return null;
+		}
+	
+	}
+	
 	public function getPaginateProgram(){
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$selectData = $db->select()
