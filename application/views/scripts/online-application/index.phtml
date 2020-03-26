@@ -159,7 +159,7 @@ function showSlides() {
 	<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
 	<?php }?>
 	<br>
-	<table><tr><td width="50%">
+	<table><tr><td width="50%" valign="top">
 	<h2>
 	<?php echo "Login bagi yang sudah mempunyai Akun"?></h2>
 	<br>
@@ -174,12 +174,11 @@ function showSlides() {
 	 	JADWAL USM <?php echo  $placement['aph_placement_name']?><br>
 	 	Awal Semester : <?php echo  $placement['IntakeDefaultLanguage'].' Kuliah Mulai :'.date('d-m-Y',strtotime($placement['class_start']))?><br>
 	 	<table class="table">
-	 		<tr><th>Periode</th><th>Tanggal USM</th><th>Batas Pembayaran</th><th>Batas Pembuatan Kartu USM</th></tr>
+	 		<tr><th>Periode</th><th>Tanggal USM</th><th>Jam Mulai</th></tr>
 	 		<?php foreach ($periodes as $period) {?>
-	 			<tr><td><?php echo $period['ap_desc']?></td>
-	 			<td><?php echo date('d-m-Y',strtotime($period['ap_usm_date']))?></td>
-	 			<td><?php echo date('d-m-Y H:s:i',strtotime($period['ap_va_expired']))?></td>
-	 			<td><?php echo date('d-m-Y H:s:i',strtotime($period['ap_card_datelimit']))?></td></tr>
+	 			<tr><td><?php echo date('M',strtotime($period['aps_test_date']))?></td>
+	 			<td><?php echo date('d-m-Y',strtotime($period['aps_test_date']))?></td>
+	 			<td><?php echo date('H:s:i',strtotime($period['aps_start_time']))?></td></tr>
 	 		<?php }?>
 	 	</table>
 	 	<br><br>
