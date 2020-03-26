@@ -1,5 +1,4 @@
-<?php
-
+<?php 
 class Examapplication_ExaminationController extends Zend_Controller_Action
 {
 
