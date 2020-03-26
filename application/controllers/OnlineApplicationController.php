@@ -260,7 +260,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	$dbPeriod=new App_Model_Application_DbTable_PlacementTestSchedule();
     	$placementtest=$pstest->getPlacementTest();
     	foreach ($placementtest as $key=>$value) {
-    		$period=$dbPeriod->getPlacementTestData($value['aph_placement_code']);
+    		$period=$dbPeriod->getActivePlacementTestData($value['aph_placement_code']);
     		$placementtest[$key]['periode']=$period;
     	}
     	
