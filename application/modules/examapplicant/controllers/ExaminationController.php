@@ -64,7 +64,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     {
         // action body
         
-    	$this->_helper->layout->setLayout('exam');
+    	 
     	$trxid=$this->_getParam('idtrx',0);
     	$this->view->title="Examination :";
     	 
