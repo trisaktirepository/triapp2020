@@ -2869,7 +2869,6 @@ class OnlineApplicationController extends Zend_Controller_Action {
 				$select = $db->select()
 				->from(array('app'=>'appl_placement_program'))
 				->join(array('p'=>'tbl_program'),'p.ProgramCode = app.app_program_code', array('ArabicName','ProgramName','ProgramCode','IdProgram','strata') )
-				->joinLeft(array('apr'=>'appl_program_req'),"apr.apr_program_code = app.app_program_code and apr.apr_decipline_code = '".$discipline_code."'")
 				->join(array('ip'=>'appl_placement_intake_program'),'p.IdProgram=ip.IdProgram',array())
 				->where('app.app_placement_code  = ?', $placementTestCode['apt_ptest_code'])
 				->where('ip.IdIntake=?',$intake)
