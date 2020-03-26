@@ -110,29 +110,37 @@ function saveAnswer(trxid,answer){
 			 
 			 <tr>
 			
-			 <td colspan="3">
+			 <td colspan="2">
 			 	<canvas style="border:1px solid grey;" id="parent" width="800" height="0"></canvas>
 			 </td>
 			 </tr>
 			 <tr>
 			 <td><div id="order"></div></td>
-			 <td colspan="2">
+			 <td>
 			 	<canvas style="border:1px solid grey;" id="Question" width="800" height="300"></canvas>
 			 </td>
 			 </tr>
-			 <tr bgcolor="lighblue">
-			 <td   align="center">
-			 <a class="pre btn" id="pre" href="#">Soal Sebelum</a>
-			 </td>
-			 <td align="center">
-			 <input type="radio" name="answer" value="A" onclick="saveAnswer('<?php echo $this->trxid;?>','A')"> A
-			 <input type="radio" name="answer" value="B" onclick="saveAnswer('<?php echo $this->trxid;?>','B')"> B
-			 <input type="radio" name="answer" value="C" onclick="saveAnswer('<?php echo $this->trxid;?>','C')"> C
-			 <input type="radio" name="answer" value="D" onclick="saveAnswer('<?php echo $this->trxid;?>','D')"> D
-			 <input type="radio" name="answer" value="E" onclick="saveAnswer('<?php echo $this->trxid;?>','E')"> E
+			 <tr>
+				<td colspan="2">
+				<table>
+					<tr>
+					<td   align="center">
+						 <a class="pre btn" id="pre" href="#">Soal Sebelum</a>
+						 </td>
+						 <td align="center">
+						 <input type="radio" name="answer" value="A" onclick="saveAnswer('<?php echo $this->trxid;?>','A')"> A
+						 <input type="radio" name="answer" value="B" onclick="saveAnswer('<?php echo $this->trxid;?>','B')"> B
+						 <input type="radio" name="answer" value="C" onclick="saveAnswer('<?php echo $this->trxid;?>','C')"> C
+						 <input type="radio" name="answer" value="D" onclick="saveAnswer('<?php echo $this->trxid;?>','D')"> D
+						 <input type="radio" name="answer" value="E" onclick="saveAnswer('<?php echo $this->trxid;?>','E')"> E
+					</td>
+					<td align="center">	<a class="next btn" id="next" href="#">Soal Sesudah</a>
+			 		</td>
+			 	</tr>
+				</table>
 				</td>
-				<td align="center">	<a class="next btn" id="next" href="#">Soal Sesudah</a>
-			 </td></tr>
+			 </tr>
+			 
 			</table>		 
 	</fieldset>
 </div>
