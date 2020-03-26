@@ -1,0 +1,176 @@
+<style>
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/2.4.5/fabric.js"></script>
+<script type="text/javascript">
+
+
+$(function() {
+	 
+	//Delete Function
+	$(".delete").click(function(){
+		let id = $(this).attr("id");
+		console.log(id);
+
+		if (window.confirm("Apakah anda ingin menghapus data dengan id : "+id+" ?"))
+			{
+				$.ajax({
+					url: '<?php echo $this->baseUrl();?>/exammaterial/question-management/delete/id/'+id,
+					type: 'POST',
+					data: {id: id},
+					error: function(){
+							alert("Terjadi masalah saat menghapus data !");
+						},
+					success: function(){
+							//$("#"+columnData).remove();
+							$('#columnData'+id).empty();
+							alert("Data berhasil dihapus !")
+						}
+					});
+			}
+	});
+
+	//edit
+	$(".edit").click(function(){
+		let id = $(this).attr("id");
+		console.log(id);
+
+		 	$.ajax({
+					url: '<?php echo $this->baseUrl();?>/exammaterial/question-management/ajax-get-question/id/'+id,
+					type: 'POST',
+					data: {id: id},
+					dataType: 'json',
+					error: function(){
+							alert("Terjadi masalah saat menghapus data !");
+						}, 
+					}).done(function ( data ) {
+		 					$("#QuestionTxt").val(data.question);
+		 					$("#seqno").val(data.seqno);
+		 					$("#answer_mc").val(data.answer_mc);
+		 					$("#answer").val(data.answer);
+		 					$("#level").val(data.level);
+		 					$("#subject").val(data.subject);
+		 					$("#idQuestion").val(data.idQuestion);
+		 					$("#from_setcode").val(data.from_setcode);
+		 					$("#parent").val(data.parent);
+		 					$("#question_parent").val(data.question_parent);
+		 					var urllink=data.question_url;
+		 					//var canvas = document.getElementById('Question');
+		 					const canvas = new fabric.Canvas("Question")
+		 					const imgEl = document.createElement("img");
+		 					imgEl.src = urllink;
+		 					imgEl.onload = () => {
+		 					  const img = new fabric.Image(imgEl)
+		 					  img.set({
+		 					    left: 50,
+		 					    top: 50,
+		 					    scaleX: 1,
+		 					    scaleY: 1
+		 					  });
+		 					  canvas.add(img);
+		 					  canvas.requestRenderAll();
+		 					  
+		 					  canvas.setWidth(img.getScaledWidth());
+		 					  canvas.setHeight(img.getScaledHeight());
+		 					  img.set({
+		 					      left: 0,
+		 					      top: 0
+		 					   });
+		 					  img.setCoords();
+		 					  canvas.requestRenderAll();
+		 					   
+		 					}
+
+		 					
+		 				     
+		 					
+		 			});
+		 
+		});
+
+ 
+});
+
+function saveQuestion(){
+	var canvas=document.getElementById("Question");
+	var dataUrl=canvas.toDataURL();
+	var answermc=$("#answer_mc").val();
+	var parent=$("#question_parent").val();
+	var level=$("#level").val();
+	var subject=$("#subject").val();
+	var question=$("#QuestionTxt").val();
+	var seqno=$("#seqno").val();
+	var setcode=$("#from_setcode").val();
+	var idquestion=$("#idQuestion").val();
+	var parent=$("#parent").val();
+	$.ajax({
+		  type: "POST",
+		  url: "/exammaterial/question-management/save-question",
+		  data: {'image': dataUrl,'answer_mc':answermc,'level':level,'question_parent':parent,'subject':subject,'QuestionTxt':question,'seqno':seqno,'from_setcode':setcode,'idQuestion':idquestion,'parent':parent}
+		})
+		.done(function(respond){
+			console.log("done: "+respond);
+			$("#search_form").submit();
+			})
+		.fail(function(respond){console.log("fail");})
+		.always(function(respond){console.log("always");
+	});
+}
+ 
+</script>
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>		
+			<li>
+				 	<span class='info'>Info</span>
+					
+				 
+			</li>
+		</ul>
+	</div>
+</div>
+<br>
+
+
+<?php if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+<?php }?>
+
+<div>
+	<fieldset>
+		<legend><?php echo $this->translate("Answer Result");?></legend>
+			<table class="table">
+			<tr><?php for ($i=1;$i<=40;$i++) {?><td bgcolor="darkgrey" align="center"><font color="white"><?php echo $i;?></font></td><?php }?></tr>
+			<tr><?php for ($i=1;$i<=40;$i++) {?><td><div id="<?php echo $i;?>"></div></div></td><?php }?></tr>
+			<tr><?php for ($i=1;$i<=40;$i++) {?><td bgcolor="darkgrey" align="center"><font color="white"><?php echo $i;?></font></td><?php }?></tr>
+			<tr><?php for ($i=1;$i<=40;$i++) {?><td><div id="<?php echo $i;?>"></div></div></td><?php }?></tr>
+			<tr><?php for ($i=1;$i<=40;$i++) {?><td bgcolor="darkgrey" align="center"><font color="white"><?php echo $i;?></font></td><?php }?></tr>
+			<tr><?php for ($i=1;$i<=40;$i++) {?><td><div id="<?php echo $i;?>"></div></div></td><?php }?></tr>
+			
+			</table>		 
+	</fieldset>
+</div> 
+<div>
+	<fieldset>
+		<legend><?php echo $this->translate("Exam Quetion");?></legend>
+			<table class="table">
+			 <tr>
+			 <td>
+			 	<canvas style="border:1px solid grey;" id="parent" width="800" height="300"></canvas>
+			 </td>
+			 </tr>
+			   <tr>
+			 <td>
+			 	<canvas style="border:1px solid grey;" id="Question" width="800" height="300"></canvas>
+			 </td>
+			 </tr>
+			</table>		 
+	</fieldset>
+</div>
+ 

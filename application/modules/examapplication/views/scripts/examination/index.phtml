@@ -1,0 +1,88 @@
+<style>
+</style>
+ <script type="text/javascript">
+ 
+</script>
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>		
+			<li>
+				 	<span class='info'>Info</span>
+					
+				 
+			</li>
+		</ul>
+	</div>
+</div>
+<br>
+
+
+<?php if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+<?php }?>
+
+<div>
+	<fieldset>
+		<legend><?php echo $this->translate("Detail Information About Your Exam");?></legend>
+			<?php if ($this->test=="1") {?>
+			<table class="table">
+			<tr><td colspan="2" bgcolor="lightgreen" align="center">
+				 <input type="button" value="<?php echo $this->translate('Start Exam');?>" onclick="startExam('<?php echo $this->transaction["at_trans_id"];?>')">
+				</td></tr>
+			 <tr><td><?php 
+					if($this->photo!=null){
+						$imageHelper = new icampus_Function_General_Image();
+						$path = $imageHelper->getImagePath($this->photo['pathupload'],250,250);			
+						 
+					?>
+						<img class="photo" src="<?php echo $path; ?>"/>
+					<?php }else{?>
+						<img class="photo" src="/images/no-photo.jpg" width="194" height="250" />
+					<?php }?>
+				</td>
+			 <td>
+			 <table class="table">
+			 	<tr>
+			 		<th><?php echo $this->translate('Name')?></th>
+			 		<td><?php echo $this->transaction['appl_fname'].' '.$this->transaction['appl_mname'].' '.$this->transaction['appl_lname']?></td>
+			 	<tr>
+			 	<tr>
+			 		<th><?php echo $this->translate('No. Formulir')?></th>
+			 		<td><?php echo $this->transaction['at_pes_id']?></td>
+			 	<tr>
+			 	<tr>
+			 		<th><?php echo $this->translate('Address')?></th>
+			 		<td><?php echo $this->transaction['appl_address1']?></td>
+			 	<tr>
+			 	<tr>
+			 		<th><?php echo $this->translate('Program Study')?></th>
+			 		<td><?php foreach ($this->program as $prog) echo $prog['programcode'].' '.$prog['programname'].'<br>'?></td>
+			 	<tr>
+			 </table></td>
+			 </tr>
+			 <tr>
+			 	<td colspan="2">
+			 	<table>
+			 		 
+			 		<?php foreach ($this->examdetail as $exam) {
+			 				$comps=$exam['compcode'];?>
+			 			<tr><th><?php echo $exam['ptestname']?></th>
+			 				<th><?php echo $exam['aps_test_date']?></th>
+			 				<th><?php echo $exam['time_start'].'-'.$exam['time_stop']?></th>
+			 			</tr>
+			 			<tr><td colspan="3"><?php foreach ($comps as $comp ) echo $comp['ac_comp_name_bahasa'].' '?></td></tr>
+			 		<?php }?>
+			 	</table>
+			 	</td>
+			 </tr>
+			</table>
+			<?php } else  echo "Pada hari ini tidak ada Ujian Saringan Masuk";?>		 
+	</fieldset>
+</div>  
