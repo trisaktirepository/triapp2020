@@ -107,12 +107,12 @@ function saveAnswer(trxid,answer){
 	<fieldset>
 		<legend><?php echo $this->translate("Answer Result");?></legend>
 			<table class="table">
-			<tr><?php for ($i=1;$i<=40;$i++) {?><td  width="2%" bgcolor="darkgrey" align="center"><font color="white"><?php echo $i;?></font></td><?php }?></tr>
+			<tr><?php for ($i=1;$i<=40;$i++) {?><td  width="2%" bgcolor="darkgrey" align="center"><font color="white"><a href="#" onclick="getQuestion('<?php echo $i?>')"><?php echo $i;?></a></font></td><?php }?></tr>
 			<tr><?php for ($i=1;$i<=40;$i++) {?><td  width="2%"><div id="<?php echo $i;?>"></div></td><?php }?></tr>
-			<tr><?php for ($i=1;$i<=40;$i++) {?><td  width="2%"bgcolor="darkgrey" align="center"><font color="white"><?php echo $i;?></font></td><?php }?></tr>
-			<tr><?php for ($i=1;$i<=40;$i++) {?><td  width="2%"><div id="<?php echo $i;?>"></div></td><?php }?></tr>
-			<tr><?php for ($i=1;$i<=40;$i++) {?><td  width="2%"bgcolor="darkgrey" align="center"><font color="white"><?php echo $i;?></font></td><?php }?></tr>
-			<tr><?php for ($i=1;$i<=40;$i++) {?><td  width="2%"><div id="<?php echo $i;?>"></div></td><?php }?></tr>
+			<tr><?php for ($i=41;$i<=80;$i++) {?><td  width="2%"bgcolor="darkgrey" align="center"><font color="white"><a href="#" onclick="getQuestion('<?php echo $i?>')"><?php echo $i;?></a></font></td><?php }?></tr>
+			<tr><?php for ($i=41;$i<=80;$i++) {?><td  width="2%"><div id="<?php echo $i;?>"></div></td><?php }?></tr>
+			<tr><?php for ($i=81;$i<=120;$i++) {?><td  width="2%"bgcolor="darkgrey" align="center"><font color="white"><a href="#" onclick="getQuestion('<?php echo $i?>')"><?php echo $i;?></a></font></td><?php }?></tr>
+			<tr><?php for ($i=81;$i<=120;$i++) {?><td  width="2%"><div id="<?php echo $i;?>"></div></td><?php }?></tr>
 			
 			</table>		 
 	</fieldset>
