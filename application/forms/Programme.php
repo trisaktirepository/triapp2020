@@ -28,7 +28,7 @@ class App_Form_Programme extends Zend_Form {
 		
 		if( $this->admissiontype == 1 ){
 			if ($this->testcode=="8" || $this->testcode=="9") 
-				$this->initPlacementTestMagister();
+				$this->initPlacementTestMagister($this->testcode);
 			else 
 				$this->initPlacementTest();
 		}else
@@ -1043,7 +1043,7 @@ class App_Form_Programme extends Zend_Form {
 				'onClick'=>"window.location ='" . $this->getView()->url(array('module'=>'default', 'controller'=>'online-application','action'=>'biodata'),'default',true) . "'; return false;"
 		));
 	}
-	private function initPlacementTestMagister(){
+	private function initPlacementTestMagister($kkni){
 	
 	 
 		$this->setName('applicant_education');
@@ -1052,7 +1052,8 @@ class App_Form_Programme extends Zend_Form {
 	
 		$this->addElement('hidden','appl_id');
 		$this->appl_id->setValue($this->ae_appl_id);
-	
+		$this->addElement('hidden','kkni');
+		$this->kkni->setValue($kkni);
 	
 		$registry = Zend_Registry::getInstance();
 		$locale = $registry->get('Zend_Locale');
@@ -1093,23 +1094,7 @@ class App_Form_Programme extends Zend_Form {
 		$dbPt=new App_Model_Application_DbTable_Pt();
 		$dbsms=new App_Model_Application_DbTable_Sms();
 		
-		/* $this->addElement('select','type', array(
-				'label'=>"Jenjang Pendidikan",
-				//'onchange'=>'changeDiscipline(this);'
-		));
-		
-		$schoolTypeDb = new App_Model_General_DbTable_SchoolType();
-		$this->type->addMultiOption(null,$this->getView()->translate('please_select'));
-		foreach ($schoolTypeDb->getDataBelow($this->testcode) as $list){
-				
-			if ($locale=="en_US"){
-				$name =$list['st_name'];
-			}else if($locale=="id_ID"){
-				$name =$list['st_name_bahasa'];
-			}
-			$this->type->addMultiOption($list['st_id'],$name." (".$list['st_code'].")");
-		} */
-	
+		 
 		$this->addElement('select','country', array(
 				'label'=>$this->getView()->translate('Country'),
 				'onChange'=>"changeStatePdpt();"
@@ -1127,12 +1112,7 @@ class App_Form_Programme extends Zend_Form {
 				'onChange'=>"changeCityPdpt();"
 		));
 		
-		//$stateDb = new App_Model_General_DbTable_State();
-		//$this->state->addMultiOption(null,$this->getView()->translate('please_select'));
-		
-		//foreach ($dbWilayah->getState() as $list){
-		//	$this->state->addMultiOption($list['id_wil'],$list['nm_wilayah']);
-		//}
+		 
 	
 		$this->addElement('select','city', array(
 				'label'=>$this->getView()->translate('Kabupaten/Kota'),
@@ -1155,12 +1135,7 @@ class App_Form_Programme extends Zend_Form {
 				//'onchange'=>'changePeminatan(this);',
 				'required'=>true
 		));
-		//$schoolMasterDb = new App_Model_General_DbTable_SchoolMaster();
-		//$this->ae_institution->addMultiOption(null,$this->getView()->translate('please_select'));
-		/*
-			foreach ($schoolMasterDb->getData() as $list){
-		$this->ae_institution->addMultiOption($list['sm_id'],$list['sm_name']);
-		}*/
+		 
 		$this->ae_institution->setRegisterInArrayValidator(false);
 		$this->ae_pt->setRegisterInArrayValidator(false);
 		$this->city->setRegisterInArrayValidator(false);
@@ -1177,17 +1152,7 @@ class App_Form_Programme extends Zend_Form {
 				'id'=>"to"
 		));
 	
-		/* $this->addElement('select','ae_discpline', array(
-				'label'=>"Discpline",
-				//'onchange'=> 'changeProgramme(this)',
-				'required'=>true
-		)); */
-		//$schoolDiscplineDb = new App_Model_General_DbTable_SchoolDiscipline();
-		//$this->ae_discpline->addMultiOption(null,$this->getView()->translate('please_select'));
-		//foreach ($schoolDiscplineDb->getData() as $list){
-		//	$this->ae_discpline->addMultiOption($list['smd_code'],$list['smd_desc']);
-		//}
-	
+		 
 		/* START END DIV */
 		$this->addElement(
 				'hidden',

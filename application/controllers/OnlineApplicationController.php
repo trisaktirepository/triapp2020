@@ -2849,61 +2849,91 @@ class OnlineApplicationController extends Zend_Controller_Action {
 			$discipline_code = $formData['discipline_code'];
 			$intake = $formData['intake_id'];
 			$yearend = $formData['ae_year_end'];
-			if ($discipline_code !=0 && $intake !=0 && $yearend != ''){
-		        $yearend=explode(" ", $yearend);
-		       // echo var_dump($yearend);
-		        $yearend=$yearend[1];
-		        $select=$db->select()
-		        ->from('tbl_intake')
-		        ->where('idintake=?',$intake);
-		        $row=$db->fetchRow($select);
-		        $yearnow=explode("/", $row['IntakeId']);
-		        $yearnow=$yearnow[0];
-		        $yeargap=$yearnow-$yearend;
-		        //-----------------------------year gap end
-		       
-		        //program in placement test with discipline filter
-		
-		        //transaction data
-				$auth = Zend_Auth::getInstance();    	
-		    	$transaction_id = $auth->getIdentity()->transaction_id;
-		    	$transDB = new App_Model_Application_DbTable_ApplicantTransaction();
-		        $transaction_data= $transDB->getTransactionData($transaction_id);
-		    	
+			$kkni=$formData['kkni'];
+			$programasal=$formData['ae_institution']; 
+			if ($kkni=="8" || $kkni=="9") {
+				//transaction data
+				$auth = Zend_Auth::getInstance();
+				$transaction_id = $auth->getIdentity()->transaction_id;
+				$transDB = new App_Model_Application_DbTable_ApplicantTransaction();
+				$transaction_data= $transDB->getTransactionData($transaction_id);
 				
 				//get placement test data
 				$select = $db->select(array('apt_ptest_code'))
-			                 ->from(array('ap'=>'applicant_ptest'))
-			                 ->where('ap.apt_at_trans_id = ?', $transaction_id);
-			                 
-			    $stmt = $db->query($select);
-		        $placementTestCode = $stmt->fetch();
-		        
-		        
-		        
-		        
-		        //get placementest program data filtered with discipline
-			  	$select = $db->select()
-			                 ->from(array('app'=>'appl_placement_program'))
-			                 ->join(array('p'=>'tbl_program'),'p.ProgramCode = app.app_program_code', array('ArabicName','ProgramName','ProgramCode','IdProgram','strata') )
-			                 ->joinLeft(array('apr'=>'appl_program_req'),"apr.apr_program_code = app.app_program_code and apr.apr_decipline_code = '".$discipline_code."'")
-			                 ->join(array('ip'=>'appl_placement_intake_program'),'p.IdProgram=ip.IdProgram',array())
-			                 ->where('app.app_placement_code  = ?', $placementTestCode['apt_ptest_code'])
-			                 ->where('ip.IdIntake=?',$intake)
-			                 ->order('p.ArabicName ASC');
+				->from(array('ap'=>'applicant_ptest'))
+				->where('ap.apt_at_trans_id = ?', $transaction_id);
+				 
+				$stmt = $db->query($select);
+				$placementTestCode = $stmt->fetch();
+				//get placementest program data filtered with discipline
+				$select = $db->select()
+				->from(array('app'=>'appl_placement_program'))
+				->join(array('p'=>'tbl_program'),'p.ProgramCode = app.app_program_code', array('ArabicName','ProgramName','ProgramCode','IdProgram','strata') )
+				->joinLeft(array('apr'=>'appl_program_req'),"apr.apr_program_code = app.app_program_code and apr.apr_decipline_code = '".$discipline_code."'")
+				->join(array('ip'=>'appl_placement_intake_program'),'p.IdProgram=ip.IdProgram',array())
+				->where('app.app_placement_code  = ?', $placementTestCode['apt_ptest_code'])
+				->where('ip.IdIntake=?',$intake)
+				->order('p.ArabicName ASC');
+				
+				// check program offer
+				$select->where("p.UsmOffer = 1");
+				
+				 
+				$stmt = $db->query($select);
+				$row = $stmt->fetchAll();
+			} else {
+				if ($discipline_code !=0 && $intake !=0 && $yearend != ''){
+			        $yearend=explode(" ", $yearend);
+			       // echo var_dump($yearend);
+			        $yearend=$yearend[1];
+			        $select=$db->select()
+			        ->from('tbl_intake')
+			        ->where('idintake=?',$intake);
+			        $row=$db->fetchRow($select);
+			        $yearnow=explode("/", $row['IntakeId']);
+			        $yearnow=$yearnow[0];
+			        $yeargap=$yearnow-$yearend;
+			        //-----------------------------year gap end
+			       
+			        //program in placement test with discipline filter
+			
+			        //transaction data
+					$auth = Zend_Auth::getInstance();    	
+			    	$transaction_id = $auth->getIdentity()->transaction_id;
+			    	$transDB = new App_Model_Application_DbTable_ApplicantTransaction();
+			        $transaction_data= $transDB->getTransactionData($transaction_id);
+			    	
 					
-			  	// check program offer
-			  	$select->where("p.UsmOffer = 1");
-			  	 
-			  	if ($yeargap > 2) {
-			  		 $select->where('p.ProgramCode not in ("0300","0400")');
-			  	}
-			  	if($discipline_code!=0){
-			  		$select->where('apr.apr_decipline_code  = ?', $discipline_code);
-			  	}
-		        $stmt = $db->query($select);
-		        $row = $stmt->fetchAll();
-			}else $row=array();  
+					//get placement test data
+					$select = $db->select(array('apt_ptest_code'))
+				                 ->from(array('ap'=>'applicant_ptest'))
+				                 ->where('ap.apt_at_trans_id = ?', $transaction_id);
+				                 
+				    $stmt = $db->query($select);
+			        $placementTestCode = $stmt->fetch();
+			      //get placementest program data filtered with discipline
+				  	$select = $db->select()
+				                 ->from(array('app'=>'appl_placement_program'))
+				                 ->join(array('p'=>'tbl_program'),'p.ProgramCode = app.app_program_code', array('ArabicName','ProgramName','ProgramCode','IdProgram','strata') )
+				                 ->joinLeft(array('apr'=>'appl_program_req'),"apr.apr_program_code = app.app_program_code and apr.apr_decipline_code = '".$discipline_code."'")
+				                 ->join(array('ip'=>'appl_placement_intake_program'),'p.IdProgram=ip.IdProgram',array())
+				                 ->where('app.app_placement_code  = ?', $placementTestCode['apt_ptest_code'])
+				                 ->where('ip.IdIntake=?',$intake)
+				                 ->order('p.ArabicName ASC');
+						
+				  	// check program offer
+				  	$select->where("p.UsmOffer = 1");
+				  	 
+				  	if ($yeargap > 2) {
+				  		 $select->where('p.ProgramCode not in ("0300","0400")');
+				  	}
+				  	if($discipline_code!=0){
+				  		$select->where('apr.apr_decipline_code  = ?', $discipline_code);
+				  	}
+			        $stmt = $db->query($select);
+			        $row = $stmt->fetchAll();
+				} else $row=array();  
+			}
 		} else $row=array();
 	  	
 		$ajaxContext->addActionContext('view', 'html')

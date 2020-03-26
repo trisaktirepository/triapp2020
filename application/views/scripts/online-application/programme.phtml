@@ -362,7 +362,7 @@ function changeProgramme(element){
 	
 	$.ajax({
 		url: "<?php echo $this->url(array('module'=>'default','controller'=>'online-application', 'action'=>'ajax-get-programme-pt'),'default',true);?>",
-		data: {'discipline_code':$("#ae_discpline").val(),'intake_id':$("#intake_id").val(),'ae_year_end':$("#to").val() },
+		data: {'kkni':$("#kkni").val(),'ae_institution':$("#ae_institution").val(),'discipline_code':$("#ae_discpline").val(),'intake_id':$("#intake_id").val(),'ae_year_end':$("#to").val() },
 		type: 'POST',
 		dataType: 'json'	
 	}).done(function ( data ) {
@@ -373,24 +373,24 @@ function changeProgramme(element){
 			$registry = Zend_Registry::getInstance();
 			$locale = $registry->get('Zend_Locale');
 			if ($locale=="en_US"){
-		?>
-		$.each(data, function(index) {
-			$('#app_id').append('<option value="'+data[index].app_id+'"> '+data[index].ProgramName+' ('+data[index].strata+') </option>');
-		});
-
-		$.each(data, function(index) {
-			$('#app_id2').append('<option value="'+data[index].app_id+'"> '+data[index].ProgramName+' ('+data[index].strata+') </option>');
-		});
+				?>
+				$.each(data, function(index) {
+					$('#app_id').append('<option value="'+data[index].app_id+'"> '+data[index].ProgramName+' ('+data[index].strata+') </option>');
+				});
+		
+				$.each(data, function(index) {
+					$('#app_id2').append('<option value="'+data[index].app_id+'"> '+data[index].ProgramName+' ('+data[index].strata+') </option>');
+				});
 		<?php 
 			}else if ($locale=="id_ID"){
 		?>
-		$.each(data, function(index) {
-			$('#app_id').append('<option value="'+data[index].app_id+'"> '+data[index].ArabicName+' ('+data[index].strata+') </option>');
-		});
-
-		$.each(data, function(index) {
-			$('#app_id2').append('<option value="'+data[index].app_id+'"> '+data[index].ArabicName+' ('+data[index].strata+') </option>');
-		});
+					$.each(data, function(index) {
+						$('#app_id').append('<option value="'+data[index].app_id+'"> '+data[index].ArabicName+' ('+data[index].strata+') </option>');
+					});
+			
+					$.each(data, function(index) {
+						$('#app_id2').append('<option value="'+data[index].app_id+'"> '+data[index].ArabicName+' ('+data[index].strata+') </option>');
+					});
 		
 		<?php }?>
 		
