@@ -57,11 +57,11 @@ public function getAvailableDate($appl_id=0, $txn_id=0,$aphtype=0,$placementcode
 			
 			$db = Zend_Db_Table::getDefaultAdapter();
 			
-			$select_date = $db ->select()
+			/* $select_date = $db ->select()
 			->from(array('at'=>'tbl_academic_period'))
 			->where('ap_va_expired >= curdate()')
 			->order('ap_va_expired ASC');
-			$txn=$db->fetchRow($select_date);
+			$txn=$db->fetchRow($select_date); */
 			 
 			
 		 	$select_date = $db ->select()
@@ -81,9 +81,10 @@ public function getAvailableDate($appl_id=0, $txn_id=0,$aphtype=0,$placementcode
 						->join(array('per'=>'tbl_academic_period'),'aps.aps_test_date=per.ap_usm_date')
 						->join(array('aph'=>'appl_placement_head'),'aps.aps_placement_code=aph.aph_placement_code',array('aph_fees_program','aph_fees_location'))
 						->where("aph.aph_testtype = '".$aphtype."'")
-						->where("ap_va_expired >=NOW()")
+						//->where("ap_va_expired >=NOW()")
 						->where('aps.aps_placement_code=?',$placementcode)
-						->where("aps_test_date NOT IN (?)",$select_date);
+						->where("aps_test_date NOT IN (?)",$select_date)
+		    			->where("aps_test_date > DATE_SUB(NOW(), INTERVAL 2 DAY)");
  		
 	        $stmt = $db->query($select);
 	        $row = $stmt->fetchAll();
@@ -91,6 +92,47 @@ public function getAvailableDate($appl_id=0, $txn_id=0,$aphtype=0,$placementcode
 	       // echo $select;
 	        //echo var_dump($row);exit;
 		    return $row;
+	}
+	
+	
+	public function getAvailableDateOld($appl_id=0, $txn_id=0,$aphtype=0,$placementcode=0){
+			
+		$db = Zend_Db_Table::getDefaultAdapter();
+			
+		$select_date = $db ->select()
+		->from(array('at'=>'tbl_academic_period'))
+		->where('ap_va_expired >= curdate()')
+		->order('ap_va_expired ASC');
+		$txn=$db->fetchRow($select_date);
+	
+			
+		$select_date = $db ->select()
+		->from(array('at'=>'applicant_transaction'),array())
+		->join(array('apt'=>'applicant_ptest'),'apt.apt_at_trans_id=at.at_trans_id',array())
+		->join(array('aps'=>'appl_placement_schedule'),'aps.aps_id=apt.apt_aps_id',array('aps_test_date'=>'distinct(aps.aps_test_date)'))
+		->where("at_appl_id= '".$appl_id."'")
+		->where('aps.aps_placement_code=?',$placementcode)
+		->where("at_appl_type = 1");
+	
+		if($txn_id!=0){
+			$select_date->where("at_trans_id != '".$txn_id."'");
+		}
+	
+		$select = $db ->select()
+		->from(array('aps'=>$this->_name))
+		->join(array('per'=>'tbl_academic_period'),'aps.aps_test_date=per.ap_usm_date')
+		->join(array('aph'=>'appl_placement_head'),'aps.aps_placement_code=aph.aph_placement_code',array('aph_fees_program','aph_fees_location'))
+		->where("aph.aph_testtype = '".$aphtype."'")
+		->where("ap_va_expired >=NOW()")
+		->where('aps.aps_placement_code=?',$placementcode)
+		->where("aps_test_date NOT IN (?)",$select_date);
+			
+		$stmt = $db->query($select);
+		$row = $stmt->fetchAll();
+		// echo date('Y-m-d h:s:i', strtotime(date('now')));
+		// echo $select;
+		//echo var_dump($row);exit;
+		return $row;
 	}
 	
 	public function getData($id=0){
