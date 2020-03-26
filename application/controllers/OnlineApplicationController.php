@@ -2846,7 +2846,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 		//-----calculate year gap
 		if ($this->getRequest()->isPost()) {
 			$formData = $this->getRequest()->getPost();
-			$discipline_code = $formData['discipline_code'];
+			if (isset($formData['discipline_code'])) $discipline_code = $formData['discipline_code'];
 			$intake = $formData['intake_id'];
 			$yearend = $formData['ae_year_end'];
 			$kkni=$formData['kkni'];
