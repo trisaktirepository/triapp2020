@@ -33,6 +33,19 @@ class App_Model_Application_DbTable_PlacementTestComponent extends Zend_Db_Table
 		
 	}
 	
+	public function getDataComponent($id=0){
+		 
+			$db = Zend_Db_Table::getDefaultAdapter();
+			$select = $db->select()
+			->from(array('ac'=>$this->_name)) 
+			->where('ac.app_comp_code = '.$id);
+				
+			$row = $db->fetchAll($select);
+		 
+		return $row;
+	
+	}
+	
 	public function getPaginateData(){
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$selectData = $db ->select()

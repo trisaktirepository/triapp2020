@@ -35,6 +35,29 @@ class App_Model_Application_DbTable_ApplicantPtestDetail extends Zend_Db_Table_A
 		
 	}
 	
+	public function getActivePtestDetail($applid){
+	
+		$db = Zend_Db_Table::getDefaultAdapter();
+	
+		$select = $db ->select()
+		->from(array('a'=>$this->_name))
+		->join(array('b'=>'applicant_ptest'),'a.apt_id=b.apt_id')
+		->join(array('c'=>'applicant_transaction'),'c.at_trans_id=b.apt_at_trans_id')
+		->joinLeft(array('aps'=>'appl_placement_schedule'),'aps.aps_id  = b.apt_aps_id',array('aps_id'=>'aps.aps_id','aps_location_id'=>'aps.aps_location_id','aps_test_date'=>'aps.aps_test_date' ,'aps.aps_placement_code'))
+		->joinLeft(array('al'=>'appl_location'),'al.al_id=aps.aps_location_id')
+		->where('c.at_appl_id =?', $applid)
+		->where('aps.aps_test_date = ?',date('Y-m-d'));
+		 
+		$row = $db->fetchAll($select);
+	
+		if($row){
+			return $row;
+		}else{
+			return null;
+		}
+	
+	}
+	
 	public function addData($data){		
 	   $id = $this->insert($data);
 	   return $id;

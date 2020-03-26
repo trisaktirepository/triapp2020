@@ -11,19 +11,13 @@
 	<ul>  
 		<li><h1><?php echo $this->translate("Menu Navigation"); ?></h1></li>
 	    <li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'applicant-portal','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Home"); ?></a></li>
-	   
-	    <li><a href="javascript:void(0)" onclick="javascript:new_application();"><?php echo $this->translate("New Application"); ?></a></li>
-	   
-	    
-		<li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'applicant-portal','action'=>'contact-info'),'default',true) ?>"><?php echo $this->translate("contact_info"); ?></a></li>
-		
-		    		
+ 	    <li><a href="javascript:void(0)" onclick="javascript:new_application();"><?php echo $this->translate("New Application"); ?></a></li>
+ 		<li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'applicant-portal','action'=>'contact-info'),'default',true) ?>"><?php echo $this->translate("contact_info"); ?></a></li>
     	<li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'quit','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Quit"); ?></a></li>
 		<li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'change-program','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Change Programme"); ?></a></li>
-		
-		<li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'applicant-portal','action'=>'account'),'default',true) ?>"><?php echo $this->translate("Account Statement"); ?></a></li>
-		
-		<li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'applicant-portal','action'=>'activity-list'),'default',true) ?>"><?php echo $this->translate("Activity Application"); ?></a></li>
+ 		<li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'applicant-portal','action'=>'account'),'default',true) ?>"><?php echo $this->translate("Account Statement"); ?></a></li>
+ 		<li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'applicant-portal','action'=>'activity-list'),'default',true) ?>"><?php echo $this->translate("Activity Application"); ?></a></li>
+		<li><a href="<?php echo $this->url(array('module'=>'exam-application','controller'=>'examination','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Online Exam"); ?></a></li>
 		<li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'logout'),'default',true) ?>"><?php echo $this->translate("Logout"); ?></a></li>
 	</ul>
 </div>
