@@ -163,8 +163,12 @@ function showSlides() {
 	<h2>
 	<?php echo "Login bagi yang sudah mempunyai Akun"?></h2>
 	<br>
-	<?php echo $this->form; ?></td>
+	<?php echo $this->form; ?>
+	<br>
+	<strong><?php echo $this->translate("create_new_account")?>&nbsp;[<a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'register'),'default',true);?>"><?php echo $this->translate("click_here");?></a>].</strong></font> 
+		
 	</td>
+	 
 	 <td>
 	 	
 	 	<?php foreach ($this->schedule as $placement) {
@@ -189,7 +193,6 @@ function showSlides() {
 	
 	 
 	<table>
-		<tr><td><font size="2pt"><strong><?php echo $this->translate("create_new_account")?>&nbsp;[<a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'register'),'default',true);?>"><?php echo $this->translate("click_here");?></a>].</strong></font></td></tr>
 		<tr><td>
 	    <font size="2pt"><p>Jika ada kesulitan silahkan hubungi:- <br> <br>
 
