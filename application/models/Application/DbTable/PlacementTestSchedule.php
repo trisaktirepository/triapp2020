@@ -50,6 +50,30 @@ class App_Model_Application_DbTable_PlacementTestSchedule extends Zend_Db_Table_
 		
 	}
 	
+	public function getActivePlacementTestData($placementTestCode=null){
+	
+		if($placementTestCode!=null){
+				
+			$db = Zend_Db_Table::getDefaultAdapter();
+			$select = $db->select()
+			->from(array('aps'=>$this->_name))
+			->joinLeft(array('al'=>'appl_location'), 'al.al_id = aps_location_id ')
+			->where("aps.aps_placement_code = '".$placementTestCode."'")
+			->where('aps_test_date>=?',date('Y-m-d'))
+			->order("aps_location_id ASC")
+			->order("aps_test_date ASC")
+			;
+	
+			$row = $db->fetchAll($select);
+				
+		}else{
+			$row = null;
+		}
+	
+		return $row;
+	
+	}
+	
 	public function getPaginateData(){
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$selectData = $db->select()
