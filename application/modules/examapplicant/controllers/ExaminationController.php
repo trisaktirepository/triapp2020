@@ -45,9 +45,6 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		
     			$i++;
     		}
-    		
-    		$documentDB = new App_Model_Application_DbTable_ApplicantDocument();
-    		$document = $documentDB->getData($trxid,30); //kartu
     		 
     		//-------- get applicant photo --------
     		$photo_name='';
