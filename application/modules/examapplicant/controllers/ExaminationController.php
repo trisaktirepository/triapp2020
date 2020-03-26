@@ -9,7 +9,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 
     public function indexAction()
     {
-    	$this->_helper->layout->setLayout('exam');
+    	 
     	$this->view->title="Examination Day";
     	//get applicant profile
     	$auth = Zend_Auth::getInstance();
