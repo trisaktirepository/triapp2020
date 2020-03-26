@@ -1531,7 +1531,7 @@ class  App_Model_Registration_DbTable_Studentregistration extends Zend_Db_Table_
         $sql = $this->lobjDbAdpt->select()
                         ->from(array('a' => 'tbl_studentregistration'), array('IdProgramMajoring','IdBranch','a.registrationId', 'a.IdProgram', "CONCAT_WS(' ',IFNULL(a.FName,''),IFNULL(a.MName,''),IFNULL(a.LName,'')) AS name", "a.ExtraIdField1 AS NRIC", "a.IdProgram", "a.IdIntake", "a.profileStatus", 'a.IdStudentRegistration', 'a.Gender', 'a.HomePhone', 'a.CellPhone','IdApplication','transaction_id'))
                         ->join(array('sp'=>'student_profile'),'a.IdApplication=sp.appl_id')
-                        ->joinLeft(array('b' => 'tbl_program'), "a.IdProgram = b.IdProgram", array("b.ProgramName", "b.IdScheme"))
+                        ->joinLeft(array('b' => 'tbl_program'), "a.IdProgram = b.IdProgram", array("b.ProgramName", "b.IdScheme",'IdCollege'))
                         ->joinLeft(array('c' => 'tbl_intake'), "a.IdIntake = c.IdIntake", array("c.IntakeDesc"))
                         ->joinLeft(array('d' => 'tbl_definationms'), "a.profileStatus = d.idDefinition", array("d.DefinitionDesc"))
                         ->joinLeft(array('f' => 'tbl_definationms'), "a.SpecialTreatmentType = f.idDefinition", array("f.DefinitionDesc as specialtreatment"))

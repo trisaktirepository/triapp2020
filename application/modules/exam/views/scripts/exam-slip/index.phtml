@@ -70,7 +70,9 @@ function getExamSlipQr(sem,ass_type){
 
 		$auth = Zend_Auth::getInstance();
 		$registration_id = $auth->getIdentity()->registration_id;
-		
+		$dbStd=new App_Model_Registration_DbTable_Studentregistration();
+		$std=$dbStd->getStudentRegistrationDetail($registration_id);
+		$dbGlobalExcp=new Exam_Model_DbTable_GlobalException();
 		$sfhelper= new icampus_Function_Studentfinance_PaymentInfo();
 		$ExamSlipReleaseDb = new App_Model_Exam_DbTable_ExamSlipRelease();
 		foreach ($this->examslip['release_data'] as $exam){
@@ -78,26 +80,29 @@ function getExamSlipQr(sem,ass_type){
 			if($exam['esr_status']==1 || true){
 				$having_exam_slip = true;
 				
+				$paymentstatus = 0;
+			if (!$dbGlobalExcp->isException(1, $std['IdCollege'], $exam['IdSemesterMaster'], $exam['IdExaminationAssessmentType']) ) {
 				
-			//check for payment status
-			$paymentstatus = 0;
-			$pymtinfo=$sfhelper->getStudentOustandingInfo($registration_id,$exam['IdSemesterMaster']);
-			//echo var_dump($pymtinfo);exit;
-			if($pymtinfo["invoices"]== 0 ) {
+				//check for payment status
+				
+				$pymtinfo=$sfhelper->getStudentOustandingInfo($registration_id,$exam['IdSemesterMaster']);
+				//echo var_dump($pymtinfo);exit;
+				if($pymtinfo["invoices"]== 0 ) {
+						$paymentstatus=1;
+					}
+	                elseif ($pymtinfo["invoices"] < 0 ){
+	                    $paymentstatus=1;
+	                }
+	                else{
+						$paymentstatus==0;
+					}
+				
+				
+				//kalau ada payment exception utk course registration
+				if(isset($pymtinfo["exception"][2])){
 					$paymentstatus=1;
 				}
-                elseif ($pymtinfo["invoices"] < 0 ){
-                    $paymentstatus=1;
-                }
-                else{
-					$paymentstatus==0;
-				}
-			
-			
-			//kalau ada payment exception utk course registration
-			if(isset($pymtinfo["exception"][2])){
-				$paymentstatus=1;
-			}
+			} else $paymentstatus=1;
 			//echo $paymentstatus;exit;
 	?>
 	<tr>
