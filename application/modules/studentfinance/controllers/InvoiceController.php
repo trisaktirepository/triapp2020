@@ -231,16 +231,22 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 					if ($invoice) {
 						 
 						$current_level=$this->getLevel($IdStudentRegistration, $idsemester, $intake);
-						$bundleDetail=$invoiceDetailDb->getInvoiceDetail($invoice['id']);
-						foreach ($bundleDetail as $key2=>$value) {
-							$bundleDetail[$key2]['fee']=array('amount'=>$value['amount']);
-							//$amount=$amount+$invoice['amount'];
-						}
-						$act[$key]['idinvoice']=$invoice['id'];
+						
 						//$this->view->invoice=$invoice;
 						//chek for incompatibility
-						$restamount=$invoiceDb->inCompatibilityInvoice($IdStudentRegistration, $idsemester, $idactivity);
-						$act[$key]['invoicerest']=$restamount;
+						if ($invoice['mhsbaru']=="0") {
+							$bundleDetail=$invoiceDetailDb->getInvoiceDetail($invoice['id']);
+							foreach ($bundleDetail as $key2=>$value) {
+								$bundleDetail[$key2]['fee']=array('amount'=>$value['amount']);
+								//$amount=$amount+$invoice['amount'];
+							}
+							$act[$key]['idinvoice']=$invoice['id'];
+							$restamount=$invoiceDb->inCompatibilityInvoice($IdStudentRegistration, $idsemester, $idactivity);
+							$act[$key]['invoicerest']=$restamount;
+						} else {
+							$act[$key]['invoicerest']=array();
+							$bundleDetail=array();
+						}
 						//if ($invoice['va']!='' && $restamount!=array()) $this->_redirect('/applicant-portal/account');
 					} else {
 						 
