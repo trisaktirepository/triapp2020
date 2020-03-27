@@ -1159,9 +1159,26 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 						//echo $selectData;
 						//echo var_dump($rowbpp);exit;
 						if (!$rowbpp) {
-							 
-							return $row['idActivity'];
-						} 
+							//cek mhs baru
+							$selectData = $db->select()
+							->from(array('im'=>'tbl_studentsemesterstatus'))
+							->join(array('std'=>'tbl_studentregistration'),'std.IdStudentregistration=im.IdStudentregistration')
+							->where('im.IdStudentRegistration = ?', $idstd)
+							->where('im.idSemesterMain=?',$idsemester);
+							$smt = $db->fetchRow($selectData);
+							if ($smt['Level']=="1") {
+								//cek pembayaranmahasiswa baru di detail
+								$applid=$smt['IdApplication'];
+								$selectData = $db->select()
+								->from(array('im'=>$this->_name))
+								->join(array('det'=>"invoice_detail"),'im.id=det.invoice_main_id')
+								->where('im.IdStudentRegistration = ?', $idstd)
+								->where('im.appl_id=?',$applid)
+								->where('im.bill_balance<bill_amount');
+								$smt = $db->fetchRow($selectData);
+								if (!$smt)  return $row['idActivity'];
+							} else return $row['idActivity'];
+						}   
 						// echo "tetap - ".$status;
 					}
 					 //else return 0;
