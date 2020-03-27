@@ -1156,8 +1156,8 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 						->where('im.idactivity=?',$row['idActivity']);
 						//echo $selectData;
 						$rowbpp = $db->fetchRow($selectData);
-						echo $selectData;
-						echo var_dump($rowbpp);exit;
+						//echo $selectData;
+						//echo var_dump($rowbpp);exit;
 						if (!$rowbpp) {
 							 
 							return $row['idActivity'];
