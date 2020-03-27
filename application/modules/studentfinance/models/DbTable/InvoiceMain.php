@@ -1164,7 +1164,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 							->from(array('im'=>'tbl_studentsemesterstatus'))
 							->join(array('std'=>'tbl_studentregistration'),'std.IdStudentregistration=im.IdStudentregistration')
 							->where('im.IdStudentRegistration = ?', $idstd)
-							->where('im.idSemesterMain=?',$idsemester);
+							->where('im.idSemesterMain=?',$row['IdSemesterMain']);
 							$smt = $db->fetchRow($selectData);
 							if ($smt['Level']=="1") {
 								//cek pembayaranmahasiswa baru di detail
