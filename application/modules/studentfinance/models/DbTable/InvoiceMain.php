@@ -1001,186 +1001,209 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 				//echo var_dump($bundle);exit;
 				if ($bundle) {
 					if (($row['idActivity']==39 || $row['idActivity']==40 || $row['idActivity']==42)) {
-							
-					//get fee structure item
-					if($std['appl_nationality']!=96){
-						$student_category = 315;
-					}else{
-						$student_category = 314;
-					}
-					$feestrucs =$feeStructure->getApplicantFeeStructure($std['IdIntake'],$std['IdProgram'],$student_category,$std['IdBranch'],$std['IdProgramMajoring']);
-					if ($feestrucs) {
-						$selectData = $db->select()
-						->from(array('fsi'=>'fee_structure_item'),array('fsi_item_id'))
-						->where("fsi.fsi_structure_id = '".$feestrucs['fs_id']."'");
-						$fiitems = $db->fetchAll($selectData);
-						foreach ($fiitems as $itm) {
-							$itemsfi[]=$itm['fsi_item_id'];
-						}
-							
-					} 
-					//get item detail
-					$selectData = $db->select()
-					->from(array('a'=>'fee_budle_detail'),array('fee_item'))
-					->where("a.idfeebundle = '".$bundle['idfeebundle']."'");
-					$bundleDetail = $db->fetchAll($selectData);
-					// echo var_dump($bundleDetail);
-					if ($bundleDetail) {
 						
-						foreach ($bundleDetail as $itm) {
-							$bundls[]=$itm['fee_item'];
-						}
-						$items=array_intersect($itemsfi, $bundls);
-						if (!empty($items)) {
-							foreach ($items as $item) {
-								$selectData = $db->select()
-								->from(array('a'=>'fee_item'),array('fi_amount_calculation_type','fi_frequency_mode'))
-								->where("a.fi_id = '".$item."'");
-								$itemdetail = $db->fetchRow($selectData);
-								/* if ($itemdetail['fi_frequency_mode']==305) {
-									//semester ditetapkan
-									$selectData = $db->select()
-									->from(array('a'=>'fee_structure_item_semester'))
-									->where("a.fsis_item_id = '".$item."'")
-									->where("a.fsis_semester = '".$row['IdSemesterMain']."'");
-									$itemsem = $db->fetchRow($selectData);
-									if ($itemsem) $status="1";
-								} */
-								/* if ($itemdetail['fi_amount_calculation_type']==459) {
-									//tergantung subject
-									$subjectset = $db->select()
-									->from(array('im'=>'tbl_studentregsubjects'),array('IdSubject'))
-									->where('im.IdStudentRegistration=?',$idstd)
-									->where('im.IdSemesterMain=?',$row['IdSemesterMain']);
-									 
-										
-									$selectData = $db->select()
-									->from(array('a'=>'fee_structure_item_subject'))
-									->where("a.fsisub_fsi_id = '".$item."'")
-									->where("a.fsisub_subject_id in (".$subjectset.")");
-									$subject = $db->fetchRow($selectData);
-									if ($subject) $status="1";
-								} */
-								if ($itemdetail['fi_amount_calculation_type']==299) {
-									//tergantung sks
-									//cek krs
-									$selectData = $db->select()
-									->from(array('im'=>'tbl_studentregsubjects'),array('IdSemesterMain'))
-									->join(array('sb'=>'tbl_subjectmaster'),'im.IdSubject=sb.IdSubject',array('sks'=>'SUM(CreditHours)','jmlmk'=>'COUNT(*)'))
-									->where('im.IdStudentRegistration=?',$idstd)
-									->where('im.IdSemesterMain=?',$row['IdSemesterMain'])
-									->group('im.IdSemesterMain');
-									$rowkrs = $db->fetchRow($selectData);
-									//echo var_dump($rowkrs); 
-									if ($rowkrs) {
-										$selectData = $db->select()
-										->from(array('im'=>'invoice_main'))
-										->where('im.IdStudentRegistration=?',$idstd)
-										->where('im.idactivity=?',$row['idActivity'])
-										->where('im.semester=?',$rowkrs['IdSemesterMain']);
-										$invoice = $db->fetchRow($selectData);
-										
-										// echo 'aciviyi='.$row['idActivity'];
-										if ($invoice)
-										{
-											
-											$selectData = $db->select()
-											->from(array('im'=>'invoice_detail'))
-											->join(array('inv'=>'invoice_main'),'im.invoice_main_id=inv.id')
-											->join(array('i'=>'fee_item'),'im.fi_id=i.fi_id')
-											->where('inv.semester=?',$rowkrs['IdSemesterMain'])
-											->where('inv.idactivity=?',$row['idActivity'])
-											->where('inv.IdStudentRegistration=?',$idstd);
-											$details= $db->fetchAll($selectData);
-											foreach ($details as $det) {
-												if ($det['fi_amount_calculation_type']==299 || $det['fi_amount_calculation_type']==301 ) {
-													$amount[$det['fi_id']]=0;
-												}
-													
-											}
-											foreach ($details as $det) {
-												if ($det['fi_amount_calculation_type']==299 || $det['fi_amount_calculation_type']==301 ) {
-													$amount[$det['fi_id']]=$amount[$det['fi_id']]+$det['amount'];
-											
-												} else unset($amount[$det['fi_id']]);
-											}
-											$items=0;
-											foreach ($amount as $fiid=>$itemamount) {
-												//get fee structure
-												$selectData = $db->select()
-													->from(array('dt'=>'fee_structure_item'))
-													->join(array('fi'=>'fee_item'),'fi.fi_id=dt.fsi_item_id')
-													->where('fsi_item_id=?',$fiid)
-													->where('dt.fsi_structure_id=?',$feestrucs['fs_id']);
-													 
-												$feestructure=$db->fetchRow($selectData);
-											
-												if ($feestructure) {
-													if ($feestructure['fi_amount_calculation_type']==299) {
-														//per sks
-														$actualamount=$rowkrs['sks']*$feestructure['fsi_amount'];
-													//	echo $actualamount;echo $itemamount;exit;
-														$items=$items+$itemamount;
-													} else if ($feestructure['fi_amount_calculation_type']==301) {
-														//per MK
-														$actualamount=$rowkrs['jmlmk']*$feestructure['fsi_amount'];
-														//if ($actualamount-$itemamount>0) $status="1";  
-														$items=$items+$itemamount;
-													}
-												}
-											}
-											//echo $actualamount;echo '-';echo $items; exit;
-											if ($actualamount-$items>0) return $row['idActivity'];
-											
-											//echo $status;echo '<br>';
-										} else return $row['idActivity'];
-											
-									}  
-								}
-								
-								
-								
-							}
-							 
-							//echo var_dump($row);
-						//	if ($status=="1") $activity= $row['idActivity'];
-							
-						} //else return 0;
-					} 
-					}else {
-							
+						//cek mhs baru
 						$selectData = $db->select()
-						->from(array('im'=>'invoice_main'))
-						->where('im.IdStudentRegistration=?',$idstd)
-						->where('im.semester=?',$row['IdSemesterMain'])
-						->where('im.idactivity=?',$row['idActivity']);
-						//echo $selectData;
-						$rowbpp = $db->fetchRow($selectData);
-						//echo $selectData;
-						//echo var_dump($rowbpp);exit;
-						if (!$rowbpp) {
-							//cek mhs baru
+						->from(array('im'=>'tbl_studentsemesterstatus'))
+						->join(array('std'=>'tbl_studentregistration'),'std.IdStudentregistration=im.IdStudentregistration')
+						->where('im.IdStudentRegistration = ?', $idstd)
+						->where('im.idSemesterMain=?',$row['IdSemesterMain']);
+						$smt = $db->fetchRow($selectData);
+						if ($smt['Level']=="1") {
+							//cek pembayaranmahasiswa baru di detail
+							$applid=$smt['IdApplication'];
 							$selectData = $db->select()
-							->from(array('im'=>'tbl_studentsemesterstatus'))
-							->join(array('std'=>'tbl_studentregistration'),'std.IdStudentregistration=im.IdStudentregistration')
+							->from(array('im'=>$this->_name))
+							->join(array('det'=>"invoice_detail"),'im.id=det.invoice_main_id')
 							->where('im.IdStudentRegistration = ?', $idstd)
-							->where('im.idSemesterMain=?',$row['IdSemesterMain']);
+							->where('im.appl_id=?',$applid)
+							->where('im.bill_balance<bill_amount');
 							$smt = $db->fetchRow($selectData);
-							if ($smt['Level']=="1") {
-								//cek pembayaranmahasiswa baru di detail
-								$applid=$smt['IdApplication'];
+							if (!$smt)  $mhsbaru="0";
+							else $mhsbaru="1";
+						} else $mhsbaru="0";
+					//get fee structure item
+						if ($mhsbaru=="0") {
+							if($std['appl_nationality']!=96){
+								$student_category = 315;
+							}else{
+								$student_category = 314;
+							}
+							$feestrucs =$feeStructure->getApplicantFeeStructure($std['IdIntake'],$std['IdProgram'],$student_category,$std['IdBranch'],$std['IdProgramMajoring']);
+							if ($feestrucs) {
 								$selectData = $db->select()
-								->from(array('im'=>$this->_name))
-								->join(array('det'=>"invoice_detail"),'im.id=det.invoice_main_id')
+								->from(array('fsi'=>'fee_structure_item'),array('fsi_item_id'))
+								->where("fsi.fsi_structure_id = '".$feestrucs['fs_id']."'");
+								$fiitems = $db->fetchAll($selectData);
+								foreach ($fiitems as $itm) {
+									$itemsfi[]=$itm['fsi_item_id'];
+								}
+									
+							} 
+							//get item detail
+							$selectData = $db->select()
+							->from(array('a'=>'fee_budle_detail'),array('fee_item'))
+							->where("a.idfeebundle = '".$bundle['idfeebundle']."'");
+							$bundleDetail = $db->fetchAll($selectData);
+							// echo var_dump($bundleDetail);
+							if ($bundleDetail) {
+									
+									foreach ($bundleDetail as $itm) {
+										$bundls[]=$itm['fee_item'];
+									}
+									$items=array_intersect($itemsfi, $bundls);
+									if (!empty($items)) {
+										foreach ($items as $item) {
+											$selectData = $db->select()
+											->from(array('a'=>'fee_item'),array('fi_amount_calculation_type','fi_frequency_mode'))
+											->where("a.fi_id = '".$item."'");
+											$itemdetail = $db->fetchRow($selectData);
+											/* if ($itemdetail['fi_frequency_mode']==305) {
+												//semester ditetapkan
+												$selectData = $db->select()
+												->from(array('a'=>'fee_structure_item_semester'))
+												->where("a.fsis_item_id = '".$item."'")
+												->where("a.fsis_semester = '".$row['IdSemesterMain']."'");
+												$itemsem = $db->fetchRow($selectData);
+												if ($itemsem) $status="1";
+											} */
+											/* if ($itemdetail['fi_amount_calculation_type']==459) {
+												//tergantung subject
+												$subjectset = $db->select()
+												->from(array('im'=>'tbl_studentregsubjects'),array('IdSubject'))
+												->where('im.IdStudentRegistration=?',$idstd)
+												->where('im.IdSemesterMain=?',$row['IdSemesterMain']);
+												 
+													
+												$selectData = $db->select()
+												->from(array('a'=>'fee_structure_item_subject'))
+												->where("a.fsisub_fsi_id = '".$item."'")
+												->where("a.fsisub_subject_id in (".$subjectset.")");
+												$subject = $db->fetchRow($selectData);
+												if ($subject) $status="1";
+											} */
+											if ($itemdetail['fi_amount_calculation_type']==299) {
+												//tergantung sks
+												//cek krs
+												$selectData = $db->select()
+												->from(array('im'=>'tbl_studentregsubjects'),array('IdSemesterMain'))
+												->join(array('sb'=>'tbl_subjectmaster'),'im.IdSubject=sb.IdSubject',array('sks'=>'SUM(CreditHours)','jmlmk'=>'COUNT(*)'))
+												->where('im.IdStudentRegistration=?',$idstd)
+												->where('im.IdSemesterMain=?',$row['IdSemesterMain'])
+												->group('im.IdSemesterMain');
+												$rowkrs = $db->fetchRow($selectData);
+												//echo var_dump($rowkrs); 
+												if ($rowkrs) {
+													$selectData = $db->select()
+													->from(array('im'=>'invoice_main'))
+													->where('im.IdStudentRegistration=?',$idstd)
+													->where('im.idactivity=?',$row['idActivity'])
+													->where('im.semester=?',$rowkrs['IdSemesterMain']);
+													$invoice = $db->fetchRow($selectData);
+													
+													// echo 'aciviyi='.$row['idActivity'];
+													if ($invoice)
+													{
+														
+														$selectData = $db->select()
+														->from(array('im'=>'invoice_detail'))
+														->join(array('inv'=>'invoice_main'),'im.invoice_main_id=inv.id')
+														->join(array('i'=>'fee_item'),'im.fi_id=i.fi_id')
+														->where('inv.semester=?',$rowkrs['IdSemesterMain'])
+														->where('inv.idactivity=?',$row['idActivity'])
+														->where('inv.IdStudentRegistration=?',$idstd);
+														$details= $db->fetchAll($selectData);
+														foreach ($details as $det) {
+															if ($det['fi_amount_calculation_type']==299 || $det['fi_amount_calculation_type']==301 ) {
+																$amount[$det['fi_id']]=0;
+															}
+																
+														}
+														foreach ($details as $det) {
+															if ($det['fi_amount_calculation_type']==299 || $det['fi_amount_calculation_type']==301 ) {
+																$amount[$det['fi_id']]=$amount[$det['fi_id']]+$det['amount'];
+														
+															} else unset($amount[$det['fi_id']]);
+														}
+														$items=0;
+														foreach ($amount as $fiid=>$itemamount) {
+															//get fee structure
+															$selectData = $db->select()
+																->from(array('dt'=>'fee_structure_item'))
+																->join(array('fi'=>'fee_item'),'fi.fi_id=dt.fsi_item_id')
+																->where('fsi_item_id=?',$fiid)
+																->where('dt.fsi_structure_id=?',$feestrucs['fs_id']);
+																 
+															$feestructure=$db->fetchRow($selectData);
+														
+															if ($feestructure) {
+																if ($feestructure['fi_amount_calculation_type']==299) {
+																	//per sks
+																	$actualamount=$rowkrs['sks']*$feestructure['fsi_amount'];
+																//	echo $actualamount;echo $itemamount;exit;
+																	$items=$items+$itemamount;
+																} else if ($feestructure['fi_amount_calculation_type']==301) {
+																	//per MK
+																	$actualamount=$rowkrs['jmlmk']*$feestructure['fsi_amount'];
+																	//if ($actualamount-$itemamount>0) $status="1";  
+																	$items=$items+$itemamount;
+																}
+															}
+														}
+														//echo $actualamount;echo '-';echo $items; exit;
+														if ($actualamount-$items>0) return $row['idActivity'];
+														
+														//echo $status;echo '<br>';
+													} else return $row['idActivity'];
+														
+												}  
+											}
+											
+											
+											
+										}
+										 
+										//echo var_dump($row);
+									//	if ($status=="1") $activity= $row['idActivity'];
+										
+									} //else return 0;
+								} 
+							}
+						} else {
+								
+							$selectData = $db->select()
+							->from(array('im'=>'invoice_main'))
+							->where('im.IdStudentRegistration=?',$idstd)
+							->where('im.semester=?',$row['IdSemesterMain'])
+							->where('im.idactivity=?',$row['idActivity']);
+							//echo $selectData;
+							$rowbpp = $db->fetchRow($selectData);
+							//echo $selectData;
+							//echo var_dump($rowbpp);exit;
+							if (!$rowbpp) {
+								//cek mhs baru
+								$selectData = $db->select()
+								->from(array('im'=>'tbl_studentsemesterstatus'))
+								->join(array('std'=>'tbl_studentregistration'),'std.IdStudentregistration=im.IdStudentregistration')
 								->where('im.IdStudentRegistration = ?', $idstd)
-								->where('im.appl_id=?',$applid)
-								->where('im.bill_balance<bill_amount');
+								->where('im.idSemesterMain=?',$row['IdSemesterMain']);
 								$smt = $db->fetchRow($selectData);
-								if (!$smt)  return $row['idActivity'];
-							} else return $row['idActivity'];
-						}   
-						// echo "tetap - ".$status;
-					}
+								if ($smt['Level']=="1") {
+									//cek pembayaranmahasiswa baru di detail
+									$applid=$smt['IdApplication'];
+									$selectData = $db->select()
+									->from(array('im'=>$this->_name))
+									->join(array('det'=>"invoice_detail"),'im.id=det.invoice_main_id')
+									->where('im.IdStudentRegistration = ?', $idstd)
+									->where('im.appl_id=?',$applid)
+									->where('im.bill_balance<bill_amount');
+									$smt = $db->fetchRow($selectData);
+									if (!$smt)  return $row['idActivity'];
+								} else return $row['idActivity'];
+							}   
+							// echo "tetap - ".$status;
+						}
+					 
 					 //else return 0;
 				}  
 				 
