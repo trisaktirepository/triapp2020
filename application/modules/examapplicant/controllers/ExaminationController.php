@@ -157,5 +157,35 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     }
 
 
+    private function generateExamScript($trxid){
+    	
+   
+    	$auth = Zend_Auth::getInstance();
+    	$appl_id = $auth->getIdentity()->appl_id;
+    	if ($appl_id==202673) $date="2020-01-19";
+    	else $date=date('Y-m-d');
+    	$dbApplicant=new App_Model_Application_DbTable_ApplicantTransaction();
+    	$dbExamComp=new App_Model_Application_DbTable_PlacementTestComponent();
+    	$dbExamCompProg=new App_Model_Application_DbTable_PlacementTestProgramComponent();
+    	$dbPlacementTest=new App_Model_Application_DbTable_ApplicantPtestDetail();
+    	$examdetail=$dbPlacementTest->getActivePtestDetail($appl_id,$date);
+    	
+    	if ($examdetail) {
+    		
+    		$trxid=$examdetail[0]['at_trans_id'];
+    		$trx=$dbApplicant->getTransaction($trxid);
+    		$compprogram=$dbExamComp->getComponenByTransaction($trxid,"0");
+    		foreach ($examdetail as $key=>$value) {
+    			$compcode=$value['app_comp_code'];
+    			$component=$dbExamComp->getDataComponent($compcode);
+    			foreach ($component as $idx=>$comp) {
+    				if (!array_search($comp['ac_id'], $compprogram))
+    					unset($component[$idx]);
+    			}
+    			$examdetail[$key]['compcode']=$component;
+    		}
+    		
+    	} else return "Jadwal Test belum dibuka";
+    }
 }
 

@@ -19,6 +19,8 @@ class App_Model_General_DbTable_Activity extends Zend_Db_Table_Abstract
 			return $row;
 	}
 	
+	
+	
 	 
 	
 	public function addData($data){
