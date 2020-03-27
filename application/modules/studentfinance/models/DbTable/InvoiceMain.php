@@ -990,7 +990,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		->where('im.setter="2"');
 		 
 		$rows = $db->fetchAll($selectData);
-		//echo var_dump($rows); exit;
+		//echo var_dump($rows);  
 		if ($rows) {
 			$status="0";
 			foreach ($rows as $row) {
@@ -1156,11 +1156,12 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 						->where('im.idactivity=?',$row['idActivity']);
 						//echo $selectData;
 						$rowbpp = $db->fetchRow($selectData);
-					
+						echo $selectData;
+						echo var_dump($rowbpp);exit;
 						if (!$rowbpp) {
 							 
 							return $row['idActivity'];
-						}
+						} 
 						// echo "tetap - ".$status;
 					}
 					 //else return 0;
