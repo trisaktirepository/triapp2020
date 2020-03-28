@@ -1023,6 +1023,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 							else $mhsbaru="1";
 						} else $mhsbaru="0";
 					//get fee structure item
+						echo $mhsbaru;exit;
 						if ($mhsbaru=="0") {
 							if($std['appl_nationality']!=96){
 								$student_category = 315;
