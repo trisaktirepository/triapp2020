@@ -279,11 +279,11 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 							  
 							  $result = $db->fetchRow($sql);
 							  if (!$result) $result['Level']=1;
-							  else $result['Level']=$result['Level'];
+							  else $result['Level']=$result['Level']+1;
 							  //echo $sql;
 						  } 
 							if( $result['Level'] ){
-								$current_level = $result['Level']+1;
+								$current_level = $result['Level'];
 							}else{
 								//check if senior student then hardcode level
 								$intake_year = substr($intake['IntakeId'], 0,4);
