@@ -21,10 +21,19 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	$dbPlacementTest=new App_Model_Application_DbTable_ApplicantPtestDetail();
     	$examdetail=$dbPlacementTest->getActivePtestDetail($appl_id,$date);
     	if ($examdetail) {
+    	//all test on date
+    		$trxid=$examdetail[0]['at_trans_id'];
+    		$trx=$dbApplicant->getTransaction($trxid);
+    		$compprogram=$dbExamComp->getComponenByTransaction($trxid,"0");
     		foreach ($examdetail as $key=>$value) {
     			$compcode=$value['app_comp_code'];
     			$component=$dbExamComp->getDataComponent($compcode);
+    			foreach ($component as $idx=>$comp) {
+    				if (!array_search($comp['ac_id'], $compprogram))
+    					unset($component[$idx]);
+    			}
     			$examdetail[$key]['compcode']=$component;
+    			
     		}
     		$trxid=$examdetail[0]['at_trans_id'];
     		$trx=$dbApplicant->getTransaction($trxid);
@@ -78,23 +87,45 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 			$date=date('Y-m-d');
 			$time=date('h:s:i');
 		}
-    	//generate personal exam
+		//generate personal exam
+		$dbExamComp=new App_Model_Application_DbTable_PlacementTestComponent();
+		$dbApplicant=new App_Model_Application_DbTable_ApplicantTransaction();
+		 
     	$dbPtest=new App_Model_Application_DbTable_ApplicantPtest();
     	$ptest=$dbPtest->getPtest($trxid);
+    	
     	if ($ptest) {
     		$dbPestDetail=new App_Model_Application_DbTable_ApplicantPtestDetail();
     		$currenttest=$dbPestDetail->getActiveTest($trxid, $date, $time);
     		if ($currenttest) {
-    			$appcomp=$currenttest['app_comp_code'];
+    			$trx=$dbApplicant->getTransaction($trxid);
+    			$compcode=$currenttest['app_comp_code'];
     			$dbPlacementComp=new App_Model_Application_DbTable_PlacementTestProgramComponent();
-    			$comps=$dbPlacementComp->getComponenByTransaction($trxid, "0");
-    			foreach ($comps as $comp) {
-    				$this->view->title=$this->view->title.', '.$comp['ac_comp_name_bahasa'];
-			
+    			$compprogram=$dbPlacementComp->getComponenByTransaction($trxid, "0");
+    			
+    			$component=$dbExamComp->getDataComponent($compcode);
+    			foreach ($component as $idx=>$comp) {
+    				if (!array_search($comp['ac_id'], $compprogram))
+    					unset($component[$idx]);
     			}
-    			$this->view->starttest="1";
-    		} else $this->view->starttest="0";
-    	}
+    			//get exam script config
+    			$dbConfig=new Examapplicant_Model_DbTable_ExamScriptConfig();
+    			$config=$dbConfig->getMatchConfig($currenttest['apt_ptest_code'], $currenttest['apt_aps_id']);
+    			if ($config) {
+    				$data=array('apa_trans_id' => $trx['at_trans_id'],
+    							'apa_ptest_code' => $trx['at_pes_id'],
+    							'apa_set_code' =>null,
+    							'apa_date' => date ('Y-m-d h:i:s'),
+    							'pcode' => $currenttest['apt_ptest_code'],
+    							'config'=>$config
+    							);
+    				$dbAppPtest=new Examapplicant_Model_DbTable_ApplicantPtestAnswer();
+    				$dbAppPtest->addData($data);
+    			} else $this->_redirect('/examapplicant/examination/index/msg/No Configuration');
+    			
+    		} else $this->_redirect('/examapplicant/examination/index/msg/No Opened Test');
+    	} else $this->_redirect('/examapplicant/examination/index/msg/No Test');
+    	
     	
 		
     }
@@ -157,35 +188,6 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     }
 
 
-    private function generateExamScript($trxid){
-    	
-   
-    	$auth = Zend_Auth::getInstance();
-    	$appl_id = $auth->getIdentity()->appl_id;
-    	if ($appl_id==202673) $date="2020-01-19";
-    	else $date=date('Y-m-d');
-    	$dbApplicant=new App_Model_Application_DbTable_ApplicantTransaction();
-    	$dbExamComp=new App_Model_Application_DbTable_PlacementTestComponent();
-    	$dbExamCompProg=new App_Model_Application_DbTable_PlacementTestProgramComponent();
-    	$dbPlacementTest=new App_Model_Application_DbTable_ApplicantPtestDetail();
-    	$examdetail=$dbPlacementTest->getActivePtestDetail($appl_id,$date);
-    	
-    	if ($examdetail) {
-    		
-    		$trxid=$examdetail[0]['at_trans_id'];
-    		$trx=$dbApplicant->getTransaction($trxid);
-    		$compprogram=$dbExamComp->getComponenByTransaction($trxid,"0");
-    		foreach ($examdetail as $key=>$value) {
-    			$compcode=$value['app_comp_code'];
-    			$component=$dbExamComp->getDataComponent($compcode);
-    			foreach ($component as $idx=>$comp) {
-    				if (!array_search($comp['ac_id'], $compprogram))
-    					unset($component[$idx]);
-    			}
-    			$examdetail[$key]['compcode']=$component;
-    		}
-    		
-    	} else return "Jadwal Test belum dibuka";
-    }
+     
 }
 

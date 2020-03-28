@@ -1403,22 +1403,24 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 			->where('im.IdStudentRegistration = ?', $idstd)
 			->where('im.idSemesterMain=?',$idsemester);
 			$smt = $db->fetchRow($selectData);
-			if ($smt['Level']=="1") {
-				//cek pembayaranmahasiswa baru di detail
-				$applid=$smt['IdApplication'];
-				$selectData = $db->select()
-				->from(array('im'=>$this->_name))
-				->join(array('det'=>"invoice_detail"),'im.id=det.invoice_main_id')
-				->where('im.IdStudentRegistration = ?', $idstd)
-				->where('im.appl_id=?',$applid)
-				->where('im.bill_balance<bill_amount');
-				$smt = $db->fetchRow($selectData);
-				if ($smt) {
-					$row['mhsbaru']="1";
-					
-				} else $row['mhsbaru']="0";
-			}
-		} else $row['mhsbaru']="0";
+			if ($smt) {
+				if ($smt['Level']=="1") {
+					//cek pembayaranmahasiswa baru di detail
+					$applid=$smt['IdApplication'];
+					$selectData = $db->select()
+					->from(array('im'=>$this->_name))
+					->join(array('det'=>"invoice_detail"),'im.id=det.invoice_main_id')
+					->where('im.IdStudentRegistration = ?', $idstd)
+					->where('im.appl_id=?',$applid)
+					->where('im.bill_balance<bill_amount');
+					$row = $db->fetchRow($selectData);
+					if ($smt) {
+						$row['mhsbaru']="1";
+						
+					}  
+				}
+			}  
+		}  
 		
 		return $row;
 	
