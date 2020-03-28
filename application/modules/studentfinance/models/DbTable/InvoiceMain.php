@@ -1015,15 +1015,16 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 							$selectData = $db->select()
 							->from(array('im'=>$this->_name))
 							->join(array('det'=>"invoice_detail"),'im.id=det.invoice_main_id')
-							->where('im.IdStudentRegistration = ?', $idstd)
+							//->where('im.IdStudentRegistration = ?', $idstd)
 							->where('im.appl_id=?',$applid)
 							->where('im.bill_balance<bill_amount');
 							$smt = $db->fetchRow($selectData);
+							
 							if (!$smt)  $mhsbaru="0";
 							else $mhsbaru="1";
 						} else $mhsbaru="0";
 					//get fee structure item
-						echo $mhsbaru;exit;
+						//echo $mhsbaru;exit;
 						if ($mhsbaru=="0") {
 							if($std['appl_nationality']!=96){
 								$student_category = 315;
