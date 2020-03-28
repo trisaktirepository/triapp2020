@@ -221,7 +221,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 				if ($bundle) {
 					
 				//if (!$bundle)	{
-					//echo var_dump($bundle);exit;
+					echo var_dump($bundle); 
 				//}
 					//get item detail
 					$bundleDetail=$dbBudleDetail->getDataByBudle($bundle['idfeebundle']);
