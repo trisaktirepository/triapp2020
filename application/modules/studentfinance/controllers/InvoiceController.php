@@ -229,7 +229,8 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 					$act[$key]['invoicerest']=array();
 					$act[$key]['invoice']=$invoice;
 					if ($invoice) {
-						 
+						echo var_dump($invoice);
+						echo var_dump($bundleDetail);
 						$current_level=$this->getLevel($IdStudentRegistration, $idsemester, $intake);
 						
 						//$this->view->invoice=$invoice;
@@ -327,8 +328,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 							}
 							
 							$row =$feeStructure->getApplicantFeeStructure($intake['IdIntake'],$std['IdProgram'],$student_category,$std['IdBranch'],$std['IdProgramMajoring']);
-							echo var_dump($row); 
-							echo var_dump(($bundleDetail));
+							 
 							if ($row) {
 								$fee_structure = $row;
 								//echo var_dump($row);
