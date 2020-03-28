@@ -221,7 +221,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 				if ($bundle) {
 					
 				//if (!$bundle)	{
-					echo var_dump($bundle); 
+					 
 				//}
 					//get item detail
 					$bundleDetail=$dbBudleDetail->getDataByBudle($bundle['idfeebundle']);
@@ -327,7 +327,8 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 							}
 							
 							$row =$feeStructure->getApplicantFeeStructure($intake['IdIntake'],$std['IdProgram'],$student_category,$std['IdBranch'],$std['IdProgramMajoring']);
-							//echo var_dump($row); 
+							echo var_dump($row); 
+							echo var_dump(($bundleDetail));
 							if ($row) {
 								$fee_structure = $row;
 								//echo var_dump($row);
