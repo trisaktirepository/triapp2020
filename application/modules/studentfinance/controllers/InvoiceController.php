@@ -229,7 +229,8 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 					$act[$key]['invoicerest']=array();
 					$act[$key]['invoice']=$invoice;
 					if ($invoice) {
-						 
+						echo var_dump($invoice);
+						echo var_dump($bundleDetail);
 						$current_level=$this->getLevel($IdStudentRegistration, $idsemester, $intake);
 						
 						//$this->view->invoice=$invoice;
