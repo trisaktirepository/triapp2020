@@ -1410,11 +1410,11 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 					$selectData = $db->select()
 					->from(array('im'=>$this->_name))
 					->join(array('det'=>"invoice_detail"),'im.id=det.invoice_main_id')
-					->where('im.IdStudentRegistration = ?', $idstd)
+					//->where('im.IdStudentRegistration = ?', $idstd)
 					->where('im.appl_id=?',$applid)
 					->where('im.bill_balance<bill_amount');
 					$row = $db->fetchRow($selectData);
-					if ($smt) {
+					if ($row) {
 						$row['mhsbaru']="1";
 						
 					}  
