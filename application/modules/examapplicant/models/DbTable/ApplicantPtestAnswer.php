@@ -96,7 +96,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 			   	'apa_user_by' => $auth->getIdentity()->appl_id
 				);
 		
-		   	echo var_dump($data);
+		   	//echo var_dump($data);
 		   	$id=1;
 			//$ok = $db->insert($this->_name,$data);
 			//$id = $db->lastInsertId($this->_name);
@@ -110,7 +110,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 					->where('a.test_type=?',$postData['test_type']);
 				$set=$db->fetchAll($select);
 				if ($set) {
-					 echo var_dump($set);
+					// echo var_dump($set);
 					//get random set according to config
 					$randomset=array_rand($set,1);
 					echo var_dump($randomset);exit;
