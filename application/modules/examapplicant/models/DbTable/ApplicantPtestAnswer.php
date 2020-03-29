@@ -93,7 +93,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 		   		'pcode' => $postData['pcode'],
 		   		'idConfig'=>$postData['config']['idConfig'],
 		   		'test_type'=>$postData['test_type'],
-			   	'apa_user_by' => $auth->getIdentity()->iduser
+			   	'apa_user_by' => $auth->getIdentity()->appl_id
 				);
 		
 		   	echo var_dump($data);
@@ -121,7 +121,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 						->from(array('a'=>'tbl_question_bank'))
 						->where('a.from_setcode=?',$idSet)
 						->where('a.subject=?',$idcomp);
-						$questionset=$db->fecthAll($select);
+						$questionset=$db->fetchAll($select);
 						if ($questionset) {
 							
 							foreach ($questionset as $quest) {
