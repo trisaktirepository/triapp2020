@@ -53,7 +53,7 @@ class App_Model_Application_DbTable_PlacementTestComponent extends Zend_Db_Table
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$selectData = $db ->select()
 		->distinct()
-		->from(array('ac'=>$this->_name),array('ac_comp_name_bahasa','ac_comp_name'))
+		->from(array('ac'=>$this->_name),array('ac_comp_name_bahasa','ac_comp_name','ac_id'))
 		//->join(array('att'=>'appl_test_type'),'att.act_id = ac.ac_test_type',array('ac_test_type_name'=>'act_name'))
 		->join(array('cp'=>'appl_placement_program_setup'),'cp.apps_comp_code=ac.ac_comp_code',array())
 		->join(array('p'=>'tbl_program'),'p.idprogram=cp.apps_program_id',array())
