@@ -119,6 +119,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     					unset($component[$idx]);
     			}
     			//get exam script config
+    			echo var_dump($currenttest);echo var_dump($component);exit;
     			$dbConfig=new Examapplicant_Model_DbTable_ExamScriptConfig();
     			$config=$dbConfig->getMatchConfig($currenttest['apt_ptest_code'], $currenttest['apt_aps_id'],$currenttest['test_type']);
     			if ($config) {
