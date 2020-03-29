@@ -97,6 +97,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 				);
 		
 		   	echo var_dump($data);
+		   	$id=1;
 			//$ok = $db->insert($this->_name,$data);
 			//$id = $db->lastInsertId($this->_name);
 			
@@ -122,6 +123,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 						->where('a.from_setcode=?',$idSet)
 						->where('a.subject=?',$idcomp);
 						$questionset=$db->fetchAll($select);
+						echo var_dump($questionset);
 						if ($questionset) {
 							
 							foreach ($questionset as $quest) {
@@ -139,7 +141,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 					}
 					exit;
 					 
-				}
+				} else $success="0";
 			} else if ($config['config_mode']==1862) {
 				//random component from several selected exam set
 				 
