@@ -96,8 +96,9 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 			   	'apa_user_by' => $auth->getIdentity()->iduser
 				);
 		
-			$ok = $db->insert($this->_name,$data);
-			$id = $db->lastInsertId($this->_name);
+		   	echo var_dump($data);
+			//$ok = $db->insert($this->_name,$data);
+			//$id = $db->lastInsertId($this->_name);
 			
 			$config=$postData['config'];
 			if ($config['config_mode']==1861) {
@@ -122,18 +123,21 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 						->where('a.subject=?',$idcomp);
 						$questionset=$db->fecthAll($select);
 						if ($questionset) {
+							
 							foreach ($questionset as $quest) {
 								$dtl_data = array(
 											'apad_apa_id' => $id,
 											'apad_ques_no' =>$i,  
 											'idQuestion'=>$quest['idQuestion']
 										);
-							
-							$db->insert('applicant_ptest_ans_detl',$dtl_data);
+								echo var_dump($dtl_data);
+								echo '<br>';
+							//$db->insert('applicant_ptest_ans_detl',$dtl_data);
 							}
 						} else $success="0";
 						$i++;
 					}
+					exit;
 					 
 				}
 			} else if ($config['config_mode']==1862) {
