@@ -24,7 +24,7 @@ $(function() {
 		 					$("#answer").val(data.apad_appl_ans);
 		 					$("#answered"+order+1).text(data.apad_appl_ans);
 		 					$("#idQuestion").val(data.idQuestion);
-		 					 
+		 					$("#apad_id").val(data.apad_id);
 		 					var urllink=data.question_url;
 		 					
 		 					populateCanvas("Question",urllink);
@@ -50,6 +50,7 @@ $(function() {
 			 					//$("#QuestionTxt").val(data.question);
 			 					$("#ordertxt").text(data.apad_ques_no);
 			 					$("#order").val(data.apad_ques_no);
+			 					$("#apad_id").val(data.apad_id);
 			 					$("#answer").val(data.apad_appl_ans);
 			 					$("#answered"+order+1).text(data.apad_appl_ans);
 			 					$("#idQuestion").val(data.idQuestion);
@@ -103,7 +104,7 @@ function saveAnswer(answer){
 	$.ajax({
 		  type: "POST",
 		  url: "/examapplicant/examination/save-answer",
-		  data: {'idQuestion':idQuestion,'apa_id':$("#apa_id").val(),'answer':answer,'order':order},
+		  data: {'idQuestion':idQuestion,'apad_id':$("#apad_id").val(),'answer':answer,'order':order},
 		  dataType: 'json'
 		})
 		.done(function(respond){
@@ -133,7 +134,7 @@ function firstQuestion(idQ,Qurl,parenturl) {
 <?php if(isset($this->noticeError)){?>
 <div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
 <?php }?>
-<input type="hidden" id="apa_id" name="apa_id" value="<?php $this->question['apad_apa_id']?>">
+<input type="hidden" id="apad_id" name="apad_id" value="<?php $this->question['apad_id']?>">
 <input type="hidden" id="idQuestion" value="">
 <input type="hidden" id="order" value="">
 <input type="hidden" id="n_of_quest" value="<?php echo $this->n_of_quest?>">

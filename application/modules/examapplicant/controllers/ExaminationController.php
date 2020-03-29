@@ -251,13 +251,15 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	$ajaxContext->addActionContext('view', 'html');
     	$ajaxContext->initContext();
     	$quest=array();
+    	$dbQuest=new Examapplicant_Model_DbTable_QuestionBank();
     	$dbQuestdet=new Examapplicant_Model_DbTable_ApplicantPtestAnswerDtl();
     	if ($this->getRequest()->isPost()) {
     		 
     		$formData = $this->getRequest()->getPost();
-    		$data=array('apad_appl_ans'=>$formData['appad_appl_ans']);
-    		$quest=$dbQuestdet->getQuestionBySequence($formData['apa_id'], $formData['order']);
-    
+    		$quest=$dbQuest->getQuestion($formData['idQuestion']);
+    		if ($quest['answer_mc']==$formData['answer']) $point=1;else $point=0;
+    		$data=array('apad_appl_ans'=>$formData['answer'],'apad_status_ans'=>$point);
+    		$dbQuestdet->update($data, 'apad_id='.$formData['apad_id']);    
     	}
     	$ajaxContext = $this->_helper->getHelper('AjaxContext');
     	$ajaxContext->addActionContext('view', 'html');
