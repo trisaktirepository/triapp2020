@@ -26,15 +26,16 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		$trxid=$examdetail[0]['at_trans_id'];
     		$trx=$dbApplicant->getTransaction($trxid);
     		$compprogram=$dbExamComp->getComponenByTransaction($trxid,"0");
+    		foreach ($compprogram as $value) {
+    			$comprog[]=$value['ac_id'];
+    		}
     		foreach ($examdetail as $key=>$value) {
     			
     			$compcode=$value['app_comp_code'];
     			$component=$dbExamComp->getDataComponent($compcode);
-    			echo var_dump($component);
-    			echo '<br>';
-    			echo var_dump($compprogram);
+    			
     			foreach ($component as $idx=>$comp) {
-    				if (!array_search($comp['ac_id'], $compprogram))
+    				if (!array_search($comp['ac_id'], $comprog))
     					unset($component[$idx]);
     			}
     			$testtype=$dbTestType->getData($compcode);
