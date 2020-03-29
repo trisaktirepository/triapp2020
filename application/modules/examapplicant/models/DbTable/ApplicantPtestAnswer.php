@@ -112,8 +112,8 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 				if ($set) {
 					// echo var_dump($set);
 					//get random set according to config
-					$idSet=array_rand($set,1);
-					 
+					$idx=array_rand($set,1);
+					$idSet=$set[$idx]['ape_idSet'];
 					$i=1;
 					foreach ($postData['component'] as $comp) {
 						$idcomp=$comp['ac_id'];
