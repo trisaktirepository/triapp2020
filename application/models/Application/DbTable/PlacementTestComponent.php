@@ -48,6 +48,23 @@ class App_Model_Application_DbTable_PlacementTestComponent extends Zend_Db_Table
 		//echo var_dump($row);exit;
 		return $row;
 	}
+	
+	public function getComponenByTransaction($trxid,$aph_code){
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$selectData = $db ->select()
+		->distinct()
+		->from(array('ac'=>$this->_name),array('ac_comp_name_bahasa','ac_comp_name'))
+		//->join(array('att'=>'appl_test_type'),'att.act_id = ac.ac_test_type',array('ac_test_type_name'=>'act_name'))
+		->join(array('cp'=>'appl_placement_program_setup'),'cp.apps_comp_code=ac.ac_comp_code',array())
+		->join(array('p'=>'tbl_program'),'p.idprogram=cp.apps_program_id',array())
+		->join(array('ap'=>'applicant_program'),'ap.ap_prog_code=p.programcode',array())
+		->where('cp.aph_type=?', $aph_code) 
+		->where('ap.ap_at_trans_id=?',$trxid);
+		//echo $selectData;
+		$row=$db->fetchAll($selectData);
+		//echo var_dump($row);exit;
+		return $row;
+	}
 	public function getDataComponent($id=0){
 		 
 			$db = Zend_Db_Table::getDefaultAdapter();
