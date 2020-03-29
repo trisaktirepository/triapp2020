@@ -20,19 +20,23 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	$dbExamComp=new App_Model_Application_DbTable_PlacementTestComponent();
     	$dbPlacementTest=new App_Model_Application_DbTable_ApplicantPtestDetail();
     	$examdetail=$dbPlacementTest->getActivePtestDetail($appl_id,$date);
+    	$dbTestType=new App_Model_Application_DbTable_PlacementTestType();
     	if ($examdetail) {
     	//all test on date
     		$trxid=$examdetail[0]['at_trans_id'];
     		$trx=$dbApplicant->getTransaction($trxid);
     		$compprogram=$dbExamComp->getComponenByTransaction($trxid,"0");
     		foreach ($examdetail as $key=>$value) {
+    			
     			$compcode=$value['app_comp_code'];
     			$component=$dbExamComp->getDataComponent($compcode);
     			foreach ($component as $idx=>$comp) {
     				if (!array_search($comp['ac_id'], $compprogram))
     					unset($component[$idx]);
     			}
+    			$testtype=$dbTestType->getData($compcode);
     			$examdetail[$key]['compcode']=$component;
+    			$examdetail[$key]['ptestname']=$testtype['act_name'];
     			
     		}
     		$trxid=$examdetail[0]['at_trans_id'];
