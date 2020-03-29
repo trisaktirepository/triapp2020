@@ -223,7 +223,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 				}
 			} 
 			
-		  	if ( $success="1")  {
+		  	if ( $success=="1")  {
 		    	$db->commit();
 		    	$response=array('apa_id'=>$id,'n_of_quest'=>$i-1);
 		  	} else {
