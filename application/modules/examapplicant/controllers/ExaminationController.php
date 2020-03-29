@@ -9,8 +9,8 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 
     public function indexAction()
     {
-    	 
-    	$this->view->title="Examination Day";
+    	$msg=$this->_getParam('msg');
+    	$this->view->title="Examination ".$msg;
     	//get applicant profile
     	$auth = Zend_Auth::getInstance();
     	$appl_id = $auth->getIdentity()->appl_id; 
