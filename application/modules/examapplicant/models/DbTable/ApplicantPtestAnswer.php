@@ -133,10 +133,11 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 										);
 								echo var_dump($dtl_data);
 								echo '<br>';
+								$i++;
 							//$db->insert('applicant_ptest_ans_detl',$dtl_data);
 							}
 						} else $success="0";
-						$i++;
+						
 					}
 					exit;
 					 
@@ -173,11 +174,11 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 										'apad_ques_no' =>$i,
 										'idQuestion'=>$quest['idQuestion']
 								);
-									
+								$i++;
 								$db->insert('applicant_ptest_ans_detl',$dtl_data);
 							}
 						} else $success="0";
-						$i++;
+						 
 					}
 					
 					
@@ -211,11 +212,11 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 										'apad_ques_no' =>$i,
 										'idQuestion'=>$quest['idQuestion']
 								);
-									
+								$i++;
 								$db->insert('applicant_ptest_ans_detl',$dtl_data);
 							}
 						} else $success="0";
-						$i++;
+						 
 					}
 						
 						
