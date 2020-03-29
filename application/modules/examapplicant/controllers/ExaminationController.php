@@ -134,7 +134,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     							'component'=>$component,
     							'test_type'=>$currenttest['app_comp_code']
     							);
-    					echo var_dump($data);exit;
+    					//echo var_dump($data);exit;
     					$dbAppPtest=new Examapplicant_Model_DbTable_ApplicantPtestAnswer();
     					$response=$dbAppPtest->addData($data);
     					
@@ -148,11 +148,11 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		} else $this->_redirect('/examapplicant/examination/index/msg/No Opened Test');
     	
     		//get first question
-    		if ($response>0) {
+    		if ($response) {
     			$question=$dbAppPtestDet->getQuestionBySequence($response['apa_id'], 1);
     			$this->view->question=$question;
     			$this->view->n_of_quest=$response['n_of_quest'];
-    		}
+    		} else $this->_redirect('/examapplicant/examination/index/msg/Fail to generate exam');
     	} else $this->_redirect('/examapplicant/examination/index/msg/No Test');
     	
     	

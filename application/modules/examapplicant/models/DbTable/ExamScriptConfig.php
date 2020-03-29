@@ -39,6 +39,7 @@ class Examapplicant_Model_DbTable_ExamScriptConfig extends Zend_Db_Table_Abstrac
 	public function  getMatchConfig($placementcode,$schid,$testtype) {
 		$select=$this->_db->select()
 		->from(array('b'=>$this->_name))
+		->join(array('a'=>'appl_placement_head'),'b.placement_code=a.aph_placement_code',array('aph_id'))
 		->where('b.placement_code=?',$placementcode)
 		->where('b.test_type=?',$testtype)
 		->where('b.sch_id=?',$schid);
@@ -46,7 +47,8 @@ class Examapplicant_Model_DbTable_ExamScriptConfig extends Zend_Db_Table_Abstrac
 		 if (!$row) {
 		 	$select=$this->_db->select()
 		 	->from(array('b'=>$this->_name))
-		 	->where('b.placement_code=?',$placementcode)
+		 	->join(array('a'=>'appl_placement_head'),'b.placement_code=a.aph_placement_code',array('aph_id'))
+			->where('b.placement_code=?',$placementcode)
 		 	->where('b.test_type=?',$testtype)
 		 	->where('b.sch_id=0 or b.sch_id is null');
 		 	$row=$this->_db->fetchRow($select);

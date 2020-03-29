@@ -75,6 +75,15 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 		$schemaDetailDb = new Application_Model_DbTable_PlacementTestSchemaDetail();
 		$response=array();
 		try {
+			$success="1";
+			//component map
+			foreach ($postData['component'] as $key=>$comp) {
+				$select=$db->select()
+					->from(array('a'=>'tbl_exam_comp_map'))
+					->where('a.ac_idori=?',$comp['ac_id']);
+				$row=$db->fetchRow($select);
+				$postData['component'][$key]['ac_id']=$row['ac_iddest'];
+			}
 			//head data
 		   	$data = array(
 		        'apa_trans_id' => $postData['apa_trans_id'],
@@ -102,7 +111,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 					 
 					//get random set according to config
 					$randomset=array_rand($set,1);
-					echo var_dump($randomset);
+					//echo var_dump($randomset);
 					$idSet=$randomset[0]['ape_idSet'];
 					$i=1;
 					foreach ($postData['component'] as $comp) {
@@ -122,7 +131,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 							
 							$db->insert('applicant_ptest_ans_detl',$dtl_data);
 							}
-						}
+						} else $success="0";
 						$i++;
 					}
 					 
@@ -162,7 +171,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 									
 								$db->insert('applicant_ptest_ans_detl',$dtl_data);
 							}
-						}
+						} else $success="0";
 						$i++;
 					}
 					
@@ -200,7 +209,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 									
 								$db->insert('applicant_ptest_ans_detl',$dtl_data);
 							}
-						}
+						} else $success="0";
 						$i++;
 					}
 						
@@ -208,9 +217,13 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 				}
 			} 
 			
-		    
-		    $db->commit();
-		    $response=array('apa_id'=>$id,'n_of_quest'=>$i-1);
+		  	if ( $success="1")  {
+		    	$db->commit();
+		    	$response=array('apa_id'=>$id,'n_of_quest'=>$i-1);
+		  	} else {
+		  		$db->rollBack();
+		  		$response=array();
+		  	}
 		} catch (exception $e) {
 			$db->rollBack();
     		echo $e->getMessage();
