@@ -110,10 +110,12 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     			$compcode=$currenttest['app_comp_code'];
     			$dbPlacementComp=new App_Model_Application_DbTable_PlacementTestProgramComponent();
     			$compprogram=$dbPlacementComp->getComponenByTransaction($trxid, "0");
-    			
+    			foreach ($compprogram as $value) {
+    				$comprog[]=$value[ac_id];
+    			}
     			$component=$dbExamComp->getDataComponent($compcode);
     			foreach ($component as $idx=>$comp) {
-    				if (!array_search($comp['ac_id'], $compprogram))
+    				if (!array_search($comp['ac_id'], $comprog))
     					unset($component[$idx]);
     			}
     			//get exam script config
