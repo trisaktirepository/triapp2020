@@ -90,7 +90,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 		//generate personal exam
 		$dbExamComp=new App_Model_Application_DbTable_PlacementTestComponent();
 		$dbApplicant=new App_Model_Application_DbTable_ApplicantTransaction();
-		 
+		$dbAppPtestDet=new Examapplicant_Model_DbTable_ApplicantPtestAnswerDtl();
     	$dbPtest=new App_Model_Application_DbTable_ApplicantPtest();
     	$ptest=$dbPtest->getPtest($trxid);
     	
@@ -110,20 +110,37 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     			}
     			//get exam script config
     			$dbConfig=new Examapplicant_Model_DbTable_ExamScriptConfig();
-    			$config=$dbConfig->getMatchConfig($currenttest['apt_ptest_code'], $currenttest['apt_aps_id']);
+    			$config=$dbConfig->getMatchConfig($currenttest['apt_ptest_code'], $currenttest['apt_aps_id'],$currenttest['test_type']);
     			if ($config) {
-    				$data=array('apa_trans_id' => $trx['at_trans_id'],
+    				try {
+    					$data=array(
+    							'apa_trans_id' => $trx['at_trans_id'],
     							'apa_ptest_code' => $trx['at_pes_id'],
     							'apa_set_code' =>null,
     							'apa_date' => date ('Y-m-d h:i:s'),
     							'pcode' => $currenttest['apt_ptest_code'],
-    							'config'=>$config
+    							'config'=>$config,
+    							'component'=>$component,
+    							'test_type'=>$currenttest['app_comp_code']
     							);
-    				$dbAppPtest=new Examapplicant_Model_DbTable_ApplicantPtestAnswer();
-    				$dbAppPtest->addData($data);
+    					$dbAppPtest=new Examapplicant_Model_DbTable_ApplicantPtestAnswer();
+    					$response=$dbAppPtest->addData($data);
+    					
+    				} catch (Exception $e) {
+    					$msg="Fail to generate Exam Script";
+    					$this->_redirect('/examapplicant/examination/index/msg/'.$msg);
+    				}
+    				
     			} else $this->_redirect('/examapplicant/examination/index/msg/No Configuration');
     			
     		} else $this->_redirect('/examapplicant/examination/index/msg/No Opened Test');
+    	
+    		//get first question
+    		if ($response>0) {
+    			$question=$dbAppPtestDet->getQuestionBySequence($response['apa_id'], 1);
+    			$this->view->question=$question;
+    			$this->view->n_of_quest=$response['n_of_quest'];
+    		}
     	} else $this->_redirect('/examapplicant/examination/index/msg/No Test');
     	
     	
@@ -187,6 +204,77 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 
     }
 
+    public function ajaxGetQuestionAction($id=null){
+    	 
+     
+    	 
+    	if ($this->getRequest()->isXmlHttpRequest()) {
+    		$this->_helper->layout->disableLayout();
+    	}
+    
+    	$ajaxContext = $this->_helper->getHelper('AjaxContext');
+    	$ajaxContext->addActionContext('view', 'html');
+    	$ajaxContext->initContext();
+    	$quest=array();
+    	$dbQuestdet=new Examapplicant_Model_DbTable_ApplicantPtestAnswerDtl();
+    	if ($this->getRequest()->isPost()) {
+    	
+    		$formData = $this->getRequest()->getPost();
+    		$quest=$dbQuestdet->getQuestionBySequence($formData['apa_id'], $formData['order']);
+    		
+    	}
+    	$ajaxContext = $this->_helper->getHelper('AjaxContext');
+    	$ajaxContext->addActionContext('view', 'html');
+    	$ajaxContext->initContext();
+    		
+    	$ajaxContext->addActionContext('view', 'html')
+    	->addActionContext('form', 'html')
+    	->addActionContext('process', 'json')
+    	->initContext();
+    
+    	$json = Zend_Json::encode($quest);
+    
+    	echo $json;
+    	exit();
+    
+    }
+    
+    public function ajaxSaveAnswerAction($id=null){
+    
+    	 
+    
+    	if ($this->getRequest()->isXmlHttpRequest()) {
+    		$this->_helper->layout->disableLayout();
+    	}
+    
+    	$ajaxContext = $this->_helper->getHelper('AjaxContext');
+    	$ajaxContext->addActionContext('view', 'html');
+    	$ajaxContext->initContext();
+    	$quest=array();
+    	$dbQuestdet=new Examapplicant_Model_DbTable_ApplicantPtestAnswerDtl();
+    	if ($this->getRequest()->isPost()) {
+    		 
+    		$formData = $this->getRequest()->getPost();
+    		$data=array('apad_appl_ans'=>$formData['appad_appl_ans']);
+    		$quest=$dbQuestdet->getQuestionBySequence($formData['apa_id'], $formData['order']);
+    
+    	}
+    	$ajaxContext = $this->_helper->getHelper('AjaxContext');
+    	$ajaxContext->addActionContext('view', 'html');
+    	$ajaxContext->initContext();
+    
+    	$ajaxContext->addActionContext('view', 'html')
+    	->addActionContext('form', 'html')
+    	->addActionContext('process', 'json')
+    	->initContext();
+    
+    	$json = Zend_Json::encode($quest);
+    
+    	echo $json;
+    	exit();
+    
+    }
+    
 
      
 }

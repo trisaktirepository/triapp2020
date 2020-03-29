@@ -73,7 +73,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 		$db->beginTransaction();
 		
 		$schemaDetailDb = new Application_Model_DbTable_PlacementTestSchemaDetail();
-		
+		$response=array();
 		try {
 			//head data
 		   	$data = array(
@@ -82,39 +82,140 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 				'apa_set_code' => $postData['apa_set_code'],
 			   	'apa_date' => date ('Y-m-d h:i:s'),
 		   		'pcode' => $postData['pcode'],
+		   		'idConfig'=>$postData['config']['idConfig'],
+		   		'test_type'=>$postData['test_type'],
 			   	'apa_user_by' => $auth->getIdentity()->iduser
 				);
 		
 			$ok = $db->insert($this->_name,$data);
 			$id = $db->lastInsertId($this->_name);
-			//detail data
-			$i=0;
-			foreach ($postData['answer'] as $answer){
-				
-				//check answer
-				$question_result = 0;
-				if($answer!=""){
-					$question_result = $schemaDetailDb->checkAnswer2($postData['apa_set_code'],($i+1),$answer);
+			
+			$config=$postData['config'];
+			if ($config['config_mode']==1861) {
+				//random set from several selected exam set
+				$select=$db->select()
+					->from(array('a'=>'appl_placement_examsets'))
+					->where('a.ape_aph_id=?',$postData['config']['aph_id'])
+					->where('a.test_type=?',$postData['test_type']);
+				$set=$db->fetchAll($select);
+				if ($set) {
+					 
+					//get random set according to config
+					$randomset=array_rand($set,1);
+					echo var_dump($randomset);
+					$idSet=$randomset[0]['ape_idSet'];
+					$i=1;
+					foreach ($postData['component'] as $comp) {
+						$idcomp=$comp['ac_id'];
+						$select=$db->select()
+						->from(array('a'=>'tbl_question_bank'))
+						->where('a.from_setcode=?',$idSet)
+						->where('a.subject=?',$idcomp);
+						$questionset=$db->fecthAll($select);
+						if ($questionset) {
+							foreach ($questionset as $quest) {
+								$dtl_data = array(
+											'apad_apa_id' => $id,
+											'apad_ques_no' =>$i,  
+											'idQuestion'=>$quest['idQuestion']
+										);
+							
+							$db->insert('applicant_ptest_ans_detl',$dtl_data);
+							}
+						}
+						$i++;
+					}
+					 
 				}
-				
-				$dtl_data = array(
-								'apad_apa_id' => $id,
-								'apad_ques_no' =>($i+1),
-								'apad_appl_ans' => $answer,
-								'apad_status_ans' => $question_result
-							);
-				
-				$db->insert('applicant_ptest_ans_detl',$dtl_data);
-				$i++;
-			}
+			} else if ($config['config_mode']==1862) {
+				//random component from several selected exam set
+				 
+				$select=$db->select()
+				->from(array('a'=>'appl_placement_examsets'))
+				->where('a.ape_aph_id=?',$postData['config']['aph_id'])
+				->where('a.test_type=?',$postData['test_type']);
+				$set=$db->fetchAll($select);
+				if ($set) {
+					foreach ($postData['component'] as $keycomp=>$comp) {
+						$idcomp=$comp['ac_id'];
+						$selectedSet=array_rand($set);
+						echo var_dump($selectedSet);echo '<br>';
+						$postData['component'][$keycomp]['idSet']=$selectedSet[0]['ape_idSet'];
+					}
+					
+					$i=1;
+					foreach ($postData['component'] as $comp) {
+						$idcomp=$comp['ac_id'];
+						$idSet=$comp['idSet'];
+						$select=$db->select()
+						->from(array('a'=>'tbl_question_bank'))
+						->where('a.from_setcode=?',$idSet)
+						->where('a.subject=?',$idcomp);
+						$questionset=$db->fecthAll($select);
+						if ($questionset) {
+							foreach ($questionset as $quest) {
+								$dtl_data = array(
+										'apad_apa_id' => $id,
+										'apad_ques_no' =>$i,
+										'idQuestion'=>$quest['idQuestion']
+								);
+									
+								$db->insert('applicant_ptest_ans_detl',$dtl_data);
+							}
+						}
+						$i++;
+					}
+					
+					
+				}
+			} else if ($config['config_mode']==1863) {
+				//random question direct from question bank
+				$selectset=$db->select()
+				->from(array('a'=>'appl_placement_examsets'),array('ape_idSet'))
+				->where('a.ape_aph_id=?',$postData['config']['aph_id'])
+				->where('a.test_type=?',$postData['test_type']);
+				$set=$db->fetchAll($selectset);
+				if ($set) {
+					foreach ($postData['component'] as $keycomp=>$comp) {
+						$idcomp=$comp['ac_id'];
+						$select=$db->select()
+						->from(array('a'=>'tbl_question_bank'))
+						->where('a.from_setcode in ('.$selectedSet.')')
+						->where('a.subject=?',$idcomp);
+					}
+						
+					$i=1;
+					foreach ($postData['component'] as $comp) {
+						$idcomp=$comp['ac_id'];
+						$idSet=$comp['idSet'];
+						
+						$questionset=$db->fecthAll($select);
+						if ($questionset) {
+							foreach ($questionset as $quest) {
+								$dtl_data = array(
+										'apad_apa_id' => $id,
+										'apad_ques_no' =>$i,
+										'idQuestion'=>$quest['idQuestion']
+								);
+									
+								$db->insert('applicant_ptest_ans_detl',$dtl_data);
+							}
+						}
+						$i++;
+					}
+						
+						
+				}
+			} 
+			
 		    
 		    $db->commit();
-		
+		    $response=array('apa_id'=>$id,'n_of_quest'=>$i-1);
 		} catch (exception $e) {
 			$db->rollBack();
     		echo $e->getMessage();
 		}
-		return $id;
+		return $response;
 	}
 	
 	public function updateData($postData,$id){

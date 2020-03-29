@@ -8,76 +8,122 @@ $(function() {
 	 
 	$(".next").click(function(){
 	var order=$("#order").val();
-
+	if (order<=$("#n_of_quest").val()) {
 		 	$.ajax({
 					url: '<?php echo $this->baseUrl();?>/examapplicant/examination/ajax-get-question,
 					type: 'POST',
-					data: {idQuestion: idQuestion,order:order+1},
+					data: {apa_id: $("#apa_id").val(),order:order+1},
 					dataType: 'json',
 					error: function(){
 							alert("Terjadi masalah saat menghapus data !");
 						}, 
 					}).done(function ( data ) {
-		 					$("#QuestionTxt").val(data.question);
-		 					$("#seqno").val(data.seqno);
-		 					$("#answer_mc").val(data.answer_mc);
+		 					//$("#QuestionTxt").val(data.question);
+		 					$("#ordertxt").text(data.apad_ques_no);
+		 					$("#order").val(data.apad_ques_no);
+		 					$("#answer").val(data.apad_appl_ans);
+		 					$("#answered"+order+1).text(data.apad_appl_ans);
 		 					$("#idQuestion").val(data.idQuestion);
-		 					$("#parent").val(data.parent); 
+		 					 
 		 					var urllink=data.question_url;
-		 					//var canvas = document.getElementById('Question');
-		 					const canvas = new fabric.Canvas("Question")
-		 					const imgEl = document.createElement("img");
-		 					imgEl.src = urllink;
-		 					imgEl.onload = () => {
-		 					  const img = new fabric.Image(imgEl)
-		 					  img.set({
-		 					    left: 50,
-		 					    top: 50,
-		 					    scaleX: 1,
-		 					    scaleY: 1
-		 					  });
-		 					  canvas.add(img);
-		 					  canvas.requestRenderAll();
-		 					  
-		 					  canvas.setWidth(img.getScaledWidth());
-		 					  canvas.setHeight(img.getScaledHeight());
-		 					  img.set({
-		 					      left: 0,
-		 					      top: 0
-		 					   });
-		 					  img.setCoords();
-		 					  canvas.requestRenderAll();
-		 					   
-		 					}
-
 		 					
-		 				     
-		 					
+		 					populateCanvas("Question",urllink);
+		 					if (data.question_parent_url!='') 
+			 					populateCanvas("parent",data.question_parent_url);
+		 					else $("#parent").empty();
 		 			});
-		 
-		});
+			}
+	});
 
+	$(".pre").click(function(){
+		var order=$("#order").val();
+		if (order>1) {
+			 	$.ajax({
+						url: '<?php echo $this->baseUrl();?>/examapplicant/examination/ajax-get-question,
+						type: 'POST',
+						data: {apa_id: $("#apa_id").val(),order:order-1},
+						dataType: 'json',
+						error: function(){
+								alert("Terjadi masalah saat menghapus data !");
+							}, 
+						}).done(function ( data ) {
+			 					//$("#QuestionTxt").val(data.question);
+			 					$("#ordertxt").text(data.apad_ques_no);
+			 					$("#order").val(data.apad_ques_no);
+			 					$("#answer").val(data.apad_appl_ans);
+			 					$("#answered"+order+1).text(data.apad_appl_ans);
+			 					$("#idQuestion").val(data.idQuestion);
+			 					 
+			 					var urllink=data.question_url;
+			 					
+			 					populateCanvas("Question",urllink);
+			 					if (data.question_parent_url!='') 
+				 					populateCanvas("parent",data.question_parent_url);
+			 					else $("#parent").empty();
+			 			});
+				}
+			});
+		 
+		
  
 });
 
-function saveAnswer(trxid,answer){
+function populateCanvas(canvasid,imageurl) {
+	var urllink=data.question_url; 
+	const canvas = new fabric.Canvas(canvasid)
+	const imgEl = document.createElement("img");
+	imgEl.src = urllink;
+	imgEl.onload = () => {
+	  const img = new fabric.Image(imgEl)
+	  img.set({
+	    left: 50,
+	    top: 50,
+	    scaleX: 1,
+	    scaleY: 1
+	  });
+	  canvas.add(img);
+	  canvas.requestRenderAll();
+	  
+	  canvas.setWidth(img.getScaledWidth());
+	  canvas.setHeight(img.getScaledHeight());
+	  img.set({
+	      left: 0,
+	      top: 0
+	   });
+	  img.setCoords();
+	  canvas.requestRenderAll();
+	}
+}
+
+function saveAnswer(answer){
 	 
 	var idQuestion=$("#idQuestion").val();
+	var order=$("#order").val();
 	 
 	$.ajax({
 		  type: "POST",
 		  url: "/examapplicant/examination/save-answer",
-		  data: {'idQuestion':idQuestion,'trxid':trxid,'answer':answer}
+		  data: {'idQuestion':idQuestion,'apa_id':$("#apa_id").val(),'answer':answer,'order':order},
+		  dataType: 'json'
 		})
 		.done(function(respond){
-			 $("#id")
+			 $("#answered"+order).text(respond.answer);
+			 
 			})
 		.fail(function(respond){console.log("fail");})
 		.always(function(respond){console.log("always");
 	});
 }
+
+function firstQuestion(idQ,Qurl,parenturl) {
+	populateCanvas("Question",Qurl);
+	if (parenturl!='') 
+		populateCanvas("parent",parenturl);
+	else $("#parent").empty();
+}
  
 </script> 
+<body onload="firstQuestion('<?php echo $this->question['idQuestion']?>','<?php echo $this->question['question_url']?>','<?php echo $this->question['question_parent_url']?>');">
 <?php if(isset($this->noticeMessage)){?>
 <div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
 <?php }?>
@@ -87,25 +133,26 @@ function saveAnswer(trxid,answer){
 <?php if(isset($this->noticeError)){?>
 <div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
 <?php }?>
-
+<input type="hidden" id="apa_id" name="apa_id" value="<?php $this->question['apad_apa_id']?>">
+<input type="hidden" id="idQuestion" value="">
+<input type="hidden" id="order" value="">
+<input type="hidden" id="n_of_quest" value="<?php echo $this->n_of_quest?>">
 <div>
 	<fieldset>
 		<legend><?php echo $this->translate("Answer Result");?></legend>
 			<table class="table">
-			<tr><?php for ($i=1;$i<=40;$i++) {?><td  width="2%" bgcolor="darkgrey" align="center"><font color="white"><a href="#" onclick="getQuestion('<?php echo $i?>')"><?php echo $i;?></a></font></td><?php }?></tr>
-			<tr><?php for ($i=1;$i<=40;$i++) {?><td  width="2%" bgcolor="white"><div id="<?php echo $i;?>"></div></td><?php }?></tr>
-			<tr><?php for ($i=41;$i<=80;$i++) {?><td  width="2%"bgcolor="darkgrey" align="center"><font color="white"><a href="#" onclick="getQuestion('<?php echo $i?>')"><?php echo $i;?></a></font></td><?php }?></tr>
-			<tr><?php for ($i=41;$i<=80;$i++) {?><td  width="2%" bgcolor="white"><div id="<?php echo $i;?>"></div></td><?php }?></tr>
-			<tr><?php for ($i=81;$i<=120;$i++) {?><td  width="2%"bgcolor="darkgrey" align="center"><font color="white"><a href="#" onclick="getQuestion('<?php echo $i?>')"><?php echo $i;?></a></font></td><?php }?></tr>
-			<tr><?php for ($i=81;$i<=120;$i++) {?><td  width="2%" bgcolor="white"><div id="<?php echo $i;?>"></div></td><?php }?></tr>
-			
+			<?php $nrow=2;
+				for ($j=1;$j<=$nrow;$j++) {?>
+			<tr><?php for ($i=1;$i<=$this->n_of_quest/$nrow;$i++) {?><td  width="2%" bgcolor="darkgrey" align="center"><font color="white"><a href="#" onclick="getQuestion('<?php echo $i?>')"><?php echo $i;?></a></font></td><?php }?></tr> 
+			<tr><?php for ($i=1;$i<=$this->n_of_quest/$nrow;$i++) {?><td  width="2%" bgcolor="white"><div id="answered<?php echo $i;?>"></div></td><?php }?></tr>
+			<?php }?>
 			</table>		 
 	</fieldset>
 </div> 
 <div>
 	<fieldset>
 		<legend><?php echo $this->translate("Exam Quetion");?></legend>
-			<input type="hidden" id="idQuestion" value="">
+			
 			<table class="table">
 			 
 			 <tr>
@@ -115,7 +162,7 @@ function saveAnswer(trxid,answer){
 			 </td>
 			 </tr>
 			 <tr>
-			 <td><div id="order"></div></td>
+			 <td><div id="ordertxt"><?php echo $this->question['apad_ques_no']?></div></td>
 			 <td>
 			 	<canvas style="border:1px solid grey;" id="Question" width="800" height="300"></canvas>
 			 </td>
@@ -128,13 +175,14 @@ function saveAnswer(trxid,answer){
 						 <a class="pre btn" id="pre" href="#">Soal Sebelum</a>
 						 </td>
 						 <td align="center">
-						 <input type="radio" name="answer" value="A" onclick="saveAnswer('<?php echo $this->trxid;?>','A')"> A
-						 <input type="radio" name="answer" value="B" onclick="saveAnswer('<?php echo $this->trxid;?>','B')"> B
-						 <input type="radio" name="answer" value="C" onclick="saveAnswer('<?php echo $this->trxid;?>','C')"> C
-						 <input type="radio" name="answer" value="D" onclick="saveAnswer('<?php echo $this->trxid;?>','D')"> D
-						 <input type="radio" name="answer" value="E" onclick="saveAnswer('<?php echo $this->trxid;?>','E')"> E
+						 <input type="radio" name="answer" value="A" onclick="saveAnswer('A')"> A
+						 <input type="radio" name="answer" value="B" onclick="saveAnswer('B')"> B
+						 <input type="radio" name="answer" value="C" onclick="saveAnswer('C')"> C
+						 <input type="radio" name="answer" value="D" onclick="saveAnswer('D')"> D
+						 <input type="radio" name="answer" value="E" onclick="saveAnswer('E')"> E
 					</td>
-					<td align="center"  width="20%">	<a class="next btn" id="next" href="#">Soal Sesudah</a>
+					<td align="center"  width="20%">	
+					<a class="next btn" id="next" href="#">Soal Sesudah</a>
 			 		</td>
 			 	</tr>
 				</table>
@@ -143,5 +191,5 @@ function saveAnswer(trxid,answer){
 			 
 			</table>		 
 	</fieldset>
-</div>
- 
+</div> 
+</body>

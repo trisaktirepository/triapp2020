@@ -44,6 +44,20 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswerDtl extends Zend_Db_Table_
 		
 	}	
 	
+	public function getQuestionBySequence($apaid,$seqno){
+		 
+			$db = Zend_Db_Table::getDefaultAdapter();
+			$select = $db->select()
+			->from(array('a'=>$this->_name))
+			->where('a.apad_apa_id  = '.$apaid)
+			->where('a.apad_ques_no  = '.$seqno);
+			//echo $select;
+			$row = $db->fetchRow($select);
+	 
+		return $row;
+	
+	}
+	
 	public function getMarkByCom($headId,$qfrom,$qend,$total,$testtype=0){
 
 		$db = Zend_Db_Table::getDefaultAdapter();
