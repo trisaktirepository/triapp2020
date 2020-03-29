@@ -133,6 +133,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     							'component'=>$component,
     							'test_type'=>$currenttest['app_comp_code']
     							);
+    					echo var_dump($data);exit;
     					$dbAppPtest=new Examapplicant_Model_DbTable_ApplicantPtestAnswer();
     					$response=$dbAppPtest->addData($data);
     					
