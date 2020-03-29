@@ -111,7 +111,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     			$dbPlacementComp=new App_Model_Application_DbTable_PlacementTestProgramComponent();
     			$compprogram=$dbPlacementComp->getComponenByTransaction($trxid, "0");
     			foreach ($compprogram as $value) {
-    				$comprog[]=$value[ac_id];
+    				$comprog[]=$value['ac_id'];
     			}
     			$component=$dbExamComp->getDataComponent($compcode);
     			foreach ($component as $idx=>$comp) {
