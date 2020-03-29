@@ -72,11 +72,8 @@
 			 				echo 'Pilihan II	:'.$this->program['program_code2'].' '.$this->program['program_name2'].'<br>';
 						?></td>
 			 	<tr>
-			 </table></td>
-			 </tr>
-			 <tr>
-			 	<td colspan="2">
-			 	<table>
+			 </table>
+			 <table>
 			 		 
 			 		<?php foreach ($this->examdetail as $exam) {
 			 				$comps=$exam['compcode'];?>
@@ -87,8 +84,9 @@
 			 			<tr><td colspan="3"><?php foreach ($comps as $comp ) echo $comp['ac_comp_name_bahasa'].' '?></td></tr>
 			 		<?php }?>
 			 	</table>
-			 	</td>
+			 </td>
 			 </tr>
+			 
 			</table>
 			<?php } else  echo "Pada hari ini tidak ada Ujian Saringan Masuk";?>		 
 	</fieldset>
