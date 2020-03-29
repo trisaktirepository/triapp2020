@@ -73,7 +73,7 @@ class App_Model_Application_DbTable_ApplicantPtestDetail extends Zend_Db_Table_A
 		->where('a.time_stop <= ?',date('H:s:i',strtotime($time)));
 			
 		$row = $db->fetchRow($select);
-	
+		echo $select; exit;
 		if($row){
 			return $row;
 		}else{
