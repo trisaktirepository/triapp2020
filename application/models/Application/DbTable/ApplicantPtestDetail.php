@@ -69,11 +69,11 @@ class App_Model_Application_DbTable_ApplicantPtestDetail extends Zend_Db_Table_A
 		->join(array('aps'=>'appl_placement_schedule'),'aps.aps_id  = b.apt_aps_id',array('aps_id'=>'aps.aps_id','aps_location_id'=>'aps.aps_location_id','aps_test_date'=>'aps.aps_test_date' ,'aps.aps_placement_code'))
 		->where('b.apt_at_trans_id =?', $transid)
 		->where('aps.aps_test_date = ?',date('Y-m-d',strtotime($date)))
-		->where('a.time_start >= ?',date('H:s:i',strtotime($time)))
-		->where('a.time_stop <= ?',date('H:s:i',strtotime($time)));
+		->where('a.time_start <= ?',date('H:s:i',strtotime($time)))
+		->where('a.time_stop >= ?',date('H:s:i',strtotime($time)));
 			
 		$row = $db->fetchRow($select);
-		echo $select; exit;
+		//echo $select; exit;
 		if($row){
 			return $row;
 		}else{
