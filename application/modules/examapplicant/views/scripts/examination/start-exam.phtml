@@ -117,7 +117,7 @@ function saveAnswer(answer){
 
 function firstQuestion(idQ,Qurl,parenturl) {
 
-	alert('onload');
+	 
 	populateCanvas("Question",Qurl);
 	if (parenturl!='') 
 		populateCanvas("parent",parenturl);
@@ -137,6 +137,9 @@ function firstQuestion(idQ,Qurl,parenturl) {
 <?php }?>
 <input type="hidden" id="apad_id" name="apad_id" value="<?php echo $this->question['apad_id']?>">
 <input type="hidden" id="idQuestion" value="<?php echo $this->question['idQuestion']?>">
+<input type="hidden" id="order" value="1">
+<input type="hidden" id="question_url" value="<?php echo $this->question['question_url']?>">
+<input type="hidden" id="question_parent_url" value="<?php echo $this->question['question_parent_url']?>">
 <input type="hidden" id="order" value="1">
 <input type="hidden" id="n_of_quest" value="<?php echo $this->n_of_quest?>">
 <div>
@@ -195,3 +198,13 @@ function firstQuestion(idQ,Qurl,parenturl) {
 	</fieldset>
 </div> 
 </body>
+
+<script>
+var parenturl=$("#question_parent_url").val();
+populateCanvas("Question",$("#question_url").val());
+if (parenturl!='') 
+	populateCanvas("parent",parenturl);
+else $("#parent").empty();
+
+
+</script>
