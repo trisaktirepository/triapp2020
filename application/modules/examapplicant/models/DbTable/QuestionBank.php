@@ -6,22 +6,7 @@ class Examapplicant_Model_DbTable_QuestionBank extends Zend_Db_Table_Abstract
     protected $_primary="idQuestion";
     
      
-    public function fetchAll ()
-    {
-        $sql  = $this->_db->select()->from($this->_name);
-        $stmt = $this->_db->query($sql);
-        return $stmt;
-    }
-   
-    public function fetch ($id = "")
-    {
-        $sql = $this->_db->select()->from($this->_name);
-        if ($id != "") {
-            $sql->where('id = ?', $id);
-        }
-        $result = $this->_db->fetchRow($sql);      
-        return $result;
-    }    
+    
     
     public function addData($data){				
 		$id = $this->insert($data);
