@@ -29,6 +29,28 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 		
 	}
 	
+	
+	public function isExamScript($trx, $testtype){
+		 
+			$db = Zend_Db_Table::getDefaultAdapter();
+			$select = $db->select()
+			->from(array('a'=>$this->_name))
+			->where('a.apa_trans_id = '.$trx)
+			->where('a.test_type=?',$testtype);
+				
+			$row = $db->fetchRow($select);
+		 	if ($row) {
+		 		$select = $db->select()
+		 		->from(array('a'=>'applicant_ptest_ans_detl'),array('count'=>'COUNT(*)'))
+		 		->where('a.apad_apa_id = '.$row['apa_id']);
+		 		
+		 		$det = $db->fetchRow($select);
+		 		$row['n_of_quest']=$det['count'];
+		 	}
+		return $row;
+	
+	}
+	
 	public function getPaginateData(){
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$selectData = $db ->select()

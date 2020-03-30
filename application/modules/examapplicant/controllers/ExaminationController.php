@@ -99,62 +99,71 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 		$dbExamComp=new App_Model_Application_DbTable_PlacementTestComponent();
 		$dbApplicant=new App_Model_Application_DbTable_ApplicantTransaction();
 		$dbAppPtestDet=new Examapplicant_Model_DbTable_ApplicantPtestAnswerDtl();
+		$dbAppTestAns=new Examapplicant_Model_DbTable_ApplicantPtestAnswer();
     	$dbPtest=new App_Model_Application_DbTable_ApplicantPtest();
     	$ptest=$dbPtest->getPtest($trxid);
     	
-    	if ($ptest) {
+    	if ($ptest ) {
+    		
     		$dbPestDetail=new App_Model_Application_DbTable_ApplicantPtestDetail();
     		$currenttest=$dbPestDetail->getActiveTest($trxid, $date, $time);
-    		if ($currenttest) {
-    			$trx=$dbApplicant->getTransaction($trxid);
-    			$compcode=$currenttest['app_comp_code'];
-    			$dbPlacementComp=new App_Model_Application_DbTable_PlacementTestProgramComponent();
-    			$compprogram=$dbPlacementComp->getComponenByTransaction($trxid, "0");
-    			foreach ($compprogram as $value) {
-    				$comprog[]=$value['ac_id'];
-    			}
-    			$component=$dbExamComp->getDataComponent($compcode);
-    			foreach ($component as $idx=>$comp) {
-    				if (!array_search($comp['ac_id'], $comprog))
-    					unset($component[$idx]);
-    			}
-    			//get exam script config
-    			//echo var_dump($currenttest);echo var_dump($component);exit;
-    			$dbConfig=new Examapplicant_Model_DbTable_ExamScriptConfig();
-    			$config=$dbConfig->getMatchConfig($currenttest['apt_ptest_code'], $currenttest['apt_aps_id'],$currenttest['app_comp_code']);
-    			if ($config) {
-    				try {
-    					$data=array(
-    							'apa_trans_id' => $trx['at_trans_id'],
-    							'apa_ptest_code' => $trx['at_pes_id'],
-    							'apa_set_code' =>null,
-    							'apa_date' => date ('Y-m-d h:i:s'),
-    							'pcode' => $currenttest['apt_ptest_code'],
-    							'config'=>$config,
-    							'component'=>$component,
-    							'test_type'=>$currenttest['app_comp_code']
-    							);
-    					//echo var_dump($data);exit;
-    					$dbAppPtest=new Examapplicant_Model_DbTable_ApplicantPtestAnswer();
-    					$response=$dbAppPtest->addData($data);
-    					
-    				} catch (Exception $e) {
-    					$msg="Fail to generate Exam Script";
-    					$this->_redirect('/examapplicant/examination/index/msg/'.$msg);
-    				}
-    				
-    			} else $this->_redirect('/examapplicant/examination/index/msg/No Configuration');
-    			
-    		} else $this->_redirect('/examapplicant/examination/index/msg/No Opened Test');
-    	
-    		//get first question
-    		if ($response) {
-    			$question=$dbAppPtestDet->getQuestionBySequence($response['apa_id'], 1);
-    			$this->view->question=$question;
-    			$this->view->n_of_quest=$response['n_of_quest'];
-    		} else $this->_redirect('/examapplicant/examination/index/msg/Fail to generate exam');
-    	} else $this->_redirect('/examapplicant/examination/index/msg/No Test');
-    	
+	    	if ($currenttest) {
+	    		$trx=$dbApplicant->getTransaction($trxid);
+	    		$compcode=$currenttest['app_comp_code'];
+	    		$response=$dbAppTestAns->isExamScript($trxid, $compcode);
+	    		if (!$response) {
+	    			$dbPlacementComp=new App_Model_Application_DbTable_PlacementTestProgramComponent();
+	    			$compprogram=$dbPlacementComp->getComponenByTransaction($trxid, "0");
+	    			foreach ($compprogram as $value) {
+	    				$comprog[]=$value['ac_id'];
+	    			}
+	    			$component=$dbExamComp->getDataComponent($compcode);
+	    			foreach ($component as $idx=>$comp) {
+	    				if (!array_search($comp['ac_id'], $comprog))
+	    					unset($component[$idx]);
+	    			}
+	    			//get exam script config
+	    			//echo var_dump($currenttest);echo var_dump($component);exit;
+	    			$dbConfig=new Examapplicant_Model_DbTable_ExamScriptConfig();
+	    			$config=$dbConfig->getMatchConfig($currenttest['apt_ptest_code'], $currenttest['apt_aps_id'],$currenttest['app_comp_code']);
+	    			if ($config) {
+	    				try {
+	    					$data=array(
+	    							'apa_trans_id' => $trx['at_trans_id'],
+	    							'apa_ptest_code' => $trx['at_pes_id'],
+	    							'apa_set_code' =>null,
+	    							'apa_date' => date ('Y-m-d h:i:s'),
+	    							'pcode' => $currenttest['apt_ptest_code'],
+	    							'config'=>$config,
+	    							'component'=>$component,
+	    							'test_type'=>$currenttest['app_comp_code']
+	    							);
+	    					//echo var_dump($data);exit;
+	    					$dbAppPtest=new Examapplicant_Model_DbTable_ApplicantPtestAnswer();
+	    					$response=$dbAppPtest->addData($data);
+	    					
+	    				} catch (Exception $e) {
+	    					$msg="Fail to generate Exam Script";
+	    					$this->_redirect('/examapplicant/examination/index/msg/'.$msg);
+	    				}
+	    				
+	    			} else $this->_redirect('/examapplicant/examination/index/msg/No Configuration');
+	    			//get first question
+	    			if ($response) {
+	    				$question=$dbAppPtestDet->getQuestionBySequence($response['apa_id'], 1);
+	    				$this->view->question=$question;
+	    				$this->view->n_of_quest=$response['n_of_quest'];
+	    			} else $this->_redirect('/examapplicant/examination/index/msg/Fail to generate exam');
+	    			
+	    		} else {
+	    			$question=$dbAppPtestDet->getQuestionBySequence($response['apa_id'], 1);
+	    			$this->view->question=$question;
+	    			$this->view->n_of_quest=$response['n_of_quest'];
+	    		}
+	    	
+	    		
+	    	} else $this->_redirect('/examapplicant/examination/index/msg/No Opened Test');
+    	}  else $this->_redirect('/examapplicant/examination/index/msg/No Test');
     	
 		
     }
