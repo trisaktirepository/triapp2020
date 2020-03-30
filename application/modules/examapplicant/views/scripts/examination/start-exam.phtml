@@ -115,15 +115,20 @@ function saveAnswer(answer){
 	});
 }
 
-function firstQuestion(idQ,Qurl,parenturl) {
+function firstQuestion(Qurl,parenturl) {
  	populateCanvas("Question",Qurl);
 	if (parenturl!='') 
 		populateCanvas("parent",parenturl);
 	else $("#parent").empty();
 }
+
+$(window).bind("load", function() {
+	   // code here
+	firstQuestion($('#question_url').val(),$('#question_parent_url').val());
+});
  
 </script> 
-<body onload="firstQuestion('<?php echo $this->question['idQuestion']?>','<?php echo $this->question['question_url']?>','<?php echo $this->question['question_parent_url']?>');">
+<body onload=">
 <?php if(isset($this->noticeMessage)){?>
 <div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
 <?php }?>
