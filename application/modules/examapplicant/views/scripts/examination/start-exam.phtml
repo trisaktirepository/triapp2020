@@ -135,8 +135,8 @@ function firstQuestion(idQ,Qurl,parenturl) {
 <div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
 <?php }?>
 <input type="hidden" id="apad_id" name="apad_id" value="<?php $this->question['apad_id']?>">
-<input type="hidden" id="idQuestion" value="">
-<input type="hidden" id="order" value="">
+<input type="hidden" id="idQuestion" value="<?php echo $this->question['idQuestion']?>">
+<input type="hidden" id="order" value="1">
 <input type="hidden" id="n_of_quest" value="<?php echo $this->n_of_quest?>">
 <div>
 	<fieldset>
@@ -144,8 +144,8 @@ function firstQuestion(idQ,Qurl,parenturl) {
 			<table class="table">
 			<?php $nrow=2;
 				for ($j=1;$j<=$nrow;$j++) {?>
-			<tr><?php for ($i=1;$i<=$this->n_of_quest/$nrow;$i++) {?><td  width="2%" bgcolor="darkgrey" align="center"><font color="white"><a href="#" onclick="getQuestion('<?php echo $i?>')"><?php echo $i;?></a></font></td><?php }?></tr> 
-			<tr><?php for ($i=$this->n_of_quest/$nrow+1;$i<=$this->n_of_quest;$i++) {?><td  width="2%" bgcolor="white"><div id="answered<?php echo $i;?>"></div></td><?php }?></tr>
+			<tr><?php for ($i=($j-1)*$this->n_of_quest/$nrow+1;$i<=$j*$this->n_of_quest/$nrow;$i++) {?><td  width="2%" bgcolor="darkgrey" align="center"><font color="white"><a href="#" onclick="getQuestion('<?php echo $i?>')"><?php echo $i;?></a></font></td><?php }?></tr> 
+			<tr><?php for ($i=($j-1)*$this->n_of_quest/$nrow+1;$i<=$j*$this->n_of_quest/$nrow;$i++) {?><td  width="2%" bgcolor="white"><div id="answered<?php echo $i;?>"></div></td><?php }?></tr>
 			<?php }?>
 			</table>		 
 	</fieldset>
