@@ -134,7 +134,7 @@ function firstQuestion(idQ,Qurl,parenturl) {
 <?php if(isset($this->noticeError)){?>
 <div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
 <?php }?>
-<input type="hidden" id="apad_id" name="apad_id" value="<?php $this->question['apad_id']?>">
+<input type="hidden" id="apad_id" name="apad_id" value="<?php echo $this->question['apad_id']?>">
 <input type="hidden" id="idQuestion" value="<?php echo $this->question['idQuestion']?>">
 <input type="hidden" id="order" value="1">
 <input type="hidden" id="n_of_quest" value="<?php echo $this->n_of_quest?>">
