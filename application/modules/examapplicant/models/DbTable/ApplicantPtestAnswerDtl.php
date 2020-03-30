@@ -14,7 +14,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswerDtl extends Zend_Db_Table_
 			$db = Zend_Db_Table::getDefaultAdapter();
 			$select = $db->select()
 					->from(array('a'=>$this->_name))
-					->where('a.apa_id = '.$id);
+					->where('a.apad_id = '.$id);
 							
 			$row = $db->fetchRow($select);
 		}else{
