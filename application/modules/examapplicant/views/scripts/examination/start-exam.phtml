@@ -143,7 +143,8 @@ function firstQuestion(Qurl,parenturl) {
 	}
 	else $('input:radio[name="answer"][value="<?php echo $this->question['apad_appl_ans'] ?>"]').attr('checked',true);
 	
-	startTimer("<?php echo $this->question['stop_time']?>");
+	//startTimer("<?php echo $this->question['stop_time']?>");
+	startTimer("2020-03-30 12:00:00");
 }
 
 $(window).bind("load", function() {
@@ -175,7 +176,7 @@ function startTimer(endtime){
 		//If the count down is over, write some text 
 		if (distance < 0) {
 			clearInterval(x);
-			document.getElementById("examtime").innerHTML = "Waktu Ujian Habis";
+			document.getElementById("examtime").innerHTML = '<font color="red"><strong>Waktu Ujian Habis</strong></font>';
 		}
 		}, 1000);
 }
