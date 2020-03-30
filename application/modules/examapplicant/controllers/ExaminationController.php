@@ -303,7 +303,8 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		$quest=$dbQuest->getQuestion($formData['idQuestion']);
     		if ($quest['answer_mc']==$formData['answer']) $point=1;else $point=0;
     		$data=array('apad_appl_ans'=>$formData['answer'],'apad_status_ans'=>$point);
-    		$dbQuestdet->update($data, 'apad_id='.$formData['apad_id']);    
+    		$dbQuestdet->update($data, 'apad_id='.$formData['apad_id']); 
+    		$quest=$dbQuestdet->getData($formData['apad_id']);   
     	}
     	$ajaxContext = $this->_helper->getHelper('AjaxContext');
     	$ajaxContext->addActionContext('view', 'html');

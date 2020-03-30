@@ -7,7 +7,7 @@
 $(function() {
 	 
 	$(".next").click(function(){
-	var order=$("#order").val();
+	var  order=$("#order").val()*1;
 	if (order<=$("#n_of_quest").val()) {
 		 	$.ajax({
 					url: '<?php echo $this->baseUrl();?>/examapplicant/examination/ajax-get-question',
@@ -36,7 +36,7 @@ $(function() {
 	});
 
 	$(".pre").click(function(){
-		var order=$("#order").val();
+		var order=$("#order").val()*1;
 		if (order>1) {
 			 	$.ajax({
 						url: '<?php echo $this->baseUrl();?>/examapplicant/examination/ajax-get-question',
@@ -127,11 +127,12 @@ function saveAnswer(answer){
 	$.ajax({
 		  type: "POST",
 		  url: "/examapplicant/examination/ajax-save-answer",
-		  data: {'idQuestion':idQuestion,'apa_id':$("#apa_id").val(),'answer':answer,'order':order},
+		  data: {'idQuestion':idQuestion,'apad_id':$("#apad_id").val(),'answer':answer,'order':order},
 		  dataType: 'json'
 		})
 		.done(function(respond){
-			 $("#answered"+order).text(respond.answer);
+			 var element="#answered"+respond.apad_ques_no;
+			 $(element).text(respond.apad_appl_ans);
 			 
 			})
 		.fail(function(respond){console.log("fail");})
