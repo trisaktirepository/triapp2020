@@ -177,7 +177,7 @@ $(window).bind("load", function() {
 			<?php $nrow=2;
 				for ($j=1;$j<=$nrow;$j++) {?>
 			<tr><?php for ($i=($j-1)*$this->n_of_quest/$nrow+1;$i<=$j*$this->n_of_quest/$nrow;$i++) {?><td  width="2%" bgcolor="darkgrey" align="center"><font color="white"><a href="#" onclick="getQuestion('<?php echo $i?>')"><?php echo $i;?></a></font></td><?php }?></tr> 
-			<tr><?php for ($i=($j-1)*$this->n_of_quest/$nrow+1;$i<=$j*$this->n_of_quest/$nrow;$i++) {?><td  width="2%" bgcolor="white"><div id="answered<?php echo $i;?>"></div></td><?php }?></tr>
+			<tr><?php for ($i=($j-1)*$this->n_of_quest/$nrow+1;$i<=$j*$this->n_of_quest/$nrow;$i++) {?><td  width="2%" bgcolor="white" align="center"><div id="answered<?php echo $i;?>"></div></td><?php }?></tr>
 			<?php }?>
 			</table>		 
 	</fieldset>
