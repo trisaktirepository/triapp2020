@@ -150,6 +150,10 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    			} else $this->_redirect('/examapplicant/examination/index/msg/No Configuration');
 	    			//get first question
 	    			if ($response) {
+	    				$answerset=$dbAppPtestDet->getDataByHead($response['apa_id']);
+	    				foreach ($answerset as $value) {
+	    					$answer[$value['apad_quest_no']]=$value['apad_appl_ans'];
+	    				}
 	    				$question=$dbAppPtestDet->getQuestionBySequence($response['apa_id'], 1);
 	    				$dt = explode("triapp",$question['question_url']);
 	    				$path = $dt[1];
@@ -160,10 +164,15 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    					$question['question_parent_url']=$path;
 	    				}
 	    				$this->view->question=$question;
+	    				$this->view->answer=$answer;
 	    				$this->view->n_of_quest=$response['n_of_quest'];
 	    			} else $this->_redirect('/examapplicant/examination/index/msg/Fail to generate exam');
 	    			
 	    		} else {
+	    			$answerset=$dbAppPtestDet->getDataByHead($response['apa_id']);
+	    			foreach ($answerset as $value) {
+	    				$answer[$value['apad_quest_no']]=$value['apad_appl_ans'];
+	    			}
 	    			$question=$dbAppPtestDet->getQuestionBySequence($response['apa_id'], 1);
 	    			$dt = explode("triapp",$question['question_url']);
 	    			$path = $dt[1];
@@ -173,6 +182,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    				$path = $dt[1];
 	    				$question['question_parent_url']=$path;
 	    			}
+	    			$this->view->answer=$answer;
 	    			$this->view->question=$question;
 	    			$this->view->n_of_quest=$response['n_of_quest'];
 	    		}
