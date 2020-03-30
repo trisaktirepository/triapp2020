@@ -49,11 +49,19 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswerDtl extends Zend_Db_Table_
 			$db = Zend_Db_Table::getDefaultAdapter();
 			$select = $db->select()
 			->from(array('a'=>$this->_name))
+			->join(array('b'=>'tbl_question_bank'),'a.idQuestion=b.idQuestion')
 			->where('a.apad_apa_id  = '.$apaid)
 			->where('a.apad_ques_no  = '.$seqno);
 			//echo $select;
 			$row = $db->fetchRow($select);
-	 
+	 		if ($row['question_parent']>0) {
+	 			$select = $db->select()
+	 			->from(array('a'=>$this->_name))
+	 			->join(array('b'=>'tbl_question_bank'),'a.idQuestion=b.idQuestion')
+	 			->where('b.idQuestion  = '.$row['question_parent']);
+	 			$parent = $db->fetchRow($select);
+	 			$row['question_parent_url']=$parent['question_url'];
+	 		}
 		return $row;
 	
 	}

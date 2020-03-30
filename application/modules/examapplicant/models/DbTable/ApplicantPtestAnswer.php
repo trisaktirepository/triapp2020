@@ -120,7 +120,8 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 						$select=$db->select()
 						->from(array('a'=>'tbl_question_bank'))
 						->where('a.from_setcode=?',$idSet)
-						->where('a.subject=?',$idcomp);
+						->where('a.subject=?',$idcomp)
+						->where('a.parent="0"');
 						$questionset=$db->fetchAll($select);
 						//echo var_dump($questionset);
 						if ($questionset) {
