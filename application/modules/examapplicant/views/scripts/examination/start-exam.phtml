@@ -1,5 +1,18 @@
 <style>
 p    {color: white; font-size: 16px}
+.numberCircle {
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    padding: 8px;
+
+    background: #fff;
+    border: 2px solid #666;
+    color: #666;
+    text-align: center;
+
+    font: 32px Arial, sans-serif;
+}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/2.4.5/fabric.js"></script>
 <script type="text/javascript">
@@ -230,7 +243,7 @@ function startTimer(endtime){
 			 </td>
 			 </tr>
 			 <tr>
-			 <td valign="top" align="center"><div id="ordertxt" style="font-size:14px"><strong> <?php echo $this->question['apad_ques_no']?> </strong></div></td>
+			 <td valign="top" align="center"><div id="ordertxt" style="font-size:14px" class="numberCircle"><strong> <?php echo $this->question['apad_ques_no']?> </strong></div></td>
 			 <td align="center">
 			 	 <img id="Question" src=""/>
 			 </td>
