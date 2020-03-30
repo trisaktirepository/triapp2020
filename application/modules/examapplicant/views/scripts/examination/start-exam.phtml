@@ -116,9 +116,7 @@ function saveAnswer(answer){
 }
 
 function firstQuestion(idQ,Qurl,parenturl) {
-
-	 
-	populateCanvas("Question",Qurl);
+ 	populateCanvas("Question",Qurl);
 	if (parenturl!='') 
 		populateCanvas("parent",parenturl);
 	else $("#parent").empty();
@@ -200,11 +198,11 @@ function firstQuestion(idQ,Qurl,parenturl) {
 </body>
 
 <script>
-var parenturl=$("#question_parent_url").val();
+/* var parenturl=$("#question_parent_url").val();
 populateCanvas("Question",$("#question_url").val());
 if (parenturl!='') 
 	populateCanvas("parent",parenturl);
 else $("#parent").empty();
-
+ */
 
 </script>
