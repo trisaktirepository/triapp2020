@@ -10,9 +10,9 @@ $(function() {
 	var order=$("#order").val();
 	if (order<=$("#n_of_quest").val()) {
 		 	$.ajax({
-					url: '<?php echo $this->baseUrl();?>/examapplicant/examination/ajax-get-question,
+					url: '<?php echo $this->baseUrl();?>/examapplicant/examination/ajax-get-question',
 					type: 'POST',
-					data: {apa_id: $("#apa_id").val(),order:order+1},
+					data: {'apa_id': $("#apa_id").val(),'order':order+1},
 					dataType: 'json',
 					error: function(){
 							alert("Terjadi masalah saat menghapus data !");
@@ -39,9 +39,9 @@ $(function() {
 		var order=$("#order").val();
 		if (order>1) {
 			 	$.ajax({
-						url: '<?php echo $this->baseUrl();?>/examapplicant/examination/ajax-get-question,
+						url: '<?php echo $this->baseUrl();?>/examapplicant/examination/ajax-get-question',
 						type: 'POST',
-						data: {apa_id: $("#apa_id").val(),order:order-1},
+						data: {'apa_id': $("#apa_id").val(),'order':order-1},
 						dataType: 'json',
 						error: function(){
 								alert("Terjadi masalah saat menghapus data !");
@@ -68,6 +68,32 @@ $(function() {
 		
  
 });
+function getQuestion(order){
+	$.ajax({
+		url: '<?php echo $this->baseUrl();?>/examapplicant/examination/ajax-get-question',
+		type: 'POST',
+		data: {'apa_id': $("#apa_id").val(),'order':order},
+		dataType: 'json',
+		error: function(){
+				alert("Terjadi masalah saat menghapus data !");
+			}, 
+		}).done(function ( data ) {
+					//$("#QuestionTxt").val(data.question);
+					$("#ordertxt").text(data.apad_ques_no);
+					$("#order").val(data.apad_ques_no);
+					$("#apad_id").val(data.apad_id);
+					$("#answer").val(data.apad_appl_ans);
+					$("#answered"+order+1).text(data.apad_appl_ans);
+					$("#idQuestion").val(data.idQuestion);
+					 
+					var urllink=data.question_url;
+					
+					populateCanvas("Question",urllink);
+					if (data.question_parent_url!='') 
+ 					populateCanvas("parent",data.question_parent_url);
+					else $("#parent").empty();
+			});
+}
 
 function populateCanvas(canvasid,imageurl) {
 	var urllink=imageurl; 
@@ -103,7 +129,7 @@ function saveAnswer(answer){
 	$.ajax({
 		  type: "POST",
 		  url: "/examapplicant/examination/save-answer",
-		  data: {'idQuestion':idQuestion,'apad_id':$("#apad_id").val(),'answer':answer,'order':order},
+		  data: {'idQuestion':idQuestion,'apa_id':$("#apa_id").val(),'answer':answer,'order':order},
 		  dataType: 'json'
 		})
 		.done(function(respond){
