@@ -126,7 +126,7 @@ function saveAnswer(answer){
 	 
 	$.ajax({
 		  type: "POST",
-		  url: "/examapplicant/examination/save-answer",
+		  url: "/examapplicant/examination/ajax-save-answer",
 		  data: {'idQuestion':idQuestion,'apa_id':$("#apa_id").val(),'answer':answer,'order':order},
 		  dataType: 'json'
 		})
