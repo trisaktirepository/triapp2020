@@ -63,7 +63,7 @@ class App_Model_Application_DbTable_ApplicantPtestDetail extends Zend_Db_Table_A
 		$db = Zend_Db_Table::getDefaultAdapter();
 	
 		$select = $db ->select()
-		->from(array('a'=>$this->_name))
+		->from(array('a'=>$this->_name),array('app_comp_code','time_start','time_stop','timerange'=>'DIFF(time_stop,time_start)'))
 		->join(array('ac'=>'appl_test_type'),'ac.act_id=a.app_comp_code',array('act_name'))
 		->join(array('b'=>'applicant_ptest'),'a.apt_id=b.apt_id')
 		->join(array('aps'=>'appl_placement_schedule'),'aps.aps_id  = b.apt_aps_id',array('aps_id'=>'aps.aps_id','aps_location_id'=>'aps.aps_location_id','aps_test_date'=>'aps.aps_test_date' ,'aps.aps_placement_code'))

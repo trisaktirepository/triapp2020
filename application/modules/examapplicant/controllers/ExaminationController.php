@@ -163,6 +163,8 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    					$path = $dt[1];
 	    					$question['question_parent_url']=$path;
 	    				}
+	    				$question['stop_time']=date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s')) + strtotime($currenttest['timerange']));
+	    				$exammain=$dbAppTestAns->update(array('start_time'=>date('Y-m-d H:i:s'),'stop_time'=>$question['stop_time']), 'apa_id='.$response['apa_id']);
 	    				$this->view->question=$question;
 	    				$this->view->answer=$answer;
 	    				$this->view->n_of_quest=$response['n_of_quest'];
@@ -182,6 +184,8 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    				$path = $dt[1];
 	    				$question['question_parent_url']=$path;
 	    			}
+	    			$exammain=$dbAppTestAns->getData($response['apa_id']);
+	    			$question['stop_time']=$exammain['stop_time'];
 	    			$this->view->answer=$answer;
 	    			$this->view->question=$question;
 	    			$this->view->n_of_quest=$response['n_of_quest'];

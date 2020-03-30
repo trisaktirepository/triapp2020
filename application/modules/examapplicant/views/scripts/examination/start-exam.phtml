@@ -137,14 +137,45 @@ function firstQuestion(Qurl,parenturl) {
 	if (parenturl!='') 
 		$("#parent").attr("src",parenturl);
 	else $("#parent").attr("src","");
+	startTime(<?php echo $this->question['stop_time']?>);
 }
 
 $(window).bind("load", function() {
 	   // code here
 	firstQuestion($('#question_url').val(),$('#question_parent_url').val());
 });
+
+function startTimer(endtime){
+		var countDownDate = new Date(endtime).getTime();
+		
+		//Update the count down every 1 second
+		var x = setInterval(function() {
+		
+		//Get today's date and time
+		var now = new Date().getTime();
+		
+		//Find the distance between now and the count down date
+		var distance = countDownDate - now;
+		
+		//Time calculations for days, hours, minutes and seconds
+		 
+		var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+		var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+		var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+		
+		//Output the result in an element with id="demo"
+		document.getElementById("examtime").innerHTML =  hours + " : "
+		+ minutes + " : " + seconds;
+		
+		//If the count down is over, write some text 
+		if (distance < 0) {
+			clearInterval(x);
+			document.getElementById("examtime").innerHTML = "Waktu Ujian Habis";
+		}
+		}, 1000);
+}
+</script>
  
-</script> 
 <body >
 <?php if(isset($this->noticeMessage)){?>
 <div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
@@ -188,7 +219,7 @@ $(window).bind("load", function() {
 			 </td>
 			 </tr>
 			 <tr>
-			 <td><div id="ordertxt"><?php echo $this->question['apad_ques_no']?></div></td>
+			 <td valign="top" align="center"><div id="ordertxt"><strong><?php echo $this->question['apad_ques_no']?></strong></div></td>
 			 <td>
 			 	 <img id="Question" src=""/>
 			 </td>
@@ -200,6 +231,7 @@ $(window).bind("load", function() {
 					<td   align="center" width="20%">
 						 <a class="pre btn" id="pre" href="#">Soal Sebelum</a>
 						 </td>
+						  
 						 <td align="center">
 						 <input type="radio" name="answer" value="A" onclick="saveAnswer('A')"> A
 						 <input type="radio" name="answer" value="B" onclick="saveAnswer('B')"> B
@@ -207,6 +239,7 @@ $(window).bind("load", function() {
 						 <input type="radio" name="answer" value="D" onclick="saveAnswer('D')"> D
 						 <input type="radio" name="answer" value="E" onclick="saveAnswer('E')"> E
 					</td>
+					<td><p id="examtime"></p></td>
 					<td align="center"  width="20%">	
 					<a class="next btn" id="next" href="#">Soal Sesudah</a>
 			 		</td>
