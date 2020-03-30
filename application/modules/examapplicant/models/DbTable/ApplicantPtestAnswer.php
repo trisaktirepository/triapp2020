@@ -74,7 +74,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 		
 		 
 		$response=array();
-		//try {
+		try {
 			$success="1";
 			//component map
 			foreach ($postData['component'] as $key=>$comp) {
@@ -97,9 +97,9 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 				);
 		
 		   	//echo var_dump($data);
-		   	$id=1;
-			//$ok = $db->insert($this->_name,$data);
-			//$id = $db->lastInsertId($this->_name);
+		   //	$id=1;
+			$ok = $db->insert($this->_name,$data);
+			$id = $db->lastInsertId($this->_name);
 			
 			$config=$postData['config'];
 			if ($config['config_mode']==1861) {
@@ -122,7 +122,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 						->where('a.from_setcode=?',$idSet)
 						->where('a.subject=?',$idcomp);
 						$questionset=$db->fetchAll($select);
-						echo var_dump($questionset);
+						//echo var_dump($questionset);
 						if ($questionset) {
 							
 							foreach ($questionset as $quest) {
@@ -131,15 +131,15 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 											'apad_ques_no' =>$i,  
 											'idQuestion'=>$quest['idQuestion']
 										);
-								echo var_dump($dtl_data);
-								echo '<br>';
+								//echo var_dump($dtl_data);
+								//echo '<br>';
 								$i++;
-							//$db->insert('applicant_ptest_ans_detl',$dtl_data);
+							$db->insert('applicant_ptest_ans_detl',$dtl_data);
 							}
 						} else $success="0";
 						
 					}
-					exit;
+					//exit;
 					 
 				} else $success="0";
 			} else if ($config['config_mode']==1862) {
@@ -230,10 +230,10 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 		  		$db->rollBack();
 		  		$response=array();
 		  	}
-		/* } catch (exception $e) {
+		 } catch (exception $e) {
 			$db->rollBack();
     		echo $e->getMessage();
-		} */
+		} 
 		return $response;
 	}
 	
