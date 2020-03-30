@@ -32,10 +32,10 @@ $(function() {
 		 					$("#apad_id").val(data.apad_id);
 		 					var urllink=data.question_url;
 		 					
-		 					populateCanvas("Question",urllink);
-		 					if (data.question_parent_url!='') 
-			 					populateCanvas("parent",data.question_parent_url);
-		 					else $("#parent").empty();
+		 					$("#Question").attr("src",urllink);
+							if (data.question_parent_url!='') 
+								$("#parent").attr("src",data.question_parent_url);
+							else $("#parent").attr("src","");
 		 			});
 			}
 	});
@@ -65,10 +65,10 @@ $(function() {
 			 					$("#answered"+data.apad_ques_no).text(data.apad_appl_ans);
 			 					$("#idQuestion").val(data.idQuestion);
 			 					var urllink=data.question_url;
-			 					populateCanvas("Question",urllink);
-			 					if (data.question_parent_url!='') 
-				 					populateCanvas("parent",data.question_parent_url);
-			 					else $("#parent").empty();
+			 					$("#Question").attr("src",urllink);
+								if (data.question_parent_url!='') 
+									$("#parent").attr("src",data.question_parent_url);
+								else $("#parent").attr("src","");
 			 			});
 				}
 			});
@@ -101,11 +101,10 @@ function getQuestion(order){
 					$("#idQuestion").val(data.idQuestion);
 					 
 					var urllink=data.question_url;
-					
-					populateCanvas("Question",urllink);
+					$("#Question").attr("src",urllink);
 					if (data.question_parent_url!='') 
- 					populateCanvas("parent",data.question_parent_url);
-					else $("#parent").empty();
+						$("#parent").attr("src",data.question_parent_url);
+					else $("#parent").attr("src","");
 			});
 }
 
