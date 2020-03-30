@@ -171,7 +171,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    		} else {
 	    			$answerset=$dbAppPtestDet->getDataByHead($response['apa_id']);
 	    			foreach ($answerset as $value) {
-	    				$answer[$value['apad_quest_no']]=$value['apad_appl_ans'];
+	    				$answer[$value['apad_ques_no']]=$value['apad_appl_ans'];
 	    			}
 	    			$question=$dbAppPtestDet->getQuestionBySequence($response['apa_id'], 1);
 	    			$dt = explode("triapp",$question['question_url']);
