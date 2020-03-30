@@ -8,7 +8,7 @@ $(function() {
 	 
 	$(".next").click(function(){
 	var  order=$("#order").val()*1;
-	if (order<=$("#n_of_quest").val()) {
+	if (order<=$("#n_of_quest").val() && $("#stop").val()!="1") {
 		 	$.ajax({
 					url: '<?php echo $this->baseUrl();?>/examapplicant/examination/ajax-get-question',
 					type: 'POST',
@@ -42,7 +42,7 @@ $(function() {
 
 	$(".pre").click(function(){
 		var order=$("#order").val()*1;
-		if (order>1) {
+		if (order>1 && $("#stop").val()!="1") {
 			 	$.ajax({
 						url: '<?php echo $this->baseUrl();?>/examapplicant/examination/ajax-get-question',
 						type: 'POST',
@@ -78,6 +78,7 @@ $(function() {
 });
 
 function getQuestion(order){
+	if (&& $("#stop").val()!="1") {
 	$.ajax({
 		url: '<?php echo $this->baseUrl();?>/examapplicant/examination/ajax-get-question',
 		type: 'POST',
@@ -106,29 +107,31 @@ function getQuestion(order){
 						$("#parent").attr("src",data.question_parent_url);
 					else $("#parent").attr("src","");
 			});
+	}
 }
 
  
 
 function saveAnswer(answer){
-	 
-	var idQuestion=$("#idQuestion").val();
-	var order=$("#order").val();
-	 
-	$.ajax({
-		  type: "POST",
-		  url: "/examapplicant/examination/ajax-save-answer",
-		  data: {'idQuestion':idQuestion,'apad_id':$("#apad_id").val(),'answer':answer,'order':order},
-		  dataType: 'json'
-		})
-		.done(function(respond){
-			 var element="#answered"+respond.apad_ques_no;
-			 $(element).text(respond.apad_appl_ans);
+	 if ($("#stop").val()!="1") {
+			var idQuestion=$("#idQuestion").val();
+			var order=$("#order").val();
 			 
-			})
-		.fail(function(respond){console.log("fail");})
-		.always(function(respond){console.log("always");
-	});
+			$.ajax({
+				  type: "POST",
+				  url: "/examapplicant/examination/ajax-save-answer",
+				  data: {'idQuestion':idQuestion,'apad_id':$("#apad_id").val(),'answer':answer,'order':order},
+				  dataType: 'json'
+				})
+				.done(function(respond){
+					 var element="#answered"+respond.apad_ques_no;
+					 $(element).text(respond.apad_appl_ans);
+					 
+					})
+				.fail(function(respond){console.log("fail");})
+				.always(function(respond){console.log("always");
+			});
+	 }
 }
 
 function firstQuestion(Qurl,parenturl) {
@@ -176,6 +179,7 @@ function startTimer(endtime){
 		//If the count down is over, write some text 
 		if (distance < 0) {
 			clearInterval(x);
+			$("#stop").val("1");
 			document.getElementById("examtime").innerHTML = '<font color="red"><strong>Waktu Ujian Habis</strong></font>';
 		}
 		}, 1000);
@@ -258,4 +262,5 @@ function startTimer(endtime){
 	</fieldset>
 </div> 
 </body>
+<input type="hidden" id="stop" value="">
  
