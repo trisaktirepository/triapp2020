@@ -207,7 +207,7 @@ function startTimer(endtime){
 <div>
 	<fieldset>
 		<legend><?php echo $this->translate("Answer Result");?></legend>
-			<table class="table">
+			<table class="table"  width="100%">
 			<?php $nrow=2;
 				for ($j=1;$j<=$nrow;$j++) {?>
 			<tr><?php for ($i=($j-1)*$this->n_of_quest/$nrow+1;$i<=$j*$this->n_of_quest/$nrow;$i++) {?><td  width="2%" bgcolor="darkgrey" align="center"><font color="white"><a href="#" onclick="getQuestion('<?php echo $i?>')"><?php echo $i;?></a></font></td><?php }?></tr> 
@@ -217,10 +217,10 @@ function startTimer(endtime){
 	</fieldset>
 </div> 
 <div>
-	<fieldset>
+	<fieldset align="center">
 		<legend><?php echo $this->translate("Exam Quetion");?></legend>
 			
-			<table border="0">
+			<table border="0" width="100%">
 			 
 			 <tr>
 			
