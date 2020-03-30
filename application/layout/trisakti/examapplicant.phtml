@@ -124,48 +124,15 @@
 		<div id="logo"><div id="name">&nbsp;</div></div>
 		<div id="appTitle"><?php echo APPLICATION_TITLE; ?></div>
 	</div>
-	<div id="menu" style="background-color: #75B737;">
-		<div id="language">
-			<select style="width:80px;" onChange="window.location = '?lang=' + this.options[this.selectedIndex].value">
-				<option value="ar" <?php echo $this->locale=="ar_YE"?"selected='selected'":""; ?>>Arabic</option>
-				<option value="en" <?php echo $this->locale=="en_US"?"selected='selected'":""; ?>>Indonesia</option>
-			</select>
-		</div>
-		 
-		
-	</div>
-		<!-- Header end -->
+	 <!-- Header end -->
 	
 	<div id="body">
 		<!-- Begin Section Content-->
 		<?php 
-			$module = Zend_Controller_Front::getInstance()->getRequest()->getModuleName();
-			
-			$controller = Zend_Controller_Front::getInstance()->getRequest()->getControllerName();
-			//echo $module ." - ". $controller;
-			
-			$file="";
-			
 			 
-			
-			
-			if($file!=''){
-			?>
-				<table width="100%" cellpadding="0" cellspacing="0" border="0">
-					
-					<tr>
-					    <td rowspan="2" valign="top" width="16%"><?php echo $this->render($file); ?></td>
-					    <!--<td valign="top" width="84%" height="35px"><?php echo $this->render($submenu); ?></td>
-					 --></tr>
-					 <tr>
-					    <td valign="top"><?php echo $this->layout()->content; ?></td>
-					 </tr>
-					 
-				</table>
-			<?php
-			}else{
-				echo $this->layout()->content;	
-			}
+ 		  
+			echo $this->layout()->content;	
+			 
 
 		?>
 		<!-- End Section Content-->
