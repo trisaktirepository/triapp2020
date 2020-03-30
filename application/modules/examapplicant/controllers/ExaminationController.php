@@ -151,12 +151,28 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    			//get first question
 	    			if ($response) {
 	    				$question=$dbAppPtestDet->getQuestionBySequence($response['apa_id'], 1);
+	    				$dt = explode("triapp",$question['question_url']);
+	    				$path = $dt[1];
+	    				$question['question_url']=$path;
+	    				if ($question['question_parent_url']!='') {
+	    					$dt = explode("triapp",$question['question_parent_url']);
+	    					$path = $dt[1];
+	    					$question['question_parent_url']=$path;
+	    				}
 	    				$this->view->question=$question;
 	    				$this->view->n_of_quest=$response['n_of_quest'];
 	    			} else $this->_redirect('/examapplicant/examination/index/msg/Fail to generate exam');
 	    			
 	    		} else {
 	    			$question=$dbAppPtestDet->getQuestionBySequence($response['apa_id'], 1);
+	    			$dt = explode("triapp",$question['question_url']);
+	    			$path = $dt[1];
+	    			$question['question_url']=$path;
+	    			if ($question['question_parent_url']!='') {
+	    				$dt = explode("triapp",$question['question_parent_url']);
+	    				$path = $dt[1];
+	    				$question['question_parent_url']=$path;
+	    			}
 	    			$this->view->question=$question;
 	    			$this->view->n_of_quest=$response['n_of_quest'];
 	    		}
@@ -242,7 +258,14 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	
     		$formData = $this->getRequest()->getPost();
     		$quest=$dbQuestdet->getQuestionBySequence($formData['apa_id'], $formData['order']);
-    		
+    		$dt = explode("triapp",$quest['question_url']);
+    		$path = $dt[1];
+    		$quest['question_url']=$path;
+    		if ($quest['question_parent_url']!='') {
+    			$dt = explode("triapp",$quest['question_parent_url']);
+    			$path = $dt[1];
+    			$quest['question_parent_url']=$path;
+    		}
     	}
     	$ajaxContext = $this->_helper->getHelper('AjaxContext');
     	$ajaxContext->addActionContext('view', 'html');

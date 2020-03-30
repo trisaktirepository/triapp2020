@@ -54,9 +54,7 @@ $(function() {
 			 					$("#answer").val(data.apad_appl_ans);
 			 					$("#answered"+order+1).text(data.apad_appl_ans);
 			 					$("#idQuestion").val(data.idQuestion);
-			 					 
 			 					var urllink=data.question_url;
-			 					
 			 					populateCanvas("Question",urllink);
 			 					if (data.question_parent_url!='') 
 				 					populateCanvas("parent",data.question_parent_url);
