@@ -157,10 +157,11 @@ function saveAnswer(answer){
 }
 
 function firstQuestion(Qurl,parenturl) {
- 	populateCanvas("Question",Qurl);
+	$("#Question").attr("src",Qurl);
+ 	//populateCanvas("Question",Qurl);
 	if (parenturl!='') 
-		populateCanvas("parent",parenturl);
-	else $("#parent").empty();
+		$("#parent").attr("src",parenturl);
+	else $("#parent").attr("src","");
 }
 
 $(window).bind("load", function() {
@@ -207,13 +208,14 @@ $(window).bind("load", function() {
 			 <tr>
 			
 			 <td colspan="2">
-			 	<canvas style="border:1px solid grey;" id="parent" width="800" height="0"></canvas>
+					 <img id="parent" src=""/>
+			 	 
 			 </td>
 			 </tr>
 			 <tr>
 			 <td><div id="ordertxt"><?php echo $this->question['apad_ques_no']?></div></td>
 			 <td>
-			 	<canvas style="border:1px solid grey;" id="Question" width="800" height="300"></canvas>
+			 	 <img id="Question" src=""/>
 			 </td>
 			 </tr>
 			 <tr>
