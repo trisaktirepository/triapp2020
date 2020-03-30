@@ -61,7 +61,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswerDtl extends Zend_Db_Table_
 	 			->where('b.idQuestion  = '.$row['question_parent']);
 	 			$parent = $db->fetchRow($select);
 	 			$row['question_parent_url']=$parent['question_url'];
-	 		}
+	 		} else $row['question_parent_url']='';
 		return $row;
 	
 	}
