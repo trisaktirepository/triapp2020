@@ -137,7 +137,12 @@ function firstQuestion(Qurl,parenturl) {
 	if (parenturl!='') 
 		$("#parent").attr("src",parenturl);
 	else $("#parent").attr("src","");
-	$("#answered1").text(<?php echo $this->question['apad_appl_ans']?>);
+	if (<?php echo $this->question['apad_appl_ans'] ?>==" ") {
+		var selValue = $("input[type='radio']:checked").val();
+		 $('input:radio[name="answer"][value="'+selValue+'"]').attr('checked',false);
+	}
+	else $('input:radio[name="answer"][value="'+<?php echo $this->question['apad_appl_ans'] ?>+'"]').attr('checked',true);
+	
 	startTime(<?php echo $this->question['stop_time']?>);
 }
 
