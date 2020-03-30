@@ -164,6 +164,7 @@ $(window).bind("load", function() {
 <?php if(isset($this->noticeError)){?>
 <div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
 <?php }?>
+<input type="hidden" id="apa_id" name="apa_id" value="<?php echo $this->question['apad_apa_id']?>">
 <input type="hidden" id="apad_id" name="apad_id" value="<?php echo $this->question['apad_id']?>">
 <input type="hidden" id="idQuestion" value="<?php echo $this->question['idQuestion']?>">
 <input type="hidden" id="order" value="1">
