@@ -29,11 +29,12 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		foreach ($compprogram as $value) {
     			$comprog[]=$value['ac_id'];
     		}
+    		echo var_dump($comprog);echo '<br>';
     		foreach ($examdetail as $key=>$value) {
     			
     			$compcode=$value['app_comp_code'];
     			$component=$dbExamComp->getDataComponent($compcode);
-    			
+    			echo var_dump($component);
     			foreach ($component as $idx=>$comp) {
     				if (!array_search($comp['ac_id'], $comprog))
     					unset($component[$idx]);
