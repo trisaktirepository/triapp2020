@@ -7525,7 +7525,8 @@ class OnlineApplicationController extends Zend_Controller_Action {
 								$data = $appprogramDB->getProcedure($transaction_id,$program_data["program_code1"],$program_data["program_code2"],$applicant["schedule_id"],$testcode,$testtype,null);
 								//echo var_dump($data);exit;
 								if($data[0]["roomid"]==0){
-										$error="Maaf tempat untuk USM telah penuh. Sila hubungi pihak manajemen universitas";
+										$error="Maaf tempat  ".$testtype."  untuk USM telah penuh. Sila hubungi pihak manajemen universitas";
+										echo $error;
 										//$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application', 'action'=>'verification','msg'=>$error),'default',true));
 									exit;
 								}
@@ -7538,7 +7539,8 @@ class OnlineApplicationController extends Zend_Controller_Action {
 								$data = $appprogramDB->getProcedure($transaction_id,null,null,$applicant["schedule_id"],$testcode,$testtype,null);
 								//echo var_dump($data);exit;
 								if($data[0]["roomid"]==0){
-									$error="Maaf tempat untuk USM telah penuh. Sila hubungi pihak manajemen universitas";
+									$error="Maaf tempat ".$testtype." untuk USM telah penuh. Sila hubungi pihak manajemen universitas";
+									echo $error;
 									//$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application', 'action'=>'verification','msg'=>$error),'default',true));
 									exit;
 								}
