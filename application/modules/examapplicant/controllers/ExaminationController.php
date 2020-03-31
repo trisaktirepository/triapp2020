@@ -36,7 +36,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     			$component=$dbExamComp->getDataComponent($compcode,'0');
     			//echo var_dump($component);
     			foreach ($component as $idx=>$comp) {
-    				if (!array_key_exists($comp['ac_id'], $comprog))
+    				if (array_keys($comprog,$comp['ac_id'])==array())
     					unset($component[$idx]);
     			}
     			$testtype=$dbTestType->getData($compcode);
