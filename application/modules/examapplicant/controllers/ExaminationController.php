@@ -119,9 +119,9 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    			}
 	    			$component=$dbExamComp->getDataComponent($compcode);
 	    			foreach ($component as $idx=>$comp) {
-	    				if (!array_search($comp['ac_id'], $comprog))
-	    					unset($component[$idx]);
-	    			}
+    					if (array_keys($comprog,$comp['ac_id'])==array())
+    						unset($component[$idx]);
+    					}
 	    			//get exam script config
 	    			//echo var_dump($currenttest);echo var_dump($component);exit;
 	    			$dbConfig=new Examapplicant_Model_DbTable_ExamScriptConfig();
