@@ -65,14 +65,14 @@ class App_Model_Application_DbTable_PlacementTestComponent extends Zend_Db_Table
 		//echo var_dump($row);exit;
 		return $row;
 	}
-	public function getDataComponent($id=0){
+	public function getDataComponent($id=0,$aphtype=null){
 		 
 			$db = Zend_Db_Table::getDefaultAdapter();
 			$select = $db->select()
 			->from(array('ac'=>$this->_name)) 
 			->where('ac.ac_test_type = '.$id);
-				
-			$row = $db->fetchAll($select);
+		if ($aphtype!=null) $select->where('aph_type=?',$aphtype);
+		$row = $db->fetchAll($select);
 		 
 		return $row;
 	

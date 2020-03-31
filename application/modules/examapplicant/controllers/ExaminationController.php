@@ -33,7 +33,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		foreach ($examdetail as $key=>$value) {
     			
     			$compcode=$value['app_comp_code'];
-    			$component=$dbExamComp->getDataComponent($compcode);
+    			$component=$dbExamComp->getDataComponent($compcode,'0');
     			echo var_dump($component);
     			foreach ($component as $idx=>$comp) {
     				if (!array_search($comp['ac_id'], $comprog))
