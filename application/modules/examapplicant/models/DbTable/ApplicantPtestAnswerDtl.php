@@ -54,8 +54,8 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswerDtl extends Zend_Db_Table_
 			->where('a.apad_ques_no  = '.$seqno);
 			//echo $select;
 			$row = $db->fetchRow($select);
-			echo var_dump($row);exit;
-	 		if ($row['question_parent']>0) {
+			 
+	 		if ($row['question_parent']!="0") {
 	 			$select = $db->select()
 	 			->from(array('a'=>$this->_name))
 	 			->join(array('b'=>'tbl_question_bank'),'a.idQuestion=b.idQuestion')
