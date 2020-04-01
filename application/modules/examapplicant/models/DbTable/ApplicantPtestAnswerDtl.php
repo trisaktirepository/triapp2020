@@ -57,11 +57,10 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswerDtl extends Zend_Db_Table_
 			 
 	 		if ($row['question_parent']!="0") {
 	 			$select = $db->select()
-	 			->from(array('a'=>$this->_name))
-	 			->join(array('b'=>'tbl_question_bank'),'a.idQuestion=b.idQuestion')
-	 			->where('b.idQuestion  = '.$row['question_parent']);
+	 			->from(array('a'=>'tbl_question_bank'))
+	 			->where('a.idQuestion  = '.$row['question_parent']);
 	 			$parent = $db->fetchRow($select);
-	 			echo var_dump($parent);
+	 			//echo var_dump($parent);
 	 			$row['question_parent_url']=$parent['question_url'];
 	 		} else $row['question_parent_url']='';
 		return $row;
