@@ -569,7 +569,7 @@ public function getProgramOffered($transaction_id,$appl_type=null){
 			->join(array('b'=>'appl_room_type'),'b.art_room_id = a.av_id')
 			->where('av_location_code=?',$vlocation)
 			->where('av_exam_capacity is not null')
-			->where('av_status=1',$vTestCode)
+			->where('av_status=1')
 			->where('art_test_type=?',$vRoomType)
 			->where('av_id not in ('.$smtin.')')
 			->order('av_seq');

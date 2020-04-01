@@ -8401,7 +8401,8 @@ class OnlineApplicationController extends Zend_Controller_Action {
 				
 				$documentDB->addData($doc);	
 								
-				echo var_dump($doc);exit;
+				//echo var_dump($doc);
+				exit;
 			
 				$this->view->download_file = "http://".APP_HOSTNAME."/documents/applicant/".$monthyearfolder."/".$transaction_id."/".$output_filename;
 				
