@@ -166,7 +166,17 @@ btnStop.addEventListener( "click", stopStreaming );
 //Start Streaming
 function startStreaming() {
 
-	var mediaSupport = 'mediaDevices' in navigator;
+	navigator.mediaDevices.getUserMedia({video: true})
+	  .then(gotMedia)
+	  .catch(error => console.error('getUserMedia() error:', error));
+
+	function gotMedia(mediaStream) {
+	  const mediaStreamTrack = mediaStream.getVideoTracks()[0];
+	  const imageCapture = new ImageCapture(mediaStreamTrack);
+	  console.log(imageCapture);
+	}
+	
+	/* var mediaSupport = 'mediaDevices' in navigator;
 
 	if( mediaSupport && null == cameraStream ) {
 
@@ -189,7 +199,7 @@ function startStreaming() {
 		alert( 'Your browser does not support media devices.' );
 
 		return;
-	}
+	} */
 }
 
 //Stop Streaming
