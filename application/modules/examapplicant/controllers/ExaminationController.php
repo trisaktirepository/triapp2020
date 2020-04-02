@@ -281,6 +281,42 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     
     }
     
+    
+    public function sendPhotoAction($id=null){
+    
+    
+    
+    	if ($this->getRequest()->isXmlHttpRequest()) {
+    		$this->_helper->layout->disableLayout();
+    	}
+    
+    	$ajaxContext = $this->_helper->getHelper('AjaxContext');
+    	$ajaxContext->addActionContext('view', 'html');
+    	$ajaxContext->initContext();
+    	$quest=array();
+    	$dbQuest=new Examapplicant_Model_DbTable_QuestionBank();
+    	$dbQuestdet=new Examapplicant_Model_DbTable_ApplicantPtestAnswerDtl();
+    	if ($this->getRequest()->isPost()) {
+    		$formData = $this->getRequest()->getPost();
+    		echo var_dump($formData);
+    		 
+    	}
+    	$ajaxContext = $this->_helper->getHelper('AjaxContext');
+    	$ajaxContext->addActionContext('view', 'html');
+    	$ajaxContext->initContext();
+    
+    	$ajaxContext->addActionContext('view', 'html')
+    	->addActionContext('form', 'html')
+    	->addActionContext('process', 'json')
+    	->initContext();
+    
+    	$json = Zend_Json::encode($quest);
+    
+    	echo $json;
+    	exit();
+    
+    }
+    
 
      
 }

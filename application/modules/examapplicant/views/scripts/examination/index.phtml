@@ -29,6 +29,7 @@
 </style>
  <script type="text/javascript">
   function startExam(idtrx) {
+	  stopStreaming();
 	  window.location.replace('/examapplicant/examination/start-exam/idtrx/'+idtrx);
   }
 
@@ -230,18 +231,20 @@ function captureSnapshot() {
 		snapshot.appendChild( img );
 
 		$("#btnstart").attr("disabled", false);
+		sendData();
 	}
 }
 function sendData(){
 	var request = new XMLHttpRequest();
 	
-	request.open( "POST", "/upload/url", true );
+	request.open( "POST", "/examapplicant/examination/send-photo", true );
 	
 	var data	= new FormData();
 	var dataURI	= snapshot.firstChild.getAttribute( "src" );
 	var imageData   = dataURItoBlob( dataURI );
 	
 	data.append( "image", imageData, "myimage" );
+	data.append( "text", <?php echo $this->transaction["at_trans_id"];?>, "transaction_id" );
 	
 	request.send( data );
 }
