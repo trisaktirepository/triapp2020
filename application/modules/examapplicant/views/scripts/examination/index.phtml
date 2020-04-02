@@ -39,6 +39,22 @@
 	   startStreaming();
 });
 
+  function savePhoto(){
+		var canvas=document.getElementById("capture");
+		var dataUrl=canvas.toDataURL(); 
+		$.ajax({
+			  type: "POST",
+			  url: "/examapplicant/examination/send-photo",
+			  data: {'image': dataUrl,'trxid':$("#transaction_id").val()}
+			})
+			.done(function(respond){
+				console.log("done: "+respond); 
+				})
+			.fail(function(respond){console.log("fail");})
+			.always(function(respond){console.log("always");
+		});
+	}
+
 </script>
 <div class="message toolbar">
 	<h2><?php echo $this->title; ?></h2>
@@ -86,7 +102,7 @@
 					<?php }?>
 					</div>
 					 <div class="play-area-sub">
-				    <h3>The Capture</h3>
+				    <h3>Foto Anda</h3>
 				    <canvas id="capture" width="200" height="150"></canvas>
 				    <div id="snapshot"></div>
 				  </div>
@@ -129,7 +145,7 @@
 			 <td>
 			 	<div class="play-area">
 				  
-				    <h3>Ambil Foto anda untuk autentikasi online</h3> 
+				    Ambil Foto anda untuk bukti daring 
 				    <button id="btn-capture" type="button" class="button">Ambil Foto</button>
 				    <video id="stream" width="320" height="240"></video>
 				 
@@ -232,22 +248,7 @@ function captureSnapshot() {
 		snapshot.appendChild( img );
 
 		$("#btnstart").attr("disabled", false);
-		sendData();
+		savePhoto();
 	}
-}
-function sendData(){
-	
-	var request = new XMLHttpRequest();
-	
-	request.open( "POST", "/examapplicant/examination/send-photo", true );
-	
-	var data	= new FormData();
-	var dataURI	= snapshot.firstChild.getAttribute( "src" );
-	var imageData   = dataURItoBlob( dataURI );
-	
-	data.append( "image", imageData, "myimage" );
-	data.append( "text", <?php echo $this->transaction["at_trans_id"];?>, "transaction_id" );
-	
-	request.send( data );
-}
+} 
 </script>

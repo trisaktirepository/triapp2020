@@ -295,11 +295,62 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	$ajaxContext->initContext();
     	$quest=array();
     	$dbQuest=new Examapplicant_Model_DbTable_QuestionBank();
+    	$dbTrx=new App_Model_Application_DbTable_ApplicantTransaction();
     	$dbQuestdet=new Examapplicant_Model_DbTable_ApplicantPtestAnswerDtl();
     	if ($this->getRequest()->isPost()) {
     		$formData = $this->getRequest()->getPost();
-    		echo var_dump($formData);
-    		 
+    		$trxid=$formData['transaction_id'];
+    		$img = $formData['image'];
+			$img = str_replace('data:image/png;base64,', '', $img);
+			$img = str_replace(' ', '+', $img);
+			$fileData = base64_decode($img);
+			//save file 
+			$trans=$dbTrx->getTransaction($trxid);
+			$appl_id = $trans['at_appl_id']; 
+			// echo "trans=".$txn_id;
+			$auth = Zend_Auth::getInstance();
+			 
+			 
+			///upload_file
+			$apath = DOCUMENT_PATH."/applicant";
+			//$apath = "/Users/alif/git/triapp/documents/applicant";
+			
+			//create directory to locate file
+			if (!is_dir($apath)) {
+				mkdir($apath, 0775);
+			}
+			
+			///upload_file
+			$applicant_path = DOCUMENT_PATH."/applicant/USM/".date("mY")."/".$trxid;
+			//$applicant_path = "/Users/alif/git/triapp/documents/applicant/".date("mY");
+			
+			//create directory to locate file
+			if (!is_dir($applicant_path)) {
+				mkdir($applicant_path, 0775,true);
+			}
+			$flnamenric = date('Ymdhs')."_Usm.png";
+			$fileName = $applicant_path."/".$flnamenric;
+			file_put_contents($fileName, $fileData);
+			$upd_photo = array(
+							'auf_appl_id' => $trxid,
+							'auf_file_name' => $flnamenric,
+							'auf_file_type' => 'png',
+							'auf_upload_date' => date("Y-m-d h:i:s"),
+							'auf_upload_by' => $auth->getIdentity()->appl_id,
+							'pathupload' => $fileName
+			);
+			
+			
+			$uploadfileDB = new App_Model_Application_DbTable_UploadFile();
+			
+			$previous_record = $uploadfileDB->getFile($trxid,'png');
+					//echo var_dump($previous_record);
+					if($previous_record){
+						$uploadfileDB->updateData($upd_photo,$previous_record['auf_id']);
+					}else{
+						$uploadfileDB->addData($upd_photo);
+					}
+			 
     	}
     	$ajaxContext = $this->_helper->getHelper('AjaxContext');
     	$ajaxContext->addActionContext('view', 'html');
@@ -310,7 +361,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	->addActionContext('process', 'json')
     	->initContext();
     
-    	$json = Zend_Json::encode($quest);
+    	$json = Zend_Json::encode($upd_photo);
     
     	echo $json;
     	exit();
