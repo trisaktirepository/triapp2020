@@ -239,6 +239,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 							$bundleDetail=$invoiceDetailDb->getInvoiceDetail($invoice['id']);
 							foreach ($bundleDetail as $key2=>$value) {
 								$bundleDetail[$key2]['fee']=array('amount'=>$value['amount']);
+								if ($value['amount']==0) unset($bundleDetail[$key2]);
 								//$amount=$amount+$invoice['amount'];
 							}
 							$act[$key]['idinvoice']=$invoice['id'];
