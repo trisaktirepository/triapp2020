@@ -82,6 +82,11 @@
 					<?php }else{?>
 						<img class="photo" src="/images/no-photo.jpg" width="194" height="250" />
 					<?php }?>
+					 <div class="play-area-sub">
+				    <h3>The Capture</h3>
+				    <canvas id="capture" width="320" height="240"></canvas>
+				    <div id="snapshot"></div>
+				  </div>
 				</td>
 			 <td>
 			 <table class="table">
@@ -124,11 +129,7 @@
 				    <h3>Ambil Foto anda untuk autentikasi online</h3> <button id="btn-capture" type="button" class="button">Ambil Foto</button>
 				    <video id="stream" width="320" height="240"></video>
 				  </div>
-				  <div class="play-area-sub">
-				    <h3>The Capture</h3>
-				    <canvas id="capture" width="320" height="240"></canvas>
-				    <div id="snapshot"></div>
-				  </div>
+				 
 </div>
 			 
 			 </td>
@@ -138,23 +139,15 @@
 			<?php } else  echo "Pada hari ini tidak ada Ujian Saringan Masuk";?>		 
 	</fieldset>
 </div>  
-
-<!-- The buttons to control the stream -->
-<div class="button-group">
-  <button id="btn-start" type="button" class="button">Start Streaming</button>
-  <button id="btn-stop" type="button" class="button">Stop Streaming</button>
  
-</div>
-
-<!-- Video Element & Canvas -->
 
 <script>
 
 
 
 //The buttons to start & stop stream and to capture the image
-var btnStart = document.getElementById( "btn-start" );
-var btnStop = document.getElementById( "btn-stop" );
+//var btnStart = document.getElementById( "btn-start" );
+//var btnStop = document.getElementById( "btn-stop" );
 var btnCapture = document.getElementById( "btn-capture" );
 
 //The stream & capture
@@ -168,8 +161,8 @@ var snapshot = document.getElementById( "snapshot" );
 var cameraStream = null;
 
 //Attach listeners
-btnStart.addEventListener( "click", startStreaming );
-btnStop.addEventListener( "click", stopStreaming );
+//btnStart.addEventListener( "click", startStreaming );
+//btnStop.addEventListener( "click", stopStreaming );
 
 //Start Streaming
 function startStreaming() {
