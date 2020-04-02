@@ -32,6 +32,10 @@
 	  window.location.replace('/examapplicant/examination/start-exam/idtrx/'+idtrx);
   }
 
+  $(window).bind("load", function() {
+	   // code here
+	   startStreaming();
+});
 
 </script>
 <div class="message toolbar">
@@ -114,6 +118,20 @@
 			 		<?php }?>
 			 	</table>
 			 </td>
+			 <td>
+			 <div class="play-area">
+				  <div class="play-area-sub">
+				    <h3>The Stream</h3>
+				    <video id="stream" width="320" height="240"></video>
+				  </div>
+				  <div class="play-area-sub">
+				    <h3>The Capture</h3>
+				    <canvas id="capture" width="320" height="240"></canvas>
+				    <div id="snapshot"></div>
+				  </div>
+</div>
+			 
+			 </td>
 			 </tr>
 			 
 			</table>
@@ -129,17 +147,7 @@
 </div>
 
 <!-- Video Element & Canvas -->
-<div class="play-area">
-  <div class="play-area-sub">
-    <h3>The Stream</h3>
-    <video id="stream" width="320" height="240"></video>
-  </div>
-  <div class="play-area-sub">
-    <h3>The Capture</h3>
-    <canvas id="capture" width="320" height="240"></canvas>
-    <div id="snapshot"></div>
-  </div>
-</div>
+
 <script>
 
 
@@ -235,17 +243,17 @@ function captureSnapshot() {
 		snapshot.appendChild( img );
 	}
 }
-
-var request = new XMLHttpRequest();
-
-request.open( "POST", "/upload/url", true );
-
-var data	= new FormData();
-var dataURI	= snapshot.firstChild.getAttribute( "src" );
-var imageData   = dataURItoBlob( dataURI );
-
-data.append( "image", imageData, "myimage" );
-
-request.send( data );
-
+function sendData(){
+	var request = new XMLHttpRequest();
+	
+	request.open( "POST", "/upload/url", true );
+	
+	var data	= new FormData();
+	var dataURI	= snapshot.firstChild.getAttribute( "src" );
+	var imageData   = dataURItoBlob( dataURI );
+	
+	data.append( "image", imageData, "myimage" );
+	
+	request.send( data );
+}
 </script>
