@@ -1419,9 +1419,9 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 					if ($row) {
 						$row['mhsbaru']="1";
 						
-					}  else $row['mhsbaru']="0";
-				} else $row['mhsbaru']="0";
-			}  else $row['mhsbaru']="0";
+					}  
+				}  
+			} 
 		}  else $row['mhsbaru']="0";
 		
 		return $row;
