@@ -82,11 +82,6 @@
 					<?php }else{?>
 						<img class="photo" src="/images/no-photo.jpg" width="194" height="250" />
 					<?php }?>
-					<div class="play-area-sub">
-				    <h3>The Capture</h3>
-				   	 <canvas id="capture" width="320" height="240"></canvas>
-				    <div id="snapshot"></div>
-				  </div>
 				</td>
 			 <td>
 			 <table class="table">
@@ -126,13 +121,15 @@
 			 <td>
 			 <div class="play-area">
 				  <div class="play-area-sub">
-				    <h3>Ambil Foto anda untuk autentikasi online</h3> 
-				   
+				    <h3>Ambil Foto anda untuk autentikasi online</h3> <button id="btn-capture" type="button" class="button">Ambil Foto</button>
 				    <video id="stream" width="320" height="240"></video>
-				     <button id="btn-capture" type="button" class="button">Ambil Foto</button>
 				  </div>
-				  
-			</div>
+				  <div class="play-area-sub">
+				    <h3>The Capture</h3>
+				    <canvas id="capture" width="320" height="240"></canvas>
+				    <div id="snapshot"></div>
+				  </div>
+</div>
 			 
 			 </td>
 			 </tr>
@@ -142,7 +139,15 @@
 	</fieldset>
 </div>  
 
+<!-- The buttons to control the stream -->
+<div class="button-group">
+  <button id="btn-start" type="button" class="button">Start Streaming</button>
+  <button id="btn-stop" type="button" class="button">Stop Streaming</button>
  
+</div>
+
+<!-- Video Element & Canvas -->
+
 <script>
 
 
