@@ -71,7 +71,7 @@
 			<tr><td colspan="3" bgcolor="lightgreen" align="center">
 				 <input class="btn" type="button" id="btnstart" value="<?php echo $this->translate('Start Exam');?>" onclick="startExam('<?php echo $this->transaction["at_trans_id"];?>')" disabled>
 				</td></tr>
-			 <tr><td><?php 
+			 <tr><td><div><?php 
 					if($this->photo!=null){
 						//$imageHelper = new icampus_Function_General_Image();
 						//$path = $imageHelper->getImagePath($this->photo['pathupload'],250,250);			
@@ -82,9 +82,10 @@
 					<?php }else{?>
 						<img class="photo" src="/images/no-photo.jpg" width="194" height="250" />
 					<?php }?>
+					</div>
 					 <div class="play-area-sub">
 				    <h3>The Capture</h3>
-				    <canvas id="capture" width="200" height="240"></canvas>
+				    <canvas id="capture" width="200" height="150"></canvas>
 				    <div id="snapshot"></div>
 				  </div>
 				</td>
@@ -222,8 +223,7 @@ function captureSnapshot() {
 		ctx.drawImage( stream, 0, 0, capture.width, capture.height );
 
 		img.src		= capture.toDataURL( "image/png" );
-		img.width	= 200;
-		img.height	= 240;
+		img.width	= 200; 
 
 		snapshot.innerHTML = '';
 
