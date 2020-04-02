@@ -68,8 +68,8 @@
 		<legend><?php echo $this->translate("Detail Information About Your Exam");?></legend>
 			<?php if ($this->test=="1") {?>
 			<table class="table">
-			<tr><td colspan="2" bgcolor="lightgreen" align="center">
-				 <input class="btn" type="button" value="<?php echo $this->translate('Start Exam');?>" onclick="startExam('<?php echo $this->transaction["at_trans_id"];?>')">
+			<tr><td colspan="3" bgcolor="lightgreen" align="center">
+				 <input class="btn" type="button" id="btnstart" value="<?php echo $this->translate('Start Exam');?>" onclick="startExam('<?php echo $this->transaction["at_trans_id"];?>')" disabled>
 				</td></tr>
 			 <tr><td><?php 
 					if($this->photo!=null){
@@ -121,7 +121,7 @@
 			 <td>
 			 <div class="play-area">
 				  <div class="play-area-sub">
-				    <h3>The Stream</h3>
+				    <h3>Ambil Foto anda untuk autentikasi online</h3>
 				    <video id="stream" width="320" height="240"></video>
 				  </div>
 				  <div class="play-area-sub">
@@ -174,15 +174,7 @@ btnStop.addEventListener( "click", stopStreaming );
 //Start Streaming
 function startStreaming() {
 
-	/* navigator.mediaDevices.getUserMedia({video: true})
-	  .then(gotMedia)
-	  .catch(error => console.error('getUserMedia() error:', error));
-
-	function gotMedia(mediaStream) {
-	  const mediaStreamTrack = mediaStream.getVideoTracks()[0];
-	  const imageCapture = new ImageCapture(mediaStreamTrack);
-	  console.log(imageCapture);
-} */
+	 
 	
 	var mediaSupport = 'mediaDevices' in navigator;
 
@@ -196,6 +188,7 @@ function startStreaming() {
 			stream.srcObject = mediaStream;
 
 			stream.play();
+			$("#btnstart")..attr("disabled", false);
 		})
 		.catch( function( err ) {
 
