@@ -229,22 +229,25 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 					$act[$key]['invoicerest']=array();
 					$act[$key]['invoice']=$invoice;
 					if ($invoice) {
-						echo var_dump($invoice);
+						//echo var_dump($invoice);
 						//echo var_dump($bundleDetail);
 						$current_level=$this->getLevel($IdStudentRegistration, $idsemester, $intake);
 						
 						//$this->view->invoice=$invoice;
 						//chek for incompatibility
 						if ($invoice['mhsbaru']=="0") {
-							$bundleDetail=$invoiceDetailDb->getInvoiceDetail($invoice['id']);
-							foreach ($bundleDetail as $key2=>$value) {
-								$bundleDetail[$key2]['fee']=array('amount'=>$value['amount']);
-								if ($value['amount']==0) unset($bundleDetail[$key2]);
+							//$invbundleDetail=$invoiceDetailDb->getInvoiceDetail($invoice['id']);
+							//foreach ($invbundleDetail as $key2=>$value) {
+							//	$invbundleDetail[$key2]['fee']=array('amount'=>$value['amount']);
+								//if ($value['amount']==0) unset($bundleDetail[$key2]);
 								//$amount=$amount+$invoice['amount'];
-							}
+							//}
+							
 							$act[$key]['idinvoice']=$invoice['id'];
 							$restamount=$invoiceDb->inCompatibilityInvoice($IdStudentRegistration, $idsemester, $idactivity);
 							$act[$key]['invoicerest']=$restamount;
+							$bundleDetail=array();
+							
 						} else {
 							$act[$key]['invoicerest']=array();
 							 
