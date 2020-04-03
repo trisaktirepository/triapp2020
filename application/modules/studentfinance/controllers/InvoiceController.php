@@ -380,7 +380,9 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 							}
 							$act[$key]['bundledetail']=$bundleDetail;
 							$act[$key]['invoice']=$invoice;
-							
+							$act[$key]['invoicerest']=array();
+							$bundle=$dbBundle->getCurrentSetup(1, $program['IdCollege'], $std['IdProgram'], $std['IdBranch'], $idsemester,$idactivity,$std['IdProgramMajoring']);
+							$act[$key]['bundle']=$bundle;
 						} else unset($act[$key]);
 						
 					}
