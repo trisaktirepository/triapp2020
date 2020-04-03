@@ -18,7 +18,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 		 
 		
 		$IdStudentRegistration = $this->_getParam('id', null);
-		$idinvoice=$this->_getParam('idinvoice');
+		$idinvoice=$this->_getParam('idinvoice','');
 		$this->view->idinvoice=$idinvoice;
 		$idactivity = $this->_getParam('idactivity', null);
 		$this->view->student_registration_id = $IdStudentRegistration;
@@ -61,8 +61,6 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 		$program = $programDb->fngetProgramData($std['IdProgram']);
 		$this->view->program=$program;
 		
-		$bundleDetail=array();
-		if ($act) {
 			$db = Zend_Db_Table::getDefaultAdapter();
 			if ($this->getRequest()->isPost()) {
 				$formData=$this->getRequest()->getPost();
@@ -200,6 +198,10 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 					}
 				}
 			}
+			
+
+		$bundleDetail=array();
+		if ($act && $idinvoice=="") {
 			foreach ($act as $key=>$value) {
 				 
 				$idsemester=$value['IdSemesterMain'];
@@ -362,10 +364,26 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 					
 					 }  else unset($act[$key]);
 				}
-			} else {
-				echo "Jadwal Pembuatan Invoice Belum dibuka, Hubungi admin Fakultas masing-masing";
-				exit;
-			}
+			} else if ($idinvoice!='' && $act) {
+					//invoice
+					
+					$invoice=$invoiceDb->getData($idinvoice);
+					foreach ($act as $key=>$value) {
+						$act[$key]['level']='';
+						if ($value['idActivity']==$invoice['idactivity']) {
+						if ($invoice)  
+							 
+							$act[$key]['bundledetail']=$invoiceDetailDb->getInvoiceDetail($idinvoice);
+							
+						} else unset($act[$key]);
+						
+					}
+					$this->view->activity= $act;
+					
+				} else {
+					echo "Jadwal Pembuatan Invoice Belum dibuka, Hubungi admin Fakultas masing-masing";
+					exit;
+				}
 		 
 		
 	}
