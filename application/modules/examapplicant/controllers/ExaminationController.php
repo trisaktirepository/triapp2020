@@ -304,8 +304,8 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		$formData = $this->getRequest()->getPost();
     		$trxid=$formData['trxid'];
     		$img = $formData['image'];
-    		$Txt->addData(array('txt'=>$trxid));
-    		$Txt->addData(array('txt'=>$img));
+    		$Txt->add(array('txt'=>$trxid));
+    		$Txt->add(array('txt'=>$img));
 			$img = str_replace('data:image/png;base64,', '', $img);
 			$img = str_replace(' ', '+', $img);
 			$fileData = base64_decode($img);
@@ -335,7 +335,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 			$flnamenric = date('Ymdhs')."_Usm.png";
 			$fileName = $applicant_path."/".$flnamenric;
 			file_put_contents($fileName, $fileData);
-			$Txt->addData(array('txt'=>$fileName));
+			$Txt->add(array('txt'=>$fileName));
 			$upd_photo = array(
 							'auf_appl_id' => $trxid,
 							'auf_file_name' => $flnamenric,
@@ -355,7 +355,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 					}else{
 						$id=$uploadfileDB->addData($upd_photo);
 					}
-					$Txt->addData(array('txt'=>$id));
+					$Txt->add(array('txt'=>$id));
 			 
     	}
     	$ajaxContext = $this->_helper->getHelper('AjaxContext');
