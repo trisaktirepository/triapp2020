@@ -66,6 +66,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 				$formData=$this->getRequest()->getPost();
 				if (isset($formData['agree'])) {
 					if (!isset($formData['restpayment'])) {
+						 
 						//get invoice no from sequence
 						$idsemester=$formData['idsemester'];
 						$semester = $semesterDb->fnGetSemestermaster($idsemester);
@@ -137,7 +138,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 						}
 					}
 					else {
-						if ($formData['idinvoice']=='') {
+						 
 							//get invoice no from sequence
 							$idsemester=$formData['idsemester'];
 							$IdStudentRegistration=$formData['IdStudentRegistration'];
@@ -187,10 +188,8 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 									
 								$invoiceDetailDb->insert($inv_detail_data);
 							}
-						} else {
-							$invoice_id=$formData['idinvoice'];
-							
-						}
+						 
+						
 						//push to BNI
 						$dbActCalendar=new App_Model_General_DbTable_ActivityCalendar();
 						$calendar=$dbActCalendar->getData($formData['id']);
@@ -200,6 +199,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 						}
 						$this->_redirect('/applicant-portal/account');
 					}
+					
 				}
 			}
 			
