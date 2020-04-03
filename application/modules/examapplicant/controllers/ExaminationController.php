@@ -304,8 +304,9 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		$formData = $this->getRequest()->getPost();
     		$trxid=$formData['trxid'];
     		$img = $formData['image'];
-    		$Txt->add(array('txt'=>$trxid));
-    		$Txt->add(array('txt'=>$img));
+    		$type = $formData['type'];
+    		//$Txt->add(array('txt'=>$trxid));
+    		//$Txt->add(array('txt'=>$img));
 			$img = str_replace('data:image/png;base64,', '', $img);
 			$img = str_replace(' ', '+', $img);
 			$fileData = base64_decode($img);
@@ -335,11 +336,11 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 			$flnamenric = date('Ymdhs')."_Usm.png";
 			$fileName = $applicant_path."/".$flnamenric;
 			file_put_contents($fileName, $fileData);
-			$Txt->add(array('txt'=>$fileName));
+			//$Txt->add(array('txt'=>$fileName));
 			$upd_photo = array(
 							'auf_appl_id' => $trxid,
 							'auf_file_name' => $flnamenric,
-							'auf_file_type' => 'png',
+							'auf_file_type' => $type,
 							'auf_upload_date' => date("Y-m-d h:i:s"),
 							'auf_upload_by' => $auth->getIdentity()->appl_id,
 							'pathupload' => $fileName
@@ -348,7 +349,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 			
 			$uploadfileDB = new App_Model_Application_DbTable_UploadFile();
 			
-			$previous_record = $uploadfileDB->getFile($trxid,'png');
+			$previous_record = $uploadfileDB->getFile($trxid,$type);
 					//echo var_dump($previous_record);
 					if($previous_record){
 						$uploadfileDB->updateData($upd_photo,$previous_record['auf_id']);

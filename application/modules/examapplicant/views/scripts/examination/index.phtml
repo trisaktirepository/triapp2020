@@ -42,13 +42,15 @@
   function savePhoto(){
 		var canvas=document.getElementById("capture");
 		var dataUrl=canvas.toDataURL(); 
+		type=$("#type").val();
 		$.ajax({
 			  type: "POST",
 			  url: "/examapplicant/examination/send-photo",
-			  data: {'image': dataUrl,'trxid':$("#transaction_id").val()}
+			  data: {'image': dataUrl,'trxid':$("#transaction_id").val(),'type':type}
 			})
 			.done(function(respond){
 				console.log("done: "+respond); 
+				$("#type").val(type*1+1);
 				})
 			.fail(function(respond){console.log("fail");})
 			.always(function(respond){console.log("always");
@@ -83,6 +85,7 @@
 
 <div>
 	<input type="hidden" id="transaction_id" value="<?php echo $this->transaction_id?>">
+	<input type="hidden" id="type" value="1000">
 	<fieldset>
 		<legend><?php echo $this->translate("Detail Information About Your Exam");?></legend>
 			<?php if ($this->test=="1") {?>
