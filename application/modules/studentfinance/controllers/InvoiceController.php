@@ -137,56 +137,60 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 						}
 					}
 					else {
-						//get invoice no from sequence
-						$idsemester=$formData['idsemester'];
-						$IdStudentRegistration=$formData['IdStudentRegistration'];
-							
-			
-						$seq_data = array(
-								date('y',strtotime($academicYear['ay_start_date'])),
-								substr($intake['IntakeId'],2,2),
-								$program['ProgramCode'], 0
-						);
-			
-						$db = Zend_Db_Table::getDefaultAdapter();
-						$stmt = $db->prepare("SELECT invoice_seq(?,?,?,?) AS invoice_no");
-						$stmt->execute($seq_data);
-						$invoice_no = $stmt->fetch();
-							
-						$inv_data = array(
-								'bill_number' => $invoice_no['invoice_no'],
-								'appl_id' => $formData['IdApplication'],
-								'IdStudentRegistration' => $formData['IdStudentRegistration'],
-								'academic_year' => $formData['idacadyear'],
-								'semester' => $formData['idsemester'],
-								'bill_amount' =>$formData['totalamountrest'],
-								'bill_paid' => 0.00,
-								'bill_balance' => $formData['totalamountrest'],
-								'bill_description' => $formData['description'],
-								'college_id' => $formData['IdCollege'],
-								'program_code' => $formData['ProgramCode'],
-								'creator' => '1',
-								'fs_id' => $formData['fs_id'],
-								'status' => 'A',
-								'date_create' => date('Y-m-d H:i:s'),
-								'idactivity'=>$formData['idactivity']
-						);
-							
-						$invoice_id = $invoiceDb->insert($inv_data);
-						$dbFeeitem=new Studentfinance_Model_DbTable_FeeItem();
-						//insert invoice detail
-						foreach ($formData['itemrest'] as $itemid=>$amount){
-							$item=$dbFeeitem->getData($itemid);
-							$inv_detail_data = array(
-									'invoice_main_id' => $invoice_id,
-									'fi_id' => $itemid,
-									'fee_item_description' => $item['fi_name_bahasa'],
-									'amount' => $amount
+						if ($formData['idinvoice']=='') {
+							//get invoice no from sequence
+							$idsemester=$formData['idsemester'];
+							$IdStudentRegistration=$formData['IdStudentRegistration'];
+								
+				
+							$seq_data = array(
+									date('y',strtotime($academicYear['ay_start_date'])),
+									substr($intake['IntakeId'],2,2),
+									$program['ProgramCode'], 0
+							);
+				
+							$db = Zend_Db_Table::getDefaultAdapter();
+							$stmt = $db->prepare("SELECT invoice_seq(?,?,?,?) AS invoice_no");
+							$stmt->execute($seq_data);
+							$invoice_no = $stmt->fetch();
+								
+							$inv_data = array(
+									'bill_number' => $invoice_no['invoice_no'],
+									'appl_id' => $formData['IdApplication'],
+									'IdStudentRegistration' => $formData['IdStudentRegistration'],
+									'academic_year' => $formData['idacadyear'],
+									'semester' => $formData['idsemester'],
+									'bill_amount' =>$formData['totalamountrest'],
+									'bill_paid' => 0.00,
+									'bill_balance' => $formData['totalamountrest'],
+									'bill_description' => $formData['description'],
+									'college_id' => $formData['IdCollege'],
+									'program_code' => $formData['ProgramCode'],
+									'creator' => '1',
+									'fs_id' => $formData['fs_id'],
+									'status' => 'A',
+									'date_create' => date('Y-m-d H:i:s'),
+									'idactivity'=>$formData['idactivity']
 							);
 								
-							$invoiceDetailDb->insert($inv_detail_data);
+							$invoice_id = $invoiceDb->insert($inv_data);
+							$dbFeeitem=new Studentfinance_Model_DbTable_FeeItem();
+							//insert invoice detail
+							foreach ($formData['itemrest'] as $itemid=>$amount){
+								$item=$dbFeeitem->getData($itemid);
+								$inv_detail_data = array(
+										'invoice_main_id' => $invoice_id,
+										'fi_id' => $itemid,
+										'fee_item_description' => $item['fi_name_bahasa'],
+										'amount' => $amount
+								);
+									
+								$invoiceDetailDb->insert($inv_detail_data);
+							}
+						} else {
+							$invoice_id=$formData['idinvoice'];
+							
 						}
-			
 						//push to BNI
 						$dbActCalendar=new App_Model_General_DbTable_ActivityCalendar();
 						$calendar=$dbActCalendar->getData($formData['id']);
