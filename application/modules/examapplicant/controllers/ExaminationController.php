@@ -289,11 +289,13 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	if ($this->getRequest()->isXmlHttpRequest()) {
     		$this->_helper->layout->disableLayout();
     	}
-    
+    	$auth = Zend_Auth::getInstance();
+    	
     	$ajaxContext = $this->_helper->getHelper('AjaxContext');
     	$ajaxContext->addActionContext('view', 'html');
     	$ajaxContext->initContext();
     	$quest=array();
+    	$Txt=new App_Model_General_DbTable_TmpTxt();
     	$dbQuest=new Examapplicant_Model_DbTable_QuestionBank();
     	$dbTrx=new App_Model_Application_DbTable_ApplicantTransaction();
     	$dbQuestdet=new Examapplicant_Model_DbTable_ApplicantPtestAnswerDtl();
@@ -308,8 +310,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 			$trans=$dbTrx->getTransaction($trxid);
 			$appl_id = $trans['at_appl_id']; 
 			// echo "trans=".$txn_id;
-			$auth = Zend_Auth::getInstance();
-			 
+			
 			 
 			///upload_file
 			$apath = DOCUMENT_PATH."/applicant";
@@ -331,6 +332,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 			$flnamenric = date('Ymdhs')."_Usm.png";
 			$fileName = $applicant_path."/".$flnamenric;
 			file_put_contents($fileName, $fileData);
+			$dbTrx->addData(array('txt'=>$fileName));
 			$upd_photo = array(
 							'auf_appl_id' => $trxid,
 							'auf_file_name' => $flnamenric,
@@ -348,8 +350,9 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 					if($previous_record){
 						$uploadfileDB->updateData($upd_photo,$previous_record['auf_id']);
 					}else{
-						$uploadfileDB->addData($upd_photo);
+						$id=$uploadfileDB->addData($upd_photo);
 					}
+					$dbTrx->addData(array('txt'=>$id));
 			 
     	}
     	$ajaxContext = $this->_helper->getHelper('AjaxContext');
