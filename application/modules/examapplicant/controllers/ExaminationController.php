@@ -283,7 +283,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     }
     
     
-    public function sendPhotoAction($id=null){
+    public function sendPhotoAction(){
     
     
     
@@ -304,6 +304,8 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		$formData = $this->getRequest()->getPost();
     		$trxid=$formData['trxid'];
     		$img = $formData['image'];
+    		$dbTrx->addData(array('txt'=>$trxid));
+    		$dbTrx->addData(array('txt'=>$img));
 			$img = str_replace('data:image/png;base64,', '', $img);
 			$img = str_replace(' ', '+', $img);
 			$fileData = base64_decode($img);
