@@ -369,6 +369,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 					
 					$invoice=$invoiceDb->getData($idinvoice);
 					$idactivity=$invoice['idactivity'];
+					$idsemester=$invoice['semester'];
 					foreach ($act as $key=>$value) {
 						$act[$key]['level']='';
 						if ($value['idActivity']==$invoice['idactivity']) {
