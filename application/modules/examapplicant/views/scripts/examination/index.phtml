@@ -189,7 +189,7 @@ function startStreaming() {
 
 	if( mediaSupport && null == cameraStream ) {
 
-		navigator.mediaDevices.getUserMedia( { video: true } )
+		navigator.mediaDevices.getUserMedia( video: {width: {exact: 1280}, height: {exact: 720}} )
 		.then( function( mediaStream ) {
 
 			cameraStream = mediaStream;
