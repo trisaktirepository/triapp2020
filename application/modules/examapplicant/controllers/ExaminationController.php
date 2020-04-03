@@ -301,7 +301,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	$dbQuestdet=new Examapplicant_Model_DbTable_ApplicantPtestAnswerDtl();
     	if ($this->getRequest()->isPost()) {
     		$formData = $this->getRequest()->getPost();
-    		$trxid=$formData['transaction_id'];
+    		$trxid=$formData['trxid'];
     		$img = $formData['image'];
 			$img = str_replace('data:image/png;base64,', '', $img);
 			$img = str_replace(' ', '+', $img);
