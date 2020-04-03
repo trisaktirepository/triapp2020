@@ -25,6 +25,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	//all test on date
     		$trxid=$examdetail[0]['at_trans_id'];
     		$trx=$dbApplicant->getTransaction($trxid);
+    		$this->view->transaction_id=$trxid;
     		$compprogram=$dbExamComp->getComponenByTransaction($trxid,"0");
     		foreach ($compprogram as $value) {
     			$comprog[]=$value['ac_id'];
