@@ -94,7 +94,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 		$db->query($sqld3);
 		$db->beginTransaction();
 		
-		 
+		$data=array();
 		$response=array();
 		try {
 			$success="1";
@@ -156,19 +156,14 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 						if ($questionset) {
 							if ($config['qsc_suffle']=="1")  
 								shuffle($questionset);
-						 
-							foreach ($questionset as $quest) {
-								$dtl_data = array(
-											'apad_apa_id' => $id,
-											'apad_ques_no' =>$i,  
-											'idQuestion'=>$quest['idQuestion']
-										);
-								$i++;
-							$db->insert('applicant_ptest_ans_detl',$dtl_data);
-							}
-						} else $success="0";
+							$data[$config['qsc_order']]['questionset']=$questionset;
+							$data[$config['qsc_order']]['n_question']=$config['qsc_n_question'];
+						 	 
+						}  else $success="0";
 						
 					}
+					
+					
 					//exit;
 					 
 				} else $success="0";
@@ -208,15 +203,10 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 						if ($questionset) {
 							if ($config['qsc_suffle']=="1")
 								shuffle($questionset);
-							foreach ($questionset as $quest) {
-								$dtl_data = array(
-										'apad_apa_id' => $id,
-										'apad_ques_no' =>$i,
-										'idQuestion'=>$quest['idQuestion']
-								);
-								$i++;
-								$db->insert('applicant_ptest_ans_detl',$dtl_data);
-							}
+							
+							$data[$config['qsc_order']]['questionset']=$questionset;
+							$data[$config['qsc_order']]['n_question']=$config['qsc_n_question'];
+							 
 						} else $success="0";
 						 
 					}
@@ -247,20 +237,9 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 						$config=$db->fetchRow($select);
 						if ($config['qsc_suffle']=="1") {
 							shuffle($questionset);
-							$j=0;
-							foreach ($questionset as $quest) {
-								$dtl_data = array(
-										'apad_apa_id' => $id,
-										'apad_ques_no' =>$i,
-										'idQuestion'=>$quest['idQuestion']
-								);
-								$db->insert('applicant_ptest_ans_detl',$dtl_data);
-								$j++;
-								$i++;
-								if ($config['qsc_n_question']>=$j) break;
-								
-								
-							}
+							$data[$config['qsc_order']]['questionset']=$questionset;
+							$data[$config['qsc_order']]['n_question']=$config['qsc_n_question'];
+							 
 						} else {
 							//get from set
 							$idx=array_rand($set,1);
@@ -271,16 +250,10 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 							->where('a.subject=?',$idcomp)
 							->where('a.parent="0"');
 							$questionset=$db->fetchAll($select);
-							foreach ($questionset as $quest) {
-								$dtl_data = array(
-										'apad_apa_id' => $id,
-										'apad_ques_no' =>$i,
-										'idQuestion'=>$quest['idQuestion']
-								);
-								$db->insert('applicant_ptest_ans_detl',$dtl_data);
-								 
-								$i++;
-						 	}
+							$data[$config['qsc_order']]['questionset']=$questionset;
+							$data[$config['qsc_order']]['n_question']=$config['qsc_n_question'];
+								
+							 
 							
 						}
 					}
@@ -289,6 +262,25 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 			} 
 			
 		  	if ( $success=="1")  {
+		  		$i=1;
+		  		foreach ($data as $value) {
+		  			$questionset=$value['questionset'];
+		  			$j=0;
+		  			foreach ($questionset as $quest) {
+			  			$dtl_data = array(
+			  					'apad_apa_id' => $id,
+			  					'apad_ques_no' =>$i,
+			  					'idQuestion'=>$quest['idQuestion']
+			  			);
+			  			
+			  			if ($j<$value['n_question']) {
+			  				$db->insert('applicant_ptest_ans_detl',$dtl_data);
+			  				$i++;
+			  				$j++;
+			  			}
+			  			
+		  			}
+		  	 	}
 		    	$db->commit();
 		    	$response=array('apa_id'=>$id,'n_of_quest'=>$i-1);
 		  	} else {

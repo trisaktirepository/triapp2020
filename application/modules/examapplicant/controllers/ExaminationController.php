@@ -94,7 +94,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 		}
 		else {
 			$date=date('Y-m-d');
-			$time=date('h:s:i');
+			$time=date('H:s:i');
 		}
 		//generate personal exam
 		$dbExamComp=new App_Model_Application_DbTable_PlacementTestComponent();
@@ -165,6 +165,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    					$question['question_parent_url']=$path;
 	    				}
 	    				$question['stop_time']=date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s')) + strtotime($currenttest['timerange']));
+	    				echo var_dump($question);
 	    				$exammain=$dbAppTestAns->update(array('start_time'=>date('Y-m-d H:i:s'),'stop_time'=>$question['stop_time']), 'apa_id='.$response['apa_id']);
 	    				$this->view->question=$question;
 	    				$this->view->answer=$answer;
