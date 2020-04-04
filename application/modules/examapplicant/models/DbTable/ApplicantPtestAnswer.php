@@ -262,6 +262,14 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 			
 		  	if ( $success=="1")  {
 		  		$i=1;
+		  		//sort data
+		  		 
+		  		foreach ($data as $key=>$value) {
+		  			$compset[]=$key;
+		  		}
+		  		echo var_dump($compset);
+		  		sort($compset);
+		  		echo var_dump($compset);
 		  		echo var_dump($data);exit;
 		  		$ok = $db->insert($this->_name,$dataaph);
 		  		$id = $db->lastInsertId($this->_name);
