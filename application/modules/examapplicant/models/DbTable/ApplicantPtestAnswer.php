@@ -73,7 +73,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 						->where("a.apa_date LIKE '%".$post['date']."%'")
 						->where("concat(c.appl_fname, ' ', c.appl_mname,' ', c.appl_lname) LIKE '%".$post['name']."%'")
              		    ->order('a.'.$this->_primary.' ASC');
-      		echo $selectData;		
+      		//echo $selectData;		
 		return $selectData;
 	}
 	
@@ -107,7 +107,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 				$postData['component'][$key]['ac_id']=$row['ac_iddest'];
 			}
 			//head data
-		   	$data = array(
+		   	$dataaph = array(
 		        'apa_trans_id' => $postData['apa_trans_id'],
 		        'apa_ptest_code' => $postData['apa_ptest_code'],
 				'apa_set_code' => $postData['apa_set_code'],
@@ -120,8 +120,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 		
 		   	//echo var_dump($data);
 		   //	$id=1;
-			$ok = $db->insert($this->_name,$data);
-			$id = $db->lastInsertId($this->_name);
+			
 			
 			$config=$postData['config'];
 			if ($config['config_mode']==1861) {
@@ -263,6 +262,10 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 			
 		  	if ( $success=="1")  {
 		  		$i=1;
+		  		echo var_dump($data);exit;
+		  		$ok = $db->insert($this->_name,$dataaph);
+		  		$id = $db->lastInsertId($this->_name);
+		  		
 		  		foreach ($data as $value) {
 		  			$questionset=$value['questionset'];
 		  			$j=0;
