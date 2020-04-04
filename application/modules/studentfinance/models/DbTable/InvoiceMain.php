@@ -708,7 +708,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 			}
 		}
 		$desc=implode(';', $desc);
-		//echo $amounttotal.'-'.$billamount.' -'.$desc;exit;
+		echo $amounttotal.'-'.$billamount.' -'.$desc;exit;
 			
 	
 	
@@ -738,8 +738,8 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 				$dbInvoice->update(array("status_remark"=>$respone['message']), "bill_number ='".$invoice['bill_number']."'");
 					
 			}
-			//echo var_dump($invoiceData);
-			//echo var_dump($respone);exit;
+			echo var_dump($invoiceData);
+			echo var_dump($respone);exit;
 		}
 	}
 	public function pushToECollForEnrollment($idinvoice,$dateexprired,$process=null,$mode=null,$re=null) {

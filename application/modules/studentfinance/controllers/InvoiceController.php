@@ -132,7 +132,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 						//push to BNI
 						$dbActCalendar=new App_Model_General_DbTable_ActivityCalendar();
 						$calendar=$dbActCalendar->getData($formData['id']);
-						echo var_dump($calendar);
+						//echo var_dump($calendar);
 						if ($calendar) {
 							$dateexprired=date('Y-m-d H:s:i',strtotime($calendar['EndDate'].' '.$calendar['EndTime']));
 							$invoiceDb->pushToEColl($invoice_id, $dateexprired,'createbilling');
