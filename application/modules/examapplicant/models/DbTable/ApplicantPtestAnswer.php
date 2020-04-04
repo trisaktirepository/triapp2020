@@ -157,7 +157,8 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 								//suffle
 								$qindex=array();
 								foreach ($questionset as $key=>$quest) {
-									$qindex[]=$key;
+									$qindex=array_merge($qindex,array("'".$key."'"));
+											
 								} 
 								echo var_dump($qindex);
 								$qindex=array_rand($qindex,$config['qsc_n_question']);
