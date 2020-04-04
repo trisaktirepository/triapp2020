@@ -183,8 +183,8 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 					foreach ($postData['component'] as $keycomp=>$comp) {
 						$idcomp=$comp['ac_id'];
 						$selectedSet=array_rand($set,1);
-						echo var_dump($selectedSet);echo '<br>';
-						$postData['component'][$keycomp]['idSet']=$selectedSet[0]['ape_idSet'];
+						//echo var_dump($selectedSet);echo '<br>';
+						$postData['component'][$keycomp]['idSet']=$set[$selectedSet]['ape_idSet'];
 					}
 					
 					echo var_dump($postData);
