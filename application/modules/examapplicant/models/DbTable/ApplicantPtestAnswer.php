@@ -139,6 +139,12 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 					$i=1;
 					foreach ($postData['component'] as $comp) {
 						$idcomp=$comp['ac_id'];
+						//get config component
+						$select=$db->select()
+						->from(array('a'=>'tbl_question_set_config'))
+						->where('a.qsc_idSet=?',$idSet);
+						$config=$db->fetchRow($select);
+						
 						$select=$db->select()
 						->from(array('a'=>'tbl_question_bank'))
 						->where('a.from_setcode=?',$idSet)
@@ -147,7 +153,19 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 						$questionset=$db->fetchAll($select);
 						//echo var_dump($questionset);
 						if ($questionset) {
-							
+							if ($config['qsc_suffle']=="1") {
+								//suffle
+								$qindex=array();
+								foreach ($questionset as $key=>$quest) {
+									$qindex[]=$key;
+								} 
+								echo var_dump($qindex);
+								$qindex=array_rand($qindex,$config['qsc_n_question']);
+								echo var_dump($qindex);exit;
+								foreach ($qindex as $idx) {
+									;
+								}
+							}
 							foreach ($questionset as $quest) {
 								$dtl_data = array(
 											'apad_apa_id' => $id,
