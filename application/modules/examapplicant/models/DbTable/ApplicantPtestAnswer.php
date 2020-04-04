@@ -204,7 +204,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 						->from(array('a'=>'tbl_question_bank'))
 						->where('a.from_setcode=?',$idSet)
 						->where('a.subject=?',$idcomp);
-						$questionset=$db->fecthAll($select);
+						$questionset=$db->fetchAll($select);
 						if ($questionset) {
 							if ($config['qsc_suffle']=="1")
 								shuffle($questionset);
