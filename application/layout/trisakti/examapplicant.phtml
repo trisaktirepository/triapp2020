@@ -24,9 +24,9 @@
 		echo $this->jQuery();
 		
 		echo $this->headLink()->prependStylesheet($this->baseUrl().'/js/jquery/plugin/timepicker/timePicker.css');
-		echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery/plugin/timepicker/jquery.timepicker.js');
+		echo $this->headScript()->prependScript($this->baseUrl().'/js/jquery/plugin/timepicker/jquery.timepicker.js');
 		
-		echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery/plugin/multiselect-1.12/jquery.multiselect.min.js');
+		echo $this->headScript()->prependScript($this->baseUrl().'/js/jquery/plugin/multiselect-1.12/jquery.multiselect.min.js');
 		echo $this->headLink()->prependStylesheet($this->baseUrl().'/js/jquery/plugin/multiselect-1.12/jquery.multiselect.css');
 	?>
 
@@ -38,7 +38,7 @@
 	
 	
 	 	if($this->direction == 'rtl'){
-	 		echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery/plugin/potato.menu/jquery.ui.potato.menu.rtl.js');
+	 		echo $this->headScript()->prependScript($this->baseUrl().'/js/jquery/plugin/potato.menu/jquery.ui.potato.menu.rtl.js');
 	 		echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/ibfim/dashboard_rtl.css');
 	 		echo $this->headLink()->prependStylesheet($this->baseUrl().'/js/jquery/plugin/potato.menu/jquery.ui.potato.menu.rtl.css');
 	 		echo "<style>";
@@ -66,7 +66,7 @@
 	 		echo "</style>";
 	 	}else{
 	 		echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/ibfim/dashboard_ltr.css');
-	 		echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery/plugin/potato.menu/jquery.ui.potato.menu.js');
+	 		echo $this->headScript()->prependScript( $this->baseUrl().'/js/jquery/plugin/potato.menu/jquery.ui.potato.menu.js');
 	 		echo $this->headLink()->prependStylesheet($this->baseUrl().'/js/jquery/plugin/potato.menu/jquery.ui.potato.menu.css');
 	 		
 	 		echo "<style>";
