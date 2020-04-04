@@ -120,8 +120,8 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 		
 		   	//echo var_dump($data);
 		   //	$id=1;
-			//$ok = $db->insert($this->_name,$data);
-			//$id = $db->lastInsertId($this->_name);
+			$ok = $db->insert($this->_name,$data);
+			$id = $db->lastInsertId($this->_name);
 			
 			$config=$postData['config'];
 			if ($config['config_mode']==1861) {
@@ -142,7 +142,8 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 						//get config component
 						$select=$db->select()
 						->from(array('a'=>'tbl_question_set_config'))
-						->where('a.qsc_idSet=?',$idSet);
+						->where('a.qsc_idSet=?',$idSet)
+						->where('a.qsc_ac_id=?',$idcomp);
 						$config=$db->fetchRow($select);
 						
 						$select=$db->select()
@@ -187,19 +188,26 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 						$postData['component'][$keycomp]['idSet']=$set[$selectedSet]['ape_idSet'];
 					}
 					
-					echo var_dump($postData);
-					exit;
-					
+					 
 					$i=1;
 					foreach ($postData['component'] as $comp) {
 						$idcomp=$comp['ac_id'];
 						$idSet=$comp['idSet'];
+						//get config component
+						$select=$db->select()
+						->from(array('a'=>'tbl_question_set_config'))
+						->where('a.qsc_idSet=?',$idSet)
+						->where('a.qsc_ac_id=?',$idcomp);
+						$config=$db->fetchRow($select);
+						//--get question
 						$select=$db->select()
 						->from(array('a'=>'tbl_question_bank'))
 						->where('a.from_setcode=?',$idSet)
 						->where('a.subject=?',$idcomp);
 						$questionset=$db->fecthAll($select);
 						if ($questionset) {
+							if ($config['qsc_suffle']=="1")
+								shuffle($questionset);
 							foreach ($questionset as $quest) {
 								$dtl_data = array(
 										'apad_apa_id' => $id,
@@ -223,35 +231,60 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 				->where('a.test_type=?',$postData['test_type']);
 				$set=$db->fetchAll($selectset);
 				if ($set) {
+					$i=1;
 					foreach ($postData['component'] as $keycomp=>$comp) {
 						$idcomp=$comp['ac_id'];
 						$select=$db->select()
 						->from(array('a'=>'tbl_question_bank'))
 						->where('a.from_setcode in ('.$selectedSet.')')
 						->where('a.subject=?',$idcomp);
-					}
-						
-					$i=1;
-					foreach ($postData['component'] as $comp) {
-						$idcomp=$comp['ac_id'];
-						$idSet=$comp['idSet'];
-						
 						$questionset=$db->fecthAll($select);
-						if ($questionset) {
+						//get config component
+						$select=$db->select()
+						->from(array('a'=>'tbl_question_set_config'))
+						->where('a.qsc_idSet=?',$idSet)
+						->where('a.qsc_ac_id=?',$idcomp);
+						$config=$db->fetchRow($select);
+						if ($config['qsc_suffle']=="1") {
+							shuffle($questionset);
+							$j=0;
 							foreach ($questionset as $quest) {
 								$dtl_data = array(
 										'apad_apa_id' => $id,
 										'apad_ques_no' =>$i,
 										'idQuestion'=>$quest['idQuestion']
 								);
-								$i++;
 								$db->insert('applicant_ptest_ans_detl',$dtl_data);
+								$j++;
+								$i++;
+								if ($config['qsc_n_question']>=$j) break;
+								
+								
 							}
-						} else $success="0";
-						 
+						} else {
+							//get from set
+							$idx=array_rand($set,1);
+							$idSet=$set[$idx]['ape_idSet'];
+							$select=$db->select()
+							->from(array('a'=>'tbl_question_bank'))
+							->where('a.from_setcode=?',$idSet)
+							->where('a.subject=?',$idcomp)
+							->where('a.parent="0"');
+							$questionset=$db->fetchAll($select);
+							foreach ($questionset as $quest) {
+								$dtl_data = array(
+										'apad_apa_id' => $id,
+										'apad_ques_no' =>$i,
+										'idQuestion'=>$quest['idQuestion']
+								);
+								$db->insert('applicant_ptest_ans_detl',$dtl_data);
+								 
+								$i++;
+						 	}
+							
+						}
 					}
-						
-						
+		 				
 				}
 			} 
 			
