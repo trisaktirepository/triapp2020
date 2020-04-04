@@ -356,7 +356,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 					}else{
 						$id=$uploadfileDB->addData($upd_photo);
 					}
-					$Txt->add(array('txt'=>$id));
+					//$Txt->add(array('txt'=>$id));
 			 
     	}
     	$ajaxContext = $this->_helper->getHelper('AjaxContext');
