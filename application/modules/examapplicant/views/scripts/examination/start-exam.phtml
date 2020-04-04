@@ -190,6 +190,7 @@ function firstQuestion(Qurl,parenturl) {
 $(window).bind("load", function() {
 	   // code here
 	firstQuestion($('#question_url').val(),$('#question_parent_url').val());
+	startStreaming();
 });
 
 function startTimer(endtime){
@@ -227,6 +228,13 @@ function startTimer(endtime){
 </script>
  
 <body >
+<!-- Draggable DIV -->
+<div id="mydiv">
+  <!-- Include a header DIV with the same name as the draggable DIV, followed by "header" -->
+  <div id="mydivheader">Video Streaming</div>
+    <video id="stream" width="200" height="160"></video>
+</div>
+
 <?php if(isset($this->noticeMessage)){?>
 <div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
 <?php }?>
@@ -306,16 +314,8 @@ function startTimer(endtime){
 </body>
 <input type="hidden" id="stop" value="">
 
-<!-- Draggable DIV -->
-<div id="mydiv">
-  <!-- Include a header DIV with the same name as the draggable DIV, followed by "header" -->
-  <div id="mydivheader">Click here to move</div>
-  <p>Move</p>
-  <p>this</p>
-  <p>DIV</p>
-</div>
 
-<<script type="text/javascript">
+<script type="text/javascript">
 <!--
 
 //-->
@@ -361,5 +361,87 @@ function dragElement(elmnt) {
     document.onmousemove = null;
   }
 }
+
+var btnCapture = document.getElementById( "btn-capture" );
+
+//The stream & capture
+var stream = document.getElementById( "stream" );
+var capture = document.getElementById( "capture" );
+var snapshot = document.getElementById( "snapshot" );
+
+
+
+//The video stream
+var cameraStream = null;
+
+//Attach listeners
+//btnStart.addEventListener( "click", startStreaming );
+//btnStop.addEventListener( "click", stopStreaming );
+
+//Start Streaming
+function startStreaming() {
+
+	 var mediaSupport = 'mediaDevices' in navigator;
+
+	if( mediaSupport && null == cameraStream ) {
+
+		navigator.mediaDevices.getUserMedia( {video: { width: 1280, height: 720 }})
+		.then( function( mediaStream ) {
+
+			cameraStream = mediaStream;
+
+			stream.srcObject = mediaStream;
+
+			stream.play();
+		})
+		.catch( function( err ) {
+
+			console.log( "Unable to access camera: " + err );
+		});
+		
+	}
+	else {
+
+		alert( 'Your browser does not support media devices.' );
+
+		return;
+	} 
+}
+
+//Stop Streaming
+function stopStreaming() {
+
+	if( null != cameraStream ) {
+
+		var track = cameraStream.getTracks()[ 0 ];
+
+		track.stop();
+		stream.load();
+
+		cameraStream = null;
+	}
+}
+
+btnCapture.addEventListener( "click", captureSnapshot );
+
+function captureSnapshot() {
+
+	if( null != cameraStream ) {
+
+		var ctx = capture.getContext( '2d' );
+		var img = new Image();
+
+		ctx.drawImage( stream, 0, 0, capture.width, capture.height );
+
+		img.src		= capture.toDataURL( "image/png" );
+		img.width	= 200; 
+
+		snapshot.innerHTML = '';
+
+		snapshot.appendChild( img );
+		savePhoto();
+		
+	}
+} 
 </script>
  
