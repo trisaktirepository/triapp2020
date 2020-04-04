@@ -98,8 +98,8 @@ class Studentfinance_Model_DbTable_InvoiceDetail extends Zend_Db_Table_Abstract 
 			$row = $db->fetchAll($selectData);
 	
 		}
-		//echo $selectData;
-		//echo var_dump($row);exit;
+		echo $selectData;
+		echo var_dump($row);exit;
 		return $row;
 			
 	}
