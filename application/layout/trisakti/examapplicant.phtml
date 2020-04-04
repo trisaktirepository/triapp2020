@@ -22,12 +22,12 @@
 		//$this->jQuery()->setUiLocalPath($this->baseUrl().'/js/jquery/ui/jquery-ui.js');
 		
 		//echo $this->jQuery();
-		echo $this->headScript()->prependScript($this->baseUrl()."https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js");
+		echo $this->headScript()->appendScript($this->baseUrl()."https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js");
 	
 		echo $this->headLink()->prependStylesheet($this->baseUrl().'/js/jquery/plugin/timepicker/timePicker.css');
-		echo $this->headScript()->prependScript($this->baseUrl().'/js/jquery/plugin/timepicker/jquery.timepicker.js');
+		echo $this->headScript()->appendScript($this->baseUrl().'/js/jquery/plugin/timepicker/jquery.timepicker.js');
 		
-		echo $this->headScript()->prependScript($this->baseUrl().'/js/jquery/plugin/multiselect-1.12/jquery.multiselect.min.js');
+		echo $this->headScript()->appendScript($this->baseUrl().'/js/jquery/plugin/multiselect-1.12/jquery.multiselect.min.js');
 		echo $this->headLink()->prependStylesheet($this->baseUrl().'/js/jquery/plugin/multiselect-1.12/jquery.multiselect.css');
 	?>
 
@@ -67,7 +67,7 @@
 	 		echo "</style>";
 	 	}else{
 	 		echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/ibfim/dashboard_ltr.css');
-	 		echo $this->headScript()->prependScript( $this->baseUrl().'/js/jquery/plugin/potato.menu/jquery.ui.potato.menu.js');
+	 		echo $this->headScript()->appendScript( $this->baseUrl().'/js/jquery/plugin/potato.menu/jquery.ui.potato.menu.js');
 	 		echo $this->headLink()->prependStylesheet($this->baseUrl().'/js/jquery/plugin/potato.menu/jquery.ui.potato.menu.css');
 	 		
 	 		echo "<style>";
