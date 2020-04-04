@@ -6,6 +6,14 @@
   border: 1px solid #d3d3d3;
   text-align: center;
 }
+#clock {
+  font-family: 'Orbitron', sans-serif;
+  color: #66ff99;
+  font-size: 56px;
+  text-align: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
 
 #mydivheader {
   padding: 10px;
@@ -184,7 +192,7 @@ function firstQuestion(Qurl,parenturl) {
 	else $('input:radio[name="answer"][value="<?php echo $this->question['apad_appl_ans'] ?>"]').attr('checked',true);
 	
 	//startTimer("<?php echo $this->question['stop_time']?>");
-	startTimer("2020-04-1 11:00:00");
+	startTimer("2020-04-4 11:00:00");
 }
 
 $(window).bind("load", function() {
@@ -228,12 +236,7 @@ function startTimer(endtime){
 </script>
  
 <body >
-<!-- Draggable DIV -->
-<div id="mydiv">
-  <!-- Include a header DIV with the same name as the draggable DIV, followed by "header" -->
-  <div id="mydivheader">Video Streaming</div>
-    <video id="stream" width="120" height="80"></video>
-</div>
+
 
 <?php if(isset($this->noticeMessage)){?>
 <div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
@@ -277,7 +280,16 @@ function startTimer(endtime){
 			 </td>
 			 </tr>
 			 <tr>
-			 <td valign="top" align="center"><div id="ordertxt"  class="numberCircle"><strong> <?php echo $this->question['apad_ques_no']?> </strong></div></td>
+			 <td valign="top" align="center">
+			 <!-- Draggable DIV -->
+					<div id="mydiv">
+					  <!-- Include a header DIV with the same name as the draggable DIV, followed by "header" -->
+					  <div id="mydivheader">Video Streaming</div>
+					    <video id="stream" width="120" height="80"></video>
+					</div>
+			 	<div id="ordertxt"  class="numberCircle"><strong> <?php echo $this->question['apad_ques_no']?> </strong>
+			 	</div>
+			 </td>
 			 <td align="center">
 			 	 <img id="Question" src=""/>
 			 </td>
@@ -289,10 +301,14 @@ function startTimer(endtime){
 					<td   align="center" width="15%">
 						 <a class="pre btn" id="pre" href="#">Soal Sebelum</a>
 						 </td>
-					<td bgcolor="darkblue" align="center"  width="15%"></td>
+					<td bgcolor="darkblue" align="center"  width="15%">
+					<div id="clock"></div>
+					</td>
 					
 						  
-						 <td align="center" bgcolor="white">
+					<td align="center" bgcolor="white">
+						 <strong> <?php echo $this->question['apad_ques_no']?> </strong>
+						 <br>
 						 <input type="radio" name="answer" value="A" onclick="saveAnswer('A')"> A
 						 <input type="radio" name="answer" value="B" onclick="saveAnswer('B')"> B
 						 <input type="radio" name="answer" value="C" onclick="saveAnswer('C')"> C
