@@ -31,13 +31,15 @@
 </style>
  <script type="text/javascript">
   function startExam(idtrx) {
-	  stopStreaming();
-	  window.location.replace('/examapplicant/examination/start-exam/idtrx/'+idtrx);
-  }
+	  if ($("#photo")=="ok") {
+	  	stopStreaming();
+	 	 window.location.replace('/examapplicant/examination/start-exam/idtrx/'+idtrx);
 
+	   } else alert('Tolong klik tombol Ambil Foto terlebih dahulu');
+  }
   $(window).bind("load", function() {
 	   // code here
-	  $("#btnstart").attr("disabled", true);
+	 // $("#btnstart").attr("disabled", true);
 	   startStreaming();
 });
 
@@ -53,6 +55,7 @@
 			.done(function(respond){
 				console.log("done: "+respond); 
 				$("#type").val(type*1+1);
+				$("#photo").val('ok');
 				})
 			.fail(function(respond){console.log("fail");})
 			.always(function(respond){console.log("always");
@@ -74,6 +77,7 @@
 <div>
 	<input type="hidden" id="transaction_id" value="<?php echo $this->transaction_id?>">
 	<input type="hidden" id="type" value="1000">
+	<input type="hidden" id="photo" value="">
 	<fieldset>
 		<legend><?php echo $this->translate("Detail Information About Your Exam");?></legend>
 			<?php if ($this->test=="1") {?>
@@ -198,6 +202,7 @@ function startStreaming() {
 
 			console.log( "Unable to access camera: " + err );
 		});
+		
 	}
 	else {
 
@@ -238,9 +243,8 @@ function captureSnapshot() {
 		snapshot.innerHTML = '';
 
 		snapshot.appendChild( img );
-
-		$("#btnstart").attr("disabled", false);
-		savePhoto();
+ 		savePhoto();
+		
 	}
 } 
 </script>
