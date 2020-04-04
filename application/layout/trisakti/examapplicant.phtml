@@ -41,7 +41,7 @@
 	
 	
 	 	if($this->direction == 'rtl'){
-	 		echo $this->headScript()->prependScript($this->baseUrl().'/js/jquery/plugin/potato.menu/jquery.ui.potato.menu.rtl.js');
+	 		echo $this->headScript()->appendScript($this->baseUrl().'/js/jquery/plugin/potato.menu/jquery.ui.potato.menu.rtl.js');
 	 		echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/ibfim/dashboard_rtl.css');
 	 		echo $this->headLink()->prependStylesheet($this->baseUrl().'/js/jquery/plugin/potato.menu/jquery.ui.potato.menu.rtl.css');
 	 		echo "<style>";
