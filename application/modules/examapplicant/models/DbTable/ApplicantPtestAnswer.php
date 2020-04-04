@@ -155,18 +155,11 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 						if ($questionset) {
 							if ($config['qsc_suffle']=="1") {
 								//suffle
-								$qindex='';
-								foreach ($questionset as $key=>$quest) {
-									$qindex=$qindex.','.$key;	
-								} 
-								$qindex=explode(',', $qindex);
-								unset($qindex[0]);
-								echo var_dump($qindex);
-								$qindex=array_rand($qindex,$config['qsc_n_question']);
-								echo var_dump($qindex);exit;
-								foreach ($qindex as $idx) {
-									;
-								}
+								echo var_dump($questionset);
+								echo '<br>';
+								shuffle($questionset);
+								echo var_dump($questionset);exit;
+								 
 							}
 							foreach ($questionset as $quest) {
 								$dtl_data = array(
