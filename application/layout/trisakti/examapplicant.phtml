@@ -10,9 +10,9 @@
 	<?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/trisakti/left-menu.css'); ?>
 	
 	<?php
-		$this->jQuery()->enable();
-		$this->jQuery()->setVersion('1.12.4');
-		$this->jQuery()->useCdn(true);
+		//$this->jQuery()->enable();
+		//$this->jQuery()->setVersion('1.12.4');
+		//$this->jQuery()->useCdn(true);
 	 	//$this->jQuery()->setLocalPath($this->baseUrl().'/js/jquery/jquery-1.4.1.min.js');
 		
 		//$this->jQuery()->uiEnable();
@@ -21,8 +21,9 @@
 		//$this->jQuery()->addStylesheet($this->baseUrl().'/js/jquery/themes/smoothness/jquery-ui.css');
 		//$this->jQuery()->setUiLocalPath($this->baseUrl().'/js/jquery/ui/jquery-ui.js');
 		
-		echo $this->jQuery();
-		
+		//echo $this->jQuery();
+		echo $this->headScript()->prependScript($this->baseUrl()."https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js");
+	
 		echo $this->headLink()->prependStylesheet($this->baseUrl().'/js/jquery/plugin/timepicker/timePicker.css');
 		echo $this->headScript()->prependScript($this->baseUrl().'/js/jquery/plugin/timepicker/jquery.timepicker.js');
 		
