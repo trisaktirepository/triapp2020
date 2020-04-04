@@ -256,7 +256,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 							
 						} else {
 							$act[$key]['invoicerest']=array();
-							 
+							$bundleDetail=array();
 						}
 						//if ($invoice['va']!='' && $restamount!=array()) $this->_redirect('/applicant-portal/account');
 					} else {
