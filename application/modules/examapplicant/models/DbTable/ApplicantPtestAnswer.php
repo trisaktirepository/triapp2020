@@ -120,8 +120,8 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 		
 		   	//echo var_dump($data);
 		   //	$id=1;
-			$ok = $db->insert($this->_name,$data);
-			$id = $db->lastInsertId($this->_name);
+			//$ok = $db->insert($this->_name,$data);
+			//$id = $db->lastInsertId($this->_name);
 			
 			$config=$postData['config'];
 			if ($config['config_mode']==1861) {
@@ -153,22 +153,15 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 						$questionset=$db->fetchAll($select);
 						//echo var_dump($questionset);
 						if ($questionset) {
-							if ($config['qsc_suffle']=="1") {
-								//suffle
-								echo var_dump($questionset);
-								echo '<br>';
+							if ($config['qsc_suffle']=="1")  
 								shuffle($questionset);
-								echo var_dump($questionset);exit;
-								 
-							}
+						 
 							foreach ($questionset as $quest) {
 								$dtl_data = array(
 											'apad_apa_id' => $id,
 											'apad_ques_no' =>$i,  
 											'idQuestion'=>$quest['idQuestion']
 										);
-								//echo var_dump($dtl_data);
-								//echo '<br>';
 								$i++;
 							$db->insert('applicant_ptest_ans_detl',$dtl_data);
 							}
@@ -189,10 +182,12 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 				if ($set) {
 					foreach ($postData['component'] as $keycomp=>$comp) {
 						$idcomp=$comp['ac_id'];
-						$selectedSet=array_rand($set);
-						echo var_dump($selectedSet);echo '<br>';
+						$selectedSet=array_rand($set,1);
 						$postData['component'][$keycomp]['idSet']=$selectedSet[0]['ape_idSet'];
 					}
+					
+					echo var_dump($postData);
+					exit;
 					
 					$i=1;
 					foreach ($postData['component'] as $comp) {
