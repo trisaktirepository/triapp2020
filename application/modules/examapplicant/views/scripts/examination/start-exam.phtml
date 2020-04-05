@@ -38,6 +38,19 @@ p    {color: white; font-size: 16px}
 
     font: 32px Arial, sans-serif;
 }
+.numberanswer {
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    padding: 4px;
+
+    background: #fff;
+    border: 2px solid #666;
+    color: #666;
+    text-align: center;
+
+    font: 32px Arial, sans-serif;
+}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/2.4.5/fabric.js"></script>
  
@@ -67,6 +80,7 @@ $(function() {
 					}).done(function ( data ) {
 		 					//$("#QuestionTxt").val(data.question);
 		 					$("#ordertxt").text(data.apad_ques_no);
+		 					$("#orderanswer").text(data.apad_ques_no);
 		 					$("#order").val(data.apad_ques_no);
 		 					if (data.apad_appl_ans==" ") {
 								var selValue = $("input[type='radio']:checked").val();
@@ -101,6 +115,7 @@ $(function() {
 						}).done(function ( data ) {
 			 					//$("#QuestionTxt").val(data.question);
 			 					$("#ordertxt").text(data.apad_ques_no);
+			 					$("#orderanswer").text(data.apad_ques_no);
 			 					$("#order").val(data.apad_ques_no);
 			 					$("#apad_id").val(data.apad_id);
 			 					if (data.apad_appl_ans==" ") {
@@ -137,6 +152,7 @@ function getQuestion(order){
 		}).done(function ( data ) {
 					//$("#QuestionTxt").val(data.question);
 					$("#ordertxt").text(data.apad_ques_no);
+					$("#orderanswer").text(data.apad_ques_no);
 					$("#order").val(data.apad_ques_no);
 					$("#apad_id").val(data.apad_id);
 					if (data.apad_appl_ans==" ") {
@@ -309,7 +325,7 @@ function startTimer(endtime){
 					
 						  
 					<td align="center" bgcolor="white">
-						 <div id="ordertxt"  class="numberCircle"></div>
+						 <div id="orderanswer"  class="numberanswer"></div>
 						 <input type="radio" name="answer" value="A" onclick="saveAnswer('A')"> A
 						 <input type="radio" name="answer" value="B" onclick="saveAnswer('B')"> B
 						 <input type="radio" name="answer" value="C" onclick="saveAnswer('C')"> C
