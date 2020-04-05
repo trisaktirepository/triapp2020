@@ -149,7 +149,8 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 						->from(array('a'=>'tbl_question_bank'))
 						->where('a.from_setcode=?',$idSet)
 						->where('a.subject=?',$idcomp)
-						->where('a.parent="0"');
+						->where('a.parent="0"')
+						->order('a.seqno');
 						$questionset=$db->fetchAll($select);
 						//echo var_dump($questionset);
 						if ($questionset) {
@@ -197,7 +198,8 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 						$select=$db->select()
 						->from(array('a'=>'tbl_question_bank'))
 						->where('a.from_setcode=?',$idSet)
-						->where('a.subject=?',$idcomp);
+						->where('a.subject=?',$idcomp)
+						->order('a.seqno');
 						$questionset=$db->fetchAll($select);
 						if ($questionset) {
 							if ($config['qsc_suffle']=="1")
@@ -226,7 +228,8 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 						$select=$db->select()
 						->from(array('a'=>'tbl_question_bank'))
 						->where('a.from_setcode in ('.$selectedSet.')')
-						->where('a.subject=?',$idcomp);
+						->where('a.subject=?',$idcomp)
+						->order('a.seqno');
 						$questionset=$db->fetchAll($select);
 						//get config component
 						$select=$db->select()
@@ -247,7 +250,8 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 							->from(array('a'=>'tbl_question_bank'))
 							->where('a.from_setcode=?',$idSet)
 							->where('a.subject=?',$idcomp)
-							->where('a.parent="0"');
+							->where('a.parent="0"')
+							->order('a.seqno');
 							$questionset=$db->fetchAll($select);
 							$data[$config['qsc_order']]['questionset']=$questionset;
 							$data[$config['qsc_order']]['n_question']=$config['qsc_n_question'];
