@@ -223,7 +223,7 @@ function firstQuestion(Qurl,parenturl) {
 		 $('input:radio[name="answer"][value="'+selValue+'"]').prop('checked',false);
 	}
 	else $('input:radio[name="answer"][value="<?php echo $this->question['apad_appl_ans'] ?>"]').prop('checked',true);
-	
+	$('#radiopre').val(<?php echo $this->question['apad_appl_ans'] ?>);
 	//startTimer("<?php echo $this->question['stop_time']?>");
 	startTimer("2020-04-5 23:00:00");
 }
