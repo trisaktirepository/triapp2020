@@ -14,7 +14,7 @@ class icampus_Function_Studentfinance_Studentfinance extends Zend_View_Helper_Ab
   			if ($registration_id!='') {
   			 // echo $dbSurvey->isAnyOpenSurvey($registration_id);exit;
   			 	$idactivity=$dbInvoiceMain->isAnyOpenInvoice($registration_id);
-  			 	echo $idactivity;exit;
+  			 	//echo $idactivity;exit;
 				if ( !($action=='generate-std-invoice'||$action=='logout') && ($idactivity!=0) && ($role=='Student'||$role=='student')) {
 					///$survey=new Servqual_SurveyController();
 					 
