@@ -82,7 +82,7 @@ $(function() {
 		 					$("#ordertxt").text(data.apad_ques_no);
 		 					$("#orderanswer").text(data.apad_ques_no);
 		 					$("#order").val(data.apad_ques_no);
-		 					if (data.apad_appl_ans==" ") {
+		 					if (data.apad_appl_ans==" " || data.apad_appl_ans=="") {
 								var selValue = $("input[type='radio']:checked").val();
 								 $('input:radio[name="answer"][value="'+selValue+'"]').attr('checked',false);
 							}
@@ -118,7 +118,7 @@ $(function() {
 			 					$("#orderanswer").text(data.apad_ques_no);
 			 					$("#order").val(data.apad_ques_no);
 			 					$("#apad_id").val(data.apad_id);
-			 					if (data.apad_appl_ans==" ") {
+			 					if (data.apad_appl_ans==" " || data.apad_appl_ans=="") {
 									var selValue = $("input[type='radio']:checked").val();
 									 $('input:radio[name="answer"][value="'+selValue+'"]').attr('checked',false);
 								}
@@ -155,7 +155,7 @@ function getQuestion(order){
 					$("#orderanswer").text(data.apad_ques_no);
 					$("#order").val(data.apad_ques_no);
 					$("#apad_id").val(data.apad_id);
-					if (data.apad_appl_ans==" ") {
+					if (data.apad_appl_ans==" " || data.apad_appl_ans=="") {
 						var selValue = $("input[type='radio']:checked").val();
 						 $('input:radio[name="answer"][value="'+selValue+'"]').attr('checked',false);
 					}
