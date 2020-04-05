@@ -90,9 +90,9 @@ $(function() {
 							 */
 
 		 					if (data.apad_appl_ans==" " || data.apad_appl_ans=="") {
-								 $("#radio"+$("#radiopre").val()).attr('chechek',false);
+								 $("#radio"+$("#radiopre").val()).prop('chechek',false);
 							}
-							else $('#radio'+data.apad_appl_ans).attr('checked',true);
+							else $('#radio'+data.apad_appl_ans).prop('checked',true);
 		 					$("#radiopre").val(data.apad_appl_ans);
 		 					
 		 					$("#answered"+data.apad_ques_no).text(data.apad_appl_ans);
@@ -132,9 +132,9 @@ $(function() {
 								else $('input:radio[name="answer"][value="'+data.apad_appl_ans+'"]').attr('checked',true);
 								 */
 			 					if (data.apad_appl_ans==" " || data.apad_appl_ans=="") {
-									 $("#radio"+$("#radiopre").val()).attr('chechek',false);
+									 $("#radio"+$("#radiopre").val()).prop('chechek',false);
 								}
-								else $('#radio'+data.apad_appl_ans).attr('checked',true);
+								else $('#radio'+data.apad_appl_ans).prop('checked',true);
 			 					$("#radiopre").val(data.apad_appl_ans);
 			 					$("#answered"+data.apad_ques_no).text(data.apad_appl_ans);
 			 					$("#idQuestion").val(data.idQuestion);
@@ -171,9 +171,9 @@ function getQuestion(order){
 					$("#apad_id").val(data.apad_id);
 					
 					if (data.apad_appl_ans==" " || data.apad_appl_ans=="") {
-						 $("#radio"+$("#radiopre").val()).attr('chechek',false);
+						 $("#radio"+$("#radiopre").val()).prop('chechek',false);
 					}
-					else $('#radio'+data.apad_appl_ans).attr('checked',true);
+					else $('#radio'+data.apad_appl_ans).prop('checked',true);
 					//$("#answer").val(data.apad_appl_ans);
 					$("#answered"+data.apad_ques_no).text(data.apad_appl_ans);
 					$("#idQuestion").val(data.idQuestion);
@@ -219,9 +219,9 @@ function firstQuestion(Qurl,parenturl) {
 	else $("#parent").attr("src","");
 	if ("<?php echo $this->question['apad_appl_ans'] ?>"==" ") {
 		var selValue = $("input[type='radio']:checked").val();
-		 $('input:radio[name="answer"][value="'+selValue+'"]').attr('checked',false);
+		 $('input:radio[name="answer"][value="'+selValue+'"]').prop('checked',false);
 	}
-	else $('input:radio[name="answer"][value="<?php echo $this->question['apad_appl_ans'] ?>"]').attr('checked',true);
+	else $('input:radio[name="answer"][value="<?php echo $this->question['apad_appl_ans'] ?>"]').prop('checked',true);
 	
 	//startTimer("<?php echo $this->question['stop_time']?>");
 	startTimer("2020-04-5 23:00:00");
