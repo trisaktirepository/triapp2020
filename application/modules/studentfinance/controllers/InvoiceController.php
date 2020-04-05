@@ -137,6 +137,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 							$dateexprired=date('Y-m-d H:s:i',strtotime($calendar['EndDate'].' '.$calendar['EndTime']));
 							$invoiceDb->pushToEColl($invoice_id, $dateexprired,'createbilling');
 						}
+						$this->_redirect('/applicant-portal/account');
 					}
 					else {
 						 
