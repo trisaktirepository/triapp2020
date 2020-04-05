@@ -1198,6 +1198,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 									->join(array('det'=>"invoice_detail"),'im.id=det.invoice_main_id')
 									->where('im.IdStudentRegistration = ?', $idstd)
 									->where('im.appl_id=?',$applid)
+									->where('im.semester=?',$row['IdSemesterMain'])
 									->where('im.bill_balance<bill_amount');
 									$smt = $db->fetchRow($selectData);
 									if (!$smt)  return $row['idActivity'];
