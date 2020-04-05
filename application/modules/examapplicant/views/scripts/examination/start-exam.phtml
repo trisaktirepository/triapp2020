@@ -204,6 +204,7 @@ function saveAnswer(answer){
 					 var element="#answered"+respond.apad_ques_no;
 					 $(element).text(respond.apad_appl_ans);
 					 $('input:radio[name="answer"][value="'+data.apad_appl_ans+'"]').attr('checked',true);
+					 captureSnapshot();
 					})
 				.fail(function(respond){console.log("fail");})
 				.always(function(respond){console.log("always");
@@ -263,7 +264,22 @@ function startTimer(endtime){
 		}, 1000);
 }
 
-
+function savePhoto(){
+	var canvas=document.getElementById("capture");
+	var dataUrl=canvas.toDataURL(); 
+	type=$("#type").val()*1+$("#oder").val();
+	$.ajax({
+		  type: "POST",
+		  url: "/examapplicant/examination/send-photo",
+		  data: {'image': dataUrl,'trxid':$("#transaction_id").val(),'type':type}
+		})
+		.done(function(respond){
+			  
+			 
+			$("#photo").val('ok');
+			})
+		.fail(function(respond){console.log("fail");});
+}
  
 </script>
  
@@ -283,6 +299,7 @@ function startTimer(endtime){
 <input type="hidden" id="apad_id" name="apad_id" value="<?php echo $this->question['apad_id']?>">
 <input type="hidden" id="idQuestion" value="<?php echo $this->question['idQuestion']?>">
 <input type="hidden" id="order" value="1">
+<input type="hidden" id="type" value="1000">
 <input type="hidden" id="question_url" value="<?php echo $this->question['question_url']?>">
 <input type="hidden" id="question_parent_url" value="<?php echo $this->question['question_parent_url']?>">
 <input type="hidden" id="n_of_quest" value="<?php echo $this->n_of_quest?>">
