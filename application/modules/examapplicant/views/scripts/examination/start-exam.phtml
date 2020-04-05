@@ -82,12 +82,19 @@ $(function() {
 		 					$("#ordertxt").text(data.apad_ques_no);
 		 					$("#orderanswer").text(data.apad_ques_no);
 		 					$("#order").val(data.apad_ques_no);
-		 					if (data.apad_appl_ans==" " || data.apad_appl_ans=="") {
+		 					/* if (data.apad_appl_ans==" " || data.apad_appl_ans=="") {
 								var selValue = $("input[type='radio']:checked").val();
 								 $('input:radio[name="answer"][value="'+selValue+'"]').attr('checked',false);
 							}
 							else $('input:radio[name="answer"][value="'+data.apad_appl_ans+'"]').attr('checked',true);
-							
+							 */
+
+		 					if (data.apad_appl_ans==" " || data.apad_appl_ans=="") {
+								 $("#radio"+$("#radiopre").val()).attr('chechek',false);
+							}
+							else $('#radio'+data.apad_appl_ans).attr('checked',true);
+		 					$("#radiopre").val(data.apad_appl_ans);
+		 					
 		 					$("#answered"+data.apad_ques_no).text(data.apad_appl_ans);
 		 					$("#idQuestion").val(data.idQuestion);
 		 					$("#apad_id").val(data.apad_id);
@@ -118,15 +125,22 @@ $(function() {
 			 					$("#orderanswer").text(data.apad_ques_no);
 			 					$("#order").val(data.apad_ques_no);
 			 					$("#apad_id").val(data.apad_id);
-			 					if (data.apad_appl_ans==" " || data.apad_appl_ans=="") {
+			 					/* if (data.apad_appl_ans==" " || data.apad_appl_ans=="") {
 									var selValue = $("input[type='radio']:checked").val();
 									 $('input:radio[name="answer"][value="'+selValue+'"]').attr('checked',false);
 								}
 								else $('input:radio[name="answer"][value="'+data.apad_appl_ans+'"]').attr('checked',true);
-								
+								 */
+			 					if (data.apad_appl_ans==" " || data.apad_appl_ans=="") {
+									 $("#radio"+$("#radiopre").val()).attr('chechek',false);
+								}
+								else $('#radio'+data.apad_appl_ans).attr('checked',true);
+			 					$("#radiopre").val(data.apad_appl_ans);
 			 					$("#answered"+data.apad_ques_no).text(data.apad_appl_ans);
 			 					$("#idQuestion").val(data.idQuestion);
+			 					
 			 					var urllink=data.question_url;
+			 					
 			 					$("#Question").attr("src",urllink);
 								if (data.question_parent_url!='') 
 									$("#parent").attr("src",data.question_parent_url);
@@ -155,15 +169,15 @@ function getQuestion(order){
 					$("#orderanswer").text(data.apad_ques_no);
 					$("#order").val(data.apad_ques_no);
 					$("#apad_id").val(data.apad_id);
+					
 					if (data.apad_appl_ans==" " || data.apad_appl_ans=="") {
-						var selValue = $("input[type='radio']:checked").val();
-						 $('input:radio[name="answer"][value="'+selValue+'"]').attr('checked',false);
+						 $("#radio"+$("#radiopre").val()).attr('chechek',false);
 					}
-					else $('input:radio[name="answer"][value="'+data.apad_appl_ans+'"]').attr('checked',true);
+					else $('#radio'+data.apad_appl_ans).attr('checked',true);
 					//$("#answer").val(data.apad_appl_ans);
 					$("#answered"+data.apad_ques_no).text(data.apad_appl_ans);
 					$("#idQuestion").val(data.idQuestion);
-					 
+					$("#radiopre").val(data.apad_appl_ans);
 					var urllink=data.question_url;
 					$("#Question").attr("src",urllink);
 					if (data.question_parent_url!='') 
@@ -179,7 +193,7 @@ function saveAnswer(answer){
 	 if ($("#stop").val()!="1") {
 			var idQuestion=$("#idQuestion").val();
 			var order=$("#order").val();
-			 
+			$('#radiopre').val(answer);
 			$.ajax({
 				  type: "POST",
 				  url: "/examapplicant/examination/ajax-save-answer",
@@ -210,7 +224,7 @@ function firstQuestion(Qurl,parenturl) {
 	else $('input:radio[name="answer"][value="<?php echo $this->question['apad_appl_ans'] ?>"]').attr('checked',true);
 	
 	//startTimer("<?php echo $this->question['stop_time']?>");
-	startTimer("2020-04-4 23:00:00");
+	startTimer("2020-04-5 23:00:00");
 }
 
 $(window).bind("load", function() {
@@ -328,11 +342,12 @@ function startTimer(endtime){
 						  
 					<td align="center" bgcolor="white">
 						 <div id="orderanswer"  class="numberanswer"><?php echo $this->question['apad_ques_no']?></div>
-						 <input type="radio" name="answer" value="A" onclick="saveAnswer('A')"> A
-						 <input type="radio" name="answer" value="B" onclick="saveAnswer('B')"> B
-						 <input type="radio" name="answer" value="C" onclick="saveAnswer('C')"> C
-						 <input type="radio" name="answer" value="D" onclick="saveAnswer('D')"> D
-						 <input type="radio" name="answer" value="E" onclick="saveAnswer('E')"> E
+						 <input type="radio" name="answer" id="radioA" value="A" onclick="saveAnswer('A')"> A
+						 <input type="radio" name="answer" id="radioB" value="B" onclick="saveAnswer('B')"> B
+						 <input type="radio" name="answer" id="radioC" value="C" onclick="saveAnswer('C')"> C
+						 <input type="radio" name="answer" id="radioD" value="D" onclick="saveAnswer('D')"> D
+						 <input type="radio" name="answer" id="radioE" value="E" onclick="saveAnswer('E')"> E
+						 <input type="hidden" id="radiopre">
 					</td>
 					<td bgcolor="darkblue" align="center"  width="15%"><p id="examtime"></p></td>
 					<td align="center"  width="15%">	
