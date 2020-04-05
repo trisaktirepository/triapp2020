@@ -90,7 +90,7 @@ $(function() {
 							 */
 
 		 					if (data.apad_appl_ans==" " || data.apad_appl_ans=="") {
-								 $("#radio"+$("#radiopre").val()).prop('chechek',false);
+								 $("#radio"+$("#radiopre").val()).prop('checked',false);
 							}
 							else $('#radio'+data.apad_appl_ans).prop('checked',true);
 		 					$("#radiopre").val(data.apad_appl_ans);
@@ -132,7 +132,7 @@ $(function() {
 								else $('input:radio[name="answer"][value="'+data.apad_appl_ans+'"]').attr('checked',true);
 								 */
 			 					if (data.apad_appl_ans==" " || data.apad_appl_ans=="") {
-									 $("#radio"+$("#radiopre").val()).prop('chechek',false);
+									 $("#radio"+$("#radiopre").val()).prop('checked',false);
 								}
 								else $('#radio'+data.apad_appl_ans).prop('checked',true);
 			 					$("#radiopre").val(data.apad_appl_ans);
@@ -171,7 +171,7 @@ function getQuestion(order){
 					$("#apad_id").val(data.apad_id);
 					
 					if (data.apad_appl_ans==" " || data.apad_appl_ans=="") {
-						 $("#radio"+$("#radiopre").val()).prop('chechek',false);
+						 $("#radio"+$("#radiopre").val()).prop('checked',false);
 					}
 					else $('#radio'+data.apad_appl_ans).prop('checked',true);
 					//$("#answer").val(data.apad_appl_ans);
