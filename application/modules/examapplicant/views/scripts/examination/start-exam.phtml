@@ -194,7 +194,7 @@ function firstQuestion(Qurl,parenturl) {
 	else $('input:radio[name="answer"][value="<?php echo $this->question['apad_appl_ans'] ?>"]').attr('checked',true);
 	
 	//startTimer("<?php echo $this->question['stop_time']?>");
-	startTimer("2020-04-4 11:00:00");
+	startTimer("2020-04-4 23:00:00");
 }
 
 $(window).bind("load", function() {
@@ -309,7 +309,7 @@ function startTimer(endtime){
 					
 						  
 					<td align="center" bgcolor="white">
-						 <div id="ordertxt"  class="numberCircle">
+						 <div id="ordertxt"  class="numberCircle"></div>
 						 <input type="radio" name="answer" value="A" onclick="saveAnswer('A')"> A
 						 <input type="radio" name="answer" value="B" onclick="saveAnswer('B')"> B
 						 <input type="radio" name="answer" value="C" onclick="saveAnswer('C')"> C
