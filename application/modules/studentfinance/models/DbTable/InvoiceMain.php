@@ -1687,7 +1687,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 	}
 	
 	public function dispatcher($idstd,$idactivity) {
-		echo $idactivity;exit;
+		 
 		$redirector = Zend_Controller_Action_HelperBroker::getStaticHelper('Redirector');
 		$redirector->gotoUrl('/studentfinance/invoice/generate-std-invoice/id/'.$idstd.'/idactivity/'.$idactivity);
 	}
