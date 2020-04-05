@@ -153,7 +153,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    			if ($response) {
 	    				$answerset=$dbAppPtestDet->getDataByHead($response['apa_id']);
 	    				foreach ($answerset as $value) {
-	    					$answer[$value['apad_quest_no']]=$value['apad_appl_ans'];
+	    					$answer[$value['apad_ques_no']]=$value['apad_appl_ans'];
 	    				}
 	    				$question=$dbAppPtestDet->getQuestionBySequence($response['apa_id'], 1);
 	    				$dt = explode("triapp",$question['question_url']);
@@ -165,8 +165,8 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    					$question['question_parent_url']=$path;
 	    				}
 	    				$question['stop_time']=date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s')) + strtotime($currenttest['timerange']));
-	    				echo var_dump($question);
-	    				echo var_dump($currenttest);
+	    				//echo var_dump($question);
+	    				//echo var_dump($currenttest);
 	    				$exammain=$dbAppTestAns->update(array('start_time'=>date('Y-m-d H:i:s'),'stop_time'=>$question['stop_time']), 'apa_id='.$response['apa_id']);
 	    				$this->view->question=$question;
 	    				$this->view->answer=$answer;
