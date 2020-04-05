@@ -267,15 +267,14 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 		  		foreach ($data as $key=>$value) {
 		  			$compset[]=$key;
 		  		}
-		  		echo var_dump($compset);
+		  		 
 		  		sort($compset);
-		  		echo var_dump($compset);
-		  		echo var_dump($data);exit;
+		  		 
 		  		$ok = $db->insert($this->_name,$dataaph);
 		  		$id = $db->lastInsertId($this->_name);
 		  		
-		  		foreach ($data as $value) {
-		  			$questionset=$value['questionset'];
+		  		foreach ($compset as $comporder) {
+		  			$questionset=$data[$comporder]['questionset'];
 		  			$j=0;
 		  			foreach ($questionset as $quest) {
 			  			$dtl_data = array(
@@ -284,7 +283,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 			  					'idQuestion'=>$quest['idQuestion']
 			  			);
 			  			
-			  			if ($j<$value['n_question']) {
+			  			if ($j<$data[$comporder]['n_question']) {
 			  				$db->insert('applicant_ptest_ans_detl',$dtl_data);
 			  				$i++;
 			  				$j++;

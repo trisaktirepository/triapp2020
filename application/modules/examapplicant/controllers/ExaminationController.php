@@ -166,6 +166,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    				}
 	    				$question['stop_time']=date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s')) + strtotime($currenttest['timerange']));
 	    				echo var_dump($question);
+	    				echo var_dump($currenttest);
 	    				$exammain=$dbAppTestAns->update(array('start_time'=>date('Y-m-d H:i:s'),'stop_time'=>$question['stop_time']), 'apa_id='.$response['apa_id']);
 	    				$this->view->question=$question;
 	    				$this->view->answer=$answer;
