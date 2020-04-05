@@ -1812,13 +1812,14 @@ class ApplicantPortalController extends Zend_Controller_Action
 		$this->view->appl_id = $appl_id;
 		$registration_id = $auth->getIdentity()->registration_id;
 		$Dbinvoice=new Studentfinance_Model_DbTable_InvoiceMain();
-		
+		echo $registration_id;exit;
 		$studentRegDB = new App_Model_Record_DbTable_StudentRegistration();
 		if ($registration_id!='') {
 			$student = $studentRegDB->getStudentInfo($registration_id);
 			
 			$activity=$Dbinvoice->isAnyOpenInvoice($registration_id);
 			echo $activity;exit;
+			
 			if ($activity!=0 && $student['IdProgram']!=60) $Dbinvoice->dispatcher($registration_id,$activity);
 		}
     	//profile
