@@ -97,7 +97,7 @@
 					</div>
 					 <div class="play-area-sub">
 				     
-				    <canvas id="capture" width="200" height="150"></canvas>
+				    <canvas id="capture" width="160" height="120"></canvas>
 				    <div id="snapshot"></div>
 				  </div>
 				</td>
@@ -236,7 +236,7 @@ function captureSnapshot() {
 		ctx.drawImage( stream, 0, 0, capture.width, capture.height );
 
 		img.src		= capture.toDataURL( "image/png" );
-		img.width	= 320; 
+		img.width	= 160; 
 
 		snapshot.innerHTML = '';
 
