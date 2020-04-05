@@ -281,7 +281,7 @@ function startTimer(endtime){
 					$colom=round($this->n_of_quest/$nrow,0);
 				for ($j=1;$j<=$nrow;$j++) {?>
 					<tr><?php for ($i=($j-1)*$colom+1;$i<=$j*$colom;$i++) {?><td  width="2%" bgcolor="darkgrey" align="center"><font color="white"><a href="#" onclick="getQuestion('<?php echo $i?>')"><?php echo $i;?></a></font></td><?php }?></tr> 
-					<tr><?php for ($i=($j-1)*$colom+1;$i<=$j*$colom;$i++) {?><td  width="2%" bgcolor="white" align="center"><div id="answered<?php echo $i;?>"><?php echo $this->answer[$i]?></div></td><?php }?></tr>
+					<tr><?php for ($i=($j-1)*$colom+1;$i<=$j*$colom;$i++) {?><td  width="2%" bgcolor="white" align="center"><div id="answered<?php echo $i;?>"><?php if (isset($this->answer[$i])) echo $this->answer[$i]?></div></td><?php }?></tr>
 			<?php }?>
 			</table>		 
 	</fieldset>
