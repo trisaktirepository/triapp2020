@@ -234,7 +234,7 @@ function saveAnswer(answer){
 				.done(function(respond){
 					 var element="#answered"+respond.apad_ques_no;
 					 $(element).text(respond.apad_appl_ans);
-					 $('input:radio[name="answer"][value="'+data.apad_appl_ans+'"]').attr('checked',true);
+					 $('input:radio[name="answer"][value="'+respond.apad_appl_ans+'"]').attr('checked',true);
 					 captureSnapshot();
 					})
 				.fail(function(respond){console.log("fail");})
