@@ -410,12 +410,14 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 			$previous_record = $uploadfileDB->getFile($trxid,$type);
 					//echo var_dump($previous_record);
 			if($previous_record){
-				$uploadfileDB->updateData($upd_photo,$previous_record['auf_id']);
+				$id=$previous_record['auf_id'];
+				$uploadfileDB->updateData($upd_photo,$id);
 			}else{
 				$id=$uploadfileDB->addData($upd_photo);
-				$dbQuestdet->update(array('apad_auf_id'=>$id), 'apad_id='.$apadid); 
 				
 			}
+			$dbQuestdet->update(array('apad_auf_id'=>$id), 'apad_id='.$apadid);
+			
 					//$Txt->add(array('txt'=>$id));
 			 
     	}
