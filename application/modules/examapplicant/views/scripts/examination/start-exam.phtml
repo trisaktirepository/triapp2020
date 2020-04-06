@@ -65,6 +65,7 @@ p    {color: white; font-size: 16px}
 }); */
 
 $(function() {
+	
 	 
 	$(".next").click(function(){
 	var  order=$("#order").val()*1;
@@ -82,12 +83,7 @@ $(function() {
 		 					$("#ordertxt").text(data.apad_ques_no);
 		 					$("#orderanswer").text(data.apad_ques_no);
 		 					$("#order").val(data.apad_ques_no);
-		 					/* if (data.apad_appl_ans==" " || data.apad_appl_ans=="") {
-								var selValue = $("input[type='radio']:checked").val();
-								 $('input:radio[name="answer"][value="'+selValue+'"]').attr('checked',false);
-							}
-							else $('input:radio[name="answer"][value="'+data.apad_appl_ans+'"]').attr('checked',true);
-							 */
+		 					showanswermedia(data.answer_type);
 
 		 					if (data.apad_appl_ans==" " || data.apad_appl_ans=="") {
 								 $("#radio"+$("#radiopre").val()).prop('checked',false);
@@ -125,12 +121,7 @@ $(function() {
 			 					$("#orderanswer").text(data.apad_ques_no);
 			 					$("#order").val(data.apad_ques_no);
 			 					$("#apad_id").val(data.apad_id);
-			 					/* if (data.apad_appl_ans==" " || data.apad_appl_ans=="") {
-									var selValue = $("input[type='radio']:checked").val();
-									 $('input:radio[name="answer"][value="'+selValue+'"]').attr('checked',false);
-								}
-								else $('input:radio[name="answer"][value="'+data.apad_appl_ans+'"]').attr('checked',true);
-								 */
+			 					showanswermedia(data.answer_type);
 			 					if (data.apad_appl_ans==" " || data.apad_appl_ans=="") {
 									 $("#radio"+$("#radiopre").val()).prop('checked',false);
 								}
@@ -149,7 +140,23 @@ $(function() {
 				}
 			});
 		 
-		
+	 
+	    $('#uploadBTN').on('click', function(){ 
+	        var fd = new FormData($("#fileinfo"));
+	        //fd.append("CustomField", "This is some extra data");
+	        $.ajax({
+	            url: '/examapplicant/examination/upload-file',  
+	            type: 'POST',
+	            data: fd,
+	            success:function(data){
+	                $('#output').html(data);
+	            },
+	            cache: false,
+	            contentType: false,
+	            processData: false
+	        });
+	    });
+	 
  
 });
 
@@ -161,7 +168,7 @@ function getQuestion(order){
 		data: {'apa_id': $("#apa_id").val(),'order':order},
 		dataType: 'json',
 		error: function(){
-				alert("Terjadi masalah saat menghapus data !");
+				alert("Terjadi masalah saat mengambil  data !");
 			}, 
 		}).done(function ( data ) {
 					//$("#QuestionTxt").val(data.question);
@@ -169,7 +176,7 @@ function getQuestion(order){
 					$("#orderanswer").text(data.apad_ques_no);
 					$("#order").val(data.apad_ques_no);
 					$("#apad_id").val(data.apad_id);
-					
+					showanswermedia(data.answer_type);
 					if (data.apad_appl_ans==" " || data.apad_appl_ans=="") {
 						 $("#radio"+$("#radiopre").val()).prop('checked',false);
 					}
@@ -183,10 +190,34 @@ function getQuestion(order){
 					if (data.question_parent_url!='') 
 						$("#parent").attr("src",data.question_parent_url);
 					else $("#parent").attr("src","");
+					
 			});
 	}
 }
 
+
+function saveAnswerText(element) {
+	if ($("#stop").val()!="1") {
+		var idQuestion=$("#idQuestion").val();
+		var order=$("#order").val();
+		var answer=$(element).val();
+		//$('#radiopre').val(answer);
+		$.ajax({
+			  type: "POST",
+			  url: "/examapplicant/examination/ajax-save-answer-text",
+			  data: {'idQuestion':idQuestion,'apad_id':$("#apad_id").val(),'answer':answer,'order':order},
+			  dataType: 'json'
+			})
+			.done(function(respond){
+				 var element="#answered"+respond.apad_ques_no;
+				 $(element).text("ok");
+				 captureSnapshot();
+				})
+			.fail(function(respond){console.log("fail");})
+			.always(function(respond){console.log("always");
+		});
+ }
+}
  
 
 function saveAnswer(answer){
@@ -218,6 +249,7 @@ function firstQuestion(Qurl,parenturl) {
 	if (parenturl!='') 
 		$("#parent").attr("src",parenturl);
 	else $("#parent").attr("src","");
+	answermedia(<?php echo $this->question['answer_type'] ?>);
 	if ("<?php echo $this->question['apad_appl_ans'] ?>"==" ") {
 		var selValue = $("input[type='radio']:checked").val();
 		 $('input:radio[name="answer"][value="'+selValue+'"]').prop('checked',false);
@@ -225,7 +257,28 @@ function firstQuestion(Qurl,parenturl) {
 	else $('input:radio[name="answer"][value="<?php echo $this->question['apad_appl_ans'] ?>"]').prop('checked',true);
 	$('#radiopre').val(<?php echo $this->question['apad_appl_ans'] ?>);
 	//startTimer("<?php echo $this->question['stop_time']?>");
-	startTimer("2020-04-5 23:00:00");
+	startTimer("2020-04-6 23:00:00");
+}
+
+function answermedia(type) {
+	$("#answermc").hide();
+	$("#answertext").hide();
+	$("#answerfile").hide(); 
+	if (type=="1") $("#answermc").show();
+	else if (type=="2" || type="4"){
+		$("#answertext").empty().append('<textarea id="answertxt" style="width:400px;height:50px;" onblur="saveAnswerText(this)">Tulis Jawaban di sini</textarea>');
+		$("#answertext").show();
+	}
+	else if (type=="3"||type=="4") {
+		
+		$("#answerfile").empty();
+		$("#answerfile").append('<form id="fileinfo" enctype="multipart/form-data" method="post" name="fileinfo">'+
+			   '<label>File Unggah:</label>'+
+			    '<input type="file" name="file" required />'+
+				'</form> <input type="button" id="uploadBTN" value="Unggah"></input>';
+		$("#answerfile").show();
+	} 
+	
 }
 
 $(window).bind("load", function() {
@@ -267,11 +320,11 @@ function startTimer(endtime){
 function savePhoto(){
 	var canvas=document.getElementById("capture");
 	var dataUrl=canvas.toDataURL(); 
-	type=$("#type").val()*1+$("#oder").val();
+	type=$("#type").val();
 	$.ajax({
 		  type: "POST",
 		  url: "/examapplicant/examination/send-photo",
-		  data: {'image': dataUrl,'trxid':$("#transaction_id").val(),'type':type}
+		  data: {'image': dataUrl,'trxid':$("#transaction_id").val(),'type':type,'apad_id':$("#apad_id").val()}
 		})
 		.done(function(respond){
 			  
@@ -299,7 +352,7 @@ function savePhoto(){
 <input type="hidden" id="apad_id" name="apad_id" value="<?php echo $this->question['apad_id']?>">
 <input type="hidden" id="idQuestion" value="<?php echo $this->question['idQuestion']?>">
 <input type="hidden" id="order" value="1">
-<input type="hidden" id="type" value="1000">
+<input type="hidden" id="type" value="<?php echo $this->testtypecode?>">
 <input type="hidden" id="question_url" value="<?php echo $this->question['question_url']?>">
 <input type="hidden" id="question_parent_url" value="<?php echo $this->question['question_parent_url']?>">
 <input type="hidden" id="n_of_quest" value="<?php echo $this->n_of_quest?>">
@@ -343,6 +396,8 @@ function savePhoto(){
 			 </td>
 			 <td align="center">
 			 	 <img id="Question" src=""/>
+			 	 <br>
+			 	 <div id="answertext"></div>
 			 </td>
 			 </tr>
 			 <tr bgcolor="lightblue">
@@ -359,12 +414,15 @@ function savePhoto(){
 						  
 					<td align="center" bgcolor="white">
 						 <div id="orderanswer"  class="numberanswer"><?php echo $this->question['apad_ques_no']?></div>
+						 <div id="answermc">
 						 <input type="radio" name="answer" id="radioA" value="A" onclick="saveAnswer('A')"> A
 						 <input type="radio" name="answer" id="radioB" value="B" onclick="saveAnswer('B')"> B
 						 <input type="radio" name="answer" id="radioC" value="C" onclick="saveAnswer('C')"> C
 						 <input type="radio" name="answer" id="radioD" value="D" onclick="saveAnswer('D')"> D
 						 <input type="radio" name="answer" id="radioE" value="E" onclick="saveAnswer('E')"> E
 						 <input type="hidden" id="radiopre">
+						 </div>
+						 <div id="answerfile"></div>
 					</td>
 					<td bgcolor="darkblue" align="center"  width="15%"><p id="examtime"></p></td>
 					<td align="center"  width="15%">	
@@ -380,7 +438,7 @@ function savePhoto(){
 </div> 
 </body>
 <input type="hidden" id="stop" value="">
-
+ 
 
 <script type="text/javascript">
 <!--
@@ -501,7 +559,7 @@ function captureSnapshot() {
 		ctx.drawImage( stream, 0, 0, capture.width, capture.height );
 
 		img.src		= capture.toDataURL( "image/png" );
-		img.width	= 320; 
+		img.width	= 1280; 
 
 		snapshot.innerHTML = '';
 

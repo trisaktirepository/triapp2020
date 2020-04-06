@@ -109,8 +109,10 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		$dbPestDetail=new App_Model_Application_DbTable_ApplicantPtestDetail();
     		$currenttest=$dbPestDetail->getActiveTest($trxid, $date, $time);
 	    	if ($currenttest) {
+	    		
 	    		$trx=$dbApplicant->getTransaction($trxid);
 	    		$compcode=$currenttest['app_comp_code'];
+	    		$this->view->testtypecode=$currenttest['initial_code'];
 	    		$response=$dbAppTestAns->isExamScript($trxid, $compcode);
 	    		if (!$response) {
 	    			$dbPlacementComp=new App_Model_Application_DbTable_PlacementTestProgramComponent();
@@ -216,6 +218,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	$ajaxContext->initContext();
     	$quest=array();
     	$dbQuestdet=new Examapplicant_Model_DbTable_ApplicantPtestAnswerDtl();
+    	$dbQuestdetMore=new Examapplicant_Model_DbTable_ApplicantPtestAnswerDtlMore();
     	if ($this->getRequest()->isPost()) {
     	
     		$formData = $this->getRequest()->getPost();
@@ -227,6 +230,17 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     			$dt = explode("triapp",$quest['question_parent_url']);
     			$path = $dt[1];
     			$quest['question_parent_url']=$path;
+    		}
+    		$answernonmc=$dbQuestdetMore->getData($formData['apad_id']);
+    		if ($answernonmc) {
+    			$quest['answertext']=$answernonmc['apadm_text'];
+    			if ($answernonmc['apadm_auf_id']!='') {
+    				$dbUplFile=new App_Model_Application_DbTable_UploadFile();
+    				$files=$dbUplFile->getData($answernonmc['apadm_auf_id']);
+    				$dt = explode("triapp",$quest['pathupload']);
+    				$path = $dt[1];
+    				$quest['answerfile']=$path;
+    			}
     		}
     	}
     	$ajaxContext = $this->_helper->getHelper('AjaxContext');
@@ -283,6 +297,49 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	exit();
     
     }
+    public function ajaxSaveAnswerTextAction($id=null){
+    
+    
+    
+    	if ($this->getRequest()->isXmlHttpRequest()) {
+    		$this->_helper->layout->disableLayout();
+    	}
+    	$auth = Zend_Auth::getInstance();
+    	$appl_id = $auth->getIdentity()->appl_id;
+    	$ajaxContext = $this->_helper->getHelper('AjaxContext');
+    	$ajaxContext->addActionContext('view', 'html');
+    	$ajaxContext->initContext();
+    	$quest=array();
+    	$dbQuest=new Examapplicant_Model_DbTable_QuestionBank();
+    	$dbQuestdet=new Examapplicant_Model_DbTable_ApplicantPtestAnswerDtlMore();
+    	if ($this->getRequest()->isPost()) {
+    		 
+    		$formData = $this->getRequest()->getPost();
+    		$quest=$dbQuest->getQuestion($formData['idQuestion']);
+    		//if ($quest['answer_mc']==$formData['answer']) $point=1;else $point=0;
+    		$data=array('apadm_apad_id'=>$formData['apad_id'],'apadm_text'=>$formData['answer'],'created_dt'=>date('Y-m-d H:s:i'),'created_by'=>$appl_id);
+    		$answertext=$dbQuestdet->getData($formData['apad_id']);
+    		if (!$answertext) 
+    			$dbQuestdet->addData($data);
+    		else 
+    			$dbQuestdet->update($data, 'apadm_apad_id='.$answertext['apadm_apad_id']);
+    		$quest=$dbQuestdet->getData($formData['apad_id']);
+    	}
+    	$ajaxContext = $this->_helper->getHelper('AjaxContext');
+    	$ajaxContext->addActionContext('view', 'html');
+    	$ajaxContext->initContext();
+    
+    	$ajaxContext->addActionContext('view', 'html')
+    	->addActionContext('form', 'html')
+    	->addActionContext('process', 'json')
+    	->initContext();
+    
+    	$json = Zend_Json::encode($quest);
+    
+    	echo $json;
+    	exit();
+    
+    }
     
     
     public function sendPhotoAction(){
@@ -307,6 +364,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		$trxid=$formData['trxid'];
     		$img = $formData['image'];
     		$type = $formData['type'];
+    		$apadid = $formData['apad_id'];
     		//$Txt->add(array('txt'=>$trxid));
     		//$Txt->add(array('txt'=>$img));
 			$img = str_replace('data:image/png;base64,', '', $img);
@@ -353,11 +411,13 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 			
 			$previous_record = $uploadfileDB->getFile($trxid,$type);
 					//echo var_dump($previous_record);
-					if($previous_record){
-						$uploadfileDB->updateData($upd_photo,$previous_record['auf_id']);
-					}else{
-						$id=$uploadfileDB->addData($upd_photo);
-					}
+			if($previous_record){
+				$uploadfileDB->updateData($upd_photo,$previous_record['auf_id']);
+			}else{
+				$id=$uploadfileDB->addData($upd_photo);
+				$dbQuestdet->update(array('apad_auf_id'=>$id), 'apad_id='.$apadid); 
+				
+			}
 					//$Txt->add(array('txt'=>$id));
 			 
     	}
@@ -376,7 +436,79 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	exit();
     
     }
+    public function uploadFileAction() {
+    	 
+    	$trxid = $this->_getParam('trxid',null);
+    	$apadid = $this->_getParam('apad_id',null);
+    	$type = $this->_getParam('type',null);
+    	 
+    	// echo "trans=".$txn_id;
+    	$auth = Zend_Auth::getInstance();
     
+    	$formData = $this->getRequest()->getPost();
+    
+    	$DocumentUploads = new App_Model_General_DbTable_Maintenance();
+    	$checklist = $DocumentUploads->fnGetMaintenanceDisplay($formData['type_id']);
+    
+    	///upload_file
+    	$apath = DOCUMENT_PATH."/applicant";
+    	//$apath = "/Users/alif/git/triapp/documents/applicant";
+    
+    	//create directory to locate file
+    	if (!is_dir($apath)) {
+    		mkdir($apath, 0775);
+    	}
+    
+    	///upload_file
+    	$applicant_path = DOCUMENT_PATH."/applicant/".date("mY");
+    	//$applicant_path = "/Users/alif/git/triapp/documents/applicant/".date("mY");
+    
+    	//create directory to locate file
+    	if (!is_dir($applicant_path)) {
+    		mkdir($applicant_path, 0775);
+    	}
+    
+    
+    	$major_path = $applicant_path."/".$txn_id;
+    
+    	//create directory to locate file
+    	if (!is_dir($major_path)) {
+    		mkdir($major_path, 0775);
+    	}
+    
+    	if (is_uploaded_file($_FILES["file"]['tmp_name'])){
+    		$ext_photo = $this->getFileExtension($_FILES["file"]["name"]);
+    
+    		if($ext_photo==".jpg" || $ext_photo==".JPG" || $ext_photo==".jpeg" || $ext_photo==".JPEG" || $ext_photo==".gif" || $ext_photo==".GIF" || $ext_photo==".png" || $ext_photo==".PNG" || $ext_photo == ".pdf" || $ext_photo == ".PDF"){
+    			$flnamenric = date('Ymdhs')."_".$checklist['idDefinition'].$ext_photo;
+    			$path_photo = $major_path."/".$flnamenric;
+    			move_uploaded_file($_FILES["file"]['tmp_name'], $path_photo);
+    
+    			$upd_photo = array(
+    					'auf_appl_id' => $txn_id,
+    					'auf_file_name' => $flnamenric,
+    					'auf_file_type' => $formData['type_id'],
+    					'auf_upload_date' => date("Y-m-d h:i:s"),
+    					'auf_upload_by' => $auth->getIdentity()->appl_id,
+    					'pathupload' => $path_photo
+    			);
+    
+    
+    			$uploadfileDB = new App_Model_Application_DbTable_UploadFile();
+    
+    			$previous_record = $uploadfileDB->getFile($formData["transaction_id"],$formData['type_id']);
+    			echo var_dump($previous_record);
+    			if($previous_record){
+    				$uploadfileDB->updateData($upd_photo,$previous_record['auf_id']);
+    			}else{
+    				$uploadfileDB->addData($upd_photo);
+    			}
+    		}
+    		//exit;
+    	}
+    
+    	$this->_redirect( $this->baseUrl . $formData['redirect_path']);
+    }
 
      
 }

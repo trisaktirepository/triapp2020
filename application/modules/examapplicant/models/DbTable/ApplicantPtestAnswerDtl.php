@@ -49,7 +49,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswerDtl extends Zend_Db_Table_
 			$db = Zend_Db_Table::getDefaultAdapter();
 			$select = $db->select()
 			->from(array('a'=>$this->_name),array('apad_id','apad_apa_id','apad_ques_no','apad_appl_ans','idQuestion'))
-			->join(array('b'=>'tbl_question_bank'),'a.idQuestion=b.idQuestion',array('question_url','question_parent'))
+			->join(array('b'=>'tbl_question_bank'),'a.idQuestion=b.idQuestion',array('question_url','question_parent','answer_type'))
 			->where('a.apad_apa_id  = '.$apaid)
 			->where('a.apad_ques_no  = '.$seqno);
 			//echo $select;
