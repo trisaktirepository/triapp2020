@@ -8,23 +8,15 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswerDtl extends Zend_Db_Table_
 	protected $_primary = "apad_id";
 		
 	public function getData($id=0){
-		$id = (int)$id;
-		
-		if($id!=0){
+		 
 			$db = Zend_Db_Table::getDefaultAdapter();
 			$select = $db->select()
 					->from(array('a'=>$this->_name))
+					->join(array('b'=>'applicant_ptest_ans'),'a.apad_apa_id=b.apa_id')
 					->where('a.apad_id = '.$id);
 							
 			$row = $db->fetchRow($select);
-		}else{
-			$db = Zend_Db_Table::getDefaultAdapter();
-			$select = $db->select()
-					->from(array('apa'=>$this->_name));
-								
-			$row = $db->fetchAll($select);
-		}
-		
+		 
 		return $row;
 		
 	}
@@ -36,6 +28,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswerDtl extends Zend_Db_Table_
 			$db = Zend_Db_Table::getDefaultAdapter();
 			$select = $db->select()
 					->from(array('a'=>$this->_name))
+					->join(array('b'=>'applicant_ptest_ans'),'a.apad_apa_id=b.apa_id')
 					->where('a.apad_apa_id  = '.$id);
 			//echo $select;				
 			$row = $db->fetchAll($select);

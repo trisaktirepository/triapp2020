@@ -361,20 +361,18 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	$dbQuestdet=new Examapplicant_Model_DbTable_ApplicantPtestAnswerDtl();
     	if ($this->getRequest()->isPost()) {
     		$formData = $this->getRequest()->getPost();
-    		$trxid=$formData['trxid'];
     		$img = $formData['image'];
     		$type = $formData['type'];
     		$apadid = $formData['apad_id'];
+    		
+    		$quest=$dbQuestdet->getData($apadid);
     		//$Txt->add(array('txt'=>$trxid));
     		//$Txt->add(array('txt'=>$img));
 			$img = str_replace('data:image/png;base64,', '', $img);
 			$img = str_replace(' ', '+', $img);
 			$fileData = base64_decode($img);
-			//save file 
-			$trans=$dbTrx->getTransaction($trxid);
-			$appl_id = $trans['at_appl_id']; 
-			// echo "trans=".$txn_id;
-			
+			 
+			$trxid=$quest['apa_trans_id'];
 			 
 			///upload_file
 			$apath = DOCUMENT_PATH."/applicant";

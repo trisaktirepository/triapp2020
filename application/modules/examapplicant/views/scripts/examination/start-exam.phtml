@@ -541,13 +541,13 @@ function savePhoto(){
 
 		ctx.drawImage( stream, 0, 0, capture.width, capture.height );
 		var dataUrl=canvas.toDataURL(); 
-		alert(dataUrl);
+		//alert(dataUrl);
 	}
 	type=$("#type").val();
 	$.ajax({
 		  type: "POST",
 		  url: "/examapplicant/examination/send-photo",
-		  data: {'image': dataUrl,'trxid':$("#transaction_id").val(),'type':type,'apad_id':$("#apad_id").val()}
+		  data: {'image': dataUrl,'type':type,'apad_id':$("#apad_id").val()}
 		})
 		.done(function(respond){
 			  
