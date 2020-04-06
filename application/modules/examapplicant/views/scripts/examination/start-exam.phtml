@@ -83,7 +83,7 @@ $(function() {
 		 					$("#ordertxt").text(data.apad_ques_no);
 		 					$("#orderanswer").text(data.apad_ques_no);
 		 					$("#order").val(data.apad_ques_no);
-		 					showanswermedia(data.answer_type);
+		 					answermedia(data.answer_type);
 
 		 					if (data.apad_appl_ans==" " || data.apad_appl_ans=="") {
 								 $("#radio"+$("#radiopre").val()).prop('checked',false);
@@ -121,7 +121,7 @@ $(function() {
 			 					$("#orderanswer").text(data.apad_ques_no);
 			 					$("#order").val(data.apad_ques_no);
 			 					$("#apad_id").val(data.apad_id);
-			 					showanswermedia(data.answer_type);
+			 					answermedia(data.answer_type);
 			 					if (data.apad_appl_ans==" " || data.apad_appl_ans=="") {
 									 $("#radio"+$("#radiopre").val()).prop('checked',false);
 								}
@@ -149,7 +149,7 @@ $(function() {
 	            type: 'POST',
 	            data: fd,
 	            success:function(data){
-	                $('#output').html(data);
+	                //$('#output').html(data);
 	            },
 	            cache: false,
 	            contentType: false,
@@ -176,7 +176,7 @@ function getQuestion(order){
 					$("#orderanswer").text(data.apad_ques_no);
 					$("#order").val(data.apad_ques_no);
 					$("#apad_id").val(data.apad_id);
-					showanswermedia(data.answer_type);
+					answermedia(data.answer_type);
 					if (data.apad_appl_ans==" " || data.apad_appl_ans=="") {
 						 $("#radio"+$("#radiopre").val()).prop('checked',false);
 					}
@@ -275,7 +275,7 @@ function answermedia(type) {
 		$("#answerfile").append('<form id="fileinfo" enctype="multipart/form-data" method="post" name="fileinfo">'+
 			   '<label>File Unggah:</label>'+
 			    '<input type="file" name="file" required />'+
-				'</form> <input type="button" id="uploadBTN" value="Unggah"></input>';
+				'</form> <input type="button" id="uploadBTN" value="Unggah"></input>');
 		$("#answerfile").show();
 	} 
 	
