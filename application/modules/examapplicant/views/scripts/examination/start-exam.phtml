@@ -165,7 +165,7 @@ function getQuestion(order){
 	$.ajax({
 		url: '<?php echo $this->baseUrl();?>/examapplicant/examination/ajax-get-question',
 		type: 'POST',
-		data: {'apa_id': $("#apa_id").val(),'order':order},
+		data: {'apa_id': $("#apa_id").val(),'apad_id': $("#apad_id").val(),'order':order},
 		dataType: 'json',
 		error: function(){
 				alert("Terjadi masalah saat mengambil  data !");
