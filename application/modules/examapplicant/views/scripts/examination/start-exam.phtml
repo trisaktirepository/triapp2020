@@ -265,7 +265,7 @@ function answermedia(type) {
 	$("#answertext").hide();
 	$("#answerfile").hide(); 
 	if (type=="1") $("#answermc").show();
-	else if (type=="2" || type="4"){
+	else if (type=="2" || type=="4"){
 		$("#answertext").empty().append('<textarea id="answertxt" style="width:400px;height:50px;" onblur="saveAnswerText(this)">Tulis Jawaban di sini</textarea>');
 		$("#answertext").show();
 	}
