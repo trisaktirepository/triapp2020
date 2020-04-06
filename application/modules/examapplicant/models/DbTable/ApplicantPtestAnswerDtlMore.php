@@ -88,7 +88,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswerDtlMore extends Zend_Db_Ta
 	 
 	
 	 
-	}
+	 
 
 }
 
