@@ -147,7 +147,7 @@ $(function() {
 	        $.ajax({
 	            url: '/examapplicant/examination/upload-file',  
 	            type: 'POST',
-	            data: fd,
+	            data: {'fd':fd},
 	            success:function(data){
 	                //$('#output').html(data);
 	            },
