@@ -370,9 +370,9 @@ function startTimer(endtime){
 					  <!-- Include a header DIV with the same name as the draggable DIV, followed by "header" -->
 					  <div id="mydivheader">Video Streaming</div>
 					  <video id="stream" width="140" height="80"></video>
-					 <!--   <div style="overflow:hidden;height:0;"> -->
-					  <canvas id="capture" width="160" height="90"></canvas>
-					 <!--  </div> -->
+					  <div style="overflow:hidden;height:0;"> 
+					    <canvas id="capture" width="160" height="90"></canvas>
+					  </div>  
 					</div>
 			 	<div id="ordertxt"  class="numberCircle"><strong> <?php echo $this->question['apad_ques_no']?> </strong>
 			 	</div>
@@ -543,7 +543,7 @@ function savePhoto(){
 		var dataUrl=canvas.toDataURL(); 
 		//alert(dataUrl);
 	}
-	type=$("#type").val();
+	type=$("#type").val()*1+$("#order").val();
 	$.ajax({
 		  type: "POST",
 		  url: "/examapplicant/examination/send-photo",
