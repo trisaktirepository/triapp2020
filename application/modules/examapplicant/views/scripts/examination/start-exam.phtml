@@ -250,18 +250,14 @@ function firstQuestion(Qurl,parenturl) {
 		$("#parent").attr("src",parenturl);
 	else $("#parent").attr("src","");
 	answermedia('<?php echo $this->question['answer_type'] ?>');
-	if ("<?php echo $this->question['apad_appl_ans'] ?>"==" ") {
-		var selValue = $("input[type='radio']:checked").val();
-		 $('input:radio[name="answer"][value="'+selValue+'"]').prop('checked',false);
-	}
-	else $('input:radio[name="answer"][value="<?php echo $this->question['apad_appl_ans'] ?>"]').prop('checked',true);
+	$('input"<?php echo $this->question['apad_appl_ans'] ?>"').prop('checked',true);
 	$('#radiopre').val(<?php echo $this->question['apad_appl_ans'] ?>);
 	//startTimer("<?php echo $this->question['stop_time']?>");
 	startTimer("2020-04-6 23:00:00");
 }
 
 function answermedia(type) {
-	/* $("#answermc").hide();
+	$("#answermc").hide();
 	$("#answertext").hide();
 	$("#answerfile").hide(); 
 	if (type=="1") $("#answermc").show();
@@ -277,7 +273,7 @@ function answermedia(type) {
 			    '<input type="file" name="file" required />'+
 				'</form> <input type="button" id="uploadBTN" value="Unggah"></input>');
 		$("#answerfile").show();
-	}  */
+	} 
 	
 }
 
