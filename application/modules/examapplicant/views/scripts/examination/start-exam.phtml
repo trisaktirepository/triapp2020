@@ -249,7 +249,7 @@ function firstQuestion(Qurl,parenturl) {
 	if (parenturl!='') 
 		$("#parent").attr("src",parenturl);
 	else $("#parent").attr("src","");
-	answermedia(<?php echo $this->question['answer_type'] ?>);
+	answermedia('<?php echo $this->question['answer_type'] ?>');
 	if ("<?php echo $this->question['apad_appl_ans'] ?>"==" ") {
 		var selValue = $("input[type='radio']:checked").val();
 		 $('input:radio[name="answer"][value="'+selValue+'"]').prop('checked',false);
