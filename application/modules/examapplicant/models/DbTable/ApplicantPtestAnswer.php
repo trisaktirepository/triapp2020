@@ -96,7 +96,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 		
 		$data=array();
 		$response=array();
-		try {
+		//try {
 			$success="1";
 			//component map
 			foreach ($postData['component'] as $key=>$comp) {
@@ -305,10 +305,10 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 		  		$db->rollBack();
 		  		$response=array();
 		  	}
-		 } catch (exception $e) {
+		/*  } catch (exception $e) {
 			$db->rollBack();
     		echo $e->getMessage();
-		} 
+		}  */
 		return $response;
 	}
 	
