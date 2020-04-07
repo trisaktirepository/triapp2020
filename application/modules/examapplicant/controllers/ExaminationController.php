@@ -195,6 +195,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    			}
 	    			$exammain=$dbAppTestAns->getData($response['apa_id']);
 	    			$question['stop_time']=$exammain['stop_time'];
+	    			echo var_dump($question);
 	    			$this->view->answer=$answer;
 	    			$this->view->question=$question;
 	    			$this->view->n_of_quest=$response['n_of_quest'];
