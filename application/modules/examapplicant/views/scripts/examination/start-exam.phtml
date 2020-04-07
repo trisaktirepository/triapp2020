@@ -341,7 +341,7 @@ function startTimer(endtime){
 		<legend><?php echo $this->translate("Hasil Jawaban");?></legend>
 			<table class="table"  width="100%">
 			<?php  if ($this->n_of_quest>100) $nrow=4;
-					else $nrow=2;
+					else if ($this->n_of_quest<20) $nrow=1; else $nrow=2;
 					$colom=round($this->n_of_quest/$nrow,0);
 				for ($j=1;$j<=$nrow;$j++) {?>
 					<tr><?php for ($i=($j-1)*$colom+1;$i<=$j*$colom;$i++) {?><td  width="2%" bgcolor="darkgrey" align="center"><font color="white"><a href="#" onclick="getQuestion('<?php echo $i?>')"><?php echo $i;?></a></font></td><?php }?></tr> 
