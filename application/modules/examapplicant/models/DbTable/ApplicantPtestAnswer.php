@@ -118,7 +118,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 			   	'apa_user_by' => $auth->getIdentity()->appl_id
 				);
 		
-		   	//echo var_dump($data);
+		   	echo var_dump($data);exit;
 		   //	$id=1;
 			
 			
