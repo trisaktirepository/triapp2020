@@ -571,7 +571,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	}
     
     
-    	$major_path = $applicant_path."/".$txn_id;
+    	$major_path = $applicant_path."/".$trxid;
     
     	//create directory to locate file
     	if (!is_dir($major_path)) {
@@ -587,9 +587,9 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     			move_uploaded_file($_FILES["file"]['tmp_name'], $path_photo);
     
     			$upd_photo = array(
-    					'auf_appl_id' => $txn_id,
+    					'auf_appl_id' => $trxid,
     					'auf_file_name' => $flnamenric,
-    					'auf_file_type' => $formData['type_id'],
+    					'auf_file_type' => $type,
     					'auf_upload_date' => date("Y-m-d h:i:s"),
     					'auf_upload_by' => $auth->getIdentity()->appl_id,
     					'pathupload' => $path_photo
@@ -597,14 +597,20 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     
     
     			$uploadfileDB = new App_Model_Application_DbTable_UploadFile();
-    
+    			$dbAnsMore=new Examapplicant_Model_DbTable_ApplicantPtestAnswerDtlMore();
+    			
     			$previous_record = $uploadfileDB->getFile($formData["transaction_id"],$formData['type_id']);
     			echo var_dump($previous_record);
     			if($previous_record){
-    				$uploadfileDB->updateData($upd_photo,$previous_record['auf_id']);
+    				$id=$previous_record['auf_id'];
+    				$row=$uploadfileDB->updateData($upd_photo,$previous_record['auf_id']);
     			}else{
-    				$uploadfileDB->addData($upd_photo);
+    				$id=$uploadfileDB->addData($upd_photo);
+    				
     			}
+    			$row=$dbAnsMore->getDataByHead($apadid);
+    			if (!$row) $dbAnsMore->addData(array('apadm_apad_id'=>$apadid,'apadm_auf_id'=>$id));
+    			else $dbAnsMore->update(array('apadm_apad_id'=>$apadid,'apadm_auf_id'=>$id), 'apadm_apad_id='.$id);
     		}
     		//exit;
     	}
