@@ -134,7 +134,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    			$config=$dbConfig->getMatchConfig($currenttest['apt_ptest_code'], $currenttest['apt_aps_id'],$currenttest['app_comp_code']);
 	    			//echo var_dump($config);exit;
 	    			if ($config) {
-	    				//try {
+	    				try {
 	    					$data=array(
 	    							'apa_trans_id' => $trx['at_trans_id'],
 	    							'apa_ptest_code' => $trx['at_pes_id'],
@@ -149,10 +149,10 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    					$dbAppPtest=new Examapplicant_Model_DbTable_ApplicantPtestAnswer();
 	    					$response=$dbAppPtest->addData($data);
 	    					
-	    				/* } catch (Exception $e) {
+	    				} catch (Exception $e) {
 	    					$msg="Fail to generate Exam Script";
 	    					$this->_redirect('/examapplicant/examination/index/msg/'.$msg);
-	    				} */
+	    				} 
 	    				
 	    			} else $this->_redirect('/examapplicant/examination/index/msg/No Configuration');
 	    			//get first question

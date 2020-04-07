@@ -92,11 +92,11 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 		$db->query($sqld2);
 		$sqld3="delete from applicant_ptest_comp_mark where apcm_at_trans_id='".$postData['apa_trans_id']."' and pcode ='".$postData['pcode']."'";
 		$db->query($sqld3);
-		//$db->beginTransaction();
+		$db->beginTransaction();
 		
 		$data=array();
 		$response=array();
-		//try {
+		try {
 			$success="1";
 			//component map
 			foreach ($postData['component'] as $key=>$comp) {
@@ -154,7 +154,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 						->where('a.parent="0"')
 						->order('a.seqno');
 						$questionset=$db->fetchAll($select);
-						 echo var_dump($questionset);exit;
+						// echo var_dump($questionset);exit;
 						if ($questionset) {
 							if ($config['qsc_suffle']=="1")  
 								shuffle($questionset);
@@ -169,7 +169,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 					
 					 
 				} else $success="0";
-				exit;
+				//exit;
 			} else if ($config['config_mode']==1862) {
 				//random component from several selected exam set
 				 
@@ -268,7 +268,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 		 				
 				}
 			} 
-			exit;
+			//exit;
 		  	if ( $success=="1")  {
 		  		$i=1;
 		  		//sort data
@@ -306,10 +306,10 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 		  		$db->rollBack();
 		  		$response=array();
 		  	}
-		/*  } catch (exception $e) {
+		  } catch (exception $e) {
 			$db->rollBack();
     		echo $e->getMessage();
-		}  */
+		}   
 		return $response;
 	}
 	
