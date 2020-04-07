@@ -1418,7 +1418,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 					->where('im.appl_id=?',$applid)
 					->where('im.bill_balance<bill_amount');
 					$row = $db->fetchRow($selectData);
-					echo var_dump($row);exit;
+					//echo var_dump($row);exit;
 					if ($row) {
 						$row['mhsbaru']="1";
 						
