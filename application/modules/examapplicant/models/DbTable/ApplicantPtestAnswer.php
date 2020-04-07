@@ -132,7 +132,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 				$set=$db->fetchAll($select);
 				//echo var_dump($set);exit;
 				if ($set) {
-					// echo var_dump($set);
+					echo var_dump($postData['component']);exit;
 					//get random set according to config
 					$idx=array_rand($set,1);
 					$idSet=$set[$idx]['ape_idSet'];
@@ -153,7 +153,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 						->where('a.parent="0"')
 						->order('a.seqno');
 						$questionset=$db->fetchAll($select);
-						echo var_dump($questionset);exit;
+						 
 						if ($questionset) {
 							if ($config['qsc_suffle']=="1")  
 								shuffle($questionset);
