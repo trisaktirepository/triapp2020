@@ -258,7 +258,7 @@ function firstQuestion(Qurl,parenturl) {
 		$("#answertxt").val('<?php echo $this->question['apadm_text']?>');
 	}
 	if ("<?php echo $this->question['answer_type'] ?>"=="3" || "<?php echo $this->question['answer_type'] ?>"=="4") {
-		$("#answerfile").val('<?php echo $this->question['pathupload']?>');
+		$("#answerlink").text('<a href="/<?php echo $this->question['pathupload']?>">Unduh Jawaban</a>');
 	}
 	startTimer("2020-04-8 23:00:00");
 }
@@ -278,7 +278,8 @@ function answermedia(type) {
 		$("#answerfile").append('<form id="fileinfo" enctype="multipart/form-data" method="post" name="fileinfo">'+
 			   '<label>File Unggah:</label>'+
 			    '<input type="file" name="file" required />'+
-				'</form> <input type="button" id="uploadBTN" value="Unggah"></input>');
+				'</form> <input type="button" id="uploadBTN" value="Unggah"></input>'+
+				'<div id="answerlink"></div>');
 		$("#answerfile").show();
 	} 
 	
