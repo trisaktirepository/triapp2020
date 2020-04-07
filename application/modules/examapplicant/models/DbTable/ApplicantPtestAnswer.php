@@ -165,9 +165,10 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 					}
 					
 					
-					exit;
+					
 					 
 				} else $success="0";
+				exit;
 			} else if ($config['config_mode']==1862) {
 				//random component from several selected exam set
 				 
