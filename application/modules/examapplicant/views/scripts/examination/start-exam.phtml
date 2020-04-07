@@ -258,7 +258,7 @@ function firstQuestion(Qurl,parenturl) {
 		$("#answertxt").val('<?php echo $this->question['apadm_text']?>');
 	}
 	if ("<?php echo $this->question['answer_type'] ?>"=="3" || "<?php echo $this->question['answer_type'] ?>"=="4") {
-		$("#answerlink").text('<a href="/<?php echo $this->question['pathupload']?>">Unduh Jawaban</a>');
+		if (<?php echo $this->question['pathupload']?>!='') $("#answerlink").text('<a href="/<?php echo $this->question['pathupload']?>">Unduh Jawaban</a>');
 	}
 	startTimer("2020-04-8 23:00:00");
 }
