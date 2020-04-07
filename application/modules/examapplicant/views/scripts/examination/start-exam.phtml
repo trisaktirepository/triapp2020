@@ -266,7 +266,7 @@ function answermedia(type) {
 		$("#answertext").empty().append('<textarea id="answertxt" style="width:600px;height:50px;" onblur="saveAnswerText(this)">Tulis Jawaban di sini</textarea>');
 		$("#answertext").show();
 	}
-	else if (type=="3"||type=="4") {
+	if (type=="3"||type=="4") {
 		
 		$("#answerfile").empty();
 		$("#answerfile").append('<form id="fileinfo" enctype="multipart/form-data" method="post" name="fileinfo">'+
