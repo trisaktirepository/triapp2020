@@ -195,7 +195,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    			}
 	    			$exammain=$dbAppTestAns->getData($response['apa_id']);
 	    			$question['stop_time']=$exammain['stop_time'];
-	    			echo var_dump($question);
+	    		//	echo var_dump($question);
 	    			$this->view->answer=$answer;
 	    			$this->view->question=$question;
 	    			$this->view->n_of_quest=$response['n_of_quest'];
@@ -369,6 +369,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		$img = $formData['image'];
     		$type = $formData['type'];
     		$apadid = $formData['apad_id'];
+    		//$apaid = $formData['apa_id'];
     		
     		$quest=$dbQuestdet->getData($apadid);
     		//$Txt->add(array('txt'=>$trxid));
@@ -425,6 +426,102 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 			
 					//$Txt->add(array('txt'=>$id));
 			 
+    	}
+    	$ajaxContext = $this->_helper->getHelper('AjaxContext');
+    	$ajaxContext->addActionContext('view', 'html');
+    	$ajaxContext->initContext();
+    
+    	$ajaxContext->addActionContext('view', 'html')
+    	->addActionContext('form', 'html')
+    	->addActionContext('process', 'json')
+    	->initContext();
+    
+    	$json = Zend_Json::encode($upd_photo);
+    
+    	echo $json;
+    	exit();
+    
+    }
+    
+    public function sendStartPhotoAction(){
+    
+    
+    
+    	if ($this->getRequest()->isXmlHttpRequest()) {
+    		$this->_helper->layout->disableLayout();
+    	}
+    	$auth = Zend_Auth::getInstance();
+    	 
+    	$ajaxContext = $this->_helper->getHelper('AjaxContext');
+    	$ajaxContext->addActionContext('view', 'html');
+    	$ajaxContext->initContext();
+    	$quest=array();
+    	$Txt=new App_Model_General_DbTable_TmpTxt();
+    	$dbQuest=new Examapplicant_Model_DbTable_QuestionBank();
+    	$dbTrx=new App_Model_Application_DbTable_ApplicantTransaction();
+    	$dbQuestdet=new Examapplicant_Model_DbTable_ApplicantPtestAnswerDtl();
+    	if ($this->getRequest()->isPost()) {
+    		$formData = $this->getRequest()->getPost();
+    		$img = $formData['image'];
+    		$type = $formData['type'];
+    		$trxid = $formData['trxid'];
+    		//$apaid = $formData['apa_id'];
+    
+    		//$quest=$dbQuestdet->getData($apadid);
+    		//$Txt->add(array('txt'=>$trxid));
+    		//$Txt->add(array('txt'=>$img));
+    		$img = str_replace('data:image/png;base64,', '', $img);
+    		$img = str_replace(' ', '+', $img);
+    		$fileData = base64_decode($img);
+    
+    		//$trxid=$quest['apa_trans_id'];
+    
+    		///upload_file
+    		$apath = DOCUMENT_PATH."/applicant";
+    		//$apath = "/Users/alif/git/triapp/documents/applicant";
+    			
+    		//create directory to locate file
+    		if (!is_dir($apath)) {
+    			mkdir($apath, 0775);
+    		}
+    			
+    		///upload_file
+    		$applicant_path = DOCUMENT_PATH."/applicant/USM/".date("mY")."/".$trxid;
+    		//$applicant_path = "/Users/alif/git/triapp/documents/applicant/".date("mY");
+    			
+    		//create directory to locate file
+    		if (!is_dir($applicant_path)) {
+    			mkdir($applicant_path, 0775,true);
+    		}
+    		$flnamenric = date('Ymdhs')."_Usm.png";
+    		$fileName = $applicant_path."/".$flnamenric;
+    		file_put_contents($fileName, $fileData);
+    		//$Txt->add(array('txt'=>$fileName));
+    		$upd_photo = array(
+    				'auf_appl_id' => $trxid,
+    				'auf_file_name' => $flnamenric,
+    				'auf_file_type' => $type,
+    				'auf_upload_date' => date("Y-m-d h:i:s"),
+    				'auf_upload_by' => $auth->getIdentity()->appl_id,
+    				'pathupload' => $fileName
+    		);
+    			
+    			
+    		$uploadfileDB = new App_Model_Application_DbTable_UploadFile();
+    			
+    		$previous_record = $uploadfileDB->getFile($trxid,$type);
+    		//echo var_dump($previous_record);
+    		if($previous_record){
+    			$id=$previous_record['auf_id'];
+    			$uploadfileDB->updateData($upd_photo,$id);
+    		}else{
+    			$id=$uploadfileDB->addData($upd_photo);
+    
+    		}
+    		//$dbQuestdet->update(array('apad_auf_id'=>$id), 'apad_id='.$apadid);
+    			
+    		//$Txt->add(array('txt'=>$id));
+    
     	}
     	$ajaxContext = $this->_helper->getHelper('AjaxContext');
     	$ajaxContext->addActionContext('view', 'html');

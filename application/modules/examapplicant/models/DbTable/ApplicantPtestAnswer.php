@@ -83,14 +83,14 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 		
 		$db = Zend_Db_Table::getDefaultAdapter();
 		
-		$sql ="select * from applicant_ptest_ans where apa_trans_id ='".$postData['apa_trans_id']."' and pcode ='".$postData['pcode']."'";
+		$sql ="select * from applicant_ptest_ans where apa_trans_id ='".$postData['apa_trans_id']."' and pcode ='".$postData['pcode']."' and test_type='".$postData['test_type']."'";
 		$row = $db->fetchRow($sql);
 		 
 		$sqld ="delete from applicant_ptest_ans where apa_id='".$row["apa_id"]."'";
 		$db->query($sqld);
 		$sqld2 ="delete from applicant_ptest_ans_detl where apad_apa_id='".$row["apa_id"]."'";
 		$db->query($sqld2);
-		$sqld3="delete from applicant_ptest_comp_mark where apcm_at_trans_id='".$postData['apa_trans_id']."' and pcode ='".$postData['pcode']."'";
+		$sqld3="delete from applicant_ptest_comp_mark where apcm_at_trans_id='".$postData['apa_trans_id']."' and pcode ='".$postData['pcode']."' and apcm_apa_id='".$row['apa_id']."'";
 		$db->query($sqld3);
 		$db->beginTransaction();
 		
@@ -120,8 +120,14 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 		
 		   	//echo var_dump($dataaph);exit;
 		   //	$id=1;
-			
-			
+		   	$filetype=500+$postData['test_type']*1;
+		   	$select=$db->select()
+		   	->from(array('a'=>'appl_placement_examsets'))
+		   	->where('a.auf_appl_id=?',$postData['apa_trans_id'])
+		   	->where('a.auf_file_type=?',$filetype);
+		   	$file=$db->fetchRow($select);
+		   	if ($file) $dataaph['apa_auf_id']=$file['auf_id'];
+		   	//-------------------
 			$config=$postData['config'];
 			if ($config['config_mode']==1861) {
 				//random set from several selected exam set
