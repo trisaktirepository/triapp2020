@@ -209,8 +209,9 @@ function saveAnswerText(element) {
 			  dataType: 'json'
 			})
 			.done(function(respond){
-				 var element="#answered"+respond.apad_ques_no;
-				 $(element).text("ok");
+				 var estatus="#answered"+respond.apad_ques_no;
+				 $(estatus).text('Ok');
+				 $("#answertxt").val('Jawaban Tersimpan:'+respond.apadm_text);
 				 savePhoto();
 				})
 			.fail(function(respond){console.log("fail");})
@@ -262,7 +263,7 @@ function answermedia(type) {
 	$("#answerfile").hide(); 
 	if (type=="1") $("#answermc").show();
 	else if (type=="2" || type=="4"){
-		$("#answertext").empty().append('<textarea id="answertxt" style="width:400px;height:50px;" onblur="saveAnswerText(this)">Tulis Jawaban di sini</textarea>');
+		$("#answertext").empty().append('<textarea id="answertxt" style="width:600px;height:50px;" onblur="saveAnswerText(this)">Tulis Jawaban di sini</textarea>');
 		$("#answertext").show();
 	}
 	else if (type=="3"||type=="4") {
@@ -398,12 +399,12 @@ function startTimer(endtime){
 					<td align="center" bgcolor="white">
 						 <div id="orderanswer"  class="numberanswer"><?php echo $this->question['apad_ques_no']?></div>
 						 <div id="answermc">
-						 <input type="radio" name="answer" id="radioA" value="A" onclick="saveAnswer('A')"> A
-						 <input type="radio" name="answer" id="radioB" value="B" onclick="saveAnswer('B')"> B
-						 <input type="radio" name="answer" id="radioC" value="C" onclick="saveAnswer('C')"> C
-						 <input type="radio" name="answer" id="radioD" value="D" onclick="saveAnswer('D')"> D
-						 <input type="radio" name="answer" id="radioE" value="E" onclick="saveAnswer('E')"> E
-						 <input type="hidden" id="radiopre">
+						 	<input type="radio" name="answer" id="radioA" value="A" onclick="saveAnswer('A')"> A
+						 	<input type="radio" name="answer" id="radioB" value="B" onclick="saveAnswer('B')"> B
+						 	<input type="radio" name="answer" id="radioC" value="C" onclick="saveAnswer('C')"> C
+							 <input type="radio" name="answer" id="radioD" value="D" onclick="saveAnswer('D')"> D
+							 <input type="radio" name="answer" id="radioE" value="E" onclick="saveAnswer('E')"> E
+						 	<input type="hidden" id="radiopre">
 						 </div>
 						 <div id="answerfile"></div>
 					</td>

@@ -23,6 +23,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswerDtlMore extends Zend_Db_Ta
 			$db = Zend_Db_Table::getDefaultAdapter();
 			$select = $db->select()
 					->from(array('a'=>$this->_name))
+					->join(array('b'=>'applicant_ptest_ans_detl'),'a.apadm_apad_id=b.apad_id')
 					->where('a.apadm_apad_id = '.$id);
 							
 			$row = $db->fetchRow($select);
