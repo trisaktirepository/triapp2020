@@ -56,6 +56,27 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswerDtl extends Zend_Db_Table_
 	 			//echo var_dump($parent);
 	 			$row['question_parent_url']=$parent['question_url'];
 	 		} else $row['question_parent_url']='';
+	 		if ($row) {
+	 			$select = $db->select()
+	 			->from('applicant_ptest_ans_detl_more')
+	 			->where('apadm_apad_id=?',$row['apad_id']);
+	 			$more = $db->fetchRow($select);
+	 			if ($more) {
+	 				$row['apadm_text']=$more['apadm_text'];
+	 				if ($more['apadm_auf_id']!=null) {
+		 				$select = $db->select()
+		 				->from('appl_upload_file')
+		 				->where('auf_id=?',$more['apadm_auf_id']);
+		 				$more = $db->fetchRow($select);
+		 				if ($more) {
+		 					$dt = explode("triapp",$more['pathupload']);
+		 					$path = $dt[1];
+		 					$row['pathupload']=$path;
+		 				}
+	 				}
+	 			}
+	 		}
+	 		
 		return $row;
 	
 	}
