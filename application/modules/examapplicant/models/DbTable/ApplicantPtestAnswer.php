@@ -92,7 +92,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 		$db->query($sqld2);
 		$sqld3="delete from applicant_ptest_comp_mark where apcm_at_trans_id='".$postData['apa_trans_id']."' and pcode ='".$postData['pcode']."'";
 		$db->query($sqld3);
-		$db->beginTransaction();
+		//$db->beginTransaction();
 		
 		$data=array();
 		$response=array();
