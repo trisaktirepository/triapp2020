@@ -132,7 +132,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 				$set=$db->fetchAll($select);
 				//echo var_dump($set);  
 				if (count($set)>0) {
-					echo var_dump($postData['component']); 
+					//echo var_dump($postData['component']); 
 					//get random set according to config
 					$idx=array_rand($set,1);
 					//echo $idx;exit;
