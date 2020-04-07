@@ -122,6 +122,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    				$comprog[]=$value['ac_id'];
 	    			}
 	    			$component=$dbExamComp->getDataComponent($compcode);
+	    			echo var_dump($component);exit;
 	    			foreach ($component as $idx=>$comp) {
     					if (array_keys($comprog,$comp['ac_id'])==array())
     						unset($component[$idx]);

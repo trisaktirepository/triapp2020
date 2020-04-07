@@ -130,12 +130,12 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 					->where('a.ape_aph_id=?',$postData['config']['aph_id'])
 					->where('a.test_type=?',$postData['test_type']);
 				$set=$db->fetchAll($select);
-				echo var_dump($set);  
+				//echo var_dump($set);  
 				if (count($set)>0) {
 					echo var_dump($postData['component']); 
 					//get random set according to config
 					$idx=array_rand($set,1);
-					echo $idx;exit;
+					//echo $idx;exit;
 					$idSet=$set[$idx]['ape_idSet'];
 					$i=1;
 					foreach ($postData['component'] as $comp) {
