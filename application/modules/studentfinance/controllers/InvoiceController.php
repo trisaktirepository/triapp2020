@@ -244,13 +244,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 						//$this->view->invoice=$invoice;
 						//chek for incompatibility
 						if ($invoice['mhsbaru']=="0") {
-							//$invbundleDetail=$invoiceDetailDb->getInvoiceDetail($invoice['id']);
-							//foreach ($invbundleDetail as $key2=>$value) {
-							//	$invbundleDetail[$key2]['fee']=array('amount'=>$value['amount']);
-								//if ($value['amount']==0) unset($bundleDetail[$key2]);
-								//$amount=$amount+$invoice['amount'];
-							//}
-							
+							 
 							$act[$key]['idinvoice']=$invoice['id'];
 							$restamount=$invoiceDb->inCompatibilityInvoice($IdStudentRegistration, $idsemester, $idactivity);
 							$act[$key]['invoicerest']=$restamount;
