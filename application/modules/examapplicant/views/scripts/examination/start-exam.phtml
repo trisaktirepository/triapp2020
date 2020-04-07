@@ -253,14 +253,14 @@ function firstQuestion(Qurl,parenturl) {
 	answermedia('<?php echo $this->question['answer_type'] ?>');
 	$('#radio<?php echo $this->question['apad_appl_ans'] ?>').prop('checked',true);
 	$('#radiopre').val('<?php echo $this->question['apad_appl_ans'] ?>');
-	//startTimer("<?php echo $this->question['stop_time']?>");
+	//startTimer("<?php //echo $this->question['stop_time']?>");
 	if ("<?php echo $this->question['answer_type'] ?>"=="2" || "<?php echo $this->question['answer_type'] ?>"=="4" ) {
-		$("#answertext").val(<?php echo $this->question['apadm_text']?>);
+		$("#answertext").val('<?php echo $this->question['apadm_text']?>');
 	}
 	if ("<?php echo $this->question['answer_type'] ?>"=="3" || "<?php echo $this->question['answer_type'] ?>"=="4") {
-		$("#answerfile").val(<?php echo $this->question['pathupload']?>);
+		$("#answerfile").val('<?php echo $this->question['pathupload']?>');
 	}
-	startTimer("2020-04-7 23:00:00");
+	startTimer("2020-04-8 23:00:00");
 }
 
 function answermedia(type) {

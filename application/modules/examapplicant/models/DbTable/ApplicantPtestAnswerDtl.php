@@ -72,9 +72,9 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswerDtl extends Zend_Db_Table_
 		 					$dt = explode("triapp",$more['pathupload']);
 		 					$path = $dt[1];
 		 					$row['pathupload']=$path;
-		 				}
-	 				}
-	 			}
+		 				} else $row['pathupload']='';
+	 				} else  $row['pathupload']='';
+	 			} else $row['apadm_text']='';
 	 		}
 	 		
 		return $row;
