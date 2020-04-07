@@ -255,7 +255,7 @@ function firstQuestion(Qurl,parenturl) {
 	$('#radiopre').val('<?php echo $this->question['apad_appl_ans'] ?>');
 	//startTimer("<?php //echo $this->question['stop_time']?>");
 	if ("<?php echo $this->question['answer_type'] ?>"=="2" || "<?php echo $this->question['answer_type'] ?>"=="4" ) {
-		$("#answertext").val('<?php echo $this->question['apadm_text']?>');
+		$("#answertxt").val('<?php echo $this->question['apadm_text']?>');
 	}
 	if ("<?php echo $this->question['answer_type'] ?>"=="3" || "<?php echo $this->question['answer_type'] ?>"=="4") {
 		$("#answerfile").val('<?php echo $this->question['pathupload']?>');
