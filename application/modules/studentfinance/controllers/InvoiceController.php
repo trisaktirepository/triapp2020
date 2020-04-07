@@ -362,6 +362,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 						} else unset($act[$key]);
 			 		 }  else unset($act[$key]);
 				}
+				echo var_dump($act);
 				$this->view->activity= $act;
 			} else if ($idinvoice!='' && $act) {
 					//invoice
