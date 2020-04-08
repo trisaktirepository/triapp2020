@@ -654,7 +654,9 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     }
     	 
      
-    
+    function getFileExtension($filename){
+    	return substr($filename, strrpos($filename, '.'));
+    }
 
      
 }
