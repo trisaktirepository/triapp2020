@@ -148,7 +148,7 @@ $(function() {
 	    $('#uploadBTN').on('click', function(){ 
 		   var form=document.getElementById('fileinfo');
 	       var fd = new FormData(form);
-	      // console.log(form);
+	       console.log(form);
 	       if (supportAjaxUploadWithProgress()) { 
 		        $.ajax({
 		            url: '/examapplicant/examination/upload-file',  
@@ -164,7 +164,8 @@ $(function() {
 		            processData: false
 		        }).done(function ( data ) {
 		        	updateAnswerFile(data);
-			     });
+			     }).fail(function(data){console.log("upload fail");})
+					.always(function(data){console.log("always")});
 	       } else alert ('Sistem tidak mendukung unggah file');
 	    });
 	 
