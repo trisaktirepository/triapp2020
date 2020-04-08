@@ -178,7 +178,7 @@ function supportAjaxUploadWithProgress() {
 
 	  function supportAjaxUploadProgressEvents() {
 	    var xhr = new XMLHttpRequest();
-	    return !! (xhr  ('upload' in xhr)  ; ('onprogress' in xhr.upload));
+	    return !! (xhr  ('upload' in xhr)('onprogress' in xhr.upload));
 	  }
 
 	  function supportFormData() {
