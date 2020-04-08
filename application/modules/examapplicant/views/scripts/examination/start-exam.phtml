@@ -144,13 +144,15 @@ $(function() {
 	    $('#uploadBTN').on('click', function(){ 
 	        var fd = new FormData();
 	        
-	        fd.append( 'file', $( '#fileinfo' )[0].files[0] );
+	        fd.append( 'file', input.files[0] );
 	    	        
 	        //fd.append("CustomField", "This is some extra data");
 	        $.ajax({
 	            url: '/examapplicant/examination/upload-file',  
 	            type: 'POST',
 	            data: {fd},
+	            processData: false,
+	            contentType: false,
 	            success:function(data){
 	                //$('#output').html(data);
 	            },
