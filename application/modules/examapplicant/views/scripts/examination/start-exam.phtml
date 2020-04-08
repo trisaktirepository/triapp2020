@@ -168,7 +168,7 @@ $(function() {
  
 });
 function supportAjaxUploadWithProgress() {
-	  return supportFileAPI() &amp;&amp; supportAjaxUploadProgressEvents() &amp;&amp; supportFormData();
+	  return supportFileAPI(); supportAjaxUploadProgressEvents(); supportFormData();
 
 	  function supportFileAPI() {
 	    var fi = document.createElement('INPUT');
