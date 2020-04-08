@@ -61,6 +61,21 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswerDtlMore extends Zend_Db_Ta
 		
 	}	
 	
+	public function getDataFileByHead($id=0){
+			
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$select = $db->select()
+		->from(array('a'=>$this->_name))
+		->join(array('b'=>'appl_upload_file'),'a.apadm_auf_id=b.auf_id')
+		->where('a.apadm_apad_id  = '.$id)
+		;
+		//echo $select;
+		$row = $db->fetchAll($select);
+	
+		return $row;
+	
+	}
+	
 	public function getEvidenceByHead($id=0){
 		$id = (int)$id;
 	

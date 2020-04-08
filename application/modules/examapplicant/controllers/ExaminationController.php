@@ -629,7 +629,12 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 			if (!$dbAnsDetMore->isIn($apadid, $id)) {
 				$dbAnsDetMore->addData(array('apadm_apad_id'=>$apadid,'apadm_auf_id'=>$id,'created_dt'=>date('Y-m-d H:s:i'),'created_by'=>$appl_id));
 			}
-			$quest=$dbAnsDetMore->getDataByHead($apadid);
+			$quest=$dbAnsDetMore->getDataFileByHead($apadid);
+			foreach ($quest as $key=>$value) {
+				$dt = explode("triapp",$value['pathupload']);
+    			$path = $dt[1];
+    			$quest[$key]['pathupload']=$path;
+			}
 					//$Txt->add(array('txt'=>$id));
 		}
 		
