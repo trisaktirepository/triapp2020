@@ -80,7 +80,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 	public function addData($postData){
 		
 		$auth = Zend_Auth::getInstance(); 
-		
+		$dbTxt=new App_Model_General_DbTable_TmpTxt();
 		$db = Zend_Db_Table::getDefaultAdapter();
 		
 		$sql ="select * from applicant_ptest_ans where apa_trans_id ='".$postData['apa_trans_id']."' and pcode ='".$postData['pcode']."' and test_type='".$postData['test_type']."'";
@@ -119,6 +119,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 				);
 		
 		   	//echo var_dump($dataaph);exit;
+		   	$dbTxt->add(array('txt'=>'testtye='. var_dump($dataaph)));
 		   //	$id=1;
 		   	$filetype=500+$postData['test_type']*1;
 		   	$select=$db->select()
@@ -192,7 +193,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 						$postData['component'][$keycomp]['idSet']=$set[$selectedSet]['ape_idSet'];
 					}
 					
-					 
+					$dbTxt->add(array('txt'=>var_dump($set)));
 					$i=1;
 					foreach ($postData['component'] as $comp) {
 						$idcomp=$comp['ac_id'];
@@ -275,6 +276,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 				}
 			} 
 			//exit;
+			$dbTxt->add(array('txt'=>'exit'));
 		  	if ( $success=="1")  {
 		  		$i=1;
 		  		//sort data

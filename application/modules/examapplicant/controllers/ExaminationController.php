@@ -116,6 +116,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 			$time=date('H:s:i');
 		}
 		//generate personal exam
+		$dbTxt=new App_Model_General_DbTable_TmpTxt();
 		$dbExamComp=new App_Model_Application_DbTable_PlacementTestComponent();
 		$dbApplicant=new App_Model_Application_DbTable_ApplicantTransaction();
 		$dbAppPtestDet=new Examapplicant_Model_DbTable_ApplicantPtestAnswerDtl();
@@ -129,7 +130,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		$currenttest=$dbPestDetail->getActiveTest($trxid, $date, $time);
 	    	//echo var_dump($currenttest);exit;
 	    	if ($currenttest) {
-	    		
+	    		$dbTxt->add(array('txt'=>'testtye='.$currenttest['app_comp_code']));
 	    		$trx=$dbApplicant->getTransaction($trxid);
 	    		$compcode=$currenttest['app_comp_code'];
 	    		$this->view->testtypecode=$currenttest['initial_code'];
@@ -147,6 +148,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     					if (!array_search($comp['ac_id'], $comprog))
     						unset($component[$idx]);
     					}
+    				$dbTxt->add(array('txt'=>'testtye='.var_dump($component)));
 	    			//get exam script config
     				//	echo var_dump($component); exit;
 	    			$dbConfig=new Examapplicant_Model_DbTable_ExamScriptConfig();
