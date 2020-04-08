@@ -143,7 +143,7 @@ $(function() {
 	 
 	    $('#uploadBTN').on('click', function(){ 
 	       // var fd = new FormData($("#fileinfo")[0]);
-	        var fd = $("#fileinfo").serialize();
+	        var fd = $("#fileinfo").serializeArray();
 	    	        
 	        //fd.append("CustomField", "This is some extra data");
 	        $.ajax({
