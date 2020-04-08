@@ -563,7 +563,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	$auth = Zend_Auth::getInstance();
     
     	$formData = $this->getRequest()->getPost();
-    	echo var_dump($formData);exit;
+    	echo var_dump($_POST());exit;
     	$DocumentUploads = new App_Model_General_DbTable_Maintenance();
     	$checklist = $DocumentUploads->fnGetMaintenanceDisplay($formData['type_id']);
     
