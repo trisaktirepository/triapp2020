@@ -130,7 +130,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		$currenttest=$dbPestDetail->getActiveTest($trxid, $date, $time);
 	    	//echo var_dump($currenttest);exit;
 	    	if ($currenttest) {
-	    		$dbTxt->add(array('txt'=>'testtye='.$currenttest['app_comp_code']));
+	    		//$dbTxt->add(array('txt'=>'testtye='.$currenttest['app_comp_code']));
 	    		$trx=$dbApplicant->getTransaction($trxid);
 	    		$compcode=$currenttest['app_comp_code'];
 	    		$this->view->testtypecode=$currenttest['initial_code'];
@@ -144,6 +144,8 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    			$component=$dbExamComp->getDataComponent($compcode);
 	    			//echo var_dump($component);
 	    			//echo var_dump($comprog);
+	    			$dbTxt->add(array('txt'=>'testtye='.var_dump($component)));
+	    			$dbTxt->add(array('txt'=>'testtye='.var_dump($comprog)));
 	    			foreach ($component as $idx=>$comp) {
     					if (!array_search($comp['ac_id'], $comprog))
     						unset($component[$idx]);
