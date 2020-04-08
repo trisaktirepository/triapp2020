@@ -123,7 +123,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 		   //	$id=1;
 		   	$filetype=500+$postData['test_type']*1;
 		   	$select=$db->select()
-		   	->from(array('a'=>'appl_placement_examsets'))
+		   	->from(array('a'=>'appl_upload_file'))
 		   	->where('a.auf_appl_id=?',$postData['apa_trans_id'])
 		   	->where('a.auf_file_type=?',$filetype);
 		   	$file=$db->fetchRow($select);
@@ -276,7 +276,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 				}
 			} 
 			//exit;
-			$dbTxt->add(array('txt'=>'exit'));
+			//$dbTxt->add(array('txt'=>'exit'));
 		  	if ( $success=="1")  {
 		  		$i=1;
 		  		//sort data
