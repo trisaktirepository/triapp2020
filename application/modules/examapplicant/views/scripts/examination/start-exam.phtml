@@ -203,6 +203,7 @@ function supportAjaxUploadWithProgress() {
 	    return !! window.FormData;
 	  }
 	}
+	
 function getQuestion(order){
 	if ( $("#stop").val()!="1") {
 	$.ajax({
@@ -289,34 +290,7 @@ function saveAnswer(answer){
 	 }
 }
 
-function firstQuestion(Qurl,parenturl) {
-	$("#Question").attr("src",Qurl);
- 	//populateCanvas("Question",Qurl);
-	if (parenturl!='') 
-		$("#parent").attr("src",parenturl);
-	else $("#parent").attr("src","");
-	answermedia('<?php echo $this->question['answer_type'] ?>');
-	$('#radio<?php echo $this->question['apad_appl_ans'] ?>').prop('checked',true);
-	$('#radiopre').val('<?php echo $this->question['apad_appl_ans'] ?>');
-	//startTimer("<?php //echo $this->question['stop_time']?>");
-	 
-	if ('<?php echo $this->question['answerfile']?>'!='') {
-		$('#answerlink').empty();
-		
-		<?php $i=1;
-			foreach ($this->question['answerfile'] as $ans) {?>
-	     
-				$('#answerlink').append('<a href="'+<?php echo $ans['pathupload']?>+'">File Jawaban ke-'+<?php echo $i?>+'</a><br>');	
-		
-		<?php $i++; }?>
-	    });
-		$('#typefile').val($('#typefile').val()*1+1);
-	}
-	if ('<?php echo $this->question['answertext']?>'!='') $('#answertxt').val(<?php echo $this->question['answertext']?>);
-	
-	
-	startTimer("2020-04-8 23:00:00");
-}
+ 
 
 function answermedia(type) {
 	$("#answermc").hide();
@@ -346,7 +320,12 @@ function answermedia(type) {
 
 $(window).bind("load", function() {
 	   // code here
-	firstQuestion($('#question_url').val(),$('#question_parent_url').val());
+	//startTimer("<?php //echo $this->question['stop_time']?>");
+	 
+	 
+	startTimer("2020-04-8 23:00:00");
+	getQuestion(1);
+	//firstQuestion($('#question_url').val(),$('#question_parent_url').val());
 	startStreaming();
 });
 
