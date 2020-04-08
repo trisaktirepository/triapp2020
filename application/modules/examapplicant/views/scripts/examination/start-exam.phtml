@@ -142,27 +142,27 @@ $(function() {
 		 
 	 
 	    $('#uploadBTN').on('click', function(){ 
-	       var fd = new FormData($("#fileinfo")[0]);
-	       // var fd = $("#fileinfo").prop('files')[0];
-	        //formdata=new FormData();
-	       // formdata.append('file',fd);
-	       if (supportAjaxUploadWithProgress()) alert ('Ok');
-	        //fd.append("CustomField", "This is some extra data");
-	        $.ajax({
-	            url: '/examapplicant/examination/upload-file',  
-	            type: 'POST',
-	            data: {fd},
-	            processData: false,
-	            contentType: false,
-	            enctype: 'multipart/form-data',
-	            cache: false,
-	            success:function(data){
-	                //$('#output').html(data);
-	            },
-	            cache: false,
-	            contentType: false,
-	            processData: false
-	        });
+		   var form=document.getElementById('fileinfo');
+	       var fd = new FormData(form);
+	        
+	       if (supportAjaxUploadWithProgress()) {
+		        //fd.append("CustomField", "This is some extra data");
+		        $.ajax({
+		            url: '/examapplicant/examination/upload-file',  
+		            type: 'POST',
+		            data: {fd},
+		            processData: false,
+		            contentType: false,
+		            enctype: 'multipart/form-data',
+		            cache: false,
+		            success:function(data){
+		                //$('#output').html(data);
+		            },
+		            cache: false,
+		            contentType: false,
+		            processData: false
+		        });
+	       } else alert ('Sistem tidak mendukung unggah file');
 	    });
 	 
  
