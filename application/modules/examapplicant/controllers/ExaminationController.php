@@ -147,9 +147,11 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    			 
 	    			foreach ($component as $idx=>$comp) {
 	    				 
-    					if (!array_search($comp['ac_id'], $comprog))
+    					if (!array_search($comp['ac_id'], $comprog)) {
     						unset($component[$idx]);
+    						echo $idx;
     					}
+    				}
     				 
 	    			//get exam script config
     				echo var_dump($component); exit;
