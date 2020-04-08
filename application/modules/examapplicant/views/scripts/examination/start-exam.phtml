@@ -143,15 +143,15 @@ $(function() {
 	 
 	    $('#uploadBTN').on('click', function(){ 
 	        var fd = new FormData($("#fileinfo")[0]);
-	        
+	        var fd = $("#fileinfo").serialize();
 	    	        
 	        //fd.append("CustomField", "This is some extra data");
 	        $.ajax({
 	            url: '/examapplicant/examination/upload-file',  
 	            type: 'POST',
 	            data: {fd},
-	            processData: false,
-	            contentType: false,
+	           // processData: false,
+	           // contentType: false,
 	            success:function(data){
 	                //$('#output').html(data);
 	            },
