@@ -144,13 +144,13 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    			$component=$dbExamComp->getDataComponent($compcode);
 	    			//echo var_dump($component);
 	    			//echo var_dump($comprog);
-	    			$dbTxt->add(array('txt'=>'testtye='.var_dump($component)));
-	    			$dbTxt->add(array('txt'=>'testtye='.var_dump($comprog)));
+	    			$dbTxt->add(array('txt'=>var_dump($component)));
+	    			$dbTxt->add(array('txt'=>var_dump($comprog)));
 	    			foreach ($component as $idx=>$comp) {
     					if (!array_search($comp['ac_id'], $comprog))
     						unset($component[$idx]);
     					}
-    				$dbTxt->add(array('txt'=>'testtye='.var_dump($component)));
+    				$dbTxt->add(array('txt'=>var_dump($component)));
 	    			//get exam script config
     				//	echo var_dump($component); exit;
 	    			$dbConfig=new Examapplicant_Model_DbTable_ExamScriptConfig();
