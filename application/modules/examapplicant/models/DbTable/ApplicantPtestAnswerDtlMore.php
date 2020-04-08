@@ -76,6 +76,19 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswerDtlMore extends Zend_Db_Ta
 	
 	}
 	
+	public function getDataTextByHead($id=0){
+			
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$select = $db->select()
+		->from(array('a'=>$this->_name)) 
+		->where('a.apadm_apad_id  = '.$id)
+		->where('a.apadm_text is not null'); 
+		$row = $db->fetchRow($select);
+	
+		return $row;
+	
+	}
+	
 	public function getEvidenceByHead($id=0){
 		$id = (int)$id;
 	

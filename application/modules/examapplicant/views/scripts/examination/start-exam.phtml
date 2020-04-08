@@ -100,6 +100,8 @@ $(function() {
 							if (data.question_parent_url!='') 
 								$("#parent").attr("src",data.question_parent_url);
 							else $("#parent").attr("src","");
+							if (data.answerfile!='') updateAnswerFile(data.answerfile);
+							if (data.answertext!='') $('#answertxt').val(data.answerfile);
 		 			});
 			}
 	});
@@ -136,6 +138,8 @@ $(function() {
 								if (data.question_parent_url!='') 
 									$("#parent").attr("src",data.question_parent_url);
 								else $("#parent").attr("src","");
+								if (data.answerfile!='') updateAnswerFile(data.answerfile);
+								if (data.answertext!='') $('#answertxt').val(data.answerfile);
 			 			});
 				}
 			});
@@ -163,21 +167,24 @@ $(function() {
 		            contentType: false,
 		            processData: false
 		        }).done(function ( data ) {
-		        	$('#answerlink').empty();
-		        	i=1;
-		        	$.each(data, function(index) {
-				     
-		        		$('#answerlink').append('<a href="'+data[index].pathupload+'">File Jawaban ke-'+i+'</a>');	
-						i++;
-				    });
-		        	$('#typefile').val($('#typefile').val()*1+1);
-
+		        	updateAnswerFile(data);
 			     });
 	       } else alert ('Sistem tidak mendukung unggah file');
 	    });
 	 
  
 });
+function updateAnswerFile(data) {
+	$('#answerlink').empty();
+	i=1;
+	$.each(data, function(index) {
+     
+		$('#answerlink').append('<a href="'+data[index].pathupload+'">File Jawaban ke-'+i+'</a><br>');	
+		i++;
+    });
+	$('#typefile').val($('#typefile').val()*1+1);
+
+}
 function supportAjaxUploadWithProgress() {
 	  return supportFileAPI(); supportAjaxUploadProgressEvents(); supportFormData();
 
@@ -226,6 +233,8 @@ function getQuestion(order){
 					if (data.question_parent_url!='') 
 						$("#parent").attr("src",data.question_parent_url);
 					else $("#parent").attr("src","");
+					if (data.answerfile!='') updateAnswerFile(data.answerfile);
+					if (data.answertext!='') $('#answertxt').val(data.answerfile);
 					
 			});
 	}

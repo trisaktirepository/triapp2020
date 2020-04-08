@@ -257,14 +257,19 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		}
     		$answernonmc=$dbQuestdetMore->getData($formData['apad_id']);
     		if ($answernonmc) {
-    			$quest['answertext']=$answernonmc['apadm_text'];
-    			if ($answernonmc['apadm_auf_id']!='') {
-    				$dbUplFile=new App_Model_Application_DbTable_UploadFile();
-    				$files=$dbUplFile->getData($answernonmc['apadm_auf_id']);
-    				$dt = explode("triapp",$quest['pathupload']);
+    			$answertxt=$dbQuestdetMore->getDataTextByHead($formData['apad_id']);
+    			$quest['answertext']=$answertxt['apadm_text'];
+    			$answerfiles=$dbQuestdetMore->getDataFileByHead($formData['apad_id']);
+    			foreach ($answerfiles as $idx=>$value) {
+    				$dt = explode("triapp",$value['pathupload']);
     				$path = $dt[1];
-    				$quest['answerfile']=$path;
+    				$answerfiles[$idx]['pathupload']=$path;
     			}
+    			$quest['answerfile']=$answerfiles;
+    			 
+    		} else {
+    			$quest['answerfile']='';
+    			$quest['answertext']='';
     		}
     	}
     	$ajaxContext = $this->_helper->getHelper('AjaxContext');
