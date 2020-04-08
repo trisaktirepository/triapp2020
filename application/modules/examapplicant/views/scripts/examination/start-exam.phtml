@@ -174,12 +174,12 @@ function supportAjaxUploadWithProgress() {
 	    var fi = document.createElement('INPUT');
 	    fi.type = 'file';
 	    return 'files' in fi;
-	  };
+	  }
 
 	  function supportAjaxUploadProgressEvents() {
 	    var xhr = new XMLHttpRequest();
 	    return !! (xhr  ('upload' in xhr)  ; ('onprogress' in xhr.upload));
-	  };
+	  }
 
 	  function supportFormData() {
 	    return !! window.FormData;
