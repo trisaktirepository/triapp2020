@@ -170,7 +170,7 @@ $(function() {
 		        		$('#answerlink').append('<a href="'+data[index].pathupload+'">File Jawaban ke-'+i+'</a>');	
 						i++;
 				    });
-		        
+		        	$('#typefile').val($('#typefile').val()*1+1);
 
 			     });
 	       } else alert ('Sistem tidak mendukung unggah file');
