@@ -144,13 +144,14 @@ $(function() {
 	    $('#uploadBTN').on('click', function(){ 
 		   var form=document.getElementById('fileinfo');
 	       var fd = new FormData(form);
-	       console.log(form);
+	      // console.log(form);
 	       if (supportAjaxUploadWithProgress()) {
 		        //fd.append("CustomField", "This is some extra data");
 		        $.ajax({
 		            url: '/examapplicant/examination/upload-file',  
 		            type: 'POST',
 		            data: fd,
+		            dataType: 'json',
 		            processData: false,
 		            contentType: false,
 		            enctype: 'multipart/form-data',
@@ -161,7 +162,17 @@ $(function() {
 		            cache: false,
 		            contentType: false,
 		            processData: false
-		        });
+		        }).done(function ( data ) {
+		        	$('#answerlink').empty();
+		        	i=1;
+		        	$.each(data, function(index) {
+				     
+		        		$('#answerlink').append('<a href="'+data[index].pathupload+'">File Jawaban ke-'.i.'</a>');	
+						i++;
+				    });
+		        
+
+			     });
 	       } else alert ('Sistem tidak mendukung unggah file');
 	    });
 	 

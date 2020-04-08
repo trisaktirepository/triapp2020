@@ -32,17 +32,31 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswerDtlMore extends Zend_Db_Ta
 		
 	}
 	
+	public function isIn($apadid,$aufid){
+			
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$select = $db->select()
+		->from(array('a'=>$this->_name))
+		->join(array('b'=>'applicant_ptest_ans_detl'),'a.apadm_apad_id=b.apad_id')
+		->where('a.apadm_apad_id = '.$apadid)
+		->where('a.apadm_auf_id=?',$aufid);
+			
+		$row = $db->fetchRow($select);
+			
+		return $row;
+	
+	}
+	
 	public function getDataByHead($id=0){
-		$id = (int)$id;
-		
-		if($id!=0){
+		 
 			$db = Zend_Db_Table::getDefaultAdapter();
 			$select = $db->select()
 					->from(array('a'=>$this->_name))
-					->where('a.apad_apa_id  = '.$id);
+					->where('a.apadm_apad_id  = '.$id)
+					->where('a.apadm_auf_id is not null');
 			//echo $select;				
 			$row = $db->fetchAll($select);
-		}
+	 
 		return $row;
 		
 	}	

@@ -416,7 +416,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 			if (!is_dir($applicant_path)) {
 				mkdir($applicant_path, 0775,true);
 			}
-			$flnamenric = date('Ymdhs')."_Usm.png";
+			$flnamenric = $trxid.'_'.date('Ymdhs')."_Usm.png";
 			$fileName = $applicant_path."/".$flnamenric;
 			file_put_contents($fileName, $fileData);
 			//$Txt->add(array('txt'=>$fileName));
@@ -559,82 +559,97 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     }
     public function uploadFileAction() {
     	 
-    	 
+
+    	if ($this->getRequest()->isXmlHttpRequest()) {
+    		$this->_helper->layout->disableLayout();
+    	}
+    	
+    	$ajaxContext = $this->_helper->getHelper('AjaxContext');
+    	$ajaxContext->addActionContext('view', 'html');
+    	$ajaxContext->initContext();
     	$auth = Zend_Auth::getInstance();
-    
+    	$quest=array();
+    	$dbAnsDet=new Examapplicant_Model_DbTable_ApplicantPtestAnswerDtl();
     	if ($this->getRequest()->isPost()) {
     		$formData = $this->getRequest()->getPost();
-    		 
-    		echo var_dump($formData);exit;
-    	$DocumentUploads = new App_Model_General_DbTable_Maintenance();
-    	$checklist = $DocumentUploads->fnGetMaintenanceDisplay($formData['type_id']);
-    
+    	 	$apadid=$formData['apadid'];
+    	 	$type=$formData['typefile'];
+    	 	
+    	 	$ans=$dbAnsDet->getData($apadid);
+    	 	$trxid=$ans['apa_trans_id'];
     	///upload_file
-    	$apath = DOCUMENT_PATH."/applicant";
-    	//$apath = "/Users/alif/git/triapp/documents/applicant";
-    
-    	//create directory to locate file
-    	if (!is_dir($apath)) {
-    		mkdir($apath, 0775);
-    	}
-    
-    	///upload_file
-    	$applicant_path = DOCUMENT_PATH."/applicant/".date("mY");
-    	//$applicant_path = "/Users/alif/git/triapp/documents/applicant/".date("mY");
-    
-    	//create directory to locate file
-    	if (!is_dir($applicant_path)) {
-    		mkdir($applicant_path, 0775);
-    	}
-    
-    
-    	$major_path = $applicant_path."/".$trxid;
-    
-    	//create directory to locate file
-    	if (!is_dir($major_path)) {
-    		mkdir($major_path, 0775);
-    	}
-    
-    	if (is_uploaded_file($_FILES["file"]['tmp_name'])){
-    		$ext_photo = $this->getFileExtension($_FILES["file"]["name"]);
-    
-    		if($ext_photo==".jpg" || $ext_photo==".JPG" || $ext_photo==".jpeg" || $ext_photo==".JPEG" || $ext_photo==".gif" || $ext_photo==".GIF" || $ext_photo==".png" || $ext_photo==".PNG" || $ext_photo == ".pdf" || $ext_photo == ".PDF"){
-    			$flnamenric = date('Ymdhs')."_".$checklist['idDefinition'].$ext_photo;
-    			$path_photo = $major_path."/".$flnamenric;
-    			move_uploaded_file($_FILES["file"]['tmp_name'], $path_photo);
-    
-    			$upd_photo = array(
-    					'auf_appl_id' => $trxid,
-    					'auf_file_name' => $flnamenric,
-    					'auf_file_type' => $type,
-    					'auf_upload_date' => date("Y-m-d h:i:s"),
-    					'auf_upload_by' => $auth->getIdentity()->appl_id,
-    					'pathupload' => $path_photo
-    			);
-    
-    
-    			$uploadfileDB = new App_Model_Application_DbTable_UploadFile();
-    			$dbAnsMore=new Examapplicant_Model_DbTable_ApplicantPtestAnswerDtlMore();
-    			
-    			$previous_record = $uploadfileDB->getFile($formData["transaction_id"],$formData['type_id']);
-    			echo var_dump($previous_record);
-    			if($previous_record){
-    				$id=$previous_record['auf_id'];
-    				$row=$uploadfileDB->updateData($upd_photo,$previous_record['auf_id']);
-    			}else{
-    				$id=$uploadfileDB->addData($upd_photo);
-    				
-    			}
-    			$row=$dbAnsMore->getDataByHead($apadid);
-    			if (!$row) $dbAnsMore->addData(array('apadm_apad_id'=>$apadid,'apadm_auf_id'=>$id));
-    			else $dbAnsMore->update(array('apadm_apad_id'=>$apadid,'apadm_auf_id'=>$id), 'apadm_apad_id='.$id);
-    		}
-    		//exit;
-    	}
-    	}
-    
-    	$this->_redirect( $this->baseUrl . $formData['redirect_path']);
+			$apath = DOCUMENT_PATH."/applicant";
+			//$apath = "/Users/alif/git/triapp/documents/applicant";
+			
+			//create directory to locate file
+			if (!is_dir($apath)) {
+				mkdir($apath, 0775);
+			}
+			
+			///upload_file
+			$applicant_path = DOCUMENT_PATH."/applicant/USM/".date("mY")."/".$trxid;
+			//$applicant_path = "/Users/alif/git/triapp/documents/applicant/".date("mY");
+			
+			//create directory to locate file
+			if (!is_dir($applicant_path)) {
+				mkdir($applicant_path, 0775,true);
+			}
+			$ext_file = $this->getFileExtension($_FILES["file"]["name"]);
+			
+			//if($ext_photo==".jpg" || $ext_photo==".JPG" || $ext_photo==".jpeg" || $ext_photo==".JPEG" || $ext_photo==".gif" || $ext_photo==".GIF" || $ext_photo==".png" || $ext_photo==".PNG" || $ext_photo == ".pdf" || $ext_photo == ".PDF"){
+				$flnamenric = $trxid.'_'.date('Ymdhs')."_Usm".$ext_file;
+				$filepath = $applicant_path."/".$flnamenric;
+				move_uploaded_file($_FILES["file"]['tmp_name'], $filepath);
+				 
+			 
+			//$Txt->add(array('txt'=>$fileName));
+			$upd_photo = array(
+							'auf_appl_id' => $trxid,
+							'auf_file_name' => $flnamenric,
+							'auf_file_type' => $type,
+							'auf_upload_date' => date("Y-m-d h:i:s"),
+							'auf_upload_by' => $auth->getIdentity()->appl_id,
+							'pathupload' => $filepath
+			);
+			
+			
+			$uploadfileDB = new App_Model_Application_DbTable_UploadFile();
+			
+			$previous_record = $uploadfileDB->getFile($trxid,$type);
+					//echo var_dump($previous_record);
+			if($previous_record){
+				$id=$previous_record['auf_id'];
+				$uploadfileDB->updateData($upd_photo,$id);
+			}else{
+				$id=$uploadfileDB->addData($upd_photo);
+				
+			}
+			$dbAnsDetMore=new Examapplicant_Model_DbTable_ApplicantPtestAnswerDtlMore();
+			 
+			if (!$dbAnsDetMore->isIn($apadid, $id)) {
+				$dbAnsDetMore->addData(array('apadm_apad_id'=>$apadid,'apadm_auf_id'=>$id,'created_dt'=>date('Y-m-d H:s:i'),'created_by'=>$appl_id));
+			}
+			$quest=$dbAnsDetMore->getDataByHead($apadid);
+					//$Txt->add(array('txt'=>$id));
+		}
+		
+		$ajaxContext = $this->_helper->getHelper('AjaxContext');
+		$ajaxContext->addActionContext('view', 'html');
+		$ajaxContext->initContext();
+		
+		$ajaxContext->addActionContext('view', 'html')
+		->addActionContext('form', 'html')
+		->addActionContext('process', 'json')
+		->initContext();
+		
+		$json = Zend_Json::encode($quest);
+		
+		echo $json;
+		exit();
     }
+    	 
+     
+    
 
      
 }
