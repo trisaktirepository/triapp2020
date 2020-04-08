@@ -130,11 +130,11 @@
 			 			<tr><th><?php echo $exam['ptestname']?></th>
 			 				<th><?php echo $exam['aps_test_date']?></th>
 			 				<th><?php echo $exam['time_start'].'-'.$exam['time_stop']?></th>
-			 				<th><?php if ($exam['active']=="1") {?>
+			 				<td bgcolor="white"><?php if ($exam['active']=="1") {?>
 			 					<img src="/images/icon/green.png"  style="width:25px;height:25px;" title="<?php echo 'Open';?>"> </a>  
 			 				<?php } else {?>
 			 					<img src="/images/icon/red.png"  style="width:25px;height:25px;" title="<?php echo 'Close';?>"> </a>
-			 				<?php }?></th>
+			 				<?php }?></td>
 			 			</tr>
 			 			<tr><td colspan="3"><?php foreach ($comps as $comp ) echo $comp['ac_comp_name_bahasa'].' '?></td></tr>
 			 		<?php }?>
