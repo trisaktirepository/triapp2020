@@ -149,7 +149,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    				 
     					if (!array_search($comp['ac_id'], $comprog)) {
     						unset($component[$idx]);
-    						echo $idx;
+    						echo $comp['ac_id'].'<br>';
     					}
     				}
     				 
