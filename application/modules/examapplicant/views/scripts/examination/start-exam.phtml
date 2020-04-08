@@ -152,8 +152,10 @@ $(function() {
 	            url: '/examapplicant/examination/upload-file',  
 	            type: 'POST',
 	            data: {formdata},
-	           processData: false,
-	           contentType: false,
+	            processData: false,
+	            contentType: false,
+	            enctype: 'multipart/form-data',
+	            cache: false,
 	            success:function(data){
 	                //$('#output').html(data);
 	            },
