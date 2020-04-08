@@ -316,7 +316,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 		  	}
 		  } catch (exception $e) {
 			$db->rollBack();
-    		echo $e->getMessage();
+    		echo $e->getMessage(); exit;
 		}   
 		return $response;
 	}

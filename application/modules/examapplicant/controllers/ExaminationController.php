@@ -143,19 +143,19 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    				$comprog[]=$value['ac_id'];
 	    			}
 	    			$component=$dbExamComp->getDataComponent($compcode);
-	    			echo var_dump($component);echo '<br>';
-	    			echo var_dump($comprog);echo '<br>';
+	    			//echo var_dump($component);echo '<br>';
+	    			//echo var_dump($comprog);echo '<br>';
 	    			 
 	    			foreach ($component as $idx=>$comp) {
 	    				 
     					if (!array_search($comp['ac_id'], $comprog)) {
     						unset($component[$idx]);
-    						echo $comp['ac_id'].'<br>';
+    						//echo $comp['ac_id'].'<br>';
     					}
     				}
     				 
 	    			//get exam script config
-    				echo var_dump($component); exit;
+    				//echo var_dump($component); exit;
 	    			$dbConfig=new Examapplicant_Model_DbTable_ExamScriptConfig();
 	    			$config=$dbConfig->getMatchConfig($currenttest['apt_ptest_code'], $currenttest['apt_aps_id'],$currenttest['app_comp_code']);
 	    			//echo var_dump($config);exit;
