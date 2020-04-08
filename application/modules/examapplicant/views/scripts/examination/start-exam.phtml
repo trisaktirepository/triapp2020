@@ -144,7 +144,7 @@ $(function() {
 	    $('#uploadBTN').on('click', function(){ 
 		   var form=document.getElementById('fileinfo');
 	       var fd = new FormData(form);
-	       console.log(fd);
+	       console.log(form);
 	       if (supportAjaxUploadWithProgress()) {
 		        //fd.append("CustomField", "This is some extra data");
 		        $.ajax({
