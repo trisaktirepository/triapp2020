@@ -149,8 +149,7 @@ $(function() {
 		   var form=document.getElementById('fileinfo');
 	       var fd = new FormData(form);
 	      // console.log(form);
-	       if (supportAjaxUploadWithProgress()) {
-		        //fd.append("CustomField", "This is some extra data");
+	       if (supportAjaxUploadWithProgress()) { 
 		        $.ajax({
 		            url: '/examapplicant/examination/upload-file',  
 		            type: 'POST',
@@ -160,9 +159,6 @@ $(function() {
 		            contentType: false,
 		            enctype: 'multipart/form-data',
 		            cache: false,
-		            success:function(data){
-		                //$('#output').html(data);
-		            },
 		            cache: false,
 		            contentType: false,
 		            processData: false
@@ -309,7 +305,8 @@ function answermedia(type) {
 			    '<input type="file" name="file" required />'+
 			    '<input type="hidden" name="typefile" id="typefile" />'+
 			    '<input type="hidden" name="apadid" id="apadid" />'+
-				'</form> <input type="button" class="btn" id="uploadBTN" value="Unggah"></input>'+
+				'</form> <br>Format: *.png;*.jpg;*.gif<br>
+				'<input type="button" class="btn" id="uploadBTN" value="Unggah"></input>'+
 				'<div id="answerlink"></div>');
 		$("#answerfile").show();
 		$("#typefile").val($("#type").val()*1+$("#order").val()*1);
