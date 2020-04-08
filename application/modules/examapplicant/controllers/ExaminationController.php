@@ -559,15 +559,11 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     }
     public function uploadFileAction() {
     	 
-    	$trxid = $this->_getParam('trxid',null);
-    	$apadid = $this->_getParam('apad_id',null);
-    	$type = $this->_getParam('type',null);
     	 
-    	// echo "trans=".$txn_id;
     	$auth = Zend_Auth::getInstance();
     
     	$formData = $this->getRequest()->getPost();
-    
+    	echo var_dump($formData);exit;
     	$DocumentUploads = new App_Model_General_DbTable_Maintenance();
     	$checklist = $DocumentUploads->fnGetMaintenanceDisplay($formData['type_id']);
     

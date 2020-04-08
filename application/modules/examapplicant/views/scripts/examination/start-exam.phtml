@@ -282,9 +282,13 @@ function answermedia(type) {
 		$("#answerfile").append('<form id="fileinfo" enctype="multipart/form-data" method="post" name="fileinfo">'+
 			   '<label>File Unggah:</label>'+
 			    '<input type="file" name="file" required />'+
+			    '<input type="hidden" name="typefile" id="typefile" />'+
+			    '<input type="hidden" name="apadid" id="apadid" />'+
 				'</form> <input type="button" class="btn" id="uploadBTN" value="Unggah"></input>'+
 				'<div id="answerlink"></div>');
 		$("#answerfile").show();
+		$("#typefile").val($("#type").val()*1+$("#order").val()*1);
+		$("#apadid").val($("#apad_id").val());
 	} 
 	
 }
