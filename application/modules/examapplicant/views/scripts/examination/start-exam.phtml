@@ -273,7 +273,7 @@ function uploadFile(){
 	var form=document.getElementById('fileinfo');
     var fd = new FormData(form);
     console.log(form);
-    if (supportAjaxUploadWithProgress()) { 
+    if (supportAjaxUploadWithProgress() && $("#file").val()!='') { 
 	        $.ajax({
 	            url: '/examapplicant/examination/upload-file',  
 	            type: 'POST',
@@ -287,7 +287,7 @@ function uploadFile(){
 	        	updateAnswerFile(data);
 		     }).fail(function(data){console.log("upload fail");})
 				.always(function(data){console.log("always")});
-    } else alert ('Sistem tidak mendukung unggah file');
+    } else alert ('Sistem tidak mendukung unggah file/File tidak boleh kosong');
 }
 
 function answermedia(type) {
@@ -304,7 +304,7 @@ function answermedia(type) {
 		$("#answerfile").empty();
 		$("#answerfile").append('<form id="fileinfo" enctype="multipart/form-data" method="post" name="fileinfo">'+
 			   '<label>File Unggah:</label>'+
-			    '<input type="file" name="file" required />'+
+			    '<input type="file" name="file" id="file" required />'+
 			    '<input type="hidden" name="typefile" id="typefile" />'+
 			    '<input type="hidden" name="apadid" id="apadid" />'+
 				'</form> <br>Format File: *.png;*.jpg;*.gif<br>'+
