@@ -688,20 +688,22 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		$apadmid=$formData['apadmid']; 
     		$apadid=$formData['apadid']; 
     		$files=$dbAnsDetMore->getDataById($apadmid);
-    		echo var_dump($files);
+    		//echo var_dump($files);
     		if ($files) {
     			$apadid=$files['apadm_apad_id'];
     			$fils=$uploadfileDB->getData($files['apadm_auf_id']);
-    			echo $fils['pathupload'];
-	    		if (!unlink($fils['pathupload'])) {
-	    			$msg= $fils['pathupload']." cannot be deleted due to an error";
-	    			
-	    		}
-	    		else {
-	    			$msg= $fils['pathupload']." has been deleted";
-	    			$uploadfileDB->deleteData($files['apadm_auf_id']);
-	    			$dbAnsDetMore->deleteData($apadmid);
-	    		}
+    			if (file_exists($fils['pathupload'])) {
+	    			//echo $fils['pathupload'];
+		    		if (unlink($fils['pathupload'])) {
+		    			 
+		    			//$msg= $fils['pathupload']." has been deleted";
+		    			$uploadfileDB->deleteData($files['apadm_auf_id']);
+		    			$dbAnsDetMore->deleteData($apadmid);
+		    		}
+    			} else {
+    				$uploadfileDB->deleteData($files['apadm_auf_id']);
+    				$dbAnsDetMore->deleteData($apadmid);
+    			}
     		}
     		 
     		$quest=$dbAnsDetMore->getDataFileByHead($apadid);
