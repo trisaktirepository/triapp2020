@@ -688,6 +688,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		$apadmid=$formData['apadmid']; 
     		$apadid=$formData['apadid']; 
     		$files=$dbAnsDetMore->getData($apadmid);
+    		echo var_dump($files);
     		if ($files) {
     			$apadid=$files['apadm_apad_id'];
     			$fils=$uploadfileDB->getData($files['apadm_auf_id']);
