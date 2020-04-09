@@ -697,6 +697,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    		}
 	    		else {
 	    			$msg= $fils['pathupload']." has been deleted";
+	    			$uploadfileDB->deleteData($files['apadm_auf_id']);
 	    			$dbAnsDetMore->deleteData($apadmid);
 	    		}
     		}
