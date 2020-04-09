@@ -3362,7 +3362,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     	//getapplicantprogram
     	$appProgramDB = new App_Model_Application_DbTable_ApplicantProgram();
     	$program = $appProgramDB->getProgramFaculty($txnId,$txnData['at_appl_type']);
-    	 echo var_dump($program);exit;
+    	 
     	//program data
     	$programDb = new App_Model_General_DbTable_Program();
     	$programData = $programDb->fngetProgramData($program[0]['program_id']);
