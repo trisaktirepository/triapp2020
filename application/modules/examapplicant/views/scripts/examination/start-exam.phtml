@@ -146,24 +146,7 @@ $(function() {
 		 
 	 
 	    $('#uploadBTN').on('click', function(){ 
-		   var form=document.getElementById('fileinfo');
-	       var fd = new FormData(form);
-	       console.log(form);
-	       if (supportAjaxUploadWithProgress()) { 
-		        $.ajax({
-		            url: '/examapplicant/examination/upload-file',  
-		            type: 'POST',
-		            data: fd,
-		            dataType: 'json',
-		            processData: false,
-		            contentType: false,
-		            enctype: 'multipart/form-data',
-		            cache: false
-		        }).done(function ( data ) {
-		        	updateAnswerFile(data);
-			     }).fail(function(data){console.log("upload fail");})
-					.always(function(data){console.log("always")});
-	       } else alert ('Sistem tidak mendukung unggah file');
+		   
 	    });
 	 
  
@@ -287,7 +270,24 @@ function saveAnswer(answer){
 }
 
 function uploadFile(){
-	alert('upload File');
+	var form=document.getElementById('fileinfo');
+    var fd = new FormData(form);
+    console.log(form);
+    if (supportAjaxUploadWithProgress()) { 
+	        $.ajax({
+	            url: '/examapplicant/examination/upload-file',  
+	            type: 'POST',
+	            data: fd,
+	            dataType: 'json',
+	            processData: false,
+	            contentType: false,
+	            enctype: 'multipart/form-data',
+	            cache: false
+	        }).done(function ( data ) {
+	        	updateAnswerFile(data);
+		     }).fail(function(data){console.log("upload fail");})
+				.always(function(data){console.log("always")});
+    } else alert ('Sistem tidak mendukung unggah file');
 }
 
 function answermedia(type) {
