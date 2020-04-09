@@ -3362,7 +3362,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     	//getapplicantprogram
     	$appProgramDB = new App_Model_Application_DbTable_ApplicantProgram();
     	$program = $appProgramDB->getProgramFaculty($txnId,$txnData['at_appl_type']);
-    	 
+    	 echo var_dump($program);
     	//program data
     	$programDb = new App_Model_General_DbTable_Program();
     	$programData = $programDb->fngetProgramData($program[0]['program_id']);
@@ -3409,7 +3409,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     	//get next intake
     	$intakeDb = new App_Model_Record_DbTable_Intake();
     	$intakeData = $intakeDb->getData($txnData['at_intake']);
-    	echo var_dump($intakeData);exit;
+    //	echo var_dump($intakeData);exit;
     	//get fee structure
     	$feeStructureDb = new Studentfinance_Model_DbTable_FeeStructure();
     	

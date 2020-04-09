@@ -10,7 +10,7 @@ class App_Model_General_DbTable_Program extends Zend_Db_Table_Abstract {
   }
 
  public function fngetProgramData($program_id=0) { //Function to get the user details
-  	
+ 	$result=array();
   	if($program_id!=0){
   		$lstrSelect = $this->lobjDbAdpt->select()
                     ->from(array("a" => "tbl_program"))
