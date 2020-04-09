@@ -3409,7 +3409,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     	//get next intake
     	$intakeDb = new App_Model_Record_DbTable_Intake();
     	$intakeData = $intakeDb->getData($txnData['at_intake']);
-    	 
+    	echo var_dump($intakeData);exit;
     	//get fee structure
     	$feeStructureDb = new Studentfinance_Model_DbTable_FeeStructure();
     	
@@ -3427,7 +3427,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     		$biaya = number_format($biaya, 2, '.', ',');
     	}
     	
-    	echo var_dump($facultyData);exit;
+    	
     	//fee structure plan
     	$feeStructurePlanDb = new Studentfinance_Model_DbTable_FeeStructurePlan();
     	$paymentPlanData = $feeStructurePlanDb->getStructureData($feeStructureData['fs_id']);
