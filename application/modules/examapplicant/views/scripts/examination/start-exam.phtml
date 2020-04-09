@@ -168,6 +168,7 @@ $(function() {
 	 
  
 });
+
 function updateAnswerFile(data) {
 	$('#answerlink').empty();
 	i=1;
@@ -179,6 +180,7 @@ function updateAnswerFile(data) {
 	$('#typefile').val($('#typefile').val()*1+1);
 
 }
+
 function supportAjaxUploadWithProgress() {
 	  return supportFileAPI(); supportAjaxUploadProgressEvents(); supportFormData();
 
@@ -284,7 +286,9 @@ function saveAnswer(answer){
 	 }
 }
 
- 
+function uploadFile(){
+	alert('upload File');
+}
 
 function answermedia(type) {
 	$("#answermc").hide();
@@ -303,8 +307,9 @@ function answermedia(type) {
 			    '<input type="file" name="file" required />'+
 			    '<input type="hidden" name="typefile" id="typefile" />'+
 			    '<input type="hidden" name="apadid" id="apadid" />'+
-				'</form> <br>Format: *.png;*.jpg;*.gif<br>'+
-				'<input type="button" class="btn" id="uploadBTN" value="Unggah"></input>'+
+				'</form> <br>Format File: *.png;*.jpg;*.gif<br>'+
+				'Besar File < 2 MB<br>'+
+				'<input type="button" class="btn" id="uploadBTN" onclick="uploadFile()"value="Unggah"></input>'+
 				'<div id="answerlink"></div>');
 		$("#answerfile").show();
 		$("#typefile").val($("#type").val()*1+$("#order").val()*1);
