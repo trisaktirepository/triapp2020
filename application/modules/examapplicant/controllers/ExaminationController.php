@@ -664,6 +664,66 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 		echo $json;
 		exit();
     }
+    
+    public function deleteFileAction() {
+    
+    
+    	if ($this->getRequest()->isXmlHttpRequest()) {
+    		$this->_helper->layout->disableLayout();
+    	}
+    	 
+    	$ajaxContext = $this->_helper->getHelper('AjaxContext');
+    	$ajaxContext->addActionContext('view', 'html');
+    	$ajaxContext->initContext();
+    	$auth = Zend_Auth::getInstance();
+    	$quest=array();
+    	$uploadfileDB = new App_Model_Application_DbTable_UploadFile();
+    	$dbAnsDetMore=new Examapplicant_Model_DbTable_ApplicantPtestAnswerDtlMore();
+    	$dbAnsDet=new Examapplicant_Model_DbTable_ApplicantPtestAnswerDtl();
+
+    	$uploadfileDB = new App_Model_Application_DbTable_UploadFile();
+    	 
+    	if ($this->getRequest()->isPost()) {
+    		$formData = $this->getRequest()->getPost();
+    		$apadmid=$formData['apadmid']; 
+    		$apadid=$formData['apadid']; 
+    		$files=$dbAnsDetMore->getData($apadmid);
+    		if ($files) {
+    			$apadid=$files['apadm_apad_id'];
+    			$fils=$uploadfileDB->getData($files['apadm_auf_id']);
+	    		if (!unlink($fils['pathupload'])) {
+	    			$msg= $fils['pathupload']." cannot be deleted due to an error";
+	    			
+	    		}
+	    		else {
+	    			$msg= $fils['pathupload']." has been deleted";
+	    			$dbAnsDetMore->deleteData($apadmid);
+	    		}
+    		}
+    		 
+    		$quest=$dbAnsDetMore->getDataFileByHead($apadid);
+    		foreach ($quest as $key=>$value) {
+    			$dt = explode("triapp",$value['pathupload']);
+    			$path = $dt[1];
+    			$quest[$key]['pathupload']=$path;
+    		}
+    		//$Txt->add(array('txt'=>$id));
+    	}
+    
+    	$ajaxContext = $this->_helper->getHelper('AjaxContext');
+    	$ajaxContext->addActionContext('view', 'html');
+    	$ajaxContext->initContext();
+    
+    	$ajaxContext->addActionContext('view', 'html')
+    	->addActionContext('form', 'html')
+    	->addActionContext('process', 'json')
+    	->initContext();
+    
+    	$json = Zend_Json::encode($quest);
+    
+    	echo $json;
+    	exit();
+    }
     	 
      
     function getFileExtension($filename){

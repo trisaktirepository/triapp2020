@@ -9,29 +9,13 @@ class App_Model_Application_DbTable_UploadFile extends Zend_Db_Table_Abstract {
 	
 	public function getData($id=0){
 		
-		$id = (int)$id;
-		
-		if($id!=0){
+		 
 			$db = Zend_Db_Table::getDefaultAdapter();
 			$select = $db ->select()
 						->from(array('a'=>$this->_name))
-						->where('a.ID = '.$id)
-						->join(array('p'=>'r003_award'),'p.id = a.ARD_AWARD',array('award_name'=>'name'));
-						
+						->where('a.auf_id = '.$id);
 	        $row = $db->fetchRow($select);				
-		}else{
-			$db = Zend_Db_Table::getDefaultAdapter();
-			$select = $db ->select()
-						->from(array('a'=>$this->_name))
-						->join(array('p'=>'r003_award'),'p.id = a.ARD_AWARD',array('award_name'=>'name'));
-						
-			$row = $db->fetchAll($select);
-		}
-		
-//		if(!$row){
-//			throw new Exception("There is No Applicant");
-//		}
-		
+		 
 		return $row;
 	}
 	

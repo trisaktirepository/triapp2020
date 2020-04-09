@@ -101,7 +101,7 @@ $(function() {
 								$("#parent").attr("src",data.question_parent_url);
 							else $("#parent").attr("src","");
 							if (data.answerfile!='') updateAnswerFile(data.answerfile);
-							if (data.answertext!='') $('#answertxt').val(data.answerfile);
+							if (data.answertext!='') $('#answertxt').val(data.answertext);
 		 			});
 			}
 	});
@@ -139,25 +139,23 @@ $(function() {
 									$("#parent").attr("src",data.question_parent_url);
 								else $("#parent").attr("src","");
 								if (data.answerfile!='') updateAnswerFile(data.answerfile);
-								if (data.answertext!='') $('#answertxt').val(data.answerfile);
+								if (data.answertext!='') $('#answertxt').val(data.answertext);
 			 			});
 				}
 			});
 		 
-	 
-	    $('#uploadBTN').on('click', function(){ 
-		   
-	    });
+	  
 	 
  
 });
+
 
 function updateAnswerFile(data) {
 	$('#answerlink').empty();
 	i=1;
 	$.each(data, function(index) {
      
-		$('#answerlink').append('<a href="'+data[index].pathupload+'">File Jawaban ke-'+i+'</a><br>');	
+		$('#answerlink').append('<a href="'+data[index].pathupload+'">File Jawaban ke-'+i+'</a><a href="#" onclick="deleteFile('+data[index].apadm_id+')"><img src="/images/icon/delete.png"></a><br>');	
 		i++;
     });
 	$('#typefile').val($('#typefile').val()*1+1);
@@ -214,7 +212,7 @@ function getQuestion(order){
 						$("#parent").attr("src",data.question_parent_url);
 					else $("#parent").attr("src","");
 					if (data.answerfile!='') updateAnswerFile(data.answerfile);
-					if (data.answertext!='') $('#answertxt').val(data.answerfile);
+					if (data.answertext!='') $('#answertxt').val(data.answertext);
 					
 			});
 	}
@@ -243,6 +241,25 @@ function saveAnswerText(element) {
 			.always(function(respond){console.log("always");
 		});
  	}
+}
+
+
+function deleteFile(apadmid) {
+	//if ($("#stop").val()!="1") {
+		 
+		$.ajax({
+			  type: "POST",
+			  url: "/examapplicant/examination/delete-file",
+			  data: {'apadmid':apadmid,'apadid':$("#apad_id").val()},
+			  dataType: 'json'
+			})
+			.done(function(data){
+				updateAnswerFile(data);
+				})
+			.fail(function(respond){console.log("fail");})
+			.always(function(respond){console.log("always");
+		});
+ 	//}
 }
  
 
