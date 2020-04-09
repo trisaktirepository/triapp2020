@@ -155,7 +155,7 @@ function updateAnswerFile(data) {
 	i=1;
 	$.each(data, function(index) {
      
-		$('#answerlink').append('<a href="'+data[index].pathupload+'">File Jawaban ke-'+i+'</a><a href="#" onclick="deleteFile('+data[index].apadm_id+')"><img src="/images/icon/delete.png" width="5px" height="5px"></a><br>');	
+		$('#answerlink').append('<a href="'+data[index].pathupload+'">File Jawaban ke-'+i+'</a><a href="#" onclick="deleteFile('+data[index].apadm_id+')"><img src="/images/icon/delete.png" width="25px" height="25px"></a><br>');	
 		i++;
     });
 	$('#typefile').val($('#typefile').val()*1+1);
