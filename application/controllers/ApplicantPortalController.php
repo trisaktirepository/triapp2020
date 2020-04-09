@@ -3427,7 +3427,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     		$biaya = number_format($biaya, 2, '.', ',');
     	}
     	
-    	
+    	echo var_dump($facultyData);exit;
     	//fee structure plan
     	$feeStructurePlanDb = new Studentfinance_Model_DbTable_FeeStructurePlan();
     	$paymentPlanData = $feeStructurePlanDb->getStructureData($feeStructureData['fs_id']);
