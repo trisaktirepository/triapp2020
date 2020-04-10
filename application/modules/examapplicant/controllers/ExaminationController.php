@@ -129,6 +129,8 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		$dbPestDetail=new App_Model_Application_DbTable_ApplicantPtestDetail();
     		$currenttest=$dbPestDetail->getActiveTest($trxid, $date, $time);
 	    	//echo var_dump($currenttest);exit;
+    		$timenow=date('Y-m-d h:i:s',strtotime('+'.$time[0].' hour +'.$time[1].' minutes +'.$time[2].' seconds',strtotime(date('Y-m-d h:i:s'))));
+    		 echo $timenow;exit;
 	    	if ($currenttest) {
 	    		//$dbTxt->add(array('txt'=>'testtye='.$currenttest['app_comp_code']));
 	    		$trx=$dbApplicant->getTransaction($trxid);
@@ -196,7 +198,9 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    					$path = $dt[1];
 	    					$question['question_parent_url']=$path;
 	    				}
-	    				$question['stop_time']=date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s')) + strtotime($currenttest['timerange']));
+	    				//$question['stop_time']=date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s')) + strtotime($currenttest['timerange']));
+	    				$time=explode(':', $currenttest['timerange']);
+	    				$question['stop_time']=date('Y-m-d h:i:s',strtotime('+'.$time[0].' hour +'.$time[1].' minutes +'.$time[2].' seconds',strtotime(date('Y-m-d h:i:s'))));
 	    				//echo var_dump($question);
 	    				//echo var_dump($currenttest);
 	    				$exammain=$dbAppTestAns->update(array('start_time'=>date('Y-m-d H:i:s'),'stop_time'=>$question['stop_time']), 'apa_id='.$response['apa_id']);
