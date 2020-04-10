@@ -130,7 +130,8 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		$currenttest=$dbPestDetail->getActiveTest($trxid, $date, $time);
 	    	//echo var_dump($currenttest);exit;
     		$timenow=date('Y-m-d h:i:s',strtotime('+'.$time[0].' hour +'.$time[1].' minutes +'.$time[2].' seconds',strtotime(date('Y-m-d h:i:s'))));
-    		 echo $timenow;exit;
+    		echo date('Y-m-d h:i:s'); 
+    		echo $timenow;exit;
 	    	if ($currenttest) {
 	    		//$dbTxt->add(array('txt'=>'testtye='.$currenttest['app_comp_code']));
 	    		$trx=$dbApplicant->getTransaction($trxid);
