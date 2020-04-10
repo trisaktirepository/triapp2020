@@ -187,24 +187,28 @@ class Exam_ExamSlipController extends Zend_Controller_Action
 			$paymentstatus = 0;
 			$pymtinfo=$sfhelper->getStudentPaymentInfo($registration_id,$formData['semid']);
 			//echo var_dump($pymtinfo);exit;
-			if( ($pymtinfo["invoices"]=='')){
-				$paymentstatus=1;
-			}else{
-				//check dah x dak balance
-				if($pymtinfo["total_invoice_balance"]<=0 ){
+			$dbGlobalException=new Exam_Model_DbTable_GlobalException();
+			if ($dbGlobalException->isException(1, $program['IdCollege'], $formData['semid'], $formData['ass_type']))
+				$paymentstatus = 1;
+				else {
+				if( ($pymtinfo["invoices"]=='')){
 					$paymentstatus=1;
 				}else{
-					$paymentstatus==0;
+					//check dah x dak balance
+					if($pymtinfo["total_invoice_balance"]<=0 ){
+						$paymentstatus=1;
+					}else{
+						$paymentstatus==0;
+					}
+				}
+					
+				//kalau ada payment exception utk course registration
+				if ($pymtinfo['exception']!=array()) {
+					if($pymtinfo["exception"][2]){
+						$paymentstatus=1;
+					}
 				}
 			}
-				
-			//kalau ada payment exception utk course registration
-			if ($pymtinfo['exception']!=array()) {
-				if($pymtinfo["exception"][2]){
-					$paymentstatus=1;
-				}
-			}
-			
 			if($paymentstatus==0){
 				try {
 					throw new Exception("Outstanding Payment");
@@ -410,29 +414,34 @@ class Exam_ExamSlipController extends Zend_Controller_Action
 			 * Payment checking
 			*/
 				
+			
 			$sfhelper= new icampus_Function_Studentfinance_PaymentInfo();
-				
+
 			$paymentstatus = 0;
-			$pymtinfo=$sfhelper->getStudentPaymentInfo($registration_id,$formData['semid']);
-			//echo var_dump($pymtinfo);exit;
-			if( ($pymtinfo["invoices"]=='')){
-				$paymentstatus=1;
-			}else{
-				//check dah x dak balance
-				if($pymtinfo["total_invoice_balance"]<=0 ){
+			$dbGlobalException=new Exam_Model_DbTable_GlobalException();
+			if ($dbGlobalException->isException(1, $program['IdCollege'], $formData['semid'], $formData['ass_type']))
+				$paymentstatus = 1;
+			else {
+				$pymtinfo=$sfhelper->getStudentPaymentInfo($registration_id,$formData['semid']);
+				//echo var_dump($pymtinfo);exit;
+				if( ($pymtinfo["invoices"]=='')){
 					$paymentstatus=1;
 				}else{
-					$paymentstatus==0;
+					//check dah x dak balance
+					if($pymtinfo["total_invoice_balance"]<=0 ){
+						$paymentstatus=1;
+					}else{
+						$paymentstatus==0;
+					}
+				}
+				 
+				//kalau ada payment exception utk course registration
+				if ($pymtinfo['exception']!=array()) {
+					if($pymtinfo["exception"][2]){
+						$paymentstatus=1;
+					}
 				}
 			}
-	
-			//kalau ada payment exception utk course registration
-			if ($pymtinfo['exception']!=array()) {
-				if($pymtinfo["exception"][2]){
-					$paymentstatus=1;
-				}
-			}
-				
 			if($paymentstatus==0){
 				try {
 					throw new Exception("Outstanding Payment");

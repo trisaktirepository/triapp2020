@@ -58,11 +58,11 @@ p    {color: white; font-size: 16px}
 <script type="text/javascript">
 
 
-/* $(document).ready(function(){
+ $(document).ready(function(){
     $(document).bind("contextmenu",function(e){
        return false;
    });
-}); */
+}); 
 
 $(function() {
 	
@@ -337,12 +337,8 @@ function answermedia(type) {
 
 $(window).bind("load", function() {
 	   // code here
-	//startTimer("<?php //echo $this->question['stop_time']?>");
-	 
-	 
-	startTimer("2020-04-9 23:00:00");
+	startTimer("<?php echo $this->question['stop_time']?>");
 	getQuestion(1);
-	//firstQuestion($('#question_url').val(),$('#question_parent_url').val());
 	startStreaming();
 });
 
