@@ -83,7 +83,7 @@
 			<tr><td colspan="3" bgcolor="lightgreen" align="center">
 				 <input class="btn" type="button" id="btnstart" value="<?php echo $this->translate('Start Exam');?>" onclick="startExam('<?php echo $this->transaction["at_trans_id"];?>')">
 				</td></tr>
-			 <tr><td width="20%"><div><?php 
+			 <tr><td width="20%" align="center"><div><?php 
 					if($this->photo!=null){
 						//$imageHelper = new icampus_Function_General_Image();
 						//$path = $imageHelper->getImagePath($this->photo['pathupload'],250,250);			
@@ -136,7 +136,7 @@
 			 					<img src="/images/icon/red.png"  style="width:25px;height:25px;" title="<?php echo 'Close';?>"> </a>
 			 				<?php }?></td>
 			 			</tr>
-			 			<tr><td colspan="3"><?php foreach ($comps as $comp ) echo $comp['ac_comp_name_bahasa'].' '?></td></tr>
+			 			<tr><td colspan="4"><?php foreach ($comps as $comp ) echo $comp['ac_comp_name_bahasa'].' '?></td></tr>
 			 		<?php }?>
 			 	</table>
 			 </td>
