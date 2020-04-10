@@ -128,10 +128,10 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		
     		$dbPestDetail=new App_Model_Application_DbTable_ApplicantPtestDetail();
     		$currenttest=$dbPestDetail->getActiveTest($trxid, $date, $time);
-	    	//echo var_dump($currenttest);exit;
+	    	echo var_dump($currenttest); 
     		$time=explode(':', $currenttest['timerange']);
     		$timenow=date('Y-m-d h:i:s',strtotime('+'.$time[0].' hour +'.$time[1].' minutes +'.$time[2].' seconds',strtotime(date('Y-m-d h:i:s'))));
-    		echo var_dump($time);
+    		echo var_dump($time);echo '<br>';
     		echo date('Y-m-d h:i:s'); 
     		echo $timenow;exit;
 	    	if ($currenttest) {
