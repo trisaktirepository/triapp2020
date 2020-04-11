@@ -397,7 +397,8 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 					$idactivity=$invoice['idactivity'];
 					$idsemester=$invoice['semester'];
 					$this->view->fee_structure=array('fs_id'=>$invoice['fs_id']);
-					 
+					$semester = $semesterDb->fnGetSemestermaster($idsemester);
+						
 					$act[0]['idinvoice']=$idinvoice;
 					$act[0]['level']='';
 					if ($invoice) {
@@ -412,6 +413,8 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 							$act[0]['invoicerest']=array();
 							$bundle=$dbBundle->getCurrentSetup(1, $program['IdCollege'], $std['IdProgram'], $std['IdBranch'], $idsemester,$idactivity,$std['IdProgramMajoring']);
 							$act[0]['bundle']=$bundle;
+							$act[0]['IdSemesterMaster']=$semester['IdSemesterMaster'];
+							$act[0]['SemesterMainName']=$semester['SemesterMainName'];
 					} 
 					 
 					$this->view->activity= $act;
