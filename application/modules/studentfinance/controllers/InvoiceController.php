@@ -110,7 +110,8 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 								'fs_id' => $formData['fs_id'],
 								'status' => 'A',
 								'date_create' => date('Y-m-d H:i:s'),
-								'idactivity'=>$formData['idactivity']
+								'idactivity'=>$formData['idactivity'],
+								'trx_id' => $invoice_no['invoice_no']
 						);
 						if ($formData["idinvoice"]=='') {
 							$invoice_id = $invoiceDb->insert($inv_data);
@@ -173,7 +174,8 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 									'fs_id' => $formData['fs_id'],
 									'status' => 'A',
 									'date_create' => date('Y-m-d H:i:s'),
-									'idactivity'=>$formData['idactivity']
+									'idactivity'=>$formData['idactivity'],
+									'trx_id' => $invoice_no['invoice_no']
 							);
 								
 							$invoice_id = $invoiceDb->insert($inv_data);
