@@ -392,13 +392,39 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 					}
 					$this->view->activity= $act;
 					
+				} else  if ($idinvoice!='') {
+					$invoice=$invoiceDb->getData($idinvoice);
+					$idactivity=$invoice['idactivity'];
+					$idsemester=$invoice['semester'];
+					$this->view->fee_structure=array('fs_id'=>$invoice['fs_id']);
+					 
+					$act[0]['idinvoice']=$idinvoice;
+					$act[0]['level']='';
+					if ($invoice) {
+						$bundleDetail=$invoiceDetailDb->getInvoiceDetail($idinvoice);
+							foreach ($bundleDetail as $idx=>$item) {
+								$bundleDetail[$idx]['fee']=array('amount'=>$item['amount'],
+										'fi_id'=>$item['fi_id']
+								);
+							}
+							$act[0]['bundledetail']=$bundleDetail;
+							$act[0]['invoice']=$invoice;
+							$act[0]['invoicerest']=array();
+							$bundle=$dbBundle->getCurrentSetup(1, $program['IdCollege'], $std['IdProgram'], $std['IdBranch'], $idsemester,$idactivity,$std['IdProgramMajoring']);
+							$act[0]['bundle']=$bundle;
+					} 
+					 
+					$this->view->activity= $act;
+					
 				} else {
+				 
 					echo "Jadwal Pembuatan Invoice Belum dibuka, Hubungi admin Fakultas masing-masing";
 					exit;
 				}
 		 
 		
 	}
+	
 	public function  getLevel($IdStudentRegistration,$idsemester,$intake) {
 		
 		$db = Zend_Db_Table::getDefaultAdapter();
