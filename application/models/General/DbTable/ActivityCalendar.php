@@ -19,6 +19,23 @@ class App_Model_General_DbTable_ActivityCalendar extends Zend_Db_Table_Abstract
 			return $row;
 	}
 	
+	public function getDataBySem($semid,$prog,$idact){
+	
+		$db = Zend_Db_Table::getDefaultAdapter();
+			
+	
+		$select = $db->select()
+		->from(array('c'=>$this->_name))
+		->where('c.IdSemesterMain=?',$semid)
+		->where('c.IdProgram=?',$prog)
+		->where('c.idActivity=?',$idact);
+	
+		$row = $db->fetchRow($select);
+		 
+	
+		return $row;
+	}
+	
 	 
 	
 	public function addData($data){

@@ -194,7 +194,10 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 						
 						//push to BNI
 						$dbActCalendar=new App_Model_General_DbTable_ActivityCalendar();
-						$calendar=$dbActCalendar->getData($formData['id']);
+						if ($formData['id']!='') $calendar=$dbActCalendar->getData($formData['id']);
+						
+						else $calendar=$dbActCalendar->getDataBySem($formData['idsemester'], $program['IdProgram'], $formData['idactivity']);
+						
 						if ($calendar) {
 							$dateexprired=date('Y-m-d H:s:i',strtotime($calendar['EndDate'].' '.$calendar['EndTime']));
 							$invoiceDb->pushToEColl($invoice_id, $dateexprired,'createbilling');
@@ -400,7 +403,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 					$semester = $semesterDb->fnGetSemestermaster($idsemester);
 					$act[0]['idacadyear']=$semester['idacadyear'];
 					$act[0]['idActivity']=$idactivity;
-					$act[0]['id']=$idinvoice;
+					$act[0]['id']='';
 					$act[0]['idinvoice']=$idinvoice;
 					$act[0]['level']='';
 					if ($invoice) {
