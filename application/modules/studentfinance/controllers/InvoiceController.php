@@ -398,7 +398,9 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 					$idsemester=$invoice['semester'];
 					$this->view->fee_structure=array('fs_id'=>$invoice['fs_id']);
 					$semester = $semesterDb->fnGetSemestermaster($idsemester);
-						
+					$act[0]['idacadyear']=$semester['idacadyear'];
+					$act[0]['idactivity']=$idactivity;
+					$act[0]['id']=$idinvoice;
 					$act[0]['idinvoice']=$idinvoice;
 					$act[0]['level']='';
 					if ($invoice) {
