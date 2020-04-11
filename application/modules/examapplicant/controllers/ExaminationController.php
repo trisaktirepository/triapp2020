@@ -48,8 +48,10 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     			$acid=$currenttest['app_comp_code'];
     		}
     		//echo var_dump($comprog);echo '<br>';
+    		$timestart="23:00:00";
     		foreach ($examdetail as $key=>$value) {
-    			
+    			if ($timestart>$value['time_start']) 
+    				$timestart=$value['time_start'];
     			$compcode=$value['app_comp_code'];
     			if ($compcode==$acid) $examdetail[$key]['active']="1";
     			else $examdetail[$key]['active']="0";
@@ -64,6 +66,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     			$examdetail[$key]['ptestname']=$testtype['act_name'];
     			
     		}
+    		$this->view->datestart=$date.' '.$timestart;
     	 		$trx=$dbApplicant->getTransaction($trxid);
 	    		//--------get applicant program  -----------
 	    		$appprogramDB = new App_Model_Application_DbTable_ApplicantProgram();
