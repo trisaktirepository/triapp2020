@@ -232,11 +232,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 				$bundle=$dbBundle->getCurrentSetup(1, $program['IdCollege'], $std['IdProgram'], $std['IdBranch'], $idsemester,$idactivity,$std['IdProgramMajoring']);
 				$act[$key]['bundle']=$bundle;
 				if ($bundle) {
-					
-				//if (!$bundle)	{
-					 
-				//}
-					//get item detail
+				 	//get item detail
 					$bundleDetail=$dbBudleDetail->getDataByBudle($bundle['idfeebundle']);
 					$invoice=$invoiceDb->isInByActivity($idsemester, $IdStudentRegistration, $idactivity);
 					$restamount=array();
@@ -347,7 +343,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 								//echo var_dump($row);
 								$this->view->fee_structure=$fee_structure;
 								$amount=0;
-								//echo var_dump($bundleDetail);exit;
+								echo var_dump($bundleDetail);exit;
 								foreach ($bundleDetail as $key1=>$value) {
 									 
 									$invoicedet = $invoiceDb->getInvoiceFee($idsemester,$std['IdStudentRegistration'], $fee_structure['fs_id'], $value['fee_item'], $value['percentage'],"1",$idactivity);
