@@ -1514,7 +1514,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 							  
 							  $result = $db->fetchRow($sql);
 							  if (!$result) $result['Level']=1;
-							  else $result['Level']=$result['Level'];
+							  else $result['Level']=$result['Level']+1;
 							  //echo $sql;
 						  } 
 							if( $result['Level'] ){
