@@ -201,6 +201,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    				$dt = explode("triapp",$question['question_url']);
 	    				$path = $dt[1];
 	    				$question['question_url']=$path;
+	    				$question['token']=$response['token'];
 	    				if ($question['question_parent_url']!='') {
 	    					$dt = explode("triapp",$question['question_parent_url']);
 	    					$path = $dt[1];
@@ -235,6 +236,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    			$token=md5(time());
 	    			$dbAppTestAns->update(array('token'=>$token), 'apa_id='.$response['apa_id']);
 	    			$question['stop_time']=$exammain['stop_time'];
+	    			$question['token']=$token;
 	    		//	echo var_dump($question);
 	    			$this->view->answer=$answer;
 	    			$this->view->question=$question;

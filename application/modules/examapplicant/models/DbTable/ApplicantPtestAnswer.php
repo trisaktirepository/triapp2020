@@ -310,7 +310,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 		  			}
 		  	 	}
 		    	$db->commit();
-		    	$response=array('apa_id'=>$id,'n_of_quest'=>$i-1);
+		    	$response=array('apa_id'=>$id,'n_of_quest'=>$i-1,'token'=>$postData['token']);
 		  	} else {
 		  		$db->rollBack();
 		  		$response=array();
