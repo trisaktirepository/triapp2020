@@ -9,8 +9,9 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 
     public function indexAction()
     {
-    	$msg=$this->_getParam('msg');
+    	 
     	$this->view->title="Examination ".$msg;
+    	$this->view->noticeError=$this->_getParam('msg',null);
     	//get applicant profile
     	$auth = Zend_Auth::getInstance();
     	$appl_id = $auth->getIdentity()->appl_id; 
@@ -173,7 +174,8 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    							'pcode' => $currenttest['apt_ptest_code'],
 	    							'config'=>$config,
 	    							'component'=>$component,
-	    							'test_type'=>$currenttest['app_comp_code']
+	    							'test_type'=>$currenttest['app_comp_code'],
+	    							'token'=>md5(time())
 	    							);
 	    					//echo var_dump($data);exit;
 	    					$dbAppPtest=new Examapplicant_Model_DbTable_ApplicantPtestAnswer();
@@ -211,7 +213,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    				$this->view->n_of_quest=$response['n_of_quest'];
 	    			} else $this->_redirect('/examapplicant/examination/index/msg/Fail to generate exam');
 	    			
-	    		} else {
+	    		} else if ($response['token']==""){
 	    			$answerset=$dbAppPtestDet->getDataByHead($response['apa_id']);
 	    			foreach ($answerset as $value) {
 	    				$answer[$value['apad_ques_no']]=$value['apad_appl_ans'];
@@ -231,7 +233,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    			$this->view->answer=$answer;
 	    			$this->view->question=$question;
 	    			$this->view->n_of_quest=$response['n_of_quest'];
-	    		}
+	    		} else $this->_redirect('/examapplicant/examination/index/msg/pengguna sudah Login sebelumnya');
 	    	
 	    		
 	    	} else $this->_redirect('/examapplicant/examination/index/msg/No Opened Test');
@@ -313,16 +315,27 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	$ajaxContext->addActionContext('view', 'html');
     	$ajaxContext->initContext();
     	$quest=array();
+    	$dbApplAns=new Examapplicant_Model_DbTable_ApplicantPtestAnswer();
     	$dbQuest=new Examapplicant_Model_DbTable_QuestionBank();
     	$dbQuestdet=new Examapplicant_Model_DbTable_ApplicantPtestAnswerDtl();
     	if ($this->getRequest()->isPost()) {
     		 
     		$formData = $this->getRequest()->getPost();
-    		$quest=$dbQuest->getQuestion($formData['idQuestion']);
-    		if ($quest['answer_mc']==$formData['answer']) $point=1;else $point=0;
-    		$data=array('apad_appl_ans'=>$formData['answer'],'apad_status_ans'=>$point);
-    		$dbQuestdet->update($data, 'apad_id='.$formData['apad_id']); 
-    		$quest=$dbQuestdet->getData($formData['apad_id']);   
+    		$token=$formData['token'];
+    		$row=$dbQuestdet->getData($formData['apad_id']);
+    		if ($row['token']==$token) {
+	    		$quest=$dbQuest->getQuestion($formData['idQuestion']);
+	    		if ($quest['answer_mc']==$formData['answer']) $point=1;else $point=0;
+	    		$data=array('apad_appl_ans'=>$formData['answer'],'apad_status_ans'=>$point);
+	    		$dbQuestdet->update($data, 'apad_id='.$formData['apad_id']); 
+	    		$token=md5(time());
+	    		$dbApplAns->update(array('token'=>$token), 'apa_id='.$row['apa_id']);
+	    		$quest=$dbQuestdet->getData($formData['apad_id']); 
+	    		$quest['error']='0';
+    		} else {
+    			$quest['error']='1';
+    			$quest['msg']='Invalid Token, penyimpanan jawaban gagal';
+    		}
     	}
     	$ajaxContext = $this->_helper->getHelper('AjaxContext');
     	$ajaxContext->addActionContext('view', 'html');
@@ -352,20 +365,32 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	$ajaxContext->addActionContext('view', 'html');
     	$ajaxContext->initContext();
     	$quest=array();
+    	$dbApplAns=new Examapplicant_Model_DbTable_ApplicantPtestAnswer();
     	$dbQuest=new Examapplicant_Model_DbTable_QuestionBank();
     	$dbQuestdet=new Examapplicant_Model_DbTable_ApplicantPtestAnswerDtlMore();
     	if ($this->getRequest()->isPost()) {
     		 
     		$formData = $this->getRequest()->getPost();
-    		$quest=$dbQuest->getQuestion($formData['idQuestion']);
-    		//if ($quest['answer_mc']==$formData['answer']) $point=1;else $point=0;
-    		$data=array('apadm_apad_id'=>$formData['apad_id'],'apadm_text'=>$formData['answer'],'created_dt'=>date('Y-m-d H:s:i'),'created_by'=>$appl_id);
-    		$answertext=$dbQuestdet->getData($formData['apad_id']);
-    		if (!$answertext) 
-    			$dbQuestdet->addData($data);
-    		else 
-    			$dbQuestdet->update($data, 'apadm_apad_id='.$answertext['apadm_apad_id']);
-    		$quest=$dbQuestdet->getData($formData['apad_id']);
+    		$token=$formData['token'];
+    		$row=$dbQuestdet->getData($formData['apad_id']);
+    		if ($row['token']==$token) {
+	    		$quest=$dbQuest->getQuestion($formData['idQuestion']);
+	    		//if ($quest['answer_mc']==$formData['answer']) $point=1;else $point=0;
+	    		$data=array('apadm_apad_id'=>$formData['apad_id'],'apadm_text'=>$formData['answer'],'created_dt'=>date('Y-m-d H:s:i'),'created_by'=>$appl_id);
+	    		$answertext=$dbQuestdet->getData($formData['apad_id']);
+	    		if (!$answertext) 
+	    			$dbQuestdet->addData($data);
+	    		else 
+	    			$dbQuestdet->update($data, 'apadm_apad_id='.$answertext['apadm_apad_id']);
+	    		$token=md5(time());
+	    		$dbApplAns->update(array('token'=>$token), 'apa_id='.$row['apa_id']);
+	    		 
+	    		$quest=$dbQuestdet->getData($formData['apad_id']);
+	    		$quest['error']='0';
+    		} else {
+    			$quest['error']='1';
+    			$quest['msg']='Invalid Token, penyimpanan jawaban gagal';
+    		}
     	}
     	$ajaxContext = $this->_helper->getHelper('AjaxContext');
     	$ajaxContext->addActionContext('view', 'html');

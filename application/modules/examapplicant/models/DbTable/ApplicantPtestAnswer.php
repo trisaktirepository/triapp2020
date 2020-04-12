@@ -115,6 +115,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 		   		'pcode' => $postData['pcode'],
 		   		'idConfig'=>$postData['config']['idConfig'],
 		   		'test_type'=>$postData['test_type'],
+		   		'token'=>$postData['token'],
 			   	'apa_user_by' => $auth->getIdentity()->appl_id
 				);
 		

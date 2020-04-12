@@ -228,12 +228,13 @@ function saveAnswerText(element) {
 		$.ajax({
 			  type: "POST",
 			  url: "/examapplicant/examination/ajax-save-answer-text",
-			  data: {'idQuestion':idQuestion,'apad_id':$("#apad_id").val(),'answer':answer,'order':order},
+			  data: {'idQuestion':idQuestion,'apad_id':$("#apad_id").val(),'answer':answer,'order':order,'token':$("#token").val()},
 			  dataType: 'json'
 			})
 			.done(function(respond){
 				 var estatus="#answered"+respond.apad_ques_no;
 				 $(estatus).text('Ok');
+				 $("#token").val(respond.token);
 				 $("#answertxt").val('Jawaban Tersimpan:'+respond.apadm_text);
 				 savePhoto();
 				})
@@ -271,15 +272,18 @@ function saveAnswer(answer){
 			$.ajax({
 				  type: "POST",
 				  url: "/examapplicant/examination/ajax-save-answer",
-				  data: {'idQuestion':idQuestion,'apad_id':$("#apad_id").val(),'answer':answer,'order':order},
+				  data: {'idQuestion':idQuestion,'apad_id':$("#apad_id").val(),'answer':answer,'order':order,'token':$("#token").val()},
 				  dataType: 'json'
 				})
 				.done(function(respond){
-					 var element="#answered"+respond.apad_ques_no;
-					 $(element).text(respond.apad_appl_ans);
-					 $('input:radio[name="answer"][value="'+respond.apad_appl_ans+'"]').attr('checked',true);
-					 savePhoto();
-					})
+					if (respond.error=="0") {
+						 var element="#answered"+respond.apad_ques_no;
+						 $(element).text(respond.apad_appl_ans);
+						 $('input:radio[name="answer"][value="'+respond.apad_appl_ans+'"]').attr('checked',true);
+					 	 $("#token").val(respond.token);
+					 	 savePhoto();
+					} else alert(respond.msg);
+				})
 				.fail(function(respond){console.log("fail");})
 				.always(function(respond){console.log("always");
 			});
@@ -391,6 +395,7 @@ function startTimer(endtime){
 <input type="hidden" id="apad_id" name="apad_id" value="<?php echo $this->question['apad_id']?>">
 <input type="hidden" id="idQuestion" value="<?php echo $this->question['idQuestion']?>">
 <input type="hidden" id="order" value="1">
+<input type="hidden" id="token" value="<?php echo $this->question['token'];?>">
 <input type="hidden" id="type" value="<?php echo $this->testtypecode?>">
 <input type="hidden" id="question_url" value="<?php echo $this->question['question_url']?>">
 <input type="hidden" id="question_parent_url" value="<?php echo $this->question['question_parent_url']?>">
