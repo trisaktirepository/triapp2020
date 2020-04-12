@@ -239,8 +239,10 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 					//get item detail
 					$bundleDetail=$dbBudleDetail->getDataByBudle($bundle['idfeebundle']);
 					$invoice=$invoiceDb->isInByActivity($idsemester, $IdStudentRegistration, $idactivity);
+					$restamount=array();
 					$act[$key]['invoicerest']=array();
 					$act[$key]['invoice']=$invoice;
+					
 					if ($invoice) {
 						//echo var_dump($invoice);
 						//echo var_dump($bundleDetail);
