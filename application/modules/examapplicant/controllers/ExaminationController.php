@@ -228,6 +228,8 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    				$question['question_parent_url']=$path;
 	    			}
 	    			$exammain=$dbAppTestAns->getData($response['apa_id']);
+	    			$token=md5(time());
+	    			$dbAppTestAns->update(array('token'=>$token), 'apa_id='.$response['apa_id']);
 	    			$question['stop_time']=$exammain['stop_time'];
 	    		//	echo var_dump($question);
 	    			$this->view->answer=$answer;
