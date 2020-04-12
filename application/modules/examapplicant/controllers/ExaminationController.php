@@ -43,10 +43,12 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		$dbPtest=new App_Model_Application_DbTable_ApplicantPtest();
     		$ptest=$dbPtest->getPtest($trxid);
     		$acid='';
+    		$this->view->testtype='';
     		if ($ptest ) { 
     	 		$currenttest=$dbPlacementTest->getActiveTest($trxid, $date, $time);
     			//echo var_dump($currenttest);exit;
     			$acid=$currenttest['app_comp_code'];
+    			$this->view->testtype=$acid;
     		}
     		//echo var_dump($comprog);echo '<br>';
     		$timestart="23:00:00";
@@ -54,7 +56,9 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     			if ($timestart>$value['time_start']) 
     				$timestart=$value['time_start'];
     			$compcode=$value['app_comp_code'];
-    			if ($compcode==$acid) $examdetail[$key]['active']="1";
+    			if ($compcode==$acid) {
+    				$examdetail[$key]['active']="1";
+    			}
     			else $examdetail[$key]['active']="0";
     			$component=$dbExamComp->getDataComponent($compcode,'0');
     			//echo var_dump($component);
