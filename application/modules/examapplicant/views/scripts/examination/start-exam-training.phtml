@@ -1,0 +1,625 @@
+<style>
+#mydiv {
+  position: absolute;
+  z-index: 9;
+  background-color: #f1f1f1;
+  border: 1px solid #d3d3d3;
+  text-align: center;
+  top:1px;
+  left:700px;
+}
+#clock {
+  font-family: 'Orbitron', sans-serif;
+  color: #66ff99;
+  font-size: 56px;
+  text-align: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
+#mydivheader {
+  padding: 0px;
+  cursor: move;
+  z-index: 10;
+  background-color: #2196F3;
+  color: #fff;
+}
+p    {color: white; font-size: 16px}
+.numberCircle {
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    padding: 8px;
+
+    background: #fff;
+    border: 2px solid #666;
+    color: #666;
+    text-align: center;
+
+    font: 32px Arial, sans-serif;
+}
+.numberanswer {
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    padding: 4px;
+
+    background: #fff;
+    border: 2px solid #666;
+    color: #666;
+    text-align: center;
+
+    font: 16px Arial, sans-serif;
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/2.4.5/fabric.js"></script>
+ 
+
+<script type="text/javascript">
+
+
+$(document).ready(function(){
+    $(document).bind("contextmenu",function(e){
+       return false;
+   });
+}); 
+ 
+$(function() {
+	
+	 
+	$(".next").click(function(){
+	var  order=$("#order").val()*1;
+	if (order<=$("#n_of_quest").val() & $("#stop").val()!="1") {
+		 	$.ajax({
+					url: '<?php echo $this->baseUrl();?>/examapplicant/examination/ajax-get-question-training',
+					type: 'POST',
+					data: {'apa_id': $("#apa_id").val(),'apad_id': $("#apad_id").val(),'order':order+1},
+					dataType: 'json',
+					error: function(){
+							alert("Terjadi masalah saat mengambil data !");
+						}, 
+					}).done(function ( data ) {
+		 					//$("#QuestionTxt").val(data.question);
+		 					$("#ordertxt").text(data.apad_ques_no);
+		 					$("#orderanswer").text(data.apad_ques_no);
+		 					$("#order").val(data.apad_ques_no);
+		 					answermedia(data.answer_type);
+
+		 					if (data.apad_appl_ans==" " || data.apad_appl_ans=="") {
+								 $("#radio"+$("#radiopre").val()).prop('checked',false);
+							}
+							else $('#radio'+data.apad_appl_ans).prop('checked',true);
+		 					$("#radiopre").val(data.apad_appl_ans);
+		 					
+		 					$("#answered"+data.apad_ques_no).text(data.apad_appl_ans);
+		 					$("#idQuestion").val(data.idQuestion);
+		 					$("#apad_id").val(data.apad_id);
+		 					var urllink=data.question_url;
+		 					
+		 					$("#Question").attr("src",urllink);
+							if (data.question_parent_url!='') 
+								$("#parent").attr("src",data.question_parent_url);
+							else $("#parent").attr("src","");
+							if (data.answerfile!='') updateAnswerFile(data.answerfile);
+							if (data.answertext!='') $('#answertxt').val(data.answertext);
+		 			});
+			}
+	});
+
+	$(".pre").click(function(){
+		var order=$("#order").val()*1;
+		if (order>1 & $("#stop").val()!="1") {
+			 	$.ajax({
+						url: '<?php echo $this->baseUrl();?>/examapplicant/examination/ajax-get-question-training',
+						type: 'POST',
+						data: {'apa_id': $("#apa_id").val(),'apad_id': $("#apad_id").val(),'order':order-1},
+						dataType: 'json',
+						error: function(){
+								alert("Terjadi masalah saat mengambil data !");
+							}, 
+						}).done(function ( data ) {
+			 					//$("#QuestionTxt").val(data.question);
+			 					$("#ordertxt").text(data.apad_ques_no);
+			 					$("#orderanswer").text(data.apad_ques_no);
+			 					$("#order").val(data.apad_ques_no);
+			 					$("#apad_id").val(data.apad_id);
+			 					answermedia(data.answer_type);
+			 					if (data.apad_appl_ans==" " || data.apad_appl_ans=="") {
+									 $("#radio"+$("#radiopre").val()).prop('checked',false);
+								}
+								else $('#radio'+data.apad_appl_ans).prop('checked',true);
+			 					$("#radiopre").val(data.apad_appl_ans);
+			 					$("#answered"+data.apad_ques_no).text(data.apad_appl_ans);
+			 					$("#idQuestion").val(data.idQuestion);
+			 					
+			 					var urllink=data.question_url;
+			 					
+			 					$("#Question").attr("src",urllink);
+								if (data.question_parent_url!='') 
+									$("#parent").attr("src",data.question_parent_url);
+								else $("#parent").attr("src","");
+								if (data.answerfile!='') updateAnswerFile(data.answerfile);
+								if (data.answertext!='') $('#answertxt').val(data.answertext);
+			 			});
+				}
+			});
+		 
+	  
+	 
+ 
+});
+
+
+function updateAnswerFile(data) {
+	$('#answerlink').empty();
+	i=1;
+	$.each(data, function(index) {
+     
+		$('#answerlink').append('<a href="'+data[index].pathupload+'">File Jawaban ke-'+i+'</a><a href="#" onclick="deleteFile('+data[index].apadm_id+')"><img src="/images/icon/delete.png" width="20px" height="20px"></a><br>');	
+		i++;
+    });
+	$('#typefile').val($('#typefile').val()*1+1);
+
+}
+
+function supportAjaxUploadWithProgress() {
+	  return supportFileAPI(); supportAjaxUploadProgressEvents(); supportFormData();
+
+	  function supportFileAPI() {
+	    var fi = document.createElement('INPUT');
+	    fi.type = 'file';
+	    return 'files' in fi;
+	  }
+
+	  function supportAjaxUploadProgressEvents() {
+	    var xhr = new XMLHttpRequest();
+	    return !! (xhr  ('upload' in xhr)('onprogress' in xhr.upload));
+	  }
+
+	  function supportFormData() {
+	    return !! window.FormData;
+	  }
+	}
+	
+function getQuestion(order){
+	if ( $("#stop").val()!="1") {
+	$.ajax({
+		url: '<?php echo $this->baseUrl();?>/examapplicant/examination/ajax-get-question-training',
+		type: 'POST',
+		data: {'apa_id': $("#apa_id").val(),'apad_id': $("#apad_id").val(),'order':order},
+		dataType: 'json',
+		error: function(){
+				alert("Terjadi masalah saat mengambil  data !");
+			}, 
+		}).done(function ( data ) {
+					//$("#QuestionTxt").val(data.question);
+					$("#ordertxt").text(data.apad_ques_no);
+					$("#orderanswer").text(data.apad_ques_no);
+					$("#order").val(data.apad_ques_no);
+					$("#apad_id").val(data.apad_id);
+					answermedia(data.answer_type);
+					if (data.apad_appl_ans==" " || data.apad_appl_ans=="") {
+						 $("#radio"+$("#radiopre").val()).prop('checked',false);
+					}
+					else $('#radio'+data.apad_appl_ans).prop('checked',true);
+					//$("#answer").val(data.apad_appl_ans);
+					$("#answered"+data.apad_ques_no).text(data.apad_appl_ans);
+					$("#idQuestion").val(data.idQuestion);
+					$("#radiopre").val(data.apad_appl_ans);
+					var urllink=data.question_url;
+					$("#Question").attr("src",urllink);
+					if (data.question_parent_url!='') 
+						$("#parent").attr("src",data.question_parent_url);
+					else $("#parent").attr("src","");
+					if (data.answerfile!='') updateAnswerFile(data.answerfile);
+					if (data.answertext!='') $('#answertxt').val(data.answertext);
+					
+			});
+	}
+}
+
+
+function saveAnswerText(element) {
+	if ($("#stop").val()!="1") {
+		var idQuestion=$("#idQuestion").val();
+		var order=$("#order").val();
+		var answer=$(element).val();
+		//$('#radiopre').val(answer);
+		$.ajax({
+			  type: "POST",
+			  url: "/examapplicant/examination/ajax-save-answer-text",
+			  data: {'idQuestion':idQuestion,'apad_id':$("#apad_id").val(),'answer':answer,'order':order,'token':$("#token").val()},
+			  dataType: 'json'
+			})
+			.done(function(respond){
+				 var estatus="#answered"+respond.apad_ques_no;
+				 $(estatus).text('Ok');
+				 $("#token").val(respond.token);
+				 $("#answertxt").val('Jawaban Tersimpan:'+respond.apadm_text);
+				 savePhoto();
+				})
+			.fail(function(respond){console.log("fail");})
+			.always(function(respond){console.log("always");
+		});
+ 	}
+}
+
+
+function deleteFile(apadmid) {
+	//if ($("#stop").val()!="1") {
+		 
+		$.ajax({
+			  type: "POST",
+			  url: "/examapplicant/examination/delete-file-training",
+			  data: {'apadmid':apadmid,'apadid':$("#apad_id").val()},
+			  dataType: 'json'
+			})
+			.done(function(data){
+				updateAnswerFile(data);
+				})
+			.fail(function(respond){console.log("fail");})
+			.always(function(respond){console.log("always");
+		});
+ 	//}
+}
+ 
+
+function saveAnswer(answer){
+	 if ($("#stop").val()!="1") {
+			var idQuestion=$("#idQuestion").val();
+			var order=$("#order").val();
+			$('#radiopre').val(answer);
+			$.ajax({
+				  type: "POST",
+				  url: "/examapplicant/examination/ajax-save-answer-training",
+				  data: {'idQuestion':idQuestion,'apad_id':$("#apad_id").val(),'answer':answer,'order':order,'token':$("#token").val()},
+				  dataType: 'json'
+				})
+				.done(function(respond){
+					if (respond.error=="0") {
+						 var element="#answered"+respond.apad_ques_no;
+						 $(element).text(respond.apad_appl_ans);
+						 $('input:radio[name="answer"][value="'+respond.apad_appl_ans+'"]').attr('checked',true);
+					 	 $("#token").val(respond.token);
+					 	// savePhoto();
+					} else alert(respond.msg);
+				})
+				.fail(function(respond){console.log("fail");})
+				.always(function(respond){console.log("always");
+			});
+	 }
+}
+
+function uploadFile(){
+	var form=document.getElementById('fileinfo');
+    var fd = new FormData(form);
+    console.log(form);
+    if (supportAjaxUploadWithProgress() && $("#file").val()!='') { 
+	        $.ajax({
+	            url: '/examapplicant/examination/upload-file-training',  
+	            type: 'POST',
+	            data: fd,
+	            dataType: 'json',
+	            processData: false,
+	            contentType: false,
+	            enctype: 'multipart/form-data',
+	            cache: false
+	        }).done(function ( data ) {
+	        	updateAnswerFile(data);
+		     }).fail(function(data){console.log("upload fail");})
+				.always(function(data){console.log("always")});
+    } else alert ('Sistem tidak mendukung unggah file/File tidak boleh kosong');
+}
+
+function answermedia(type) {
+	$("#answermc").hide();
+	$("#answertext").hide();
+	$("#answerfile").hide(); 
+	if (type=="1") $("#answermc").show();
+	else if (type=="2" || type=="4"){
+		$("#answertext").empty().append('<textarea id="answertxt" style="width:600px;height:50px;" onblur="saveAnswerText(this)">Tulis Jawaban di sini</textarea>');
+		$("#answertext").show();
+	}
+	if (type=="3"||type=="4") {
+		
+		$("#answerfile").empty();
+		$("#answerfile").append('<form id="fileinfo" enctype="multipart/form-data" method="post" name="fileinfo">'+
+			   '<label>File Unggah:</label>'+
+			    '<input type="file" name="file" id="file" required />'+
+			    '<input type="hidden" name="typefile" id="typefile" />'+
+			    '<input type="hidden" name="apadid" id="apadid" />'+
+				'</form> <br>Format File: *.png;*.jpg;*.gif<br>'+
+				'Besar File < 2 MB<br>'+
+				'<input type="button" class="btn" id="uploadBTN" onclick="uploadFile()"value="Unggah"></input>'+
+				'<div id="answerlink"></div>');
+		$("#answerfile").show();
+		$("#typefile").val($("#type").val()*1+$("#order").val()*1);
+		$("#apadid").val($("#apad_id").val());
+	} 
+	
+}
+
+$(window).bind("load", function() {
+	   // code here
+	startTimer("<?php echo $this->question['stop_time']?>");
+	getQuestion(1);
+	startStreaming();
+});
+
+function startTimer(endtime){
+		var countDownDate = new Date(endtime).getTime();
+		
+		//Update the count down every 1 second
+		var x = setInterval(function() {
+		
+		//Get today's date and time
+		var now = new Date().getTime();
+		
+		//Find the distance between now and the count down date
+		var distance = countDownDate - now;
+		
+		//Time calculations for days, hours, minutes and seconds
+		 
+		var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+		var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+		var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+		
+		//Output the result in an element with id="demo"
+		document.getElementById("examtime").innerHTML =  hours + " : " + minutes + " : " + seconds;
+		
+		//If the count down is over, write some text 
+		if (distance < 0) {
+			clearInterval(x);
+			$("#stop").val("1");
+			document.getElementById("examtime").innerHTML = '<font color="red"><strong>Waktu Ujian Habis</strong></font>';
+		}
+		}, 1000);
+}
+
+
+</script>
+ 
+<body >
+
+
+<?php if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+<?php }?>
+<input type="hidden" id="apa_id" name="apa_id" value="<?php echo $this->question['apad_apa_id']?>">
+<input type="hidden" id="apad_id" name="apad_id" value="<?php echo $this->question['apad_id']?>">
+<input type="hidden" id="idQuestion" value="<?php echo $this->question['idQuestion']?>">
+<input type="hidden" id="order" value="1">
+<input type="hidden" id="token" value="<?php echo $this->question['token'];?>">
+<input type="hidden" id="type" value="<?php echo $this->testtypecode?>">
+<input type="hidden" id="question_url" value="<?php echo $this->question['question_url']?>">
+<input type="hidden" id="question_parent_url" value="<?php echo $this->question['question_parent_url']?>">
+<input type="hidden" id="n_of_quest" value="<?php echo $this->n_of_quest?>">
+<div>
+	<fieldset>
+		<legend><?php echo $this->translate("Hasil Jawaban");?></legend>
+			<table class="table"  width="100%">
+			<?php  if ($this->n_of_quest>100) $nrow=4;
+					else if ($this->n_of_quest<20) $nrow=1; else $nrow=2;
+					$colom=round($this->n_of_quest/$nrow,0);
+				for ($j=1;$j<=$nrow;$j++) {?>
+					<tr><?php for ($i=($j-1)*$colom+1;$i<=$j*$colom;$i++) {?><td  width="2%" bgcolor="darkgrey" align="center"><font color="white"><a href="#" onclick="getQuestion('<?php echo $i?>')"><?php echo $i;?></a></font></td><?php }?></tr> 
+					<tr><?php for ($i=($j-1)*$colom+1;$i<=$j*$colom;$i++) {?><td  width="2%" bgcolor="white" align="center"><div id="answered<?php echo $i;?>"><?php if (isset($this->answer[$i])) echo $this->answer[$i]?></div></td><?php }?></tr>
+			<?php }?>
+			</table>		 
+	</fieldset>
+</div> 
+<div>
+	<fieldset align="center">
+		<legend><?php echo $this->translate("Pertanyaan");?></legend>
+			
+			<table border="0" width="100%">
+			 
+			 <tr>
+			
+			 <td colspan="2" align="center">
+					 <img id="parent" src=""/>
+			 	 
+			 </td>
+			 </tr>
+			 <tr>
+			 <td valign="top" align="right">
+			 <!-- Draggable DIV -->
+		 			<div id="mydiv">
+					  <!-- Include a header DIV with the same name as the draggable DIV, followed by "header" -->
+					  <div id="mydivheader">Video Streaming</div>
+					  <video id="stream" width="140" height="80"></video>
+					  <div style="overflow:hidden;height:0;"> 
+					    <canvas id="capture" width="160" height="90"></canvas>
+					  </div>  
+					</div>
+			 	<div id="ordertxt"  class="numberCircle"><strong> <?php echo $this->question['apad_ques_no']?> </strong>
+			 	</div>
+			 </td>
+			 <td align="center">
+			 	 <img id="Question" src=""/>
+			 	 <br>
+			 	 <div id="answertext"></div>
+			 </td>
+			 </tr>
+			 <tr bgcolor="lightblue">
+				<td colspan="2" align="center">
+				<table width="100%" border="0" class="table">
+					<tr>
+					<td   align="center" width="15%">
+						 <a class="pre btn" id="pre" href="#">Soal Sebelum</a>
+						 </td>
+					<td bgcolor="darkblue" align="center"  width="15%">
+					<div id="clock"></div>
+					</td>
+					
+						  
+					<td align="center" bgcolor="white">
+						 <div id="orderanswer"  class="numberanswer"><?php echo $this->question['apad_ques_no']?></div>
+						 <div id="answermc">
+						 	<input type="radio" name="answer" id="radioA" value="A" onclick="saveAnswer('A')"> A
+						 	<input type="radio" name="answer" id="radioB" value="B" onclick="saveAnswer('B')"> B
+						 	<input type="radio" name="answer" id="radioC" value="C" onclick="saveAnswer('C')"> C
+							 <input type="radio" name="answer" id="radioD" value="D" onclick="saveAnswer('D')"> D
+							 <input type="radio" name="answer" id="radioE" value="E" onclick="saveAnswer('E')"> E
+						 	<input type="hidden" id="radiopre">
+						 </div>
+						 <div id="answerfile"></div>
+					</td>
+					<td bgcolor="darkblue" align="center"  width="15%"><p id="examtime"></p></td>
+					<td align="center"  width="15%">	
+					<a class="next btn" id="next" href="#">Soal Berikutnya</a>
+			 		</td>
+			 	</tr>
+				</table>
+				</td>
+			 </tr>
+			 
+			</table>		 
+	</fieldset>
+</div> 
+</body>
+<input type="hidden" id="stop" value="">
+ 
+
+<script type="text/javascript">
+<!--
+
+//-->
+dragElement(document.getElementById("mydiv"));
+
+function dragElement(elmnt) {
+  var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+  if (document.getElementById(elmnt.id + "header")) {
+    // if present, the header is where you move the DIV from:
+    document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+  } else {
+    // otherwise, move the DIV from anywhere inside the DIV:
+    elmnt.onmousedown = dragMouseDown;
+  }
+
+  function dragMouseDown(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // get the mouse cursor position at startup:
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    document.onmouseup = closeDragElement;
+    // call a function whenever the cursor moves:
+    document.onmousemove = elementDrag;
+  }
+
+  function elementDrag(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // calculate the new cursor position:
+    pos1 = pos3 - e.clientX;
+    pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    // set the element's new position:
+    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+  }
+
+  function closeDragElement() {
+    // stop moving when mouse button is released:
+    document.onmouseup = null;
+    document.onmousemove = null;
+  }
+}
+
+var btnCapture = document.getElementById( "btn-capture" );
+
+//The stream & capture
+var stream = document.getElementById( "stream" );
+var capture = document.getElementById( "capture" ); 
+
+
+//The video stream
+var cameraStream = null;
+
+//Attach listeners
+//btnStart.addEventListener( "click", startStreaming );
+//btnStop.addEventListener( "click", stopStreaming );
+
+//Start Streaming
+function startStreaming() {
+
+	 var mediaSupport = 'mediaDevices' in navigator;
+
+	if( mediaSupport && null == cameraStream ) {
+
+		navigator.mediaDevices.getUserMedia( {video: { width: 1280, height: 720 }})
+		.then( function( mediaStream ) {
+
+			cameraStream = mediaStream;
+
+			stream.srcObject = mediaStream;
+
+			stream.play();
+		})
+		.catch( function( err ) {
+
+			console.log( "Unable to access camera: " + err );
+		});
+		
+	}
+	else {
+
+		alert( 'Your browser does not support media devices.' );
+
+		return;
+	} 
+}
+
+//Stop Streaming
+function stopStreaming() {
+
+	if( null != cameraStream ) {
+
+		var track = cameraStream.getTracks()[ 0 ];
+
+		track.stop();
+		stream.load();
+
+		cameraStream = null;
+	}
+}
+
+//btnCapture.addEventListener( "click", captureSnapshot );
+
+ 
+function savePhoto(){
+	var canvas=document.getElementById("capture");
+	
+	if( null != cameraStream ) {
+
+		var ctx = capture.getContext( '2d' );
+		var img = new Image();
+
+		ctx.drawImage( stream, 0, 0, capture.width, capture.height );
+		var dataUrl=canvas.toDataURL(); 
+		//alert(dataUrl);
+	}
+	type=$("#type").val()*1+$("#order").val();
+	$.ajax({
+		  type: "POST",
+		  url: "/examapplicant/examination/send-photo",
+		  data: {'image': dataUrl,'type':type,'apad_id':$("#apad_id").val()}
+		})
+		.done(function(respond){
+			  
+			 
+			$("#photo").val('ok');
+			})
+		.fail(function(respond){console.log("fail");});
+}
+ 
+</script>
+ 

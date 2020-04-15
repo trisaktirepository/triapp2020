@@ -33,8 +33,9 @@ p    {color: white; font-size: 20px}
   function startExam(idtrx) {
 	  if ($("#photo").val()=="ok") {
 	  	 //stopStreaming();
-	 	 window.location.replace('/examapplicant/examination/start-exam/idtrx/'+idtrx);
-
+		 if ($("input[name='testtype']:checked").val()) 	 
+	 		 window.location.replace('/examapplicant/examination/start-exam-training/idtrx/'+idtrx+'/testtype/'+$("input[name='testtype']:checked").val());
+		 else alert('Pilih test yang akan dicoba');
 	   } else alert('Tolong klik tombol Ambil Foto terlebih dahulu');
   }
   $(window).bind("load", function() {
@@ -158,14 +159,11 @@ p    {color: white; font-size: 20px}
 			 		 
 			 		<?php foreach ($this->examdetail as $exam) {
 			 				$comps=$exam['compcode'];?>
-			 			<tr><th><?php echo $exam['ptestname']?></th>
+			 			<tr>
+			 				<th><input type="radio" name="testtype" id="testtype" value="<?php echo $exam['app_comp_code'];?>"><?php echo $exam['ptestname']?></th>
 			 				<th><?php echo $exam['aps_test_date']?></th>
 			 				<th><?php echo $exam['time_start'].'-'.$exam['time_stop']?></th>
-			 				<td><?php if ($exam['active']=="1") {?>
-			 					<img src="/images/icon/green.png"  style="width:25px;height:25px;" title="<?php echo 'Open';?>"> </a>  
-			 				<?php } else {?>
-			 					<img src="/images/icon/red.png"  style="width:25px;height:25px;" title="<?php echo 'Close';?>"> </a>
-			 				<?php }?></td>
+			 				 
 			 			</tr>
 			 			<tr><td colspan="4"><?php foreach ($comps as $comp ) echo $comp['ac_comp_name_bahasa'].' '?></td></tr>
 			 		<?php }?>
@@ -188,12 +186,7 @@ p    {color: white; font-size: 20px}
 			 </tr>
 			 
 			</table>
-			<?php } else  {
-				echo "Pada hari ini tidak ada Ujian Saringan Masuk";
-				echo "<br>";
-				echo 'Jika ingin mencoba silahkan klik <a href="examapplicant/examination/index-training">link ini</a>';
-			 
-			}?>		 
+			<?php } else  echo "Pada hari ini tidak ada Ujian Saringan Masuk";?>		 
 	</fieldset>
 </div>  
  

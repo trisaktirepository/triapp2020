@@ -35,7 +35,7 @@ class App_Model_Application_DbTable_ApplicantPtestDetail extends Zend_Db_Table_A
 		
 	}
 	
-	public function getActivePtestDetail($applid,$date){
+	public function getActivePtestDetail($applid,$date=null){
 	
 		$db = Zend_Db_Table::getDefaultAdapter();
 	
@@ -45,8 +45,10 @@ class App_Model_Application_DbTable_ApplicantPtestDetail extends Zend_Db_Table_A
 		->join(array('c'=>'applicant_transaction'),'c.at_trans_id=b.apt_at_trans_id')
 		->joinLeft(array('aps'=>'appl_placement_schedule'),'aps.aps_id  = b.apt_aps_id',array('aps_id'=>'aps.aps_id','aps_location_id'=>'aps.aps_location_id','aps_test_date'=>'aps.aps_test_date' ,'aps.aps_placement_code'))
 		->joinLeft(array('al'=>'appl_location'),'al.al_id=aps.aps_location_id')
-		->where('c.at_appl_id =?', $applid)
-		->where('aps.aps_test_date = ?',date('Y-m-d',strtotime($date)));
+		->where('c.at_appl_id =?', $applid);
+		
+		if ($date!=null)
+			$select->where('aps.aps_test_date = ?',date('Y-m-d',strtotime($date)));
 		 
 		$row = $db->fetchAll($select);
 	
@@ -71,6 +73,28 @@ class App_Model_Application_DbTable_ApplicantPtestDetail extends Zend_Db_Table_A
 		->where('aps.aps_test_date = ?',date('Y-m-d',strtotime($date)))
 		->where('a.time_start <= ?',date('H:s:i',strtotime($time)))
 		->where('a.time_stop >= ?',date('H:s:i',strtotime($time)));
+			
+		$row = $db->fetchRow($select);
+		//echo $select; exit;
+		if($row){
+			return $row;
+		}else{
+			return null;
+		}
+	
+	}
+	
+	public function getActiveTestByTestType($transid,$testtype){
+	
+		$db = Zend_Db_Table::getDefaultAdapter();
+	
+		$select = $db ->select()
+		->from(array('a'=>$this->_name),array('app_comp_code','time_start','time_stop','timerange'=>'TIMEDIFF(time_stop,time_start)'))
+		->join(array('ac'=>'appl_test_type'),'ac.act_id=a.app_comp_code',array('act_name','initial_code'))
+		->join(array('b'=>'applicant_ptest'),'a.apt_id=b.apt_id')
+		->join(array('aps'=>'appl_placement_schedule'),'aps.aps_id  = b.apt_aps_id',array('aps_id'=>'aps.aps_id','aps_location_id'=>'aps.aps_location_id','aps_test_date'=>'aps.aps_test_date' ,'aps.aps_placement_code'))
+		->where('b.apt_at_trans_id =?', $transid)
+		->where('a.app_comp_code=?',$testtype);
 			
 		$row = $db->fetchRow($select);
 		//echo $select; exit;
