@@ -409,7 +409,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     								'test_type'=>$currenttest['app_comp_code'],
     								'token'=>md5(time())
     						);
-    						echo var_dump($data);exit;
+    						//echo var_dump($data);exit;
     						$dbAppPtest=new Examapplicant_Model_DbTable_LatihApplicantPtestAnswer();
     						$response=$dbAppPtest->addData($data);
     

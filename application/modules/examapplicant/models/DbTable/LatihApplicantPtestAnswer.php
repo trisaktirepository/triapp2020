@@ -119,7 +119,7 @@ class Examapplicant_Model_DbTable_LatihApplicantPtestAnswer extends Zend_Db_Tabl
 			   	'apa_user_by' => $auth->getIdentity()->appl_id
 				);
 		
-		   	//echo var_dump($dataaph);exit;
+		   	echo var_dump($dataaph); 
 		   	//$dbTxt->add(array('txt'=>'testtye='. var_dump($dataaph)));
 		   //	$id=1;
 		   	$filetype=500+$postData['test_type']*1;
@@ -162,7 +162,8 @@ class Examapplicant_Model_DbTable_LatihApplicantPtestAnswer extends Zend_Db_Tabl
 						->where('a.parent="0"')
 						->order('a.seqno');
 						$questionset=$db->fetchAll($select);
-						// echo var_dump($questionset);exit;
+						
+						echo var_dump($questionset);exit;
 						if ($questionset) {
 							if ($config['qsc_suffle']=="1")  
 								shuffle($questionset);
