@@ -12,7 +12,7 @@ class Examapplicant_Model_DbTable_LatihApplicantPtestAnswerDtl extends Zend_Db_T
 			$db = Zend_Db_Table::getDefaultAdapter();
 			$select = $db->select()
 					->from(array('a'=>$this->_name))
-					->join(array('b'=>'applicant_ptest_ans'),'a.apad_apa_id=b.apa_id')
+					->join(array('b'=>'latih_applicant_ptest_ans'),'a.apad_apa_id=b.apa_id')
 					->where('a.apad_id = '.$id);
 							
 			$row = $db->fetchRow($select);
@@ -28,7 +28,7 @@ class Examapplicant_Model_DbTable_LatihApplicantPtestAnswerDtl extends Zend_Db_T
 			$db = Zend_Db_Table::getDefaultAdapter();
 			$select = $db->select()
 					->from(array('a'=>$this->_name))
-					->join(array('b'=>'applicant_ptest_ans'),'a.apad_apa_id=b.apa_id')
+					->join(array('b'=>'latih_applicant_ptest_ans'),'a.apad_apa_id=b.apa_id')
 					->where('a.apad_apa_id  = '.$id);
 			//echo $select;				
 			$row = $db->fetchAll($select);
@@ -58,7 +58,7 @@ class Examapplicant_Model_DbTable_LatihApplicantPtestAnswerDtl extends Zend_Db_T
 	 		} else $row['question_parent_url']='';
 	 		if ($row) {
 	 			$select = $db->select()
-	 			->from('applicant_ptest_ans_detl_more')
+	 			->from('latih_applicant_ptest_ans_detl_more')
 	 			->where('apadm_apad_id=?',$row['apad_id']);
 	 			$more = $db->fetchRow($select);
 	 			if ($more) {

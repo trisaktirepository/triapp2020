@@ -23,7 +23,7 @@ class Examapplicant_Model_DbTable_LatihApplicantPtestAnswerDtlMore extends Zend_
 			$db = Zend_Db_Table::getDefaultAdapter();
 			$select = $db->select()
 					->from(array('a'=>$this->_name))
-					->join(array('b'=>'applicant_ptest_ans_detl'),'a.apadm_apad_id=b.apad_id')
+					->join(array('b'=>'latih_applicant_ptest_ans_detl'),'a.apadm_apad_id=b.apad_id')
 					->where('a.apadm_apad_id = '.$id);
 							
 			$row = $db->fetchRow($select);
@@ -37,7 +37,7 @@ class Examapplicant_Model_DbTable_LatihApplicantPtestAnswerDtlMore extends Zend_
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$select = $db->select()
 		->from(array('a'=>$this->_name))
-		->join(array('b'=>'applicant_ptest_ans_detl'),'a.apadm_apad_id=b.apad_id')
+		->join(array('b'=>'latih_applicant_ptest_ans_detl'),'a.apadm_apad_id=b.apad_id')
 		->where('a.apadm_id = '.$id);
 			
 		$row = $db->fetchRow($select);
@@ -51,7 +51,7 @@ class Examapplicant_Model_DbTable_LatihApplicantPtestAnswerDtlMore extends Zend_
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$select = $db->select()
 		->from(array('a'=>$this->_name))
-		->join(array('b'=>'applicant_ptest_ans_detl'),'a.apadm_apad_id=b.apad_id')
+		->join(array('b'=>'latih_applicant_ptest_ans_detl'),'a.apadm_apad_id=b.apad_id')
 		->where('a.apadm_apad_id = '.$apadid)
 		->where('a.apadm_auf_id=?',$aufid);
 			

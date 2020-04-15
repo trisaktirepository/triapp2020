@@ -666,11 +666,11 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	if ($this->getRequest()->isPost()) {
     		 
     		$formData = $this->getRequest()->getPost();
-    		echo var_dump($formData);
+    		//echo var_dump($formData);
     		$token=$formData['token'];
     		
     		$row=$dbQuestdet->getData($formData['apad_id']);
-    		echo var_dump($row);
+    		//echo var_dump($row);
     		if ($row['token']==$token) {
     			$quest=$dbQuest->getQuestion($formData['idQuestion']);
     			if ($quest['answer_mc']==$formData['answer']) $point=1;else $point=0;

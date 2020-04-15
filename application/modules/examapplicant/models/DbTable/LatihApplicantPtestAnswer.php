@@ -41,7 +41,7 @@ class Examapplicant_Model_DbTable_LatihApplicantPtestAnswer extends Zend_Db_Tabl
 			$row = $db->fetchRow($select);
 		 	if ($row) {
 		 		$select = $db->select()
-		 		->from(array('a'=>'applicant_ptest_ans_detl'),array('count'=>'COUNT(*)'))
+		 		->from(array('a'=>'latih_applicant_ptest_ans_detl'),array('count'=>'COUNT(*)'))
 		 		->where('a.apad_apa_id = '.$row['apa_id']);
 		 		
 		 		$det = $db->fetchRow($select);
