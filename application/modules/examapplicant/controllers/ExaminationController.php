@@ -131,8 +131,8 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		foreach ($compprogram as $value) {
     			$comprog[]=$value['ac_id'];
     		}
-    		$dbAppPtestDet=new Examapplicant_Model_DbTable_ApplicantPtestAnswerDtl();
-    		$dbAppTestAns=new Examapplicant_Model_DbTable_ApplicantPtestAnswer();
+    		$dbAppPtestDet=new Examapplicant_Model_DbTable_LatihApplicantPtestAnswerDtl();
+    		$dbAppTestAns=new Examapplicant_Model_DbTable_LatihApplicantPtestAnswer();
     		$dbPtest=new App_Model_Application_DbTable_ApplicantPtest();
     		$ptest=$dbPtest->getPtest($trxid);
     		$acid='';
@@ -141,7 +141,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		//echo var_dump($comprog);echo '<br>';
     	 
     		foreach ($examdetail as $key=>$value) {
-    			 
+    			$compcode=$value['app_comp_code'];
     			$component=$dbExamComp->getDataComponent($compcode,'0');
     			//echo var_dump($component);
     			foreach ($component as $idx=>$comp) {
