@@ -135,7 +135,7 @@ class Examapplicant_Model_DbTable_LatihApplicantPtestAnswer extends Zend_Db_Tabl
 				//random set from several selected exam set
 				$select=$db->select()
 					->from(array('a'=>'appl_placement_examsets'))
-					->where('a.ape_aph_id=0')
+					->where('a.ape_aph_id=?',$postData['config']['aph_id'])
 					->where('a.test_type=?',$postData['test_type']);
 				$set=$db->fetchAll($select);
 				//echo var_dump($set);  
