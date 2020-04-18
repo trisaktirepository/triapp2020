@@ -111,6 +111,7 @@ p    {color: white; font-size: 20px}
 	<fieldset>
 		<legend><?php echo $this->translate("Detail Information About Your Exam");?></legend>
 			<?php if ($this->test=="1") {?>
+			<h2>Kebutuhan data selama pelaksanaaan USM sekitar 50 MB pastikan kuato data internet anda memenuhi</h2>
 			<table class="table">
 			<tr><td colspan="3" bgcolor="lightgreen" align="center">
 				 <input class="btn" type="button" id="btnstart" value="<?php echo $this->translate('Start Exam');?>" onclick="startExam('<?php echo $this->transaction["at_trans_id"];?>')">
