@@ -4290,7 +4290,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     	//to list available placement test from schedule
     	$applicantPlacementScheduleDB = new App_Model_Application_DbTable_ApplicantPlacementSchedule();
     	//$placement_test_info = $applicantPlacementScheduleDB->getInfo();
-    	$this->view->testdate = $applicantPlacementScheduleDB->getAvailableDate($appl_id,$transaction_id);
+    	$this->view->testdate = $applicantPlacementScheduleDB->getAvailableDate($appl_id,$transaction_id,null,'USM2020');
     	  
     	$dbInvoice=new Studentfinance_Model_DbTable_InvoiceMain();
     	$this->view->invoice=$dbInvoice->getInvoiceData($applicantID);

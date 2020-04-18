@@ -70,18 +70,18 @@ public function getAvailableDate($appl_id=0, $txn_id=0,$aphtype=0,$placementcode
 						->join(array('aps'=>'appl_placement_schedule'),'aps.aps_id=apt.apt_aps_id',array('aps_test_date'=>'distinct(aps.aps_test_date)'))
 						->where("at_appl_id= '".$appl_id."'")
 						->where('aps.aps_placement_code=?',$placementcode)
-						->where("at_appl_type = 1");
+		 				->where('at.at_pes_id is not null');
+						//->where("at_appl_type = 1");
 						
-			if($txn_id!=0){
-				$select_date->where("at_trans_id != '".$txn_id."'");
-			}			
+			//if($txn_id!=0){
+			//	$select_date->where("at_trans_id != '".$txn_id."'");
+			//}			
 		
 		    $select = $db ->select()
 						->from(array('aps'=>$this->_name))
 						//->join(array('per'=>'tbl_academic_period'),'aps.aps_test_date=per.ap_usm_date')
 						->join(array('aph'=>'appl_placement_head'),'aps.aps_placement_code=aph.aph_placement_code',array('aph_fees_program','aph_fees_location'))
-						->where("aph.aph_testtype = '".$aphtype."'")
-						//->where("ap_va_expired >=NOW()")
+						->where("aph.aph_testtype = '".$aphtype."'") 
 						->where('aps.aps_placement_code=?',$placementcode)
 						->where("aps_test_date NOT IN (?)",$select_date)
 		    			->where("aps_test_date >= DATE_SUB(NOW(), INTERVAL 2 DAY)");
