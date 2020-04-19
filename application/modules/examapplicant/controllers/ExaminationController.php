@@ -1210,6 +1210,8 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	return substr($filename, strrpos($filename, '.'));
     }
 
-     
+    function generateMark($transud ) {
+    	
+    }
 }
 
