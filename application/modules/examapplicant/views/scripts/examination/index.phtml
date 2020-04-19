@@ -86,7 +86,7 @@ p    {color: white; font-size: 20px}
 		if (distance < 0) {
 			clearInterval(x);
 			$("#stop").val("1");
-			document.getElementById("examtime").innerHTML = '<font color="red"><strong>Waktu Ujian Sudah Mulai, waktu ujian anda dimulai saat anda mengklik tombol START</strong></font>';
+			document.getElementById("examtime").innerHTML = '<font color="red"><strong>Waktu ujian sudah dibuka, waktu ujian anda dimulai saat anda mengklik tombol START</strong></font>';
 		}
 		}, 1000);
 }
@@ -111,6 +111,9 @@ p    {color: white; font-size: 20px}
 		<legend><?php echo $this->translate("Detail Information About Your Exam");?></legend>
 			<?php if ($this->test=="1") {?>
 			<h2>Kebutuhan data selama pelaksanaaan USM sekitar 50 MB pastikan kuato data internet anda memenuhi</h2>
+			<br>
+			<h2>Setelah soal muncul dilayar jangan pernah melakukan refresh/reload karena akan dianggap selesai</h2>
+			<h2>Tidak ada tombol simpan, karena data disimpan secara otomatis (pastikan jawaban muncul di daftar jawaban)</h2>
 			<table class="table">
 			<tr><td colspan="3" bgcolor="lightgreen" align="center">
 				 <input class="btn" type="button" id="btnstart" value="<?php echo $this->translate('Start Exam');?>" onclick="startExam('<?php echo $this->transaction["at_trans_id"];?>')">
