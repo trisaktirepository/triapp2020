@@ -74,7 +74,7 @@ function getDate(element){
 		    	$("#aph_fees_location").val(data[0].aph_fees_location);
 			}
 			for (var index = 0; index < data.length; index++) {
-				append_html += '<option value="'+data[index].aps_id+'"> '+data[index].aps_test_date+' (YYYY-MM-DD) </option>';//' '+data[index].aps_start_time+' </option>';
+				append_html += '<option value="'+data[index].aps_id+'"> '+data[index].aps_test_date+' (Tahun-bulan-hari) </option>';//' '+data[index].aps_start_time+' </option>';
 			}	
 
 			testdate.append(append_html);
