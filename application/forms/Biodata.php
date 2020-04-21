@@ -762,6 +762,7 @@ class App_Form_Biodata extends Zend_Form {
 		
 		$this->addElement('text','telephone', array(
 		'label'=>$this->getView()->translate("Telephone"),
+		'required'=>true,
 		'decorators'=>array(
 		'ViewHelper',
 		'Description',
