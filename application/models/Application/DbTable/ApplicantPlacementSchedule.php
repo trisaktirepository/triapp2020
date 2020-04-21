@@ -89,8 +89,8 @@ public function getAvailableDate($appl_id=0, $txn_id=0,$aphtype=0,$placementcode
 	        $stmt = $db->query($select);
 	        $row = $stmt->fetchAll();
 	       // echo date('Y-m-d h:s:i', strtotime(date('now')));
-	       echo $select;
-	       echo var_dump($row);exit;
+	      // echo $select;
+	       //echo var_dump($row);exit;
 		    return $row;
 	}
 	
