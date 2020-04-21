@@ -15,7 +15,7 @@ $(document).ready(function(){
 function getLocation(element){
 	//appl_province
 	var select_date =  $("#aps_test_date").val()
-	var placement_code =  $("#aph_placement_code").val()
+	var placement_code =  $("input[name='aph_placement_code']:checked").val()
 	var datetime= $("#aps_test_date option:selected").text();
 	var date=datetime.substring(0,11);
 	var time=datetime.substring(12,20);
@@ -97,7 +97,7 @@ function getFees(element){
 	var aps_id   =  $(element).val()	
 	var appl_id    =  $("#appl_id").val()
 	var transaction_id    =  $("#transaction_id").val()
-    var app_code    =  $("#aph_placement_code").val()
+    var app_code    =  $("input[name='aph_placement_code']:checked").val()
     var aph_fees_program  =  $("#aph_fees_program").val()   
     var aph_fees_location =  $("#aph_fees_location").val()
      
