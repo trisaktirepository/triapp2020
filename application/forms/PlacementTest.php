@@ -79,7 +79,7 @@ class App_Form_PlacementTest extends Zend_Form {
 		    ),
 		));
 		
-		$this->addElement('select','aph_placement_code', array(
+		/* $this->addElement('select','aph_placement_code', array(
 				'label'=>'USM Name',
 				'required'=>true,
 				'onChange'=>"getDate(this);"
@@ -97,6 +97,24 @@ class App_Form_PlacementTest extends Zend_Form {
 			$this->aph_placement_code->addMultiOption($list['aph_placement_code'],$list['aph_placement_name']);
 		}
 		
+		 */
+		$this->addElement('radio','aph_placement_code', array(
+				'label'=>'Pilih Jalur USM yang diinginkan',
+				'required'=>true,
+				'escape'=>false, 
+				'onClick'=>"getDate(this);"
+		));
+		//to list available placement test from schedule
+		$applicantPlacementDB = new App_Model_Application_DbTable_PlacementTest();
+		//$placement_test_info = $applicantPlacementScheduleDB->getInfo();
+		if ($this->change=="1")
+			$placement_test = $applicantPlacementDB->getPlacementTest($this->aphplacementcode);
+		else $placement_test = $applicantPlacementDB->getPlacementTest();
+		
+		//$this->aph_placement_code->addMultiOption(null,$this->getView()->translate('Please Select'));
+		foreach ($placement_test as $list){
+			$this->aph_placement_code->addMultiOption($list['aph_placement_code'],$list['aph_placement_name'].': '.$list['aph_description']);
+		}
 		
     	
 		   
