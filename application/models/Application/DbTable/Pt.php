@@ -70,7 +70,7 @@ class App_Model_Application_DbTable_Pt extends Zend_Db_Table_Abstract {
 		 
 		->order('a.nm_sp');
 		if ($idwilayah!='') {
-			$select->where('TRIM(a.id_wilayah)=?',$idwilayah) ;
+			$select->where('TRIM(a.id_wilayah)=?',trim($idwilayah)) ;
 			$select->ORwhere('a.id_wilayah is null') ;
 		}
 		//echo $select;
