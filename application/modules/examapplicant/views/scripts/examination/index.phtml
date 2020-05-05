@@ -156,6 +156,19 @@ p    {color: white; font-size: 20px}
 			 </fieldset>
 			 <br>
 			 <fieldset><legend><?php echo 'Informasi Materi Ujian Seleksi'?></legend>
+			 <table><tr>
+			 <div><?php 
+					if($this->photo!=null){
+					 	$dt = explode("triapp",$this->photo['pathupload']);
+						$path = $dt[1]; 
+					?>
+						<img class="photo" src="<?php echo $path; ?>"/>
+					<?php }else{?>
+						<img class="photo" src="/images/no-photo.jpg" width="194" height="250" />
+					<?php }?>
+					</div>
+				<td></td>
+			 <td>
 			 <table class="table" width="100%">
 			 		 
 			 		<?php foreach ($this->examdetail as $exam) {
@@ -172,7 +185,9 @@ p    {color: white; font-size: 20px}
 			 			</tr>
 			 			<tr><td colspan="4"><?php foreach ($comps as $comp ) echo $comp['ac_comp_name_bahasa'].'<br> '?></td></tr>
 			 		<?php }?>
-			 	</table>
+			 </table>
+			 </td>
+			 </table>
 			 </fieldset>
 			<table  >
 			<tr>
@@ -187,16 +202,8 @@ p    {color: white; font-size: 20px}
 				</div>
 			 
 			 </td>
-			 <td width="20%" align="center"><div><?php 
-					if($this->photo!=null){
-					 	$dt = explode("triapp",$this->photo['pathupload']);
-						$path = $dt[1]; 
-					?>
-						<img class="photo" src="<?php echo $path; ?>"/>
-					<?php }else{?>
-						<img class="photo" src="/images/no-photo.jpg" width="194" height="250" />
-					<?php }?>
-					</div>
+			 <td width="20%" align="center">
+			 
 					 <div class="play-area-sub">
 				    <canvas id="capture" width="160" height="90"></canvas>
 				    <div id="snapshot"></div>
