@@ -139,7 +139,7 @@ p    {color: white; font-size: 20px}
 							} else $bg=""; 
 			 				$totalstd=$totalstd+$comp['nQuestion'];
 			 				$totalsoal=$totalsoal+$comp['jml']?>
-			 		 
+			 		 		if ($tolalsoal==0) $status="0";
 			 			<tr bgcolor="<?php echo $bg;?>">
 			 			<td><?php echo $comp['ac_comp_name_bahasa']?></td>
 			 			<td align="center"><?php echo $comp['nQuestion']?></td>
