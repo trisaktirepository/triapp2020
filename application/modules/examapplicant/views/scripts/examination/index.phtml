@@ -142,7 +142,7 @@ p    {color: white; font-size: 20px}
 						<img class="photo" src="/images/no-photo.jpg" width="194" height="250" />
 					<?php }?>
 				 
-			 </td><td>
+			 </td><td valign="top">
 			<table class="table" width="100%">
 			 	<tr>
 			 		<th><?php echo $this->translate('Name')?></th>
@@ -177,9 +177,9 @@ p    {color: white; font-size: 20px}
 			 				$comps=$exam['compcode'];?>
 			 			<tr>
 			 			<td width="5px"><?php if ($exam['active']=="1") {?>
-			 					<img src="/images/icon/green.png"  style="width:20px;height:20px;" title="<?php echo 'Open';?>"> </a>  
+			 					<img src="/images/icon/green.png"  style="width:25px;height:25px;" title="<?php echo 'Open';?>"> </a>  
 			 				<?php } else {?>
-			 					<img src="/images/icon/red.png"  style="width:25px;height:25px;" title="<?php echo 'Close';?>"> </a>
+			 					<img src="/images/icon/red.png"  style="width:20px;height:20px;" title="<?php echo 'Close';?>"> </a>
 			 				<?php }?></td>
 			 			<th><?php echo $exam['ptestname']?></th>
 			 				<th><?php echo date('d-m-Y',strtotime($exam['aps_test_date']))?></th>
