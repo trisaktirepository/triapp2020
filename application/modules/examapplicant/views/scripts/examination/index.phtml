@@ -2,7 +2,7 @@
 .button-group, .play-area {
   border: 0px solid grey;
   padding: 0em 1%;
-  margin-bottom: 1em; 
+  margin-bottom: 0em; 
 }
 p    {color: white; font-size: 20px}
 
@@ -131,7 +131,7 @@ p    {color: white; font-size: 20px}
 			 
 			 <br>
 			<fieldset><legend><?php echo 'Identitas dan Pilihan Program Studi'?></legend>
-			<table width="70%"><tr><td width="20%">
+			<table width="100%"><tr><td width="20%">
 			  <?php 
 					if($this->photo!=null){
 					 	$dt = explode("triapp",$this->photo['pathupload']);
@@ -142,7 +142,7 @@ p    {color: white; font-size: 20px}
 						<img class="photo" src="/images/no-photo.jpg" width="194" height="250" />
 					<?php }?>
 				 
-			 </td><td valign="top">
+			 </td><td valign="top" width="60%">
 			<table class="table" width="100%">
 			 	<tr>
 			 		<th><?php echo $this->translate('Name')?></th>
@@ -166,10 +166,10 @@ p    {color: white; font-size: 20px}
 			 	<tr>
 			 </table>
 			 </td>
-			 <td> <td width="20%" align="center">
+			 <td> <td align="center">
 			 
 					 <div class="play-area-sub">
-				    <canvas id="capture" width="200" height="120"></canvas>
+				    <canvas id="capture" width="320" height="240"></canvas>
 				    <div id="snapshot"></div>
 				  </div>
 				</td></td></tr>
