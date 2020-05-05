@@ -215,7 +215,33 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	$dbPtest=new App_Model_Application_DbTable_ApplicantPtest();
     	$dbPtestDetail=new App_Model_Application_DbTable_PlacementTestDetail();
     	$ptest=$dbPtest->getPtest($trxid);
+    	$trx=$dbApplicant->getTransaction($trxid);
+    	//--------get applicant program  -----------
+    	$appprogramDB = new App_Model_Application_DbTable_ApplicantProgram();
+    	$app_program = $appprogramDB->getPlacementProgram($trxid);
+    	 
+    	$program_data["program_code1"]="0";
+    	$program_data["program_code2"]="0";
+    	$program_data["faculty_name2"]="";
+    	$program_data["program_name2"]="";
+    	 
+    	$i=1;
+    	foreach($app_program as $program){
+    		$program_data["program_name".$i] = $program["program_name"];
+    		$program_data["faculty_name".$i] = $program["faculty"];
+    		$program_data["program_code".$i] = $program["program_code"];
+    		 
+    		$i++;
+    	}
     	
+    	//-------- get applicant photo --------
+    	$photo_name='';
+    	$photoDB = new App_Model_Application_DbTable_UploadFile();
+    	$photo = $photoDB->getFile($trxid,33); //PHoto
+    	
+    	$this->view->transaction=$trx;
+    	$this->view->program=$program_data;
+    	$this->view->photo=$photo;
     	if ($ptest ) {
     		
     		$dbPestDetail=new App_Model_Application_DbTable_ApplicantPtestDetail();
