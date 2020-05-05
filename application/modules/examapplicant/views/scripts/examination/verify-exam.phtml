@@ -138,14 +138,16 @@ p    {color: white; font-size: 20px}
 								$status="0";
 							} else $bg=""; 
 			 				$totalstd=$totalstd+$comp['nQuestion'];
-			 				$totalsoal=$totalsoal+$comp['jml']?>
-			 		 		if ($tolalsoal==0) $status="0";
+			 				$totalsoal=$totalsoal+$comp['jml'];
+			 				?>
+			 		 		
 			 			<tr bgcolor="<?php echo $bg;?>">
 			 			<td><?php echo $comp['ac_comp_name_bahasa']?></td>
 			 			<td align="center"><?php echo $comp['nQuestion']?></td>
 			 			<td align="center"><?php echo $comp['jml']?></td>
 			 			</tr>
 			 		<?php }
+			 			if ($totalsoal==0) $status="0";
 			 		?>
 			 		<tr>
 			 			<td><?php echo $this->translate('Total')?></td>
