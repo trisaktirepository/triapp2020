@@ -115,7 +115,7 @@ p    {color: white; font-size: 20px}
 			 </table>
 			 <br>
 			<h2>Baca petunjuk ujian seleksi masuk Usakti dengan seksama</h2>
-			<br>
+			 
 			<ol>
 				<li>Pastikan kamera komputer/hp anda dinyalakan untuk pengambilan foto anda </li>
 				<li>Periksa Kuota Data anda karena kebutuhan data selama pelaksanaaan USM sekitar 50 MB pastikan kuato data internet anda memenuhi</li>
@@ -156,7 +156,7 @@ p    {color: white; font-size: 20px}
 			 </fieldset>
 			 <br>
 			 <fieldset><legend><?php echo 'Informasi Materi Ujian Seleksi'?></legend>
-			 <table width="100%">
+			 <table class="table" width="100%">
 			 		 
 			 		<?php foreach ($this->examdetail as $exam) {
 			 				$comps=$exam['compcode'];?>
@@ -173,7 +173,8 @@ p    {color: white; font-size: 20px}
 			 		<?php }?>
 			 	</table>
 			 </fieldset>
-			<table class="table">
+			<table class="table" border="0">
+			<tr>
 			<td width="30%" align="center">
 			 	<div class="play-area">
 				  
@@ -185,7 +186,7 @@ p    {color: white; font-size: 20px}
 				</div>
 			 
 			 </td>
-			 <tr><td width="20%" align="center"><div><?php 
+			 <td width="20%" align="center"><div><?php 
 					if($this->photo!=null){
 					 	$dt = explode("triapp",$this->photo['pathupload']);
 						$path = $dt[1]; 
@@ -200,15 +201,11 @@ p    {color: white; font-size: 20px}
 				    <div id="snapshot"></div>
 				  </div>
 				</td>
-			 <td>
 			 
-			 
-			
-			 </td>
 			 
 			 </tr>
-			<tr><td colspan="3">&nbsp;</tr>
-			<tr><td colspan="3" bgcolor="lightgreen" align="center">
+			<tr><td colspan="2">&nbsp;</tr>
+			<tr><td colspan="2" bgcolor="lightgreen" align="center">
 				 <input class="btn" type="button" id="btnstart" value="<?php echo $this->translate('Next');?>" onclick="startExam('<?php echo $this->transaction["at_trans_id"];?>')">
 			</td></tr>
 			</table>
