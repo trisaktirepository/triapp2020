@@ -355,8 +355,8 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 	
 		$auth = Zend_Auth::getInstance();
 	 
-			
-		$this->update($postData, $where);
+		if ($where!='')
+			$this->update($postData, $where);
 	}
 	
 	public function getDataByStatus($status=1){
