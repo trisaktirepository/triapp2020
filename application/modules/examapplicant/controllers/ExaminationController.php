@@ -262,6 +262,8 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    		foreach ($compprogram as $value) {
 	    			$comprog[]=$value['ac_id'];
 	    		}
+	    		echo var_dump($pstet);
+	    		echo $compcode;exit;
 	    		$component=$dbExamComp->getDataComponent($compcode,$pstet['aph_testtype']);
 	    		 
 	    		foreach ($component as $idx=>$comp) {
