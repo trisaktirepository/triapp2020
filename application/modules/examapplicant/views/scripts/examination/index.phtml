@@ -160,14 +160,16 @@ p    {color: white; font-size: 20px}
 			 		 
 			 		<?php foreach ($this->examdetail as $exam) {
 			 				$comps=$exam['compcode'];?>
-			 			<tr><th><?php echo $exam['ptestname']?></th>
-			 				<th><?php echo $exam['aps_test_date']?></th>
-			 				<th><?php echo $exam['time_start'].'-'.$exam['time_stop']?></th>
-			 				<td><?php if ($exam['active']=="1") {?>
+			 			<tr>
+			 			<td><?php if ($exam['active']=="1") {?>
 			 					<img src="/images/icon/green.png"  style="width:25px;height:25px;" title="<?php echo 'Open';?>"> </a>  
 			 				<?php } else {?>
 			 					<img src="/images/icon/red.png"  style="width:25px;height:25px;" title="<?php echo 'Close';?>"> </a>
 			 				<?php }?></td>
+			 			<th><?php echo $exam['ptestname']?></th>
+			 				<th><?php echo $exam['aps_test_date']?></th>
+			 				<th><?php echo $exam['time_start'].'-'.$exam['time_stop']?></th>
+			 				
 			 			</tr>
 			 			<tr><td colspan="4"><?php foreach ($comps as $comp ) echo $comp['ac_comp_name_bahasa'].' '?></td></tr>
 			 		<?php }?>
