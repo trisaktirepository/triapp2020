@@ -265,7 +265,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    		//echo var_dump($pstet);
 	    		//echo $compcode;exit;
 	    		$component=$dbExamComp->getDataComponent($compcode,$pstet['aph_testtype']);
-	    		echo var_dump($component);exit;
+	    		//echo var_dump($component);exit;
 	    		foreach ($component as $idx=>$comp) {
 	    		
 	    			if (!array_search($comp['ac_id'], $comprog)) {
@@ -310,7 +310,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    			//get number of question per Component
 	    			foreach ($component as $idx=>$comp) {
 	    				$component[$idx]['jml']=$dbAppTestAns->getNQuestionPerComp($response['apa_id'], $comp['ac_id']);
-	    				$ptestcomp=$dbPtestDetail->getPlacementTestComponentData($currenttest['apt_ptest_code'],$comp['app_comp_code']);
+	    				$ptestcomp=$dbPtestDetail->getPlacementTestComponentData($currenttest['apt_ptest_code'],$comp['ac_comp_code']);
 	    				$component[$idx]['nQuestion']=$ptestcomp['apd_total_question'];
 	    			}
 	    			$this->view->componentlist=$component;
