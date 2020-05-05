@@ -165,12 +165,19 @@ p    {color: white; font-size: 20px}
 						?></td>
 			 	<tr>
 			 </table>
-			 </td></tr>
+			 </td>
+			 <td> <td width="20%" align="center">
+			 
+					 <div class="play-area-sub">
+				    <canvas id="capture" width="200" height="120"></canvas>
+				    <div id="snapshot"></div>
+				  </div>
+				</td></td></tr>
 			 </table>
 			 </fieldset>
 			 <br>
 			 <fieldset><legend><?php echo 'Informasi Materi Ujian Seleksi'?></legend>
-			 
+			 <table><tr><td> 
 			 <table class="table" width="70%">
 			 		 
 			 		<?php foreach ($this->examdetail as $exam) {
@@ -188,11 +195,7 @@ p    {color: white; font-size: 20px}
 			 			<tr><td colspan="4"><?php foreach ($comps as $comp ) echo $comp['ac_comp_name_bahasa'].'<br> '?></td></tr>
 			 		<?php }?>
 			 </table>
-			  
-			 </fieldset>
-			<table  >
-			<tr>
-			<td width="30%" align="left">
+			 </td> <td width="30%" align="left">
 			 	<div class="play-area">
 				  <video id="stream" width="320" height="240"></video>
 				  <br>
@@ -200,17 +203,12 @@ p    {color: white; font-size: 20px}
 				    <button id="btn-capture" type="button" class="button">Ambil Foto</button>
 				    
 		 		</div>
-	 		 </td>
-			 <td width="20%" align="center">
-			 
-					 <div class="play-area-sub">
-				    <canvas id="capture" width="200" height="120"></canvas>
-				    <div id="snapshot"></div>
-				  </div>
-				</td>
-			 
-			 
+	 		 </td> 
 			 </tr>
+			  </table>
+			 </fieldset>
+			<table  >
+			 
 			<tr><td colspan="2">&nbsp;</tr>
 			<tr><td colspan="2" bgcolor="lightgreen" align="center">
 				 <input class="btn" type="button" id="btnstart" value="<?php echo $this->translate('Next');?>" onclick="startExam('<?php echo $this->transaction["at_trans_id"];?>')">
