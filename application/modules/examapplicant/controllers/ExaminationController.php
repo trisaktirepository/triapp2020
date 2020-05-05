@@ -208,6 +208,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 		}
 		//generate personal exam
 		$dbTxt=new App_Model_General_DbTable_TmpTxt();
+		$dbPtesthead=new App_Model_Application_DbTable_PlacementTest();
 		$dbExamComp=new App_Model_Application_DbTable_PlacementTestComponent();
 		$dbApplicant=new App_Model_Application_DbTable_ApplicantTransaction();
 		$dbAppPtestDet=new Examapplicant_Model_DbTable_ApplicantPtestAnswerDtl();
@@ -216,6 +217,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	$dbPtestDetail=new App_Model_Application_DbTable_PlacementTestDetail();
     	$ptest=$dbPtest->getPtest($trxid);
     	$trx=$dbApplicant->getTransaction($trxid);
+    	
     	//--------get applicant program  -----------
     	$appprogramDB = new App_Model_Application_DbTable_ApplicantProgram();
     	$app_program = $appprogramDB->getPlacementProgram($trxid);
@@ -253,25 +255,25 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    		$trx=$dbApplicant->getTransaction($trxid);
 	    		$compcode=$currenttest['app_comp_code'];
 	    		$this->view->testtypecode=$currenttest['initial_code'];
+	    		$pstet=$dbPtesthead->getDataFromCode($currenttest['apt_ptest_code']);
+	    		$dbPlacementComp=new App_Model_Application_DbTable_PlacementTestProgramComponent();
+	    		$compprogram=$dbPlacementComp->getComponenByTransaction($trxid, $pstet['aph_testtype']);
+	    		$comprog[]='';
+	    		foreach ($compprogram as $value) {
+	    			$comprog[]=$value['ac_id'];
+	    		}
+	    		$component=$dbExamComp->getDataComponent($compcode);
+	    		 
+	    		foreach ($component as $idx=>$comp) {
+	    		
+	    			if (!array_search($comp['ac_id'], $comprog)) {
+	    				unset($component[$idx]);
+	    				//echo $comp['ac_id'].'<br>';
+	    			}
+	    		}
 	    		$response=$dbAppTestAns->isExamScript($trxid, $compcode);
 	    		if (!$response) {
-	    			$dbPlacementComp=new App_Model_Application_DbTable_PlacementTestProgramComponent();
-	    			$compprogram=$dbPlacementComp->getComponenByTransaction($trxid, "0");
-	    			$comprog[]='';
-	    			foreach ($compprogram as $value) {
-	    				$comprog[]=$value['ac_id'];
-	    			}
-	    			$component=$dbExamComp->getDataComponent($compcode);
-	    			 
-	    			foreach ($component as $idx=>$comp) {
-	    				 
-    					if (!array_search($comp['ac_id'], $comprog)) {
-    						unset($component[$idx]);
-    						//echo $comp['ac_id'].'<br>';
-    					}
-    				}
-    				 
-	    			//get exam script config
+	    		 	//get exam script config
     				//echo var_dump($component); exit;
 	    			$dbConfig=new Examapplicant_Model_DbTable_ExamScriptConfig();
 	    			$config=$dbConfig->getMatchConfig($currenttest['apt_ptest_code'], $currenttest['apt_aps_id'],$currenttest['app_comp_code']);
