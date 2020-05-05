@@ -156,7 +156,7 @@ p    {color: white; font-size: 20px}
 			 </fieldset>
 			 <br>
 			 <fieldset><legend><?php echo 'Informasi Materi Ujian Seleksi'?></legend>
-			 <table width="100%"><tr>
+			 <table width="100%"><tr><td>
 			  <?php 
 					if($this->photo!=null){
 					 	$dt = explode("triapp",$this->photo['pathupload']);
@@ -167,7 +167,7 @@ p    {color: white; font-size: 20px}
 						<img class="photo" src="/images/no-photo.jpg" width="194" height="250" />
 					<?php }?>
 				 
-			 <td>
+			 </td><td>
 			 <table class="table" width="100%">
 			 		 
 			 		<?php foreach ($this->examdetail as $exam) {
@@ -185,7 +185,7 @@ p    {color: white; font-size: 20px}
 			 			<tr><td colspan="4"><?php foreach ($comps as $comp ) echo $comp['ac_comp_name_bahasa'].'<br> '?></td></tr>
 			 		<?php }?>
 			 </table>
-			 </td>
+			 </td></tr>
 			 </table>
 			 </fieldset>
 			<table  >
