@@ -76,7 +76,7 @@ $(function() {
 					data: {'apa_id': $("#apa_id").val(),'apad_id': $("#apad_id").val(),'order':order+1},
 					dataType: 'json',
 					error: function(){
-							alert("Terjadi masalah saat mengambil data !");
+							alert("Koneksi Internet anda lemah, ulangi pengambilan soal !");
 						}, 
 					}).done(function ( data ) {
 		 					//$("#QuestionTxt").val(data.question);
@@ -115,7 +115,7 @@ $(function() {
 						data: {'apa_id': $("#apa_id").val(),'apad_id': $("#apad_id").val(),'order':order-1},
 						dataType: 'json',
 						error: function(){
-								alert("Terjadi masalah saat mengambil data !");
+								alert("Koneksi Internet anda lemah, ulangi pengambilan soal !");
 							}, 
 						}).done(function ( data ) {
 			 					//$("#QuestionTxt").val(data.question);
@@ -189,7 +189,7 @@ function getQuestion(order){
 		data: {'apa_id': $("#apa_id").val(),'apad_id': $("#apad_id").val(),'order':order},
 		dataType: 'json',
 		error: function(){
-				alert("Terjadi masalah saat mengambil  data !");
+				alert("Koneksi Internet anda lemah, ulangi pengambilan soal !");
 			}, 
 		}).done(function ( data ) {
 					//$("#QuestionTxt").val(data.question);

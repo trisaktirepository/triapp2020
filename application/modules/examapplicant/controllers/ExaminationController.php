@@ -382,12 +382,12 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     				$data=array('token'=>$token);
     				$exammain=$dbAppTestAns->getData($response['apa_id']);
     				if ($exammain['start_time']=='') {
-    					$data['start_time']=date('Y-m-d H:s:i');
+    					$data['start_time']=date('Y-m-d H:i:s');
     					$time=explode(':', $currenttest['timerange']);
     					$data['stop_time']=date('Y-m-d H:i:s',strtotime('+'.$time[0].' hour +'.$time[1].' minutes +'.$time[2].' seconds',strtotime(date('Y-m-d H:i:s'))));
     					$data['last_time']=$data['start_time'];
     				} else {  
-    					$data['last_time']=date('Y-m-d H:s:i');
+    					$data['last_time']=date('Y-m-d H:i:s');
     					
     				}
     				$dbAppTestAns->update($data, 'apa_id='.$response['apa_id']);
@@ -789,12 +789,12 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    		$data=array('apad_appl_ans'=>$formData['answer'],'apad_status_ans'=>$point);
 	    		$dbQuestdet->update($data, 'apad_id='.$formData['apad_id']); 
 	    		$token=md5(time());
-	    		$dbApplAns->update(array('token'=>$token,'last_time'=>date('Y-m-d H:s:i')), 'apa_id='.$row['apa_id']);
+	    		$dbApplAns->update(array('token'=>$token,'last_time'=>date('Y-m-d H:i:s')), 'apa_id='.$row['apa_id']);
 	    		$quest=$dbQuestdet->getData($formData['apad_id']); 
 	    		$quest['error']='0';
     		} else {
     			$quest['error']='1';
-    			$quest['msg']='Invalid Token, penyimpanan jawaban gagal';
+    			$quest['msg']='Invalid Token, penyimpanan jawaban gagal, ulangi simpan jawaban';
     		}
     	}
     	$ajaxContext = $this->_helper->getHelper('AjaxContext');
