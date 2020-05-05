@@ -386,7 +386,7 @@ td.bold-text{
 			<input type="submit" name="cetak" value="Cetak Surat Panggilan">
 	<?php } else {
 			 
-			$path = 'http://www.spmb.trisakti.ac.id/documents/'.$file['ad_filepath'].'/'.$file['ad_filename'];
+			$path = 'https://spmb.trisakti.ac.id/documents/'.$file['ad_filepath'].'/'.$file['ad_filename'];
 			$download ="<a target='_blank' href=".$path.">".$this->translate('Download')." Surat Panggilan Diterima</a>"; 
 			echo $download;
 	  }?>

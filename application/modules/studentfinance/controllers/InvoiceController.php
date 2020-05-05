@@ -337,7 +337,41 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 							}
 							
 							$row =$feeStructure->getApplicantFeeStructure($intake['IdIntake'],$std['IdProgram'],$student_category,$std['IdBranch'],$std['IdProgramMajoring']);
-							 
+							if (!$row) {
+								$sql = $db->select()
+								->from(array('sss' => 'tbl_studentregistration'), array('IdProgram','IdIntake','IdBranch','IdProgramMajoring'))
+								->where('sss.registrationId  = ?', $student_list[$i]['nim'])
+								->where('sss.IdProgram<>?',$ses_batch_invoice->program_id);
+								//echo $sql;
+								$std = $db->fetchRow($sql);
+								//echo var_dump($std);
+								if ($std) {
+									$row =$feeStructure->getApplicantFeeStructure($std['IdIntake'],$std['IdProgram'],$std['IdBranch'],$student_category,$std['IdProgramMajoring']);
+									 
+									if (!$row) {
+										//get from oldnim'
+										$sql = $db->select()
+										->from(array('sss' => 'tbl_studentregistration'), array('IdProgram','IdIntake','IdBranch','IdProgramMajoring'))
+										->where('sss.registrationId  = ?', $student_list[$i]['nim']);
+										
+										$oldnim=$std = $db->fetchRow($sql);
+										
+										$sql = $db->select()
+										->from(array('sss' => 'tbl_studentregistration'), array('IdProgram','IdIntake','IdBranch','IdProgramMajoring'))
+										->where('sss.registrationId  = ?',$oldnim['oldnim']);
+										//echo $sql;
+										$std = $db->fetchRow($sql);
+										//echo var_dump($std);
+										if ($std) {
+											$row =$feeStructure->getApplicantFeeStructure($std['IdIntake'],$std['IdProgram'],$std['IdBranch'],$student_category,$std['IdProgramMajoring']);
+											//echo var_dump($std); echo var_dump($row);
+												
+										}
+										//exit;
+									}
+								}
+								//exit;
+							}
 							if ($row) {
 								$fee_structure = $row;
 								//echo var_dump($row);
