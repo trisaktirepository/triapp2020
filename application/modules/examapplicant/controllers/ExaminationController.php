@@ -362,81 +362,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     			$compcode=$currenttest['app_comp_code'];
     			$this->view->testtypecode=$currenttest['initial_code'];
     			$response=$dbAppTestAns->isExamScript($trxid, $compcode);
-    			if (!$response) {
-    				$dbPlacementComp=new App_Model_Application_DbTable_PlacementTestProgramComponent();
-    				$compprogram=$dbPlacementComp->getComponenByTransaction($trxid, "0");
-    				$comprog[]='';
-    				foreach ($compprogram as $value) {
-    					$comprog[]=$value['ac_id'];
-    				}
-    				$component=$dbExamComp->getDataComponent($compcode);
-    				//echo var_dump($component);echo '<br>';
-    				//echo var_dump($comprog);echo '<br>';
-    	    
-    				foreach ($component as $idx=>$comp) {
-    
-    					if (!array_search($comp['ac_id'], $comprog)) {
-    						unset($component[$idx]);
-    						//echo $comp['ac_id'].'<br>';
-    					}
-    				}
-    					
-    				//get exam script config
-    				//echo var_dump($component); exit;
-    				$dbConfig=new Examapplicant_Model_DbTable_ExamScriptConfig();
-    				$config=$dbConfig->getMatchConfig($currenttest['apt_ptest_code'], $currenttest['apt_aps_id'],$currenttest['app_comp_code']);
-    				//echo var_dump($config);exit;
-    				if ($config) {
-    					try {
-    						$data=array(
-    								'apa_trans_id' => $trx['at_trans_id'],
-    								'apa_ptest_code' => $trx['at_pes_id'],
-    								'apa_set_code' =>null,
-    								'apa_date' => date ('Y-m-d h:i:s'),
-    								'pcode' => $currenttest['apt_ptest_code'],
-    								'config'=>$config,
-    								'component'=>$component,
-    								'test_type'=>$currenttest['app_comp_code'],
-    								'token'=>md5(time())
-    						);
-    						//echo var_dump($data);exit;
-    						$dbAppPtest=new Examapplicant_Model_DbTable_ApplicantPtestAnswer();
-    						$response=$dbAppPtest->addData($data);
-    
-    					} catch (Exception $e) {
-    						$msg="Fail to generate Exam Script";
-    						$this->_redirect('/examapplicant/examination/index/msg/'.$msg);
-    					}
-    					 
-    				} else $this->_redirect('/examapplicant/examination/index/msg/No Configuration');
-    				//get first question
-    				if ($response) {
-    					$answerset=$dbAppPtestDet->getDataByHead($response['apa_id']);
-    					foreach ($answerset as $value) {
-    						$answer[$value['apad_ques_no']]=$value['apad_appl_ans'];
-    					}
-    					$question=$dbAppPtestDet->getQuestionBySequence($response['apa_id'], 1);
-    					$dt = explode("triapp",$question['question_url']);
-    					$path = $dt[1];
-    					$question['question_url']=$path;
-    					$question['token']=$response['token'];
-    					if ($question['question_parent_url']!='') {
-    						$dt = explode("triapp",$question['question_parent_url']);
-    						$path = $dt[1];
-    						$question['question_parent_url']=$path;
-    					}
-    					//$question['stop_time']=date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s')) + strtotime($currenttest['timerange']));
-    					$time=explode(':', $currenttest['timerange']);
-    					$question['stop_time']=date('Y-m-d H:i:s',strtotime('+'.$time[0].' hour +'.$time[1].' minutes +'.$time[2].' seconds',strtotime(date('Y-m-d H:i:s'))));
-    					//echo var_dump($question);
-    					//echo var_dump($currenttest);
-    					$exammain=$dbAppTestAns->update(array('start_time'=>date('Y-m-d H:i:s'),'stop_time'=>$question['stop_time']), 'apa_id='.$response['apa_id']);
-    					$this->view->question=$question;
-    					$this->view->answer=$answer;
-    					$this->view->n_of_quest=$response['n_of_quest'];
-    				} else $this->_redirect('/examapplicant/examination/index/msg/Fail to generate exam');
-    
-    			} else if ($response['token']==""){
+    			if ($response['last_time']==""){
     				$answerset=$dbAppPtestDet->getDataByHead($response['apa_id']);
     				foreach ($answerset as $value) {
     					$answer[$value['apad_ques_no']]=$value['apad_appl_ans'];
@@ -450,9 +376,21 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     					$path = $dt[1];
     					$question['question_parent_url']=$path;
     				}
-    				$exammain=$dbAppTestAns->getData($response['apa_id']);
+    					
     				$token=md5(time());
-    				$dbAppTestAns->update(array('token'=>$token), 'apa_id='.$response['apa_id']);
+    				$data=array('token'=>$token);
+    				$exammain=$dbAppTestAns->getData($response['apa_id']);
+    				if ($exammain['start_time']=='') {
+    					$data['start_time']=date('Y-m-d H:s:i');
+    					$time=explode(':', $currenttest['timerange']);
+    					$data['stop_time']=date('Y-m-d H:i:s',strtotime('+'.$time[0].' hour +'.$time[1].' minutes +'.$time[2].' seconds',strtotime(date('Y-m-d H:i:s'))));
+    					$data['last_time']=$data['start_time'];
+    				} else {  
+    					$data['last_time']=date('Y-m-d H:s:i');
+    					
+    				}
+    				$dbAppTestAns->update($data, 'apa_id='.$response['apa_id']);
+    				$exammain=$dbAppTestAns->getData($response['apa_id']);
     				$question['stop_time']=$exammain['stop_time'];
     				$question['token']=$token;
     				//	echo var_dump($question);
@@ -502,7 +440,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     			$this->view->testtypecode=$currenttest['initial_code'];
     			$response=$dbAppTestAns->isExamScript($trxid, $compcode);
     			if ($response) {
-    				$dbAppTestAns->updateDataConditional(array('test_type'=>$response['test_type'].rand(1,100)), 'test_type="'.$compcode.'"  and apa_trans_id='.$trxid);
+    				$dbAppTestAns->updateDataConditional(array('test_type'=>$response['test_type'].rand(100,1000)), 'test_type="'.$compcode.'"  and apa_trans_id='.$trxid);
     			 
     				$dbPlacementComp=new App_Model_Application_DbTable_PlacementTestProgramComponent();
     				$compprogram=$dbPlacementComp->getComponenByTransaction($trxid, "0");
@@ -511,9 +449,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     					$comprog[]=$value['ac_id'];
     				}
     				$component=$dbExamComp->getDataComponent($compcode);
-    				//echo var_dump($component);echo '<br>';
-    				//echo var_dump($comprog);echo '<br>';
-    					
+    				 
     				foreach ($component as $idx=>$comp) {
     
     					if (!array_search($comp['ac_id'], $comprog)) {
@@ -852,7 +788,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    		$data=array('apad_appl_ans'=>$formData['answer'],'apad_status_ans'=>$point);
 	    		$dbQuestdet->update($data, 'apad_id='.$formData['apad_id']); 
 	    		$token=md5(time());
-	    		$dbApplAns->update(array('token'=>$token), 'apa_id='.$row['apa_id']);
+	    		$dbApplAns->update(array('token'=>$token,'last_time'=>date('Y-m-d H:s:i')), 'apa_id='.$row['apa_id']);
 	    		$quest=$dbQuestdet->getData($formData['apad_id']); 
 	    		$quest['error']='0';
     		} else {
