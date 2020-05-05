@@ -129,7 +129,7 @@ p    {color: white; font-size: 20px}
 			<hr>
 	 		<br>
 			<fieldset><legend><?php echo 'Identitas Diri, Pilihan Program Studi, dan Materi Ujian'?></legend>
-			<table width="100%"><tr><td width="20%">
+			<table width="100%"><tr><td width="20%" align="center">
 			  <?php 
 					if($this->photo!=null){
 					 	$dt = explode("triapp",$this->photo['pathupload']);
@@ -192,16 +192,16 @@ p    {color: white; font-size: 20px}
 			 </table>
 			 </fieldset>
 			 <br>
-			 <fieldset><legend><?php echo 'Informasi Materi Ujian Seleksi'?></legend>
-			 <table><tr><td> 
+			 <fieldset><legend><?php echo 'Informasi Foto'?></legend>
+			 <table><tr> 
 			 
 			 <td> <td align="center">
 			 
-					 <div class="play-area-sub">
+				<div class="play-area-sub">
 				    <canvas id="capture" width="720" height="400"></canvas>
-				    <div id="snapshot"></div>
+				     
 				  </div>
-				</td></td></tr>
+				 
 			 </td> 
 			 </tr>
 			  </table>
