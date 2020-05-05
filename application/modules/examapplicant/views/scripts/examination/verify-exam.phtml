@@ -31,11 +31,18 @@ p    {color: white; font-size: 20px}
 </style>
  <script type="text/javascript">
   function startExam(idtrx) {
-	  if ($("#photo").val()=="ok") {
+	  
 	  	 //stopStreaming();
-	 	 window.location.replace('/examapplicant/examination/verify-exam/idtrx/'+idtrx);
+	 	 window.location.replace('/examapplicant/examination/start-exam/idtrx/'+idtrx);
+ 
+  }
 
-	   } else alert('Tolong klik tombol Ambil Foto terlebih dahulu');
+  function generateExam(idtrx,testtype) {
+	   
+	  	 //stopStreaming();
+	 	 window.location.replace('/examapplicant/examination/generate-exam/idtrx/'+idtrx+'/testtype/'+testtype);
+
+	   
   }
   $(window).bind("load", function() {
 	   // code here
@@ -44,52 +51,7 @@ p    {color: white; font-size: 20px}
 	  startStreaming();
 });
 
-  function savePhoto(){
-		var canvas=document.getElementById("capture");
-		var dataUrl=canvas.toDataURL(); 
-		type=$("#type").val();
-		$.ajax({
-			  type: "POST",
-			  url: "/examapplicant/examination/send-start-photo",
-			  data: {'image': dataUrl,'trxid':$("#transaction_id").val(),'type':type}
-			})
-			.done(function(respond){
-				  
-				//$("#type").val(type*1+1);
-				$("#photo").val('ok');
-				})
-			.fail(function(respond){console.log("fail");});
-	}
-	
-  function startTimer(endtime){
-		var countDownDate = new Date(endtime).getTime();
-		
-		//Update the count down every 1 second
-		var x = setInterval(function() {
-		
-		//Get today's date and time
-		var now = new Date().getTime();
-		
-		//Find the distance between now and the count down date
-		var distance = countDownDate - now;
-		
-		//Time calculations for days, hours, minutes and seconds
-		 
-		var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-		var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-		var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-		
-		//Output the result in an element with id="demo"
-		document.getElementById("examtime").innerHTML =  hours + " : " + minutes + " : " + seconds;
-		
-		//If the count down is over, write some text 
-		if (distance < 0) {
-			clearInterval(x);
-			$("#stop").val("1");
-			document.getElementById("examtime").innerHTML = '<font><strong>Waktu ujian sudah dibuka, waktu ujian anda dimulai saat anda mengklik tombol MULAI di halaman berikutnya</strong></font>';
-		}
-		}, 1000);
-}
+    
 	
 </script>
  
@@ -169,22 +131,26 @@ p    {color: white; font-size: 20px}
 			 		</tr>
 			 		<?php $totalstd=0;
 			 				$totalsoal=0;
+			 				$status="1";
 			 			foreach ($this->componentlist as $comp) { 
-			 				if ($comp['jml']!=$comp['nQuestion']) $bg="red";else $bg=""; 
+			 				if ($comp['jml']!=$comp['nQuestion']) {
+								$bg="red"; 
+								$status="0";
+							} else $bg=""; 
 			 				$totalstd=$totalstd+$comp['nQuestion'];
 			 				$totalsoal=$totalsoal+$comp['jml']?>
 			 		 
 			 			<tr bgcolor="<?php echo $bg;?>">
 			 			<td><?php echo $comp['ac_comp_name_bahasa']?></td>
-			 			<td><?php echo $comp['nQuestion']?></td>
-			 			<td><?php echo $comp['jml']?></td>
+			 			<td align="center"><?php echo $comp['nQuestion']?></td>
+			 			<td align="center"><?php echo $comp['jml']?></td>
 			 			</tr>
 			 		<?php }
 			 		?>
 			 		<tr>
-			 			<th><?php echo $this->translate('Total')?></th>
-			 			<th><?php echo $totalstd?></th>
-			 			<th><?php echo $totalsoal?></th>
+			 			<td><?php echo $this->translate('Total')?></td>
+			 			<td align="center"><?php echo $totalstd?></td>
+			 			<td align="center"><?php echo $totalsoal?></td>
 			 			
 			 		</tr>
 			 </table>
@@ -195,8 +161,15 @@ p    {color: white; font-size: 20px}
 			 </fieldset>
 		 
 			<table  width="100%"> 
-			<tr><td colspan="2" bgcolor="lightgreen" align="center">
+			<tr>
+				
+				<td colspan="2" bgcolor="lightgreen" align="center">
+				<?php if ($status=="1") {?>
 				 <input class="btn" type="button" id="btnstart" value="<?php echo $this->translate('Start Exam');?>" onclick="startExam('<?php echo $this->transaction["at_trans_id"];?>')">
+				<?php } else {?>
+					<input class="btn" type="button" id="btnulang" value="<?php echo $this->translate('Generate Exam Question');?>" onclick="generateExam('<?php echo $this->transaction["at_trans_id"];?>','<?php echo $this->testtype?>')">
+				
+				<?php }?>
 			</td></tr>
 			</table> 
 			
@@ -204,95 +177,4 @@ p    {color: white; font-size: 20px}
 	</fieldset>
 </div>  
  
-
-<script>
-
-
-
-//The buttons to start & stop stream and to capture the image
-//var btnStart = document.getElementById( "btn-start" );
-//var btnStop = document.getElementById( "btn-stop" );
-var btnCapture = document.getElementById( "btn-capture" );
-
-//The stream & capture
-var stream = document.getElementById( "stream" );
-var capture = document.getElementById( "capture" );
-var snapshot = document.getElementById( "snapshot" );
-
-
-
-//The video stream
-var cameraStream = null;
-
-//Attach listeners
-//btnStart.addEventListener( "click", startStreaming );
-//btnStop.addEventListener( "click", stopStreaming );
-
-//Start Streaming
-function startStreaming() {
-
-	 
-	
-	var mediaSupport = 'mediaDevices' in navigator;
-
-	if( mediaSupport && null == cameraStream ) {
-
-		navigator.mediaDevices.getUserMedia( {video: { width: 1280, height: 720 }})
-		.then( function( mediaStream ) {
-
-			cameraStream = mediaStream;
-
-			stream.srcObject = mediaStream;
-
-			stream.play();
-		})
-		.catch( function( err ) {
-
-			console.log( "Unable to access camera: " + err );
-		});
-		
-	}
-	else {
-
-		alert( 'Your browser does not support media devices.' );
-
-		return;
-	} 
-}
-
-//Stop Streaming
-function stopStreaming() {
-
-	if( null != cameraStream ) {
-
-		var track = cameraStream.getTracks()[ 0 ];
-
-		track.stop();
-		stream.load();
-
-		cameraStream = null;
-	}
-}
-
-btnCapture.addEventListener( "click", captureSnapshot );
-
-function captureSnapshot() {
-
-	if( null != cameraStream ) {
-
-		var ctx = capture.getContext( '2d' );
-		var img = new Image();
-
-		ctx.drawImage( stream, 0, 0, capture.width, capture.height );
-
-		img.src		= capture.toDataURL( "image/png" );
-		img.width	= 160; 
-
-		snapshot.innerHTML = '';
-
-		snapshot.appendChild( img );
- 		savePhoto();
-		
-	}
-} 
-</script>
+ 

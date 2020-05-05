@@ -254,6 +254,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    		//$dbTxt->add(array('txt'=>'testtye='.$currenttest['app_comp_code']));
 	    		$trx=$dbApplicant->getTransaction($trxid);
 	    		$compcode=$currenttest['app_comp_code'];
+	    		$this->view->testtype=$compcode;
 	    		$this->view->testtypecode=$currenttest['initial_code'];
 	    		$pstet=$dbPtesthead->getDataByCode($currenttest['apt_ptest_code']);
 	    		$dbPlacementComp=new App_Model_Application_DbTable_PlacementTestProgramComponent();
@@ -464,6 +465,98 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		} else $this->_redirect('/examapplicant/examination/index/msg/No Opened Test');
     	}  else $this->_redirect('/examapplicant/examination/index/msg/No Test');
     	 
+    
+    }
+    
+    
+    public function generateExamAction()
+    {
+    	// action body
+    	 
+    	$trxid=$this->_getParam('idtrx',0);
+    	$testtype=$this->_getParam('testtype',0);
+    	$this->view->title="Examination :";
+    
+    	$auth = Zend_Auth::getInstance();
+    	$appl_id = $auth->getIdentity()->appl_id;
+    	 
+    	//generate personal exam
+    	$dbTxt=new App_Model_General_DbTable_TmpTxt();
+    	$dbExamComp=new App_Model_Application_DbTable_PlacementTestComponent();
+    	$dbApplicant=new App_Model_Application_DbTable_ApplicantTransaction();
+    	$dbAppPtestDet=new Examapplicant_Model_DbTable_ApplicantPtestAnswerDtl();
+    	$dbAppTestAns=new Examapplicant_Model_DbTable_ApplicantPtestAnswer();
+    	$dbPtest=new App_Model_Application_DbTable_ApplicantPtest();
+    	$ptest=$dbPtest->getPtest($trxid);
+    
+    	if ($ptest ) {
+    
+    		$dbPestDetail=new App_Model_Application_DbTable_ApplicantPtestDetail();
+    		$currenttest=$dbPestDetail->getActiveTestByTestType($trxid, $testtype);
+    		//echo var_dump($currenttest);
+    		 
+    		if ($currenttest) {
+    			//$dbTxt->add(array('txt'=>'testtye='.$currenttest['app_comp_code']));
+    			$trx=$dbApplicant->getTransaction($trxid);
+    			$compcode=$currenttest['app_comp_code'];
+    			$this->view->testtypecode=$currenttest['initial_code'];
+    			$response=$dbAppTestAns->isExamScript($trxid, $compcode);
+    			if ($response) {
+    				$dbAppTestAns->updateDataConditional(array('test_type'=>$response['test_type'].rand(1,100)), 'test_type="'.$compcode.'"  and apa_trans_id='.$trxid);
+    			 
+    				$dbPlacementComp=new App_Model_Application_DbTable_PlacementTestProgramComponent();
+    				$compprogram=$dbPlacementComp->getComponenByTransaction($trxid, "0");
+    				$comprog[]='';
+    				foreach ($compprogram as $value) {
+    					$comprog[]=$value['ac_id'];
+    				}
+    				$component=$dbExamComp->getDataComponent($compcode);
+    				//echo var_dump($component);echo '<br>';
+    				//echo var_dump($comprog);echo '<br>';
+    					
+    				foreach ($component as $idx=>$comp) {
+    
+    					if (!array_search($comp['ac_id'], $comprog)) {
+    						unset($component[$idx]);
+    						//echo $comp['ac_id'].'<br>';
+    					}
+    				}
+    					
+    				//get exam script config
+    				//echo var_dump($component); exit;
+    				$dbConfig=new Examapplicant_Model_DbTable_ExamScriptConfig();
+    				$config=$dbConfig->getMatchConfig($currenttest['apt_ptest_code'], $currenttest['apt_aps_id'],$currenttest['app_comp_code']);
+    				//echo var_dump($config);exit;
+    				if ($config) {
+    					try {
+    						$data=array(
+    								'apa_trans_id' => $trx['at_trans_id'],
+    								'apa_ptest_code' => $trx['at_pes_id'],
+    								'apa_set_code' =>null,
+    								'apa_date' => date ('Y-m-d h:i:s'),
+    								'pcode' => $currenttest['apt_ptest_code'],
+    								'config'=>$config,
+    								'component'=>$component,
+    								'test_type'=>$currenttest['app_comp_code'],
+    								'token'=>md5(time())
+    						);
+    						//echo var_dump($data);exit;
+    						$dbAppPtest=new Examapplicant_Model_DbTable_ApplicantPtestAnswer();
+    						$response=$dbAppPtest->addData($data);
+    
+    					} catch (Exception $e) {
+    						$msg="Fail to generate Exam Script";
+    						$this->_redirect('/examapplicant/examination/index/msg/'.$msg);
+    					}
+    
+    				}  
+    				 
+    			}
+    
+    		}  
+    
+    	}
+    	$this->_redirect('/examapplicant/examination/verify-exam/idtrx/'.$trxid);
     
     }
     

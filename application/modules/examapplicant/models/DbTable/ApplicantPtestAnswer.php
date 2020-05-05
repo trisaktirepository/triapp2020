@@ -351,6 +351,14 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 		$this->update($data, 'apa_id = '. (int)$id);
 	}
 	
+	public function updateDataConditional($postData,$where){
+	
+		$auth = Zend_Auth::getInstance();
+	 
+			
+		$this->update($data, $where);
+	}
+	
 	public function getDataByStatus($status=1){
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$sql = "Select apa.*,ap.apt_ptest_code,ap.apt_id from ".$this->_name." apa 
@@ -406,5 +414,6 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 		if(is_array($row)) return true;
 		else return false;
 	}
+	 
 }
 
