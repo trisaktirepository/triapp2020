@@ -30,10 +30,10 @@ p    {color: white; font-size: 20px}
 }
 </style>
  <script type="text/javascript">
-  function startExam(idtrx) {
+  function startExam(idtrx,testtype) {
 	  
 	  	 //stopStreaming();
-	 	 window.location.replace('/examapplicant/examination/start-exam/idtrx/'+idtrx);
+	 	 window.location.replace('/examapplicant/examination/start-exam/idtrx/'+idtrx+'/testtype/'+testtype);
  
   }
 
@@ -171,7 +171,7 @@ p    {color: white; font-size: 20px}
 				
 				<td colspan="2" bgcolor="lightgreen" align="center">
 				<?php if ($status=="1") {?>
-				 <input class="btn" type="button" id="btnstart" value="<?php echo $this->translate('Start Exam');?>" onclick="startExam('<?php echo $this->transaction["at_trans_id"];?>')">
+				 <input class="btn" type="button" id="btnstart" value="<?php echo $this->translate('Start Exam');?>" onclick="startExam('<?php echo $this->transaction["at_trans_id"];?>','<?php echo $this->testtype?>')">
 				<?php } else {?>
 					<input class="btn" type="button" id="btnulang" value="<?php echo $this->translate('Generate Exam Question');?>" onclick="generateExam('<?php echo $this->transaction["at_trans_id"];?>','<?php echo $this->testtype?>')">
 				

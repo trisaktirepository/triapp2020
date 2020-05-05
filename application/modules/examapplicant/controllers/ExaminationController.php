@@ -329,13 +329,14 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	// action body
     	$this->_helper->layout->setLayout('examapplicant');
     	$trxid=$this->_getParam('idtrx',0);
+    	$testtype=$this->_getParam('testtype',0);
     	$this->view->title="Examination :";
     
     	$auth = Zend_Auth::getInstance();
     	$appl_id = $auth->getIdentity()->appl_id;
     	if ($appl_id==202673) {
     		$date="2020-01-19";
-    		$time="11:40:00";
+    		$time="13:40:00";
     	}
     	else {
     		$date=date('Y-m-d');
