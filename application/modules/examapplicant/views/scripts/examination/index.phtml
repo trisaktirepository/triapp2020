@@ -131,6 +131,18 @@ p    {color: white; font-size: 20px}
 			 
 			 <br>
 			<fieldset><legend><?php echo 'Identitas dan Pilihan Program Studi'?></legend>
+			<table width="100%"><tr><td>
+			  <?php 
+					if($this->photo!=null){
+					 	$dt = explode("triapp",$this->photo['pathupload']);
+						$path = $dt[1]; 
+					?>
+						<img class="photo" src="<?php echo $path; ?>"/>
+					<?php }else{?>
+						<img class="photo" src="/images/no-photo.jpg" width="194" height="250" />
+					<?php }?>
+				 
+			 </td><td>
 			<table class="table" width="100%">
 			 	<tr>
 			 		<th><?php echo $this->translate('Name')?></th>
@@ -153,28 +165,18 @@ p    {color: white; font-size: 20px}
 						?></td>
 			 	<tr>
 			 </table>
+			 </td></tr>
 			 </fieldset>
 			 <br>
 			 <fieldset><legend><?php echo 'Informasi Materi Ujian Seleksi'?></legend>
-			 <table width="100%"><tr><td>
-			  <?php 
-					if($this->photo!=null){
-					 	$dt = explode("triapp",$this->photo['pathupload']);
-						$path = $dt[1]; 
-					?>
-						<img class="photo" src="<?php echo $path; ?>"/>
-					<?php }else{?>
-						<img class="photo" src="/images/no-photo.jpg" width="194" height="250" />
-					<?php }?>
-				 
-			 </td><td>
-			 <table class="table" width="100%">
+			 
+			 <table class="table" width="70%">
 			 		 
 			 		<?php foreach ($this->examdetail as $exam) {
 			 				$comps=$exam['compcode'];?>
 			 			<tr>
 			 			<td width="5px"><?php if ($exam['active']=="1") {?>
-			 					<img src="/images/icon/green.png"  style="width:25px;height:25px;" title="<?php echo 'Open';?>"> </a>  
+			 					<img src="/images/icon/green.png"  style="width:20px;height:20px;" title="<?php echo 'Open';?>"> </a>  
 			 				<?php } else {?>
 			 					<img src="/images/icon/red.png"  style="width:25px;height:25px;" title="<?php echo 'Close';?>"> </a>
 			 				<?php }?></td>
@@ -185,8 +187,7 @@ p    {color: white; font-size: 20px}
 			 			<tr><td colspan="4"><?php foreach ($comps as $comp ) echo $comp['ac_comp_name_bahasa'].'<br> '?></td></tr>
 			 		<?php }?>
 			 </table>
-			 </td></tr>
-			 </table>
+			  
 			 </fieldset>
 			<table  >
 			<tr>
