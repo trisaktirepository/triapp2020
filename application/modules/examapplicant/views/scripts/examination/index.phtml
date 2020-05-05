@@ -1,7 +1,7 @@
 <style>
 .button-group, .play-area {
   border: 0px solid grey;
-  padding: 1em 1%;
+  padding: 0em 1%;
   margin-bottom: 1em; 
 }
 p    {color: white; font-size: 20px}
@@ -198,17 +198,14 @@ p    {color: white; font-size: 20px}
 			 </td> <td width="30%" align="left">
 			 	<div class="play-area">
 				  <video id="stream" width="320" height="240"></video>
-				  <br>
 				   Ambil Foto anda untuk bukti daring 
 				    <button id="btn-capture" type="button" class="button">Ambil Foto</button>
-				    
 		 		</div>
 	 		 </td> 
 			 </tr>
 			  </table>
 			 </fieldset>
 			<table  >
-			 
 			<tr><td colspan="2">&nbsp;</tr>
 			<tr><td colspan="2" bgcolor="lightgreen" align="center">
 				 <input class="btn" type="button" id="btnstart" value="<?php echo $this->translate('Next');?>" onclick="startExam('<?php echo $this->transaction["at_trans_id"];?>')">
