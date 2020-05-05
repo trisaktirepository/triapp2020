@@ -157,7 +157,7 @@ p    {color: white; font-size: 20px}
 			 <br>
 			 <fieldset><legend><?php echo 'Informasi Materi Ujian Seleksi'?></legend>
 			 <table><tr>
-			 <div><?php 
+			  <?php 
 					if($this->photo!=null){
 					 	$dt = explode("triapp",$this->photo['pathupload']);
 						$path = $dt[1]; 
@@ -166,8 +166,7 @@ p    {color: white; font-size: 20px}
 					<?php }else{?>
 						<img class="photo" src="/images/no-photo.jpg" width="194" height="250" />
 					<?php }?>
-					</div>
-				<td></td>
+				 
 			 <td>
 			 <table class="table" width="100%">
 			 		 
