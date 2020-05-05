@@ -86,7 +86,7 @@ p    {color: white; font-size: 20px}
 		if (distance < 0) {
 			clearInterval(x);
 			$("#stop").val("1");
-			document.getElementById("examtime").innerHTML = '<font color="red"><strong>Waktu ujian sudah dibuka, waktu ujian anda dimulai saat anda mengklik tombol START</strong></font>';
+			document.getElementById("examtime").innerHTML = '<font><strong>Waktu ujian sudah dibuka, waktu ujian anda dimulai saat anda mengklik tombol MULAI di halaman berikutnya</strong></font>';
 		}
 		}, 1000);
 }
@@ -110,7 +110,11 @@ p    {color: white; font-size: 20px}
 	<fieldset>
 		<legend><?php echo $this->translate("Detail Information About Your Exam");?></legend>
 			<?php if ($this->test=="1") {?>
-			<p><span >Baca petunjuk ujian seleksi masuk Usakti dengan seksama</span></p>
+			<table width="100%">
+			 	<tr><td bgcolor="Darkblue" align="center"  width="15%"><p id="examtime"></p></td></tr>
+			 </table>
+			 <br>
+			<h2>Baca petunjuk ujian seleksi masuk Usakti dengan seksama</h2>
 			<br>
 			<ol>
 				<li>Pastikan kamera komputer/hp anda dinyalakan untuk pengambilan foto anda </li>
@@ -124,9 +128,7 @@ p    {color: white; font-size: 20px}
 			</ol>
 			<hr>
 			
-			 <table width="100%">
-			 	<tr><td bgcolor="darkblue" align="center"  width="15%"><p id="examtime"></p></td></tr>
-			 </table>
+			 
 			 <br>
 			<fieldset><legend><?php echo 'Identitas dan Pilihan Program Studi'?></legend>
 			<table class="table" width="100%">
