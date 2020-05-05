@@ -255,7 +255,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    		$trx=$dbApplicant->getTransaction($trxid);
 	    		$compcode=$currenttest['app_comp_code'];
 	    		$this->view->testtypecode=$currenttest['initial_code'];
-	    		$pstet=$dbPtesthead->getDataFromCode($currenttest['apt_ptest_code']);
+	    		$pstet=$dbPtesthead->getDataByCode($currenttest['apt_ptest_code']);
 	    		$dbPlacementComp=new App_Model_Application_DbTable_PlacementTestProgramComponent();
 	    		$compprogram=$dbPlacementComp->getComponenByTransaction($trxid, $pstet['aph_testtype']);
 	    		$comprog[]='';
