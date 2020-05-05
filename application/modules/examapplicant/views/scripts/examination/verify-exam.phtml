@@ -109,11 +109,7 @@ p    {color: white; font-size: 20px}
 	<input type="hidden" id="photo" value="">
 	<fieldset>
 		<legend><?php echo $this->translate("Detail Information About Your Exam");?></legend>
-			<?php if ($this->test=="1") {?>
-			<table width="100%">
-			 	<tr><td bgcolor="Darkblue" align="center"  width="15%"><p id="examtime"></p></td></tr>
-			 </table>
-			 <br>
+			 
 			<h2>Baca petunjuk ujian seleksi masuk Usakti dengan seksama</h2>
 			 
 			<ol>
@@ -163,60 +159,46 @@ p    {color: white; font-size: 20px}
 						?></td>
 			 	<tr>
 			 </table>
+			 <br>
 			 <table class="table" width="100%">
+			 		<tr>
+			 			<th><?php echo $this->translate('Materi Ujian')?></th>
+			 			<th><?php echo $this->translate('Jumlah Soal Ujian Seharusnya')?></th>
+			 			<th><?php echo $this->translate('Jumlah Soal Ujian Anda')?></th>
+			 			
+			 		</tr>
+			 		<?php $totalstd=0;
+			 				$totalsoal=0;
+			 			foreach ($this->componentlist as $comp) { 
+			 				if ($comp['jml']!=$comp['nQuestion']) $bg="red";else $bg=""; 
+			 				$totalstd=$totalstd+$comp['nQuestion'];
+			 				$totalsoal=$totalsoal+$comp['jml']?>
 			 		 
-			 		<?php foreach ($this->examdetail as $exam) {
-			 				$comps=$exam['compcode'];?>
-			 			<tr>
-			 			<td width="5px"><?php if ($exam['active']=="1") {?>
-			 					<img src="/images/icon/green.png"  style="width:25px;height:25px;" title="<?php echo 'Open';?>"> </a>  
-			 				<?php } else {?>
-			 					<img src="/images/icon/red.png"  style="width:20px;height:20px;" title="<?php echo 'Close';?>"> </a>
-			 				<?php }?></td>
-			 			<th><?php echo $exam['ptestname']?></th>
-			 				<th><?php echo date('d-m-Y',strtotime($exam['aps_test_date']))?></th>
-			 				<th><?php echo $exam['time_start'].'-'.$exam['time_stop']?></th>
+			 			<tr bgcolor="<?php echo $bg;?>">
+			 			<td><?php echo $comp['ac_comp_name_bahasa']?></td>
+			 			<td><?php echo $comp['nQuestion']?></td>
+			 			<td><?php echo $comp['jml']?></td>
 			 			</tr>
-			 			<tr><td colspan="4"><?php foreach ($comps as $comp ) echo $comp['ac_comp_name_bahasa'].'<br> '?></td></tr>
-			 		<?php }?>
+			 		<?php }
+			 		?>
+			 		<tr>
+			 			<th><?php echo $this->translate('Total')?></th>
+			 			<th><?php echo $totalstd?></th>
+			 			<th><?php echo $totalsoal?></th>
+			 			
+			 		</tr>
 			 </table>
 			 </td>
-			 <td width="30%" align="left">
-			 	<div class="play-area">
-				  <video id="stream" width="320" height="240"></video>
-				   Ambil Foto anda untuk bukti daring 
-				    <button id="btn-capture" type="button" class="button">Ambil Foto</button>
-		 		</div>
-	 		 </td> 
+			 
 			 
 			 </table>
 			 </fieldset>
-			 <br>
-			 <fieldset><legend><?php echo 'Informasi Foto'?></legend>
-			 <table><tr> 
-			 
-			 <td> <td align="center">
-			 
-				<div class="play-area-sub">
-				    <canvas id="capture" width="720" height="400"></canvas>
-				    <div id="snapshot"></div>
-				  </div>
-				 
-			 </td> 
-			 </tr>
-			  </table>
-			 </fieldset>
+		 
 			<table  width="100%"> 
 			<tr><td colspan="2" bgcolor="lightgreen" align="center">
-				 <input class="btn" type="button" id="btnstart" value="<?php echo $this->translate('Next');?>" onclick="startExam('<?php echo $this->transaction["at_trans_id"];?>')">
+				 <input class="btn" type="button" id="btnstart" value="<?php echo $this->translate('Start Exam');?>" onclick="startExam('<?php echo $this->transaction["at_trans_id"];?>')">
 			</td></tr>
-			</table>
-			<?php } else  {
-				echo "Pada hari ini tidak ada Ujian Saringan Masuk";
-				echo "<br>";
-				echo 'Jika ingin mencoba silahkan klik <a href="/examapplicant/examination/index-training">link ini</a>';
-			 
-			}?>	
+			</table> 
 			
 				 
 	</fieldset>

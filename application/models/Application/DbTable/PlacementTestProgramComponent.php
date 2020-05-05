@@ -72,7 +72,7 @@ class App_Model_Application_DbTable_PlacementTestProgramComponent extends Zend_D
 	}
 	
 	
-	public function getComponenByTransaction($trxid,$testtype){
+	public function getComponenByTransactionComp($trxid,$testtype,$comp){
 	
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$programset=$db->select()
@@ -81,9 +81,36 @@ class App_Model_Application_DbTable_PlacementTestProgramComponent extends Zend_D
 		
 		$select = $db->select()
 		->distinct()
-		->from(array('apps'=>$this->_name),array())
+		->from(array('apps'=>$this->_name))
 		->join(array('p'=>'tbl_program'),'p.IdProgram=apps.apps_program_id')
 		->join(array('c'=>'appl_component'),'c.ac_comp_code = apps.apps_comp_code', array('ac_id','ac_comp_code','ac_comp_name_bahasa')) 
+		->where('p.ProgramCode in ( '. $programset.')')
+		->where('apps.aph_type=?',$testtype)
+		->where('c.ac_id=?',$comp)
+		->order('c.ac_test_type ASC');
+	
+		$row = $db->fetchRow($select);
+	
+		if($row){
+			return $row;
+		}else{
+			return null;
+		}
+	
+	}
+	
+	public function getComponenByTransaction($trxid,$testtype){
+	
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$programset=$db->select()
+		->from('applicant_program',array('ap_prog_code'))
+		->where('ap_at_trans_id=?',$trxid);
+	
+		$select = $db->select()
+		->distinct()
+		->from(array('apps'=>$this->_name),array())
+		->join(array('p'=>'tbl_program'),'p.IdProgram=apps.apps_program_id')
+		->join(array('c'=>'appl_component'),'c.ac_comp_code = apps.apps_comp_code', array('ac_id','ac_comp_code','ac_comp_name_bahasa'))
 		->where('p.ProgramCode in ( '. $programset.')')
 		->where('apps.aph_type=?',$testtype)
 		->order('c.ac_test_type ASC');
