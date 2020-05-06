@@ -408,6 +408,10 @@ function shutdownTimer(endtime){
 	}, 1000);
 }
 
+function keluar(){
+	if (confirm('Apakah anda mau keluar/menyatakan selesai')) {
+	}
+}
 
 </script>
  
@@ -487,7 +491,7 @@ function shutdownTimer(endtime){
 						 <a class="pre btn" id="pre" href="#">Soal Sebelum</a>
 						 </td>
 					<td bgcolor="darkblue" align="center"  width="15%">
-					<div id="clock"></div>
+					<div id="stop"><input type="butto" name="Keluar" value="Keluar" onclick="keluar()"></div>
 					</td>
 					
 						  
