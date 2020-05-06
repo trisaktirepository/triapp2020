@@ -113,18 +113,26 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     
     
     	$this->view->noticeError=$this->_getParam('msg',null);
+    	
     	//get applicant profile
     	$auth = Zend_Auth::getInstance();
-    	$appl_id = $auth->getIdentity()->appl_id;
-    	 
+    	$appl_id = $auth->getIdentity()->appl_id; 
+    	if ($appl_id==202673) {
+			$date="2020-01-19";
+			$time="13:40:00";
+		}
+		else {
+			$date=date('Y-m-d');
+			$time=date('H:s:i');
+		}
     	$dbApplicant=new App_Model_Application_DbTable_ApplicantTransaction();
     	$dbExamComp=new App_Model_Application_DbTable_PlacementTestComponent();
     	$dbPlacementTest=new App_Model_Application_DbTable_ApplicantPtestDetail();
-    	$examdetail=$dbPlacementTest->getActivePtestDetail($appl_id,null);
+    	$examdetail=$dbPlacementTest->getActivePtestDetail($appl_id,$date);
     	$dbTestType=new App_Model_Application_DbTable_PlacementTestType();
     	$dbPestDetail=new App_Model_Application_DbTable_ApplicantPtestDetail();
     	if ($examdetail) {
-    		//all test on date
+    	//all test on date
     		$trxid=$examdetail[0]['at_trans_id'];
     		$trx=$dbApplicant->getTransaction($trxid);
     		$this->view->transaction_id=$trxid;
@@ -138,11 +146,22 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		$ptest=$dbPtest->getPtest($trxid);
     		$acid='';
     		$this->view->testtype='';
-    		 
+    		if ($ptest ) { 
+    	 		$currenttest=$dbPlacementTest->getActiveTest($trxid, $date, $time);
+    			//echo var_dump($currenttest);exit;
+    			$acid=$currenttest['app_comp_code'];
+    			$this->view->testtype=$acid;
+    		}
     		//echo var_dump($comprog);echo '<br>';
-    	 
+    		$timestart="23:00:00";
     		foreach ($examdetail as $key=>$value) {
+    			if ($timestart>$value['time_start']) 
+    				$timestart=$value['time_start'];
     			$compcode=$value['app_comp_code'];
+    			if ($compcode==$acid) {
+    				$examdetail[$key]['active']="1";
+    			}
+    			else $examdetail[$key]['active']="0";
     			$component=$dbExamComp->getDataComponent($compcode,'0');
     			//echo var_dump($component);
     			foreach ($component as $idx=>$comp) {
@@ -152,40 +171,41 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     			$testtype=$dbTestType->getData($compcode);
     			$examdetail[$key]['compcode']=$component;
     			$examdetail[$key]['ptestname']=$testtype['act_name'];
-    			 
+    			
     		}
-    		$this->view->datestart=date('Y-m-d H:s:i');
-    		$trx=$dbApplicant->getTransaction($trxid);
-    		//--------get applicant program  -----------
-    		$appprogramDB = new App_Model_Application_DbTable_ApplicantProgram();
-    		$app_program = $appprogramDB->getPlacementProgram($trxid);
-    		 
-    		$program_data["program_code1"]="0";
-    		$program_data["program_code2"]="0";
-    		$program_data["faculty_name2"]="";
-    		$program_data["program_name2"]="";
-    		 
-    		$i=1;
-    		foreach($app_program as $program){
-    			$program_data["program_name".$i] = $program["program_name"];
-    			$program_data["faculty_name".$i] = $program["faculty"];
-    			$program_data["program_code".$i] = $program["program_code"];
-    	   
-    			$i++;
-    		}
-    
-    		//-------- get applicant photo --------
-    		$photo_name='';
-    		$photoDB = new App_Model_Application_DbTable_UploadFile();
-    		$photo = $photoDB->getFile($trxid,33); //PHoto
-    
-    		$this->view->transaction=$trx;
-    		$this->view->program=$program_data;
-    		$this->view->photo=$photo;
-    		$this->view->examdetail=$examdetail;
-    		$this->view->test="1";
-    		 
+    		$this->view->datestart=$date.' '.$timestart;
+    	 		$trx=$dbApplicant->getTransaction($trxid);
+	    		//--------get applicant program  -----------
+	    		$appprogramDB = new App_Model_Application_DbTable_ApplicantProgram();
+	    		$app_program = $appprogramDB->getPlacementProgram($trxid);
+	    		
+	    		$program_data["program_code1"]="0";
+	    		$program_data["program_code2"]="0";
+	    		$program_data["faculty_name2"]="";
+	    		$program_data["program_name2"]="";
+	    		
+	    		$i=1;
+	    		foreach($app_program as $program){
+	    			$program_data["program_name".$i] = $program["program_name"];
+	    			$program_data["faculty_name".$i] = $program["faculty"];
+	    			$program_data["program_code".$i] = $program["program_code"];
+	    		
+	    			$i++;
+	    		}
+	    		 
+	    		//-------- get applicant photo --------
+	    		$photo_name='';
+	    		$photoDB = new App_Model_Application_DbTable_UploadFile();
+	    		$photo = $photoDB->getFile($trxid,33); //PHoto
+	    		 
+	    		$this->view->transaction=$trx;
+	    		$this->view->program=$program_data;
+	    		$this->view->photo=$photo;
+	    		$this->view->examdetail=$examdetail;
+	    		$this->view->test="1";
+	    	 
     	} else $this->view->test="0";
+    	
     	 
     }
     
