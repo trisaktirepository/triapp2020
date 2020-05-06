@@ -386,9 +386,12 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     					$time=explode(':', $currenttest['timerange']);
     					$data['stop_time']=date('Y-m-d H:i:s',strtotime('+'.$time[0].' hour +'.$time[1].' minutes +'.$time[2].' seconds',strtotime(date('Y-m-d H:i:s'))));
     					$data['last_time']=$data['start_time'];
+    					$data['time_rest']=$currenttest['timerange'];
     				} else {  
-    					$data['last_time']=date('Y-m-d H:i:s');
-    					
+    					$data['last_time']=date('Y-m-d H:i:s'); 
+    					$time=explode(':', $exammain['time_rest']);
+    					$data['stop_time']=date('Y-m-d H:i:s',strtotime('+'.$time[0].' hour +'.$time[1].' minutes +'.$time[2].' seconds',strtotime(date('Y-m-d H:i:s'))));
+    						
     				}
     				$dbAppTestAns->update($data, 'apa_id='.$response['apa_id']);
     				$exammain=$dbAppTestAns->getData($response['apa_id']);
@@ -789,7 +792,8 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    		$data=array('apad_appl_ans'=>$formData['answer'],'apad_status_ans'=>$point);
 	    		$dbQuestdet->update($data, 'apad_id='.$formData['apad_id']); 
 	    		$token=md5(time());
-	    		$dbApplAns->update(array('token'=>$token,'last_time'=>date('Y-m-d H:i:s')), 'apa_id='.$row['apa_id']);
+	    		$difftime=date_diff(new DateTime($row['stop_time']),new DateTime( date('Y-m-d H:i:s')));
+	    		$dbApplAns->update(array('token'=>$token,'last_time'=>date('Y-m-d H:i:s'),'time_rest'=>date('h:i:s',strtotime($difftime))), 'apa_id='.$row['apa_id']);
 	    		$quest=$dbQuestdet->getData($formData['apad_id']); 
 	    		$quest['error']='0';
     		} else {
