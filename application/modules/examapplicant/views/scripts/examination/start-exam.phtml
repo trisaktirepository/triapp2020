@@ -403,7 +403,7 @@ function shutdownTimer(endtime){
 		clearInterval(x);
 		$("#stop").val("1");
 		//document.getElementById("examtime").innerHTML = '<font color="red"><strong>Waktu Ujian Habis</strong></font>';
-		window.location('/applicant-portal');
+		location.replace('/applicant-portal');
 	}
 	}, 1000);
 }

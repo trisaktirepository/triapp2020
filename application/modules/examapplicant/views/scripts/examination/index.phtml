@@ -110,7 +110,7 @@ p    {color: white; font-size: 20px}
 	<input type="hidden" id="type" value="<?php echo 500+$this->testtype*1;?>">
 	<input type="hidden" id="photo" value="">
 	<fieldset>
-		<legend><?php echo $this->translate("Detail Information About Your Exam");?></legend>
+		<legend><?php echo $this->translate("Informasi terkait Ujian Saringan Masuk anda");?></legend>
 			<?php if ($this->test=="1") {?>
 			<table width="100%">
 			 	<tr><td bgcolor="Darkblue" align="center"  width="15%"><p id="examtime"></p></td></tr>
@@ -126,7 +126,7 @@ p    {color: white; font-size: 20px}
 			 	<li>Pada layar soal tidak ada tombol save karena setiap anda menjawab sistem secara otomatis menyimpan jawaban anda dan hasilnya ditampilkan di Daftar Jawaban</li>
 			 	<li>Jika waktu ujian telah selesai maka layar secara otomatis akan tertutup</li>
 			 	<li>Jika waktu ujian belum selesai dan anda menutup layar soal maka ujian dianggap sudah selesai</li>
-				<li>Waktu Ujian dimulai pada saat anda telah selesai memerikan kecukupan jumlah soal dihalaman berikutnya dan menekan tombol 'Mulai'</li>
+				<li>Waktu Ujian dimulai pada saat anda telah selesai memeriksa kecukupan jumlah soal dihalaman berikutnya dan menekan tombol 'Mulai'</li>
 			</ol>
 			<hr>
 	 		<br>
@@ -217,6 +217,14 @@ p    {color: white; font-size: 20px}
 				echo "Pada hari ini tidak ada Ujian Saringan Masuk";
 				echo "<br>";
 				echo 'Jika ingin mencoba silahkan klik <a href="/examapplicant/examination/index-training">link ini</a>';
+				echo "<br>";
+				echo "<br>";
+				echo 'Jika ingin melihat video tutorial Ujian Saringan Masuk silahkan klik Video Berikut';
+				echo '<br>';
+				echo '<video width="640" height="480" controls">';
+				echo '<source src="/documents/video/usm/video_usm_daring.mp4" type="video/mp4">';
+				echo '</video>';
+				
 			 
 			}?>	
 			

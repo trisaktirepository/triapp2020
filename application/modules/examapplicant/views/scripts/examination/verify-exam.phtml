@@ -70,7 +70,7 @@ p    {color: white; font-size: 20px}
 	<input type="hidden" id="type" value="<?php echo 500+$this->testtype*1;?>">
 	<input type="hidden" id="photo" value="">
 	<fieldset>
-		<legend><?php echo $this->translate("Detail Information About Your Exam");?></legend>
+		<legend><?php echo $this->translate("Informasi sekitar Ujian Saringan Masuk anda");?></legend>
 			 
 			<h2>Baca petunjuk ujian seleksi masuk Usakti dengan seksama</h2>
 			 
@@ -82,7 +82,7 @@ p    {color: white; font-size: 20px}
 			 	<li>Pada layar soal tidak ada tombol save karena setiap anda menjawab sistem secara otomatis menyimpan jawaban anda dan hasilnya ditampilkan di Daftar Jawaban</li>
 			 	<li>Jika waktu ujian telah selesai maka layar secara otomatis akan tertutup</li>
 			 	<li>Jika waktu ujian belum selesai dan anda menutup layar soal maka ujian dianggap sudah selesai</li>
-				<li>Waktu Ujian dimulai pada saat anda telah selesai memerikan kecukupan jumlah soal dihalaman berikutnya dan menekan tombol 'Mulai'</li>
+				<li>Waktu Ujian dimulai pada saat anda telah selesai memeriksa kecukupan jumlah soal dihalaman berikutnya dan menekan tombol 'Mulai Ujian'</li>
 			</ol>
 			<hr>
 	 		<br>
@@ -171,9 +171,9 @@ p    {color: white; font-size: 20px}
 				
 				<td colspan="2" bgcolor="lightgreen" align="center">
 				<?php if ($status=="1") {?>
-				 <input class="btn" type="button" id="btnstart" value="<?php echo $this->translate('Start Exam');?>" onclick="startExam('<?php echo $this->transaction["at_trans_id"];?>','<?php echo $this->testtype?>')">
+				 <input class="btn" type="button" id="btnstart" value="<?php echo $this->translate('Mulai Ujian');?>" onclick="startExam('<?php echo $this->transaction["at_trans_id"];?>','<?php echo $this->testtype?>')">
 				<?php } else {?>
-					<input class="btn" type="button" id="btnulang" value="<?php echo $this->translate('Generate Exam Question');?>" onclick="generateExam('<?php echo $this->transaction["at_trans_id"];?>','<?php echo $this->testtype?>')">
+					<input class="btn" type="button" id="btnulang" value="<?php echo $this->translate('Buat Soal Ujian Ulang');?>" onclick="generateExam('<?php echo $this->transaction["at_trans_id"];?>','<?php echo $this->testtype?>')">
 				
 				<?php }?>
 			</td></tr>
