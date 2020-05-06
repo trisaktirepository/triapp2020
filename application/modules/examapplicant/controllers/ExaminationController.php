@@ -793,7 +793,8 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    		$dbQuestdet->update($data, 'apad_id='.$formData['apad_id']); 
 	    		$token=md5(time());
 	    		$difftime=date_diff(new DateTime($row['stop_time']),new DateTime( date('Y-m-d H:i:s')));
-	    		$dbApplAns->update(array('token'=>$token,'last_time'=>date('Y-m-d H:i:s'),'time_rest'=>date('h:i:s',strtotime($difftime))), 'apa_id='.$row['apa_id']);
+	    		$resttime=$difftime->format('%H').':'.$difftime->format('%I').':'.$difftime->format('%S');
+	    		$dbApplAns->update(array('token'=>$token,'last_time'=>date('Y-m-d H:i:s'),'time_rest'=>$resttime), 'apa_id='.$row['apa_id']);
 	    		$quest=$dbQuestdet->getData($formData['apad_id']); 
 	    		$quest['error']='0';
     		} else {
