@@ -1,8 +1,8 @@
 <style>
 .button-group, .play-area {
-  border: 0px solid grey;
-  padding: 0em 1%;
-  margin-bottom: 0em; 
+  border: 1px solid grey;
+  padding: 1em 1%;
+  margin-bottom: 1em; 
 }
 p    {color: white; font-size: 20px}
 
@@ -33,8 +33,9 @@ p    {color: white; font-size: 20px}
   function startExam(idtrx) {
 	  if ($("#photo").val()=="ok") {
 	  	 //stopStreaming();
-	 	 window.location.replace('/examapplicant/examination/verify-exam/idtrx/'+idtrx);
-
+		 if ($("input[name='testtype']:checked").val()) 	 
+	 		 window.location.replace('/examapplicant/examination/start-exam-training/idtrx/'+idtrx+'/testtype/'+$("input[name='testtype']:checked").val());
+		 else alert('Pilih test yang akan dicoba');
 	   } else alert('Tolong klik tombol Ambil Foto terlebih dahulu');
   }
   $(window).bind("load", function() {
@@ -51,13 +52,11 @@ p    {color: white; font-size: 20px}
 		$.ajax({
 			  type: "POST",
 			  url: "/examapplicant/examination/send-start-photo",
-			  data: {'image': dataUrl,'trxid':$("#transaction_id").val(),'type':type},
-			  error: function(){
-					alert("Koneksi Internet anda lemah, ulangi pengambilan photo !");
-				}, 
+			  data: {'image': dataUrl,'trxid':$("#transaction_id").val(),'type':type}
 			})
 			.done(function(respond){
-				 
+				  
+				//$("#type").val(type*1+1);
 				$("#photo").val('ok');
 				})
 			.fail(function(respond){console.log("fail");});
@@ -88,7 +87,7 @@ p    {color: white; font-size: 20px}
 		if (distance < 0) {
 			clearInterval(x);
 			$("#stop").val("1");
-			document.getElementById("examtime").innerHTML = '<font><strong>Waktu ujian sudah dibuka, waktu ujian anda dimulai saat anda mengklik tombol MULAI di halaman berikutnya</strong></font>';
+			document.getElementById("examtime").innerHTML = '<font color="red"><strong>Waktu Ujian Sudah Lewat</strong></font>';
 		}
 		}, 1000);
 }
@@ -110,40 +109,32 @@ p    {color: white; font-size: 20px}
 	<input type="hidden" id="type" value="<?php echo 500+$this->testtype*1;?>">
 	<input type="hidden" id="photo" value="">
 	<fieldset>
-		<legend><?php echo $this->translate("Informasi terkait Ujian Saringan Masuk anda");?></legend>
+		<legend><?php echo $this->translate("Detail Information About Your Exam");?></legend>
 			<?php if ($this->test=="1") {?>
-			<table width="100%">
-			 	<tr><td bgcolor="Darkblue" align="center"  width="15%"><p id="examtime"></p></td></tr>
-			 </table>
-			 <br>
-			<h2>Baca petunjuk ujian seleksi masuk Usakti dengan seksama</h2>
-			 
-			<ol>
-				<li>Pastikan kamera komputer/hp anda dinyalakan untuk pengambilan foto anda </li>
-				<li>Periksa Kuota Data anda karena kebutuhan data selama pelaksanaaan USM sekitar 50 MB pastikan kuato data internet anda memenuhi</li>
-				<li>Periksa semua informasi di laman ini sampai anda jumpai tombol 'Mulai'</li>
-				<li>Pada halaman ini akan ada informasi terkait (1) Indentitas anda dan Program Studi yang dipilih; (2) Materi Ujian dan waktu ujian; (3) Pengambilan foto anda</li>
-			 	<li>Pada layar soal tidak ada tombol save karena setiap anda menjawab sistem secara otomatis menyimpan jawaban anda dan hasilnya ditampilkan di Daftar Jawaban</li>
-			 	<li>Jika waktu ujian telah selesai maka layar secara otomatis akan tertutup</li>
-			 	<li>Jika waktu ujian belum selesai dan anda menutup layar soal maka ujian dianggap sudah selesai</li>
-				<li>Waktu Ujian dimulai pada saat anda telah selesai memeriksa kecukupan jumlah soal dihalaman berikutnya dan menekan tombol 'Mulai'</li>
-			</ol>
-			<hr>
-	 		<br>
-			<fieldset><legend><?php echo 'Identitas Diri, Pilihan Program Studi, dan Materi Ujian'?></legend>
-			<table width="100%"><tr><td width="20%" align="center">
-			  <?php 
+			<h2>Kebutuhan data selama pelaksanaaan USM sekitar 50 MB pastikan kuato data internet anda memenuhi</h2>
+			<table class="table">
+			<tr><td colspan="3" bgcolor="lightgreen" align="center">
+				 <input class="btn" type="button" id="btnstart" value="<?php echo $this->translate('Start Exam');?>" onclick="startExam('<?php echo $this->transaction["at_trans_id"];?>')">
+				</td></tr>
+			 <tr><td width="20%" align="center"><div><?php 
 					if($this->photo!=null){
-					 	$dt = explode("triapp",$this->photo['pathupload']);
+						//$imageHelper = new icampus_Function_General_Image();
+						//$path = $imageHelper->getImagePath($this->photo['pathupload'],250,250);			
+						$dt = explode("triapp",$this->photo['pathupload']);
 						$path = $dt[1]; 
 					?>
 						<img class="photo" src="<?php echo $path; ?>"/>
 					<?php }else{?>
 						<img class="photo" src="/images/no-photo.jpg" width="194" height="250" />
 					<?php }?>
-				 
-			 </td><td valign="top" width="50%">
-			<table class="table" width="100%">
+					</div>
+					 <div class="play-area-sub">
+				    <canvas id="capture" width="160" height="90"></canvas>
+				    <div id="snapshot"></div>
+				  </div>
+				</td>
+			 <td>
+			 <table class="table" width="100%">
 			 	<tr>
 			 		<th><?php echo $this->translate('Name')?></th>
 			 		<td><?php echo $this->transaction['appl_fname'].' '.$this->transaction['appl_mname'].' '.$this->transaction['appl_lname']?></td>
@@ -165,68 +156,36 @@ p    {color: white; font-size: 20px}
 						?></td>
 			 	<tr>
 			 </table>
-			 <table class="table" width="100%">
+			 <table width="100%">
 			 		 
 			 		<?php foreach ($this->examdetail as $exam) {
 			 				$comps=$exam['compcode'];?>
 			 			<tr>
-			 			<td width="5px">
 			 				<th><input type="radio" name="testtype" id="testtype" value="<?php echo $exam['app_comp_code'];?>"><?php echo $exam['ptestname']?></th>
-			 				</td>
-			 			<th><?php echo $exam['ptestname']?></th>
-			 				<th><?php echo date('d-m-Y',strtotime($exam['aps_test_date']))?></th>
+			 				<th><?php echo $exam['aps_test_date']?></th>
 			 				<th><?php echo $exam['time_start'].'-'.$exam['time_stop']?></th>
+			 				 
 			 			</tr>
-			 			<tr><td colspan="4"><?php foreach ($comps as $comp ) echo $comp['ac_comp_name_bahasa'].'<br> '?></td></tr>
+			 			<tr><td colspan="4"><?php foreach ($comps as $comp ) echo $comp['ac_comp_name_bahasa'].' '?></td></tr>
 			 		<?php }?>
-			 </table>
+			 	</table>
+			 	 
 			 </td>
-			 <td width="30%" align="left">
+			 <td width="30%" align="center">
 			 	<div class="play-area">
-				  <video id="stream" width="320" height="240"></video>
-				   Ambil Foto anda untuk bukti daring 
+				  
+				    Ambil Foto anda untuk bukti daring 
 				    <button id="btn-capture" type="button" class="button">Ambil Foto</button>
-		 		</div>
-	 		 </td> 
-			 
-			 </table>
-			 </fieldset>
-			 <br>
-			 <fieldset><legend><?php echo 'Informasi Foto'?></legend>
-			 <table><tr> 
-			 
-			 <td> <td align="center">
-			 
-				<div class="play-area-sub">
-				    <canvas id="capture" width="720" height="400"></canvas>
-				    <div id="snapshot"></div>
-				  </div>
+				    <video id="stream" width="320" height="240"></video>
 				 
-			 </td> 
+				 
+				</div>
+			 
+			 </td>
 			 </tr>
-			  </table>
-			 </fieldset>
-			<table  width="100%"> 
-			<tr><td colspan="2" bgcolor="lightgreen" align="center">
-				 <input class="btn" type="button" id="btnstart" value="<?php echo $this->translate('Next');?>" onclick="startExam('<?php echo $this->transaction["at_trans_id"];?>')">
-			</td></tr>
-			</table>
-			<?php } else  {
-				echo "Pada hari ini tidak ada Ujian Saringan Masuk";
-				echo "<br>";
-				echo 'Jika ingin mencoba silahkan klik <a href="/examapplicant/examination/index-training">link ini</a>';
-				echo "<br>";
-				echo "<br>";
-				echo 'Jika ingin melihat video tutorial Ujian Saringan Masuk silahkan start Video Berikut';
-				echo '<br>';
-				echo '<video width="640" height="420" controls>';
-				echo '<source src="/documents/video/usm/video_usm_daring.mp4" type="video/mp4">';
-				echo '</video>';
-				
 			 
-			}?>	
-			
-				 
+			</table>
+			<?php } else  echo "Pada hari ini tidak ada Ujian Saringan Masuk";?>		 
 	</fieldset>
 </div>  
  
