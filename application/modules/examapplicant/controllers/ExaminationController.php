@@ -859,10 +859,11 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		$currenttest=$dbPestDetail->getActiveTest($trxid, $date, $time);
     		//echo var_dump($currenttest);
     		 
-    		if ($currenttest) {
+    		//if ($currenttest) {
     			//$dbTxt->add(array('txt'=>'testtye='.$currenttest['app_comp_code']));
     			$trx=$dbApplicant->getTransaction($trxid);
-    			$compcode=$currenttest['app_comp_code'];
+    			$compcode=$testtype;
+    			$currenttest=$dbPestDetail->getActiveTestByTestType($trxid, $testtype);
     			$this->view->testtypecode=$currenttest['initial_code'];
     			$response=$dbAppTestAns->isExamScript($trxid, $compcode);
     			if ($response['last_time']==""){
@@ -906,7 +907,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     			} else $this->_redirect('/examapplicant/examination/index/msg/pengguna sudah Login sebelumnya');
     
     	   
-    		} else $this->_redirect('/examapplicant/examination/index/msg/No Opened Test');
+    		//} else $this->_redirect('/examapplicant/examination/index/msg/No Opened Test');
     	}  else $this->_redirect('/examapplicant/examination/index/msg/No Test');
     	 
     }
