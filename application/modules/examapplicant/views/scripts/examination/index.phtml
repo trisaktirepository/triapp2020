@@ -30,6 +30,9 @@ p    {color: white; font-size: 20px}
 }
 </style>
  <script type="text/javascript">
+  function latihan(){
+	  window.location.replace('/examapplicant/examination/index-training');
+  }
   function startExam(idtrx) {
 	  if ($("#photo").val()=="ok") {
 	  	 //stopStreaming();
@@ -221,7 +224,7 @@ p    {color: white; font-size: 20px}
 				echo "<hr>";
 				echo "Mohon maaf pada hari ini tidak ada Ujian Saringan Masuk";
 				echo "<br>";
-				echo 'Jika ingin mencoba silahkan klik <button class="btn"  href="/examapplicant/examination/index-training">Latihan Ujian Daring</button>';
+				echo 'Jika ingin mencoba silahkan klik <button class="btn"  onclick="latihan()">Latihan Ujian Daring</button>';
 				echo "<br>";
 				echo "<hr>";
 				echo "<br>";
