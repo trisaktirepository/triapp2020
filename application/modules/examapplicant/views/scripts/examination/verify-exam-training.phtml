@@ -1,0 +1,186 @@
+<style>
+.button-group, .play-area {
+  border: 0px solid grey;
+  padding: 0em 1%;
+  margin-bottom: 0em; 
+}
+p    {color: white; font-size: 20px}
+
+.button {
+  padding: 0.5em;
+  margin-right: 1em;
+}
+
+.play-area-sub {
+  padding: 1em 1%;
+  display: inline-block;
+  text-align: center; 
+}
+
+#capture {
+  	display: none;
+	
+		
+}
+
+#snapshot {
+  display: inline-block;
+  width: 200px;
+  height: 150px;
+}
+</style>
+ <script type="text/javascript">
+  function startExam(idtrx,testtype) {
+	  
+	  	 //stopStreaming();
+	 	 window.location.replace('/examapplicant/examination/start-exam-training/idtrx/'+idtrx+'/testtype/'+testtype);
+ 
+  }
+
+  function generateExam(idtrx,testtype) {
+	   
+	  	 //stopStreaming();
+	 	 window.location.replace('/examapplicant/examination/generate-exam-training/idtrx/'+idtrx+'/testtype/'+testtype);
+
+	   
+  }
+  $(window).bind("load", function() {
+	   // code here
+	 // $("#btnstart").attr("disabled", true);
+	  startTimer("<?php echo $this->datestart?>");
+	  startStreaming();
+});
+
+    
+	
+</script>
+ 
+<?php if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+<?php }?>
+<?php if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+<?php }?>
+<?php if(isset($this->noticeError)){?>
+<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+<?php }?>
+
+<div>
+	<input type="hidden" id="transaction_id" value="<?php echo $this->transaction_id?>">
+	<input type="hidden" id="type" value="<?php echo 500+$this->testtype*1;?>">
+	<input type="hidden" id="photo" value="">
+	<fieldset>
+		<legend><?php echo $this->translate("Informasi sekitar Ujian Saringan Masuk anda");?></legend>
+			 
+			<h2>Baca petunjuk ujian seleksi masuk Usakti dengan seksama</h2>
+			 
+			<ol>
+				<li>Pastikan kamera komputer/hp anda dinyalakan untuk pengambilan foto anda </li>
+				<li>Periksa Kuota Data anda karena kebutuhan data selama pelaksanaaan USM sekitar 50 MB pastikan kuato data internet anda memenuhi</li>
+				<li>Periksa semua informasi di laman ini sampai anda jumpai tombol 'Mulai'</li>
+				<li>Pada halaman ini akan ada informasi terkait (1) Indentitas anda dan Program Studi yang dipilih; (2) Materi Ujian dan waktu ujian; (3) Pengambilan foto anda</li>
+			 	<li>Pada layar soal tidak ada tombol save karena setiap anda menjawab sistem secara otomatis menyimpan jawaban anda dan hasilnya ditampilkan di Daftar Jawaban</li>
+			 	<li>Jika waktu ujian telah selesai maka layar secara otomatis akan tertutup</li>
+			 	<li>Jika waktu ujian belum selesai dan anda menutup layar soal maka ujian dianggap sudah selesai</li>
+				<li>Waktu Ujian dimulai pada saat anda telah selesai memeriksa kecukupan jumlah soal dihalaman berikutnya dan menekan tombol 'Mulai Ujian'</li>
+			</ol>
+			<hr>
+	 		<br>
+			<fieldset><legend><?php echo 'Identitas Diri, Pilihan Program Studi, dan Materi Ujian'?></legend>
+			<table width="100%"><tr><td width="20%" align="center">
+			  <?php 
+					if($this->photo!=null){
+					 	$dt = explode("triapp",$this->photo['pathupload']);
+						$path = $dt[1]; 
+					?>
+						<img class="photo" src="<?php echo $path; ?>"/>
+					<?php }else{?>
+						<img class="photo" src="/images/no-photo.jpg" width="194" height="250" />
+					<?php }?>
+				 
+			 </td><td valign="top" width="50%">
+			<table class="table" width="100%">
+			 	<tr>
+			 		<th><?php echo $this->translate('Name')?></th>
+			 		<td><?php echo $this->transaction['appl_fname'].' '.$this->transaction['appl_mname'].' '.$this->transaction['appl_lname']?></td>
+			 	<tr>
+			 	<tr>
+			 		<th><?php echo $this->translate('No. Formulir')?></th>
+			 		<td><?php echo $this->transaction['at_pes_id']?></td>
+			 	<tr>
+			 	<tr>
+			 		<th><?php echo $this->translate('Address')?></th>
+			 		<td><?php echo $this->transaction['appl_address1']?></td>
+			 	<tr>
+			 	<tr>
+			 		<th><?php echo $this->translate('Program Study')?></th>
+			 		<td><?php  
+			 			 
+			 				echo 'Pilihan I 	:'.$this->program['program_code1'].' '.$this->program['program_name1'].'<br>';
+			 				echo 'Pilihan II	:'.$this->program['program_code2'].' '.$this->program['program_name2'].'<br>';
+						?></td>
+			 	<tr>
+			 </table>
+			 <br>
+			 <table class="table" width="100%">
+			 		<tr>
+			 			<th><?php echo $this->translate('Materi Ujian')?></th>
+			 			<th><?php echo $this->translate('Jumlah Soal Ujian Seharusnya')?></th>
+			 			<th><?php echo $this->translate('Jumlah Soal Ujian Anda')?></th>
+			 			
+			 		</tr>
+			 		<?php $totalstd=0;
+			 				$totalsoal=0;
+			 				$status="1";
+			 			foreach ($this->componentlist as $comp) { 
+			 				if ($comp['jml']!=$comp['nQuestion']) {
+								$bg="red"; 
+								$status="0";
+							} else $bg=""; 
+			 				$totalstd=$totalstd+$comp['nQuestion'];
+			 				$totalsoal=$totalsoal+$comp['jml'];
+			 				?>
+			 		 		
+			 			<tr bgcolor="<?php echo $bg;?>">
+			 			<td><?php echo $comp['ac_comp_name_bahasa']?></td>
+			 			<td align="center"><?php echo $comp['nQuestion']?></td>
+			 			<td align="center"><?php echo $comp['jml']?></td>
+			 			</tr>
+			 		<?php }
+			 			if ($totalsoal==0) $status="0";
+			 		?>
+			 		<tr>
+			 			<td><?php echo $this->translate('Total')?></td>
+			 			<td align="center"><?php echo $totalstd?></td>
+			 			<td align="center"><?php echo $totalsoal?></td>
+			 			
+			 		</tr>
+			 		<tr bgcolor="white"><td colspan="3" ><?php if ($status=="1") echo 'Selamat jumlah soal anda sudah sesuai,silahkan dilanjutkan ke pengerjaan ujian';
+			 		else echo 'Jumlah soal ujian belum sesuai, silahkan buat soal kembali dengan mengklik tombol Generate Exam Question'?>
+			 		</td>
+			 		</tr>
+			 </table>
+			 </td>
+			 
+			 
+			 </table>
+			 </fieldset>
+		 
+			<table  width="100%"> 
+			<tr>
+				
+				<td colspan="2" bgcolor="lightgreen" align="center">
+				<?php if ($status=="1") {?>
+				 <input class="btn" type="button" id="btnstart" value="<?php echo $this->translate('Mulai Ujian');?>" onclick="startExam('<?php echo $this->transaction["at_trans_id"];?>','<?php echo $this->testtype?>')">
+				<?php } else {?>
+					<input class="btn" type="button" id="btnulang" value="<?php echo $this->translate('Buat Soal Ujian Ulang');?>" onclick="generateExam('<?php echo $this->transaction["at_trans_id"];?>','<?php echo $this->testtype?>')">
+				
+				<?php }?>
+			</td></tr>
+			</table> 
+			
+				 
+	</fieldset>
+</div>  
+ 
+ 
