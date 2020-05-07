@@ -33,8 +33,8 @@ p    {color: white; font-size: 20px}
   function startExam(idtrx) {
 	  if ($("#photo").val()=="ok" ) {
 	  	 //stopStreaming();
-		 if ($('input[name="testtype"]:checked').val()!='')
-	 		 window.location.replace('/examapplicant/examination/verify-exam-training/idtrx/'+idtrx+'/testtype/'+$('input[name="testtype"]:checked').val());
+		 if ($('input[type="radio"]:checked').val()!='')
+	 		 window.location.replace('/examapplicant/examination/verify-exam-training/idtrx/'+idtrx+'/testtype/'+$('input[type="radio"]:checked').val());
 		 else  alert('Tolong pilih test yang mau dicoba');
 	   } else alert('Tolong klik tombol Ambil Foto terlebih dahulu');
   }
