@@ -57,6 +57,11 @@ p    {color: white; font-size: 16px}
 
 <script type="text/javascript">
 
+function keluar(){
+	if (confirm('Apakah anda mau keluar/menyatakan selesai')) {
+		location.replace('/applicant-portal');
+	}
+}
 
 $(document).ready(function(){
     $(document).bind("contextmenu",function(e){
@@ -455,7 +460,7 @@ function startTimer(endtime){
 						 <a class="pre btn" id="pre" href="#">Soal Sebelum</a>
 						 </td>
 					<td bgcolor="darkblue" align="center"  width="15%">
-					<div id="clock"></div>
+					<div id="stop"><input type="button" name="Keluar" value="Keluar" onclick="keluar()"></div>
 					</td>
 					
 						  
