@@ -270,9 +270,7 @@
 				$file    = "sidebar/alumni.phtml";
 			}elseif($auth->getIdentity()->role == 'parent'){
 				$file    = "sidebar/parent.phtml";} 
-			else if($auth->getIdentity()->role == 'tester'){
-					$file    = "sidebar/tester.phtml";
-			} else {
+			else {
 				$file    = "sidebar/applicant.phtml";	
 			}		
 			

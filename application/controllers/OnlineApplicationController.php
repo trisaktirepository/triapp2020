@@ -242,8 +242,112 @@ class OnlineApplicationController extends Zend_Controller_Action {
                 		$this->_redirect($this->view->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'index'),'default',true));
                 	
                 	} else {
-                    $this->view->noticeError = 'Login failed. Either username or password is incorrect';
-                	}
+                		
+
+
+                		//cek for tester
+                		 
+                		$dbAdapter = Zend_Db_Table::getDefaultAdapter();
+                		$authAdapter = new Zend_Auth_Adapter_DbTable($dbAdapter);
+                		 
+                		$authAdapter->setTableName('tbl_user_training')
+                		->setIdentityColumn('usr_id')
+                		->setCredentialColumn('urs_password');
+                		 
+                		// Set the input credential values to authenticate against
+                		$authAdapter->setIdentity($username);
+                		//$authAdapter->setCredential(md5($password));
+                		$authAdapter->setCredential($password);
+                		 
+                		// do the authentication
+                		$auth = Zend_Auth::getInstance();
+                		$result = $auth->authenticate($authAdapter);
+                		 
+                		if ($result->isValid()) {
+                			// success : store database row to auth's storage system
+                			// (not the password though!)
+                			$data = $authAdapter->getResultRowObject(null, 'password');
+                			//get data applicant
+                		
+                			$dbapplicant=new App_Model_Application_DbTable_ApplicantProfile();
+                			$datauser=$dbapplicant->getData($data->appl_id);
+                			 
+                			/*
+                			 * transaction move to applicant portal
+                			*/
+                			//echo $data['appl_role'];exit;
+                			$data->appl_fname=$datauser['appl_fname'];
+                			$data->appl_mname=$datauser['appl_mname'];
+                			$data->appl_lname=$datauser['appl_lname'];
+                			$data->appl_id=$datauser['appl_id'];
+                			if($datauser['appl_role']==1){
+                		
+                				//$data->role = "student";
+                				 
+                				$studentRegDB = new App_Model_Record_DbTable_StudentRegistration();
+                				$student = $studentRegDB->getData($datauser['appl_id']);
+                				 
+                				if(isset($student["IdStudentRegistration"]))
+                				{
+                					$data->registration_id = $student["IdStudentRegistration"];
+                					$data->role = "parent";
+                					$data->programcode = $student['ProgramCode'];
+                					$this->gstrsessionTRIAPP = new Zend_Session_Namespace('triapp');
+                					$this->gstrsessionTRIAPP->__set('survey',"0");
+                		
+                					//echo "student";exit;
+                				}
+                				else
+                				{
+                					$alumni = $studentRegDB->getDataAlumni($datauser['appl_id']);
+                					 
+                					if(isset($alumni["IdStudentRegistration"]))
+                					{
+                						 
+                						$data->registration_id = $alumni["IdStudentRegistration"];
+                						$data->role = "alumni";
+                					}
+                					else
+                					{
+                						 
+                						$data->role = "guest";
+                					}
+                				}
+                				 
+                				 
+                				/*print_r($data);
+                				  
+                				echo '<br>---';
+                				echo $data->appl_role;
+                				exit; */
+                				 
+                			}else{
+                				$data->role = "tester";
+                			}
+                			 
+                			 
+                			 
+                			 
+                			$auth->getStorage()->write($data);
+                			 
+                		
+                			//disabled temporary
+                			if($data->appl_role==1){
+                				if($data->role == "alumni")
+                					$this->_redirect($this->view->url(array('module'=>'default','controller'=>'alumni-portal', 'action'=>'biodata'),'default',true));
+                				else
+                					$this->_redirect($this->view->url(array('module'=>'servqual','controller'=>'survey', 'action'=>'dispatcher','id'=>$auth->getIdentity()->registration_id,'type'=>'student'),'default',true));
+                				//$this->_redirect($this->view->url(array('module'=>'default','controller'=>'student-portal', 'action'=>'home'),'default',true));
+                			}else{
+                				$this->_redirect($this->view->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'index'),'default',true));
+                			}
+                			$this->_redirect($this->view->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'index'),'default',true));
+                			 
+                		} else {
+                			$this->view->noticeError = 'Login failed. Either username or password is incorrect';
+                		}
+                		
+                	 }
                 }
 				
 			} else{

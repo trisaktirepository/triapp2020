@@ -180,6 +180,7 @@ class App_Model_Application_DbTable_ApplicantProfile extends Zend_Db_Table_Abstr
         $row = $db->fetchRow($select);
 		return $row;
 	}
+	
 	public function getProfileByTransaction($id=""){
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$select = $this->_db->select()

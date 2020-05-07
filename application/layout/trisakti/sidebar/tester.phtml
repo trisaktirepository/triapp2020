@@ -1,0 +1,15 @@
+<script type="text/javascript">
+	function new_application(){
+
+		if(confirm('<?php echo $this->translate("Are you sure you want to create new application?"); ?>')){
+			window.location = "<?php echo $this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'new-application'),'default',true); ?>";
+		}
+	}
+</script>
+
+<div id="vertmenu">
+	<ul>  
+		<li><a href="<?php echo $this->url(array('module'=>'examapplicant','controller'=>'examination','action'=>'index'),'default',true) ?>"><?php echo $this->translate("Online Exam"); ?></a></li>
+		<li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'logout'),'default',true) ?>"><?php echo $this->translate("Logout"); ?></a></li>
+	</ul>
+</div>
