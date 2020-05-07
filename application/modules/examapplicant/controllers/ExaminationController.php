@@ -429,6 +429,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	// action body
     	//$this->_helper->layout->setLayout('examapplicant');
     	$trxid=$this->_getParam('idtrx',0);
+    	$testtype=$this->_getParam('testtype',0);
     	$this->view->title="Examination :";
     
     	$auth = Zend_Auth::getInstance();
@@ -482,14 +483,15 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	if ($ptest ) {
     
     		$dbPestDetail=new App_Model_Application_DbTable_ApplicantPtestDetail();
-    		$currenttest=$dbPestDetail->getActiveTest($trxid, $date, $time);
+    		//$currenttest=$dbPestDetail->getActiveTest($trxid, $date, $time);
     		//echo var_dump($currenttest);
     		 
-    		if ($currenttest) {
+    		//if ($currenttest) {
     			//$dbTxt->add(array('txt'=>'testtye='.$currenttest['app_comp_code']));
     			$trx=$dbApplicant->getTransaction($trxid);
-    			$compcode=$currenttest['app_comp_code'];
+    			$compcode=$testtype;
     			$this->view->testtype=$compcode;
+    			$currenttest=$dbPestDetail->getActiveTestByTestType($trxid, $testtype);
     			$this->view->testtypecode=$currenttest['initial_code'];
     			$pstet=$dbPtesthead->getDataByCode($currenttest['apt_ptest_code']);
     			$dbPlacementComp=new App_Model_Application_DbTable_PlacementTestProgramComponent();
@@ -530,7 +532,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     								'token'=>md5(time())
     						);
     						//echo var_dump($data);exit;
-    						$dbAppPtest=new Examapplicant_Model_DbTable_ApplicantPtestAnswer();
+    						$dbAppPtest=new Examapplicant_Model_DbTable_LatihApplicantPtestAnswer();
     						$response=$dbAppPtest->addData($data);
     
     					} catch (Exception $e) {
@@ -553,7 +555,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     			} else $this->_redirect('/examapplicant/examination/index/msg/Fail to generate exam');
     
     
-    		} else $this->_redirect('/examapplicant/examination/index/msg/No Opened Test');
+    		//} else $this->_redirect('/examapplicant/examination/index/msg/No Opened Test');
     	}  else $this->_redirect('/examapplicant/examination/index/msg/No Test');
     	 
     

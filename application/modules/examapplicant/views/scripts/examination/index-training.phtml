@@ -31,11 +31,11 @@ p    {color: white; font-size: 20px}
 </style>
  <script type="text/javascript">
   function startExam(idtrx) {
-	  if ($("#photo").val()=="ok") {
+	  if ($("#photo").val()=="ok" && $('input[name="testtype"]:radio').val()!='') {
 	  	 //stopStreaming();
-	 	 window.location.replace('/examapplicant/examination/verify-exam/idtrx/'+idtrx);
+	 	 window.location.replace('/examapplicant/examination/verify-exam/idtrx/'+idtrx+'/testtype/'+$('input[name="testtype"]:radio').val());
 
-	   } else alert('Tolong klik tombol Ambil Foto terlebih dahulu');
+	   } else alert('Tolong klik tombol Ambil Foto terlebih dahulu dan pilih test yang mau dicoba');
   }
   $(window).bind("load", function() {
 	   // code here
