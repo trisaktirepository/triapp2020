@@ -252,7 +252,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
                 		 
                 		$authAdapter->setTableName('tbl_user_training')
                 		->setIdentityColumn('usr_id')
-                		->setCredentialColumn('urs_password');
+                		->setCredentialColumn('usr_password');
                 		 
                 		// Set the input credential values to authenticate against
                 		$authAdapter->setIdentity($username);
