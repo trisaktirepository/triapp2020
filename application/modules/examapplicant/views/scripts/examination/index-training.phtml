@@ -182,19 +182,11 @@ p    {color: white; font-size: 20px}
 			 		<?php }?>
 			 </table>
 			 </td>
-			 <td width="30%" align="left">
-			 	<div class="play-area">
-				  <video id="stream" width="320" height="240"></video>
-				  <br>
-				   Ambil Foto anda untuk bukti daring 
-				    <button id="btn-capture" type="button" class="button">Ambil Foto</button>
-		 		</div>
-	 		 </td> 
-			 
+			
 			 </table>
 			 </fieldset>
 			 <br>
-			 <fieldset><legend><?php echo 'Informasi Foto'?></legend>
+			 <fieldset><legend><?php echo 'Pengambilan Foto Bukti Daftar Daring'?></legend>
 			 <table><tr> 
 			 
 			 <td> <td align="center">
@@ -205,6 +197,15 @@ p    {color: white; font-size: 20px}
 				  </div>
 				 
 			 </td> 
+			  <td width="30%" align="left">
+			 	<div class="play-area">
+				  <video id="stream" width="320" height="240"></video>
+				  <br>
+				   Ambil Foto anda untuk bukti daring 
+				    <button id="btn-capture" type="button" class="button">Ambil Foto</button>
+		 		</div>
+	 		 </td> 
+			 
 			 </tr>
 			  </table>
 			 </fieldset>
@@ -213,20 +214,7 @@ p    {color: white; font-size: 20px}
 				 <input class="btn" type="button" id="btnstart" value="<?php echo $this->translate('Next');?>" onclick="startExam('<?php echo $this->transaction["at_trans_id"];?>')">
 			</td></tr>
 			</table>
-			<?php } else  {
-				echo "Pada hari ini tidak ada Ujian Saringan Masuk";
-				echo "<br>";
-				echo 'Jika ingin mencoba silahkan klik <a href="/examapplicant/examination/index-training">link ini</a>';
-				echo "<br>";
-				echo "<br>";
-				echo 'Jika ingin melihat video tutorial Ujian Saringan Masuk silahkan start Video Berikut';
-				echo '<br>';
-				echo '<video width="640" height="420" controls>';
-				echo '<source src="/documents/video/usm/video_usm_daring.mp4" type="video/mp4">';
-				echo '</video>';
-				
-			 
-			}?>	
+			<?php } ?>	
 			
 				 
 	</fieldset>
