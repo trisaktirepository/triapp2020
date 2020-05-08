@@ -143,8 +143,8 @@ p    {color: white; font-size: 20px}
 						<img class="photo" src="/images/no-photo.jpg" width="194" height="250" />
 					<?php }?>
 				 
-			 </td><td valign="top" width="50%">
-			<table class="table" width="100%">
+			 </td><td valign="top" width="80%">
+			<table class="table" width="80%">
 			 	<tr>
 			 		<th><?php echo $this->translate('Name')?></th>
 			 		<td><?php echo $this->transaction['appl_fname'].' '.$this->transaction['appl_mname'].' '.$this->transaction['appl_lname']?></td>
@@ -174,11 +174,11 @@ p    {color: white; font-size: 20px}
 			 			<td width="5px">
 			 				<th><input type="radio" name="testtype" id="testtype" value="<?php echo $exam['app_comp_code'];?>"><?php echo $exam['ptestname']?></th>
 			 				</td>
-			 			<th><?php echo $exam['ptestname']?></th>
+			 			 
 			 				<th><?php echo date('d-m-Y',strtotime($exam['aps_test_date']))?></th>
 			 				<th><?php echo $exam['time_start'].'-'.$exam['time_stop']?></th>
 			 			</tr>
-			 			<tr><td colspan="4"><?php foreach ($comps as $comp ) echo $comp['ac_comp_name_bahasa'].'<br> '?></td></tr>
+			 			<tr><td></td><td colspan="3"><?php foreach ($comps as $comp ) echo $comp['ac_comp_name_bahasa'].'<br> '?></td></tr>
 			 		<?php }?>
 			 </table>
 			 </td>
@@ -187,9 +187,9 @@ p    {color: white; font-size: 20px}
 			 </fieldset>
 			 <br>
 			 <fieldset><legend><?php echo 'Pengambilan Foto Bukti Daftar Daring'?></legend>
-			 <table><tr> 
+			 <table width="70%"><tr> 
 			 
-			 <td> <td align="center">
+			  <td align="center">
 			 
 				<div class="play-area-sub">
 				    <canvas id="capture" width="720" height="400"></canvas>
@@ -197,7 +197,7 @@ p    {color: white; font-size: 20px}
 				  </div>
 				 
 			 </td> 
-			  <td width="30%" align="left">
+			  <td width="60%" align="left">
 			 	<div class="play-area">
 				  <video id="stream" width="320" height="240"></video>
 				  <br>
