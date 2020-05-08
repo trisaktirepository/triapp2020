@@ -145,12 +145,12 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		$ptest=$dbPtest->getPtest($trxid);
     		$acid='';
     		$this->view->testtype='';
-    		if ($ptest ) {
-    			$currenttest=$dbPlacementTest->getActiveTest($trxid, $date, $time);
+    		//if ($ptest ) {
+    		//	$currenttest=$dbPlacementTest->getActiveTest($trxid, $date, $time);
     			//echo var_dump($currenttest);exit;
-    			$acid=$currenttest['app_comp_code'];
-    			$this->view->testtype=$acid;
-    		}
+    		//	$acid=$currenttest['app_comp_code'];
+    		//	$this->view->testtype=$acid;
+    		//}
     		//echo var_dump($comprog);echo '<br>';
     		$timestart="23:00:00";
     		foreach ($examdetail as $key=>$value) {
@@ -161,12 +161,19 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     				$examdetail[$key]['active']="1";
     			}
     			else $examdetail[$key]['active']="0";
+    			if ($compcode=="1") {
+    				$compcode="14";
+    				$compcodeori="1";
+    				
+    			} else $compcodeori="14";
     			$component=$dbExamComp->getDataComponent($compcode,'0');
     			//echo var_dump($component);
     			foreach ($component as $idx=>$comp) {
     				if (array_keys($comprog,$comp['ac_id'])==array())
     					unset($component[$idx]);
     			}
+    			$compcode=$compcodeori;
+    			
     			$testtype=$dbTestType->getData($compcode);
     			$examdetail[$key]['compcode']=$component;
     			$examdetail[$key]['ptestname']=$testtype['act_name'];
@@ -503,6 +510,11 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     			}
     			//echo var_dump($pstet);
     			//echo $compcode;exit;
+    			if ($compcode=="1") {
+    				$compcode="14";
+    				$compcodeori="1";
+    			
+    			} else $compcodeori="14";
     			$component=$dbExamComp->getDataComponent($compcode,$pstet['aph_testtype']);
     			//echo var_dump($component);exit;
     			foreach ($component as $idx=>$comp) {
@@ -512,6 +524,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     					//echo $comp['ac_id'].'<br>';
     				}
     			}
+    			$compcode=$compcodeori;
     			$response=$dbAppTestAns->isExamScript($trxid, $compcode);
     			if (!$response) {
     				//get exam script config
