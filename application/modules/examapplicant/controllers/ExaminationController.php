@@ -493,7 +493,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     			$this->view->testtype=$compcode;
     			$currenttest=$dbPestDetail->getActiveTestByTestType($trxid, $testtype);
     			$this->view->testtypecode=$currenttest['initial_code'];
-    			$pstet=$dbPtesthead->getDataByCode($currenttest['apt_ptest_code']);
+    			$pstet=$dbPtesthead->getDataByCode('TRAINING');
     			$dbPlacementComp=new App_Model_Application_DbTable_PlacementTestProgramComponent();
     			$compprogram=$dbPlacementComp->getComponenByTransaction($trxid, $pstet['aph_testtype']);
     			$comprog[]='';
@@ -516,7 +516,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     				//get exam script config
     				//echo var_dump($component); exit;
     				$dbConfig=new Examapplicant_Model_DbTable_ExamScriptConfig();
-    				$config=$dbConfig->getMatchConfig($currenttest['apt_ptest_code'], $currenttest['apt_aps_id'],$currenttest['app_comp_code']);
+    				$config=$dbConfig->getMatchConfig('TRAINING', $currenttest['apt_aps_id'],$currenttest['app_comp_code']);
     				//echo var_dump($config);exit;
     				if ($config) {
     					try {
@@ -525,7 +525,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     								'apa_ptest_code' => $trx['at_pes_id'],
     								'apa_set_code' =>null,
     								'apa_date' => date ('Y-m-d h:i:s'),
-    								'pcode' => $currenttest['apt_ptest_code'],
+    								'pcode' => 'TRAINING',
     								'config'=>$config,
     								'component'=>$component,
     								'test_type'=>$currenttest['app_comp_code'],
@@ -759,10 +759,11 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	if ($ptest ) {
     
     		$dbPestDetail=new App_Model_Application_DbTable_ApplicantPtestDetail();
-    		$currenttest=$dbPestDetail->getActiveTestByTestType($trxid, $testtype);
+    		//$currenttest=$dbPestDetail->getActiveTestByTestType($trxid, $testtype);
     		//echo var_dump($currenttest);
+    		$currenttest=$dbPestDetail->getActiveTestByTestType($trxid, $testtype);
     		 
-    		if ($currenttest) {
+    		//if ($currenttest) {
     			//$dbTxt->add(array('txt'=>'testtye='.$currenttest['app_comp_code']));
     			$trx=$dbApplicant->getTransaction($trxid);
     			$compcode=$currenttest['app_comp_code'];
@@ -790,7 +791,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     				//get exam script config
     				//echo var_dump($component); exit;
     				$dbConfig=new Examapplicant_Model_DbTable_ExamScriptConfig();
-    				$config=$dbConfig->getMatchConfig($currenttest['apt_ptest_code'], $currenttest['apt_aps_id'],$currenttest['app_comp_code']);
+    				$config=$dbConfig->getMatchConfig('TRAINING', $currenttest['apt_aps_id'],$currenttest['app_comp_code']);
     				//echo var_dump($config);exit;
     				if ($config) {
     					try {
@@ -799,7 +800,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     								'apa_ptest_code' => $trx['at_pes_id'],
     								'apa_set_code' =>null,
     								'apa_date' => date ('Y-m-d h:i:s'),
-    								'pcode' => $currenttest['apt_ptest_code'],
+    								'pcode' => 'TRAINING',
     								'config'=>$config,
     								'component'=>$component,
     								'test_type'=>$currenttest['app_comp_code'],
@@ -816,7 +817,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     
     				}
     					
-    			}
+    			//}
     
     		}
     
@@ -856,7 +857,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	if ($ptest ) {
     
     		$dbPestDetail=new App_Model_Application_DbTable_ApplicantPtestDetail();
-    		$currenttest=$dbPestDetail->getActiveTest($trxid, $date, $time);
+    		//$currenttest=$dbPestDetail->getActiveTest($trxid, $date, $time);
     		//echo var_dump($currenttest);
     		 
     		//if ($currenttest) {
