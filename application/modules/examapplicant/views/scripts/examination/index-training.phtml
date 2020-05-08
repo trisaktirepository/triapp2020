@@ -33,8 +33,8 @@ p    {color: white; font-size: 20px}
   function startExam(idtrx) {
 	  if ($("#photo").val()=="ok" ) {
 	  	 //stopStreaming();
-		 if ($('#testtype').is(':checked'))
-	 		 window.location.replace('/examapplicant/examination/verify-exam-training/idtrx/'+idtrx+'/testtype/'+$('input[type="radio"]:checked').val());
+		 if ($('input:radio[name=testtype]:checked').val()!='')
+	 		 window.location.replace('/examapplicant/examination/verify-exam-training/idtrx/'+idtrx+'/testtype/'+$('input:radio[name=testtype]:checked').val());
 		 else  alert('Tolong pilih test yang mau dicoba');
 	   } else alert('Tolong klik tombol Ambil Foto terlebih dahulu');
   }
@@ -185,6 +185,7 @@ p    {color: white; font-size: 20px}
 			 <td width="30%" align="left">
 			 	<div class="play-area">
 				  <video id="stream" width="320" height="240"></video>
+				  <br>
 				   Ambil Foto anda untuk bukti daring 
 				    <button id="btn-capture" type="button" class="button">Ambil Foto</button>
 		 		</div>
@@ -316,9 +317,8 @@ function captureSnapshot() {
 		img.width	= 160; 
 
 		snapshot.innerHTML = '';
-
 		snapshot.appendChild( img );
- 		savePhoto();
+ 		savePhoto(img);
 		
 	}
 } 
