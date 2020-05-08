@@ -192,7 +192,7 @@ p    {color: white; font-size: 20px}
 			  <td align="center">
 			 
 				<div class="play-area-sub">
-				    <canvas id="capture" width="720" height="400"></canvas>
+				    <canvas id="capture" width="320" height="240"></canvas>
 				    <div id="snapshot"></div>
 				  </div>
 				 
@@ -302,7 +302,7 @@ function captureSnapshot() {
 		ctx.drawImage( stream, 0, 0, capture.width, capture.height );
 
 		img.src		= capture.toDataURL( "image/png" );
-		img.width	= 160; 
+		img.width	= 320; 
 
 		snapshot.innerHTML = '';
 		snapshot.appendChild( img );
