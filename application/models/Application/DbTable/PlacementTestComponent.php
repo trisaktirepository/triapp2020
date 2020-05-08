@@ -60,9 +60,9 @@ class App_Model_Application_DbTable_PlacementTestComponent extends Zend_Db_Table
 		->join(array('ap'=>'applicant_program'),'ap.ap_prog_code=p.programcode',array())
 		->where('cp.aph_type=?', $aph_code) 
 		->where('ap.ap_at_trans_id=?',$trxid);
-		echo $selectData;
+		//echo $selectData;
 		$row=$db->fetchAll($selectData);
-		echo var_dump($row); 
+		//echo var_dump($row); 
 		return $row;
 	}
 	public function getDataComponent($id=0,$aphtype=null){
