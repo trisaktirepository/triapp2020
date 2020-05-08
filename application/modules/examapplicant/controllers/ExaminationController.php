@@ -792,8 +792,14 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     				foreach ($compprogram as $value) {
     					$comprog[]=$value['ac_id'];
     				}
+    				
+    				if ($compcode=="1") {
+    					$compcode="14";
+    					$compcodeori="1";
+    					 
+    				} else $compcodeori="14";
     				$component=$dbExamComp->getDataComponent($compcode);
-    					
+    				$compcode=$compcodeori;
     				foreach ($component as $idx=>$comp) {
     
     					if (!array_search($comp['ac_id'], $comprog)) {
