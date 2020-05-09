@@ -348,12 +348,10 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    		$this->view->testtypecode=$currenttest['initial_code'];
 	    		$pstet=$dbPtesthead->getDataByCode($currenttest['apt_ptest_code']);
 	    		$dbPlacementComp=new App_Model_Application_DbTable_PlacementTestProgramComponent();
-	    		
+	    		$component=$dbExamComp->getDataByComponent($currenttest['apt_ptest_code'], $programset, $compcode);
 	    		$response=$dbAppTestAns->isExamScript($trxid, $compcode);
 	    		if (!$response) {
-	    			$components=$dbPlacementComp->getDataByComponent($currenttest['apt_ptest_code'], $programset, $compcode);
 	    			 
-	    			
 	    		 	//get exam script config
     				//echo var_dump($component); exit;
 	    			$dbConfig=new Examapplicant_Model_DbTable_ExamScriptConfig();
@@ -474,12 +472,10 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     			$this->view->testtypecode=$currenttest['initial_code'];
     			$pstet=$dbPtesthead->getDataByCode('TRAINING');
     			$dbPlacementComp=new App_Model_Application_DbTable_PlacementTestComponent();
-    			
+    			$component=$dbExamComp->getDataByComponent($currenttest['apt_ptest_code'], $programset, $compcode);
     			$response=$dbAppTestAns->isExamScript($trxid, $compcode);
     			if (!$response) {
-    				$components=$dbPlacementComp->getDataByComponent($currenttest['apt_ptest_code'], $programset, $testtype);
-    				 
-    				//get exam script config
+    				 //get exam script config
     				//echo var_dump($component); exit;
     				$dbConfig=new Examapplicant_Model_DbTable_ExamScriptConfig();
     				$config=$dbConfig->getMatchConfig('TRAINING', $currenttest['apt_aps_id'],$currenttest['app_comp_code']);
@@ -656,6 +652,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     			$trx=$dbApplicant->getTransaction($trxid);
     			$compcode=$currenttest['app_comp_code'];
     			$this->view->testtypecode=$currenttest['initial_code'];
+    			$component=$dbExamComp->getDataByComponent($currenttest['apt_ptest_code'], $programset, $compcode);
     			$response=$dbAppTestAns->isExamScript($trxid, $compcode);
     			if ($response) {
     				$dbAppTestAns->updateDataConditional(array('test_type'=>$response['test_type'].rand(100,1000)), 'test_type="'.$compcode.'"  and apa_trans_id='.$trxid);
@@ -666,16 +663,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     				foreach ($compprogram as $value) {
     					$comprog[]=$value['ac_id'];
     				}
-    				$component=$dbExamComp->getDataComponent($compcode);
     				 
-    				foreach ($component as $idx=>$comp) {
-    
-    					if (!array_search($comp['ac_id'], $comprog)) {
-    						unset($component[$idx]);
-    						//echo $comp['ac_id'].'<br>';
-    					}
-    				}
-    					
     				//get exam script config
     				//echo var_dump($component); exit;
     				$dbConfig=new Examapplicant_Model_DbTable_ExamScriptConfig();
@@ -745,6 +733,8 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     			$trx=$dbApplicant->getTransaction($trxid);
     			$compcode=$currenttest['app_comp_code'];
     			$this->view->testtypecode=$currenttest['initial_code'];
+    			$component=$dbExamComp->getDataByComponent($currenttest['apt_ptest_code'], $programset, $compcode);
+    			
     			$response=$dbAppTestAns->isExamScript($trxid, $compcode);
     			if ($response) {
     				$dbAppTestAns->updateDataConditional(array('test_type'=>$response['test_type'].rand(100,1000)), 'test_type="'.$compcode.'"  and apa_trans_id='.$trxid);
@@ -755,21 +745,8 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     				foreach ($compprogram as $value) {
     					$comprog[]=$value['ac_id'];
     				}
-    				
-    				if ($compcode=="1") {
-    					$compcode="14";
-    					$compcodeori="1";
-    					 
-    				} else $compcodeori="14";
-    				$component=$dbExamComp->getDataComponent($compcode);
-    				$compcode=$compcodeori;
-    				foreach ($component as $idx=>$comp) {
-    
-    					if (!array_search($comp['ac_id'], $comprog)) {
-    						unset($component[$idx]);
-    						//echo $comp['ac_id'].'<br>';
-    					}
-    				}
+    				 
+    			 
     					
     				//get exam script config
     				//echo var_dump($component); exit;
