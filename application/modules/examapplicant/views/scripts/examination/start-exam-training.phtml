@@ -108,7 +108,8 @@ $(function() {
 							if (data.answerfile!='') updateAnswerFile(data.answerfile);
 							if (data.answertext!='') $('#answertxt').val(data.answertext);
 							if (data.apad_ques_no==$("#n_of_quest").val()) $('#next').hide(); else $('#next').show();
-		 			});
+							if (data.apad_ques_no==1) $('#pre').hide();else $('#pre').show();
+				 	});
 			}
 	});
 
@@ -149,6 +150,7 @@ $(function() {
 								if (data.answerfile!='') updateAnswerFile(data.answerfile);
 								if (data.answertext!='') $('#answertxt').val(data.answertext);
 								if (data.apad_ques_no==1) $('#pre').hide();else $('#pre').show();
+								if (data.apad_ques_no==$("#n_of_quest").val()) $('#next').hide();
 			 			});
 				}
 			});
@@ -462,10 +464,10 @@ function startTimer(endtime){
 				<table width="100%" border="0" class="table">
 					<tr>
 					<td bgcolor="darkblue" align="center"  width="15%"><p id="examtime"></p></td>
-					<td align="right"  width="15%" bgcolor="with">	
-						 <button class="previous btn" id="pre"  ><img src="/images/icon/16-left.png" style="width:40px;height:40px;"></button>
+					<td align="right"  width="15%" bgcolor="white">	
+						 <button class="previous btn" id="pre"  ><img src="/images/icon/pre-icon.png" style="width:40px;height:40px;"></button>
 						 </td>
-				 	<td align="center" >
+				 	<td align="center" bgcolor="white">
 						 <div id="orderanswer"  class="numberanswer"><?php echo $this->question['apad_ques_no']?></div>
 						 <div id="answermc">
 						 	<input type="radio" name="answer" id="radioA" value="A" onclick="saveAnswer('A')"> A
@@ -477,8 +479,8 @@ function startTimer(endtime){
 						 </div>
 						 <div id="answerfile"></div>
 					</td>
-					<td align="left"  width="15%" bgcolor="with">	
-					<button class="next btn" id="next" ><img src="/images/icon/16-right.png" style="width:40px;height:40px;"></button>
+					<td align="left"  width="15%" bgcolor="white">	
+					<button class="next btn" id="next" ><img src="/images/icon/next-icon.png" style="width:40px;height:40px;"></button>
 			 		</td>
 			 		<td bgcolor="lightgreen" align="center"  width="15%">
 					<div id="stop"><input type="button" name="Keluar" value="Kumpulkan Jawaban" onclick="keluar()"></div>
