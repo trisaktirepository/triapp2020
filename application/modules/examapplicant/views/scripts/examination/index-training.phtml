@@ -178,7 +178,7 @@ p    {color: white; font-size: 20px}
 			 				<th><?php echo date('d-m-Y',strtotime($exam['aps_test_date']))?></th>
 			 				<th><?php echo $exam['time_start'].'-'.$exam['time_stop']?></th>
 			 			</tr>
-			 			<tr><td></td><td colspan="3"><?php foreach ($comps as $comp ) echo $comp['ac_comp_name_bahasa'].'<br> '?></td></tr>
+			 			<tr><td></td><td colspan="3"><?php foreach ($comps as $comp ) echo $comp['ac_comp_name_bahasa'].', '?></td></tr>
 			 		<?php }?>
 			 </table>
 			 </td>
