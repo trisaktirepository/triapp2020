@@ -1,11 +1,3 @@
-
-<script src="https://code.jquery.com/jquery-1.12.4.js">
-
-</script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js">
-
-</script>
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <style>
 #mydiv {
   position: absolute;
@@ -64,52 +56,13 @@ p    {color: white; font-size: 16px}
  
 
 <script type="text/javascript">
-function close(){
-	 $("#dialog-result").dialog('close');
-}
-
-function openDialog(trxid,testtype){
-	url = "<?php echo $this->url(array('module'=>'examapplicant','controller'=>'examination','action'=>'review-exam-training'), 'default', true);?>/trxid/"+trxid+"/testtype/"+testtype;
-	$( "#dialog-result" ).load(url).dialog('open');	
-}
 
 
-$(function() {
-
-	$("#dialog-result").dialog({
-	    autoOpen: false,
-	    width: 750,
-	    height: 350,
-	    modal: true,
-	    buttons: {          
-	        "Close": function() {
-	            $( this ).dialog( "close" );
-	             
-	        }
-	    }
-	});
-});
-
-function kumpul(){
-	if (confirm('Apakah anda mau mengumpulkan hasil/selesai')) {
-		 
-		openDialog($("#transaction_id").val(),$('#testtype').val());
-		//location.replace('/applicant-portal');
-	}
-}
-
-function keluar(){
-	if (confirm('Apakah anda mau mengumpulkan hasil/selesai')) {
-		 
-		location.replace('/applicant-portal');
-	}
-}
-
-/* $(document).ready(function(){
+$(document).ready(function(){
     $(document).bind("contextmenu",function(e){
        return false;
    });
-});  */  
+}); 
  
 $(function() {
 	
@@ -118,12 +71,12 @@ $(function() {
 	var  order=$("#order").val()*1;
 	if (order<=$("#n_of_quest").val() & $("#stop").val()!="1") {
 		 	$.ajax({
-					url: '<?php echo $this->baseUrl();?>/examapplicant/examination/ajax-get-question-training',
+					url: '<?php echo $this->baseUrl();?>/examapplicant/examination/ajax-get-question',
 					type: 'POST',
 					data: {'apa_id': $("#apa_id").val(),'apad_id': $("#apad_id").val(),'order':order+1},
 					dataType: 'json',
 					error: function(){
-							alert("Terjadi masalah saat mengambil data !");
+							alert("Koneksi Internet anda lemah, ulangi pengambilan soal !");
 						}, 
 					}).done(function ( data ) {
 		 					//$("#QuestionTxt").val(data.question);
@@ -149,24 +102,20 @@ $(function() {
 							else $("#parent").attr("src","");
 							if (data.answerfile!='') updateAnswerFile(data.answerfile);
 							if (data.answertext!='') $('#answertxt').val(data.answertext);
-							if (data.apad_ques_no==$("#n_of_quest").val()) $('#next').hide(); else $('#next').show();
-							if (data.apad_ques_no==1) $('#pre').hide();else $('#pre').show();
-				 	});
+		 			});
 			}
 	});
 
-	$(".previous").click(function(){
-		
+	$(".pre").click(function(){
 		var order=$("#order").val()*1;
-		if (order==1) $("pre").hide();
 		if (order>1 & $("#stop").val()!="1") {
 			 	$.ajax({
-						url: '<?php echo $this->baseUrl();?>/examapplicant/examination/ajax-get-question-training',
+						url: '<?php echo $this->baseUrl();?>/examapplicant/examination/ajax-get-question',
 						type: 'POST',
 						data: {'apa_id': $("#apa_id").val(),'apad_id': $("#apad_id").val(),'order':order-1},
 						dataType: 'json',
 						error: function(){
-								alert("Terjadi masalah saat mengambil data !");
+								alert("Koneksi Internet anda lemah, ulangi pengambilan soal !");
 							}, 
 						}).done(function ( data ) {
 			 					//$("#QuestionTxt").val(data.question);
@@ -191,8 +140,6 @@ $(function() {
 								else $("#parent").attr("src","");
 								if (data.answerfile!='') updateAnswerFile(data.answerfile);
 								if (data.answertext!='') $('#answertxt').val(data.answertext);
-								if (data.apad_ques_no==1) $('#pre').hide();else $('#pre').show();
-								if (data.apad_ques_no==$("#n_of_quest").val()) $('#next').hide(); else $('#next').show();
 			 			});
 				}
 			});
@@ -237,12 +184,12 @@ function supportAjaxUploadWithProgress() {
 function getQuestion(order){
 	if ( $("#stop").val()!="1") {
 	$.ajax({
-		url: '<?php echo $this->baseUrl();?>/examapplicant/examination/ajax-get-question-training',
+		url: '<?php echo $this->baseUrl();?>/examapplicant/examination/ajax-get-question',
 		type: 'POST',
 		data: {'apa_id': $("#apa_id").val(),'apad_id': $("#apad_id").val(),'order':order},
 		dataType: 'json',
 		error: function(){
-				alert("Terjadi masalah saat mengambil  data !");
+				alert("Koneksi Internet anda lemah, ulangi pengambilan soal !");
 			}, 
 		}).done(function ( data ) {
 					//$("#QuestionTxt").val(data.question);
@@ -266,8 +213,7 @@ function getQuestion(order){
 					else $("#parent").attr("src","");
 					if (data.answerfile!='') updateAnswerFile(data.answerfile);
 					if (data.answertext!='') $('#answertxt').val(data.answertext);
-					if (data.apad_ques_no==1) $('#pre').hide(); else $('#pre').show();
-					if (data.apad_ques_no==$("#n_of_quest").val()) $('#next').hide(); else $('#next').show();
+					
 			});
 	}
 }
@@ -304,7 +250,7 @@ function deleteFile(apadmid) {
 		 
 		$.ajax({
 			  type: "POST",
-			  url: "/examapplicant/examination/delete-file-training",
+			  url: "/examapplicant/examination/delete-file",
 			  data: {'apadmid':apadmid,'apadid':$("#apad_id").val()},
 			  dataType: 'json'
 			})
@@ -325,7 +271,7 @@ function saveAnswer(answer){
 			$('#radiopre').val(answer);
 			$.ajax({
 				  type: "POST",
-				  url: "/examapplicant/examination/ajax-save-answer-training",
+				  url: "/examapplicant/examination/ajax-save-answer",
 				  data: {'idQuestion':idQuestion,'apad_id':$("#apad_id").val(),'answer':answer,'order':order,'token':$("#token").val()},
 				  dataType: 'json'
 				})
@@ -335,7 +281,7 @@ function saveAnswer(answer){
 						 $(element).text(respond.apad_appl_ans);
 						 $('input:radio[name="answer"][value="'+respond.apad_appl_ans+'"]').attr('checked',true);
 					 	 $("#token").val(respond.token);
-					 	// savePhoto();
+					 	 savePhoto();
 					} else alert(respond.msg);
 				})
 				.fail(function(respond){console.log("fail");})
@@ -350,7 +296,7 @@ function uploadFile(){
     console.log(form);
     if (supportAjaxUploadWithProgress() && $("#file").val()!='') { 
 	        $.ajax({
-	            url: '/examapplicant/examination/upload-file-training',  
+	            url: '/examapplicant/examination/upload-file',  
 	            type: 'POST',
 	            data: fd,
 	            dataType: 'json',
@@ -426,10 +372,47 @@ function startTimer(endtime){
 			clearInterval(x);
 			$("#stop").val("1");
 			document.getElementById("examtime").innerHTML = '<font color="red"><strong>Waktu Ujian Habis</strong></font>';
+			shutdownTimer(endtime);
 		}
 		}, 1000);
 }
 
+function shutdownTimer(endtime){
+	var countDownDate = new Date(endtime).getTime();
+	var countDownDate=countDownDate.setMinutes(countDownDate.getMinutes()+3);
+	//Update the count down every 1 second
+	var x = setInterval(function() {
+	
+	//Get today's date and time
+	var now = new Date().getTime();
+	
+	//Find the distance between now and the count down date
+	var distance = countDownDate - now;
+	
+	//Time calculations for days, hours, minutes and seconds
+	 
+	var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+	var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+	var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+	
+	//Output the result in an element with id="demo"
+	document.getElementById("examtime").innerHTML =  hours + " : " + minutes + " : " + seconds;
+	
+	//If the count down is over, write some text 
+	if (distance < 0) {
+		clearInterval(x);
+		$("#stop").val("1");
+		//document.getElementById("examtime").innerHTML = '<font color="red"><strong>Waktu Ujian Habis</strong></font>';
+		location.replace('/applicant-portal');
+	}
+	}, 1000);
+}
+
+function keluar(){
+	if (confirm('Apakah anda mau keluar/menyatakan selesai')) {
+		location.replace('/applicant-portal');
+	}
+}
 
 </script>
  
@@ -449,8 +432,6 @@ function startTimer(endtime){
 <input type="hidden" id="apad_id" name="apad_id" value="<?php echo $this->question['apad_id']?>">
 <input type="hidden" id="idQuestion" value="<?php echo $this->question['idQuestion']?>">
 <input type="hidden" id="order" value="1">
-<input type="hidden" id="testtype" value="<?php echo $this->testtype?>">
-<input type="hidden" id="transaction_id" value="<?php echo $this->transaction_id?>">
 <input type="hidden" id="token" value="<?php echo $this->question['token'];?>">
 <input type="hidden" id="type" value="<?php echo $this->testtypecode?>">
 <input type="hidden" id="question_url" value="<?php echo $this->question['question_url']?>">
@@ -470,12 +451,6 @@ function startTimer(endtime){
 			</table>		 
 	</fieldset>
 </div> 
-<table width="100%"><tr>
-	<?php foreach ($this->component as $value) {
-		?><td width="10%"><input type="button" value="<?php echo $value['ac_comp_name_bahasa']?>" onclick="getQuestion('<?php echo $value['quest_no']?>')"></td><?php 
-	}?>
-	<td align="right"><?php echo $this->transaction['at_pes_id'].' - '.$this->transaction['appl_fname'].' '.$this->transaction['appl_mname'].' '.$this->transaction['appl_lname'];?></td></tr>
-</table>
 <div>
 	<fieldset align="center">
 		<legend><?php echo $this->translate("Pertanyaan");?></legend>
@@ -513,11 +488,15 @@ function startTimer(endtime){
 				<td colspan="2" align="center">
 				<table width="100%" border="0" class="table">
 					<tr>
-					<td bgcolor="darkblue" align="center"  width="15%"><p id="examtime"></p></td>
-					<td align="right"  width="15%" bgcolor="white">	
-						 <button class="previous btn" id="pre"  ><img src="/images/icon/pre-icon.png" style="width:40px;height:40px;"></button>
+					<td   align="center" width="15%">
+						 <a class="pre btn" id="pre" href="#">Soal Sebelum</a>
 						 </td>
-				 	<td align="center" bgcolor="white">
+					<td bgcolor="darkblue" align="center"  width="15%">
+					<div id="stop"><input type="button" name="Keluar" value="Keluar" onclick="keluar()"></div>
+					</td>
+					
+						  
+					<td align="center" bgcolor="white">
 						 <div id="orderanswer"  class="numberanswer"><?php echo $this->question['apad_ques_no']?></div>
 						 <div id="answermc">
 						 	<input type="radio" name="answer" id="radioA" value="A" onclick="saveAnswer('A')"> A
@@ -529,12 +508,10 @@ function startTimer(endtime){
 						 </div>
 						 <div id="answerfile"></div>
 					</td>
-					<td align="left"  width="15%" bgcolor="white">	
-					<button class="next btn" id="next" ><img src="/images/icon/next-icon.png" style="width:40px;height:40px;"></button>
+					<td bgcolor="darkblue" align="center"  width="15%"><p id="examtime"></p></td>
+					<td align="center"  width="15%">	
+					<a class="next btn" id="next" href="#">Soal Berikutnya</a>
 			 		</td>
-			 		<td bgcolor="lightgreen" align="center"  width="15%">
-					<div id="stop"><input type="button" name="Keluar" value="Kumpulkan Jawaban" onclick="kumpul()"></div>
-					</td>
 			 	</tr>
 				</table>
 				</td>
@@ -546,10 +523,6 @@ function startTimer(endtime){
 </body>
 <input type="hidden" id="stop" value="">
  
-
-<div id="dialog-result" title="Hasil Jawaban Ujian Anda">
-</div>
-
 
 <script type="text/javascript">
 <!--
@@ -686,3 +659,4 @@ function savePhoto(){
 }
  
 </script>
+ 

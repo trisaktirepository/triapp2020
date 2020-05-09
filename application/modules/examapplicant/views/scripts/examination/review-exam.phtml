@@ -1,0 +1,36 @@
+ 
+
+<div>
+	<input type="hidden" id="transaction_id" value="<?php echo $this->transaction_id?>">
+	 
+	<fieldset><legend><?php echo $this->translate("Daftar Hasil Ujian Anda");?></legend>
+			 
+	<table class="table">
+	
+	<?php foreach ($this->component as $value) {
+		
+		?><tr><th rowspan="2"><?php echo $value['ac_comp_name_bahasa']?></th>
+		 <?php foreach ($value['ans'] as $ans) {
+		 			?><th><?php echo $ans['apad_ques_no']?></th><?php  
+		 		}
+		 ?></tr>
+		 <tr>
+		  <?php foreach ($value['ans'] as $ans) {
+		 			?><td align="center"><?php echo $ans['apad_appl_ans']?></td><?php  
+		 		}
+		 ?>
+		 </tr>
+		 
+		 <?php 
+	}?>
+
+	</table>
+	<table  width="100%"> 
+			<tr><td colspan="2" bgcolor="lightgreen" align="center">
+				 <input class="btn" type="button" id="btnstart" value="<?php echo $this->translate('Saya menyatakan Ujian selesai');?>" onclick="keluar()"> 
+			</td></tr>
+			</table> 
+	</fieldset>
+</div>  
+ 
+ 

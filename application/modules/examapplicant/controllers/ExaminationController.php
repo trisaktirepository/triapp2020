@@ -35,10 +35,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		$trxid=$examdetail[0]['at_trans_id'];
     		$trx=$dbApplicant->getTransaction($trxid);
     		$this->view->transaction_id=$trxid;
-    		$compprogram=$dbExamComp->getComponenByTransaction($trxid,"0");
-    		foreach ($compprogram as $value) {
-    			$comprog[]=$value['ac_id'];
-    		}
+    		 
     		$dbAppPtestDet=new Examapplicant_Model_DbTable_ApplicantPtestAnswerDtl();
     		$dbAppTestAns=new Examapplicant_Model_DbTable_ApplicantPtestAnswer();
     		$dbPtest=new App_Model_Application_DbTable_ApplicantPtest();
@@ -52,6 +49,26 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     			$this->view->testtype=$acid;
     		}
     		//echo var_dump($comprog);echo '<br>';
+    		$trx=$dbApplicant->getTransaction($trxid);
+    		//--------get applicant program  -----------
+    		$appprogramDB = new App_Model_Application_DbTable_ApplicantProgram();
+    		$app_program = $appprogramDB->getPlacementProgram($trxid);
+    		 
+    		$program_data["program_code1"]="0";
+    		$program_data["program_code2"]="0";
+    		$program_data["faculty_name2"]="";
+    		$program_data["program_name2"]="";
+    		 
+    		$i=1;$programset='';
+    		foreach($app_program as $program){
+    			$program_data["program_name".$i] = $program["program_name"];
+    			$program_data["faculty_name".$i] = $program["faculty"];
+    			$program_data["program_code".$i] = $program["program_code"];
+    			if ($programset!='') $programset=$programset.','.$program['program_id'];
+    			else $programset=$program['program_id'];
+    			$i++;
+    		}
+    		
     		$timestart="23:00:00";
     		foreach ($examdetail as $key=>$value) {
     			if ($timestart>$value['time_start']) 
@@ -61,36 +78,16 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     				$examdetail[$key]['active']="1";
     			}
     			else $examdetail[$key]['active']="0";
-    			$component=$dbExamComp->getDataComponent($compcode,'0');
-    			//echo var_dump($component);
-    			foreach ($component as $idx=>$comp) {
-    				if (array_keys($comprog,$comp['ac_id'])==array())
-    					unset($component[$idx]);
-    			}
     			$testtype=$dbTestType->getData($compcode);
-    			$examdetail[$key]['compcode']=$component;
+    			
     			$examdetail[$key]['ptestname']=$testtype['act_name'];
+    			
+    			$component=$dbExamComp->getDataByComponent($value['apt_ptest_code'], $programset, $compcode);
+    			$examdetail[$key]['compcode']=$component;
     			
     		}
     		$this->view->datestart=$date.' '.$timestart;
-    	 		$trx=$dbApplicant->getTransaction($trxid);
-	    		//--------get applicant program  -----------
-	    		$appprogramDB = new App_Model_Application_DbTable_ApplicantProgram();
-	    		$app_program = $appprogramDB->getPlacementProgram($trxid);
-	    		
-	    		$program_data["program_code1"]="0";
-	    		$program_data["program_code2"]="0";
-	    		$program_data["faculty_name2"]="";
-	    		$program_data["program_name2"]="";
-	    		
-	    		$i=1;
-	    		foreach($app_program as $program){
-	    			$program_data["program_name".$i] = $program["program_name"];
-	    			$program_data["faculty_name".$i] = $program["faculty"];
-	    			$program_data["program_code".$i] = $program["program_code"];
-	    		
-	    			$i++;
-	    		}
+    	 		
 	    		 
 	    		//-------- get applicant photo --------
 	    		$photo_name='';
@@ -135,51 +132,13 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		$trxid=$examdetail[0]['at_trans_id'];
     		$trx=$dbApplicant->getTransaction($trxid);
     		$this->view->transaction_id=$trxid;
-    		$compprogram=$dbExamComp->getComponenByTransaction($trxid,"0");
-    		foreach ($compprogram as $value) {
-    			$comprog[]=$value['ac_id'];
-    		}
+    		 
     		$dbAppPtestDet=new Examapplicant_Model_DbTable_LatihApplicantPtestAnswerDtl();
     		$dbAppTestAns=new Examapplicant_Model_DbTable_LatihApplicantPtestAnswer();
     		$dbPtest=new App_Model_Application_DbTable_ApplicantPtest();
     		$ptest=$dbPtest->getPtest($trxid);
     		$acid='';
     		$this->view->testtype='';
-    		//if ($ptest ) {
-    		//	$currenttest=$dbPlacementTest->getActiveTest($trxid, $date, $time);
-    			//echo var_dump($currenttest);exit;
-    		//	$acid=$currenttest['app_comp_code'];
-    		//	$this->view->testtype=$acid;
-    		//}
-    		//echo var_dump($comprog);echo '<br>';
-    		$timestart="23:00:00";
-    		foreach ($examdetail as $key=>$value) {
-    			if ($timestart>$value['time_start'])
-    				$timestart=$value['time_start'];
-    			$compcode=$value['app_comp_code'];
-    			if ($compcode==$acid) {
-    				$examdetail[$key]['active']="1";
-    			}
-    			else $examdetail[$key]['active']="0";
-    			if ($compcode=="1") {
-    				$compcode="14";
-    				$compcodeori="1";
-    				
-    			} else $compcodeori="14";
-    			$component=$dbExamComp->getDataComponent($compcode,'0');
-    			//echo var_dump($component);
-    			foreach ($component as $idx=>$comp) {
-    				if (array_keys($comprog,$comp['ac_id'])==array())
-    					unset($component[$idx]);
-    			}
-    			$compcode=$compcodeori;
-    			
-    			$testtype=$dbTestType->getData($compcode);
-    			$examdetail[$key]['compcode']=$component;
-    			$examdetail[$key]['ptestname']=$testtype['act_name'];
-    			 
-    		}
-    		$this->view->datestart=$date.' '.$timestart;
     		$trx=$dbApplicant->getTransaction($trxid);
     		//--------get applicant program  -----------
     		$appprogramDB = new App_Model_Application_DbTable_ApplicantProgram();
@@ -190,14 +149,36 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		$program_data["faculty_name2"]="";
     		$program_data["program_name2"]="";
     		 
-    		$i=1;
+    		$i=1;$programset='';
     		foreach($app_program as $program){
     			$program_data["program_name".$i] = $program["program_name"];
     			$program_data["faculty_name".$i] = $program["faculty"];
     			$program_data["program_code".$i] = $program["program_code"];
-    	   
+    			if ($programset!='') $programset=$programset.','.$program['program_id'];
+    			else $programset=$program['program_id'];
     			$i++;
     		}
+    		$timestart="23:00:00";
+    		foreach ($examdetail as $key=>$value) {
+    			if ($timestart>$value['time_start'])
+    				$timestart=$value['time_start'];
+    			$compcode=$value['app_comp_code'];
+    			if ($compcode==$acid) {
+    				$examdetail[$key]['active']="1";
+    			}
+    			else $examdetail[$key]['active']="0";
+    			$testtype=$dbTestType->getData($compcode);
+    			
+    			$examdetail[$key]['ptestname']=$testtype['act_name'];
+    			
+    			$component=$dbExamComp->getDataByComponent($value['apt_ptest_code'], $programset, $compcode);
+    			$examdetail[$key]['compcode']=$component;
+    			
+    			
+    			 
+    		}
+    		$this->view->datestart=$date.' '.$timestart;
+    		
     
     		//-------- get applicant photo --------
     		$photo_name='';
@@ -596,6 +577,15 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     			$this->view->testtypecode=$currenttest['initial_code'];
     			$response=$dbAppTestAns->isExamScript($trxid, $compcode);
     			if ($response['last_time']==""){
+    				$dbPlacementComp=new App_Model_Application_DbTable_PlacementTestComponent();
+    				$components=$dbPlacementComp->getDataByComponent($currenttest['apt_ptest_code'], $programset, $testtype);
+    				$component=array();
+    				foreach ($components as $idx=>$value) {
+    					$quest=$dbAppTestAns->getFirstQuestion($response['apa_id'], $value['ac_id']);
+    					$component[$quest['apad_ques_no']]=$value;
+    					$component[$quest['apad_ques_no']]['quest_no']=$quest;
+    						
+    				}
     				$answerset=$dbAppPtestDet->getDataByHead($response['apa_id']);
     				foreach ($answerset as $value) {
     					$answer[$value['apad_ques_no']]=$value['apad_appl_ans'];
@@ -629,6 +619,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     				$exammain=$dbAppTestAns->getData($response['apa_id']);
     				$question['stop_time']=$exammain['stop_time'];
     				$question['token']=$token;
+    				$this->view->component=$component;
     				//	echo var_dump($question);
     				$this->view->answer=$answer;
     				$this->view->question=$question;
@@ -881,16 +872,19 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     			$compcode=$testtype;
     			$currenttest=$dbPestDetail->getActiveTestByTestType($trxid, $testtype);
     			
-    			$dbPlacementComp=new App_Model_Application_DbTable_PlacementTestComponent();
-    			$component=$dbPlacementComp->getDataByComponent($currenttest['apt_ptest_code'], $programset, $testtype);
     			//get first question
     			
     			$this->view->testtypecode=$currenttest['initial_code'];
     			$response=$dbAppTestAns->isExamScript($trxid, $compcode);
     			if ($response['last_time']==""){
-    				foreach ($component as $idx=>$value) {
-    					$component[$idx]['quest_no']=$dbAppTestAns->getFirstQuestion($response['apa_id'], $value['ac_id']);
-    					
+    				$dbPlacementComp=new App_Model_Application_DbTable_PlacementTestComponent();
+    				$components=$dbPlacementComp->getDataByComponent($currenttest['apt_ptest_code'], $programset, $testtype);
+    				$component=array();
+    				foreach ($components as $idx=>$value) {
+    					$quest=$dbAppTestAns->getFirstQuestion($response['apa_id'], $value['ac_id']);
+    					$component[$quest['apad_ques_no']]=$value;
+    					$component[$quest['apad_ques_no']]['quest_no']=$quest;
+    				
     				}
     				$answerset=$dbAppPtestDet->getDataByHead($response['apa_id']);
     				foreach ($answerset as $value) {
@@ -991,14 +985,83 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		$dbPlacementComp=new App_Model_Application_DbTable_PlacementTestComponent();
     		$component=$dbPlacementComp->getDataByComponent($currenttest['apt_ptest_code'], $programset, $testtype);
     		//get first question
-    		 
+    		$components=array();
     		foreach ($component as $idx=>$value) {
-				$component[$idx]['ans']=$dbAppTestAns->getAnswerQuestion($response['apa_id'],$value['ac_id']);	
+    			$answer=$dbAppTestAns->getAnswerQuestion($response['apa_id'],$value['ac_id']);
+    			$components[$answer[0]['apad_ques_no']]=$value;
+    			$components[$answer[0]['apad_ques_no']]['ans']=$answer;
     		}
-    		$this->view->component=$component;
     		
+    		$this->view->component=$components;    		
     		//} else $this->_redirect('/examapplicant/examination/index/msg/No Opened Test');
     	}   
+    
+    }
+    
+    public function reviewExamAction()
+    {
+    	// action body
+    
+    	if ($this->getRequest()->isXmlHttpRequest()) {
+    		$this->_helper->layout->disableLayout();
+    	}
+    
+    
+    	$trxid=$this->_getParam('trxid',0);
+    	$testtype=$this->_getParam('testtype',0);
+    	$this->view->title="Examination :";
+    
+    	$auth = Zend_Auth::getInstance();
+    	$appl_id = $auth->getIdentity()->appl_id;
+    	if ($appl_id==202673) {
+    		$date="2020-01-19";
+    		$time="13:40:00";
+    	}
+    	else {
+    		$date=date('Y-m-d');
+    		$time=date('H:s:i');
+    	}
+    	//generate personal exam
+    	$dbTxt=new App_Model_General_DbTable_TmpTxt();
+    	$dbExamComp=new App_Model_Application_DbTable_PlacementTestComponent();
+    	$dbApplicant=new App_Model_Application_DbTable_ApplicantTransaction();
+    	$dbAppPtestDet=new Examapplicant_Model_DbTable_ApplicantPtestAnswerDtl();
+    	$dbAppTestAns=new Examapplicant_Model_DbTable_ApplicantPtestAnswer();
+    	$dbPtest=new App_Model_Application_DbTable_ApplicantPtest();
+    	$ptest=$dbPtest->getPtest($trxid);
+    
+    	if ($ptest ) {
+    		$appprogramDB = new App_Model_Application_DbTable_ApplicantProgram();
+    		$app_program = $appprogramDB->getPlacementProgram($trxid);
+    		 
+    		$programset='';
+    		foreach($app_program as $program){
+    			if ($programset!='') $programset=$programset.','.$program['program_id'];
+    			else $programset=$program['program_id'];
+    
+    		}
+    
+    		$dbPestDetail=new App_Model_Application_DbTable_ApplicantPtestDetail();
+    		$trx=$dbApplicant->getTransaction($trxid);
+    		$compcode=$testtype;
+    		$currenttest=$dbPestDetail->getActiveTestByTestType($trxid, $testtype);
+    
+    		$response=$dbAppTestAns->isExamScript($trxid, $compcode);
+    
+    		$dbPlacementComp=new App_Model_Application_DbTable_PlacementTestComponent();
+    		$component=$dbPlacementComp->getDataByComponent($currenttest['apt_ptest_code'], $programset, $testtype);
+    		//get first question
+    		$components=array();
+    		foreach ($component as $idx=>$value) {
+    			$answer=$dbAppTestAns->getAnswerQuestion($response['apa_id'],$value['ac_id']);
+    			$components[$answer[0]['apad_ques_no']]=$value;
+    			$components[$answer[0]['apad_ques_no']]['ans']=$answer;
+    		}
+    		
+    		$this->view->component=$components;
+    
+    		//} else $this->_redirect('/examapplicant/examination/index/msg/No Opened Test');
+    	}
     
     }
     
