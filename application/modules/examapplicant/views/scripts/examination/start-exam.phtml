@@ -470,10 +470,10 @@ function startTimer(endtime){
 			</table>		 
 	</fieldset>
 </div> 
-<table width="100%"><tr>
+<table width="100%"><tr bgcolor="lightblue"><td width="60%">
 	<?php foreach ($this->component as $value) {
-		?><td width="10%"><input type="button" value="<?php echo $value['ac_comp_name_bahasa']?>" onclick="getQuestion('<?php echo $value['quest_no']?>')"></td><?php 
-	}?>
+		?><input type="button" value="<?php echo $value['ac_comp_name_bahasa']?>" onclick="getQuestion('<?php echo $value['quest_no']?>')"> <?php 
+	}?></td>
 	<td align="right"><?php echo $this->transaction['at_pes_id'].' - '.$this->transaction['appl_fname'].' '.$this->transaction['appl_mname'].' '.$this->transaction['appl_lname'];?></td></tr>
 </table>
 <div>
