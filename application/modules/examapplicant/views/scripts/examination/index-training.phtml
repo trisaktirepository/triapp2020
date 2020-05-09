@@ -171,7 +171,7 @@ p    {color: white; font-size: 20px}
 			 		 
 			 		<?php foreach ($this->examdetail as $exam) {
 			 				$comps=$exam['compcode'];
-			 				if ($axam['app_comp_code']=='1' || $axam['app_comp_code']=='14' ) $status="checked";else $status='';?>
+			 				if ($exam['app_comp_code']=='1' || $exam['app_comp_code']=='14' ) $status="checked";else $status='';?>
 			 			<tr>
 			 			<td width="5px">
 			 				<th><input type="radio" name="testtype" id="testtype" value="<?php echo $exam['app_comp_code'];?>" <?php echo $status?>><?php echo $exam['ptestname']?></th>
