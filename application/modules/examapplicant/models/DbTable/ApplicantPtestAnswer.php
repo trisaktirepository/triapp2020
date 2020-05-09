@@ -363,7 +363,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$select = $db->select()
 		->from(array('a'=>$this->_name),array())
-		->join(array('b'=>'latih_applicant_ptest_ans_detl'),'a.apa_id=b.apad_apa_id',array('apad_ques_no','apad_appl_ans'))
+		->join(array('b'=>'applicant_ptest_ans_detl'),'a.apa_id=b.apad_apa_id',array('apad_ques_no','apad_appl_ans'))
 		->join(array('c'=>'tbl_question_bank'),'b.idQuestion=c.idQuestion',array())
 		->where('a.apa_id = '.$apaid)
 		->where('c.subject=?',$compid)

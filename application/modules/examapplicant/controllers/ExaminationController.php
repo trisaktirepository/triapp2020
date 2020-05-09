@@ -1063,12 +1063,12 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		$components=array();
     		foreach ($component as $idx=>$value) {
     			$answer=$dbAppTestAns->getAnswerQuestion($response['apa_id'],$value['ac_id']);
-    			echo var_dump($answer);
+    			//echo var_dump($answer);
     			$components[$answer[0]['apad_ques_no']]=$value;
     			$components[$answer[0]['apad_ques_no']]['ans']=$answer;
     		}
     		ksort($components);
-    		echo var_dump($components);exit;
+    		//echo var_dump($components);exit;
     		$this->view->component=$components;
     
     		//} else $this->_redirect('/examapplicant/examination/index/msg/No Opened Test');
