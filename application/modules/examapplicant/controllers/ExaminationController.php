@@ -941,7 +941,11 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     public function reviewExamTrainingAction()
     {
     	// action body
-    	$this->_helper->layout->disableLayout();
+    
+		if ($this->getRequest()->isXmlHttpRequest()) {
+			$this->_helper->layout->disableLayout();
+		}
+	
     	 
     	$trxid=$this->_getParam('trxid',0);
     	$testtype=$this->_getParam('testtype',0);
