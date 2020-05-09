@@ -481,17 +481,18 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     			$this->view->testtypecode=$currenttest['initial_code'];
     			$pstet=$dbPtesthead->getDataByCode('TRAINING');
     			$dbPlacementComp=new App_Model_Application_DbTable_PlacementTestComponent();
-    			$components=$dbPlacementComp->getDataByComponent($currenttest['apt_ptest_code'], $programset, $testtype);
-    			$component=array();
-    			foreach ($components as $idx=>$value) {
-    				$questno=$dbAppTestAns->getFirstQuestion($response['apa_id'], $value['ac_id']);
-    				$component[$questno]=$value;
-    				$component[$questno]['quest_no']=$questno;
     			
-    			}
-    			ksort($component);
     			$response=$dbAppTestAns->isExamScript($trxid, $compcode);
     			if (!$response) {
+    				$components=$dbPlacementComp->getDataByComponent($currenttest['apt_ptest_code'], $programset, $testtype);
+    				$component=array();
+    				foreach ($components as $idx=>$value) {
+    					$questno=$dbAppTestAns->getFirstQuestion($response['apa_id'], $value['ac_id']);
+    					$component[$questno]=$value;
+    					$component[$questno]['quest_no']=$questno;
+    					 
+    				}
+    				ksort($component);
     				//get exam script config
     				//echo var_dump($component); exit;
     				$dbConfig=new Examapplicant_Model_DbTable_ExamScriptConfig();
