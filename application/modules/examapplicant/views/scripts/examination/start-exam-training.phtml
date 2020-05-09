@@ -84,9 +84,7 @@ $(function() {
 
 function kumpul(){
 	if (confirm('Apakah anda mau mengumpulkan hasil/selesai')) {
-		 $(document).bind("contextmenu",function(e){
-		       return true;
-		   });
+		 
 		openDialog($("#transaction_id").val(),$('#testtype').val());
 		//location.replace('/applicant-portal');
 	}
@@ -99,11 +97,11 @@ function keluar(){
 	}
 }
 
-$(document).ready(function(){
+/* $(document).ready(function(){
     $(document).bind("contextmenu",function(e){
        return false;
    });
-});   
+});   */ 
  
 $(function() {
 	
