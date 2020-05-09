@@ -82,7 +82,7 @@ class Examapplicant_Model_DbTable_LatihApplicantPtestAnswer extends Zend_Db_Tabl
 		->join(array('c'=>'tbl_question_bank'),'b.idQuestion=c.idQuestion',array())
 		->where('a.apa_id = '.$apaid)
 		->where('c.subject=?',$compid)
-		->order('a.apad_ques_no ASC');
+		->order('b.apad_ques_no ASC');
 	
 		$row = $db->fetchRow($select);
 			
