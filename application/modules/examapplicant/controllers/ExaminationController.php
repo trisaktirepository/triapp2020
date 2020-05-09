@@ -1050,12 +1050,12 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		$dbPestDetail=new App_Model_Application_DbTable_ApplicantPtestDetail();
     		$trx=$dbApplicant->getTransaction($trxid);
     		$compcode=$testtype;
-    		$currenttest=$dbPestDetail->getActiveTestByTestType($trxid, $testtype);
+    		//$currenttest=$dbPestDetail->getActiveTestByTestType($trxid, $testtype);
     
     		$response=$dbAppTestAns->isExamScript($trxid, $compcode);
     
     		$dbPlacementComp=new App_Model_Application_DbTable_PlacementTestComponent();
-    		$component=$dbPlacementComp->getDataByComponent($currenttest['apt_ptest_code'], $programset, $testtype);
+    		$component=$dbPlacementComp->getDataByComponent($response['pcode'], $programset, $testtype);
     		//get first question
     		$components=array();
     		foreach ($component as $idx=>$value) {
