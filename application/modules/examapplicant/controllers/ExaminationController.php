@@ -1053,6 +1053,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		//$currenttest=$dbPestDetail->getActiveTestByTestType($trxid, $testtype);
     
     		$response=$dbAppTestAns->isExamScript($trxid, $compcode);
+    		echo $trxid.'-'.$compcode;
     		echo var_dump($response);exit;
     		$dbPlacementComp=new App_Model_Application_DbTable_PlacementTestComponent();
     		$component=$dbPlacementComp->getDataByComponent($response['pcode'], $programset, $testtype);
