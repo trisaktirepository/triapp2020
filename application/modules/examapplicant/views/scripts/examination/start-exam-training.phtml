@@ -426,6 +426,11 @@ function startTimer(endtime){
 			</table>		 
 	</fieldset>
 </div> 
+<table width="100%"><tr>
+	<?php foreach ($this->component as $value) {
+		?><td><input type="button" value="<?php echo $value['ac_comp_name_bahasa']?>" onclick="getQuestion('<?php echo $value['quest_no']?>')"></td><?php 
+	}?></tr>
+</table>
 <div>
 	<fieldset align="center">
 		<legend><?php echo $this->translate("Pertanyaan");?></legend>

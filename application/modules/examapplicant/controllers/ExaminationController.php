@@ -470,13 +470,14 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	$program_data["program_code2"]="0";
     	$program_data["faculty_name2"]="";
     	$program_data["program_name2"]="";
-    
+    	$programset='';
     	$i=1;
     	foreach($app_program as $program){
     		$program_data["program_name".$i] = $program["program_name"];
     		$program_data["faculty_name".$i] = $program["faculty"];
     		$program_data["program_code".$i] = $program["program_code"];
-    		 
+    		if ($programset!='') $programset=$programset.','.$program['program_id'];
+    		else $programset=$program['program_id'];
     		$i++;
     	}
     	 
@@ -502,29 +503,9 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     			$currenttest=$dbPestDetail->getActiveTestByTestType($trxid, $testtype);
     			$this->view->testtypecode=$currenttest['initial_code'];
     			$pstet=$dbPtesthead->getDataByCode('TRAINING');
-    			$dbPlacementComp=new App_Model_Application_DbTable_PlacementTestProgramComponent();
-    			$compprogram=$dbPlacementComp->getComponenByTransaction($trxid, $pstet['aph_testtype']);
-    			$comprog[]='';
-    			foreach ($compprogram as $value) {
-    				$comprog[]=$value['ac_id'];
-    			}
-    			//echo var_dump($pstet);
-    			//echo $compcode;exit;
-    			if ($compcode=="1") {
-    				$compcode="14";
-    				$compcodeori="1";
-    			
-    			} else $compcodeori="14";
-    			$component=$dbExamComp->getDataComponent($compcode,$pstet['aph_testtype']);
-    			//echo var_dump($component);exit;
-    			foreach ($component as $idx=>$comp) {
-    				 
-    				if (!array_search($comp['ac_id'], $comprog)) {
-    					unset($component[$idx]);
-    					//echo $comp['ac_id'].'<br>';
-    				}
-    			}
-    			$compcode=$compcodeori;
+    			$dbPlacementComp=new App_Model_Application_DbTable_PlacementTestComponent();
+    			$component=$dbPlacementComp->getDataByComponent($currenttest['apt_ptest_code'], $programset, $testtype);
+    			 
     			$response=$dbAppTestAns->isExamScript($trxid, $compcode);
     			if (!$response) {
     				//get exam script config
@@ -875,6 +856,17 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	$ptest=$dbPtest->getPtest($trxid);
     	 
     	if ($ptest ) {
+    		
+    		$appprogramDB = new App_Model_Application_DbTable_ApplicantProgram();
+    		$app_program = $appprogramDB->getPlacementProgram($trxid);
+    		 
+    		$programset='';
+    		 
+    		foreach($app_program as $program){
+    			 if ($programset!='') $programset=$programset.','.$program['program_id'];
+    			else $programset=$program['program_id'];
+    			 
+    		}
     
     		$dbPestDetail=new App_Model_Application_DbTable_ApplicantPtestDetail();
     		//$currenttest=$dbPestDetail->getActiveTest($trxid, $date, $time);
@@ -885,9 +877,18 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     			$trx=$dbApplicant->getTransaction($trxid);
     			$compcode=$testtype;
     			$currenttest=$dbPestDetail->getActiveTestByTestType($trxid, $testtype);
+    			
+    			$dbPlacementComp=new App_Model_Application_DbTable_PlacementTestComponent();
+    			$component=$dbPlacementComp->getDataByComponent($currenttest['apt_ptest_code'], $programset, $testtype);
+    			//get first question
+    			
     			$this->view->testtypecode=$currenttest['initial_code'];
     			$response=$dbAppTestAns->isExamScript($trxid, $compcode);
     			if ($response['last_time']==""){
+    				foreach ($component as $idx=>$value) {
+    					$component[$idx]['quest_no']=$dbAppTestAns->getFirstQuestion($response['apa_id'], $value['ac_id']);
+    					
+    				}
     				$answerset=$dbAppPtestDet->getDataByHead($response['apa_id']);
     				foreach ($answerset as $value) {
     					$answer[$value['apad_ques_no']]=$value['apad_appl_ans'];
@@ -922,6 +923,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     				$question['stop_time']=$exammain['stop_time'];
     				$question['token']=$token;
     				//	echo var_dump($question);
+    				$this->view->component=$component;
     				$this->view->answer=$answer;
     				$this->view->question=$question;
     				$this->view->n_of_quest=$response['n_of_quest'];

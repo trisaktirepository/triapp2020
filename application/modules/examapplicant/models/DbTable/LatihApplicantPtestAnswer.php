@@ -73,6 +73,23 @@ class Examapplicant_Model_DbTable_LatihApplicantPtestAnswer extends Zend_Db_Tabl
 	
 	}
 	
+	public function getFirstQuestion($apaid,$compid){
+			
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$select = $db->select()
+		->from(array('a'=>$this->_name),array('apad_ques_no'))
+		->join(array('b'=>'latih_applicant_ptest_ans_detl'),'a.apa_id=b.apad_apa_id',array())
+		->join(array('c'=>'tbl_question_bank'),'b.idQuestion=c.idQuestion',array())
+		->where('a.apa_id = '.$apaid)
+		->where('c.subject=?',$compid)
+		->order('a.apad_ques_no ASC');
+	
+		$row = $db->fetchRow($select);
+			
+		return $row['apad_ques_no'];
+	
+	}
+	
 	public function getPaginateData(){
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$selectData = $db ->select()
