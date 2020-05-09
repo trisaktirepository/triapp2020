@@ -581,10 +581,10 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     				$components=$dbPlacementComp->getDataByComponent($currenttest['apt_ptest_code'], $programset, $testtype);
     				$component=array();
     				foreach ($components as $idx=>$value) {
-    					$quest=$dbAppTestAns->getFirstQuestion($response['apa_id'], $value['ac_id']);
-    					$component[$quest['apad_ques_no']]=$value;
-    					$component[$quest['apad_ques_no']]['quest_no']=$quest;
-    						
+    					$questno=$dbAppTestAns->getFirstQuestion($response['apa_id'], $value['ac_id']);
+    					$component[$questno]=$value;
+    					$component[$questno]['quest_no']=$questno;
+    				
     				}
     				$answerset=$dbAppPtestDet->getDataByHead($response['apa_id']);
     				foreach ($answerset as $value) {
@@ -881,9 +881,9 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     				$components=$dbPlacementComp->getDataByComponent($currenttest['apt_ptest_code'], $programset, $testtype);
     				$component=array();
     				foreach ($components as $idx=>$value) {
-    					$quest=$dbAppTestAns->getFirstQuestion($response['apa_id'], $value['ac_id']);
-    					$component[$quest['apad_ques_no']]=$value;
-    					$component[$quest['apad_ques_no']]['quest_no']=$quest;
+    					$questno=$dbAppTestAns->getFirstQuestion($response['apa_id'], $value['ac_id']);
+    					$component[$questno]=$value;
+    					$component[$questno]['quest_no']=$questno;
     				
     				}
     				$answerset=$dbAppPtestDet->getDataByHead($response['apa_id']);
