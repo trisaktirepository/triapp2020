@@ -942,8 +942,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     {
     	// action body
     	$this->_helper->layout->disableLayout();
-    	
-    	$this->_helper->layout->setLayout('examapplicant');
+    	 
     	$trxid=$this->_getParam('trxid',0);
     	$testtype=$this->_getParam('testtype',0);
     	$this->view->title="Examination :";
