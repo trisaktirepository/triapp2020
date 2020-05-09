@@ -56,6 +56,7 @@ p    {color: white; font-size: 16px}
  
 
 <script type="text/javascript">
+
 function openDialog(trxid,testtype){
 	url = "<?php echo $this->url(array('module'=>'examapplicant','controller'=>'examination','action'=>'review-exam-training'), 'default', true);?>/trxid/"+trxid+"/testtype/"+testtype;
 	$( "#dialog-result" ).load(url).dialog('open');	

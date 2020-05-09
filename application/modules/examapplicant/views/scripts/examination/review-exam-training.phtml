@@ -30,7 +30,9 @@ p    {color: white; font-size: 20px}
 }
 </style>
  <script type="text/javascript">
- 
+ function close(){
+	 $("#dialog-result").dialog('open');
+ }
 </script>
   
 
@@ -62,6 +64,7 @@ p    {color: white; font-size: 20px}
 	<table  width="100%"> 
 			<tr><td colspan="2" bgcolor="lightgreen" align="center">
 				 <input class="btn" type="button" id="btnstart" value="<?php echo $this->translate('Finish');?>" onclick="keluar()">
+				  <input class="btn" type="button" id="btnstart" value="<?php echo $this->translate('Close');?>" onclick="close()">
 			</td></tr>
 			</table> 
 	</fieldset>
