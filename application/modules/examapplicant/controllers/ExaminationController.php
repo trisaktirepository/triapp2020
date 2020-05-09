@@ -530,6 +530,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	$trxid=$this->_getParam('idtrx',0);
     	$this->view->transaction_id=$trxid;
     	$testtype=$this->_getParam('testtype',0);
+    	$this->view->testtype=$testtype;
     	$this->view->title="Examination :";
     
     	$auth = Zend_Auth::getInstance();
@@ -1053,8 +1054,8 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		//$currenttest=$dbPestDetail->getActiveTestByTestType($trxid, $testtype);
     
     		$response=$dbAppTestAns->isExamScript($trxid, $compcode);
-    		echo $trxid.'-'.$compcode;
-    		echo var_dump($response);exit;
+    		//echo $trxid.'-'.$compcode;
+    		//echo var_dump($response);exit;
     		$dbPlacementComp=new App_Model_Application_DbTable_PlacementTestComponent();
     		$component=$dbPlacementComp->getDataByComponent($response['pcode'], $programset, $testtype);
     		//get first question
