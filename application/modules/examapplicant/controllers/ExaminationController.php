@@ -942,7 +942,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     {
     	// action body
     	$this->_helper->layout->setLayout('examapplicant');
-    	$trxid=$this->_getParam('idtrx',0);
+    	$trxid=$this->_getParam('trxid',0);
     	$testtype=$this->_getParam('testtype',0);
     	$this->view->title="Examination :";
     
@@ -993,7 +993,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		$this->view->component=$component;
     		
     		//} else $this->_redirect('/examapplicant/examination/index/msg/No Opened Test');
-    	}  else $this->_redirect('/examapplicant/examination/index/msg/No Test');
+    	}   
     
     }
     
