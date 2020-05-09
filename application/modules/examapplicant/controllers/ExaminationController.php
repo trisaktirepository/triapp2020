@@ -835,6 +835,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	$trxid=$this->_getParam('idtrx',0);
     	$testtype=$this->_getParam('testtype',0);
     	$this->view->testtype=$testtype;
+    	$this->view->transaction_id=$trxid;
     	$this->view->title="Examination :";
     
     	$auth = Zend_Auth::getInstance();
