@@ -170,10 +170,11 @@ p    {color: white; font-size: 20px}
 			 <table class="table" width="80%">
 			 		 
 			 		<?php foreach ($this->examdetail as $exam) {
-			 				$comps=$exam['compcode'];?>
+			 				$comps=$exam['compcode'];
+			 				if ($axam['app_comp_code']=='1' || $axam['app_comp_code']=='14' ) $status="checked";else $status='';?>
 			 			<tr>
 			 			<td width="5px">
-			 				<th><input type="radio" name="testtype" id="testtype" value="<?php echo $exam['app_comp_code'];?>" checked><?php echo $exam['ptestname']?></th>
+			 				<th><input type="radio" name="testtype" id="testtype" value="<?php echo $exam['app_comp_code'];?>" <?php echo $status?>><?php echo $exam['ptestname']?></th>
 			 				</td>
 			 			 
 			 				<th><?php echo date('d-m-Y',strtotime($exam['aps_test_date']))?></th>
