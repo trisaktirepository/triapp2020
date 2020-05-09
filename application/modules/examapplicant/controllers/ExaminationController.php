@@ -988,7 +988,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		//get first question
     		 
     		foreach ($component as $idx=>$value) {
-				$component[$idx]['ans']=$dbAppTestAns->getAnswerQuestion($response['ap_id'],$value['ac_id']);	
+				$component[$idx]['ans']=$dbAppTestAns->getAnswerQuestion($response['apa_id'],$value['ac_id']);	
     		}
     		$this->view->component=$component;
     		
