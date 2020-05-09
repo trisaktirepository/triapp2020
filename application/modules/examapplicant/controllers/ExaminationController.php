@@ -1059,6 +1059,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		$dbPlacementComp=new App_Model_Application_DbTable_PlacementTestComponent();
     		$component=$dbPlacementComp->getDataByComponent($response['pcode'], $programset, $testtype);
     		//get first question
+    		echo var_dump($component);exit;
     		$components=array();
     		foreach ($component as $idx=>$value) {
     			$answer=$dbAppTestAns->getAnswerQuestion($response['apa_id'],$value['ac_id']);
