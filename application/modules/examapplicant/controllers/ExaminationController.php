@@ -283,6 +283,9 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
         // action body
     	//$this->_helper->layout->setLayout('examapplicant');
     	$trxid=$this->_getParam('idtrx',0);
+    	$this->view->transaction_id=$trxid;
+    	$testtype=$this->_getParam('testtype',0);
+    	$this->view->testtype=$testtype;
     	$this->view->title="Examination :";
     	 
     	$auth = Zend_Auth::getInstance();
@@ -337,7 +340,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	if ($ptest ) {
     		
     		$dbPestDetail=new App_Model_Application_DbTable_ApplicantPtestDetail();
-    		$currenttest=$dbPestDetail->getActiveTest($trxid, $date, $time);
+    		$currenttest=$dbPestDetail->getActiveTestByTestType($trxid, $testtype);
 	    	//echo var_dump($currenttest); 
     		 
 	    	if ($currenttest) {
