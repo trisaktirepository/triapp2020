@@ -834,6 +834,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	$this->_helper->layout->setLayout('examapplicant');
     	$trxid=$this->_getParam('idtrx',0);
     	$testtype=$this->_getParam('testtype',0);
+    	$this->view->testtype=$testtype;
     	$this->view->title="Examination :";
     
     	$auth = Zend_Auth::getInstance();
@@ -854,7 +855,8 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	$dbAppTestAns=new Examapplicant_Model_DbTable_LatihApplicantPtestAnswer(); 
     	$dbPtest=new App_Model_Application_DbTable_ApplicantPtest();
     	$ptest=$dbPtest->getPtest($trxid);
-    	 
+    	$trx=$dbApplicant->getTransaction($trxid);
+    	$this->view->transaction=$trx;
     	if ($ptest ) {
     		
     		$appprogramDB = new App_Model_Application_DbTable_ApplicantProgram();
@@ -933,6 +935,65 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		//} else $this->_redirect('/examapplicant/examination/index/msg/No Opened Test');
     	}  else $this->_redirect('/examapplicant/examination/index/msg/No Test');
     	 
+    }
+    
+    public function reviewExamTrainingAction()
+    {
+    	// action body
+    	$this->_helper->layout->setLayout('examapplicant');
+    	$trxid=$this->_getParam('idtrx',0);
+    	$testtype=$this->_getParam('testtype',0);
+    	$this->view->title="Examination :";
+    
+    	$auth = Zend_Auth::getInstance();
+    	$appl_id = $auth->getIdentity()->appl_id;
+    	if ($appl_id==202673) {
+    		$date="2020-01-19";
+    		$time="13:40:00";
+    	}
+    	else {
+    		$date=date('Y-m-d');
+    		$time=date('H:s:i');
+    	}
+    	//generate personal exam
+    	$dbTxt=new App_Model_General_DbTable_TmpTxt();
+    	$dbExamComp=new App_Model_Application_DbTable_PlacementTestComponent();
+    	$dbApplicant=new App_Model_Application_DbTable_ApplicantTransaction();
+    	$dbAppPtestDet=new Examapplicant_Model_DbTable_LatihApplicantPtestAnswerDtl();
+    	$dbAppTestAns=new Examapplicant_Model_DbTable_LatihApplicantPtestAnswer();
+    	$dbPtest=new App_Model_Application_DbTable_ApplicantPtest();
+    	$ptest=$dbPtest->getPtest($trxid);
+    
+    	if ($ptest ) {
+    		$appprogramDB = new App_Model_Application_DbTable_ApplicantProgram();
+    		$app_program = $appprogramDB->getPlacementProgram($trxid);
+    		 
+    		$programset='';
+    		foreach($app_program as $program){
+    			if ($programset!='') $programset=$programset.','.$program['program_id'];
+    			else $programset=$program['program_id'];
+    
+    		}
+    
+    		$dbPestDetail=new App_Model_Application_DbTable_ApplicantPtestDetail();
+    		$trx=$dbApplicant->getTransaction($trxid);
+    		$compcode=$testtype;
+    		$currenttest=$dbPestDetail->getActiveTestByTestType($trxid, $testtype);
+
+    		$response=$dbAppTestAns->isExamScript($trxid, $compcode);
+    		
+    		$dbPlacementComp=new App_Model_Application_DbTable_PlacementTestComponent();
+    		$component=$dbPlacementComp->getDataByComponent($currenttest['apt_ptest_code'], $programset, $testtype);
+    		//get first question
+    		 
+    		foreach ($component as $idx=>$value) {
+				$component[$idx]['ans']=$dbAppTestAns->getAnswerQuestion($response['ap_id'],$value['ac_id']);	
+    		}
+    		$this->view->component=$component;
+    		
+    		//} else $this->_redirect('/examapplicant/examination/index/msg/No Opened Test');
+    	}  else $this->_redirect('/examapplicant/examination/index/msg/No Test');
+    
     }
     
  	 

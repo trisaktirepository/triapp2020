@@ -358,6 +358,38 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 		if ($where!='')
 			$this->update($postData, $where);
 	}
+	public function getAnswerQuestion($apaid,$compid){
+			
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$select = $db->select()
+		->from(array('a'=>$this->_name),array())
+		->join(array('b'=>'latih_applicant_ptest_ans_detl'),'a.apa_id=b.apad_apa_id',array('apad_ques_no','apad_appl_ans'))
+		->join(array('c'=>'tbl_question_bank'),'b.idQuestion=c.idQuestion',array())
+		->where('a.apa_id = '.$apaid)
+		->where('c.subject=?',$compid)
+		->order('b.apad_ques_no ASC');
+	
+		$row = $db->fetchAll($select);
+			
+		return $row;
+	
+	}
+	public function getFirstQuestion($apaid,$compid){
+			
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$select = $db->select()
+		->from(array('a'=>$this->_name),array())
+		->join(array('b'=>'latih_applicant_ptest_ans_detl'),'a.apa_id=b.apad_apa_id',array('apad_ques_no'))
+		->join(array('c'=>'tbl_question_bank'),'b.idQuestion=c.idQuestion',array())
+		->where('a.apa_id = '.$apaid)
+		->where('c.subject=?',$compid)
+		->order('b.apad_ques_no ASC');
+	
+		$row = $db->fetchRow($select);
+			
+		return $row['apad_ques_no'];
+	
+	}
 	
 	public function getDataByStatus($status=1){
 		$db = Zend_Db_Table::getDefaultAdapter();

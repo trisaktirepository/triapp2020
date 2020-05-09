@@ -56,10 +56,32 @@ p    {color: white; font-size: 16px}
  
 
 <script type="text/javascript">
+function openDialog(trxid,testtype){
+	url = "<?php echo $this->url(array('module'=>'examapplicant','controller'=>'examination','action'=>'review-exam-training'), 'default', true);?>/trxid/"+trxid+"/testtype/"+testtype;
+	$( "#dialog-result" ).load(url).dialog('open');	
+}
+
+
+$(function() {
+
+	$( "#dialog-result" ).dialog({
+	    autoOpen: false,
+	    width: 750,
+	    height: 350,
+	    modal: true,
+	    buttons: {          
+	        "Close": function() {
+	            $( this ).dialog( "close" );
+	             
+	        }
+	    }
+	});
+});
 
 function keluar(){
 	if (confirm('Apakah anda mau keluar/menyatakan selesai')) {
-		location.replace('/applicant-portal');
+		openDialog($("#transaction_id").val(),$('#testtype').val());
+		//location.replace('/applicant-portal');
 	}
 }
 
@@ -407,6 +429,7 @@ function startTimer(endtime){
 <input type="hidden" id="apad_id" name="apad_id" value="<?php echo $this->question['apad_id']?>">
 <input type="hidden" id="idQuestion" value="<?php echo $this->question['idQuestion']?>">
 <input type="hidden" id="order" value="1">
+<input type="hidden" id="testtype" value="<?php echo $this->testtype?>">
 <input type="hidden" id="token" value="<?php echo $this->question['token'];?>">
 <input type="hidden" id="type" value="<?php echo $this->testtypecode?>">
 <input type="hidden" id="question_url" value="<?php echo $this->question['question_url']?>">
@@ -428,8 +451,9 @@ function startTimer(endtime){
 </div> 
 <table width="100%"><tr>
 	<?php foreach ($this->component as $value) {
-		?><td><input type="button" value="<?php echo $value['ac_comp_name_bahasa']?>" onclick="getQuestion('<?php echo $value['quest_no']?>')"></td><?php 
-	}?></tr>
+		?><td width="10%"><input type="button" value="<?php echo $value['ac_comp_name_bahasa']?>" onclick="getQuestion('<?php echo $value['quest_no']?>')"></td><?php 
+	}?>
+	<td align="right"><?php echo $this->transaction['at_pes_id'].' - '.$this->transaction['appl_fname'].' '.$this->transaction['appl_mname'].' '.$this->transaction['appl_lname'];?></td></tr>
 </table>
 <div>
 	<fieldset align="center">
@@ -501,6 +525,10 @@ function startTimer(endtime){
 </body>
 <input type="hidden" id="stop" value="">
  
+
+<div id="dialog-result" title="Hasil Jawaban Ujian Anda">
+</div>
+
 
 <script type="text/javascript">
 <!--
@@ -637,4 +665,3 @@ function savePhoto(){
 }
  
 </script>
- 
