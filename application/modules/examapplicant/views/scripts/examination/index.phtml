@@ -33,10 +33,10 @@ p    {color: white; font-size: 20px}
   function latihan(){
 	  window.location.replace('/examapplicant/examination/index-training');
   }
-  function startExam(idtrx) {
+  function startExam(idtrx,testtype) {
 	  if ($("#photo").val()=="ok") {
 	  	 //stopStreaming();
-	 	 window.location.replace('/examapplicant/examination/verify-exam/idtrx/'+idtrx);
+	 	 window.location.replace('/examapplicant/examination/verify-exam/idtrx/'+idtrx+'/testtype/'+testtype);
 
 	   } else alert('Tolong klik tombol Ambil Foto terlebih dahulu');
   }
@@ -224,7 +224,7 @@ p    {color: white; font-size: 20px}
 			 </fieldset>
 			<table  width="100%"> 
 			<tr><td colspan="2" bgcolor="lightgreen" align="center">
-				 <input class="btn" type="button" id="btnstart" value="<?php echo $this->translate('Next');?>" onclick="startExam('<?php echo $this->transaction["at_trans_id"];?>')">
+				 <input class="btn" type="button" id="btnstart" value="<?php echo $this->translate('Next');?>" onclick="startExam('<?php echo $this->transaction["at_trans_id"];?>','<?php echo $this->testtype?>')">
 			</td></tr>
 			</table>
 			<?php } else  {
