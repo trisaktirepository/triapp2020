@@ -33,7 +33,7 @@ p    {color: white; font-size: 20px}
   function startExam(idtrx) {
 	  if ($("#photo").val()=="ok" ) {
 	  	 //stopStreaming();
-		 if ($('input:radio[name=testtype]:checked').val()!='')
+		 if ($('input:radio[name=testtype]:checked').val()!='undefined')
 	 		 window.location.replace('/examapplicant/examination/verify-exam-training/idtrx/'+idtrx+'/testtype/'+$('input:radio[name=testtype]:checked').val());
 		 else  alert('Tolong pilih test yang mau dicoba');
 	   } else alert('Tolong klik tombol Ambil Foto terlebih dahulu');
