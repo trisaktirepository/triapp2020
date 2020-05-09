@@ -456,15 +456,11 @@ function startTimer(endtime){
 				<td colspan="2" align="center">
 				<table width="100%" border="0" class="table">
 					<tr>
+					<td bgcolor="darkblue" align="center"  width="15%"><p id="examtime"></p></td>
 					<td   align="center" width="15%">
 						 <a class="pre btn" id="pre" href="#">Soal Sebelum</a>
 						 </td>
-					<td bgcolor="darkblue" align="center"  width="15%">
-					<div id="stop"><input type="button" name="Keluar" value="Keluar" onclick="keluar()"></div>
-					</td>
-					
-						  
-					<td align="center" bgcolor="white">
+				 	<td align="center" bgcolor="white">
 						 <div id="orderanswer"  class="numberanswer"><?php echo $this->question['apad_ques_no']?></div>
 						 <div id="answermc">
 						 	<input type="radio" name="answer" id="radioA" value="A" onclick="saveAnswer('A')"> A
@@ -476,10 +472,12 @@ function startTimer(endtime){
 						 </div>
 						 <div id="answerfile"></div>
 					</td>
-					<td bgcolor="darkblue" align="center"  width="15%"><p id="examtime"></p></td>
 					<td align="center"  width="15%">	
-					<a class="next btn" id="next" href="#">Soal Berikutnya</a>
+					<button class="next btn" id="next" href="#">Soal Berikutnya</button>
 			 		</td>
+			 		<td bgcolor="darkblue" align="center"  width="15%">
+					<div id="stop"><input type="button" name="Keluar" value="Keluar" onclick="keluar()"></div>
+					</td>
 			 	</tr>
 				</table>
 				</td>
