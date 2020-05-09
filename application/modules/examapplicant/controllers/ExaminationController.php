@@ -352,14 +352,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    		$response=$dbAppTestAns->isExamScript($trxid, $compcode);
 	    		if (!$response) {
 	    			$components=$dbPlacementComp->getDataByComponent($currenttest['apt_ptest_code'], $programset, $compcode);
-	    			$component=array();
-	    			foreach ($components as $idx=>$value) {
-	    				$questno=$dbAppTestAns->getFirstQuestion($response['apa_id'], $value['ac_id']);
-	    				$component[$questno]=$value;
-	    				$component[$questno]['quest_no']=$questno;
-	    				 
-	    			}
-	    			ksort($component);
+	    			 
 	    			
 	    		 	//get exam script config
     				//echo var_dump($component); exit;
@@ -485,14 +478,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     			$response=$dbAppTestAns->isExamScript($trxid, $compcode);
     			if (!$response) {
     				$components=$dbPlacementComp->getDataByComponent($currenttest['apt_ptest_code'], $programset, $testtype);
-    				$component=array();
-    				foreach ($components as $idx=>$value) {
-    					$questno=$dbAppTestAns->getFirstQuestion($response['apa_id'], $value['ac_id']);
-    					$component[$questno]=$value;
-    					$component[$questno]['quest_no']=$questno;
-    					 
-    				}
-    				ksort($component);
+    				 
     				//get exam script config
     				//echo var_dump($component); exit;
     				$dbConfig=new Examapplicant_Model_DbTable_ExamScriptConfig();
