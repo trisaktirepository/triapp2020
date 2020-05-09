@@ -186,13 +186,7 @@ p    {color: white; font-size: 20px}
 			 		<?php }?>
 			 </table>
 			 </td>
-			 <td width="30%" align="left">
-			 	<div class="play-area">
-				  <video id="stream" width="320" height="240"></video>
-				   Ambil Foto anda untuk bukti daring 
-				    <button id="btn-capture" type="button" class="button">Ambil Foto</button>
-		 		</div>
-	 		 </td> 
+			 
 			 
 			 </table>
 			 </fieldset>
@@ -208,6 +202,13 @@ p    {color: white; font-size: 20px}
 				  </div>
 				 
 			 </td> 
+			 <td width="80%" align="left">
+			 	<div class="play-area">
+				  <video id="stream" width="320" height="240"></video>
+				   Ambil Foto anda untuk bukti daring 
+				    <button id="btn-capture" type="button" class="button">Ambil Foto</button>
+		 		</div>
+	 		 </td> 
 			 </tr>
 			  </table>
 			 </fieldset>
@@ -323,7 +324,7 @@ function captureSnapshot() {
 		ctx.drawImage( stream, 0, 0, capture.width, capture.height );
 
 		img.src		= capture.toDataURL( "image/png" );
-		img.width	= 160; 
+		img.width	= 200; 
 
 		snapshot.innerHTML = '';
 

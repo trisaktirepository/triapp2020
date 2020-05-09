@@ -156,7 +156,7 @@ p    {color: white; font-size: 20px}
 			 			
 			 		</tr>
 			 		<tr bgcolor="white"><td colspan="3" ><?php if ($status=="1") echo 'Selamat jumlah soal anda sudah sesuai,silahkan dilanjutkan ke pengerjaan ujian';
-			 		else echo 'Jumlah soal ujian belum sesuai, silahkan buat soal kembali dengan mengklik tombol Generate Exam Question'?>
+			 		else echo 'Jumlah soal ujian belum sesuai dengan yang seharusnya, silahkan   <input type="button" name="generate" value="Klik Disini" onclick="generateExam('.$this->transaction["at_trans_id"].','.$this->testtype.')">' ?>
 			 		</td>
 			 		</tr>
 			 </table>
@@ -166,19 +166,19 @@ p    {color: white; font-size: 20px}
 			 </table>
 			 </fieldset>
 		 
-			<table  width="100%"> 
-			<tr>
-				
-				<td colspan="2" bgcolor="lightgreen" align="center">
-				<?php if ($status=="1") {?>
-				 <input class="btn" type="button" id="btnstart" value="<?php echo $this->translate('Mulai Ujian');?>" onclick="startExam('<?php echo $this->transaction["at_trans_id"];?>','<?php echo $this->testtype?>')">
-				<?php } else {?>
-					<input class="btn" type="button" id="btnulang" value="<?php echo $this->translate('Buat Soal Ujian Ulang');?>" onclick="generateExam('<?php echo $this->transaction["at_trans_id"];?>','<?php echo $this->testtype?>')">
-				
-				<?php }?>
-			</td></tr>
-			</table> 
+			 <?php if ($status=="1") {?>
+				<table  width="100%"> 
 			
+				<tr>
+				
+					<td colspan="2" bgcolor="lightgreen" align="center">
+				
+				 	<input class="btn" type="button" id="btnstart" value="<?php echo $this->translate('Mulai Ujian');?>" onclick="startExam('<?php echo $this->transaction["at_trans_id"];?>','<?php echo $this->testtype?>')">
+				
+					</td>
+				</tr>
+				</table> 
+			<?php }?>
 				 
 	</fieldset>
 </div>  
