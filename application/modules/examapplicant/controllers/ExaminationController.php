@@ -316,12 +316,13 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	$program_data["faculty_name2"]="";
     	$program_data["program_name2"]="";
     	 
-    	$i=1;
+    	$i=1;$programset='';
     	foreach($app_program as $program){
     		$program_data["program_name".$i] = $program["program_name"];
     		$program_data["faculty_name".$i] = $program["faculty"];
     		$program_data["program_code".$i] = $program["program_code"];
-    		 
+    		if ($programset!='') $programset=$programset.','.$program['program_id'];
+    		else $programset=$program['program_id'];
     		$i++;
     	}
     	
@@ -347,24 +348,19 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    		$this->view->testtypecode=$currenttest['initial_code'];
 	    		$pstet=$dbPtesthead->getDataByCode($currenttest['apt_ptest_code']);
 	    		$dbPlacementComp=new App_Model_Application_DbTable_PlacementTestProgramComponent();
-	    		$compprogram=$dbPlacementComp->getComponenByTransaction($trxid, $pstet['aph_testtype']);
-	    		$comprog[]='';
-	    		foreach ($compprogram as $value) {
-	    			$comprog[]=$value['ac_id'];
-	    		}
-	    		//echo var_dump($pstet);
-	    		//echo $compcode;exit;
-	    		$component=$dbExamComp->getDataComponent($compcode,$pstet['aph_testtype']);
-	    		//echo var_dump($component);exit;
-	    		foreach ($component as $idx=>$comp) {
 	    		
-	    			if (!array_search($comp['ac_id'], $comprog)) {
-	    				unset($component[$idx]);
-	    				//echo $comp['ac_id'].'<br>';
-	    			}
-	    		}
 	    		$response=$dbAppTestAns->isExamScript($trxid, $compcode);
 	    		if (!$response) {
+	    			$components=$dbPlacementComp->getDataByComponent($currenttest['apt_ptest_code'], $programset, $compcode);
+	    			$component=array();
+	    			foreach ($components as $idx=>$value) {
+	    				$questno=$dbAppTestAns->getFirstQuestion($response['apa_id'], $value['ac_id']);
+	    				$component[$questno]=$value;
+	    				$component[$questno]['quest_no']=$questno;
+	    				 
+	    			}
+	    			ksort($component);
+	    			
 	    		 	//get exam script config
     				//echo var_dump($component); exit;
 	    			$dbConfig=new Examapplicant_Model_DbTable_ExamScriptConfig();
@@ -485,8 +481,15 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     			$this->view->testtypecode=$currenttest['initial_code'];
     			$pstet=$dbPtesthead->getDataByCode('TRAINING');
     			$dbPlacementComp=new App_Model_Application_DbTable_PlacementTestComponent();
-    			$component=$dbPlacementComp->getDataByComponent($currenttest['apt_ptest_code'], $programset, $testtype);
-    			 
+    			$components=$dbPlacementComp->getDataByComponent($currenttest['apt_ptest_code'], $programset, $testtype);
+    			$component=array();
+    			foreach ($components as $idx=>$value) {
+    				$questno=$dbAppTestAns->getFirstQuestion($response['apa_id'], $value['ac_id']);
+    				$component[$questno]=$value;
+    				$component[$questno]['quest_no']=$questno;
+    			
+    			}
+    			ksort($component);
     			$response=$dbAppTestAns->isExamScript($trxid, $compcode);
     			if (!$response) {
     				//get exam script config
@@ -586,6 +589,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     					$component[$questno]['quest_no']=$questno;
     				
     				}
+    				ksort($component);
     				$answerset=$dbAppPtestDet->getDataByHead($response['apa_id']);
     				foreach ($answerset as $value) {
     					$answer[$value['apad_ques_no']]=$value['apad_appl_ans'];
@@ -886,6 +890,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     					$component[$questno]['quest_no']=$questno;
     				
     				}
+    				ksort($component);
     				$answerset=$dbAppPtestDet->getDataByHead($response['apa_id']);
     				foreach ($answerset as $value) {
     					$answer[$value['apad_ques_no']]=$value['apad_appl_ans'];
@@ -991,7 +996,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     			$components[$answer[0]['apad_ques_no']]=$value;
     			$components[$answer[0]['apad_ques_no']]['ans']=$answer;
     		}
-    		
+    		ksort($components);
     		$this->view->component=$components;    		
     		//} else $this->_redirect('/examapplicant/examination/index/msg/No Opened Test');
     	}   
@@ -1057,7 +1062,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     			$components[$answer[0]['apad_ques_no']]=$value;
     			$components[$answer[0]['apad_ques_no']]['ans']=$answer;
     		}
-    		
+    		ksort($components);
     		$this->view->component=$components;
     
     		//} else $this->_redirect('/examapplicant/examination/index/msg/No Opened Test');
