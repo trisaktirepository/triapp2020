@@ -652,6 +652,18 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     			$trx=$dbApplicant->getTransaction($trxid);
     			$compcode=$currenttest['app_comp_code'];
     			$this->view->testtypecode=$currenttest['initial_code'];
+    			//--------get applicant program  -----------
+    			$appprogramDB = new App_Model_Application_DbTable_ApplicantProgram();
+    			$app_program = $appprogramDB->getPlacementProgram($trxid);
+    			 
+    			$i=1;$programset='';
+    			foreach($app_program as $program){
+    			 	if ($programset!='') $programset=$programset.','.$program['program_id'];
+    				else $programset=$program['program_id'];
+    				$i++;
+    			}
+    			
+    			
     			$component=$dbExamComp->getDataByComponent($currenttest['apt_ptest_code'], $programset, $compcode);
     			$response=$dbAppTestAns->isExamScript($trxid, $compcode);
     			if ($response) {
@@ -733,6 +745,17 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     			$trx=$dbApplicant->getTransaction($trxid);
     			$compcode=$currenttest['app_comp_code'];
     			$this->view->testtypecode=$currenttest['initial_code'];
+    			//--------get applicant program  -----------
+    			$appprogramDB = new App_Model_Application_DbTable_ApplicantProgram();
+    			$app_program = $appprogramDB->getPlacementProgram($trxid);
+    			
+    			$i=1;$programset='';
+    			foreach($app_program as $program){
+    				if ($programset!='') $programset=$programset.','.$program['program_id'];
+    				else $programset=$program['program_id'];
+    				$i++;
+    			}
+    			 
     			$component=$dbExamComp->getDataByComponent($currenttest['apt_ptest_code'], $programset, $compcode);
     			
     			$response=$dbAppTestAns->isExamScript($trxid, $compcode);
