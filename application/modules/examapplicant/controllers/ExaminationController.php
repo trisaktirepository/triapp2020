@@ -558,7 +558,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	if ($ptest ) {
     
     		$dbPestDetail=new App_Model_Application_DbTable_ApplicantPtestDetail();
-    		$currenttest=$dbPestDetail->getActiveTest($trxid, $date, $time);
+    		$currenttest=$dbPestDetail->getActiveTestByTestType($trxid, $testtype);
     		//echo var_dump($currenttest);
     		 
     		if ($currenttest) {
