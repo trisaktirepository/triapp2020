@@ -35,7 +35,7 @@ p    {color: white; font-size: 20px}
   }
   function startExam(idtrx,testtype) {
 	  if ($("#photo").val()=="ok") {
-	  	 //stopStreaming();
+	  	  
 	 	 window.location.replace('/examapplicant/examination/verify-exam/idtrx/'+idtrx+'/testtype/'+testtype);
 
 	   } else alert('Tolong klik tombol Ambil Foto terlebih dahulu');
@@ -116,7 +116,8 @@ p    {color: white; font-size: 20px}
 		<legend><?php echo $this->translate("Informasi terkait Ujian Saringan Masuk anda");?></legend>
 			<?php if ($this->test=="1") {?>
 			<table width="100%">
-			 	<tr><td bgcolor="Darkblue" align="center"  width="15%"><p id="examtime"></p></td></tr>
+			 	<tr><td bgcolor="Darkblue" align="center"  width="15%"><p id="examtime"></p>
+			 	<input type="button" value="Latihan Ujian" onclick="latihan()"></td></tr>
 			 </table>
 			 <br>
 			<h2>Baca petunjuk ujian seleksi masuk Usakti dengan seksama</h2>
