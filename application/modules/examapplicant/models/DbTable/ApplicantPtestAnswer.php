@@ -178,7 +178,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 						->where('a.parent="0"')
 						->order('a.seqno');
 						$questionset=$db->fetchAll($select);
-						echo var_dump($questionset);exit;
+						//echo var_dump($questionset);exit;
 						if ($questionset) {
 							if ($config['qsc_suffle']=="1")  
 								shuffle($questionset);
@@ -193,7 +193,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 					
 					 
 				} else $success="0";
-				exit;
+				//exit;
 			} else if ($config['config_mode']==1862) {
 				//random component from several selected exam set
 				 
