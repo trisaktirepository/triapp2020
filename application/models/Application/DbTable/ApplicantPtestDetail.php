@@ -68,6 +68,7 @@ class App_Model_Application_DbTable_ApplicantPtestDetail extends Zend_Db_Table_A
 		->from(array('a'=>$this->_name),array('app_comp_code','time_start','time_stop','timerange'=>'TIMEDIFF(time_stop,time_start)'))
 		->join(array('ac'=>'appl_test_type'),'ac.act_id=a.app_comp_code',array('act_name','initial_code'))
 		->join(array('b'=>'applicant_ptest'),'a.apt_id=b.apt_id')
+		->join(array('d'=>'application_ptest_detail'),'d.apt_id=b.apt_id')
 		->join(array('aps'=>'appl_placement_schedule'),'aps.aps_id  = b.apt_aps_id',array('aps_id'=>'aps.aps_id','aps_location_id'=>'aps.aps_location_id','aps_test_date'=>'aps.aps_test_date' ,'aps.aps_placement_code'))
 		->where('b.apt_at_trans_id =?', $transid)
 		->where('aps.aps_test_date = ?',date('Y-m-d',strtotime($date)))

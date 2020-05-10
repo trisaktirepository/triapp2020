@@ -337,7 +337,7 @@ function saveAnswer(answer){
 						 $(element).text(respond.apad_appl_ans);
 						 $('input:radio[name="answer"][value="'+respond.apad_appl_ans+'"]').attr('checked',true);
 					 	 $("#token").val(respond.token);
-					 	// savePhoto();
+					 	 savePhoto();
 					} else alert(respond.msg);
 				})
 				.fail(function(respond){console.log("fail");})
