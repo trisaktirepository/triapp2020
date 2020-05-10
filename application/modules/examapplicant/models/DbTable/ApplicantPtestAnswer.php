@@ -154,7 +154,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 					->where('a.ape_aph_id=?',$postData['config']['aph_id'])
 					->where('a.test_type=?',$postData['test_type']);
 				$set=$db->fetchAll($select);
-				echo var_dump($set);  
+				//echo var_dump($set);  
 				if (count($set)>0) {
 					//echo var_dump($postData['component']); 
 					//get random set according to config
@@ -178,7 +178,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 						->where('a.parent="0"')
 						->order('a.seqno');
 						$questionset=$db->fetchAll($select);
-						// echo var_dump($questionset);exit;
+						echo var_dump($questionset);exit;
 						if ($questionset) {
 							if ($config['qsc_suffle']=="1")  
 								shuffle($questionset);
