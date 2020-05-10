@@ -135,7 +135,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 			   	'apa_user_by' => $auth->getIdentity()->appl_id
 				);
 		
-		   	echo var_dump($dataaph);exit;
+		   	 
 		   	//$dbTxt->add(array('txt'=>'testtye='. var_dump($dataaph)));
 		   //	$id=1;
 		   	$filetype=500+$postData['test_type']*1;
@@ -154,7 +154,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 					->where('a.ape_aph_id=?',$postData['config']['aph_id'])
 					->where('a.test_type=?',$postData['test_type']);
 				$set=$db->fetchAll($select);
-				//echo var_dump($set);  
+				echo var_dump($set);  
 				if (count($set)>0) {
 					//echo var_dump($postData['component']); 
 					//get random set according to config
@@ -193,7 +193,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 					
 					 
 				} else $success="0";
-				//exit;
+				exit;
 			} else if ($config['config_mode']==1862) {
 				//random component from several selected exam set
 				 
