@@ -1975,7 +1975,7 @@ class Application_Model_DbTable_ProformaInvoice extends Zend_Db_Table {
 					}
 					
 					$data=array('dcnt_appl_id'=>$value['appl_id'],
-								'dcnt_trx_id'=>$$applicant['at_trans_id'],
+								'dcnt_trn_id'=>$$applicant['at_trans_id'],
 								'dcnt_fomulir_id'=>$value['no_fomulir'],
 								'dcnt_type_id'=>24,
 								'dcnt_letter_number'=>'',
