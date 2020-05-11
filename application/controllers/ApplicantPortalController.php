@@ -1169,6 +1169,8 @@ class ApplicantPortalController extends Zend_Controller_Action
 			$biaya = $biaya*2;
 			$biaya = number_format($biaya, 2, '.', ',');
 		}
+		echo var_dump($feeStructureData);
+		echo var_dump($program);exit;
 		
 		
 		//fee structure plan
