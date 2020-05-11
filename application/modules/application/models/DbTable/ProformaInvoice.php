@@ -1958,13 +1958,33 @@ class Application_Model_DbTable_ProformaInvoice extends Zend_Db_Table {
 		->where('no_fomulir=?',$noform);
 			
 		$invoices=$db->fetchAll($select);
-		
+		$dbDiscount=new Studentfinance_Model_DbTable_Discount();
+		$dbDiscDetail=new Studentfinance_Model_DbTable_DiscountDetail();
 		if ($invoices) {
 			foreach ($invoices as $value) {
 				$idpro=$value['id'];
 				if ($discount>0 ) {
-					$value['cn_amount']=$discount;
-					 
+					if ($value['bill_amount']>=$discount) {
+						$value['bill_amount']=$value['bill_amount']-$discount;
+						$value['bill_balance']=$value['bill_amount'];
+					}
+					else {
+						$discount=$discount-$value['bill_amount'];
+						$value['bill_amount']=0;
+						$value['bill_balance']=$value['bill_amount'];
+					}
+					
+					$data=array('dcnt_appl_id'=>$value['appl_id'],
+								'dcnt_trx_id'=>$$applicant['at_trans_id'],
+								'dcnt_fomulir_id'=>$value['no_fomulir'],
+								'dcnt_type_id'=>24,
+								'dcnt_letter_number'=>'',
+								'dcnt_amount'=>$discount,
+								'dcnt_invoice_id'=>$value['id'],
+								'dcnt_creator'=>$applicant['appl_id'],
+								'dcnt_create_date'=>date('Y-m-d H:i:s')
+					);
+					$dbDiscount->insert($data);
 				}
 				unset($value['id']);
 				$inv=$dbInvoice->isIn($value['bill_number']);
