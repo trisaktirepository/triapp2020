@@ -1093,6 +1093,10 @@ class ApplicantPortalController extends Zend_Controller_Action
 		//get assessment data
 		$assessmentDb = new App_Model_Application_DbTable_ApplicantAssessment();
 		$assessmentData = $assessmentDb->getData($txnId);
+		if (!$assessmentData) {
+			$assessmentDb = new App_Model_Application_DbTable_ApplicantAssessmentUsm();
+			$assessmentData = $assessmentDb->getData($txnId);
+		}
 		
 		//get transaction info
 		$applicantTxnDB = new App_Model_Application_DbTable_ApplicantTransaction();
