@@ -1981,7 +1981,7 @@ class Application_Model_DbTable_ProformaInvoice extends Zend_Db_Table {
 								'dcnt_letter_number'=>'',
 								'dcnt_amount'=>$discount,
 								'dcnt_invoice_id'=>$value['id'],
-								'dcnt_creator'=>$applicant['appl_id'],
+								'dcnt_creator'=>$applicant['at_appl_id'],
 								'dcnt_create_date'=>date('Y-m-d H:i:s')
 					);
 					$dbDiscount->insert($data);
