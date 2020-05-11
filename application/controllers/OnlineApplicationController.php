@@ -121,6 +121,8 @@ class OnlineApplicationController extends Zend_Controller_Action {
        					
                     }else{
                     	$data->role = "applicant";
+                    	$data->registration_id = '';
+                    		
                     }
                    
                     
