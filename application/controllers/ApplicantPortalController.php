@@ -1156,21 +1156,21 @@ class ApplicantPortalController extends Zend_Controller_Action
     	//get fee structure
 		$feeStructureDb = new Studentfinance_Model_DbTable_FeeStructure();
 		
-		//get fee structure
-		if($applicant["appl_nationality"]==96){
-			//local
-			$feeStructureDb = new App_Model_Finance_DbTable_FeeStructure();
-			$feeStructureData = $feeStructureDb->getApplicantFeeStructure($intakeData['IdIntake'],$program[0]["program_id"],314,$program[0]["IdBranchOffer"]);
-			$biaya = number_format($biaya, 2, '.', ',');
-		
-		}else{
-			//foreigner
-			$feeStructureData = $feeStructureDb->getApplicantFeeStructure($intakeData['IdIntake'],$program[0]["program_id"],315,$program[0]["IdBranchOffer"]);	
-			$biaya = $biaya*2;
-			$biaya = number_format($biaya, 2, '.', ',');
-		}
-		echo var_dump($feeStructureData);
-		echo var_dump($program);exit;
+	//get fee structure
+    	if($applicant["appl_nationality"]==96){
+    		//local
+    		$feeStructureDb = new Studentfinance_Model_DbTable_FeeStructure();
+    		$feeStructureData = $feeStructureDb->getApplicantFeeStructure($intakeData['IdIntake'],$program[0]["program_id"],314,$program[0]['IdBranchOffer']);
+    		$biaya = number_format($biaya, 2, '.', ',');
+    	
+    	}else{
+    		//foreigner
+    		$feeStructureData = $feeStructureDb->getApplicantFeeStructure($intakeData['IdIntake'],$program[0]["program_id"],315,$program[0]['IdBranchOffer']);
+    		$biaya = $biaya*2;
+    		$biaya = number_format($biaya, 2, '.', ',');
+    	}
+		//echo var_dump($feeStructureData);
+		//echo var_dump($program);exit;
 		
 		
 		//fee structure plan
