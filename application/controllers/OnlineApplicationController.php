@@ -5658,7 +5658,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 							
 						
 		
-			}else $this->_redirect('http://www.print.trisakti.ac.id/online-application/print-bukti-daftar/trxid/'.$transaction_id.'/at_appl_type/'.$admission_type);
+			}else $this->_redirect('/online-application/print-bukti-daftar/trxid/'.$transaction_id.'/at_appl_type/'.$admission_type);
 						
 			/*
 			if($admission_type==2){
@@ -9978,6 +9978,966 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	$this->_redirect($this->view->url(array('module'=>'default','controller'=>'applicant-portal','action'=>'index'),'default',true));
     	
     
+    		
+    }
+    
+    
+    public function printBuktiDaftarAction(){
+    
+    	$registry = Zend_Registry::getInstance();
+    	$locale = $registry->get('Zend_Locale');
+    
+    	$admission_type=$this->_getParam('at_appl_type');
+    	$transaction_id=$this->_getParam('trxid');
+    
+    	//get transaction data
+    	$transDB = new App_Model_Application_DbTable_ApplicantTransaction();
+    	$transData = $transDB->getTransactionData($transaction_id);
+    	$appl_id=$transData['at_appl_id'];
+    	//get applicant profile
+    	$appProfileDB  = new App_Model_Application_DbTable_ApplicantProfile();
+    	$applicant = $appProfileDB->getTransProfile($appl_id,$transaction_id);
+    		
+    	//*** check programme
+    	$applicantProgramDB = new App_Model_Application_DbTable_ApplicantProgram();
+    	$applicantProgram = $applicantProgramDB->getPlacementProgram($transaction_id);
+    
+    	//get academic year
+    	$ayearDb = new App_Model_Record_DbTable_AcademicYear();
+    	$academic_year = $ayearDb->getNextAcademicYearData();
+    	$IdIntake = $transData['at_intake'];//$intake["IdIntake"];
+    		
+    	//cek bulan dan tahun
+    	$periodDB = new App_Model_Record_DbTable_AcademicPeriod();
+    	$period   = $periodDB->getCurrentPeriod(date("m"),date("Y"),$IdIntake);
+    	$idPeriod = $period["ap_id"];
+    
+    	//echo 'period='.$transData["entry_type"];exit;
+    	$ptestinfo = new App_Model_Application_DbTable_ApplicantPtest();
+    	$applicant_placement_test_info = $ptestinfo->getScheduleInfo($transaction_id);
+    	if( !isset($transData["at_pes_id"]) && $transData["at_pes_id"]==null ){
+    
+    		//to get and update applicantID
+    		$applicantID = $transDB->getApplicantID($transData["at_appl_type"],$transData["at_intake"],$applicant_placement_test_info['aps_placement_code']);//
+    		//echo $applicantID;exit;
+    		$data["at_pes_id"]=$applicantID;
+    
+    		$transDB->updateData($data, $transData["at_trans_id"]);
+    
+    	}else{
+    
+    		$applicantID = $transData["at_pes_id"];
+    	}
+    	if($admission_type==2){
+    
+    		//-------- high school cert (PSSB) section -------------
+    
+    		setlocale (LC_ALL, $locale);
+    
+    		//filetype
+    		$fileType = 31;
+    
+    
+    		//pengumumam hasil seleksi
+    		//0=sunday onwards
+    		$today = date("w");
+    
+    		if($today<=2){
+    			$selection_date = strftime('%e %B %Y',  strtotime("this Saturday")).', '.strftime('%e %B %Y',  strtotime("second Saturday")).' atau '.strftime('%e %B %Y',  strtotime("third Saturday"));
+    		}else{
+    			$selection_date = strftime('%e %B %Y',  strtotime("second Saturday")).', '.strftime('%e %B %Y',  strtotime("third Saturday")).' atau '.strftime('%e %B %Y',  strtotime("fourth Saturday"));
+    		}
+    
+    
+    		//get applicant program applied
+    		$programDB = new App_Model_Application_DbTable_ApplicantProgram();
+    		$app_program = $programDB->getPlacementProgram($transaction_id);
+    
+    		$program_data["program_name1"]='';
+    		$program_data["program_name2"]='';
+    		//$program_data["program_name3"]='';
+    		//$program_data["program_name4"]='';
+    		$i=1;
+    		foreach($app_program as $program){
+    
+    			if ($locale=="en_US"){
+    				$program_data["program_name".$i] = $program["program_name"];
+    			}else if ($locale=="id_ID"){
+    				$program_data["program_name".$i] = $program["program_name_indonesia"];
+    			}
+    
+    			$i++;
+    		}
+    		 
+    		//once submmitted update status=CLOSE
+    		$upddata["at_status"]='PROCESS';
+    		//$upddata["at_intake"]=$IdIntake;
+    		$upddata["at_period"]=$idPeriod;
+    		$upddata["at_submit_date"]=date("Y-m-d H:i:s");
+    		$transDB->updateData($upddata,$transaction_id);
+    
+    		if($applicant["appl_gender"]==1) $gender="LAKI-LAKI";
+    		if($applicant["appl_gender"]==2) $gender="PEREMPUAN";
+    
+    
+    		$fieldValues = array (
+    				'$[Applicantname]' => $applicant["appl_fname"].' '.$applicant["appl_mname"].' '.$applicant["appl_lname"],
+    				'$[dob]' => $applicant["appl_dob"],
+    				'$[Sex]' => $gender,
+    				'$[Address]' => $applicant["appl_address1"].','.$applicant["appl_address2"],
+    				'$[phone]' => $applicant["appl_phone_hp"],
+    				'$[email]' => $applicant["appl_email"],
+    				'$[Discipline]' => $applicant["discipline"] ,
+    				'$[PROGRAM1]' => $program_data["program_name1"],
+    				'$[submission_date]'=>date('j M Y'),
+    				'$[ACADEMICYEAR]'=>$academic_year["ay_code"],
+    				'$[registration_date]'=>date('j M Y'),
+    				'$[withdrawal_date]'=>date('j M Y'),
+    				'$[seleksi_date]'=>$selection_date,
+    				//'photo'=>$photo_url
+    				// 'registration_date'=>$registrasi["StartDate"].' s.d '.$registrasi["EndDate"],
+    				// 'withdrawal_date'=>$withdrawal["StartDate"].' s.d '.$withdrawal["EndDate"]
+    
+    		);
+    		global $matapelajaran;
+    		$educationDB = new App_Model_Application_DbTable_ApplicantEducation();
+    		$matapelajaran = $educationDB->getEducationDetail($transaction_id);
+    		//echo var_dump($matapelajaran);
+    		// ------- create PDF File section	--------
+    
+    		require_once 'dompdf_config.inc.php';
+    
+    		$autoloader = Zend_Loader_Autoloader::getInstance(); // assuming we're in a controller
+    		$autoloader->pushAutoloader('DOMPDF_autoload');
+    
+    		//template path
+    		$html_template_path = DOCUMENT_PATH."/template/pssb_confirmation_letter.html";
+    
+    		//filename
+    		$output_filename = $applicantID."_pssb_confirmation_letter.pdf";
+    		$filepath="/applicant/".date("mY")."/".$transaction_id;
+    		$output_directory_path = DOCUMENT_PATH.$filepath;
+    
+    		//create directory to locate file
+    		if (!is_dir($output_directory_path)) {
+    			mkdir($output_directory_path, 0775);
+    		}
+    
+    		/* //to create PDF File
+    		 if($admission_type==2){
+    		$this->mailmergeConnection($filepath, $fieldValues,$connection,$output_directory_path, $output_filename);
+    		}else{
+    		$this->mailmerge($filepath, $fieldValues,$output_directory_path, $output_filename);
+    		} */
+    		$html = file_get_contents($html_template_path);
+    		//echo $html;exit;
+    		//replace variable
+    		foreach ($fieldValues as $key=>$value){
+    			$html = str_replace($key,$value,$html);
+    		}
+    
+    		//echo $html;exit;
+    
+    		$dompdf = new DOMPDF();
+    		$dompdf->load_html($html);
+    		$dompdf->set_paper('a4', 'potrait');
+    		$dompdf->render();
+    
+    		$dompdf = $dompdf->output();
+    
+    		//to rename output file
+    		$output_file_path = $output_directory_path."/".$output_filename;
+    
+    		file_put_contents($output_file_path, $dompdf);
+    
+    		// ------- End PDF File section	--------
+    
+    		//save file info
+    		$documentDB = new App_Model_Application_DbTable_ApplicantDocument();
+    		$doc["ad_appl_id"]=$transaction_id;
+    		$doc["ad_type"]=$fileType;
+    		$doc["ad_filepath"]=$filepath;
+    		$doc["ad_filename"]=$output_filename;
+    		$doc["ad_createddt"]=date("Y-m-d");
+    		//echo var_dump($doc);exit;
+    		$documentDB->addData($doc);
+    		//------- end high school cert section ----------
+    	}
+    	elseif ($admission_type==3)
+    	{
+    		$fileType=75;
+    		//die;
+    		//----credit transfer
+    		//get applicant program applied
+    		$programDB = new App_Model_Application_DbTable_ApplicantProgram();
+    		$app_program = $programDB->getPlacementProgram($transaction_id);
+    		$dbCredit=new App_Model_Application_DbTable_CreditTransfer();
+    		$dbCreditSubject=new App_Model_Application_DbTable_CreditTransferSubject();
+    		$program_data["program_name1"]='';
+    		$program_data["program_name2"]='';
+    		$i=1;
+    		foreach($app_program as $program){
+    				
+    			if ($locale=="en_US"){
+    				$program_data["program_name".$i] = $program["program_name"];
+    			}else if ($locale=="id_ID"){
+    				$program_data["program_name".$i] = $program["program_name_indonesia"];
+    			}
+    				
+    			$i++;
+    		}
+    
+    		//once submmitted update status=CLOSE
+    		$upddata["at_status"]='PROCESS';
+    		$upddata["at_intake"]=$IdIntake;
+    		$upddata["at_period"]=$idPeriod;
+    		$upddata["at_submit_date"]=date("Y-m-d H:i:s");
+    
+    		//die;
+    		$transDB->updateData($upddata,$transaction_id);
+    		//create application letter
+    		//pengumumam hasil seleksi
+    		//0=sunday onwards
+    		$today = date("w");
+    
+    		if($today<=2){
+    			$selection_date = strftime('%e %B %Y',  strtotime("this Saturday")).', '.strftime('%e %B %Y',  strtotime("second Saturday")).' atau '.strftime('%e %B %Y',  strtotime("third Saturday"));
+    		}else{
+    			$selection_date = strftime('%e %B %Y',  strtotime("second Saturday")).', '.strftime('%e %B %Y',  strtotime("third Saturday")).' atau '.strftime('%e %B %Y',  strtotime("fourth Saturday"));
+    		}
+    
+    
+    		//get applicant program applied
+    		$programDB = new App_Model_Application_DbTable_ApplicantProgram();
+    		$app_program = $programDB->getPlacementProgram($transaction_id);
+    
+    
+    		//get photo student
+    		$uploadFileDb = new App_Model_Application_DbTable_UploadFile();
+    		$file = $uploadFileDb->getFile($transaction_id,51);
+    
+    		if(isset($file["pathupload"])){
+    			if (file_exists($file["pathupload"])) {
+    				$fnImage = new icampus_Function_General_Image();
+    				$photo_url = "http://".ONNAPP_HOSTNAME.$fnImage->getImagePath($file['pathupload'],100,123);
+    				//$photo_url = str_replace("/var/www/html/triapp","http://".ONNAPP_HOSTNAME."/", $file["pathupload"]);
+    			}else{
+    				$photo_url = "http://".ONNAPP_HOSTNAME."/images/no-photo.jpg";
+    			}
+    		}else{
+    			$photo_url = "http://".ONNAPP_HOSTNAME."/images/no-photo.jpg";
+    		}
+    		//once submmitted update status=CLOSE
+    		$upddata["at_status"]='PROCESS';
+    		//$upddata["at_intake"]=$IdIntake;
+    		$upddata["at_period"]=$idPeriod;
+    		$upddata["at_submit_date"]=date("Y-m-d H:i:s");
+    		$transDB->updateData($upddata,$transaction_id);
+    
+    		if($applicant["appl_gender"]==1) $gender="LAKI-LAKI";
+    		if($applicant["appl_gender"]==2) $gender="PEREMPUAN";
+    		global $application;
+    		global $subjects;
+    		$application=$dbCredit->getDataByTransaction($transaction_id);
+    		$subjects=$dbCreditSubject->getDataByApplyId($application['idApply']);
+    		$fieldValues = array (
+    				'$[Applicantname]' => $applicant["appl_fname"].' '.$applicant["appl_mname"].' '.$applicant["appl_lname"],
+    				'$[dob]' => $applicant["appl_dob"],
+    				'$[Sex]' => $gender,
+    				'$[Address]' => $applicant["appl_address1"].','.$applicant["appl_address2"],
+    				'$[phone]' => $applicant["appl_phone_hp"],
+    				'$[email]' => $applicant["appl_email"],
+    				'$[Discipline]' => $applicant["discipline"] ,
+    				'$[PROGRAM1]' => $program_data["program_name1"],
+    				//'$[PROGRAM2]' => $program_data["program_name2"],
+    				'$[submission_date]'=>date('j M Y'),
+    				'$[ACADEMICYEAR]'=>$academic_year["ay_code"],
+    				'$[registration_date]'=>date('j M Y'),
+    				'$[withdrawal_date]'=>date('j M Y'),
+    				'$[seleksi_date]'=>$selection_date,
+    				'photo'=>$photo_url
+    				// 'registration_date'=>$registrasi["StartDate"].' s.d '.$registrasi["EndDate"],
+    				// 'withdrawal_date'=>$withdrawal["StartDate"].' s.d '.$withdrawal["EndDate"]
+    
+    		);
+    
+    		//$educationDB = new App_Model_Application_DbTable_ApplicantEducation();
+    		//$matapelajaran = $educationDB->getEducationDetail($transaction_id);
+    		//echo var_dump($matapelajaran);
+    		// ------- create PDF File section	--------
+    
+    		require_once 'dompdf_config.inc.php';
+    
+    		$autoloader = Zend_Loader_Autoloader::getInstance(); // assuming we're in a controller
+    		$autoloader->pushAutoloader('DOMPDF_autoload');
+    
+    		//template path
+    		$html_template_path = DOCUMENT_PATH."/template/credittransfer_application_letter.html";
+    
+    		//filename
+    		$output_filename = $applicantID."_credittransfer_app_letter.pdf";
+    		$filepath="/applicant/".date("mY")."/".$transaction_id;
+    		$output_directory_path = DOCUMENT_PATH.$filepath;
+    
+    		//create directory to locate file
+    		if (!is_dir($output_directory_path)) {
+    			mkdir($output_directory_path, 0775);
+    		}
+    
+    		/* //to create PDF File
+    		 if($admission_type==2){
+    		$this->mailmergeConnection($filepath, $fieldValues,$connection,$output_directory_path, $output_filename);
+    		}else{
+    		$this->mailmerge($filepath, $fieldValues,$output_directory_path, $output_filename);
+    		} */
+    		$html = file_get_contents($html_template_path);
+    		//echo $html;exit;
+    		//replace variable
+    		foreach ($fieldValues as $key=>$value){
+    			$html = str_replace($key,$value,$html);
+    		}
+    
+    		//echo $html;exit;
+    
+    		$dompdf = new DOMPDF();
+    		$dompdf->load_html($html);
+    		$dompdf->set_paper('a4', 'potrait');
+    		$dompdf->render();
+    
+    		$dompdf = $dompdf->output();
+    
+    		//to rename output file
+    		$output_file_path = $output_directory_path."/".$output_filename;
+    
+    		file_put_contents($output_file_path, $dompdf);
+    
+    		// ------- End PDF File section	--------
+    
+    		//save file info
+    		$documentDB = new App_Model_Application_DbTable_ApplicantDocument();
+    		$doc["ad_appl_id"]=$transaction_id;
+    		$doc["ad_type"]=$fileType;
+    		$doc["ad_filepath"]=$filepath;
+    		$doc["ad_filename"]=$output_filename;
+    		$doc["ad_createddt"]=date("Y-m-d");
+    		//echo var_dump($doc);exit;
+    		$documentDB->addData($doc);
+    		//-----------------
+    		$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'notification'),'default',true));
+    
+    		//------- end credit transfer section ----------
+    
+    	}
+    
+    	else if ($admission_type==4) {
+    
+    
+    		//-------- Invitation section -------------
+    
+    		setlocale (LC_ALL, $locale);
+    
+    		//filetype
+    		$fileType = 76;
+    
+    
+    		//pengumumam hasil seleksi
+    		//0=sunday onwards
+    		$today = date("w");
+    
+    		if($today<=2){
+    			$selection_date = strftime('%e %B %Y',  strtotime("this Saturday")).', '.strftime('%e %B %Y',  strtotime("second Saturday")).' atau '.strftime('%e %B %Y',  strtotime("third Saturday"));
+    		}else{
+    			$selection_date = strftime('%e %B %Y',  strtotime("second Saturday")).', '.strftime('%e %B %Y',  strtotime("third Saturday")).' atau '.strftime('%e %B %Y',  strtotime("fourth Saturday"));
+    		}
+    
+    
+    		//get applicant program applied
+    		$programDB = new App_Model_Application_DbTable_ApplicantProgram();
+    		$app_program = $programDB->getPlacementProgram($transaction_id);
+    
+    		$program_data["program_name1"]='';
+    		$program_data["program_name2"]='';
+    		$i=1;
+    		foreach($app_program as $program){
+    				
+    			if ($locale=="en_US"){
+    				$program_data["program_name".$i] = $program["program_name"];
+    			}else if ($locale=="id_ID"){
+    				$program_data["program_name".$i] = $program["program_name_indonesia"];
+    			}
+    				
+    			$i++;
+    		}
+    		/* //
+    		 //get photo student
+    		$uploadFileDb = new App_Model_Application_DbTable_UploadFile();
+    		$file = $uploadFileDb->getFile($transaction_id,51);
+    
+    		if(isset($file["pathupload"])){
+    		if (file_exists($file["pathupload"])) {
+    		$fnImage = new icampus_Function_General_Image();
+    		$photo_url = "http://".ONNAPP_HOSTNAME.$fnImage->getImagePath($file['pathupload'],100,123);
+    		//$photo_url = str_replace("/var/www/html/triapp","http://".ONNAPP_HOSTNAME."/", $file["pathupload"]);
+    		}else{
+    		$photo_url = "http://".ONNAPP_HOSTNAME."/images/no-photo.jpg";
+    		}
+    		}else{
+    		$photo_url = "http://".ONNAPP_HOSTNAME."/images/no-photo.jpg";
+    		}		 */
+    		//once submmitted update status=CLOSE
+    		$upddata["at_status"]='PROCESS';
+    		//$upddata["at_intake"]=$IdIntake;
+    		$upddata["at_period"]=$idPeriod;
+    		$upddata["at_submit_date"]=date("Y-m-d H:i:s");
+    		$transDB->updateData($upddata,$transaction_id);
+    
+    		if($applicant["appl_gender"]==1) $gender="LAKI-LAKI";
+    		if($applicant["appl_gender"]==2) $gender="PEREMPUAN";
+    
+    
+    		$fieldValues = array (
+    				'$[Applicantname]' => $applicant["appl_fname"].' '.$applicant["appl_mname"].' '.$applicant["appl_lname"],
+    				'$[dob]' => $applicant["appl_dob"],
+    				'$[Sex]' => $gender,
+    				'$[Address]' => $applicant["appl_address1"].','.$applicant["appl_address2"],
+    				'$[phone]' => $applicant["appl_phone_hp"],
+    				'$[email]' => $applicant["appl_email"],
+    				'$[Discipline]' => $applicant["discipline"] ,
+    				'$[PROGRAM1]' => $program_data["program_name1"],
+    				'$[PROGRAM2]' => $program_data["program_name2"],
+    				'$[submission_date]'=>date('j M Y'),
+    				'$[ACADEMICYEAR]'=>$academic_year["ay_code"],
+    				'$[registration_date]'=>date('j M Y'),
+    				'$[withdrawal_date]'=>date('j M Y'),
+    				'$[seleksi_date]'=>$selection_date,
+    				//'photo'=>$photo_url
+    				// 'registration_date'=>$registrasi["StartDate"].' s.d '.$registrasi["EndDate"],
+    				// 'withdrawal_date'=>$withdrawal["StartDate"].' s.d '.$withdrawal["EndDate"]
+    
+    		);
+    		global $matapelajaran;
+    		$educationDB = new App_Model_Application_DbTable_ApplicantEducation();
+    		$matapelajaran = $educationDB->getEducationDetail($transaction_id);
+    		//echo var_dump($matapelajaran);
+    		// ------- create PDF File section	--------
+    
+    		require_once 'dompdf_config.inc.php';
+    
+    		$autoloader = Zend_Loader_Autoloader::getInstance(); // assuming we're in a controller
+    		$autoloader->pushAutoloader('DOMPDF_autoload');
+    
+    		//template path
+    		$html_template_path = DOCUMENT_PATH."/template/invitation_confirmation_letter.html";
+    
+    		//filename
+    		$output_filename = $applicantID."_invitation_confirmation_letter.pdf";
+    		$filepath="/applicant/".date("mY")."/".$transaction_id;
+    		$output_directory_path = DOCUMENT_PATH.$filepath;
+    
+    		//create directory to locate file
+    		if (!is_dir($output_directory_path)) {
+    			mkdir($output_directory_path, 0775);
+    		}
+    
+    		/* //to create PDF File
+    		 if($admission_type==2){
+    		$this->mailmergeConnection($filepath, $fieldValues,$connection,$output_directory_path, $output_filename);
+    		}else{
+    		$this->mailmerge($filepath, $fieldValues,$output_directory_path, $output_filename);
+    		} */
+    		$html = file_get_contents($html_template_path);
+    		//echo $html;exit;
+    		//replace variable
+    		foreach ($fieldValues as $key=>$value){
+    			$html = str_replace($key,$value,$html);
+    		}
+    
+    		//echo $html;exit;
+    
+    		$dompdf = new DOMPDF();
+    		$dompdf->load_html($html);
+    		$dompdf->set_paper('a4', 'potrait');
+    		$dompdf->render();
+    
+    		$dompdf = $dompdf->output();
+    
+    		//to rename output file
+    		$output_file_path = $output_directory_path."/".$output_filename;
+    
+    		file_put_contents($output_file_path, $dompdf);
+    
+    		// ------- End PDF File section	--------
+    
+    		//save file info
+    		$documentDB = new App_Model_Application_DbTable_ApplicantDocument();
+    		$doc["ad_appl_id"]=$transaction_id;
+    		$doc["ad_type"]=$fileType;
+    		$doc["ad_filepath"]=$filepath;
+    		$doc["ad_filename"]=$output_filename;
+    		$doc["ad_createddt"]=date("Y-m-d");
+    		//echo var_dump($doc);exit;
+    		$documentDB->addData($doc);
+    		//------- end high school cert section ----------
+    
+    	} else if ($admission_type==5) {
+    
+    
+    		//-------- Protfolio section -------------
+    
+    		setlocale (LC_ALL, $locale);
+    
+    		//filetype
+    		$fileType = 83;
+    
+    
+    		//pengumumam hasil seleksi
+    		//0=sunday onwards
+    		$today = date("w");
+    
+    		if($today<=2){
+    			$selection_date = strftime('%e %B %Y',  strtotime("this Saturday")).', '.strftime('%e %B %Y',  strtotime("second Saturday")).' atau '.strftime('%e %B %Y',  strtotime("third Saturday"));
+    		}else{
+    			$selection_date = strftime('%e %B %Y',  strtotime("second Saturday")).', '.strftime('%e %B %Y',  strtotime("third Saturday")).' atau '.strftime('%e %B %Y',  strtotime("fourth Saturday"));
+    		}
+    
+    
+    		//get applicant program applied
+    		$programDB = new App_Model_Application_DbTable_ApplicantProgram();
+    		$app_program = $programDB->getPlacementProgram($transaction_id);
+    
+    		$program_data["program_name1"]='';
+    		$program_data["program_name2"]='';
+    		$i=1;
+    		foreach($app_program as $program){
+    				
+    			if ($locale=="en_US"){
+    				$program_data["program_name".$i] = $program["program_name"];
+    			}else if ($locale=="id_ID"){
+    				$program_data["program_name".$i] = $program["program_name_indonesia"];
+    			}
+    				
+    			$i++;
+    		}
+    		/* //
+    		 //get photo student
+    		$uploadFileDb = new App_Model_Application_DbTable_UploadFile();
+    		$file = $uploadFileDb->getFile($transaction_id,51);
+    
+    		if(isset($file["pathupload"])){
+    		if (file_exists($file["pathupload"])) {
+    		$fnImage = new icampus_Function_General_Image();
+    		$photo_url = "http://".ONNAPP_HOSTNAME.$fnImage->getImagePath($file['pathupload'],100,123);
+    		//$photo_url = str_replace("/var/www/html/triapp","http://".ONNAPP_HOSTNAME."/", $file["pathupload"]);
+    		}else{
+    		$photo_url = "http://".ONNAPP_HOSTNAME."/images/no-photo.jpg";
+    		}
+    		}else{
+    		$photo_url = "http://".ONNAPP_HOSTNAME."/images/no-photo.jpg";
+    		}		 */
+    		//once submmitted update status=CLOSE
+    		$upddata["at_status"]='PROCESS';
+    		//$upddata["at_intake"]=$IdIntake;
+    		$upddata["at_period"]=$idPeriod;
+    		$upddata["at_submit_date"]=date("Y-m-d H:i:s");
+    		$transDB->updateData($upddata,$transaction_id);
+    
+    		if($applicant["appl_gender"]==1) $gender="LAKI-LAKI";
+    		if($applicant["appl_gender"]==2) $gender="PEREMPUAN";
+    
+    
+    		$fieldValues = array (
+    				'$[Applicantname]' => $applicant["appl_fname"].' '.$applicant["appl_mname"].' '.$applicant["appl_lname"],
+    				'$[dob]' => $applicant["appl_dob"],
+    				'$[Sex]' => $gender,
+    				'$[Address]' => $applicant["appl_address1"].','.$applicant["appl_address2"],
+    				'$[phone]' => $applicant["appl_phone_hp"],
+    				'$[email]' => $applicant["appl_email"],
+    				'$[Discipline]' => $applicant["discipline"] ,
+    				'$[PROGRAM1]' => $program_data["program_name1"],
+    				//'$[PROGRAM2]' => $program_data["program_name2"],
+    				'$[submission_date]'=>date('j M Y'),
+    				'$[ACADEMICYEAR]'=>$academic_year["ay_code"],
+    				'$[registration_date]'=>date('j M Y'),
+    				'$[withdrawal_date]'=>date('j M Y'),
+    				'$[seleksi_date]'=>$selection_date,
+    				//'photo'=>$photo_url
+    				// 'registration_date'=>$registrasi["StartDate"].' s.d '.$registrasi["EndDate"],
+    				// 'withdrawal_date'=>$withdrawal["StartDate"].' s.d '.$withdrawal["EndDate"]
+    
+    		);
+    		global $matapelajaran;
+    		$educationDB = new App_Model_Application_DbTable_ApplicantEducation();
+    		$matapelajaran = $educationDB->getEducationDetail($transaction_id);
+    		//echo var_dump($matapelajaran);
+    		// ------- create PDF File section	--------
+    
+    		require_once 'dompdf_config.inc.php';
+    
+    		$autoloader = Zend_Loader_Autoloader::getInstance(); // assuming we're in a controller
+    		$autoloader->pushAutoloader('DOMPDF_autoload');
+    
+    		//template path
+    		$html_template_path = DOCUMENT_PATH."/template/portofolio_confirmation_letter.html";
+    
+    		//filename
+    		$output_filename = $applicantID."_portofolio_confirmation_letter.pdf";
+    		$filepath="/applicant/".date("mY")."/".$transaction_id;
+    		$output_directory_path = DOCUMENT_PATH.$filepath;
+    
+    		//create directory to locate file
+    		if (!is_dir($output_directory_path)) {
+    			mkdir($output_directory_path, 0775);
+    		}
+    
+    		/* //to create PDF File
+    		 if($admission_type==2){
+    		$this->mailmergeConnection($filepath, $fieldValues,$connection,$output_directory_path, $output_filename);
+    		}else{
+    		$this->mailmerge($filepath, $fieldValues,$output_directory_path, $output_filename);
+    		} */
+    		$html = file_get_contents($html_template_path);
+    		//echo $html;exit;
+    		//replace variable
+    		foreach ($fieldValues as $key=>$value){
+    			$html = str_replace($key,$value,$html);
+    		}
+    
+    		//echo $html;exit;
+    
+    		$dompdf = new DOMPDF();
+    		$dompdf->load_html($html);
+    		$dompdf->set_paper('a4', 'potrait');
+    		$dompdf->render();
+    
+    		$dompdf = $dompdf->output();
+    
+    		//to rename output file
+    		$output_file_path = $output_directory_path."/".$output_filename;
+    
+    		file_put_contents($output_file_path, $dompdf);
+    
+    		// ------- End PDF File section	--------
+    
+    		//save file info
+    		$documentDB = new App_Model_Application_DbTable_ApplicantDocument();
+    		$doc["ad_appl_id"]=$transaction_id;
+    		$doc["ad_type"]=$fileType;
+    		$doc["ad_filepath"]=$filepath;
+    		$doc["ad_filename"]=$output_filename;
+    		$doc["ad_createddt"]=date("Y-m-d");
+    		//echo var_dump($doc);exit;
+    		$documentDB->addData($doc);
+    		//------- end high school cert section ----------
+    
+    	} else if ($admission_type==6) {
+    
+    
+    		//-------- Scholarship section -------------
+    
+    		setlocale (LC_ALL, $locale);
+    
+    		//filetype
+    		$fileType = 84;
+    
+    
+    		//pengumumam hasil seleksi
+    		//0=sunday onwards
+    		$today = date("w");
+    
+    		if($today<=2){
+    			$selection_date = strftime('%e %B %Y',  strtotime("this Saturday")).', '.strftime('%e %B %Y',  strtotime("second Saturday")).' atau '.strftime('%e %B %Y',  strtotime("third Saturday"));
+    		}else{
+    			$selection_date = strftime('%e %B %Y',  strtotime("second Saturday")).', '.strftime('%e %B %Y',  strtotime("third Saturday")).' atau '.strftime('%e %B %Y',  strtotime("fourth Saturday"));
+    		}
+    
+    
+    		//get applicant program applied
+    		$programDB = new App_Model_Application_DbTable_ApplicantProgram();
+    		$app_program = $programDB->getPlacementProgram($transaction_id);
+    
+    		$program_data["program_name1"]='';
+    		$program_data["program_name2"]='';
+    		$i=1;
+    		foreach($app_program as $program){
+    				
+    			if ($locale=="en_US"){
+    				$program_data["program_name".$i] = $program["program_name"];
+    			}else if ($locale=="id_ID"){
+    				$program_data["program_name".$i] = $program["program_name_indonesia"];
+    			}
+    				
+    			$i++;
+    		}
+    		/* //
+    		 //get photo student
+    		$uploadFileDb = new App_Model_Application_DbTable_UploadFile();
+    		$file = $uploadFileDb->getFile($transaction_id,51);
+    
+    		if(isset($file["pathupload"])){
+    		if (file_exists($file["pathupload"])) {
+    		$fnImage = new icampus_Function_General_Image();
+    		$photo_url = "http://".ONNAPP_HOSTNAME.$fnImage->getImagePath($file['pathupload'],100,123);
+    		//$photo_url = str_replace("/var/www/html/triapp","http://".ONNAPP_HOSTNAME."/", $file["pathupload"]);
+    		}else{
+    		$photo_url = "http://".ONNAPP_HOSTNAME."/images/no-photo.jpg";
+    		}
+    		}else{
+    		$photo_url = "http://".ONNAPP_HOSTNAME."/images/no-photo.jpg";
+    		}		 */
+    		//once submmitted update status=CLOSE
+    		$upddata["at_status"]='PROCESS';
+    		//$upddata["at_intake"]=$IdIntake;
+    		$upddata["at_period"]=$idPeriod;
+    		$upddata["at_submit_date"]=date("Y-m-d H:i:s");
+    		$transDB->updateData($upddata,$transaction_id);
+    
+    		if($applicant["appl_gender"]==1) $gender="LAKI-LAKI";
+    		if($applicant["appl_gender"]==2) $gender="PEREMPUAN";
+    
+    
+    		$fieldValues = array (
+    				'$[Applicantname]' => $applicant["appl_fname"].' '.$applicant["appl_mname"].' '.$applicant["appl_lname"],
+    				'$[dob]' => $applicant["appl_dob"],
+    				'$[Sex]' => $gender,
+    				'$[Address]' => $applicant["appl_address1"].','.$applicant["appl_address2"],
+    				'$[phone]' => $applicant["appl_phone_hp"],
+    				'$[email]' => $applicant["appl_email"],
+    				'$[Discipline]' => $applicant["discipline"] ,
+    				'$[PROGRAM1]' => $program_data["program_name1"],
+    				//'$[PROGRAM2]' => $program_data["program_name2"],
+    				'$[submission_date]'=>date('j M Y'),
+    				'$[ACADEMICYEAR]'=>$academic_year["ay_code"],
+    				'$[registration_date]'=>date('j M Y'),
+    				'$[withdrawal_date]'=>date('j M Y'),
+    				'$[seleksi_date]'=>$selection_date,
+    				//'photo'=>$photo_url
+    				// 'registration_date'=>$registrasi["StartDate"].' s.d '.$registrasi["EndDate"],
+    				// 'withdrawal_date'=>$withdrawal["StartDate"].' s.d '.$withdrawal["EndDate"]
+    
+    		);
+    		global $matapelajaran;
+    		$educationDB = new App_Model_Application_DbTable_ApplicantEducation();
+    		$matapelajaran = $educationDB->getEducationDetail($transaction_id);
+    		//echo var_dump($matapelajaran);
+    		// ------- create PDF File section	--------
+    
+    		require_once 'dompdf_config.inc.php';
+    
+    		$autoloader = Zend_Loader_Autoloader::getInstance(); // assuming we're in a controller
+    		$autoloader->pushAutoloader('DOMPDF_autoload');
+    
+    		//template path
+    		$html_template_path = DOCUMENT_PATH."/template/scholarship_confirmation_letter.html";
+    
+    		//filename
+    		$output_filename = $applicantID."_scholarship_confirmation_letter.pdf";
+    		$filepath="/applicant/".date("mY")."/".$transaction_id;
+    		$output_directory_path = DOCUMENT_PATH.$filepath;
+    
+    		//create directory to locate file
+    		if (!is_dir($output_directory_path)) {
+    			mkdir($output_directory_path, 0775);
+    		}
+    
+    		/* //to create PDF File
+    		 if($admission_type==2){
+    		$this->mailmergeConnection($filepath, $fieldValues,$connection,$output_directory_path, $output_filename);
+    		}else{
+    		$this->mailmerge($filepath, $fieldValues,$output_directory_path, $output_filename);
+    		} */
+    		$html = file_get_contents($html_template_path);
+    		//echo $html;exit;
+    		//replace variable
+    		foreach ($fieldValues as $key=>$value){
+    			$html = str_replace($key,$value,$html);
+    		}
+    
+    		//echo $html;exit;
+    
+    		$dompdf = new DOMPDF();
+    		$dompdf->load_html($html);
+    		$dompdf->set_paper('a4', 'potrait');
+    		$dompdf->render();
+    
+    		$dompdf = $dompdf->output();
+    
+    		//to rename output file
+    		$output_file_path = $output_directory_path."/".$output_filename;
+    
+    		file_put_contents($output_file_path, $dompdf);
+    
+    		// ------- End PDF File section	--------
+    
+    		//save file info
+    		$documentDB = new App_Model_Application_DbTable_ApplicantDocument();
+    		$doc["ad_appl_id"]=$transaction_id;
+    		$doc["ad_type"]=$fileType;
+    		$doc["ad_filepath"]=$filepath;
+    		$doc["ad_filename"]=$output_filename;
+    		$doc["ad_createddt"]=date("Y-m-d");
+    		//echo var_dump($doc);exit;
+    		$documentDB->addData($doc);
+    		//------- end high school cert section ----------
+    
+    	} else if ($admission_type==7){
+    
+    
+    
+    		//-------- Invitation section -------------
+    
+    		setlocale (LC_ALL, $locale);
+    
+    		//filetype
+    		$fileType = 87;
+    
+    
+    		//pengumumam hasil seleksi
+    		//0=sunday onwards
+    		$today = date("w");
+    
+    		if($today<=2){
+    			$selection_date = strftime('%e %B %Y',  strtotime("this Saturday")).', '.strftime('%e %B %Y',  strtotime("second Saturday")).' atau '.strftime('%e %B %Y',  strtotime("third Saturday"));
+    		}else{
+    			$selection_date = strftime('%e %B %Y',  strtotime("second Saturday")).', '.strftime('%e %B %Y',  strtotime("third Saturday")).' atau '.strftime('%e %B %Y',  strtotime("fourth Saturday"));
+    		}
+    
+    
+    		//get applicant program applied
+    		$programDB = new App_Model_Application_DbTable_ApplicantProgram();
+    		$app_program = $programDB->getPlacementProgram($transaction_id);
+    
+    		$program_data["program_name1"]='';
+    		$program_data["program_name2"]='';
+    		$program_data["program_name3"]='';
+    		$program_data["program_name4"]='';
+    		$i=1;
+    		foreach($app_program as $program){
+    				
+    			if ($locale=="en_US"){
+    				$program_data["program_name".$i] = $program["program_name"];
+    			}else if ($locale=="id_ID"){
+    				$program_data["program_name".$i] = $program["program_name_indonesia"];
+    			}
+    				
+    			$i++;
+    		}
+    		/* //
+    		 //get photo student
+    		$uploadFileDb = new App_Model_Application_DbTable_UploadFile();
+    		$file = $uploadFileDb->getFile($transaction_id,51);
+    
+    		if(isset($file["pathupload"])){
+    		if (file_exists($file["pathupload"])) {
+    		$fnImage = new icampus_Function_General_Image();
+    		$photo_url = "http://".ONNAPP_HOSTNAME.$fnImage->getImagePath($file['pathupload'],100,123);
+    		//$photo_url = str_replace("/var/www/html/triapp","http://".ONNAPP_HOSTNAME."/", $file["pathupload"]);
+    		}else{
+    		$photo_url = "http://".ONNAPP_HOSTNAME."/images/no-photo.jpg";
+    		}
+    		}else{
+    		$photo_url = "http://".ONNAPP_HOSTNAME."/images/no-photo.jpg";
+    		}		 */
+    		//once submmitted update status=CLOSE
+    		$upddata["at_status"]='PROCESS';
+    		//$upddata["at_intake"]=$IdIntake;
+    		$upddata["at_period"]=$idPeriod;
+    		$upddata["at_submit_date"]=date("Y-m-d H:i:s");
+    		$transDB->updateData($upddata,$transaction_id);
+    
+    		if($applicant["appl_gender"]==1) $gender="LAKI-LAKI";
+    		if($applicant["appl_gender"]==2) $gender="PEREMPUAN";
+    
+    
+    		$fieldValues = array (
+    				'$[Applicantname]' => $applicant["appl_fname"].' '.$applicant["appl_mname"].' '.$applicant["appl_lname"],
+    				'$[dob]' => $applicant["appl_dob"],
+    				'$[Sex]' => $gender,
+    				'$[Address]' => $applicant["appl_address1"].','.$applicant["appl_address2"],
+    				'$[phone]' => $applicant["appl_phone_hp"],
+    				'$[email]' => $applicant["appl_email"],
+    				'$[Discipline]' => $applicant["discipline"] ,
+    				'$[PROGRAM1]' => $program_data["program_name1"],
+    				'$[PROGRAM2]' => $program_data["program_name2"],
+    				'$[PROGRAM3]' => $program_data["program_name3"],
+    				'$[PROGRAM4]' => $program_data["program_name4"],
+    				'$[submission_date]'=>date('j M Y'),
+    				'$[ACADEMICYEAR]'=>$academic_year["ay_code"],
+    				'$[registration_date]'=>date('j M Y'),
+    				'$[withdrawal_date]'=>date('j M Y'),
+    				'$[seleksi_date]'=>$selection_date,
+    				//'photo'=>$photo_url
+    				// 'registration_date'=>$registrasi["StartDate"].' s.d '.$registrasi["EndDate"],
+    				// 'withdrawal_date'=>$withdrawal["StartDate"].' s.d '.$withdrawal["EndDate"]
+    
+    		);
+    		global $matapelajaran;
+    		$educationDB = new App_Model_Application_DbTable_ApplicantEducation();
+    
+    		$matapelajaran = $educationDB->getUTBKDetail($transaction_id);
+    		//echo var_dump($matapelajaran);
+    		// ------- create PDF File section	--------
+    
+    		require_once 'dompdf_config.inc.php';
+    
+    		$autoloader = Zend_Loader_Autoloader::getInstance(); // assuming we're in a controller
+    		$autoloader->pushAutoloader('DOMPDF_autoload');
+    
+    		//template path
+    		$html_template_path = DOCUMENT_PATH."/template/utbk_confirmation_letter.html";
+    
+    		//filename
+    		$output_filename = $applicantID."_utbk_confirmation_letter.pdf";
+    		$filepath="/applicant/".date("mY")."/".$transaction_id;
+    		$output_directory_path = DOCUMENT_PATH.$filepath;
+    
+    		//create directory to locate file
+    		if (!is_dir($output_directory_path)) {
+    			mkdir($output_directory_path, 0775);
+    		}
+    
+    		/* //to create PDF File
+    		 if($admission_type==2){
+    		$this->mailmergeConnection($filepath, $fieldValues,$connection,$output_directory_path, $output_filename);
+    		}else{
+    		$this->mailmerge($filepath, $fieldValues,$output_directory_path, $output_filename);
+    		} */
+    		$html = file_get_contents($html_template_path);
+    		//echo $html;exit;
+    		//replace variable
+    		foreach ($fieldValues as $key=>$value){
+    			$html = str_replace($key,$value,$html);
+    		}
+    
+    		//echo $html;exit;
+    
+    		$dompdf = new DOMPDF();
+    		$dompdf->load_html($html);
+    		$dompdf->set_paper('a4', 'potrait');
+    		$dompdf->render();
+    
+    		$dompdf = $dompdf->output();
+    
+    		//to rename output file
+    		$output_file_path = $output_directory_path."/".$output_filename;
+    
+    		file_put_contents($output_file_path, $dompdf);
+    
+    		// ------- End PDF File section	--------
+    
+    		//save file info
+    		$documentDB = new App_Model_Application_DbTable_ApplicantDocument();
+    		$doc["ad_appl_id"]=$transaction_id;
+    		$doc["ad_type"]=$fileType;
+    		$doc["ad_filepath"]=$filepath;
+    		$doc["ad_filename"]=$output_filename;
+    		$doc["ad_createddt"]=date("Y-m-d");
+    		//echo var_dump($doc);exit;
+    		$documentDB->addData($doc);
+    		//------- end high school cert section ----------
+    			
+    
+    	}
+    	//$this->_redirect('http://www.spmb.trisakti.ac.id/applicant-portal');
     		
     }
 }

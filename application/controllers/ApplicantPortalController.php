@@ -168,7 +168,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     		if($type=="42"){
     			$this->genSurat($txnId);    			
     		}
-    		  $this->view->file_path = $this->getDocumentPath($txnId,$type);
+    	 $this->view->file_path = $this->getDocumentPath($txnId,$type);
     		 
     	}else{
     		$this->_redirect($this->view->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'index'),'default',true));
