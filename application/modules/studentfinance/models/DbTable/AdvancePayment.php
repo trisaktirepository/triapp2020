@@ -22,7 +22,7 @@ class Studentfinance_Model_DbTable_AdvancePayment extends Zend_Db_Table_Abstract
 	 * Overite Insert function
 	 */
 	
-	public function insert($data){
+	public function insert(array $data){
 		
 		$auth = Zend_Auth::getInstance();
 		
