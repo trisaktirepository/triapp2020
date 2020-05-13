@@ -287,7 +287,7 @@ class QuitController extends Zend_Controller_Action {
 		
 						//create directory to locate file			
 						if (!is_dir($app_directory_path)) {
-						    mkdir($app_directory_path, 0775);
+						    mkdir($app_directory_path, 0775,true);
 						}
 						
 						$output_directory_path = DOCUMENT_PATH."/applicant/".$monthyearfolder."/".$txnId;
@@ -323,9 +323,9 @@ class QuitController extends Zend_Controller_Action {
 							$dompdf = new DOMPDF();
 							$dompdf->load_html($html);
 							$dompdf->set_paper('a4', 'potrait');
-							$dompdf->render();
+							@$dompdf->render();
 							
-							$dompdf = $dompdf->stream($output_filename);
+							$dompdf = @$dompdf->stream($output_filename);
 							//$dompdf = $dompdf->output();
 							
 							
@@ -385,7 +385,7 @@ class QuitController extends Zend_Controller_Action {
 
 				//create directory to locate file			
 				if (!is_dir($app_directory_path)) {
-				    mkdir($app_directory_path, 0775);
+				    mkdir($app_directory_path, 0775,true);
 				}
 				
 				$output_directory_path = DOCUMENT_PATH."/applicant/".$monthyearfolder."/".$txnId;
@@ -421,9 +421,9 @@ class QuitController extends Zend_Controller_Action {
 					$dompdf = new DOMPDF();
 					$dompdf->load_html($html);
 					$dompdf->set_paper('a4', 'potrait');
-					$dompdf->render();
+					@$dompdf->render();
 					
-					$dompdf = $dompdf->output();
+					$dompdf = @$dompdf->output();
 					
 					
 					

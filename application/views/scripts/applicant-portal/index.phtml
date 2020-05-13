@@ -500,7 +500,7 @@ $pdb = new App_Model_Application_DbTable_ApplicantPtest();
                         				
 					} else if ($entry["at_quit_status"]==2) {
 							//approved Quit
-							echo "<a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'get-document','id'=>$entry['at_trans_id'],'typeId'=>49),'default',true)."'>".$this->translate("Quit Approval Letter")."</a>";
+							echo "<a href='".$this->url(array('module'=>'default','controller'=>'quit', 'action'=>'download','id'=>$entry['at_trans_id']),'default',true)."'>".$this->translate("Quit Approval Letter")."</a>";
  
 						
 					}
