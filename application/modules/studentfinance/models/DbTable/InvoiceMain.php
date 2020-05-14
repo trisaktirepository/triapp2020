@@ -1452,7 +1452,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		$registered_subject = $subjectRegisterDb->getUnInvoiceRegisteredSubject($idRegistration,$idsemester, '1,3');
 		//else
 		//	$registered_subject = $subjectRegisterDb->getUnInvoiceRepeatRegisteredSubject($idRegistration,$semester, '1,3');
-		$dbIntake=new GeneralSetup_Model_DbTable_Intake();
+		$dbIntake=new App_Model_General_DbTable_Intake();
 		$intake=$dbIntake->fngetIntakeById($registrationData['IdIntake']);
 		$registered_subject=array_values($registered_subject);
 		//semester info
