@@ -1452,7 +1452,8 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		$registered_subject = $subjectRegisterDb->getUnInvoiceRegisteredSubject($idRegistration,$idsemester, '1,3');
 		//else
 		//	$registered_subject = $subjectRegisterDb->getUnInvoiceRepeatRegisteredSubject($idRegistration,$semester, '1,3');
-			
+		$dbIntake=new GeneralSetup_Model_DbTable_Intake();
+		$intake=$dbIntake->fngetIntakeById($registrationData['IdIntake']);
 		$registered_subject=array_values($registered_subject);
 		//semester info
 		$semesterDb = new App_Model_General_DbTable_Semestermaster();
@@ -1491,7 +1492,8 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		}
 		//get current semester level
 		$db = Zend_Db_Table::getDefaultAdapter();
-	//get current semester level
+		
+	    //get current semester level
 						$sql = $db->select()
 						  ->from(array('sss' => 'tbl_studentsemesterstatus'), array('Level'))
 							->join(array('b'=>'tbl_semestermaster'),'b.IdSemesterMaster=sss.IdSemesterMain')
@@ -1517,6 +1519,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 							  else $result['Level']=$result['Level']+1;
 							  //echo $sql;
 						  } 
+						  echo var_dump($result);exit;
 							if( $result['Level'] ){
 								$student_sem = $result['Level']+1;
 							}else{
