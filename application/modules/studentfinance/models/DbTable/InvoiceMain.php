@@ -1512,14 +1512,16 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 							  ->from(array('sss' => 'tbl_studentsemesterstatus'), array(new Zend_Db_Expr('max(Level) as Level')))
 							  ->join(array('b'=>'tbl_semestermaster'),'b.IdSemesterMaster=sss.IdSemesterMain')
 							  ->where('sss.IdStudentRegistration  = ?', $idRegistration)
-							  ->where('b.SemesterMainStartDate<= ?',$sem['SemesterMainStartDate']);
+							  ->where('b.SemesterMainStartDate<= ?',$sem['SemesterMainStartDate'])
+							  ->where('b.IsCountable="1"');
+							  
 							  
 							  $result = $db->fetchRow($sql);
 							  if (!$result) $result['Level']=1;
 							  else $result['Level']=$result['Level']+1;
 							  //echo $sql;
 						  } 
-						  echo var_dump($result);exit;
+						 // echo var_dump($result);exit;
 							if( $result['Level'] ){
 								$student_sem = $result['Level']+1;
 							}else{
