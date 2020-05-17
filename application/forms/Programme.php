@@ -112,7 +112,7 @@ class App_Form_Programme extends Zend_Form {
 		}
 		
 		$this->addElement('select','country', array(
-				'label'=>$this->getView()->translate('state_province'),
+				'label'=>$this->getView()->translate('Country'),
 				'onChange'=>"changeCountry();"
 		));
 		
@@ -474,7 +474,7 @@ class App_Form_Programme extends Zend_Form {
 		}
 		
 		$this->addElement('select','country', array(
-				'label'=>$this->getView()->translate('state_province'),
+				'label'=>$this->getView()->translate('Country'),
 				'onChange'=>"changeCountry();"
 		));
 		
@@ -816,6 +816,19 @@ class App_Form_Programme extends Zend_Form {
 			$this->type->addMultiOption($list['st_id'],$name." (".$list['st_code'].")");
 		}
 	
+		$this->addElement('select','country', array(
+				'label'=>$this->getView()->translate('Country'),
+				'onChange'=>"changeCountry();"
+		));
+		
+		$stateDb = new App_Model_General_DbTable_Country();
+		$this->country->addMultiOption(null,$this->getView()->translate('please_select'));
+		
+		foreach ($stateDb->getData() as $list){
+			$this->country->addMultiOption($list['idCountry'],$list['CountryName']);
+		}
+		$this->country->setValue(96);
+		
 		$this->addElement('select','state', array(
 				'label'=>$this->getView()->translate('state_province'),
 				'onChange'=>"changeState();"
@@ -1455,7 +1468,7 @@ class App_Form_Programme extends Zend_Form {
 		}
 		
 		$this->addElement('select','country', array(
-				'label'=>$this->getView()->translate('state_province'),
+				'label'=>$this->getView()->translate('Country'),
 				'onChange'=>"changeCountry();"
 		));
 		
@@ -2031,7 +2044,19 @@ class App_Form_Programme extends Zend_Form {
 		foreach ($schoolTypeDb->getData() as $list){
 			$this->type->addMultiOption($list['st_id'],$list['st_name']." (".$list['st_code'].")");
 		}
-	
+		$this->addElement('select','country', array(
+				'label'=>$this->getView()->translate('Country'),
+				'onChange'=>"changeCountry();"
+		));
+		
+		$stateDb = new App_Model_General_DbTable_Country();
+		$this->country->addMultiOption(null,$this->getView()->translate('please_select'));
+		
+		foreach ($stateDb->getData() as $list){
+			$this->country->addMultiOption($list['idCountry'],$list['CountryName']);
+		}
+		$this->country->setValue(96);
+		
 		$this->addElement('select','state', array(
 				'label'=>$this->getView()->translate('state_province'),
 				'onChange'=>"changeState();"
@@ -2455,6 +2480,19 @@ class App_Form_Programme extends Zend_Form {
 			$this->type->addMultiOption($list['st_id'],$list['st_name']." (".$list['st_code'].")");
 		}
 	
+		$this->addElement('select','country', array(
+				'label'=>$this->getView()->translate('Country'),
+				'onChange'=>"changeCountry();"
+		));
+		
+		$stateDb = new App_Model_General_DbTable_Country();
+		$this->country->addMultiOption(null,$this->getView()->translate('please_select'));
+		
+		foreach ($stateDb->getData() as $list){
+			$this->country->addMultiOption($list['idCountry'],$list['CountryName']);
+		}
+		$this->country->setValue(96);
+		
 		$this->addElement('select','state', array(
 				'label'=>$this->getView()->translate('state_province'),
 				'onChange'=>"changeState();"
