@@ -29,9 +29,20 @@
 		    <th><?php echo $this->translate("Admission Type")?></th>
 			<td><?php 			
 				if( $this->applicant['at_appl_type']==1 ){
-					echo $this->translate("USM");}
-				else{
-					echo $this->translate("PSSB");
+					echo $this->translate("USM");
+				}
+				else if( $this->applicant['at_appl_type']==2 ){
+						echo $this->translate("PSSB");
+				}else if( $this->applicant['at_appl_type']==3 ){
+						echo $this->translate("Credit Transfer");
+				}else if( $this->applicant['at_appl_type']==4 ){
+						echo $this->translate("Program Seleksi Undangan");
+				} else if( $this->applicant['at_appl_type']==5 ){
+						echo $this->translate("Program Seleksi Portofolio");
+				} else if( $this->applicant['at_appl_type']==6 ){
+						echo $this->translate("Program Seleksi Beasiswa");
+				}else if( $this->applicant['at_appl_type']==7 ){
+						echo $this->translate("Program Seleksi UTBK");
 				}?></td>			
 		</tr>
 		<tr>

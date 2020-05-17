@@ -135,8 +135,8 @@ class Studentfinance_Model_DbTable_PaymentMain extends Zend_Db_Table_Abstract {
     	$db = Zend_Db_Table::getDefaultAdapter();
         $select = $db ->select()
 				->from(array('pm'=>'payment_main'))
-				->join(array('pi'=>'applicant_proforma_invoice'),'pm.billing_no = pi.billing_no')
-				->where("pi.payee_id ='".$payer."'");
+				->joinLeft(array('pi'=>'applicant_proforma_invoice'),'pm.billing_no = pi.billing_no')
+				->where("pm.payer ='".$payer."'");
 
 				
 		$row = $db->fetchAll($select);
