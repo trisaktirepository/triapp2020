@@ -1427,7 +1427,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 									->from(array('im'=>$this->_name))
 									->join(array('det'=>"invoice_detail"),'im.id=det.invoice_main_id')
 									->where('im.no_fomulir=?',$applicant['at_pes_id'])
-									->where('im.semester='.$row['IdSemesterMain'].' or semester is null')
+									//->where('im.semester='.$row['IdSemesterMain'].' or semester is null')
 									->where('im.bill_balance<bill_amount')
 									->where('im.bill_paid>500000');
 					$row = $db->fetchRow($selectData);
