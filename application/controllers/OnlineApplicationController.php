@@ -2457,6 +2457,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
         $row = $stmt->fetchAll();
         $row['sm_id']=7905;
         $row['sm_name']="Other/Lain";
+        
 	  //	echo var_dump($row);exit;
 		$ajaxContext->addActionContext('view', 'html')
                     ->addActionContext('form', 'html')
@@ -2540,6 +2541,8 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	 
     	$stmt = $db->query($select);
     	$row = $stmt->fetchAll();
+    	$row['sm_id']=7905;
+    	$row['sm_name']="Other/Lain";
     	//	echo var_dump($row);exit;
     	$ajaxContext->addActionContext('view', 'html')
     	->addActionContext('form', 'html')
