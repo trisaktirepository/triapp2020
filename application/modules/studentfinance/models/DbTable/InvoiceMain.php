@@ -1416,15 +1416,21 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 			if ($smt) {
 				if ($smt['Level']=="1") {
 					//cek pembayaranmahasiswa baru di detail
-					$applid=$smt['IdApplication'];
+					$trx=$smt['transaction_id'];
+									
 					$selectData = $db->select()
-					->from(array('im'=>$this->_name))
-					->join(array('det'=>"invoice_detail"),'im.id=det.invoice_main_id')
-					->where('im.semester='.$idsemester.' or semester is null')
-					->where('im.appl_id=?',$applid)
-					->where('im.bill_balance<bill_amount');
+						->from(array('im'=>'applicant_transaction'))
+						->where('im.at_trans_id=?',$trx);
+					$applicant = $db->fetchRow($selectData);
+									 
+					$selectData = $db->select()
+									->from(array('im'=>$this->_name))
+									->join(array('det'=>"invoice_detail"),'im.id=det.invoice_main_id')
+									->where('im.no_fomulir=?',$applicant['at_pes_id'])
+									->where('im.semester='.$row['IdSemesterMain'].' or semester is null')
+									->where('im.bill_balance<bill_amount')
+									->where('im.bill_paid>500000');
 					$row = $db->fetchRow($selectData);
-					//echo var_dump($row);exit;
 					if ($row) {
 						$row['mhsbaru']="1";
 						
