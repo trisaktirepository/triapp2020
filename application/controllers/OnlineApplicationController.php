@@ -7895,7 +7895,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
         //get course
     	$stateDB = new App_Model_General_DbTable_State();
         $state_list = $stateDB->getState($country_id);    	
-    	
+    	if (!$state_list) $state_list[0]=array('idState'=>273,'StateName'=>'Luar Negeri');
 		$ajaxContext->addActionContext('view', 'html')
                     ->addActionContext('form', 'html')
                     ->addActionContext('process', 'json')

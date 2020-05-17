@@ -78,6 +78,38 @@ $(document).ready(function()
     ?>
     
 });
+
+function changeCountry(element){
+	var country_id = $('#country').val();
+	
+	$.ajax({
+		url: "<?php echo $this->url(array('module'=>'default','controller'=>'online-application', 'action'=>'ajax-get-state'),'default',true);?>",
+		data: {'country_id':country_id},
+		type: 'POST',
+		dataType: 'json',
+		beforeSend: function() {
+			showLoading('state','state-element','loading');
+		},
+		complete: function() {
+			hideLoading('loading','state');
+		} 	
+	}).done(function ( data ) {
+		
+		$('#state').empty().append('<option value=""> <?php echo $this->translate('please_select'); ?> </option>');
+		
+		 
+		var state = $('#state');
+		var append_html = "";
+		
+		for (var index = 0; index < data.length; index++) {
+			append_html += '<option value="'+data[index].idState+'"> '+data[index].StateName+' </option>';
+		}	
+
+		state.append(append_html);
+
+	});
+}
+
 		
 function changeSchool(element){
 	var type_id = $('#type').val();
