@@ -1536,7 +1536,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 						  } 
 						 // echo var_dump($result);exit;
 							if( $result['Level'] ){
-								$student_sem = $result['Level']+1;
+								$student_sem = $result['Level'];
 							}else{
 								//check if senior student then hardcode level
 								$intake_year = substr($intake['IntakeId'], 0,4);

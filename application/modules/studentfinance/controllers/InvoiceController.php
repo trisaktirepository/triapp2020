@@ -340,7 +340,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 							if (!$row) {
 								$sql = $db->select()
 								->from(array('sss' => 'tbl_studentregistration'), array('IdProgram','IdIntake','IdBranch','IdProgramMajoring'))
-								->where('sss.registrationId  = ?', $student_list[$i]['nim'])
+								->where('sss.registrationId  = ?', $registration['registrationId'])
 								->where('sss.IdProgram<>?',$ses_batch_invoice->program_id);
 								//echo $sql;
 								$std = $db->fetchRow($sql);
@@ -352,7 +352,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 										//get from oldnim'
 										$sql = $db->select()
 										->from(array('sss' => 'tbl_studentregistration'), array('IdProgram','IdIntake','IdBranch','IdProgramMajoring'))
-										->where('sss.registrationId  = ?', $student_list[$i]['nim']);
+										->where('sss.registrationId  = ?', $registration['registrationId']);
 										
 										$oldnim=$std = $db->fetchRow($sql);
 										
@@ -381,9 +381,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 								foreach ($bundleDetail as $key1=>$value) {
 									 
 									$invoicedet = $invoiceDb->getInvoiceFee($idsemester,$std['IdStudentRegistration'], $fee_structure['fs_id'], $value['fee_item'], $value['percentage'],"1",$idactivity);
-									//echo  $value['fee_item'];
-									 
-									//echo var_dump($invoicedet);
+								 
 									if ($invoicedet['amount']>0) $bundleDetail[$key1]['fee']=$invoicedet;
 									else unset($bundleDetail[$key1]);
 									$amount=$amount+$invoicedet['amount'];
