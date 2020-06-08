@@ -2601,8 +2601,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	$dbPt = new App_Model_Application_DbTable_Pt();
     
     	$row=$dbPt->getByNama($pt);
-    	if (!$row) $row[0]=array('id_wil'=>$country_id,'nm_wilayah'=>'Luar Negeri');
-    	 
+      
     	//	echo var_dump($row);exit;
     	$ajaxContext->addActionContext('view', 'html')
     	->addActionContext('form', 'html')
