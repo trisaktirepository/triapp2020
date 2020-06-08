@@ -2572,6 +2572,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	 $dbSchool = new App_Model_Application_DbTable_Pt();
     	 
     	 $row=$dbSchool->getByWilayah($idwil);
+    	  
     	//	echo var_dump($row);exit;
     	$ajaxContext->addActionContext('view', 'html')
     	->addActionContext('form', 'html')
@@ -2600,6 +2601,8 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	$dbPt = new App_Model_Application_DbTable_Pt();
     
     	$row=$dbPt->getByNama($pt);
+    	if (!$row) $row[0]=array('id_wil'=>$country_id,'nm_wilayah'=>'Luar Negeri');
+    	 
     	//	echo var_dump($row);exit;
     	$ajaxContext->addActionContext('view', 'html')
     	->addActionContext('form', 'html')
@@ -8134,7 +8137,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
         
        $cityDb = new App_Model_Application_DbTable_Wilayah();
        $list_city = $cityDb->getByWilayah($state_id);
-       if (!$list_city) $list_city[0]=array('id_wil'=>$state_id,'nm_wilayah'=>'Luar Negeri');
+       if (!$list_city) $list_city[0]=array('id_wil'=>'999999','nm_wilayah'=>'Luar Negeri');
        
 		$ajaxContext->addActionContext('view', 'html')
                     ->addActionContext('form', 'html')
