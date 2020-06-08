@@ -7932,7 +7932,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	//get course
     	$stateDB = new App_Model_Application_DbTable_Wilayah();
     	$state_list = $stateDB->getByWilayah($country_id);
-    	if (!$state_list) $state_list[0]=array('idState'=>273,'StateName'=>'Luar Negeri');
+    	if (!$state_list) $state_list[0]=array('id_wil'=>$country_id,'nm_wilayah'=>'Luar Negeri');
     	$ajaxContext->addActionContext('view', 'html')
     	->addActionContext('form', 'html')
     	->addActionContext('process', 'json')
@@ -8134,6 +8134,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
         
        $cityDb = new App_Model_Application_DbTable_Wilayah();
        $list_city = $cityDb->getByWilayah($state_id);
+       if (!$list_city) $list_city[0]=array('id_wil'=>$state_id,'nm_wilayah'=>'Luar Negeri');
        
 		$ajaxContext->addActionContext('view', 'html')
                     ->addActionContext('form', 'html')
