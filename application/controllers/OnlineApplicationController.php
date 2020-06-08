@@ -2573,7 +2573,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	 
     	 $row=$dbSchool->getByWilayah($idwil);
     	  
-    	echo var_dump($row);exit;
+    	//echo var_dump($row);exit;
     	$ajaxContext->addActionContext('view', 'html')
     	->addActionContext('form', 'html')
     	->addActionContext('process', 'json')
