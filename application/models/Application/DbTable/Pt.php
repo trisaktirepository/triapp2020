@@ -74,7 +74,7 @@ class App_Model_Application_DbTable_Pt extends Zend_Db_Table_Abstract {
 			$select->ORwhere('a.id_wilayah is null') ;
 		}
 		$row=$db->fetchAll($select);
-		echo var_dump($row);
+		//echo var_dump($row);
 		//echo $select;
 		return $row;
 	
