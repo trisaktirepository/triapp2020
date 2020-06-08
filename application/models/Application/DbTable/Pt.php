@@ -73,8 +73,9 @@ class App_Model_Application_DbTable_Pt extends Zend_Db_Table_Abstract {
 			$select->where('TRIM(a.id_wilayah)=?',trim($idwilayah)) ;
 			$select->ORwhere('a.id_wilayah is null') ;
 		}
-		echo $select;
-		return $db->fetchAll($select);
+		$row=$db->fetchAll($select);
+		//echo $select;
+		return $row;
 	
 	}
 	  
