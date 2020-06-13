@@ -2435,13 +2435,13 @@ class ApplicantPortalController extends Zend_Controller_Action
 		$dompdf = new DOMPDF();
 		$dompdf->load_html($html);
 		$dompdf->set_paper('a4', 'potrait');
-		$dompdf->render();
+		@$dompdf->render();
 
 		//output filename 
 		$output_filename = "Bukti_Reservasi.pdf";
 		
 		//$dompdf = $dompdf->output();
-		$dompdf->stream($output_filename);						
+		@$dompdf->stream($output_filename);						
 							
 		//to rename output file						
 	    $output_file_path = DOCUMENT_PATH."/student/".$output_filename;
