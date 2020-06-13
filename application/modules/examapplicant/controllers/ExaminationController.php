@@ -388,7 +388,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    		}
 	    		if ($response) {
 	    			//get number of question per Component
-	    			echo var_dump($component);exit;
+	    			//echo var_dump($component);exit;
 	    			foreach ($component as $idx=>$comp) {
 	    				$component[$idx]['jml']=$dbAppTestAns->getNQuestionPerComp($response['apa_id'], $comp['ac_id']);
 	    				$ptestcomp=$dbPtestDetail->getPlacementTestComponentData($currenttest['apt_ptest_code'],$comp['ac_test_type']);
