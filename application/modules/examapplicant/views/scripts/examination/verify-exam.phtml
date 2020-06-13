@@ -143,18 +143,18 @@ p    {color: white; font-size: 20px}
 			 		 		
 			 			<tr bgcolor="<?php echo $bg;?>">
 			 			<td><?php echo $comp['ac_comp_name_bahasa']?></td>
-			 			<td align="center"><?php echo $comp['jml']?></td>
-			 			<td align="center"><?php echo $comp['nQuestion']?></td>
 			 			
+			 			<td align="center"><?php echo $comp['nQuestion']?></td>
+			 			<td align="center"><?php echo $comp['jml']?></td>
 			 			</tr>
 			 		<?php }
 			 			if ($totalsoal==0) $status="0";
 			 		?>
 			 		<tr>
 			 			<td><?php echo $this->translate('Total')?></td>
-			 			
-			 			<td align="center"><?php echo $totalsoal?></td>
 			 			<td align="center"><?php echo $totalstd?></td>
+			 			<td align="center"><?php echo $totalsoal?></td>
+			 			
 			 			
 			 		</tr>
 			 		<tr bgcolor="white"><td colspan="3" ><?php if ($status=="1") echo 'Selamat jumlah soal anda sudah sesuai,silahkan dilanjutkan ke pengerjaan ujian';
