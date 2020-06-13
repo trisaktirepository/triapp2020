@@ -312,15 +312,15 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 		  		
 		  		foreach ($compset as $comporder) {
 		  			$questionset=$data[$comporder]['questionset'];
-		  			$j=0; echo var_dump($comporder);echo '<br>';
+		  			$j=0; //echo var_dump($comporder);echo '<br>';
 		  			foreach ($questionset as $quest) {
-		  				echo var_dump($quest);
+		  				//echo var_dump($quest);
 			  			$dtl_data = array(
 			  					'apad_apa_id' => $id,
 			  					'apad_ques_no' =>$i,
 			  					'idQuestion'=>$quest['idQuestion']
 			  			);
-			  			
+			  			echo $data[$comporder]['n_question'];
 			  			if ($j<$data[$comporder]['n_question']) {
 			  				$db->insert('applicant_ptest_ans_detl',$dtl_data);
 			  				$i++;
