@@ -69,7 +69,7 @@ class App_Model_Application_DbTable_PlacementTestDetail extends Zend_Db_Table_Ab
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$select = $db->select()
 		->from(array('apd'=>$this->_name))
-		->join(array('ac'=>'appl_component'),'ac.ac_comp_code = apd.apd_comp_code',array('ac_comp_name'=>'ac_comp_name'))
+		->join(array('ac'=>'appl_component'),'ac.ac_test_type = apd.apd_comp_code',array('ac_comp_name'=>'ac_comp_name'))
 		->where('apd.apd_placement_code = ?',$placementtest_code)
 		->where('ac.ac_comp_code = ?',$component_code);
 			
