@@ -154,8 +154,8 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 					->where('a.ape_aph_id=?',$postData['config']['aph_id'])
 					->where('a.test_type=?',$postData['test_type']);
 				$set=$db->fetchAll($select);
-				echo $select;
-				echo var_dump($set);  exit;
+				//echo $select;
+				//echo var_dump($set);  exit;
 				if (count($set)>0) {
 					//echo var_dump($postData['component']); 
 					//get random set according to config
@@ -170,9 +170,9 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 						->from(array('a'=>'tbl_question_set_config'))
 						->where('a.qsc_idSet=?',$idSet)
 						->where('a.qsc_ac_id=?',$idcomp);
-						//echo $select;exit;
+						 
 						$config=$db->fetchRow($select);
-						
+						echo var_dump($config);
 						$select=$db->select()
 						->from(array('a'=>'tbl_question_bank'))
 						->where('a.from_setcode=?',$idSet)
