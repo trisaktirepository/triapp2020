@@ -169,7 +169,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 						->from(array('a'=>'tbl_question_set_config'))
 						->where('a.qsc_idSet=?',$idSet)
 						->where('a.qsc_ac_id=?',$idcomp);
-						echo $select;exit;
+						//echo $select;exit;
 						$config=$db->fetchRow($select);
 						
 						$select=$db->select()
@@ -178,7 +178,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 						->where('a.subject=?',$idcomp)
 						->where('a.parent="0"')
 						->order('a.seqno');
-						echo $select;
+						//echo $select;
 						$questionset=$db->fetchAll($select);
 					    //echo var_dump($questionset);exit;
 						if ($questionset) {
@@ -195,7 +195,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 					
 					 
 				} else $success="0";
-				exit;
+				//exit;
 			} else if ($config['config_mode']==1862) {
 				//random component from several selected exam set
 				 
