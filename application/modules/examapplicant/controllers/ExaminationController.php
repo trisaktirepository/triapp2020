@@ -391,7 +391,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    			echo var_dump($component);exit;
 	    			foreach ($component as $idx=>$comp) {
 	    				$component[$idx]['jml']=$dbAppTestAns->getNQuestionPerComp($response['apa_id'], $comp['ac_id']);
-	    				$ptestcomp=$dbPtestDetail->getPlacementTestComponentData($currenttest['apt_ptest_code'],$comp['ac_comp_code']);
+	    				$ptestcomp=$dbPtestDetail->getPlacementTestComponentData($currenttest['apt_ptest_code'],$comp['ac_test_type']);
 	    				$component[$idx]['nQuestion']=$ptestcomp['apd_total_question'];
 	    			}
 	    			$this->view->componentlist=$component;
