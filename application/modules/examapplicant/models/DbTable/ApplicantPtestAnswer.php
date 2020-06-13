@@ -320,7 +320,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 			  					'apad_ques_no' =>$i,
 			  					'idQuestion'=>$quest['idQuestion']
 			  			);
-			  			echo $data[$comporder]['n_question'];
+			  		//	echo $data[$comporder]['n_question'];
 			  			if ($j<$data[$comporder]['n_question']) {
 			  				$db->insert('applicant_ptest_ans_detl',$dtl_data);
 			  				$i++;
@@ -329,10 +329,11 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 			  			
 		  			}
 		  	 	}
-		  	 	exit;
+		  	 //	exit;
 		  	 	
 		    	$db->commit();
 		    	$response=array('apa_id'=>$id,'n_of_quest'=>$i-1,'token'=>$postData['token'],'pcode'=>$postData['pcode']);
+		  	exit;
 		  	} else {
 		  		$db->rollBack();
 		  		$response=array();
