@@ -312,8 +312,9 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 		  		
 		  		foreach ($compset as $comporder) {
 		  			$questionset=$data[$comporder]['questionset'];
-		  			$j=0;
+		  			$j=0; echo var_dump($comporder);echo '<br>';
 		  			foreach ($questionset as $quest) {
+		  				echo var_dump($quest);
 			  			$dtl_data = array(
 			  					'apad_apa_id' => $id,
 			  					'apad_ques_no' =>$i,
@@ -328,6 +329,8 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 			  			
 		  			}
 		  	 	}
+		  	 	exit;
+		  	 	
 		    	$db->commit();
 		    	$response=array('apa_id'=>$id,'n_of_quest'=>$i-1,'token'=>$postData['token'],'pcode'=>$postData['pcode']);
 		  	} else {
