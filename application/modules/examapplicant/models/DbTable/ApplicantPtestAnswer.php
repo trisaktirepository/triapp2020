@@ -320,8 +320,9 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 			  					'apad_ques_no' =>$i,
 			  					'idQuestion'=>$quest['idQuestion']
 			  			);
-			  		//	echo $data[$comporder]['n_question'];
+			  			echo $data[$comporder]['n_question'];
 			  			if ($j<$data[$comporder]['n_question']) {
+			  				echo var_dump($dtl_data);echo '<br>';
 			  				$db->insert('applicant_ptest_ans_detl',$dtl_data);
 			  				$i++;
 			  				$j++;
