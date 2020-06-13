@@ -172,7 +172,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 						->where('a.qsc_ac_id=?',$idcomp);
 						 
 						$config=$db->fetchRow($select);
-						echo var_dump($config);
+						//echo var_dump($config);
 						$select=$db->select()
 						->from(array('a'=>'tbl_question_bank'))
 						->where('a.from_setcode=?',$idSet)
@@ -181,7 +181,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 						->order('a.seqno');
 						//echo $select;
 						$questionset=$db->fetchAll($select);
-					    echo var_dump($questionset);exit;
+					    //echo var_dump($questionset);exit;
 						if ($questionset) {
 							if ($config['qsc_suffle']=="1")  
 								shuffle($questionset);
