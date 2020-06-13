@@ -356,7 +356,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
 	    		if (!$response) {
 	    			 
 	    		 	//get exam script config
-    				//echo var_dump($component); exit;
+    				echo var_dump($component); exit;
 	    			$dbConfig=new Examapplicant_Model_DbTable_ExamScriptConfig();
 	    			$config=$dbConfig->getMatchConfig($currenttest['apt_ptest_code'], $currenttest['apt_aps_id'],$currenttest['app_comp_code']);
 	    			//echo var_dump($config);exit;
