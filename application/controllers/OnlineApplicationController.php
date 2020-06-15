@@ -7626,13 +7626,17 @@ class OnlineApplicationController extends Zend_Controller_Action {
 						$program_data["program_code2"] = $program_data["program_code1"];
 					}
 					$programset=implode(',', $programset);
-					$dbCompoment=new App_Model_Application_DbTable_PlacementTestProgramComponent();
-					$components=$dbCompoment->getComponenByProgram($programset, '0');
+					//$dbCompoment=new App_Model_Application_DbTable_PlacementTestProgramComponent();
+					//$components=$dbCompoment->getComponenByProgram($programset, '0');
+					$dbCompoment=new App_Model_Application_DbTable_PlacementTestDetail();
+					$components=$dbCompoment->getPlacementTestComponentByProgram($testcode,$programset);
+								
 					$dbDetailTest=new App_Model_Application_DbTable_ApplicantPtestDetail();
+					 
 					// echo var_dump($components);exit;
 					foreach ($components as $value) {
 						$testtype=$value['ac_test_type'];
-						if ($testtype=='1' || $testtype=='14') {
+						if ($testtype=='1' || $testtype=='14'  ) {
 							if (!$dbDetailTest->isIn($sched['apt_id'], $testtype)) {
 								
 								$data = $appprogramDB->getProcedure($transaction_id,$program_data["program_code1"],$program_data["program_code2"],$applicant["schedule_id"],$testcode,$testtype,null);

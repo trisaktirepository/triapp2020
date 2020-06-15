@@ -64,6 +64,26 @@ class App_Model_Application_DbTable_PlacementTestDetail extends Zend_Db_Table_Ab
 		}
 	}
 	
+	public function getPlacementTestComponentByProgram($placementtest_code,$programset){
+	
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$select = $db->select()->distinct()
+		->from(array('apd'=>$this->_name),array())
+		->join(array('aw'=>'appl_placement_weightage'),'apd.apd_id=aw.apw_apd_id',array('ac_test_type'=>'apw_test_type'))
+		->join(array('app'=>'appl_placement_program'),'aw.apw_app_id=app.app_id',array())
+		->join(array('p'=>'tbl_program'),'app.app_program_code = p.programcode',array())
+		->where('apd.apd_placement_code = ?',$placementtest_code)
+		->where('p.idprogram in ('.$programset.') ');
+			
+		$row = $db->fetchAll($select);
+	
+		if($row){
+			return $row;
+		}else{
+			return null;
+		}
+	}
+	
 	public function getCountPlacementTestComponentData($placementtest_code, $component_code){
 	
 		$db = Zend_Db_Table::getDefaultAdapter();
