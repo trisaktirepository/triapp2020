@@ -73,6 +73,7 @@ class App_Model_Application_DbTable_Pt extends Zend_Db_Table_Abstract {
 			$select->where('TRIM(a.id_wilayah)=?',trim($idwilayah)) ;
 			//$select->ORwhere('a.id_wilayah is null') ;
 		}
+		$db->query('SET CHARACTER SET utf8');
 		$row=$db->fetchAll($select);
 		//echo var_dump($row);
 		//echo $select;

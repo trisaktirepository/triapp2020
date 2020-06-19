@@ -2569,9 +2569,9 @@ class OnlineApplicationController extends Zend_Controller_Action {
     
     	$db = Zend_Db_Table::getDefaultAdapter();
     
-    	 $dbSchool = new App_Model_Application_DbTable_Pt();
+    	$dbSchool = new App_Model_Application_DbTable_Pt();
     	 
-    	 $row=$dbSchool->getByWilayah($idwil);
+    	$row=$dbSchool->getByWilayah($idwil);
     	  
     	//echo var_dump($row); 
     	$ajaxContext->addActionContext('view', 'html')
