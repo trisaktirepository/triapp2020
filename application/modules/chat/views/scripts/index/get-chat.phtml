@@ -1,6 +1,6 @@
 <?php 
 $auth = Zend_Auth::getInstance();
-$id=$auth->getIdentity()->id;
+$id=$auth->getIdentity()->transaction_id;
 foreach ($this->data as $value) {
 	if ($value['chat_by']!=$id) 
 	 	echo '<strong>'.date('d-m-Y H:i:s',strtotime($value['created_dt'])).'['.$value['noform'].']: '.$value['chat_msg'].'</strong><br>';
