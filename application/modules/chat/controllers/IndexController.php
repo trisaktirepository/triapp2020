@@ -27,6 +27,7 @@ class Chat_IndexController extends Zend_Controller_Action
     public function getChatAction()
     {
     	$id=$this->_getParam('id');
+    	$this->view->transaction_id=$id;
     	$this->_helper->layout()->disableLayout();
     	$dbChat=new Chat_Model_DbTable_Chat();
     	$dbTransaction=new App_Model_Application_DbTable_ApplicantTransaction();
