@@ -18,6 +18,7 @@ class Chat_IndexController extends Zend_Controller_Action
     
     public function userChatAction()
     {
+    	$this->_helper->layout()->disableLayout();
       $transid=$this->_getParam('transaction_id');
       $this->view->transactionid=$transid;
     	
