@@ -30,6 +30,32 @@ p    {color: white; font-size: 20px}
 }
 </style>
  <script type="text/javascript">
+ $(function() {
+
+		 
+
+		$("#dialog-chat").dialog({
+		    autoOpen: false,
+		    width: 504,
+		    height: 530,
+		    modal: true,
+		    buttons: {          
+		        "Close": function() {
+		            $( this ).dialog( "close" );
+		             
+		        }
+		    }
+		});
+	});
+
+ function chat(){
+		if (confirm('Apakah anda perlu bantuan admin?')) {
+			 
+			url = "<?php echo $this->url(array('module'=>'chat','controller'=>'index','action'=>'user-chat'), 'default', true);?>/transaction_id/"+$("#transaction_id").val();
+			$( "#dialog-chat" ).load(url).dialog('open');	
+		}
+	}
+	
   function startExam(idtrx,testtype) {
 	  
 	  	 //stopStreaming();
@@ -84,6 +110,7 @@ p    {color: white; font-size: 20px}
 			 	<li>Jika waktu ujian belum selesai dan anda menutup layar soal maka ujian dianggap sudah selesai</li>
 				<li>Waktu Ujian dimulai pada saat anda telah selesai memeriksa kecukupan jumlah soal dihalaman berikutnya dan menekan tombol 'Mulai Ujian'</li>
 			</ol>
+			 <input type="button" name="chat" value="Chat ke Admin" onclick="chat()"> 
 			<hr>
 	 		<br>
 			<fieldset><legend><?php echo 'Identitas Diri, Pilihan Program Studi, dan Materi Ujian'?></legend>
@@ -185,4 +212,6 @@ p    {color: white; font-size: 20px}
 	</fieldset>
 </div>  
  
+<div id="dialog-chat" title="Chat to Admin in Preparation">
+</div>
  
