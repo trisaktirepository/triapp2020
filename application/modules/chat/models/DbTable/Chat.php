@@ -48,7 +48,7 @@ class Chat_Model_DbTable_Chat extends Zend_Db_Table
     	$select = $db->select()
     	->from(array('a'=>$this->_name))
     	->where('a.created_dt between "'.date_format($dtstart,'Y-m-d H:i:s').'" and "'.date_format($dtstop,'Y-m-d H:i:s').'"')
-    	->order('created_dt ASC'); 
+    	->order('idchat'); 
     	if ($transid!=null) $select->where('at_trans_id = ?', $transid);
     	//echo $select;exit;
     	$issues = $db->fetchAll($select);
