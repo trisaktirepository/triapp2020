@@ -90,6 +90,19 @@ $(function() {
 	        }
 	    }
 	});
+
+	$("#dialog-chat").dialog({
+	    autoOpen: false,
+	    width: 504,
+	    height: 300,
+	    modal: true,
+	    buttons: {          
+	        "Close": function() {
+	            $( this ).dialog( "close" );
+	             
+	        }
+	    }
+	});
 });
 
 function kumpul(){
@@ -97,6 +110,13 @@ function kumpul(){
 		 
 		openDialog($("#transaction_id").val(),$('#testtype').val());
 		//location.replace('/applicant-portal');
+	}
+}
+
+function chat(){
+	if (confirm('Apakah anda perlu bantuan admin?')) {
+		 
+		$( "#dialog-chat" ).dialog('open');	
 	}
 }
 
@@ -476,7 +496,8 @@ function startTimer(endtime){
 	<?php foreach ($this->component as $value) {
 		?><input type="button" value="<?php echo $value['ac_comp_name_bahasa']?>" onclick="getQuestion('<?php echo $value['quest_no']?>')"> <?php 
 	}?></td>
-	<td align="right"><?php echo $this->transaction['at_pes_id'].' - '.$this->transaction['appl_fname'].' '.$this->transaction['appl_mname'].' '.$this->transaction['appl_lname'];?></td></tr>
+	<td align="right"> <input type="button" name="chat" value="Chat ke Admin" onclick="chat()"> 
+					<?php echo $this->transaction['at_pes_id'].' - '.$this->transaction['appl_fname'].' '.$this->transaction['appl_mname'].' '.$this->transaction['appl_lname'];?></td></tr>
 </table>
 <div>
 	<fieldset align="center">
@@ -550,6 +571,9 @@ function startTimer(endtime){
  
 
 <div id="dialog-result" title="Hasil Jawaban Ujian Anda">
+</div>
+
+<div id="dialog-chat" title="Chat to Admin">
 </div>
 
 
