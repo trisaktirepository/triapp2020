@@ -116,7 +116,8 @@ function kumpul(){
 function chat(){
 	if (confirm('Apakah anda perlu bantuan admin?')) {
 		 
-		$( "#dialog-chat" ).dialog('open');	
+		url = "<?php echo $this->url(array('module'=>'chat','controller'=>'index','action'=>'user-chat'), 'default', true);?>/transaction_id/"+$("#transaction_id").val();
+		$( "#dialog-chat" ).load(url).dialog('open');	
 	}
 }
 
