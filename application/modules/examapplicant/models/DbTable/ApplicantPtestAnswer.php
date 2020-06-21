@@ -120,7 +120,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 					->from(array('a'=>'tbl_exam_comp_map'))
 					->where('a.ac_idori=?',$comp['ac_id']);
 				$row=$db->fetchRow($select);
-				echo var_dump($row);
+				//echo var_dump($row);
 				$postData['component'][$key]['ac_id']=$row['ac_iddest'];
 			}
 			//head data
@@ -136,7 +136,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 			   	'apa_user_by' => $auth->getIdentity()->appl_id
 				);
 		
-		   	echo var_dump($dataaph);exit;
+		   	//echo var_dump($dataaph);exit;
 		   	//$dbTxt->add(array('txt'=>'testtye='. var_dump($dataaph)));
 		   //	$id=1;
 		   	$filetype=500+$postData['test_type']*1;
