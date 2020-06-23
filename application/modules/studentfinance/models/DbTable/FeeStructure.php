@@ -133,7 +133,7 @@ class Studentfinance_Model_DbTable_FeeStructure extends Zend_Db_Table_Abstract {
 					->where("fs.fs_intake_start = '".$intake_id."'");
 		if ($branch!=null) $selectData->where('fsp.fsp_branch_id=?',$branch);
 		if ($majoring!=null) $selectData->where('fsp.fsp_majoring_id=?',$majoring);
-		//echo $selectData;exit;
+		echo $selectData;exit;
 		$row = $db->fetchRow($selectData);
 		
 		if(!$row){
@@ -178,8 +178,9 @@ class Studentfinance_Model_DbTable_FeeStructure extends Zend_Db_Table_Abstract {
 					$row = $db->fetchRow($selectData);
 				}
 			}
-			echo $selectData;exit;
+			
 		}
+		
 		//echo var_dump($row);exit;
 		if(!$row){
 			throw new Exception("No Fee Structure setup for this program or student category");
