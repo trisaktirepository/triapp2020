@@ -178,7 +178,7 @@ class Studentfinance_Model_DbTable_FeeStructure extends Zend_Db_Table_Abstract {
 					$row = $db->fetchRow($selectData);
 				}
 			}
-			//echo $selectData;exit;
+			echo $selectData;exit;
 		}
 		//echo var_dump($row);exit;
 		if(!$row){
