@@ -57,7 +57,7 @@ class App_Form_ApplicationRegistration extends Zend_Form {
 		$this->addElement('date','appl_dob', array(
 			'label'=>$this->getView()->translate('dob'),
 			'required'=>true,
-			'startYear'=>date('Y')-38,
+			'startYear'=>date('Y')-65,
 			'stopYear'=>date('Y'),
 			'locale'=>$this->_lang
 		));
