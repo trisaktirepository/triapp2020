@@ -880,9 +880,10 @@ class OnlineApplicationController extends Zend_Controller_Action {
         	$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'programme-invitation'),'default',true));
         } elseif($transaction['at_appl_type'] == 5 ){
         	/*PORTFOLIO*/
-        	//if ($transaction['at_appl_type'] == 8) $kkni="8";else $kkni="6";
-        	
-        	$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'programme-portfolio','kkni'=>$kkni),'default',true));
+        	if ($transaction['at_appl_type'] == 8)  
+        		$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'programme-magister-doktor'),'default',true));
+        	else 
+        		$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'programme-portfolio'),'default',true));
         } elseif($transaction['at_appl_type'] == 6){
         	/*SCHOLARSHIP*/
         	$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'programme-scholar'),'default',true));
@@ -1113,7 +1114,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 			//check ptest
 			 
 	
-			$form = new App_Form_Programme(array('ae_appl_id'=>$applicant['appl_id'],'admissiontype'=>5,null));
+			$form = new App_Form_Programme(array('ae_appl_id'=>$applicant['appl_id'],'admissiontype'=>5,'testcode'=>$ptest['level_kkni']));
 	
 			if ($this->getRequest()->isPost()) {
 				$formData = $this->getRequest()->getPost();
