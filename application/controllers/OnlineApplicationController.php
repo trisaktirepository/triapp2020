@@ -880,17 +880,16 @@ class OnlineApplicationController extends Zend_Controller_Action {
         	$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'programme-invitation'),'default',true));
         } elseif($transaction['at_appl_type'] == 5 ){
         	/*PORTFOLIO*/
-        	if ($transaction['at_appl_type'] == 8)  
-        		$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'programme-magister-doktor'),'default',true));
-        	else 
-        		$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'programme-portfolio'),'default',true));
+        	$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'programme-portfolio'),'default',true));
         } elseif($transaction['at_appl_type'] == 6){
         	/*SCHOLARSHIP*/
         	$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'programme-scholar'),'default',true));
         } elseif($transaction['at_appl_type'] == 7){
         	/*Nilai UTBK*/
         	$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'programme-utbk'),'default',true));
-        }
+        } else if ($transaction['at_appl_type'] == 8)  
+        		$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'programme-magister-doktor'),'default',true));
+        	 
         else{//admission type = placement test (id=1)
 			//check ptest
 	    	$ptestDb = new App_Model_Application_DbTable_ApplicantPtest();
