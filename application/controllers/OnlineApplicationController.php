@@ -888,7 +888,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
         	/*Nilai UTBK*/
         	$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'programme-utbk'),'default',true));
         } else if ($transaction['at_appl_type'] == 8)  
-        		$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'programme-magister-doktor'),'default',true));
+        		$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'programme-portofolio','kkni'=>8),'default',true));
         	 
         else{//admission type = placement test (id=1)
 			//check ptest
@@ -1059,7 +1059,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 				$this->_redirect($this->view->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'index'),'default',true));
 			}
 		}
-		 
+		$kkni=$this->_getParam('kkni');
 		$transaction_id = $auth->getIdentity()->transaction_id;
 		$this->view->transaction_id = $auth->getIdentity()->transaction_id;
 		 
@@ -1113,7 +1113,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 			//check ptest
 			 
 	
-			$form = new App_Form_Programme(array('ae_appl_id'=>$applicant['appl_id'],'admissiontype'=>5,'testcode'=>$ptest['level_kkni']));
+			$form = new App_Form_Programme(array('ae_appl_id'=>$applicant['appl_id'],'admissiontype'=>5,'testcode'=>$kkni));
 	
 			if ($this->getRequest()->isPost()) {
 				$formData = $this->getRequest()->getPost();
