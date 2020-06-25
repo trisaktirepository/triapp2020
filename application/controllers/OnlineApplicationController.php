@@ -878,9 +878,11 @@ class OnlineApplicationController extends Zend_Controller_Action {
         elseif($transaction['at_appl_type'] == 4){
         	/*INVITATION*/
         	$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'programme-invitation'),'default',true));
-        } elseif($transaction['at_appl_type'] == 5){
+        } elseif($transaction['at_appl_type'] == 5 ){
         	/*PORTFOLIO*/
-        	$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'programme-portfolio'),'default',true));
+        	//if ($transaction['at_appl_type'] == 8) $kkni="8";else $kkni="6";
+        	
+        	$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'programme-portfolio','kkni'=>$kkni),'default',true));
         } elseif($transaction['at_appl_type'] == 6){
         	/*SCHOLARSHIP*/
         	$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'programme-scholar'),'default',true));
