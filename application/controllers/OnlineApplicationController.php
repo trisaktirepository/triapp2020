@@ -3077,51 +3077,100 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	$ajaxContext = $this->_helper->getHelper('AjaxContext');
     	$ajaxContext->addActionContext('view', 'html');
     	$ajaxContext->initContext();
-    
-    	//program in placement test with discipline filter
-    
     	//transaction data
     	$auth = Zend_Auth::getInstance();
-    	 
+    	
     	$appl_id = $auth->getIdentity()->appl_id;
     	$transaction_id = $auth->getIdentity()->transaction_id;
     	$transDB = new App_Model_Application_DbTable_ApplicantTransaction();
     	$transaction_data= $transDB->getTransactionData($transaction_id);
-    	 
+    	
     	$db = Zend_Db_Table::getDefaultAdapter();
-    
-    	//get transaction data
-		$select = $db->select()
-	                 ->from(array('at'=>'applicant_transaction'))
-	                 ->where('at.at_trans_id = ?', $transaction_id);
-	                 
-	    $stmt = $db->query($select);
-        $transactionData = $stmt->fetch();
-        
-        $select_applied = $db->select()
-         			 ->from(array('at'=>'applicant_transaction'),array())
-	                 ->join(array('ap'=>'applicant_program'),'ap.ap_at_trans_id=at.at_trans_id',array('ap_prog_code'=>'distinct(ap.ap_prog_code)'))
-	                 ->where("at.at_appl_id= '".$appl_id."'")
-	                 ->where("ap.ap_at_trans_id != '".$transaction_id."'")
-	                 ->where("at.at_appl_type=5");	
-    
-    	//get placementest program data filtered with discipline
-    	$select = $db->select()
-    				 ->distinct()
-	                 ->from(array('apr'=>'appl_program_req'),array())
-	                 ->joinLeft(array('p'=>'tbl_program'),'p.ProgramCode = apr.apr_program_code',array('ProgramCode','ProgramName','ArabicName','strata') )
-	                 ->join(array('ip'=>'appl_placement_intake_program'),'p.IdProgram=ip.IdProgram',array())
-	                 ->where('ip.IdIntake=?',$intake)
-	                 ->where("p.ProgramCode NOT IN (?)",$select_applied)
-	                 ->order('p.ArabicName ASC');
+    	//program in placement test with discipline filter
+    	//-----calculate year gap
+    	if ($this->getRequest()->isPost()) {
+    		$formData = $this->getRequest()->getPost();
+    		if (isset($formData['discipline_code'])) $discipline_code = $formData['discipline_code'];
+    		$intake = $formData['intake_id'];
+    		$yearend = $formData['ae_year_end'];
+    		$kkni=$formData['kkni'];
+    		$programasal=$formData['ae_institution'];
+    		if ($kkni=="8" ) {
+    			//get transaction data
+				$select = $db->select()
+			                 ->from(array('at'=>'applicant_transaction'))
+			                 ->where('at.at_trans_id = ?', $transaction_id);
+			                 
+			    $stmt = $db->query($select);
+		        $transactionData = $stmt->fetch();
+		        
+		        $select_applied = $db->select()
+		         			 ->from(array('at'=>'applicant_transaction'),array())
+			                 ->join(array('ap'=>'applicant_program'),'ap.ap_at_trans_id=at.at_trans_id',array('ap_prog_code'=>'distinct(ap.ap_prog_code)'))
+			                 ->where("at.at_appl_id= '".$appl_id."'")
+			                 ->where("ap.ap_at_trans_id != '".$transaction_id."'")
+			                 ->where("at.at_appl_type=8");	
+		    
+		    	//get placementest program data filtered with discipline
+		    
+		    	$select = $db->select()
+		    	->distinct()
+		    	->from(array('apr'=>'appl_program_req'),array())
+		    	->joinLeft(array('p'=>'tbl_program'),'p.ProgramCode = apr.apr_program_code',array('ProgramCode','ProgramName','ArabicName','strata') )
+		    	->join(array('ip'=>'appl_placement_intake_program'),'p.IdProgram=ip.IdProgram',array())
+		    	->where('ip.IdIntake=?',$intake)
+		    	->where('p.KKNI_level=?',$kkni)
+		    	->where("p.ProgramCode NOT IN (?)",$select_applied)
+		    	->order('p.ArabicName ASC');
+		    	
+		    	// check program offer
+		    	$select->where("p.PortofolioOffer = 1");
+		    
+		    	$stmt = $db->query($select);
+		    	$row = $stmt->fetchAll();
+    				
+    			$stmt = $db->query($select);
+    			$row = $stmt->fetchAll();
+    		} else {
+		    			if ($discipline_code !=0 && $intake !=0 && $yearend != ''){
+		    	
+		    	
+		    
+		    	//get transaction data
+				$select = $db->select()
+			                 ->from(array('at'=>'applicant_transaction'))
+			                 ->where('at.at_trans_id = ?', $transaction_id);
+			                 
+			    $stmt = $db->query($select);
+		        $transactionData = $stmt->fetch();
+		        
+		        $select_applied = $db->select()
+		         			 ->from(array('at'=>'applicant_transaction'),array())
+			                 ->join(array('ap'=>'applicant_program'),'ap.ap_at_trans_id=at.at_trans_id',array('ap_prog_code'=>'distinct(ap.ap_prog_code)'))
+			                 ->where("at.at_appl_id= '".$appl_id."'")
+			                 ->where("ap.ap_at_trans_id != '".$transaction_id."'")
+			                 ->where("at.at_appl_type=5");	
+		    
+		    	//get placementest program data filtered with discipline
+		    	$select = $db->select()
+		    				 ->distinct()
+			                 ->from(array('apr'=>'appl_program_req'),array())
+			                 ->joinLeft(array('p'=>'tbl_program'),'p.ProgramCode = apr.apr_program_code',array('ProgramCode','ProgramName','ArabicName','strata') )
+			                 ->join(array('ip'=>'appl_placement_intake_program'),'p.IdProgram=ip.IdProgram',array())
+			                 ->where('ip.IdIntake=?',$intake)
+			                 ->where("p.ProgramCode NOT IN (?)",$select_applied)
+			                 ->order('p.ArabicName ASC');
+		    		
+		    	// check program offer
+		    	$select->where("p.PortofolioOffer = 1");
+		    
+		    	$stmt = $db->query($select);
+		    	$row = $stmt->fetchAll();
+		    
+		    		}
+    		}
+    	}
     		
-    	// check program offer
-    	$select->where("p.PortofolioOffer = 1");
-    
-    	$stmt = $db->query($select);
-    	$row = $stmt->fetchAll();
-    
-    
     
     	$ajaxContext->addActionContext('view', 'html')
     	->addActionContext('form', 'html')
