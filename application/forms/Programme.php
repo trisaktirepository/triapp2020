@@ -38,12 +38,17 @@ class App_Form_Programme extends Zend_Form {
 			$this->initCreditTransfer();
 		}else if( $this->admissiontype == 4 ){
 				$this->initInvitation();
-		} else if( $this->admissiontype == 5 ){
-				$this->initPortfolioTest();
+		} else if( $this->admissiontype == 5 || $this->admissiontype == 8 || $this->admissiontype == 9 ){
+			if ($this->testcode=="8" || $this->testcode=="9")
+				$this->initPlacementTestMagister($this->testcode);
+			else $this->initPortfolioTest();
 		}else if( $this->admissiontype == 6 ){
 				$this->initScholarship();
 		} else if( $this->admissiontype == 7 ){
 				$this->initUnbk();
+		}
+		else if( $this->admissiontype == 8 ){
+			$this->initPortfolioTest();
 		}
 	}
 	

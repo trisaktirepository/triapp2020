@@ -800,7 +800,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 					$periodDB = new App_Model_Record_DbTable_AcademicPeriod();
 					$period   = $periodDB->getCurrentPeriod(date("m"),date("Y"),null);
 					$idPeriod = $period["ap_id"];
-					 
+					
 	    			$info["at_appl_type"]=$formData["at_appl_type"];
 	    			$info['at_period']=$idPeriod;
 	    			$info['at_academic_year']=0;
@@ -888,8 +888,10 @@ class OnlineApplicationController extends Zend_Controller_Action {
         	/*Nilai UTBK*/
         	$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'programme-utbk'),'default',true));
         } else if ($transaction['at_appl_type'] == 8)  
-        		$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'programme-portofolio','kkni'=>8),'default',true));
-        	 
+        		$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'programme-portfolio','kkni'=>8),'default',true));
+        else if ($transaction['at_appl_type'] == 9)
+        	$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'programme-portfolio','kkni'=>9),'default',true));
+        
         else{//admission type = placement test (id=1)
 			//check ptest
 	    	$ptestDb = new App_Model_Application_DbTable_ApplicantPtest();
@@ -1113,7 +1115,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 			//check ptest
 			 
 	
-			$form = new App_Form_Programme(array('ae_appl_id'=>$applicant['appl_id'],'admissiontype'=>5,'testcode'=>$kkni));
+			$form = new App_Form_Programme(array('ae_appl_id'=>$applicant['appl_id'],'admissiontype'=>$transaction['at_appl_type'] ,'testcode'=>$kkni));
 	
 			if ($this->getRequest()->isPost()) {
 				$formData = $this->getRequest()->getPost();
