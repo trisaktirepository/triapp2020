@@ -1915,7 +1915,7 @@ class App_Form_Programme extends Zend_Form {
 			->order('p.ArabicName ASC');
 	
 			// check program offer
-			$select->where("p.UsmOffer = 1");
+			$select->where("p.UsmOffer = 1 or p.PortofolioOffer = 1" );
 			 
 			$stmt = $db->query($select);
 			$row = $stmt->fetchAll();
