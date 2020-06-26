@@ -1908,7 +1908,7 @@ class App_Form_Programme extends Zend_Form {
 		if ($appltype=="8" || $appltype=="9" ) {
 			$select = $db->select()
 			 
-			->from(array('p'=>'tbl_program'),array('p.*','app_id'=>'IdProgram') )
+			->from(array('p'=>'tbl_program'),array('p.*','app_id'=>'ProgramCode') )
 			->where('p.KKNI_level=?',$appltype)
 			->order('p.ArabicName ASC');
 			
