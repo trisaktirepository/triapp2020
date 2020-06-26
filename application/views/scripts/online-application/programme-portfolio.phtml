@@ -199,7 +199,7 @@ function changeProdi(element){
 		var append_html = "";
 		
 		for (var index = 0; index < data.length; index++) {
-			append_html += '<option value="'+data[index].sms_id+'"> '+data[index].nm_lemb+' ('+data[index].nm_jenjang+ ') </option>';
+			append_html += '<option value="'+data[index].key+'"> '+data[index].value+' ('+data[index].nm_jenjang+ ') </option>';
 		}	
 
 		ae_institution.append(append_html);
