@@ -3126,7 +3126,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 		    	
 		    	// check program offer
 		    	$select->where("p.PortofolioOffer = 1");
-		    	echo $select;
+		    //	echo $select;
 		    	$stmt = $db->query($select);
 		    	$row = $stmt->fetchAll();
     				
