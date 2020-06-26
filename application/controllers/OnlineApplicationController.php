@@ -3092,10 +3092,11 @@ class OnlineApplicationController extends Zend_Controller_Action {
     		$formData = $this->getRequest()->getPost();
     		if (isset($formData['discipline_code'])) $discipline_code = $formData['discipline_code'];
     		$intake = $formData['intake_id'];
-    		$yearend = $formData['ae_year_end'];
+    		//
     		$kkni=$formData['kkni'];
-    		$programasal=$formData['ae_institution'];
-    		if ($kkni=="8" ) {
+    		if ($kkni=="8" || $kkni=="9" ) {
+    			$yearend = $formData['ae_year_end'];
+    			$programasal=$formData['ae_institution'];
     			//get transaction data
 				$select = $db->select()
 			                 ->from(array('at'=>'applicant_transaction'))
