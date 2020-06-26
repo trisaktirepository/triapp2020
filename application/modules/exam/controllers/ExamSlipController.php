@@ -190,7 +190,7 @@ class Exam_ExamSlipController extends Zend_Controller_Action
 			$dbGlobalException=new Exam_Model_DbTable_GlobalException();
 			if ($dbGlobalException->isException(1, $program['IdCollege'], $formData['semid'], $formData['ass_type']))
 				$paymentstatus = 1;
-				else {
+			else {
 				if( ($pymtinfo["invoices"]=='')){
 					$paymentstatus=1;
 				}else{

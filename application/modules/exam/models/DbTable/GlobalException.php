@@ -51,7 +51,7 @@ class Exam_Model_DbTable_GlobalException extends Zend_Db_Table_Abstract {
 				->where('a.id_faculty is null');
 				$row = $db->fetchRow($select);
 			}
-		 
+		echo $select;exit;
 		return $row;
 	}
 	public function getPaginateData(){
