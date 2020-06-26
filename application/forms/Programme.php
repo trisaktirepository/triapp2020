@@ -1908,7 +1908,7 @@ class App_Form_Programme extends Zend_Form {
 		if ($appltype=="8" || $appltype=="9" ) {
 			$select = $db->select()
 			 
-			->from(array('p'=>'tbl_program') )
+			->from(array('p'=>'tbl_program'),array('p.*','app_id'=>'IdProgram') )
 			->order('p.ArabicName ASC');
 			
 			// check program offer
@@ -1932,7 +1932,7 @@ class App_Form_Programme extends Zend_Form {
 			->order('p.ArabicName ASC');
 	
 			// check program offer
-			$select->where("p.UsmOffer = 1 or p.PortofolioOffer = 1" );
+			$select->where("p.UsmOffer = 1" );
 			 
 			$stmt = $db->query($select);
 			$row = $stmt->fetchAll();
