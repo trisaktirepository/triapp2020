@@ -28,7 +28,7 @@ class App_Form_Programme extends Zend_Form {
 		
 		if( $this->admissiontype == 1 ){
 			if ($this->testcode=="8" || $this->testcode=="9") 
-				$this->initPlacementTestMagister($this->testcode);
+				$this->initPlacementTestMagister($this->testcode,$this->admissiontype);
 			else 
 				$this->initPlacementTest($this->testcode);
 		}else
@@ -40,7 +40,7 @@ class App_Form_Programme extends Zend_Form {
 				$this->initInvitation();
 		} else if( $this->admissiontype == 5 || $this->admissiontype == 8 || $this->admissiontype == 9 ){
 			if ($this->testcode=="8" || $this->testcode=="9")
-				$this->initPlacementTestMagister($this->testcode);
+				$this->initPlacementTestMagister($this->testcode,$this->admissiontype);
 			else $this->initPortfolioTest();
 		}else if( $this->admissiontype == 6 ){
 				$this->initScholarship();
@@ -1089,7 +1089,7 @@ class App_Form_Programme extends Zend_Form {
 				'onClick'=>"window.location ='" . $this->getView()->url(array('module'=>'default', 'controller'=>'online-application','action'=>'biodata'),'default',true) . "'; return false;"
 		));
 	}
-	private function initPlacementTestMagister($kkni){
+	private function initPlacementTestMagister($kkni,$appltype){
 	
 	 
 		$this->setName('applicant_education');
@@ -1339,7 +1339,7 @@ class App_Form_Programme extends Zend_Form {
 		$this->group->setRegisterInArrayValidator(false);
 	
 	
-		$placementTestProgramList = $this->getPlacementTestMagisterProgram();
+		$placementTestProgramList = $this->getPlacementTestMagisterProgram($appltype);
 	
 		$registry = Zend_Registry::getInstance();
 		$locale = $registry->get('Zend_Locale');
@@ -1892,7 +1892,7 @@ class App_Form_Programme extends Zend_Form {
 		
 	}
 	
-	private function getPlacementTestMagisterProgram(){
+	private function getPlacementTestMagisterProgram($appltype=null){
 		$auth = Zend_Auth::getInstance();
 		$transaction_id = $auth->getIdentity()->transaction_id;
 		 
@@ -1905,7 +1905,24 @@ class App_Form_Programme extends Zend_Form {
 	
 		$stmt = $db->query($select);
 		$placementTestCode = $stmt->fetch();
-	
+		if ($appltype=="8" || $appltype=="9" ) {
+			$select = $db->select()
+			 
+			->from(array('p'=>'tbl_program') )
+			->order('p.ArabicName ASC');
+			
+			// check program offer
+			$select->where("p.PortofolioOffer = 1" );
+			
+			$stmt = $db->query($select);
+			$row = $stmt->fetchAll();
+			
+			if($row){
+				return $row;
+			}else{
+				return null;
+			}
+		} else
 		if($placementTestCode){
 			//get placementest program data
 			$select = $db->select()
