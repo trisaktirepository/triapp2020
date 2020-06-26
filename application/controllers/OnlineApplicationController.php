@@ -3110,7 +3110,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 			                 ->join(array('ap'=>'applicant_program'),'ap.ap_at_trans_id=at.at_trans_id',array('ap_prog_code'=>'distinct(ap.ap_prog_code)'))
 			                 ->where("at.at_appl_id= '".$appl_id."'")
 			                 ->where("ap.ap_at_trans_id != '".$transaction_id."'")
-			                 ->where("at.at_appl_type=8");	
+			                 ->where("at.at_appl_type='8'");	
 		    
 		    	//get placementest program data filtered with discipline
 		    
@@ -3126,7 +3126,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 		    	
 		    	// check program offer
 		    	$select->where("p.PortofolioOffer = 1");
-		    
+		    	echo $select;
 		    	$stmt = $db->query($select);
 		    	$row = $stmt->fetchAll();
     				
