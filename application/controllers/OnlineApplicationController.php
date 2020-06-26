@@ -1240,7 +1240,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 				}
 		   
 		   
-				if($applicationEducationData){
+				if($applicationEducationData && $transaction['at_appl_type'] == 5){
 	
 					$this->view->education_selected =  $applicationEducationData;
 	
