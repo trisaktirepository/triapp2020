@@ -360,7 +360,7 @@ function changeProgramme(element){
 	
 	$.ajax({
 		url: "<?php echo $this->url(array('module'=>'default','controller'=>'online-application', 'action'=>'ajax-get-programme-portofolio'),'default',true);?>",
-		data: {'kkni':$("#kkni").val(),'discipline_code':$("#ae_discpline").val(),'intake_id':$(element).val()},
+		data: {'kkni':$("#kkni").val(),'ae_institution':$("#ae_institution").val(),'discipline_code':$("#ae_discpline").val(),'intake_id':$(element).val(),'ae_year_end':$("#to").val() },
 		type: 'POST',
 		dataType: 'json'	
 	}).done(function ( data ) {
