@@ -1909,6 +1909,7 @@ class App_Form_Programme extends Zend_Form {
 			$select = $db->select()
 			 
 			->from(array('p'=>'tbl_program'),array('p.*','app_id'=>'IdProgram') )
+			->where('p.KKNI_level=?',$appltype)
 			->order('p.ArabicName ASC');
 			
 			// check program offer
