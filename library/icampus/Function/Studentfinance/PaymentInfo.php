@@ -39,9 +39,9 @@ class icampus_Function_Studentfinance_PaymentInfo{
     			->where('semester=?',$semesterMainId);
     } else  
     	*/
-    if ($program==5 || $program==6 || $program==7) {
-    	$select->where('semester <>?',$semesterMainId);
-    }
+    //if ($program==5 || $program==6 || $program==7) {
+    //	$select->where('semester <>?',$semesterMainId);
+   // }
     $select->where('appl_id =?', $profile['IdApplication']);
     //$invoices = $invoiceMainDb->fetchAll($condition)->toArray();
     $invoices = $invoiceMainDb->fetchAll($select);
