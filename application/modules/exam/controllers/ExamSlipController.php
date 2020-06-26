@@ -186,7 +186,7 @@ class Exam_ExamSlipController extends Zend_Controller_Action
 			
 			$paymentstatus = 0;
 			$pymtinfo=$sfhelper->getStudentPaymentInfo($registration_id,$formData['semid']);
-			echo var_dump($pymtinfo);exit;
+			//echo var_dump($pymtinfo);exit;
 			$dbGlobalException=new Exam_Model_DbTable_GlobalException();
 			if ($dbGlobalException->isException(1, $program['IdCollege'], $formData['semid'], $formData['ass_type']))
 				$paymentstatus = 1;
