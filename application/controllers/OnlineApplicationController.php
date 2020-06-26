@@ -3116,8 +3116,8 @@ class OnlineApplicationController extends Zend_Controller_Action {
 		    
 		    	$select = $db->select()
 		    	->distinct()
-		    	->from(array('apr'=>'appl_program_req'),array())
-		    	->joinLeft(array('p'=>'tbl_program'),'p.ProgramCode = apr.apr_program_code',array('ProgramCode','ProgramName','ArabicName','strata') )
+		    	 
+		    	->from(array('p'=>'tbl_program'),array('ProgramCode','ProgramName','ArabicName','strata') )
 		    	->join(array('ip'=>'appl_placement_intake_program'),'p.IdProgram=ip.IdProgram',array())
 		    	->where('ip.IdIntake=?',$intake)
 		    	->where('p.KKNI_level=?',$kkni)
