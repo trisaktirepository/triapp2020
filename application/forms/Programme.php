@@ -1332,11 +1332,11 @@ class App_Form_Programme extends Zend_Form {
 				'onChange'=>"getGroupName(this);"
 		));
 	
-		$this->addElement('select','group', array(
+		$this->addElement('select','group1', array(
 				'label'=>"Kelas Kuliah",
 				'required'=>true,
 		));
-		$this->group->setRegisterInArrayValidator(false);
+		$this->group1->setRegisterInArrayValidator(false);
 	
 	
 		$placementTestProgramList = $this->getPlacementTestMagisterProgram($appltype);

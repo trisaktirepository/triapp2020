@@ -2576,7 +2576,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	$dbSchool = new App_Model_Application_DbTable_Pt();
     	 
     	$row=$dbSchool->getByWilayah($idwil);
-    	  
+    	$row[count($row)]=array('id_sp'=>'','nm_sp'=>'Other');
     	//echo var_dump($row); 
     	$ajaxContext->addActionContext('view', 'html')
     	->addActionContext('form', 'html')
