@@ -280,17 +280,16 @@ function getGroupName(element){
 		type: 'POST',
 		dataType: 'json',
 		beforeSend: function() {
-			showLoading('group','group1-element','loading');
+			showLoading('group1','group1-element','loading');
 		},
 		complete: function() {
-			hideLoading('loading','group');
+			hideLoading('loading','group1');
 		} 	
 	}).done(function ( data ) {
 		
-		$('#group').empty().append('<option value=""> <?php echo $this->translate('please_select'); ?> </option>');
+		$('#group1').empty().append('<option value=""> <?php echo $this->translate('please_select'); ?> </option>');
 		
-		 
-		var group1 = $('#group');
+		var group1 = $('#group1');
 		var append_html = "";
 		
 		for (var index = 0; index < data.length; index++) {
