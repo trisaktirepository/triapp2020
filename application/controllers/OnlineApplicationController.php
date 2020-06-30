@@ -1164,13 +1164,13 @@ class OnlineApplicationController extends Zend_Controller_Action {
 					//get Idbranch
 					$dbbranch=new App_Model_General_DbTable_Branchofficevenue();
 					 
-					$branch=$dbbranch->getData($formData['group']);
+					$branch=$dbbranch->getData($formData['group1']);
 					//add ptest program prefered 1
 					$data1 = array(
 							'ap_at_trans_id' =>$transaction['at_trans_id'],
 							'ap_prog_code' => $formData['app_id'],
 							'ap_preference' =>1,
-							'IdProgramBranch'=>$formData['group'],
+							'IdProgramBranch'=>$formData['group1'],
 							'IdBranch'=>$branch['IdBranch']
 					);
 					
