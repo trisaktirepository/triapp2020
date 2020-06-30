@@ -2577,16 +2577,19 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	 
     	$row=$dbSchool->getByWilayah($idwil);
     	if ($row) {
-    		 
+    		$count=count($row);
     		$dbWil=new App_Model_Application_DbTable_Wilayah();
     		$wil=$dbWil->getByWilayah($idwil);
     		foreach ($wil as $value) {
     			$idwil=$value['id_wil'];
     			$rowwil=$dbSchool->getByWilayah($idwil);
-    			$row=array_merge($row,$rowwil); 
+    			if ($rowwil) foreach ($rowwil as $sch) {
+    				$row[$count]=$sch;
+    				$count++;
+    			} 
     		}
     		
-    		$row=$dbSchool->getByWilayah($idwil);
+    		 
     	}
     	$row[count($row)]=array('id_sp'=>'','nm_sp'=>'Other');
     	//echo var_dump($row); 
