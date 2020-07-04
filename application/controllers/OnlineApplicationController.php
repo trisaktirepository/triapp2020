@@ -9746,7 +9746,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     				'appl_email' => $formData['appl_email'],
     				'appl_nis' => $formData['appl_nis'],
     				'appl_nik' => $formData['appl_nik'],
-    				'appl_uan' => $formData['appl_uan'],
+    				//'appl_uan' => $formData['appl_uan'],
     				'appl_idbranch'=>$formData['appl_idbranch'],
     				'appl_id' => $formData['profile_id'],
     				'burekol_verify_date'=>date('Y-M-d h:s:i'),

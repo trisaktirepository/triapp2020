@@ -609,7 +609,19 @@ function copy_address_above(){
 				<input type="text" name="appl_nik" value="<?php echo $this->profile['appl_nik']; ?>" /><?php echo $pesan;?>
 			</td>
 		</tr>
- 	 
+		<tr>
+			<?php if ( $this->profile['appl_uan']=="" ||  $this->profile['appl_uan']==0 ) {
+				$color="red";; $pesan="Harus diisi";}
+				else {
+			$color="";
+			$pesan="";
+			}?>
+			<td ><?php echo $this->translate("Nilai Ujian Nasional");?></td>
+			<td>:</td>
+			<td bgcolor="<?php echo $color;?>">
+				<input type="text" name="appl_uan" value="<?php echo $this->profile['appl_uan']; ?>" /><?php echo $pesan;?>
+			</td>
+		</tr>
 		<tr>
 							<td><?php echo $this->translate("Class"); ?></td><td>:</td>
 							<td>
