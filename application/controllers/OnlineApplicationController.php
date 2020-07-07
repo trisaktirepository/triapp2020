@@ -10009,7 +10009,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     		//exit;
     	}
     
-    	$this->_redirect( $this->baseUrl . $formData['redirect_path']);
+    	$this->_redirect($formData['redirect_path']);
     }
     
     public function pushECollectionAction(){
