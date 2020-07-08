@@ -2621,6 +2621,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     
     	$row=$dbPt->getByNama($pt);
       
+    	if (!$row) $row=array('key'=>'','value'=>'Other');
     	//	echo var_dump($row);exit;
     	$ajaxContext->addActionContext('view', 'html')
     	->addActionContext('form', 'html')
@@ -9999,7 +10000,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     			$uploadfileDB = new App_Model_Application_DbTable_UploadFile();
     
     			$previous_record = $uploadfileDB->getFile($formData["transaction_id"],$formData['type_id']);
-    			echo var_dump($previous_record);
+    			//echo var_dump($previous_record);
     			if($previous_record){
     				$uploadfileDB->updateData($upd_photo,$previous_record['auf_id']);
     			}else{
