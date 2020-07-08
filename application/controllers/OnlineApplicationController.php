@@ -2621,7 +2621,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     
     	$row=$dbPt->getByNama($pt);
       
-    	if (!$row) $row=array('key'=>'','value'=>'Other');
+    	if (!$row) $row=array('0'=>array('key'=>'','value'=>'Other'));
     	//	echo var_dump($row);exit;
     	$ajaxContext->addActionContext('view', 'html')
     	->addActionContext('form', 'html')
