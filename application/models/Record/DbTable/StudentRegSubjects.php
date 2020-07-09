@@ -470,8 +470,9 @@ class App_Model_Record_DbTable_StudentRegSubjects extends Zend_Db_Table_Abstract
 		if ($idbranch!=null && $intake!=null) {
 			$sql=$db->select()
 			->from('course_register_package')
-			->where('IdProgram=?'.$program)
+			->where('IdProgram=?',$program)
 			->where('IdBranch=?',$idbranch);
+			
 			$row=$db->fetchRow($sql);
 			if ($row) {
 				$sql = $db->select()
@@ -484,10 +485,11 @@ class App_Model_Record_DbTable_StudentRegSubjects extends Zend_Db_Table_Abstract
 				->where('ls.idintake=?',$intake)
 				->order('s.SubCode')
 				->group('s.IdSubject');
+				///echo $sql;exit;
 				$result =  $db->fetchAll($sql);
 			}
 		}
-		echo $sql;exit;
+		
 		if ($result==array()) {
 			//semester based
 			if($landscape_type==43){
