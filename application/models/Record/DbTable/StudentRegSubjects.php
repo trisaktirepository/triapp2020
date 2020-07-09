@@ -475,16 +475,34 @@ class App_Model_Record_DbTable_StudentRegSubjects extends Zend_Db_Table_Abstract
 			
 			$row=$db->fetchRow($sql);
 			if ($row) {
-				$sql = $db->select()
-				->from(array("s"=>"tbl_subjectmaster"),array('BahasaIndonesia','SubCode','CreditHours','IdSubject'))
-				->join(array('ls'=>'course_register_package_scheme'),'ls.IdSubject=s.IdSubject',array()) 
-				->join(array("so"=>'tbl_subjectsoffered'),'so.IdSubject=s.IdSubject',array())
-				->where('so.IdSemester = ?',$semester_id) //offer pada semester ini
-				->where('ls.idpackage = ?',$row['idpackage'])
-				->where('ls.idsemester=?',$semester_id)
-				->where('ls.idintake=?',$intake)
-				->order('s.SubCode')
-				->group('s.IdSubject');
+				if($landscape_type==43){
+					$sql = $db->select()
+					->from(array("s"=>"tbl_subjectmaster"),array('BahasaIndonesia','SubCode','CreditHours','IdSubject','SubjectType'=>'DefinitionDesc'))
+					->join(array('ls'=>'course_register_package_scheme'),'ls.IdSubject=s.IdSubject',array()) 
+					->join(array('lss'=>'tbl_landscapesubject'),'lss.IdSubject=s.IdSubject',array('IdLandscapeSub'))
+					->joinLeft(array("d"=>"tbl_definationms"),'d.idDefinition=lss.SubjectType',array('SubjectType'=>'DefinitionDesc'))
+					->join(array("so"=>'tbl_subjectsoffered'),'so.IdSubject=s.IdSubject',array())
+					->where('so.IdSemester = ?',$semester_id) //offer pada semester ini
+					->where('ls.idpackage = ?',$row['idpackage'])
+					->where('ls.idsemester=?',$semester_id)
+					->where('ls.idintake=?',$intake)
+					->order('s.SubCode')
+					->group('s.IdSubject');
+				} else {
+					$sql = $db->select()
+					->from(array("s"=>"tbl_subjectmaster"),array('BahasaIndonesia','SubCode','CreditHours','IdSubject','SubjectType'=>'DefinitionDesc'))
+					->join(array('ls'=>'course_register_package_scheme'),'ls.IdSubject=s.IdSubject',array())
+					 ->join(array('lss'=>'tbl_landscapeblocksubject'),'lss.subjectid=s.IdSubject',array('blockid','IdLandscapeblocksubject'))
+	                 ->join(array('bl'=>'tbl_landscapeblock'),'bl.idblock=lss.blockid')
+	                 ->joinLeft(array("d"=>"tbl_definationms"),'d.idDefinition=lss.SubjectType',array('SubjectType'=>'DefinitionDesc'))
+					->join(array("so"=>'tbl_subjectsoffered'),'so.IdSubject=s.IdSubject',array())
+					->where('so.IdSemester = ?',$semester_id) //offer pada semester ini
+					->where('ls.idpackage = ?',$row['idpackage'])
+					->where('ls.idsemester=?',$semester_id)
+					->where('ls.idintake=?',$intake)
+					->order('s.SubCode')
+					->group('s.IdSubject');
+				}
 				///echo $sql;exit;
 				$result =  $db->fetchAll($sql);
 			}
