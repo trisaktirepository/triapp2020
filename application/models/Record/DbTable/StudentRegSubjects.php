@@ -487,6 +487,7 @@ class App_Model_Record_DbTable_StudentRegSubjects extends Zend_Db_Table_Abstract
 				$result =  $db->fetchAll($sql);
 			}
 		}
+		echo $sql;exit;
 		if ($result==array()) {
 			//semester based
 			if($landscape_type==43){
