@@ -561,7 +561,8 @@ class CourseRegistrationController extends Zend_Controller_Action
 		  				$subjectDB = new App_Model_Record_DbTable_StudentRegSubjects();
 		  				
 		  				if ($paket=='1') {
-		  					$landscape_subject = $subjectDB->getSubjectOfferedReg($registration_id,$student["IdLandscape"],$idSemester,$landscape["LandscapeType"],null,$landscapeSem,$lastblock,$programid);
+		  					
+		  					$landscape_subject = $subjectDB->getSubjectOfferedReg($registration_id,$student["IdLandscape"],$idSemester,$landscape["LandscapeType"],null,$landscapeSem,$lastblock,$programid,$student['IdBranch'],$student['IdIntake']);
 		  					
 		  				} else {
 		  					$landscape_subject = $subjectDB->getSubjectOfferedReg($registration_id,$student["IdLandscape"],$idSemester,$landscape["LandscapeType"],null,null,$lastblock,$programid);		
