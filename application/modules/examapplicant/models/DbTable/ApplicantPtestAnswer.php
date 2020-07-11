@@ -112,6 +112,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 		
 		$data=array();
 		$response=array();
+		
 		try {
 			$success="1";
 			//component map
@@ -123,6 +124,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 				//echo var_dump($row);
 				$postData['component'][$key]['ac_id']=$row['ac_iddest'];
 			}
+			
 			//head data
 		   	$dataaph = array(
 		        'apa_trans_id' => $postData['apa_trans_id'],
@@ -135,8 +137,9 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 		   		'token'=>$postData['token'],
 			   	'apa_user_by' => $auth->getIdentity()->appl_id
 				);
+		   	
 		
-		   	//echo var_dump($dataaph);exit;
+		   //	echo var_dump($dataaph);exit;
 		   	//$dbTxt->add(array('txt'=>'testtye='. var_dump($dataaph)));
 		   //	$id=1;
 		   	$filetype=500+$postData['test_type']*1;
