@@ -392,10 +392,32 @@ public function checkValidAgentApplicant($txnId, $agent_id){
 			->joinLeft(array('def1'=>'sis_setup_detl'),'def1.ssd_id=sp.appl_marital_status',array('marital'=>'def1.ssd_name_bahasa'))
 			->joinLeft(array('c'=>'tbl_countries'),'sp.appl_nationality=c.idCountry',array('wn'=>'c.CountryName'))
 			->joinLeft(array('c1'=>'tbl_countries'),'sp.appl_province=c1.idCountry',array('negara'=>'c1.CountryName'))
-			->joinLeft(array('st'=>'tbl_state'),'st.idstate=sp.appl_state',array('propinsi'=>'StateName'))
+			->joinLeft(array('st'=>'tbl_state'),'st.idstate=sp.appl_state',array('propinsi'=>'st.StateName'))
 			->joinLeft(array('ct'=>'tbl_city'),'ct.idCity=sp.appl_city')
-			
+			->joinLeft(array('c11'=>'tbl_countries'),'sp.appl_cprovince=c11.idCountry',array('cnegara'=>'c11.CountryName'))
+			->joinLeft(array('st1'=>'tbl_state'),'st1.idstate=sp.appl_cstate',array('cpropinsi'=>'st1.StateName'))
+			->joinLeft(array('ct1'=>'tbl_city'),'ct1.idCity=sp.appl_ccity',array('cCityName'=>'ct1.CityName'))
+				
 			->where('sp.appl_id=?',$applid);
+		$row = $db->fetchRow($select);
+		return $row;
+	}
+	
+	public function getProfileDetailPropose($applid){
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$select= $db->select()
+		->from(array("sp"=>'applicant_profile_propose'))
+		->joinLeft(array('def'=>'sis_setup_detl'),'def.ssd_id=sp.appl_religion',array('religion'=>'def.ssd_name_bahasa'))
+		->joinLeft(array('def1'=>'sis_setup_detl'),'def1.ssd_id=sp.appl_marital_status',array('marital'=>'def1.ssd_name_bahasa'))
+		->joinLeft(array('c'=>'tbl_countries'),'sp.appl_nationality=c.idCountry',array('wn'=>'c.CountryName'))
+		->joinLeft(array('c1'=>'tbl_countries'),'sp.appl_province=c1.idCountry',array('negara'=>'c1.CountryName'))
+		->joinLeft(array('st'=>'tbl_state'),'st.idstate=sp.appl_state',array('propinsi'=>'st.StateName'))
+		->joinLeft(array('ct'=>'tbl_city'),'ct.idCity=sp.appl_city')
+		->joinLeft(array('c11'=>'tbl_countries'),'sp.appl_cprovince=c11.idCountry',array('cnegara'=>'c11.CountryName'))
+		->joinLeft(array('st1'=>'tbl_state'),'st1.idstate=sp.appl_cstate',array('cpropinsi'=>'st1.StateName'))
+		->joinLeft(array('ct1'=>'tbl_city'),'ct1.idCity=sp.appl_ccity',array('cCityName'=>'ct1.CityName'))
+	
+		->where('sp.appl_id=?',$applid);
 		$row = $db->fetchRow($select);
 		return $row;
 	}

@@ -3078,6 +3078,59 @@ class ApplicantPortalController extends Zend_Controller_Action
     	
     }
     
+    
+    public function downloadBurekolVerificationProposeAction() {
+    
+    	$transid = $this->_getParam('txn_id',null);
+    	global $profile;
+    	global $motherData;
+    	global $fatherData;
+    	 
+    	$Transaction = new App_Model_Application_DbTable_ApplicantTransaction();
+    	$trans = $Transaction->getTransaction($transid);
+    
+    	$appl_id = $trans['at_appl_id'];
+    
+    	//getProfile
+    	$profile = $Transaction->getProfileDetailPropose($appl_id);
+    
+    	//parent (mother)
+    	$familyDb = new App_Model_Application_DbTable_ApplicantFamilyPropose();
+    	$motherData = $familyDb->getData($appl_id,'21');
+    
+    	//parent (mother)
+    	$familyDb = new App_Model_Application_DbTable_ApplicantFamily();
+    	$fatherData = $familyDb->getData($appl_id,'20');
+    
+    
+    	require_once 'dompdf_config.inc.php';
+    	 
+    	$autoloader = Zend_Loader_Autoloader::getInstance(); // assuming we're in a controller
+    	$autoloader->pushAutoloader('DOMPDF_autoload');
+    	 
+    	$html_template_path = DOCUMENT_PATH."/template/AppVerifikasi.html";
+    	 
+    	$html = file_get_contents($html_template_path);
+    	 
+    	//echo $html;exit;
+    	$dompdf = new DOMPDF();
+    	$dompdf->load_html($html);
+    	$dompdf->set_paper('a4', 'potrait');
+    	@$dompdf->render();
+    	 
+    	//output filename
+    	$output_filename = "BiodataVerifikasi.pdf";
+    	 
+    	//$dompdf = $dompdf->output();
+    
+    	 
+    	@$dompdf->stream($output_filename);
+    	 
+    	exit();
+    	 
+    	 
+    }
+    
     public function activityListAction(){
     	$this->view->title="Form: Applicant Activity Application";
     	$auth = Zend_Auth::getInstance();
