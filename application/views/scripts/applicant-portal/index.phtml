@@ -450,8 +450,10 @@ $pdb = new App_Model_Application_DbTable_ApplicantPtest();
 	                                    echo "<a href='#' onclick='UpdateRegistrasi(".$entry['at_trans_id'].")'>Update data Kelengkapan Registrasi</a>";
 	                                    
 	                                    echo "<br>";
-	                                    echo "<a href='#' onclick='DownloadAppVerifikasi(".$entry['at_trans_id'].")'>Data Verifikasi</a>";
-	                                     
+	                                   	$dbProfileProp=new App_Model_Application_DbTable_ApplicantTransaction();
+	                            		if ($dbProfileProp->getProfileDetail($entry['at_appl_id']))
+	                            			echo "<a href='#' onclick='DownloadAppVerifikasi(".$entry['at_trans_id'].")'>Download Data Verifikasi</a>";
+	                            	 
 									}else{
 										$dialogregistration="1";
 	                                    echo "<a href='#' onclick='jadwal(".$entry['at_trans_id'].")'>Pesan tanggal pendaftaran ulang</a>";		
@@ -489,7 +491,9 @@ $pdb = new App_Model_Application_DbTable_ApplicantPtest();
 	                            	echo "<br>";
 	                            	echo "<a href='#' onclick='UpdateRegistrasi(".$entry['at_trans_id'].")'>Update data Kelengkapan Registrasi</a>";
 	                            	echo "<br>";
-	                            	echo "<a href='#' onclick='DownloadAppVerifikasi(".$entry['at_trans_id'].")'>Data Verifikasi</a>";
+	                            	$dbProfileProp=new App_Model_Application_DbTable_ApplicantTransaction();
+	                            	if ($dbProfileProp->getProfileDetail($entry['at_appl_id']))
+	                            		echo "<a href='#' onclick='DownloadAppVerifikasi(".$entry['at_trans_id'].")'>Download Data Verifikasi</a>";
 	                            	 
 	                            }else{
 									$dialogregistration="1";
