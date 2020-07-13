@@ -3099,7 +3099,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     	$motherData = $familyDb->getData($appl_id,'21');
     
     	//parent (mother)
-    	$familyDb = new App_Model_Application_DbTable_ApplicantFamily();
+    	$familyDb = new App_Model_Application_DbTable_ApplicantFamilyPropose();
     	$fatherData = $familyDb->getData($appl_id,'20');
     
     
