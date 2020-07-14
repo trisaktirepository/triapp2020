@@ -9711,8 +9711,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     
     		//profile
     		$pes_id=$formData['registration_id'];
-    		if ($formData['appl_nik']!="" &&
-    				$formData['appl_uan']!="") {
+    		if ($formData['appl_nik']!="" ) {
     		$data = array(
     				'appl_fname' => $formData['appl_fname'],
     				'appl_mname' => $formData['appl_mname'],
