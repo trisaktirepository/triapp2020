@@ -634,6 +634,8 @@ function copy_address_above(){
 	
 	
 	<h3><?php echo $this->translate("Data Ibu");?></h3>
+	<input type="hidden" name="fi_id_mother" value="<?php echo $this->motherData['af_id']?>">
+	<input type="hidden" name="fi_id_father" value="<?php echo $this->fatherData['af_id']?>">
 	<table class="tbl">
 		<tr>
 			<td><?php echo $this->translate('Nama Ibu'); ?></td>

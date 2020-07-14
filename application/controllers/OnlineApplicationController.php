@@ -9791,7 +9791,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     					'af_phone' => $formData['af_hp_ibu'],
     					'af_email' => '',
     					'af_job' => '',
-    					'af_id'=>$formData['af_id']
+    					'af_id'=>$formData['af_id_mother']
     			);
     
     			$familyDbPropose->insert($data);
@@ -9818,7 +9818,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     					'af_phone' =>  $formData['af_hp_father'],
     					'af_email' => '',
     					'af_job' => '',
-    					'af_id'=>$formData['af_id']
+    					'af_id'=>$formData['af_id_father']
     			);
     				
     			$familyDbPropose->insert($data);
