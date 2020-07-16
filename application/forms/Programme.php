@@ -47,9 +47,9 @@ class App_Form_Programme extends Zend_Form {
 		} else if( $this->admissiontype == 7 ){
 				$this->initUnbk();
 		}
-		else if( $this->admissiontype == 8 ){
-			$this->initPortfolioTest();
-		}
+		//else if( $this->admissiontype == 8 ){
+		//	$this->initPortfolioTest();
+		//}
 	}
 	
 	private function initPlacementTest($kkni){
@@ -681,14 +681,14 @@ class App_Form_Programme extends Zend_Form {
 				'onChange'=>"getGroupName(this);"
 		));
 		$this->app_id->setRegisterInArrayValidator(false);
-		$this->addElement('select','group', array(
+		$this->addElement('select','group1', array(
 				'label'=>"Kelas Kuliah",
 				'required'=>true,
 		));
 		$this->group->setRegisterInArrayValidator(false);
 	
 	
-		$placementTestProgramList = $this->getPlacementTestProgram();
+		$placementTestProgramList = $this->getPortfolioProgram();
 	
 		$registry = Zend_Registry::getInstance();
 		$locale = $registry->get('Zend_Locale');
@@ -1862,6 +1862,44 @@ class App_Form_Programme extends Zend_Form {
         }else{
         	return null;
         }
+	}
+	
+	private function getPortfolioProgram(){
+		$auth = Zend_Auth::getInstance();
+		$transaction_id = $auth->getIdentity()->transaction_id;
+		 
+		$db = Zend_Db_Table::getDefaultAdapter();
+	
+		//get placement test data
+		$select = $db->select(array('apt_ptest_code'))
+		->from(array('ap'=>'applicant_ptest'))
+		->where('ap.apt_at_trans_id = ?', $transaction_id);
+	
+		$stmt = $db->query($select);
+		$placementTestCode = $stmt->fetch();
+	
+		if($placementTestCode){
+			//get placementest program data
+			$select = $db->select()
+			->from(array('app'=>'appl_placement_program'))
+			->joinLeft(array('p'=>'tbl_program'),'p.ProgramCode = app.app_program_code' )
+			->where('app.app_placement_code  = ?', $placementTestCode['apt_ptest_code'])
+			->order('p.ArabicName ASC');
+	
+			// check program offer
+			$select->where("p.PortofolioOffer = 1");
+			 
+			$stmt = $db->query($select);
+			$row = $stmt->fetchAll();
+			 
+			if($row){
+				return $row;
+			}else{
+				return null;
+			}
+		}else{
+			return null;
+		}
 	}
 	
 	private function getCreditTransferProgram(){
