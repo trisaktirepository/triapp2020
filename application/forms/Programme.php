@@ -685,6 +685,7 @@ class App_Form_Programme extends Zend_Form {
 				'label'=>"Kelas Kuliah",
 				'required'=>true,
 		));
+		
 		$this->group1->setRegisterInArrayValidator(false);
 	
 	
