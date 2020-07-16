@@ -685,7 +685,7 @@ class App_Form_Programme extends Zend_Form {
 				'label'=>"Kelas Kuliah",
 				'required'=>true,
 		));
-		$this->group->setRegisterInArrayValidator(false);
+		$this->group1->setRegisterInArrayValidator(false);
 	
 	
 		$placementTestProgramList = $this->getPortfolioProgram();
