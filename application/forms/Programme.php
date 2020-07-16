@@ -425,7 +425,8 @@ class App_Form_Programme extends Zend_Form {
 		$this->addElement('hidden','appl_id');
 		$this->appl_id->setValue($this->ae_appl_id);
 	
-	
+		$this->addElement('hidden','kkni');
+		 
 		$registry = Zend_Registry::getInstance();
 		$locale = $registry->get('Zend_Locale');
 	

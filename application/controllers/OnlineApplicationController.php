@@ -3110,6 +3110,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     		$intake = $formData['intake_id'];
     		//
     		$kkni=$formData['kkni'];
+    		$row=array();
     		if ($kkni=="8" || $kkni=="9" ) {
     			$yearend = $formData['ae_year_end'];
     			$programasal=$formData['ae_institution'];
@@ -3149,7 +3150,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     			$stmt = $db->query($select);
     			$row = $stmt->fetchAll();
     		} else {
-		    			if ($discipline_code !=0 && $intake !=0 && $yearend != ''){
+		    			if ($discipline_code !=0 && $intake !=0   ){
 		    	
 		    	
 		    
