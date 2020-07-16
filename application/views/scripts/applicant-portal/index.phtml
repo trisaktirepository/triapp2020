@@ -383,7 +383,7 @@ $pdb = new App_Model_Application_DbTable_ApplicantPtest();
 						
 						if($entry['at_selection_status']==5 //&& $applicant_ptestDb->tpaExamToAttend($entry['at_trans_id'])
 							){
-								echo "<a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'get-document','id'=>$entry['at_trans_id'],'typeId'=>30),'default',true)."'>".$this->translate("USM Card")."</a>";
+								echo "<a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'get-document','id'=>$entry['at_trans_id'],'typeId'=>30),'default',true)."'>".$this->translate("Kartu Ujian Tahap Akhir")."</a>";
 
 							//echo "<a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'get-document','id'=>$entry['at_trans_id'],'typeId'=>63),'default',true)."'>".$this->translate("Surat Lulus Tahap Pertama")."</a>";
 							echo "<br />";
