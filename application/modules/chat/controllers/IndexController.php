@@ -123,7 +123,7 @@ class Chat_IndexController extends Zend_Controller_Action
     		$row=$dbChat->add(array('at_trans_id'=>$formData['trxid'],
     				'chat_msg'=>$formData['text'],
     				'chat_by'=>$formData['trxid'],
-    				'created_dt'=>date('Y-m-d H:s:i')
+    				'created_dt'=>date('Y-m-d H:i:s')
     		));
     		 
     	}
