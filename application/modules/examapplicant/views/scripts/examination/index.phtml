@@ -116,6 +116,7 @@ function chat(){
 		if (distance < 0) {
 			clearInterval(x);
 			$("#stop").val("1");
+			$("#btnlatihan").hide();
 			document.getElementById("examtime").innerHTML = '<font><strong>Waktu ujian sudah dibuka, waktu ujian anda dimulai saat anda mengklik tombol MULAI di halaman berikutnya</strong></font>';
 		}
 		}, 1000);
@@ -142,7 +143,7 @@ function chat(){
 			<?php if ($this->test=="1") {?>
 			<table width="100%">
 			 	<tr><td bgcolor="Darkblue" align="center"  width="15%"><p id="examtime"></p>
-			 	<input type="button" value="Klik disini jika ingin Latihan Ujian" onclick="latihan()"></td></tr>
+			 	<input type="button" value="Klik disini jika ingin Latihan Ujian" onclick="latihan()" id='btnlatihan"></td></tr>
 			 </table>
 			 <br>
 			<h2>Baca petunjuk ujian seleksi masuk Usakti dengan seksama</h2>
