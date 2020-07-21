@@ -41,7 +41,7 @@ function getTranscript(){
 					
 	    	}	
 			tables.append(append_html);
-		} else tables.empty();
+		} else $('#table_subject tr:gt(1)').remove();
 
 	});
 }
