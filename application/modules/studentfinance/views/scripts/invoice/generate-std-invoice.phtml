@@ -148,17 +148,17 @@
 			$invoice=$act['invoice'];
 			?>
 			<tr>
-			<th colspan="2" align="right"><?php echo $this->translate('Virtual Account');?></th>
+			<th colspan="4" align="right"><?php echo $this->translate('Virtual Account');?></th>
 			<th><?php echo $invoice['va'];?></th>
 			
 		</tr>
 		<tr>
-			<th colspan="2" align="right"><?php echo $this->translate('Expired Date');?></th>
+			<th colspan="4" align="right"><?php echo $this->translate('Expired Date');?></th>
 			<th><?php echo date('d-m-Y H:s:i',strtotime($invoice['va_expired_dt']));?></th>
 			
 		</tr>
 		<tr>
-			<th colspan="2" align="right"><?php echo $this->translate('Payment Status');?></th>
+			<th colspan="4" align="right"><?php echo $this->translate('Payment Status');?></th>
 			<th><?php  if ($invoice['status_va']!='') echo $invoice['status_va']; else echo "Belum Dibayar";?></th>
 			
 		</tr>
