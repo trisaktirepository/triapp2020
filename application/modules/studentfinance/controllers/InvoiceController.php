@@ -551,7 +551,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 						$discounttype=$dbDiscountSetup->getDiscountType();
 						foreach ($discounttype as $idx=>$value) {
 							$iddiscount=$value['dt_id'];
-							$discountSetup=$dbDiscountSetup->getCurrentSetup(1, $std['IdCollege'], $std['IdProgram'], $std['IdBranch'], $semester, $std['IdProgramMajoring'],$iddiscount);
+							$discountSetup=$dbDiscountSetup->getCurrentSetup(1, $std['IdCollege'], $std['IdProgram'], $std['IdBranch'], $idsemester, $std['IdProgramMajoring'],$iddiscount);
 							if  ($discountSetup) {
 								$discounttype[$idx]['discount']=$discountSetup;
 							} else unset($discounttype[$idx]);
