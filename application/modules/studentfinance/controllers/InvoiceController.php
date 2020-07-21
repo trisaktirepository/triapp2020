@@ -139,7 +139,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 							foreach ($discount as $iddm=>$value) {
 								$dm=$dbDiscountSetup->getDataById($iddm);
 								$data=array('dcnt_appl_id'=>$formData['IdApplication'],
-										'dcnt_trn_id'=>$formData['transaction_id'],
+										'dcnt_txn_id'=>$formData['transaction_id'],
 										'dcnt_type_id'=>$dm['idDiscount'],
 										'dcnt_letter_number'=>$dm['no_skr'],
 										'dcnt_invoice_id'=>$invoice_id
