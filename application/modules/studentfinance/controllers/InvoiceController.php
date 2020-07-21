@@ -60,7 +60,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 		$programDb = new App_Model_General_DbTable_Program();
 		$program = $programDb->fngetProgramData($std['IdProgram']);
 		$this->view->program=$program;
-		
+		$dbDiscountSetup=new Studentfinance_Model_DbTable_DiscountMain();
 			$db = Zend_Db_Table::getDefaultAdapter();
 			if ($this->getRequest()->isPost()) {
 				$formData=$this->getRequest()->getPost();
@@ -129,6 +129,82 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 								$invoiceDetailDb->insert($inv_detail_data);
 							}
 						} else $invoice_id=$formData['idinvoice'];
+						
+						//discount here ----------------
+						if (isset($formData['discount'])) {
+							$dbDiscount=new Studentfinance_Model_DbTable_Discount();
+							$dbDisDetail=new Studentfinance_Model_DbTable_DiscountDetail();
+							$dbFee=new Studentfinance_Model_DbTable_FeeItem();
+							$discount=$formData['discount'];
+							foreach ($discount as $iddm=>$value) {
+								$dm=$dbDiscountSetup->getDataById($iddm);
+								$data=array('dcnt_appl_id'=>$formData['IdApplication'],
+										'dcnt_trn_id'=>$formData['transaction_id'],
+										'dcnt_type_id'=>$dm['idDiscount'],
+										'dcnt_letter_number'=>$dm['no_skr'],
+										'dcnt_invoice_id'=>$invoice_id
+								);
+								$row=$dbDiscount->isIn($formData['transaction_id'], $invoice_id, $dm['no_skr']);
+								if ($row) $iddisc=$row['dcnt_id'];
+								else $iddisc=$dbDiscount->insert($data);
+								$tamount=0;
+								foreach ($value as $fiid=>$amount) {
+									$fee=$dbFee->getData($fiid);
+									$discdetail=array('dcnt_id'=>$iddisc,
+														'dcntdtl_fi_id'=>$fiid,
+														'dcntdtl_fi_name'=>$fee['fi_name_bahasa'],
+														'dcntdtl_amount'=>$amount
+													);
+									$row=$dbDisDetail->isIn($iddisc, $fiid);
+									if ($row) $dbDisDetail->update($discdetail, 'dcntdtl_id='.$row['dcntdtl_id']);
+									else $dbDisDetail->insert($discdetail);
+									 
+									$tamount=$tamount+$amount;
+								}
+								$dbDiscount->update(array('dcnt_amount'=>$tamount), 'dcnt_id='.$iddisc);
+								//put to credirt note and invoice
+								$dbCreditNote=new Studentfinance_Model_DbTable_CreditNote();
+								$dbCnDetail=new Studentfinance_Model_DbTable_CreditNoteDetail();
+								$dbInvoice=new Studentfinance_Model_DbTable_InvoiceMain();
+								$disc=$dbDiscount->getDataByInvoice($invoice_id);
+								if ($disc) {
+									$tamount=0;
+									foreach ($disc as $discvalue) {
+										$tamount=$tamount+$discvalue['dcnt_amount'];
+										$cn=array('cn_billing_number'=>$invoice_no['invoice_no'],
+												'cn_appl_id'=>$discvalue['dcnt_appl_id'],
+												'IdStudentRegistration'=>$formData['IdStudentRegistration'],
+												'cn_amount'=>$discvalue['dcnt_amount'],
+												'cn_description'=>$discvalue['dt_discount'].' '.$discvalue['dcnt_letter_number'],
+												'cn_approver'=>1,
+												'cn_approve_date'=>date('Y-m-d H:i:s')
+										);
+										$row=$dbCreditNote->isIn($invoice_no['invoice_no'], $formData['IdStudentRegistration'], $discvalue['dt_discount'].' '.$discvalue['dcnt_letter_number']);
+										if ($row) {
+											$cnid=$row['cn_id'];
+											$dbCreditNote->update($cn, 'cn_id='.$row['cn_id']);
+										}
+										else $cnid=$dbCreditNote->insert($cn);
+										//detail
+										$discdet=$dbDisDetail->getDataByMain($discvalue['dcnt_id']);
+										foreach ($discdet as $det) {
+											$cndet=array('cnd_cn_id'=>$cnid,
+													'cnd_fi_id'=>$det['dcntdtl_fi_id'],
+													'cnd_fi_name'=>$det['dcntdtl_fi_name'],
+													'cnd_amount'=>$det['dcntdtl_amount']
+											);
+											$row=$dbCnDetail->isIn($cnid, $det['dcntdtl_fi_id']);
+											if ($row) $dbCnDetail->updateData($cndet, 'cnd_id='.$row['cnd_id']);
+											else $dbCnDetail->addData($cndet);
+										}
+										
+									}
+									$dbInvoice->update(array('cn_amount'=>$tamount), 'id='.$invoice_id);
+								}
+							}
+						}
+						
+						//------------------------------
 						$this->view->idinvoice=$invoice_id;
 						//push to BNI
 						$dbActCalendar=new App_Model_General_DbTable_ActivityCalendar();
@@ -138,6 +214,8 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 							$dateexprired=date('Y-m-d H:s:i',strtotime($calendar['EndDate'].' '.$calendar['EndTime']));
 							$invoiceDb->pushToEColl($invoice_id, $dateexprired,'createbilling');
 						}
+						
+						
 						$this->_redirect('/applicant-portal/account');
 					}
 					else {
@@ -399,7 +477,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 			 		 }  else unset($act[$key]);
 				}
 				//echo var_dump($act);
-				$this->view->activity= $act;
+				//$this->view->activity= $act;
 			} else if ($idinvoice!='' && $act) {
 					//invoice
 					
@@ -426,7 +504,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 						} else unset($act[$key]);
 						
 					}
-					$this->view->activity= $act;
+					//$this->view->activity= $act;
 					
 				} else  if ($idinvoice!='') {
 					$invoice=$invoiceDb->getData($idinvoice);
@@ -455,17 +533,74 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 							$act[0]['SemesterMainName']=$semester['SemesterMainName'];
 					} 
 					 
-					$this->view->activity= $act;
+					
+					
 					
 				} else {
 				 
 					echo "Jadwal Pembuatan Invoice Belum dibuka, Hubungi admin Fakultas masing-masing";
 					exit;
 				}
-		 
-		
+				
+		 	foreach ($act as $key=>$actitem) { 
+				if (isset($actitem['bundledetail'])) {
+					foreach ($actitem['bundledetail'] as $idxitem=>$item) {
+							
+						//discount processing
+						$dbDiscountSetup=new Studentfinance_Model_DbTable_DiscountMain();
+						$discounttype=$dbDiscountSetup->getDiscountType();
+						foreach ($discounttype as $idx=>$value) {
+							$iddiscount=$value['dt_id'];
+							$discountSetup=$dbDiscountSetup->getCurrentSetup(1, $std['IdCollege'], $std['IdProgram'], $std['IdBranch'], $semester, $std['IdProgramMajoring'],$iddiscount);
+							if  ($discountSetup) {
+								$discounttype[$idx]['discount']=$discountSetup;
+							} else unset($discounttype[$idx]);
+						}
+						
+						if ($discounttype) {
+							foreach ($discounttype as $idx=>$value) {
+								$setup=$value['discount'];
+								$maind=$setup['id_dm'];
+								$valid="1";
+								if ($dbDiscountSetup->isSemesterApplied($maind)) {
+									if (!$dbDiscountSetup->isSemesterApplied($maind,$value['IdSemesterMain'])) $valid="0";
+								} else $valid="0";
+								if ($valid=="1") {
+									if ($dbDiscountSetup->isLevelApplied($maind)) {
+										$level=$this->getLevel($std['IdStudentRegistration'], $value['IdSemesterMain'], $std['IdIntake']);
+										if (!$dbDiscountSetup->isLevelApplied($maind,$level)) $valid="0";
+									}
+									
+									if ($dbDiscountSetup->isIntakeApplied($maind)) {
+										if (!$dbDiscountSetup->isIntakeApplied($maind,$std['IdIntake'])) $valid="0";
+									}
+									
+									if ($dbDiscountSetup->isStudentApplied($maind)) {
+										if (!$dbDiscountSetup->isStudentApplied($maind,$std['IdStudentRegistration'])) $valid="0";
+										
+									}
+								}
+								if ($valid=="0") unset($discounttype[$idx]);
+							}
+							
+							if ($discounttype) {
+								foreach ($discounttype as $idx=>$value) {
+									$setup=$value['discount'];
+									$maind=$setup['id_dm'];
+									$discount=$dbDiscountSetup->getDiscount($maind,$item['fi_id']);
+									$discount["type"]=$value['dt_discount'];
+									$discount["id_dm"]=$setup['id_dm'];
+									$act[$key]['bundledetail'][$idxitem]['discount'][]=$discount;
+								}
+							} 
+						}
+						
+					}
+				}
+		 	}
+			$this->view->activity= $act;
 	}
-	
+	 
 	public function  getLevel($IdStudentRegistration,$idsemester,$intake) {
 		
 		$db = Zend_Db_Table::getDefaultAdapter();

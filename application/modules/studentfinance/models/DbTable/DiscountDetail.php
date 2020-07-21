@@ -26,28 +26,33 @@ class Studentfinance_Model_DbTable_DiscountDetail extends Zend_Db_Table_Abstract
 		}
 	}
 	
-	public function getPaginateData(){
+	public function isIn($iddisc,$fiid){
 		$db = Zend_Db_Table::getDefaultAdapter();
-		
 		$selectData = $db->select()
-				->from(array('d'=>$this->_name))
-				->joinLeft(array('tu'=>'tbl_user'),'tu.iduser = d.dcnt_creator', array())
-				->joinLeft(array('ts'=>'tbl_staffmaster'),'ts.IdStaff = tu.IdStaff', array("creator"=>new Zend_Db_Expr("CONCAT_WS(' ', fName,Mname,Lname)")));
-	
-		return $selectData;
+		->from(array('d'=>$this->_name))
+		->where('d.dcntdtl_fi_id=?',$fiid)
+		->where('d.dcnt_id=?',$iddisc);
+		 
+		$row = $db->fetchRow($selectData);
+		 
+		if($row){
+			return $row;
+		}else{
+			return null;
+		}
 	}
 	
-	public function getDiscountData($fomulir){
-		
+	 
+	
+	public function getDataByMain($main){
+	
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$selectData = $db->select()
-					->from(array('d'=>$this->_name))
-					->joinLeft(array('tu'=>'tbl_user'),'tu.iduser = d.dcnt_creator', array())
-					->joinLeft(array('ts'=>'tbl_staffmaster'),'ts.IdStaff = tu.IdStaff', array("creator"=>'Fullname'))
-					->where('d.dcnt_fomulir_id =?',$fomulir);
-					
+		->from(array('d'=>$this->_name))
+		->where('d.dcnt_id =?',$main);
+			
 		$row = $db->fetchAll($selectData);
-
+	
 		if($row){
 			return $row;
 		}else{

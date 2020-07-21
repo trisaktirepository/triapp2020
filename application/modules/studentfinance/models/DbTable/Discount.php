@@ -26,6 +26,22 @@ class Studentfinance_Model_DbTable_Discount extends Zend_Db_Table_Abstract {
 		}
 	}
 	
+	public function isIn($trxid,$invoice,$srkr){
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$selectData = $db->select()
+		->from(array('d'=>$this->_name))
+		->where('d.dcnt_trn_id=?',$trxid)
+		->where('d.dcnt_invoice_id=?',$invoice)
+		->where('d.dcnt_letter_number=?',$srkr);
+		$row = $db->fetchRow($selectData);
+		 	
+		if($row){
+			return $row;
+		}else{
+			return null;
+		}
+	}
+	
 	public function getPaginateData(){
 		$db = Zend_Db_Table::getDefaultAdapter();
 		
@@ -48,6 +64,23 @@ class Studentfinance_Model_DbTable_Discount extends Zend_Db_Table_Abstract {
 					
 		$row = $db->fetchAll($selectData);
 
+		if($row){
+			return $row;
+		}else{
+			return null;
+		}
+	}
+	
+	public function getDataByInvoice($invoice){
+	
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$selectData = $db->select()
+		->from(array('d'=>$this->_name))
+		->jon(array('a'=>'discount_type'),'d.dcnt_type_id=a.dt_id')
+		->where('d.dcnt_invoice_id =?',$invoice);
+			
+		$row = $db->fetchAll($selectData);
+	
 		if($row){
 			return $row;
 		}else{

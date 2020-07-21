@@ -90,5 +90,26 @@ class Studentfinance_Model_DbTable_CreditNote extends Zend_Db_Table_Abstract {
 			$this->update($data, "id = '".$id."'");
 		}
 	}	
+	
+	public function isIn($nobill,$idstd,$desc){
+	
+		$db = Zend_Db_Table::getDefaultAdapter();
+	
+		$selectData = $db->select()
+		->from(array('d'=>$this->_name))
+		->where("d.cn_billing_no = '".$nobill."'")
+		->where('d.IdStudentRegistration=?',$idstd)
+		->where('d.cn_description=?',$desc);
+	
+		$row = $db->fetchRow($selectData);
+	
+			
+		if(!$row){
+			return null;
+		}else{
+			return $row;
+		}
+	
+	}
 }
 

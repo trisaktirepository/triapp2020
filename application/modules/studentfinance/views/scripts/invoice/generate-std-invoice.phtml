@@ -57,6 +57,7 @@
 	<form name="formDetail" method="post">
 	<input type="hidden" name="IdApplication" value="<?php echo $this->registration['IdApplication'] ?>">
 	<input type="hidden" name="IdStudentRegistration" value="<?php echo $this->registration['IdStudentRegistration'] ?>">
+	<input type="hidden" name="transaction_id" value="<?php echo $this->registration['transaction_id'] ?>">
 	<input type="hidden" name="idinvoice" value="<?php echo $act['idinvoice']; ?>">
 	<input type="hidden" name="idsemester" value="<?php echo $act['IdSemesterMaster'] ?>">
 	<input type="hidden" name="idacadyear" value="<?php echo $act['idacadyear'] ?>">
@@ -93,7 +94,9 @@
 		<tr>
 			<th><?php echo $this->translate('No');?></th>
 			<th><?php echo $this->translate('Component Name');?></th>
-			<th><?php echo $this->translate('Amount');?></th> 
+			<th><?php echo $this->translate('Amount');?></th>
+			<th><?php echo $this->translate('Discount');?></th>
+			<th><?php echo $this->translate('Net Amount');?></th> 
 			
 		</tr>
 		<?php $i=1;$total=0;
@@ -105,8 +108,32 @@
 		<tr>
 			<td><?php echo $i;?></td>
 			<td><?php echo $item['fi_name_bahasa'];?></td>
-			<td><?php echo $fee['amount'];?></td> 
-			
+			<td><?php 
+					$subtotal=$fee['amount'];
+					echo $fee['amount'];?>
+			</td> 
+			<td>
+			<?php 
+				$totaldisc=0;
+				if (isset($item['discount'])) {
+				?><ul><?php 
+					
+					foreach ($item['discount'] as $discount) {
+						$msg='';
+						if ($discount['percentage']>0) {
+							$discamount=$fee['amount']*$discount['percentage']/100;
+							$msg= '('.$discount['percentage'].' %)';
+						}else $discamount=$discount['amount'];
+				?>
+					<li><input type="hidden" name="discount[<?php echo $discount['id_dm'] ?>][<?php echo $item['fi_id']?>]" value="<?php echo $discamount;?>">
+		
+					<?php echo $discount['type'].' = '.$discamount.' '.$msg?></li>	
+			<?php 		$totaldisc=$totaldisc+$discamount;
+						$total=$total-$discamount;
+					} ?>
+			</ul><?php 
+				} else echo $totaldisc;?></td>
+			<td><?php echo $subtotal-$totaldisc;?></td>
 		</tr>
 		<?php $i++;
 			}?>
