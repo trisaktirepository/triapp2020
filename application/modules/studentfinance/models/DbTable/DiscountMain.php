@@ -179,7 +179,7 @@ public function getCurrentSetup($univ,$college,$program,$branch,$semester,$idmaj
 	
 			
 		$select=$this->lobjDbAdpt->select()
-		->from(array('a'=>'tbl_discount_semester'))
+		->from(array('a'=>'tbl_discount_level'))
 		->where('id_dm=?',$iddm);
 		if ($level!=null)
 			$select->where('level=?',$level);
@@ -191,7 +191,7 @@ public function getCurrentSetup($univ,$college,$program,$branch,$semester,$idmaj
 	
 			
 		$select=$this->lobjDbAdpt->select()
-		->from(array('a'=>'tbl_discount_semester'))
+		->from(array('a'=>'tbl_discount_intake'))
 		->where('id_dm=?',$iddm);
 		if ($intake!=null)
 			$select->where('idintake=?',$intake);
