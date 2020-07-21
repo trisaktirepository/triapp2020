@@ -87,13 +87,13 @@ class Studentfinance_Model_DbTable_Discount extends Zend_Db_Table_Abstract {
 			return null;
 		}
 	}
-	
+	 
 	public function insert(array $data){
 		
 		if( !isset($data['dcnt_creator']) ){
 			$auth = $auth = Zend_Auth::getInstance();
 			
-			$data['dcnt_creator'] = $auth->getIdentity()->iduser; 
+			$data['dcnt_creator'] = $auth->getIdentity()->appl_id; 
 		}
 		
 		if( !isset($data['dcnt_create_date']) ){
