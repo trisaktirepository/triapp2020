@@ -173,7 +173,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 									foreach ($disc as $discvalue) {
 										$tamount=$tamount+$discvalue['dcnt_amount'];
 										$cn=array('cn_billing_no'=>$invoice_no['invoice_no'],
-												'cn_appl_id'=>$discvalue['dcnt_appl_id'],
+												'appl_id'=>$discvalue['dcnt_appl_id'],
 												'IdStudentRegistration'=>$formData['IdStudentRegistration'],
 												'cn_amount'=>$discvalue['dcnt_amount'],
 												'cn_description'=>$discvalue['dt_discount'].' '.$discvalue['dcnt_letter_number'],
