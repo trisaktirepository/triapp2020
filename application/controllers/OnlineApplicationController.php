@@ -9429,12 +9429,10 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	$placementDB = new App_Model_Record_DbTable_PlacementHead();
     	$applicantTransactionDn->updateData(array('at_intake'=>$intake,'at_academic_year'=>$yearacad), $formData['transactionId']);
     	
-    	$subjectcode=$formData['subjectcode'];
-    	$subjectnames=$formData['subjectname'];
-    	$skss=$formData['sks'];
-    	$grades=$formData['grade'];
+    	
     	$row=$dbApply->isIn($formData['transactionId']);
     	if ($row) $idapply=$row['idApply']; else $idapply=0;
+    	echo var_dump($formData);
     	if ($formData['nim_asal']!='') {
     		$data=array('PT_Asal'=>$formData['pt_asal'],
     				'Prodi_Asal'=>$formData['prodi_asal'],
@@ -9485,6 +9483,13 @@ class OnlineApplicationController extends Zend_Controller_Action {
     			$this->view->noticeError = $this->translate("Silalah pilih program studi");
     			 
     			 
+    		}
+    		
+    		if (isset($formData['subjectcode'])) {
+    			$subjectcode=$formData['subjectcode'];
+    			$subjectnames=$formData['subjectname'];
+    			$skss=$formData['sks'];
+    			$grades=$formData['grade'];
     		}
     	}
     	
