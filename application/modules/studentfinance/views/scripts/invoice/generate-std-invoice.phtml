@@ -139,7 +139,7 @@
 			}?>
 		<input type="hidden" name="totalamount" value="<?php echo $total?>">
 		<tr>
-			<th colspan="2"><?php echo $this->translate('Total');?></th>
+			<th colspan="4"><?php echo $this->translate('Total');?></th>
 			<th><?php echo $total;?></th>
 		</tr>
 		<?php 
@@ -154,7 +154,7 @@
 		</tr>
 		<tr>
 			<th colspan="4" align="right"><?php echo $this->translate('Expired Date');?></th>
-			<th><?php echo date('d-m-Y H:s:i',strtotime($invoice['va_expired_dt']));?></th>
+			<th><?php  if ($invoice['va_expired_dt']!='') echo date('d-m-Y H:s:i',strtotime($invoice['va_expired_dt']));?></th>
 			
 		</tr>
 		<tr>
