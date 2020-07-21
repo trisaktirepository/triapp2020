@@ -403,7 +403,7 @@ function continues(){
 	<td> <input type="text" id="skstotal"  name="skstotal" size="5"> sks</td>
 	</tr>
 	<tr><th><?php echo $this->translate('Jumlah Mata Kuliah :')?></th>
-	<td> <input type="text" id="nofsubject" name="nofsubject" onchange="setSubject()" size="5"></td>
+	<td> <input type="text" id="nofsubject" name="nofsubject" onblur="setSubject()" size="5"></td>
 	</tr>
 </table> 
  <?php }?>
