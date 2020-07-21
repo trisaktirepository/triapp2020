@@ -129,7 +129,7 @@
 		
 					<?php echo $discount['type'].' = '.$discamount.' '.$msg?></li>	
 			<?php 		$totaldisc=$totaldisc+$discamount;
-						$total=$total-$discamount;
+						//$total=$total-$discamount;
 					} ?>
 			</ul><?php 
 				} else echo $totaldisc;?></td>
@@ -138,9 +138,10 @@
 		<?php $i++;
 			}?>
 		<input type="hidden" name="totalamount" value="<?php echo $total?>">
+		<input type="hidden" name="discountamount" value="<?php echo $totaldisc;?>">
 		<tr>
 			<th colspan="4"><?php echo $this->translate('Total');?></th>
-			<th><?php echo $total;?></th>
+			<th><?php echo $total-$totaldisc;?></th>
 		</tr>
 		<?php 
 		//echo var_dump($this->invoice);
