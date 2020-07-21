@@ -176,6 +176,9 @@ function setSubject(){
 	$('#nofrow').val(nofrow+n);
 }
 
+
+
+
 function continues(){
 	alert("upload");
 	window.location = "<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'uploaddocument'), 'default', true);?>";
@@ -407,6 +410,7 @@ function continues(){
 	<td> <input type="text" id="nofsubject" name="nofsubject" onblur="setSubject()" size="5"></td>
 	</tr>
 </table> 
+<input type="hidden" id="nofrow" value="0">
 <table class="table" id="table_subject">
 <tr><th><?php echo $this->translate("No")?></th>
 <th><?php echo $this->translate("Subject Code")?></th>
