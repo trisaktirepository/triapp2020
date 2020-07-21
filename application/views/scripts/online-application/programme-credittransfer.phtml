@@ -32,16 +32,16 @@ function getTranscript(){
 		//alert(data.length);
 		var tables=$('#table_subject');
 		append_html='';
-		 
-		for (var index = 0; index < data.length; index++) {
-			append_html += '<tr><td>'+index+'</td><td><input type="text" name="subjectcode['+index+']" size="15" value="'+data[index].ShortName+'"> </td>';
-			append_html += '<td><input type="text" name="subjectname['+index+']" size="60" value="'+data[index].NamaSubjek+'"> </td>';
-			append_html += '<td><input type="text" name="sks['+index+']" size="4"  value="'+data[index].CreditHours+'"> </td>';
-			append_html += '<td><input type="text" name="grade['+index+']" size="4" value="'+data[index].grade_name+'"> </td></tr>';
-				
-    	}	
-		tables.append(append_html);
-		 
+		if (data.length>0) {
+			for (var index = 0; index < data.length; index++) {
+				append_html += '<tr><td>'+index+'</td><td><input type="text" name="subjectcode['+index+']" size="15" value="'+data[index].ShortName+'"> </td>';
+				append_html += '<td><input type="text" name="subjectname['+index+']" size="60" value="'+data[index].NamaSubjek+'"> </td>';
+				append_html += '<td><input type="text" name="sks['+index+']" size="4"  value="'+data[index].CreditHours+'"> </td>';
+				append_html += '<td><input type="text" name="grade['+index+']" size="4" value="'+data[index].grade_name+'"> </td></tr>';
+					
+	    	}	
+			tables.append(append_html);
+		} else tables.empty();
 
 	});
 }
