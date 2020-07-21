@@ -41,7 +41,7 @@ function getTranscript(){
 					
 	    	}	
 			tables.append(append_html);
-		} else $('#table_subject tr:gt(0)').remove();
+		} else $('#table_subject tr:gt(1)').remove();
 
 	});
 }
@@ -399,27 +399,7 @@ function continues(){
 </table>
 </fieldset> 
 </fieldset>
-<table>
-	<tr><th><?php echo $this->translate('IPK :')?></th>
-	<td> <input type="text" id="ipk" name="ipk" size="5"></td>
-	</tr>
-	<tr><th><?php echo $this->translate('sks Total :')?></th>
-	<td> <input type="text" id="skstotal"  name="skstotal" size="5"> sks</td>
-	</tr>
-	<tr><th><?php echo $this->translate('Tambahkan Baris Mata Kuliah :')?></th>
-	<td> <input type="text" id="nofsubject" name="nofsubject" onblur="setSubject()" size="5"></td>
-	</tr>
-</table> 
-<input type="hidden" id="nofrow" value="0">
-<table class="table" id="table_subject">
-<tr><th><?php echo $this->translate("No")?></th>
-<th><?php echo $this->translate("Subject Code")?></th>
-<th><?php echo $this->translate("Subject Name")?></th>
-<th><?php echo $this->translate("Credit Hour")?></th>
-<th><?php echo $this->translate("Grade")?></th>
-<th><?php echo $this->translate("Drop")?></th>
-</tr>
-</table>
+ 
  <?php }?>
  <input type="submit" value="Kirim"> 
 
