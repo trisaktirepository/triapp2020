@@ -567,7 +567,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 								} else $valid="0";
 								if ($valid=="1") {
 									if ($dbDiscountSetup->isLevelApplied($maind)) {
-										$level=$actitem['Level'];//$this->getLevel($std['IdStudentRegistration'], $idsemester, $std['IdIntake']);
+										$level=$actitem['level'];//$this->getLevel($std['IdStudentRegistration'], $idsemester, $std['IdIntake']);
 										if (!$dbDiscountSetup->isLevelApplied($maind,$level)) $valid="0";
 									}
 									

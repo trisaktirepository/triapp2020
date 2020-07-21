@@ -138,12 +138,14 @@ public function getCurrentSetup($univ,$college,$program,$branch,$semester,$idmaj
 	}
 	
 	
-	public function isStudentApplied($iddm) {
+	public function isStudentApplied($iddm,$idstd=null) {
 	
 			
 		$select=$this->lobjDbAdpt->select()
 		->from(array('a'=>'tbl_discount_student'))
 		->where('id_dm=?',$iddm);
+		if ($idstd!=null)
+			$select->where('idstudentregistration=?',$idstd);
 		$row=$this->lobjDbAdpt->fetchRow($select);
 		return $row;
 	}
