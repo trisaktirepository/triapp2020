@@ -17,8 +17,8 @@ class App_Model_Application_DbTable_CreditTransfer extends Zend_Db_Table_Abstrac
 		->join(array('t'=>'applicant_transaction'),'a.transaction_id=t.at_trans_id',array('at_intake'))
 		->joinLeft(array('in'=>'tbl_intake'),'in.idintake=t.at_intake',array('IntakeId'))
 		->join(array('p'=>'tbl_program'),'a.IdProgram=p.IdProgram',array('programdest'=>"CONCAT(ArabicName,' (',strata,')')"))
-		->join(array('pt'=>'tbl_pt_pdpt'),'pt.id_sp=a.pt_asal',array('ptasal'=>'nm_sp'))
-		->join(array('pr'=>'tbl_sms_pdpt'),'pr.id_sms=a.prodi_asal',array('programasal'=>"nm_lemb","nm_jenjang"))
+		->joinLeft(array('pt'=>'tbl_pt_pdpt'),'pt.id_sp=a.pt_asal',array('ptasal'=>'nm_sp'))
+		->joinLeft(array('pr'=>'tbl_sms_pdpt'),'pr.id_sms=a.prodi_asal',array('programasal'=>"nm_lemb","nm_jenjang"))
 		->where('transaction_id=?',$id);
 		$row=$db->fetchRow($select);
 		return $row;
