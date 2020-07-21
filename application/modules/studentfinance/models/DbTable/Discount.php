@@ -30,7 +30,7 @@ class Studentfinance_Model_DbTable_Discount extends Zend_Db_Table_Abstract {
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$selectData = $db->select()
 		->from(array('d'=>$this->_name))
-		->where('d.dcnt_trn_id=?',$trxid)
+		->where('d.dcnt_txn_id=?',$trxid)
 		->where('d.dcnt_invoice_id=?',$invoice)
 		->where('d.dcnt_letter_number=?',$srkr);
 		$row = $db->fetchRow($selectData);
