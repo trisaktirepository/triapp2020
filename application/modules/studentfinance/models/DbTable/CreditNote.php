@@ -64,7 +64,7 @@ class Studentfinance_Model_DbTable_CreditNote extends Zend_Db_Table_Abstract {
 		$auth = Zend_Auth::getInstance();
 		
 		if(!isset($data['cn_creator'])){
-			$data['cn_creator'] = $auth->getIdentity()->iduser;
+			$data['cn_creator'] = $auth->getIdentity()->appl_id;
 		}
 		
 		$data['cn_create_date'] = date('Y-m-d H:i:s');
@@ -75,7 +75,7 @@ class Studentfinance_Model_DbTable_CreditNote extends Zend_Db_Table_Abstract {
 
 	public function updateData(array $data,$where){
 		
-		$data['update_by'] = $auth->getIdentity()->iduser;
+		$data['update_by'] = $auth->getIdentity()->appl_id;
 		$data['update_date'] = date('Y-m-d H:i:s');
 		
 		return parent::update($data, $where);
