@@ -162,7 +162,7 @@ function setSubject(){
 	var tables=$('#table_subject');
 	nofrow=nofrow*1;
 	n=n*1;
-	//alert(n);
+	alert(n);
 	append_html="";
 	for (var index = nofrow+1; index < nofrow+n+1; index++) {
 		append_html += '<tr><td>'+index+'</td><td><input type="text" name="subjectcode['+index+']" id="subjectcode'+index+'" size="15" onblur="save('+index+')" > </td>';
