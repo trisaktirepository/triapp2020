@@ -563,11 +563,11 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 								$maind=$setup['id_dm'];
 								$valid="1";
 								if ($dbDiscountSetup->isSemesterApplied($maind)) {
-									if (!$dbDiscountSetup->isSemesterApplied($maind,$value['IdSemesterMain'])) $valid="0";
+									if (!$dbDiscountSetup->isSemesterApplied($maind,$idsemester)) $valid="0";
 								} else $valid="0";
 								if ($valid=="1") {
 									if ($dbDiscountSetup->isLevelApplied($maind)) {
-										$level=$this->getLevel($std['IdStudentRegistration'], $value['IdSemesterMain'], $std['IdIntake']);
+										$level=$this->getLevel($std['IdStudentRegistration'], $idsemester, $std['IdIntake']);
 										if (!$dbDiscountSetup->isLevelApplied($maind,$level)) $valid="0";
 									}
 									
@@ -592,6 +592,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 									$discount["id_dm"]=$setup['id_dm'];
 									$act[$key]['bundledetail'][$idxitem]['discount'][]=$discount;
 								}
+								echo var_dump($discounttype);
 							} 
 						}
 						
