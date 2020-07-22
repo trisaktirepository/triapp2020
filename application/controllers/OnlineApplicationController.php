@@ -9542,7 +9542,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 	    				//update
 	    				$dbAppySubject->updateData($data, $row['idCTSubject']);
 	    			} else {
-	    				echo var_dump($data);exit;
+	    				//echo var_dump($data);exit;
 	    				//insert
 	    				$dbAppySubject->addData($data);
 	    			}
