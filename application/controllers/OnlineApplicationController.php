@@ -9430,9 +9430,12 @@ class OnlineApplicationController extends Zend_Controller_Action {
         $this->view->programs = $programs;
         $application=$dbApply->getDataByTransaction($transaction_id);
     	$subjectproposed=array();
+    	$this->view->subjectstatus='';
     	if ($application) {
     		$subjectproposed=$dbAppySubject->getDataByApplyId($application['idApply']);
-    		if (!$subjectproposed)  $subjectproposed=$this->getTranscript($application['nim_asal']);
+    		if (!$subjectproposed)  {
+    			$subjectproposed=$this->getTranscript($application['nim_asal']);
+    		} else $this->view->subjectstatus='ok';
     	}
     	//echo $transaction_id;echo var_dump($appProgram);exit;
     	$this->view->subjects = $subjectproposed;

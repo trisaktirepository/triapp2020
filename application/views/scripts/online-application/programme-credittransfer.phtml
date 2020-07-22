@@ -417,7 +417,7 @@ function continues(){
 </fieldset> 
  <?php }?>
  <input type="submit" value="Kirim"> 
-<?php if (count($this->subjects)>0) {?>
+<?php if ($this->subjectstatus=='ok') {?>
  <input type="button" value="Jika Data pada Laman ini dianggap benar maka Teruskan" onclick="window.location = '<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'uploaddocument'),'default',true);?>' "> 
 <?php }?>
  </fieldset>
