@@ -9536,12 +9536,13 @@ class OnlineApplicationController extends Zend_Controller_Action {
 	    					'sks'=>$skss[$idx],
 	    					'Grade'=>$grades[$idx],
 	    					'dt_entry'=>date('Y-m-d h:s:i'),
-	    					'idApply'=>$formData['idapp']);
+	    					'idApply'=>$idapply);
 	    			$row=$dbAppySubject->isIn($idapply, $subcode);
 	    			if ($row) {
 	    				//update
 	    				$dbAppySubject->updateData($data, $row['idCTSubject']);
 	    			} else {
+	    				echo var_dump($data);exit;
 	    				//insert
 	    				$dbAppySubject->addData($data);
 	    			}
