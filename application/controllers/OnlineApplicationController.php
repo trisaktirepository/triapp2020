@@ -2889,10 +2889,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	 
     	  
     	$studentRegDB = new App_Model_Registration_DbTable_Studentregistration();
-    	$std=$studentRegDB->getStudentRegistrationByNim($nim);
-    	//if ($this->getRequest()->isXmlHttpRequest()) {
-    	$this->_helper->layout->disableLayout();
-    	//}
+    	$std=$studentRegDB->getStudentRegistrationByNim($nim); 
     	$db = Zend_Db_Table::getDefaultAdapter();
     	 
     	if ($std) {
