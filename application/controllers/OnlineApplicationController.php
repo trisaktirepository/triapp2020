@@ -9520,10 +9520,10 @@ class OnlineApplicationController extends Zend_Controller_Action {
 	    			 
 	    		}
 	    		
-	    		$dbTrasaction=new App_Model_Application_DbTable_ApplicantTransaction();
-	    		$dbTrasaction->updateData(array('at_intake'=>$formData['intake_id']), $formData['transactionId']);
+	    		//$dbTrasaction=new App_Model_Application_DbTable_ApplicantTransaction();
+	    		//$dbTrasaction->updateData(array('at_intake'=>$formData['intake_id']), $formData['transactionId']);
 	    	}
-	    	echo var_dump($subjectcode);echo $idapply;exit;
+	    	echo var_dump($formData['subjectcode']);echo $idapply;exit;
     		if (isset($formData['subjectcode']) && $idapply>0) {
     			$subjectcode=$formData['subjectcode'];
     			$subjectnames=$formData['subjectname'];

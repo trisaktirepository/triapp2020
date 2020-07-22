@@ -228,6 +228,8 @@ function continues(){
 <?php if ($this->application && $this->edit!='1') {?>
 <input type="hidden" name="nim_asal" value="<?php echo $this->application['nim_asal']?>">
 <input type="hidden" id="idapp" value="<?php echo $this->application['idApply']?>">
+<input type="hidden" id="intake_id" value="<?php echo $this->transaction['at_intake']?>">
+
 <fieldset><legend><?php echo $this->translate('Credit Transfer Program')?></legend>
 <table class="table">
 <tr><th><?php echo $this->translate("Destination Program")?></th><td><?php echo $this->application['programdest']?></td></tr>
