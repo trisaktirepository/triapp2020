@@ -2885,6 +2885,36 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	exit();
     }
     
+    public function getTranscript($nim){
+    	 
+    	  
+    	$studentRegDB = new App_Model_Registration_DbTable_Studentregistration();
+    	$std=$studentRegDB->getStudentRegistrationByNim($nim);
+    	//if ($this->getRequest()->isXmlHttpRequest()) {
+    	$this->_helper->layout->disableLayout();
+    	//}
+    	$db = Zend_Db_Table::getDefaultAdapter();
+    	 
+    	if ($std) {
+    		$idStudentRegistration=$std['IdStudentRegistration'];
+    		$idprogram=$std['IdProgram'];
+    		$idlandscape=$std['IdLandscape'];
+    		$regSubjectDB= new App_Model_Exam_DbTable_StudentRegistrationSubject();
+    		$dbLands = new GeneralSetup_Model_DbTable_Landscapesubject();
+    		$dbBlock= new GeneralSetup_Model_DbTable_LandscapeBlockSubject();
+    		$subject_list = $dbLands->getlandscapesubjects($idprogram,$idlandscape);
+    		if ($subject_list==array()) $subject_list = $dbBlock->getLandscapeCourse($idlandscape);
+    
+    		foreach ($subject_list as $key=>$subject) {
+    			$subject=$regSubjectDB->getHighestMarkofAllSemesterPassed($idStudentRegistration, $subject['IdSubject']);
+    			if (!is_bool($subject)) $subjects[] = $subject;
+    				
+    				
+    		}
+    	} else $subjects=array();
+    	return $subjects;
+    }
+    
 	public function ajaxGetDisciplineSubjectAction(){
     	$discipline_code = $this->_getParam('discipline_code', 0);
     	$appltype = $this->_getParam('appltype', 0);
@@ -9391,6 +9421,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     				$dbAppySubject->deleteDataBySubcode($idapply, $value);
     			}
     		}
+    		$this->_redirect('/online-application/programme-credittransfer');
     		//echo var_dump($formData);exit;
     	}
     	
@@ -9403,6 +9434,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	$subjectproposed=array();
     	if ($application) {
     		$subjectproposed=$dbAppySubject->getDataByApplyId($application['idApply']);
+    		if (!$subjectproposed)  $subjectproposed=$this->getTranscript($application['nim_asal']);
     	}
     	//echo $transaction_id;echo var_dump($appProgram);exit;
     	$this->view->subjects = $subjectproposed;
