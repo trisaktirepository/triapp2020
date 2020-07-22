@@ -279,10 +279,10 @@ function continues(){
  } else {
 	for ($i=0;$i<$this->application['jml_mk'];$i++) {?>
 	<tr><td><?php echo $i?></td>
-	<td><input type="text" name="subjectcode[<?php echo $i?>]"  size="15"></td>
-	<td><input type="text" name="subjectname[<?php echo $i?>]"  size="60"></td>
-	<td><input type="text" name="sks[<?php echo $i?>]" size="4"></td>
-	<td><input type="text" name="grade[<?php echo $i?>]"  size="4"></td>
+	<td><input type="text" name="subjectcode[<?php echo $i?>]"  size="15" onblur="save('<?php echo $i?>')"></td>
+	<td><input type="text" name="subjectname[<?php echo $i?>]"  size="60" onblur="save('<?php echo $i?>')"></td>
+	<td><input type="text" name="sks[<?php echo $i?>]" size="4" onblur="save('<?php echo $i?>')"></td>
+	<td><input type="text" name="grade[<?php echo $i?>]"  size="4" onblur="save('<?php echo $i?>')"></td>
 	<td> </td>
 </tr>
 	
