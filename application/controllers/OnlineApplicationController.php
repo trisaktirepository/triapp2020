@@ -9527,6 +9527,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     			$subjectnames=$formData['subjectname'];
     			$skss=$formData['sks'];
     			$grades=$formData['grade'];
+    			echo var_dump($formData['subjectcode']);
     			foreach ($subjectcode as $idx=>$subcode) {
 	    			$data=array('SubjectCode'=>$subcode,
 	    					'SubjectName'=>$subjectnames[$idx],
