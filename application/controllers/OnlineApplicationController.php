@@ -9519,11 +9519,27 @@ class OnlineApplicationController extends Zend_Controller_Action {
     		$dbTrasaction=new App_Model_Application_DbTable_ApplicantTransaction();
     		$dbTrasaction->updateData(array('at_intake'=>$formData['intake_id']), $formData['transactionId']);
     		
-    		if (isset($formData['subjectcode'])) {
+    		if (isset($formData['subjectcode']) && $idapply>0) {
     			$subjectcode=$formData['subjectcode'];
     			$subjectnames=$formData['subjectname'];
     			$skss=$formData['sks'];
     			$grades=$formData['grade'];
+    			foreach ($subjectcode as $idx=>$subcode) {
+	    			$data=array('SubjectCode'=>$subcode,
+	    					'SubjectName'=>$subjectnames[$idx],
+	    					'sks'=>$skss[$idx],
+	    					'Grade'=>$grades[$idx],
+	    					'dt_entry'=>date('Y-m-d h:s:i'),
+	    					'idApply'=>$formData['idapp']);
+	    			$row=$dbAppySubject->isIn($idapply, $subcode);
+	    			if ($row) {
+	    				//update
+	    				$dbAppySubject->updateData($data, $row['idCTSubject']);
+	    			} else {
+	    				//insert
+	    				$dbAppySubject->addData($data);
+	    			}
+    			}
     		}
     	}
     	
