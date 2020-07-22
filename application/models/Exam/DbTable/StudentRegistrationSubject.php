@@ -295,8 +295,8 @@ class App_Model_Exam_DbTable_StudentRegistrationSubject extends Zend_Db_Table_Ab
 		$db = Zend_Db_Table::getDefaultAdapter();
 			
 		$select = $db->select()
-		->from(array('srs'=>'tbl_studentregsubjects'))
-		->join(array('s'=>'tbl_subjectmaster'),'s.IdSubject=srs.IdSubject',array('CreditHours','SubCode','SubjectName','NamaSubjek'=>'BahasaIndonesia','category','ShortName'))
+		->from(array('srs'=>'tbl_studentregsubjects'),array('srs.*','Grade'=>'grade_name'))
+		->join(array('s'=>'tbl_subjectmaster'),'s.IdSubject=srs.IdSubject',array('sks'=>'CreditHours','CreditHours','SubjectCode'=>'ShortName','SubCode','SubjectName','NamaSubjek'=>'BahasaIndonesia','category','ShortName'))
 		->where('srs.IdStudentRegistration = ?',$IdStudentRegistration)
 		->where('srs.IdSubject = ?',$IdSubject)
 		->where('srs.exam_status = "C"')
