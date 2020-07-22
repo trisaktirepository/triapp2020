@@ -247,9 +247,9 @@ function continues(){
 	</tr>
 	<tr><th><?php echo $this->translate('Jumlah Mata Kuliah :')?></th>
 	<td> <input type="text" id="nofsubject" name="nofsubject"  size="5" value="<?php echo $this->application['jml_mk']?>" onblur="saveatt('<?php echo $this->application['idApply'];?>')">
-	<br> Tambah Baris Mata Kuliah 
-	<input type="text" id="addsubject" name="addsubject" onchange="setSubject()" size="5" value="<?php echo $this->application['jml_mk']?>" ></td>
-	</tr>
+	<td>Tambah Baris Mata Kuliah 
+	<input type="text" id="addsubject" name="addsubject" onchange="setSubject()" size="5"   ></td>
+	</td></tr>
 </table>
 
 <fieldset><legend><?php echo $this->translate("Subject List")?></legend>
