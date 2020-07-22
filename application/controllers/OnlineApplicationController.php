@@ -9336,6 +9336,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
         /*
 		 * check session for transaction
 		 */
+    	$edit=$this->_getParam('edit');
 		$auth = Zend_Auth::getInstance(); 
 		if($auth->getIdentity()->transaction_id==null){
 			$this->_redirect($this->view->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'index'),'default',true));	
@@ -9408,7 +9409,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
         $this->view->application = $application; 
             
          
-        
+        $this->view->edit=$edit;
         $this->view->title = $this->view->translate("Programme");
     }
     
@@ -9432,7 +9433,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	
     	$row=$dbApply->isIn($formData['transactionId']);
     	if ($row) $idapply=$row['idApply']; else $idapply=0;
-    	echo var_dump($formData);
+    	//echo var_dump($formData);
     	if ($formData['nim_asal']!='') {
     		$data=array('PT_Asal'=>$formData['pt_asal'],
     				'Prodi_Asal'=>$formData['prodi_asal'],
@@ -9484,6 +9485,9 @@ class OnlineApplicationController extends Zend_Controller_Action {
     			 
     			 
     		}
+    		
+    		$dbTrasaction=new App_Model_Application_DbTable_ApplicantTransaction();
+    		$dbTrasaction->updateData(array('at_intake'=>$formData['intake_id']), $formData['transactionId']);
     		
     		if (isset($formData['subjectcode'])) {
     			$subjectcode=$formData['subjectcode'];

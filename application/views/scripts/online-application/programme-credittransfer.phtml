@@ -225,16 +225,17 @@ function continues(){
 	</div>
 </div>
 <form name="credittransfer" action="" method="post">
-<?php if ($this->application) {?>
+<?php if ($this->application && $this->edit!='1') {?>
 <input type="hidden" id="idapp" value="<?php echo $this->application['idApply']?>">
 <fieldset><legend><?php echo $this->translate('Credit Transfer Program')?></legend>
 <table class="table">
 <tr><th><?php echo $this->translate("Destination Program")?></th><td><?php echo $this->application['programdest']?></td></tr>
-<tr><th><?php echo $this->translate("Institution From")?></th><td><?php echo $this->application['ptasal']?></td></tr>
-<tr><th><?php echo $this->translate("Program From")?></th><td><?php echo $this->application['programasal'].'('.$this->application['nm_jenjang'].')'?></td></tr>
+<tr><th><?php echo $this->translate("Institution From")?></th><td><?php if ($this->application['ptasal']!='') echo $this->application['ptasal'];else 'Other';?></td></tr>
+<tr><th><?php echo $this->translate("Program From")?></th><td><?php if ($this->application['programasal']!='') echo $this->application['programasal'].'('.$this->application['nm_jenjang'].')' ; else 'Other'?></td></tr>
 <tr><th><?php echo $this->translate("NIM/NPM")?></th><td><?php echo $this->application['nim_asal']?></td></tr>
 <tr><th><?php echo $this->translate("Intake")?></th><td><?php echo $this->application['IntakeId']?></td></tr>
 </table>
+<a href="/online-application/programme-credittransfer/edit/1" >Edit</a>
 </fieldset>
 <br>
 
