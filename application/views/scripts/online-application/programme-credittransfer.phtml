@@ -157,7 +157,7 @@ function saveatt(idapp) {
 }
 
 function setSubject(){
-	var n=$('#nofsubject').val();
+	var n=$('#addsubject').val();
 	var nofrow=$('#nofrow').val();
 	var tables=$('#table_subject');
 	nofrow=nofrow*1;
@@ -246,7 +246,9 @@ function continues(){
 	<td> <input type="text" id="skstotal"  name="skstotal" size="5" value="<?php echo $this->application['sks_total']?>" onblur="saveatt('<?php echo $this->application['idApply'];?>')"> sks</td>
 	</tr>
 	<tr><th><?php echo $this->translate('Jumlah Mata Kuliah :')?></th>
-	<td> <input type="text" id="nofsubject" name="nofsubject" onchange="setSubject()" size="5" value="<?php echo $this->application['jml_mk']?>" onblur="saveatt('<?php echo $this->application['idApply'];?>')"></td>
+	<td> <input type="text" id="nofsubject" name="nofsubject"  size="5" value="<?php echo $this->application['jml_mk']?>" onblur="saveatt('<?php echo $this->application['idApply'];?>')">
+	<br> Tambah Baris Mata Kuliah 
+	<input type="text" id="addsubject" name="addsubject" onchange="setSubject()" size="5" value="<?php echo $this->application['jml_mk']?>" ></td>
 	</tr>
 </table>
 
