@@ -84,7 +84,7 @@ public function getAvailableDate($appl_id=0, $txn_id=0,$aphtype=0,$placementcode
 						->where("aph.aph_testtype = '".$aphtype."'") 
 						->where('aps.aps_placement_code=?',$placementcode)
 						->where("aps_test_date NOT IN (?)",$select_date)
-		    			->where("aps_test_date >= DATE_ADD(NOW(), INTERVAL 2 DAY)");
+		    			->where("aps_test_date >= DATE_ADD(NOW(), INTERVAL 1 DAY)");
  		
 	        $stmt = $db->query($select);
 	        $row = $stmt->fetchAll();
