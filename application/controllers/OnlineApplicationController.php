@@ -9760,7 +9760,21 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	$pes_id=$trans['at_pes_id'];
     	$this->view->pes_id = $pes_id;
     	$this->view->transaction_id = $txn_id = $trans['at_trans_id'];
-    
+    	$dbAppProg=new App_Model_Application_DbTable_ApplicantProgram();
+    	$program=$dbAppProg->getProgramOffered($txn_id,$trans['at_appl_type']);
+    	$this->view->program=$program;
+    	$dbIntake=new GeneralSetup_Model_DbTable_Intake();
+    	$intake=$dbIntake->fngetIntakeById($trans['at_intake']);
+    	if ($trans['at_appl_type']=="1") $pcode='USM';
+    	else if ($trans['at_appl_type']=="2") $pcode='PSSB';
+    	else if ($trans['at_appl_type']=="3") $pcode='CT';
+    	else if ($trans['at_appl_type']=="4") $pcode='UND';
+    	else if ($trans['at_appl_type']=="6") $pcode='SCH';
+    	else if ($trans['at_appl_type']=="5") $pcode='PORT';
+    	else if ($trans['at_appl_type']=="7") $pcode='UTBK';
+    	else if ($trans['at_appl_type']=="8") $pcode='MGS';
+    	else if ($trans['at_appl_type']=="9") $pcode='DOK';
+    	$placementcode=$pcode.substr($intake['IntakeId'], 0,4).substr($intake['IntakeId'], 10,1);
     	$applicantProfileProposeDb = new App_Model_Application_DbTable_ApplicantProfilePropose();
     	$applicantProfileDb=new App_Model_Application_DbTable_ApplicantProfile();
      
@@ -9978,7 +9992,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	$checklist = $DocumentUploads->fnGetMaintenanceMsDetails(33);
     
     	$dbPreDoc=new App_Model_Application_DbTable_DocumentPrerequisite();
-    	$checklist=$dbPreDoc->getDataByProgram($testCode, $prog1)
+    	$checklist=$dbPreDoc->getDataByProgram($placementcode, $program['IdProgram']);
     	$doc = array();
     	$documentDb = new App_Model_Application_DbTable_ApplicantUploadFile();
     	//photo
@@ -9989,9 +10003,9 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	{
     		 
     		$doc[] = array(
-    				'type_id' => $value['idDefinition'],
-    				'type_name' => $value['DefinitionDesc'],
-    				'data' => $documentDb->getTxnFileArray($txn_id,$value['idDefinition'])
+    				'type_id' => $value['IdDocument'],
+    				'type_name' => $value['document_name'],
+    				'data' => $documentDb->getTxnFileArray($txn_id,$value['IdDocument'])
     		);
     	}
     

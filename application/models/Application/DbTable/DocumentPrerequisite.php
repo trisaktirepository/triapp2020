@@ -37,7 +37,7 @@ class App_Model_Application_DbTable_DocumentPrerequisite extends Zend_Db_Table_A
 	
 		$select = $db ->select()
 		->from(array('a'=>$this->_name),array('IdDocument'))
-		->join(array('def'=>'sis_setup_detl'),'a.IdDocument=def.ssd_id',array('document_name'=>'def.ssd_name_bahasa','code'=>'ssd_name_bahasa'))
+		->join(array('def'=>'sis_setup_detl'),'a.IdDocument=def.ssd_id',array('document_name'=>'def.ssd_name_bahasa','code'=>'ssd_name_bahasa','ssd_id'))
 		->where('a.test_code=?',$testCode)
 		->where('a.for_admission=?',$addmission)
 		->order('def.ssd_seq');
