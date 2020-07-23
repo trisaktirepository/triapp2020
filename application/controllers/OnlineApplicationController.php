@@ -9775,6 +9775,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	else if ($trans['at_appl_type']=="8") $pcode='MGS';
     	else if ($trans['at_appl_type']=="9") $pcode='DOK';
     	$placementcode=$pcode.substr($intake['IntakeId'], 0,4).substr($intake['IntakeId'], 10,1);
+    	if ($trans['at_appl_type']=="1") $placementcode=substr($placementcode, 0,7);
     	$applicantProfileProposeDb = new App_Model_Application_DbTable_ApplicantProfilePropose();
     	$applicantProfileDb=new App_Model_Application_DbTable_ApplicantProfile();
      
@@ -9992,8 +9993,8 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	$checklist = $DocumentUploads->fnGetMaintenanceMsDetails(33);
     
     	$dbPreDoc=new App_Model_Application_DbTable_DocumentPrerequisite();
-    	echo $placementcode;echo var_dump($program);exit;
-    	$checklist=$dbPreDoc->getDataByProgram($placementcode, $program['IdProgram']);
+    	//echo $placementcode;echo var_dump($program);exit;
+    	$checklist=$dbPreDoc->getDataByProgram($placementcode, $program['program_id']);
     	$doc = array();
     	$documentDb = new App_Model_Application_DbTable_ApplicantUploadFile();
     	//photo
