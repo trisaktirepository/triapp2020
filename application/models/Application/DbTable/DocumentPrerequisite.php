@@ -30,7 +30,7 @@ class App_Model_Application_DbTable_DocumentPrerequisite extends Zend_Db_Table_A
 		return $db->fetchRow($select);
 		
 	}
-	public function getDataByProgram($testCode,$prog1,$prog2=null,$prog3=null,$prog4=null) {
+	public function getDataByProgram($testCode,$prog1,$prog2=null,$prog3=null,$prog4=null,$addmission="1") {
 			
 	
 		$db = Zend_Db_Table::getDefaultAdapter();
@@ -39,6 +39,7 @@ class App_Model_Application_DbTable_DocumentPrerequisite extends Zend_Db_Table_A
 		->from(array('a'=>$this->_name),array('IdDocument'))
 		->join(array('def'=>'sis_setup_detl'),'a.IdDocument=def.ssd_id',array('document_name'=>'def.ssd_name_bahasa','code'=>'ssd_name_bahasa'))
 		->where('a.test_code=?',$testCode)
+		->where('a.for_admission=?',$addmission)
 		->order('def.ssd_seq');
 		
 		if ($prog2!=null && $prog3==null && $prog4==null) {

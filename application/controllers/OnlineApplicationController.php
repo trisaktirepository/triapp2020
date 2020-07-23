@@ -9763,10 +9763,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     
     	$applicantProfileProposeDb = new App_Model_Application_DbTable_ApplicantProfilePropose();
     	$applicantProfileDb=new App_Model_Application_DbTable_ApplicantProfile();
-    	 
-
-    	
-    
+     
     	if ($this->getRequest()->isPost()) {
     		$auth = Zend_Auth::getInstance();
     			
@@ -9838,6 +9835,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     			$data = array(
     					'af_name' => $formData['af_name'],
     					'af_phone' => $formData['af_hp_ibu'],
+    					'af_nik' => $formData['af_nik_ibu'],
     			);
     
     			$familyDbPropose->update($data,'af_appl_id = '.$appl_id.' and af_relation_type = 21');
@@ -9845,6 +9843,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     			$data = array(
     					'af_name' => $formData['af_name'],
     					'af_appl_id' => $appl_id,
+    					'af_nik' => $formData['af_nik_ibu'],
     					'af_relation_type' => 21,
     					'af_address1' => $formData['appl_address1'],
     					'af_address2' => '',
@@ -9864,6 +9863,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     			$data = array(
     					'af_name' => $formData['af_name_father'],
     					'af_phone' =>  $formData['af_hp_father'],
+    					'af_nik' => $formData['af_nik_father'],
     			);
     				
     			$familyDbPropose->update($data,'af_appl_id = '.$appl_id.' and af_relation_type = 20');
@@ -9872,6 +9872,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     			$data = array(
     					'af_name' => $formData['af_name_father'],
     					'af_appl_id' => $appl_id,
+    					'af_nik' => $formData['af_nik_father'],
     					'af_relation_type' => 20,
     					'af_address1' => $formData['appl_address1'],
     					'af_address2' => '',
@@ -9976,8 +9977,8 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	$DocumentUploads = new App_Model_General_DbTable_Maintenance();
     	$checklist = $DocumentUploads->fnGetMaintenanceMsDetails(33);
     
-    
-    
+    	$dbPreDoc=new App_Model_Application_DbTable_DocumentPrerequisite();
+    	$checklist=$dbPreDoc->getDataByProgram($testCode, $prog1)
     	$doc = array();
     	$documentDb = new App_Model_Application_DbTable_ApplicantUploadFile();
     	//photo

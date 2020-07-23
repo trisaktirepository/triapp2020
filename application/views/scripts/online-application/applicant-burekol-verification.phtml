@@ -23,8 +23,24 @@
 </style>
 
 <script type="text/javascript">
+ 
 $(function() {
-	 
+	
+	$( "#dialog-upload-photo" ).dialog({
+		autoOpen: false,
+    	resizable: false,
+      	height:140,
+      	modal: true,
+      	buttons: {
+        	"Upload Photo": function() {
+      		  $("#type_idfoto").val(51);
+        	$('#form_photo').submit();
+        	},
+        	Cancel: function() {
+          		$( this ).dialog( "close" );
+        	}
+      	}
+    });
 
     $( "#dialog-upload-file" ).dialog({
 		autoOpen: false,
@@ -228,6 +244,22 @@ function copy_address_above(){
 	}
 ?>
 <h2>Semua Isian tidak boleh ada yang kosong</h2> 
+<!-- PHOTO -->
+	<h2><?php echo $this->translate("Photo"); ?></h2>
+		
+	<?php 
+		if($this->photo!=null){
+			$imageHelper = new icampus_Function_General_Image();
+			$path = $imageHelper->getImagePath($this->photo['pathupload'],250,250);			
+	?>
+		<img class="photo" src="<?php echo $path; ?>"/>
+	<?php }else{?>
+		<img class="photo" src="/images/no-photo.jpg" width="194" height="250" />
+	<?php }?>
+	
+	<br />
+	<input type="button" name="photo" id="photo" value="<?php echo $this->translate("Upload Student Photo"); ?>" onclick="$('#dialog-upload-photo').dialog('open');" />
+	
 <form method="post">
 
 	<input type="hidden" name="profile_id" value="<?php echo $this->profile['appl_id']; ?>" />
@@ -652,6 +684,19 @@ function copy_address_above(){
 			</td>
 		</tr>
 		<tr>
+		<?php if ( $this->motherData['af_nik']=="") {
+				$color="red"; ; $pesan="Harus diisi";}
+				else {
+					$color="";
+					$pesan="";
+			}?>
+			<td><?php echo $this->translate('NIK Ibu'); ?></td>
+			<td>:</td>
+			<td>
+				<input type="text" name="af_nik_ibu" value="<?php echo $this->motherData['af_nik']; ?>" /><?php echo $pesan;?>
+			</td>
+		</tr>
+		<tr>
 			<td><?php echo $this->translate('Nama Ayah'); ?></td>
 			<td>:</td>
 			<td>
@@ -663,6 +708,20 @@ function copy_address_above(){
 			<td>:</td>
 			<td>
 				<input type="text" name="af_hp_father" value="<?php echo $this->fatherData['af_phone']; ?>" />
+			</td>
+		</tr>
+		
+		<tr>
+			<?php if ( $this->fatherData['af_nik']=="") {
+				$color="red"; ; $pesan="Harus diisi";}
+				else {
+					$color="";
+					$pesan="";
+			}?>
+			<td><?php echo $this->translate('NIK Ayah'); ?></td>
+			<td>:</td>
+			<td>
+				<input type="text" name="af_nik_father" value="<?php echo $this->fatherData['af_nik']; ?>" /><?php echo $pesan;?>
 			</td>
 		</tr>
 	</table>
@@ -745,6 +804,17 @@ function copy_address_above(){
         <input type="file" name="file" />
   		<input type="hidden" name="transaction_id" value="<?php echo $this->transaction_id; ?>" />
   		<input type="hidden" id="type_id" name="type_id" value="" />
+  		
+  		<input type="hidden" name="redirect_path" value="/default/online-application/applicant-burekol-verification/txn_id/<?php echo $this->transaction_id;?>" />
+  		
+  	</form>
+</div>
+
+<div id="dialog-upload-photo" title="<?php echo $this->translate("Upload Student's Photo");?>">
+  	<form name="form_photo" id="form_photo" method="post" action="/default/online-application/upload-file/id/<?php echo $this->pes_id;?>"  enctype="multipart/form-data">
+  		<input type="file" name="file" />
+  		<input type="hidden" name="transaction_id" value="<?php echo $this->transaction_id; ?>" />
+  		<input type="hidden" id="type_idfoto" name="type_id" value="" />
   		
   		<input type="hidden" name="redirect_path" value="/default/online-application/applicant-burekol-verification/txn_id/<?php echo $this->transaction_id;?>" />
   		
