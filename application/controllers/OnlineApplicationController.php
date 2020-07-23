@@ -9763,7 +9763,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	$dbAppProg=new App_Model_Application_DbTable_ApplicantProgram();
     	$program=$dbAppProg->getProgramOffered($txn_id,$trans['at_appl_type']);
     	$this->view->program=$program;
-    	$dbIntake=new GeneralSetup_Model_DbTable_Intake();
+    	$dbIntake=new App_Model_General_DbTable_Intake();
     	$intake=$dbIntake->fngetIntakeById($trans['at_intake']);
     	if ($trans['at_appl_type']=="1") $pcode='USM';
     	else if ($trans['at_appl_type']=="2") $pcode='PSSB';
