@@ -9992,6 +9992,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	$checklist = $DocumentUploads->fnGetMaintenanceMsDetails(33);
     
     	$dbPreDoc=new App_Model_Application_DbTable_DocumentPrerequisite();
+    	echo $placementcode;echo var_dump($program);exit;
     	$checklist=$dbPreDoc->getDataByProgram($placementcode, $program['IdProgram']);
     	$doc = array();
     	$documentDb = new App_Model_Application_DbTable_ApplicantUploadFile();
