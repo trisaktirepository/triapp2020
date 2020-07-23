@@ -10121,17 +10121,21 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	$secretkey=$bank['secret_key'];
     	$url=$bank['url_api'];
     	$dbPeriod=new App_Model_Record_DbTable_AcademicPeriod();
-    	if ($apsid==null || $apsid=="") 
+    	if ($apsid==null || $apsid=="") {
     		$vaexpired=$dbPeriod->getData($transaction['at_period']);
-    	else {
+    		$vaexpired=$vaexpired['ap_va_expired'];
+    	}else {
     		$sch=$dbSchedule->getData($apsid);
     		$year=date('Y',strtotime($sch['aps_test_date']));
     		$moth=date('m',strtotime($sch['aps_test_date']));
     		$filter=array('ap_month'=>$moth,'ap_year'=>$year,'ap_intake_id'=>$transaction['at_intake']);
-    		$vaexpired=$dbPeriod->getDataFilter($filter);
+    		$expireddate=date_create($sch['aps_test_date']);
+    		date_sub($expireddate, date_interval_create_from_date_string('1 days') );
+    		//$vaexpired=$dbPeriod->getDataFilter($filter);
+    		$vaexpired=date_format($expireddate,'Y-m-d H:i:s');
     	}
     		
-    	$vaexpired=$vaexpired['ap_va_expired'];
+    	
     	//echo $vaexpired;exit;
     	//create invoice
     	

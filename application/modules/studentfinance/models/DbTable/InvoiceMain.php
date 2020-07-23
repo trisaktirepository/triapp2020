@@ -916,6 +916,8 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 	
 		if ($billamount>0 && $amounttotal==$billamount && strlen($desc)<=100) {
 			if (!filter_var($profil['appl_email'],FILTER_VALIDATE_EMAIL)) $std['appl_email']="" ;
+			if (substr($billno,0,2)=="01" || substr($billno,0,2)=="11" ) $vaexpired='2020-09-04 23:00:00';
+			else $vaexpired=$invoice['va_expired_dt'];
 			$invoiceData= array(
 	
 					'type'=>$process,
@@ -927,8 +929,8 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 					'customer_email'=>utf8_decode( $profil["appl_email"] ),
 					'customer_phone'=>utf8_decode( $profil["appl_phone_hp"] ),
 					'virtual_account'=>utf8_decode($va),
-					//'datetime_expired'=>date_format(date_create($invoice['va_expired_dt']), 'c'),
-					'datetime_expired'=>date_format(date_create('2020-08-10 23:00:00'), 'c'),
+					'datetime_expired'=>date_format(date_create($vaexpired), 'c'),
+					//'datetime_expired'=>date_format(date_create('2020-08-10 23:00:00'), 'c'),
 					'description'=>$desc,
 			);
 				
@@ -939,7 +941,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 	
 	
 			if (!isset($respone['status']) && $process=='createbilling')
-				$dbInvoice->update(array("va"=>$respone['virtual_account'],"dt_va"=>date('Y-m-d h:i:s'),'va_expired_dt'=>date_format(date_create('2020-08-10 23:00:00'), 'c'),"Client_id"=>$clientid,"billing_type"=>'c',"Description"=>$desc,"status_remark"=>'ok'), "bill_number ='".$respone['trx_id']."'");
+				$dbInvoice->update(array("va"=>$respone['virtual_account'],"dt_va"=>date('Y-m-d h:i:s'),'va_expired_dt'=>date_format(date_create('2020-09-04 23:00:00'), 'c'),"Client_id"=>$clientid,"billing_type"=>'c',"Description"=>$desc,"status_remark"=>'ok'), "bill_number ='".$respone['trx_id']."'");
 			else if (isset($respone['status'])) {
 				$dbInvoice->update(array("status_remark"=>$respone['message']), "bill_number ='".$invoice['bill_number']."'");
 					
