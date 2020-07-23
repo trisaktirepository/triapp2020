@@ -9995,7 +9995,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     
     	$dbPreDoc=new App_Model_Application_DbTable_DocumentPrerequisite();
     	//echo $placementcode;echo var_dump($program);exit;
-    	$checklist=$dbPreDoc->getDataByProgram($placementcode, $program['program_id']);
+    	$checklist=$dbPreDoc->getDataByProgram($placementcode, $program['program_id'],null,null,null,"2");
     	$doc = array();
     	$documentDb = new App_Model_Application_DbTable_ApplicantUploadFile();
     	//photo
