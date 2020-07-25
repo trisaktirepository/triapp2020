@@ -116,7 +116,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 		try {
 			$success="1";
 			//component map
-			echo var_dump($postData['component']);exit;
+			//echo var_dump($postData['component']);exit;
 			foreach ($postData['component'] as $key=>$comp) {
 				$select=$db->select()
 					->from(array('a'=>'tbl_exam_comp_map'))
