@@ -140,7 +140,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 				);
 		   	
 		
-		   //	echo var_dump($dataaph);exit;
+		  	echo var_dump($dataaph);exit;
 		   	//$dbTxt->add(array('txt'=>'testtye='. var_dump($dataaph)));
 		   //	$id=1;
 		   	$filetype=500+$postData['test_type']*1;
