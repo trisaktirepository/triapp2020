@@ -341,8 +341,8 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		
     		$dbPestDetail=new App_Model_Application_DbTable_ApplicantPtestDetail();
     		$currenttest=$dbPestDetail->getActiveTestByTestType($trxid, $testtype);
-	    	//echo var_dump($currenttest); 
-    		 
+	    	echo var_dump($currenttest); 
+    		 exit;
 	    	if ($currenttest) {
 	    		//$dbTxt->add(array('txt'=>'testtye='.$currenttest['app_comp_code']));
 	    		$trx=$dbApplicant->getTransaction($trxid);
