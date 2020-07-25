@@ -186,7 +186,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 						->order('a.seqno');
 						//echo $select;
 						$questionset=$db->fetchAll($select);
-					    echo var_dump($questionset);exit;
+					     
 						if ($questionset) {
 							if ($config['qsc_suffle']=="1")  
 								shuffle($questionset);
@@ -327,7 +327,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 			  			);
 			  			//echo $data[$comporder]['n_question'];
 			  			if ($j<$data[$comporder]['n_question']) {
-			  				//echo var_dump($dtl_data);echo '<br>';
+			  				echo var_dump($dtl_data);echo '<br>';
 			  				$db->insert('applicant_ptest_ans_detl',$dtl_data);
 			  				$i++;
 			  				$j++;
@@ -335,7 +335,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 			  			
 		  			}
 		  	 	}
-		  	 //	exit;
+		  	 exit;
 		  	 	
 		    	$db->commit();
 		    	$response=array('apa_id'=>$id,'n_of_quest'=>$i-1,'token'=>$postData['token'],'pcode'=>$postData['pcode']);
