@@ -140,7 +140,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 				);
 		   	
 		
-		  	echo var_dump($dataaph);exit;
+		  
 		   	//$dbTxt->add(array('txt'=>'testtye='. var_dump($dataaph)));
 		   //	$id=1;
 		   	$filetype=500+$postData['test_type']*1;
@@ -160,7 +160,7 @@ class Examapplicant_Model_DbTable_ApplicantPtestAnswer extends Zend_Db_Table_Abs
 					->where('a.test_type=?',$postData['test_type']);
 				$set=$db->fetchAll($select);
 				//echo $select;
-				//echo var_dump($set);  exit;
+				echo var_dump($set);  exit;
 				if (count($set)>0) {
 					//echo var_dump($postData['component']); 
 					//get random set according to config
