@@ -543,15 +543,15 @@ $pdb = new App_Model_Application_DbTable_ApplicantPtest();
 <form name="form1" id="form1" method="post" action="<?php echo $this->url(array('module'=>'default','controller'=>'applicant-portal','action'=>'jadwal-pendaftaran'), 'default', true);?>">
 <input type='hidden' name='txn_id' id='txn_id' value=''>
 
-<h2><?php echo $this->translate("Silahkan pilih tanggal pendaftaran")?></h2>
+<h2><?php echo $this->translate("Silahkan pilih tanggal registrasi")?></h2>
 Perhatian: <strong>Silahkan lakukan pembayaran kewajiban keuangan cicilan pertama atau pembayaran lunas seperti yang tercantum dalam surat panggilan, sebelum memesan tanggal registrasi ulang </strong>
-Pastikan semua kelengkapan dokumen daftar ulang dapat dipenuhi sebelum tanggal yang anda pilih
+Pastikan semua kelengkapan dokumen daftar ulang dapat dipenuhi dan diunggakh sebelum tanggal yang anda pilih. Registrasi akan dilaksanakan secara daring dari rumah masing masing.
 
 <br>
 	<table class="table" width="100%" cellpadding="5" cellspacing="1" border="0">
 		<tr>
 		    <th>&nbsp;</th>
-			<th><?php echo $this->translate("Tanggal Pendaftaran")?></th>
+			<th><?php echo $this->translate("Tanggal Registrasi")?></th>
 			<th><?php echo $this->translate("Jam Buka")?></th>
 			<th><?php echo $this->translate("Jam Tutup")?></th>
 			<th><?php echo $this->translate("Kursi Tersisa")?></th>

@@ -62,16 +62,22 @@ class ApplicantPortalController extends Zend_Controller_Action
 		 
 		if(is_array($schedule)){
 			foreach($schedule as $key=>$row){
-				//count total
-				$total_allocate = $transactionDb->getTotalAllocateSchedule($row['rds_id']);
-				
-				if($total_allocate >= $row['rds_capacity']) {
-					unset($schedule[$key]);
-					//$schedule[$key]["status"] = 1; //Not available
-				}else{
-					//$schedule[$key]["status"] = 2; //available
-					$schedule[$key]["allocate"]  = $total_allocate;
-					$schedule[$key]["available"] = abs($row['rds_capacity'])-abs($total_allocate);
+				$rdsdate=$row['rds_date'];
+				$date=date_create(date('Y-m-d',strtotime($rdsdate)));
+				date_sub($date, date_interval_create_from_date_string("3 days"));
+				if (date('Y-m-d') > $date) unset($schedule[$ey]); 
+				else { 
+					//count total
+					$total_allocate = $transactionDb->getTotalAllocateSchedule($row['rds_id']);
+					
+					if($total_allocate >= $row['rds_capacity']) {
+						unset($schedule[$key]);
+						//$schedule[$key]["status"] = 1; //Not available
+					}else{
+						//$schedule[$key]["status"] = 2; //available
+						$schedule[$key]["allocate"]  = $total_allocate;
+						$schedule[$key]["available"] = abs($row['rds_capacity'])-abs($total_allocate);
+					}
 				}
 			}
 		}	
