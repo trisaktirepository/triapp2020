@@ -517,7 +517,21 @@ $pdb = new App_Model_Application_DbTable_ApplicantPtest();
 				
 			?>
 		</td>
-		<td>&nbsp;</td>
+		<td>  
+		<?php if($entry["rds_id"]!=''){
+			$dbRegChannel=new App_Model_Registration_DbTable_RegChannel();
+			$channel=$dbRegChannel->getDataByTrx($entry['at_trans_id']);
+			if ($channel) {
+			 ?>
+				<table class="table">
+				<tr><th>Media</th><td><?php echo $channel['channel_name'];?></td></tr>
+				<tr><th>Link</th><td><?php echo $channel['channel_link'];?></td></tr>
+				<tr><th>User</th><td><?php echo $channel['channel_user'];?></td></tr>
+				<tr><th>Password</th><td><?php echo $channel['channel_pass'];?></td></tr>
+				<tr><th>Time</th><td><?php echo date('d-n-Y H:i:s',strtotime($channel['date_of_event']));?></td></tr>
+				</table>
+		<?php }
+		}?></td>
 	</tr>
 	<?php 
 	$i++;
