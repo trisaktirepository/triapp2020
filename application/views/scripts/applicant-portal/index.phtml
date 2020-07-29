@@ -520,22 +520,33 @@ $pdb = new App_Model_Application_DbTable_ApplicantPtest();
 		<td>  
 		<?php if($entry["rds_id"]!=''){
 			$dbRegChannel=new App_Model_Registration_DbTable_RegChannel();
+			$dbRegChannelQueue=new App_Model_Registration_DbTable_RegChannelQueue();
 			$channel=$dbRegChannel->getDataByTrx($entry['at_trans_id']);
 			if ($channel) {
+				//$row=$dbRegChannelQueue->getClerk();
+				//if ($row) {
+					//$idrcc=$row['id_rcc'];
+					//$id=$dbRegChannelQueue->add(array('id_rcc'=>$idrcc,'transaction_id'=>$entry['at_trans_id'],'date_login'=>date('Y-m-d H:i:s')));
+				 	//$row=$dbRegChannelQueue->getData($id);
 			 ?>
+			 	<h3>Jadwal Registrasi Daring</h3>
+			 	<br>
 				<table class="table">
 				<tr><th>Media</th><td><?php echo $channel['channel_name'];?></td></tr>
 				<tr><th>Link</th><td><?php echo $channel['channel_link'];?></td></tr>
-				<tr><th>User</th><td><?php echo $channel['channel_user'];?></td></tr>
-				<tr><th>Password</th><td><?php echo $channel['channel_pass'];?></td></tr>
+				<tr><th>User</th><td><?php if ($channel['channel_user']!='') echo $channel['channel_user']; else echo 'tidak ada user id'?></td></tr>
+				<tr><th>Password</th><td><?php if ($channel['channel_pass']!='') echo $channel['channel_pass']; else echo 'tidak pakai password'?></td></tr>
 				<tr><th>Time</th><td><?php echo date('d-n-Y H:i:s',strtotime($channel['date_of_event']));?></td></tr>
 				</table>
-		<?php }
-		}?></td>
+		<?php // }
+			}
+		}?> </td>
 	</tr>
 	<?php 
 	$i++;
+	
 	endforeach; 
+	
 	}else{
 	?>
 	<tr>
