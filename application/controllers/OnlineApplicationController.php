@@ -9754,6 +9754,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     
     	$Transaction = new App_Model_Application_DbTable_ApplicantTransaction();
     	$trans = $Transaction->getDataById($txtid);
+    	$dbRegConfirm=new App_Model_Registration_DbTable_RegConfirmation();
     	
     	$appl_id = $trans['at_appl_id'];
     	$this->view->applid=$appl_id;
@@ -9763,6 +9764,8 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	$dbAppProg=new App_Model_Application_DbTable_ApplicantProgram();
     	$program=$dbAppProg->getProgramOffered($txn_id,$trans['at_appl_type']);
     	$this->view->program=$program;
+    	$confirm=$dbRegConfirm->getData($txn_id);
+    	if ($confirm['status']=="1") $this->view->oto="r"; else $this->view->oto="w"; 
     	$dbIntake=new App_Model_General_DbTable_Intake();
     	$intake=$dbIntake->fngetIntakeById($trans['at_intake']);
     	if ($trans['at_appl_type']=="1") $pcode='USM';
