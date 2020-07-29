@@ -667,7 +667,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 	
 	public function pushToEColl($idinvoice,$dateexprired,$process=null,$mode=null) {
 		date_default_timezone_set('Asia/Bangkok');
-		 
+		$dbTxt=new Studentfinance_Model_DbTable_TmpTxt();
 		$invoiceDet = new Studentfinance_Model_DbTable_InvoiceDetail();
 		$dbInvoice = new Studentfinance_Model_DbTable_InvoiceMain();
 		$dbCnote=new Studentfinance_Model_DbTable_CreditNote();
@@ -703,13 +703,14 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 			foreach ($invoicedetail as $det) {
 					
 				//echo "kode".$kode;
+				$amount=$det['amount']*1;
 				$cn=$dbCnote->getCN($invoice['bill_number'], $det['fi_id']);
-				if ($cn) $amount=$det['amount']*1-$cn['cnd_amount'];
-				else $amount=$det['amount']*1;
+				if ($cn) $amount=$amount-$cn['cnd_amount'];
+				
 				//debit
-				$cn=$dbNNote->getDN($invoice['bill_number'], $det['fi_id']);
-				if ($cn) $amount=$det['amount']*1-$cn['dnd_amount'];
-				else $amount=$det['amount']*1;
+				$dn=$dbNNote->getDN($invoice['bill_number'], $det['fi_id']);
+				if ($dn) $amount=$amount*1+$dn['dnd_amount'];
+				 
 				//------
 				$amounttotal=$amounttotal+$amount;
 				$desc[]=$det['account_code']."_".$det['fi_code']."_".$amount;
@@ -750,7 +751,10 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 			}
 			//echo var_dump($invoiceData);
 			//echo var_dump($respone);exit;
-		}
+		} else  {
+	    		
+	    		$dbTxt->add(array('txt'=>$invoice['trx_id'].' total '.$amounttotal.'= tagihan'.$billamount.' Legth '.strlen($desc).' '.$desc));
+	    	}
 	}
 	public function pushToECollForEnrollment($idinvoice,$dateexprired,$process=null,$mode=null,$re=null) {
 		date_default_timezone_set('Asia/Bangkok');
