@@ -546,7 +546,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 		 	foreach ($act as $key=>$actitem) { 
 				if (isset($actitem['bundledetail'])) {
 					foreach ($actitem['bundledetail'] as $idxitem=>$item) {
-							
+						echo $std['Strata_code_EPSBED'];	
 						//discount processing
 						$dbDiscountSetup=new Studentfinance_Model_DbTable_DiscountMain();
 						$discounttype=$dbDiscountSetup->getDiscountType();
