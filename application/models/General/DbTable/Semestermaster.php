@@ -35,7 +35,7 @@ class App_Model_General_DbTable_Semestermaster extends Zend_Db_Table_Abstract
 			->where("a.IdSemesterMaster = $IdSemesterMaster")
 			->order('a.SemesterMainName');
 	
-			$result = $this->fetchAll($select);
+			$result = $this->fetchRow($select);
 		}
 	
 		return $result->toArray();
