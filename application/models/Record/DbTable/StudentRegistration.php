@@ -39,7 +39,7 @@ class App_Model_Record_DbTable_StudentRegistration extends Zend_Db_Table_Abstrac
 		$select = $db->select()
 				->from(array('sr'=>$this->_name))
 				->join(array('ap'=>'student_profile'),'ap.appl_id=sr.IdApplication',array('StudentName'=>'CONCAT(appl_fname," ",appl_mname," ",appl_lname)','appl_fname','appl_mname','appl_lname','appl_phone_hp','appl_birth_place','appl_dob','appl_nationality','appl_email'))
-				->join(array('p'=>'tbl_program'),'p.IdProgram=sr.IdProgram',array('ArabicName','ProgramName','ProgramCode','IdProgram','AdvisorDefaultApprove','Departement','Dept_Bahasa','strata','StrataName','OptimalDuration','Gradepoint_rmd','paket','print_majoring','MeetAdvisor','kkni'=>'KKNI_level'))
+				->join(array('p'=>'tbl_program'),'p.IdProgram=sr.IdProgram',array('ArabicName','ProgramName','ProgramCode','IdProgram','AdvisorDefaultApprove','Departement','Dept_Bahasa','strata','StrataName','OptimalDuration','Gradepoint_rmd','paket','print_majoring','MeetAdvisor','kkni'=>'KKNI_level','Strata_code_EPSBED'))
 				->join(array('i'=>'tbl_intake'),'i.IdIntake=sr.IdIntake',array('intake'=>'IntakeDefaultLanguage','IntakeId'))
 				->joinLeft(array('s'=>'tbl_semestermaster'),'s.IdSemesterMaster=sr.IdSemesterMain',array('scheme'=>'Scheme'))
 				->joinLeft(array('d'=>'tbl_definationms'),'d.idDefinition=sr.profileStatus',array('StudentStatus'=>'DefinitionDesc'))
