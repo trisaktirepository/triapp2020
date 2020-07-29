@@ -670,6 +670,8 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		 
 		$invoiceDet = new Studentfinance_Model_DbTable_InvoiceDetail();
 		$dbInvoice = new Studentfinance_Model_DbTable_InvoiceMain();
+		$dbCnote=new Studentfinance_Model_DbTable_CreditNote();
+		$dbNNote=new Studentfinance_Model_DbTable_DebitNote();
 		//$dbinvoiceSpc=new Studentfinance_Model_DbTable_InvoiceSpc();
 		$bni = new Studentfinance_Model_DbTable_AccessBni();
 		$dbProgram=new App_Model_General_DbTable_Program();
@@ -691,7 +693,8 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 			$va= '8'.$clientid.$invoice['bill_number'];
 		else
 			$va=$invoice['va'];//$billamount=$invoice['bill_balance'];
-		$billamount=$invoice['bill_amount'];
+		$billamount=$invoice['bill_amount']-$invoice['cn_amount']+$invoice['dn_amount'];
+		
 		//get detail
 		$invoicedetail=$invoiceDet->getInvoiceDetailBank($idinvoice, $idprogram,$std['IdBranch']);
 		$desc=array();
@@ -700,7 +703,14 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 			foreach ($invoicedetail as $det) {
 					
 				//echo "kode".$kode;
-				$amount=$det['amount']*1;
+				$cn=$dbCnote->getCN($invoice['billing_no'], $det['fi_id']);
+				if ($cn) $amount=$det['amount']*1-$cn['cnd_amount'];
+				else $amount=$det['amount']*1;
+				//debit
+				$cn=$dbCnote->getDN($invoice['billing_no'], $det['fi_id']);
+				if ($cn) $amount=$det['amount']*1-$cn['dnd_amount'];
+				else $amount=$det['amount']*1;
+				//------
 				$amounttotal=$amounttotal+$amount;
 				$desc[]=$det['account_code']."_".$det['fi_code']."_".$amount;
 					

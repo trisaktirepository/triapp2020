@@ -1,10 +1,10 @@
 <?php
-class Studentfinance_Model_DbTable_CreditNote extends Zend_Db_Table_Abstract {
+class Studentfinance_Model_DbTable_DebitNote extends Zend_Db_Table_Abstract {
 	/**
 	 * The default table name 
 	 */
-	protected $_name = 'credit_note';
-	protected $_primary = "cn_id";
+	protected $_name = 'debit_note';
+	protected $_primary = "dn_id";
 		
 	public function getData($id=0){
 		$db = Zend_Db_Table::getDefaultAdapter();
@@ -112,15 +112,15 @@ class Studentfinance_Model_DbTable_CreditNote extends Zend_Db_Table_Abstract {
 	
 	}
 	
-	public function getCN($nobill,$feeid){
+	public function getDN($nobill,$feeid){
 	
 		$db = Zend_Db_Table::getDefaultAdapter();
 	
 		$selectData = $db->select()
 		->from(array('d'=>$this->_name))
-		->join(array('dd'=>'credit_note_detail'),'d.cn_id=dd.cnd_cn_id')
-		->where("d.cn_billing_no = '".$nobill."'")
-		->where('d.cnd_fi_id=?',$feeid);
+		->join(array('dd'=>'debit_note_detail'),'d.dn_id=dd.dnd_dn_id')
+		->where("d.dn_billing_no = '".$nobill."'")
+		->where('d.dnd_fi_id=?',$feeid);
 	
 		$row = $db->fetchRow($selectData);
 	
