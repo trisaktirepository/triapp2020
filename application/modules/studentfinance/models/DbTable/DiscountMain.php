@@ -93,8 +93,9 @@ public function getCurrentSetup($univ,$kkni,$college,$program,$branch,$semester,
 					->join(array('b'=>'tbl_semestermaster'),'a.idsemestermain=b.idsemestermaster')
 					->where('idDiscount=?',$iddiscount)
 					 ->where('iduniv=?',$univ)
+					 ->where('kkni=?',$kkni)
 					->where('idcollege=?',$college)
-					->where('kkni=?',$kkni)
+					
 					->where('idprogram is null or idprogram=0')
 					->where('idbranch is null or idbranch=0')
 					->where('majoring is null or majoring=0')
@@ -122,8 +123,9 @@ public function getCurrentSetup($univ,$kkni,$college,$program,$branch,$semester,
 							->join(array('b'=>'tbl_semestermaster'),'a.idsemestermain=b.idsemestermaster')
 							->where('idDiscount=?',$iddiscount)
 							->where('iduniv=?',$univ)
-							->where('idcollege is null or idcollege=0')
 							->where('kkni=0 or kkni is null')
+							->where('idcollege is null or idcollege=0')
+							
 							->where('idprogram is null or idprogram=0')
 							->where('idbranch is null or idbranch=0')
 							->where('majoring is null or majoring=0')
@@ -137,7 +139,7 @@ public function getCurrentSetup($univ,$kkni,$college,$program,$branch,$semester,
 				}
 			}
 		}
-		//echo $select;
+		if ($row) echo $select;
 		return $row;
 	}
 	
