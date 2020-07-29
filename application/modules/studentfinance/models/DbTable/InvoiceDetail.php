@@ -76,7 +76,7 @@ class Studentfinance_Model_DbTable_InvoiceDetail extends Zend_Db_Table_Abstract 
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$selectData = $db->select()
 		->from(array('idtl'=>$this->_name),array('amount'))
-		->join(array('item'=>'fee_item'),'item.fi_id=idtl.fi_id',array('bni_code','fi_code'))
+		->join(array('item'=>'fee_item'),'item.fi_id=idtl.fi_id',array('bni_code','fi_code','fi_id'))
 		->join(array('ia'=>'fee_item_account'),'item.fi_id=ia.fiacc_fee_item',array())
 		->join(array('acc'=>'tbl_bank_account'),'ia.fiacc_account=acc.account',array('account_code'))
 		->where("idtl.invoice_main_id = ?", $invoice_id)
@@ -88,7 +88,7 @@ class Studentfinance_Model_DbTable_InvoiceDetail extends Zend_Db_Table_Abstract 
 		if(!$row){
 			$selectData = $db->select()
 			->from(array('idtl'=>$this->_name),array('amount'))
-			->join(array('item'=>'fee_item'),'item.fi_id=idtl.fi_id',array('bni_code','fi_code'))
+			->join(array('item'=>'fee_item'),'item.fi_id=idtl.fi_id',array('bni_code','fi_code','fi_id'))
 			->join(array('ia'=>'fee_item_account'),'item.fi_id=ia.fiacc_fee_item',array())
 			->join(array('acc'=>'tbl_bank_account'),'ia.fiacc_account=acc.account',array('account_code'))
 			->where("idtl.invoice_main_id = ?", $invoice_id)
