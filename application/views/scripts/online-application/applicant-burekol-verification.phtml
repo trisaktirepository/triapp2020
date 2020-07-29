@@ -775,7 +775,9 @@ function copy_address_above(){
 						<td></td>
 						<td width="100px" align="center" style="text-align:center;"></td>
 						<td width="100px" align="center" style="text-align:center;">
+						<?php if ($this->oto=="w") {?>
 							<a id="<?php echo $doc['type_id'];?>" class="uploadFile" data-name="<?php echo $doc['type_name'];?>" href="#"><?php echo $this->translate("Upload"); ?></a>
+						<?php }?>
 						</td>
 					</tr>
 					<?php 
