@@ -796,11 +796,13 @@ function copy_address_above(){
 	<br>
 	*Foto yang saudara unggah sebaiknya berpenampilan sopan dan terlihat wajah 70%
 	<br>
-	<?php if ($this->oto=="w") {?>
+	
 	<div style="text-align:center; background:#EEE; margin: 10px 0 10px 0">
+		<?php if ($this->oto=="w") {?>
 		<input type="submit" value="Verified Burekol Data" />
+		<?php } else echo "Data sudah diverifikasi secara lengkap dan tidak dapat diubah kembali"; ?>
 	</div>
-	<?php } else "Data sudah diverifikasi secara lengkap dan tidak dapat diubah kembali"?>
+	
 </form>	
 
  
