@@ -133,11 +133,11 @@ public function getCurrentSetup($univ,$kkni,$college,$program,$branch,$semester,
 								
 						}
 					}
-					}
+				  }
 				}
 			}
 		}
-		echo $select;
+		//echo $select;
 		return $row;
 	}
 	
