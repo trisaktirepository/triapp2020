@@ -20,7 +20,7 @@ class Studentfinance_Model_DbTable_DiscountMain extends Zend_Db_Table { //Model 
 		return $this->lobjDbAdpt->delete($this->_name,$where);
 	}
 	 
-public function getCurrentSetup($univ,$college,$program,$branch,$semester,$idmajoring,$iddiscount) {
+public function getCurrentSetup($univ,$kkni,$college,$program,$branch,$semester,$idmajoring,$iddiscount) {
 		
 		$selectsmt=$this->lobjDbAdpt->select()
 		->from('tbl_semestermaster')
@@ -35,6 +35,7 @@ public function getCurrentSetup($univ,$college,$program,$branch,$semester,$idmaj
 		->where('idDiscount=?',$iddiscount) 
 		->where('iduniv=?',$univ)
 		->where('idcollege=?',$college)
+		->where('kkni=?',$kkni)
 		->where('idprogram=?',$program)
 		->where('idbranch=?',$branch)
 		->where('a.majoring=?',$idmajoring)
@@ -49,6 +50,7 @@ public function getCurrentSetup($univ,$college,$program,$branch,$semester,$idmaj
 			->where('idDiscount=?',$iddiscount) 
 			->where('iduniv=?',$univ)
 			->where('idcollege=?',$college)
+			->where('kkni=?',$kkni)
 			->where('idprogram=?',$program)
 			->where('a.majoring=?',$idmajoring)
 			->where('idbranch is null or idbranch=0')
@@ -63,6 +65,7 @@ public function getCurrentSetup($univ,$college,$program,$branch,$semester,$idmaj
 				->where('idDiscount=?',$iddiscount) 
 				->where('iduniv=?',$univ)
 				->where('idcollege=?',$college)
+				->where('kkni=?',$kkni)
 				->where('idprogram=?',$program)
 				->where('idbranch=?',$branch)
 				->where('majoring is null or majoring=0')
@@ -77,6 +80,7 @@ public function getCurrentSetup($univ,$college,$program,$branch,$semester,$idmaj
 						->where('idDiscount=?',$iddiscount)
 						 ->where('iduniv=?',$univ)
 						->where('idcollege=?',$college)
+						->where('kkni=?',$kkni)
 						->where('idprogram=?',$program)
 						->where('idbranch is null or idbranch=0')
 						->where('majoring is null or majoring=0')
@@ -90,6 +94,7 @@ public function getCurrentSetup($univ,$college,$program,$branch,$semester,$idmaj
 					->where('idDiscount=?',$iddiscount)
 					 ->where('iduniv=?',$univ)
 					->where('idcollege=?',$college)
+					->where('kkni=?',$kkni)
 					->where('idprogram is null or idprogram=0')
 					->where('idbranch is null or idbranch=0')
 					->where('majoring is null or majoring=0')
@@ -103,14 +108,30 @@ public function getCurrentSetup($univ,$college,$program,$branch,$semester,$idmaj
 						->join(array('b'=>'tbl_semestermaster'),'a.idsemestermain=b.idsemestermaster')
 						->where('idDiscount=?',$iddiscount)
 						 ->where('iduniv=?',$univ)
-						->where('idcollege is null or idcollege=0')
+						->where('idcollege=?',$college)
+						->where('kkni=0 or kkni is null')
 						->where('idprogram is null or idprogram=0')
 						->where('idbranch is null or idbranch=0')
 						->where('majoring is null or majoring=0')
 						->where('b.SemesterMainStartDate <=?',$datestart)
 						->order('b.SemesterMainStartDate DESC');
 						$row=$this->lobjDbAdpt->fetchRow($select);
-						 
+						if (!$row) {
+							$select=$this->lobjDbAdpt->select()
+							->from(array('a'=>$this->_name))
+							->join(array('b'=>'tbl_semestermaster'),'a.idsemestermain=b.idsemestermaster')
+							->where('idDiscount=?',$iddiscount)
+							->where('iduniv=?',$univ)
+							->where('idcollege is null or idcollege=0')
+							->where('kkni=0 or kkni is null')
+							->where('idprogram is null or idprogram=0')
+							->where('idbranch is null or idbranch=0')
+							->where('majoring is null or majoring=0')
+							->where('b.SemesterMainStartDate <=?',$datestart)
+							->order('b.SemesterMainStartDate DESC');
+							$row=$this->lobjDbAdpt->fetchRow($select);
+								
+						}
 					}
 					}
 				}
