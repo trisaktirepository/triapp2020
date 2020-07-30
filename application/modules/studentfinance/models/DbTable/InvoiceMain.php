@@ -1006,8 +1006,8 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		->where('im.setter="2"');
 		 
 		$rows = $db->fetchAll($selectData);
-		echo $selectData;
-		echo var_dump($rows);  exit;
+		//echo $selectData;
+		//echo var_dump($rows);  exit;
 		if ($rows) {
 			$status="0";
 			foreach ($rows as $row) {
@@ -1015,7 +1015,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 				 
 				$dbBundle=new Studentfinance_Model_DbTable_BundleFee();
 				$bundle=$dbBundle->getCurrentSetup(1, $std['IdCollege'], $std['IdProgram'], $std['IdBranch'], $row['IdSemesterMain'], $row['idActivity'],$std['IdProgramMajoring']);
-				//echo var_dump($bundle);exit;
+				echo var_dump($bundle);exit;
 				if ($bundle) {
 					if (($row['idActivity']==39 || $row['idActivity']==40 || $row['idActivity']==42)) {
 						
