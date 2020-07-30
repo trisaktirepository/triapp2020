@@ -1064,8 +1064,8 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 							->from(array('a'=>'fee_budle_detail'),array('fee_item'))
 							->where("a.idfeebundle = '".$bundle['idfeebundle']."'");
 							$bundleDetail = $db->fetchAll($selectData);
-							echo $selectData;
-							echo var_dump($bundleDetail);exit;
+							//echo $selectData;
+							//echo var_dump($bundleDetail);exit;
 							if ($bundleDetail) {
 									
 									foreach ($bundleDetail as $itm) {
@@ -1102,7 +1102,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 												$subject = $db->fetchRow($selectData);
 												if ($subject) $status="1";
 											} */
-											if ($itemdetail['fi_amount_calculation_type']==299) {
+											if ($itemdetail['fi_amount_calculation_type']==299 || $itemdetail['fi_amount_calculation_type']==301) {
 												//tergantung sks
 												//cek krs
 												$selectData = $db->select()
