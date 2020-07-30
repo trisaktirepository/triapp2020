@@ -1041,7 +1041,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 							else $mhsbaru="1";
 						} else $mhsbaru="0";
 					//get fee structure item
-						echo $mhsbaru;exit;
+						//echo $mhsbaru;exit;
 						if ($mhsbaru=="0") {
 							if($std['appl_nationality']!=96){
 								$student_category = 315;
@@ -1064,7 +1064,8 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 							->from(array('a'=>'fee_budle_detail'),array('fee_item'))
 							->where("a.idfeebundle = '".$bundle['idfeebundle']."'");
 							$bundleDetail = $db->fetchAll($selectData);
-							// echo var_dump($bundleDetail);
+							echo $selectData;
+							echo var_dump($bundleDetail);exit;
 							if ($bundleDetail) {
 									
 									foreach ($bundleDetail as $itm) {
