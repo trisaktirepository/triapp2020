@@ -1015,7 +1015,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 				 
 				$dbBundle=new Studentfinance_Model_DbTable_BundleFee();
 				$bundle=$dbBundle->getCurrentSetup(1, $std['IdCollege'], $std['IdProgram'], $std['IdBranch'], $row['IdSemesterMain'], $row['idActivity'],$std['IdProgramMajoring']);
-				echo var_dump($bundle);exit;
+				//echo var_dump($bundle);exit;
 				if ($bundle) {
 					if (($row['idActivity']==39 || $row['idActivity']==40 || $row['idActivity']==42)) {
 						
@@ -1041,7 +1041,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 							else $mhsbaru="1";
 						} else $mhsbaru="0";
 					//get fee structure item
-						//echo $mhsbaru;exit;
+						echo $mhsbaru;exit;
 						if ($mhsbaru=="0") {
 							if($std['appl_nationality']!=96){
 								$student_category = 315;
