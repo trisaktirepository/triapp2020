@@ -1020,12 +1020,15 @@ if(isset($this->registeredcourses)){
             <?php foreach ($soffered['group'] as $group) { 
             		 
             		if ($group['minor']==array()) {
-		            		$sch=$group['sch'];?>
+		            		;?>
 		                <?php if($group['currentStud'] < $group['maxstud']) {?>
 		                 <input type="radio" name="radio_<?php echo $soffered["IdSubject"];?>" value="<?php echo $group['IdCourseTaggingGroup'];?>" id="<?php echo $soffered["IdSubject"].'_'.$z;?>" class="<?php echo $soffered["IdSubject"];?>" disabled  onclick="CekRule()"/> 
 		                <a href="<?php echo $soffered["IdSubject"].'/idgroup/'.$group['IdCourseTaggingGroup'].'/idLandscapeSub/'.$soffered['IdLandscapeSub'];?>" class="scheduleLink"> <?php echo $group['GroupName']?> </a>
 		               	 <br>
-		               	 <?php $i=1;
+		               	 <?php 
+		               	 if (isset($group['sch'])) {
+							$sch=$group['sch'];
+		               	 	$i=1;
 		               	 	foreach ($sch as $sc) {
 		               	 		?>
 		               	 		<?php  echo 'Tanggal : '. date('d-m-Y',strtotime($sc['sc_date'])).' s/d '.date('d-m-Y',strtotime($sc['sc_date_end']))?><br> 
@@ -1041,6 +1044,7 @@ if(isset($this->registeredcourses)){
 		                <img src="/images/icon/red.ico"  style="width:20px;height:20px;" title="This group has been fully seated">
 				   		
 		                <?php }
+		            		}
                 } else {
 						
 						$groupminor=$group['minor'];
