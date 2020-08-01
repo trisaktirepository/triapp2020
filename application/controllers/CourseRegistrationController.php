@@ -628,7 +628,7 @@ class CourseRegistrationController extends Zend_Controller_Action
                             			}
                             			$groupLists[$keyb]['minor']=$grpminors;
                             			//echo var_dump($landscape_subject);exit;
-                            		} else $groupLists[$keyb]['minor']=false;
+                            		} else $groupLists[$keyb]['minor']=array();
                             		
                             		
                             	}
