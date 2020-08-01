@@ -1018,7 +1018,8 @@ if(isset($this->registeredcourses)){
             <?php if (isset($soffered['group'])) : ?>
             <?php $z = 1;?>
             <?php foreach ($soffered['group'] as $group) { 
-            		if ( $group['minor']==array()) {
+            		if ( isset($group['minor'])) {
+            			if ($group['minor']==array()) {
 		            		$sch=$group['sch'];?>
 		                <?php if($group['currentStud'] < $group['maxstud']) {?>
 		                 <input type="radio" name="radio_<?php echo $soffered["IdSubject"];?>" value="<?php echo $group['IdCourseTaggingGroup'];?>" id="<?php echo $soffered["IdSubject"].'_'.$z;?>" class="<?php echo $soffered["IdSubject"];?>" disabled  onclick="CekRule()"/> 
@@ -1131,7 +1132,8 @@ if(isset($this->registeredcourses)){
 			                		} ?>
 			             <?php }
 		                }
-				};?></li>
+				};
+				}?></li>
                 
                 
 
