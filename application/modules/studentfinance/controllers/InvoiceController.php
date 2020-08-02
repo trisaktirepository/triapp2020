@@ -16,7 +16,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 	 
 	public function generateStdInvoiceAction(){
 		 
-		
+		$dbtxt=new App_Model_General_DbTable_TmpTxt();
 		$IdStudentRegistration = $this->_getParam('id', null);
 		$idinvoice=$this->_getParam('idinvoice','');
 		$this->view->idinvoice=$idinvoice;
@@ -326,10 +326,11 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 						//$this->view->invoice=$invoice;
 						//chek for incompatibility
 						if ($invoice['mhsbaru']=="0") {
-							 
+							$dbtxt->add(array('txt'=>'no msh baru'.$IdStudentRegistration));
 							$act[$key]['idinvoice']=$invoice['id'];
 							$restamount=$invoiceDb->inCompatibilityInvoice($IdStudentRegistration, $idsemester, $idactivity);
 							$act[$key]['invoicerest']=$restamount;
+							$dbtxt->add(array('txt'=>'rest'.var_dump($restamount).'-'.$IdStudentRegistration));
 							$bundleDetail=array();
 							
 						} else {

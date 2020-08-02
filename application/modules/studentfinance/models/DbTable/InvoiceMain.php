@@ -1162,20 +1162,20 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 																	$actualamount=$rowkrs['sks']*$feestructure['fsi_amount'];
 																//	echo $actualamount;echo $itemamount;exit;
 																	$itemss=$itemss+$itemamount;
-																	$dbtxt->add(array('txt'=>$rowkrs['sks'].'='.$itemss.' '.$idstd));
+																	//$dbtxt->add(array('txt'=>$rowkrs['sks'].'='.$itemss.' '.$idstd));
 																		
 																} else if ($feestructure['fi_amount_calculation_type']==301) {
 																	//per MK
 																	$actualamount=$rowkrs['jmlmk']*$feestructure['fsi_amount'];
 																	//if ($actualamount-$itemamount>0) $status="1";  
 																	$itemss=$itemss+$itemamount;
-																	$dbtxt->add(array('txt'=>$rowkrs['jmlmk'].'='.$itemss.' '.$idstd));
+																	//$dbtxt->add(array('txt'=>$rowkrs['jmlmk'].'='.$itemss.' '.$idstd));
 																		
 																}
 															}
 														}
 														
-														$dbtxt->add(array('txt'=>$actualamount.'='.$itemss.' '.$idstd));
+														//$dbtxt->add(array('txt'=>$actualamount.'='.$itemss.' '.$idstd));
 														//echo $actualamount;echo '-';echo $items; exit;
 														if ($actualamount-$itemss>0) return $row['idActivity'];
 														
