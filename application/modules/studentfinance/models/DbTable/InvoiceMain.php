@@ -1339,7 +1339,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 									$subject = $db->fetchRow($selectData);
 									//check incompatibility
 								}
-								if ($itemdetail['fi_amount_calculation_type']==299) {
+								if ($itemdetail['fi_amount_calculation_type']==299 || $itemdetail['fi_amount_calculation_type']==301) {
 									//tergantung sks
 									//cek krs
 									$selectData = $db->select()
