@@ -61,7 +61,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 		$program = $programDb->fngetProgramData($std['IdProgram']);
 		$this->view->program=$program;
 		$dbDiscountSetup=new Studentfinance_Model_DbTable_DiscountMain();
-			$db = Zend_Db_Table::getDefaultAdapter();
+		$db = Zend_Db_Table::getDefaultAdapter();
 			if ($this->getRequest()->isPost()) {
 				$formData=$this->getRequest()->getPost();
 				if (isset($formData['agree'])) {
@@ -336,6 +336,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 							$act[$key]['invoicerest']=array();
 							$bundleDetail=array();
 						}
+						
 						//if ($invoice['va']!='' && $restamount!=array()) $this->_redirect('/applicant-portal/account');
 					} else {
 						 
@@ -608,7 +609,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 					}
 				}
 		 	}
-			$this->view->activity= $act;
+		 	$this->view->activity= $act;
 	}
 	 
 	public function  getLevel($IdStudentRegistration,$idsemester,$intake) {

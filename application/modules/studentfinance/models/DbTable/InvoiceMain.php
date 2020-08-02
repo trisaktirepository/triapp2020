@@ -1170,6 +1170,8 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 																}
 															}
 														}
+														$dbtxt=new App_Model_General_DbTable_TmpTxt();
+														$dbtxt->add(array('txt'=>$actualamount.'='.$item));
 														//echo $actualamount;echo '-';echo $items; exit;
 														if ($actualamount-$items>0) return $row['idActivity'];
 														
