@@ -1145,7 +1145,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 														
 															} else unset($amount[$det['fi_id']]);
 														}
-														$items=0;
+														$itemss=0;
 														foreach ($amount as $fiid=>$itemamount) {
 															//get fee structure
 															$selectData = $db->select()
@@ -1161,19 +1161,19 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 																	//per sks
 																	$actualamount=$rowkrs['sks']*$feestructure['fsi_amount'];
 																//	echo $actualamount;echo $itemamount;exit;
-																	$items=$items+$itemamount;
+																	$itemss=$itemss+$itemamount;
 																} else if ($feestructure['fi_amount_calculation_type']==301) {
 																	//per MK
 																	$actualamount=$rowkrs['jmlmk']*$feestructure['fsi_amount'];
 																	//if ($actualamount-$itemamount>0) $status="1";  
-																	$items=$items+$itemamount;
+																	$itemss=$itemss+$itemamount;
 																}
 															}
 														}
 														$dbtxt=new App_Model_General_DbTable_TmpTxt();
-														$dbtxt->add(array('txt'=>$actualamount.'='.$items));
+														$dbtxt->add(array('txt'=>$actualamount.'='.$itemss));
 														//echo $actualamount;echo '-';echo $items; exit;
-														if ($actualamount-$items>0) return $row['idActivity'];
+														if ($actualamount-$itemss>0) return $row['idActivity'];
 														
 														//echo $status;echo '<br>';
 													} else return $row['idActivity'];
