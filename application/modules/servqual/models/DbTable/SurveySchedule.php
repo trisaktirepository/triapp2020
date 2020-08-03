@@ -95,7 +95,7 @@ class Servqual_Model_DbTable_SurveySchedule extends Zend_Db_Table { //Model Clas
 	public function getActiveSemester($prog){
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$select = $db->select()
-		->from(array('sq'=>$this->_name))
+		->from(array('sq'=>$this->_name)) 
 		//->join(array('def'=>'tbl_definationms'),'sq.survey_type=def.IdDefinition',array('surveytype'=>'def.BahasaIndonesia'))
 		->where('sq.IdProgram=?',$prog)
 		->where('sq.Survey_start<=CURDATE() and sq.Survey_stop>=CURDATE()');

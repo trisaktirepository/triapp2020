@@ -167,7 +167,7 @@ class Servqual_Model_DbTable_Survey extends Zend_Db_Table { //Model Class for Us
 			//get traget
 			$targets=$this->getSurvey($idstudentregistration,$semester);
 			$dbSurveyHead=new Servqual_Model_DbTable_ServqualTransactionHead();
-			
+			echo var_dump($targets);exit;
 			foreach ($targets as $target) {
 				//echo var_dump($target);
 				$idSurveyTarget=$target['IdTarget'];
