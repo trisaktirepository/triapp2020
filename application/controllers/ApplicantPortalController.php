@@ -64,10 +64,10 @@ class ApplicantPortalController extends Zend_Controller_Action
 			foreach($schedule as $key=>$row){
 				$rdsdate=$row['rds_date'];
 				$date=date_create(date('Y-m-d',strtotime($rdsdate)));
-				echo date_format($date, 'Y-m-d');
+				//echo date_format($date, 'Y-m-d');
 				date_sub($date, date_interval_create_from_date_string("3 days"));
-				echo date_format($date, 'Y-m-d');
-				exit;
+				//echo date_format($date, 'Y-m-d');
+				//exit;
 				if (date('Y-m-d') > $date) unset($schedule[$ey]); 
 				else { 
 					//count total
