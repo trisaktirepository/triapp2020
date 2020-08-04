@@ -53,6 +53,13 @@ class  App_Model_Registration_DbTable_RegChannel extends Zend_Db_Table_Abstract 
 		->where("a.transaction_id = ?",$idstd)
 		->where("a.rsd_id is not null");
 		$row = $db->fetchRow($select);
+		if ($row) {
+			$select = $db ->select()
+			->from(array('a'=>'tbl_reg_confirmation'))
+			->where("a.transaction_id = ?",$idstd);
+			$rowreg = $db->fetchRow($select);
+			if ($rowreg) $row['status']="1"; else $row['status']="";
+		} 
 		return $row;
 	}
 	
