@@ -104,7 +104,8 @@ class Servqual_Model_DbTable_ServqualTransactionHead extends Zend_Db_Table { //M
 			->where('sqr.IdServqualTransaction=?',$row['IdServqualTransaction'])
 			->where('sqr.Complete= "1"');
 			 $row=$db->fetchRow($select);
-			// echo var_dump($row);echo $idstudentregistration;exit;
+			//echo var_dump($row);
+			//echo $idstudentregistration;exit;
 			 return $row;
 			//echo var_dump($row);echo $idstudentregistration."=".$idsemester;exit;
 			 
