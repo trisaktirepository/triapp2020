@@ -117,20 +117,27 @@ class Servqual_Model_DbTable_ServqualTransactionHead extends Zend_Db_Table { //M
 	public function isRealityDone($idstudentregistration,$idsemester,$idSurveyTarget,$idprogram) {
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$select = $db->select()
-		->from(array('sq'=>$this->_name))
-		->where('sq.IdSemester=?',$idsemester)
-		->where('sq.IdSurveyTarget=?',$idSurveyTarget)
-		->where('sq.IdProgram=?',$idprogram)
-		->where('sq.expectation="1"');
+		->from(array('sr'=>'tbl_studentregsubjects'))
+		->where('sr.IdStudentRegistration=?',$idstudentregistration)
+		->where('sr.IdSemesterMain=?',$idsemester);
 		$row=$db->fetchRow($select);
 		if ($row) {
 			$select = $db->select()
-			->from(array('sqr'=>'tbl_servqual_transaction_responden'))
-			->where('sqr.IdResponden=?',$idstudentregistration)
-			->where('sqr.IdServqualTransaction=?',$row['IdServqualTransaction'])
-			->where('sqr.Complete= "1"');
+			->from(array('sq'=>$this->_name))
+			->where('sq.IdSemester=?',$idsemester)
+			->where('sq.IdSurveyTarget=?',$idSurveyTarget)
+			->where('sq.IdProgram=?',$idprogram)
+			->where('sq.expectation="1"');
 			$row=$db->fetchRow($select);
-			return $row;
+			if ($row) {
+				$select = $db->select()
+				->from(array('sqr'=>'tbl_servqual_transaction_responden'))
+				->where('sqr.IdResponden=?',$idstudentregistration)
+				->where('sqr.IdServqualTransaction=?',$row['IdServqualTransaction'])
+				->where('sqr.Complete= "1"');
+				$row=$db->fetchRow($select);
+				return $row;
+			} 
 		}
 		return array();
 	
