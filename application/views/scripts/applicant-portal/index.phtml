@@ -542,6 +542,7 @@ $pdb = new App_Model_Application_DbTable_ApplicantPtest();
 				<tr><th>User</th><td><?php if ($channel['channel_user']!='') echo $channel['channel_user']; else echo 'tidak ada user id'?></td></tr>
 				<tr><th>Password</th><td><?php if ($channel['channel_pass']!='') echo $channel['channel_pass']; else echo 'tidak pakai password'?></td></tr>
 				<tr><th>Time</th><td><?php echo date('d-n-Y H:i:s',strtotime($channel['date_of_event']));?></td></tr>
+				<tr><th>Status</th><td><?php if ($channel['status']=="1") echo 'Registrasi Lengkap/Selesai'; else if ($channel['status']=="") echo 'Belum Registrasi'; else echo 'Registrasi Belum Lengkap, akan dilengkapi tgl '.date('Y-m-d',strtotime($channel['dt_appointment']));?></td></tr>
 				</table>
 		<?php }
 			}
