@@ -429,7 +429,7 @@ $pdb = new App_Model_Application_DbTable_ApplicantPtest();
                         //paid status
 						$paymentMainDb = new Studentfinance_Model_DbTable_PaymentMain();
 						$payment = $paymentMainDb->getApplicantPaymentInfo($entry['at_pes_id']);
-
+						
 						if ($entry['at_appl_type']!=3)
                         {
                             if(date('Y-m-d') >= $reg_start_date){
@@ -523,7 +523,7 @@ $pdb = new App_Model_Application_DbTable_ApplicantPtest();
 			$dbRegChannelQueue=new App_Model_Registration_DbTable_RegChannelQueue();
 			$channel=$dbRegChannel->getDataByTrx($entry['at_trans_id']);
 			if ($channel) {
-				if (date('Y-d-m H:i:s',strtotime($channel['date_of_event'])) < date('Y-d-m H:i:s',strtotime(date('Y-d-m').' 20:00:00')) && $channel['status']=="") {
+				if (date('Y-d-m H:i:s',strtotime($channel['date_of_event'])) < date('Y-d-m H:i:s',strtotime(date('Y-d-m').' 20:00:00')) && $channel['status']!="") {
 					$dialogregistration="1";
 					echo "<a href='#' onclick='jadwal(".$entry['at_trans_id'].")'>Pesan ulang tanggal registrasi</a>";
 
@@ -536,6 +536,7 @@ $pdb = new App_Model_Application_DbTable_ApplicantPtest();
 			 ?>
 			 	<h3>Jadwal Registrasi Daring</h3>
 			 	<a href="/documents/template/SRT_PERNYATAAN.docx">Unduh Surat Pernyataan</a>
+			 	<br>
 			 	<br>
 				<table class="table">
 				<tr><th>Media/Ruang</th><td><?php echo $channel['channel_name'];?></td></tr>
