@@ -118,7 +118,8 @@ class Servqual_Model_DbTable_Survey extends Zend_Db_Table { //Model Class for Us
 			->join(array('def'=>'tbl_definationms'),'sq.type_survey=def.IdDefinition',array('surveytype'=>'def.BahasaIndonesia'))
 			->join(array('st'=>'tbl_servqual_survey_target'),'st.IdSurvey=sq.IdSurvey',array('IdTarget'=>'IdSurveyTarget'))
 			 
-			->where('st.IdProgram=?',$idprogram);
+			->where('st.IdProgram=?',$idprogram)
+			->where('st.IdSurvey=5');
 			$select->where('st.IdSemester=?',$sem);
 			$row=$db->fetchAll($select);
 			//echo $select;exit;
