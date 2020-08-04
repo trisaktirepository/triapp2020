@@ -10007,12 +10007,21 @@ class OnlineApplicationController extends Zend_Controller_Action {
     
     	foreach ($checklist as $key => $value)
     	{
+    		//cek passport dan ijin belajar 103 and 166
+    		if ( $value['IdDocument']==103 ||  $value['IdDocument']==166) {
+    			if ($trans['appl_nationality']!=96) 
+    				$doc[] = array(
+    					'type_id' => $value['IdDocument'],
+    					'type_name' => $value['document_name'],
+    					'data' => $documentDb->getTxnFileArray($txn_id,$value['IdDocument'])
+    			);
+    		} else
     		 
-    		$doc[] = array(
-    				'type_id' => $value['IdDocument'],
-    				'type_name' => $value['document_name'],
-    				'data' => $documentDb->getTxnFileArray($txn_id,$value['IdDocument'])
-    		);
+	    		$doc[] = array(
+	    				'type_id' => $value['IdDocument'],
+	    				'type_name' => $value['document_name'],
+	    				'data' => $documentDb->getTxnFileArray($txn_id,$value['IdDocument'])
+	    		);
     	}
     
     	$this->view->documentList = $doc;

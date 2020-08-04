@@ -44,7 +44,8 @@ class App_Model_Application_DbTable_ApplicantTransaction extends Zend_Db_Table_A
 		$db = Zend_Db_Table::getDefaultAdapter();
 	
 		$select = $db ->select()
-		->from($this->_name)
+		->from(array('a'=>$this->_name))
+		->join(array('b'=>'applicant_profile'),'a.at_appl_id=b.appl_id')
 		 
 		->where('at_trans_id=?',$id);
 	
