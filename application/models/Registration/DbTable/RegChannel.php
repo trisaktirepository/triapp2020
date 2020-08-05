@@ -44,19 +44,20 @@ class  App_Model_Registration_DbTable_RegChannel extends Zend_Db_Table_Abstract 
 		return $row;
 	}
 	
-	public function getDataByTrx($idstd){
+	public function getDataByTrx($idstd,$rsdid){
 	
 		$db = Zend_Db_Table::getDefaultAdapter();
 	
 		$select = $db ->select()
 		->from(array('a'=>$this->_name))
 		->where("a.transaction_id = ?",$idstd)
-		->where("a.rsd_id is not null");
+		->where("a.rsd_id =?",$rsdid);
 		$row = $db->fetchRow($select);
 		if ($row) {
 			$select = $db ->select()
 			->from(array('a'=>'tbl_reg_confirmation'))
-			->where("a.transaction_id = ?",$idstd);
+			->where("a.transaction_id = ?",$idstd)
+			->where('a.rds_id=?',$row['rsd_id']);
 			$rowreg = $db->fetchRow($select);
 			if ($rowreg) {
 				$row['status']=$rowreg['status']; 
