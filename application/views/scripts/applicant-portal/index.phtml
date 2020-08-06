@@ -547,6 +547,10 @@ $pdb = new App_Model_Application_DbTable_ApplicantPtest();
 				<tr><th>Status</th><td><?php if ($channel['status']=="1") echo 'Registrasi Lengkap/Selesai'; else if ($channel['status']=="") echo 'Belum Registrasi'; else echo 'Registrasi Belum Lengkap, akan dilengkapi tgl '.date('Y-m-d',strtotime($channel['dt_appointment']));?></td></tr>
 				</table>
 		<?php }
+			} else {
+				$dialogregistration="1";
+				echo "<a href='#' onclick='jadwal(".$entry['at_trans_id'].")'>Pesan ulang tanggal registrasi</a>";
+
 			}
 		}?> </td>
 	</tr>
