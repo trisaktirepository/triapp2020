@@ -34,6 +34,21 @@ class App_Model_Registration_DbTable_RegDateSetup extends Zend_Db_Table_Abstract
 		 return null;
 	}
 	
+	public function getDataById($id){
+	
+		$db = Zend_Db_Table::getDefaultAdapter();
+	
+		$select = $db ->select()
+		->from($this->_name)
+		->where('rds_id = ?',$id);
+		$row = $db->fetchRow($select);
+			
+		if($row)
+			return $row;
+		else
+			return null;
+	}
+	
 	public function getInfo($txn_id){
 		
 		$db = Zend_Db_Table::getDefaultAdapter();		
