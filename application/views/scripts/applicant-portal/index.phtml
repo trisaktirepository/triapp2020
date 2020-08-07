@@ -552,7 +552,7 @@ $pdb = new App_Model_Application_DbTable_ApplicantPtest();
 			} else {
 				$date=date_create($reg['rds_date']);
 				date_sub($date, date_interval_create_from_date_string('4 days'));
-				if (strtotime(date_format($date, 'Y-m-d'))<strtotime(date('Y-m-d'))) {
+				if (strtotime(date_format($date, 'Y-m-d'))>strtotime(date('Y-m-d'))) {
 					$dialogregistration="1";
 					echo "<a href='#' onclick='jadwal(".$entry['at_trans_id'].")'>Pesan ulang tanggal registrasi</a>";
 				}
