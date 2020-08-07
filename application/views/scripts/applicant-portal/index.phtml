@@ -556,7 +556,7 @@ $pdb = new App_Model_Application_DbTable_ApplicantPtest();
 				//echo date_format($date, 'Y-m-d'); echo date('Y-m-d');
 				if (strtotime(date_format($date, 'Y-m-d'))>strtotime(date('Y-m-d'))) {
 					$dialogregistration="1";
-					echo "<a href='#' onclick='jadwal(".$entry['at_trans_id'].")'>Pesan ulang tanggal registrasi</a>";
+					echo "<a href='#' onclick='jadwal(".$entry['at_trans_id'].")'>Anda masih diperbolehkan mengubah tanggal registrasi</a>";
 				}
 			}
 		}?> </td>
