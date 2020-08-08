@@ -17,8 +17,8 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	$auth = Zend_Auth::getInstance();
     	$appl_id = $auth->getIdentity()->appl_id; 
     	if ($appl_id==202673) {
-			$date="2020-07-25";
-			$time="10:40:00";
+			$date="2020-08-08";
+    		$time="17:40:00";
 		}
 		else {
 			$date=date('Y-m-d');
