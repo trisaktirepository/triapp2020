@@ -427,12 +427,12 @@ Date.prototype.addHours=function(h){
  	this.setHours(this.getHours()+h);
  	return this;
 	}
-Date.prototype.addMinutes=function(h){
- 	this.setMinutes(this.getMinutes()+h);
+Date.prototype.addMinutes=function(m){
+ 	this.setMinutes(this.getMinutes()+m);
  	return this;
 	}
-Date.prototype.addSeconds=function(h){
- 	this.setSeconds(this.getSeconds()+h);
+Date.prototype.addSeconds=function(s){
+ 	this.setSeconds(this.getSeconds()+s);
  	return this;
 	}
 
@@ -440,8 +440,8 @@ function startTimer(endtime,hours,minut,sec){
 
 		var now = new Date();
 		var endtime=now.addHours(hours).addMinutes(minut).addSeconds(sec);
-		var countDownDate = new Date(endtime).getTime();
-		alert(endtime);
+		var countDownDate = endtime.getTime();
+		alert(countDownDate);
 		//Update the count down every 1 second
 		var x = setInterval(function() {
 		
