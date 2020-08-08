@@ -128,11 +128,11 @@ function keluar(){
 	}
 }
 
-//  $(document).ready(function(){
-//     $(document).bind("contextmenu",function(e){
-//        return false;
-//    });
-// });  
+ $(document).ready(function(){
+    $(document).bind("contextmenu",function(e){
+       return false;
+   });
+});  
  
 $(function() {
 	
@@ -440,7 +440,7 @@ function startTimer(endtime,hours,minut,sec){
 		//alert(hours+' '+minut+' '+sec);
 		var now = new Date();
 		var endtime=now.addHours(parseInt(hours)).addMinutes(parseInt(minut)).addSeconds(parseInt(sec));
-		alert(endtime);
+	//	alert(endtime);
 		var countDownDate = endtime.getTime();
 		 
 		//Update the count down every 1 second
