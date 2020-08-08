@@ -423,21 +423,21 @@ $(window).bind("load", function() {
 	startStreaming();
 });
 
+Date.prototype.addHours=function(h){
+ 	this.setHours(this.getHours()+h);
+ 	return this;
+	}
+Date.prototype.addMinutes=function(h){
+ 	this.setMinutes(this.getMinutes()+h);
+ 	return this;
+	}
+Date.prototype.addSeconds=function(h){
+ 	this.setSeconds(this.getSeconds()+h);
+ 	return this;
+	}
+
 function startTimer(endtime,hours,minut,sec){
 
-	 	Date.prototype.addHours=function(h){
-		 	this.setHours(this.getHours()+h);
-		 	return this;
-	 	}
-	 	Date.prototype.addMinutes=function(h){
-		 	this.setMinutes(this.getMinutes()+h);
-		 	return this;
-	 	}
-	 	Date.prototype.addSeconds=function(h){
-		 	this.setSeconds(this.getSeconds()+h);
-		 	return this;
-	 	}
-	 	
 		var now = new Date().getTime();
 		var endtime=now.addHours(hours).addMinutes(minut).addSeconds(sec);
 		var countDownDate = new Date(endtime).getTime();
