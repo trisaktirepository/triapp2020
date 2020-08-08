@@ -1991,6 +1991,7 @@ class Application_Model_DbTable_ProformaInvoice extends Zend_Db_Table {
 								'dcnt_create_date'=>date('Y-m-d H:i:s')
 					);
 					$dbDiscount->insert($data);
+					
 					$cndata=array('cn_billing_no'=>$value['bill_number'],
 							'cn_fomulir'=>$value['no_fomulir'],
 							'appl_id'=>$value['appl_id'],

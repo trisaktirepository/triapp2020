@@ -616,16 +616,18 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     					$data['stop_time']=date('Y-m-d H:i:s',strtotime('+'.$time[0].' hour +'.$time[1].' minutes +'.$time[2].' seconds',strtotime(date('Y-m-d H:i:s'))));
     					$data['last_time']=$data['start_time'];
     					$data['time_rest']=$currenttest['timerange'];
+    					$timerest=$time;
     				} else {  
     					$data['last_time']=date('Y-m-d H:i:s'); 
     					$time=explode(':', $exammain['time_rest']);
     					$data['stop_time']=date('Y-m-d H:i:s',strtotime('+'.$time[0].' hour +'.$time[1].' minutes +'.$time[2].' seconds',strtotime(date('Y-m-d H:i:s'))));
-    						
+    					$timerest=$time;
     				}
     				$dbAppTestAns->update($data, 'apa_id='.$response['apa_id']);
     				$exammain=$dbAppTestAns->getData($response['apa_id']);
     				$question['stop_time']=$exammain['stop_time'];
     				$question['token']=$token;
+    				$question['timerest']=$timerest;
     				$this->view->component=$component;
     				//	echo var_dump($question);
     				$this->view->answer=$answer;

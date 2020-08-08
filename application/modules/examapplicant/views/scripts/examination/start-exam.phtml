@@ -418,14 +418,17 @@ function answermedia(type) {
 
 $(window).bind("load", function() {
 	   // code here
-	startTimer("<?php echo $this->question['stop_time']?>");
+	startTimer("<?php echo $this->question['stop_time']?>","<?php echo $this->question['timerest'][0]?>", "<?php echo $this->question['timerest'][1]?>","<?php echo $this->question['timerest'][2]?>");
 	getQuestion(1);
 	startStreaming();
 });
 
-function startTimer(endtime){
+function startTimer(endtime,hours,minut,sec){
+		 
+		var now = new Date().getTime();
+		var endtime=now.add(hours,'hours').add(minut,'minutes').add(sec,'seconds');
 		var countDownDate = new Date(endtime).getTime();
-		
+		alert(endtime.format('H:i:s'));
 		//Update the count down every 1 second
 		var x = setInterval(function() {
 		

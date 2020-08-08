@@ -3640,6 +3640,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     		if (!$dbinvVa->isInByTrx($txnId)) 
     		//regenerate performa invoice
     			$proformaInvoiceDb->generateProformaInvoiceEcollection($formData['transaction_id']);
+    		
     		$inv=$dbInv->getApplicantInvoice($txnData['at_pes_id']);
     		//echo var_dump($inv);exit;
     		if (!$inv) {
