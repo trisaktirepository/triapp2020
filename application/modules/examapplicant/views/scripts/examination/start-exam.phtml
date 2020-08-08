@@ -439,7 +439,7 @@ Date.prototype.addSeconds=function(s){
 function startTimer(endtime,hours,minut,sec){
 		//alert(hours+' '+minut+' '+sec);
 		var now = new Date();
-		var endtime=now.addHours(parseInt(hours).addMinutes(parseInt(minut)).addSeconds(parseInt(sec));
+		var endtime=now.addHours(parseInt(hours)).addMinutes(parseInt(minut)).addSeconds(parseInt(sec));
 		alert(endtime);
 		var countDownDate = endtime.getTime();
 		 
