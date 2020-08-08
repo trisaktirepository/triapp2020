@@ -437,13 +437,12 @@ Date.prototype.addSeconds=function(s){
 	}
 
 function startTimer(endtime,hours,minut,sec){
-
+		alert(hours+' '+minut+' '+sec);
 		var now = new Date();
-		alert(now);
 		var endtime=now.addHours(hours).addMinutes(minut).addSeconds(sec);
 		alert(endtime);
 		var countDownDate = endtime.getTime();
-		alert(countDownDate);
+		 
 		//Update the count down every 1 second
 		var x = setInterval(function() {
 		
