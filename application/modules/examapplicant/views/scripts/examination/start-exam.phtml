@@ -424,9 +424,22 @@ $(window).bind("load", function() {
 });
 
 function startTimer(endtime,hours,minut,sec){
-		 
+
+	 	Date.prototype.addHours=function(h){
+		 	this.setHours(this.getHours()+h);
+		 	return this;
+	 	}
+	 	Date.prototype.addMinutes=function(h){
+		 	this.setMinutes(this.getMinutes()+h);
+		 	return this;
+	 	}
+	 	Date.prototype.addSeconds=function(h){
+		 	this.setSeconds(this.getSeconds()+h);
+		 	return this;
+	 	}
+	 	
 		var now = new Date().getTime();
-		var endtime=now.add(hours,'hours').add(minut,'minutes').add(sec,'seconds');
+		var endtime=now.addHourse(hours).addMinutes(minut).addSeconds(sec);
 		var countDownDate = new Date(endtime).getTime();
 		alert(endtime.format('H:i:s'));
 		//Update the count down every 1 second
