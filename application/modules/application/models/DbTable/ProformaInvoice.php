@@ -1959,21 +1959,27 @@ class Application_Model_DbTable_ProformaInvoice extends Zend_Db_Table {
 			
 		$invoices=$db->fetchAll($select);
 		$dbDiscount=new Studentfinance_Model_DbTable_Discount();
+		$dbCN=new Studentfinance_Model_DbTable_CreditNote();
+		$dbCNDet=new Studentfinance_Model_DbTable_CreditNoteDetail();
+		$dbProInvDet=new Application_Model_DbTable_ProformaInvoiceDetail();
 		$dbDiscDetail=new Studentfinance_Model_DbTable_DiscountDetail();
 		if ($invoices) {
 			foreach ($invoices as $value) {
 				$idpro=$value['id'];
 				if ($discount>0 ) {
 					if ($value['bill_amount']>=$discount) {
-						$value['bill_amount']=$value['bill_amount']-$discount;
-						$value['bill_balance']=$value['bill_amount'];
+						$value['bill_balance']=$value['bill_amount']-$discount;
+						$value['cn_amount']=$discount;
+						
 					}
 					else {
 						$discount=$discount-$value['bill_amount'];
+						$value['cn_amount']=$value['bill_amount'];
 						$value['bill_amount']=0;
 						$value['bill_balance']=$value['bill_amount'];
 					}
-					
+					//discount 
+					 
 					$data=array('dcnt_appl_id'=>$value['appl_id'],
 								'dcnt_txn_id'=>$applicant['at_trans_id'],
 								'dcnt_fomulir_id'=>$value['no_fomulir'],
@@ -1985,6 +1991,23 @@ class Application_Model_DbTable_ProformaInvoice extends Zend_Db_Table {
 								'dcnt_create_date'=>date('Y-m-d H:i:s')
 					);
 					$dbDiscount->insert($data);
+					$cndata=array('cn_billing_no'=>$value['bill_number'],
+							'cn_fomulir'=>$value['no_fomulir'],
+							'appl_id'=>$value['appl_id'],
+							'cn_amount'=>$value['cn_amount'],
+							'cn_description'=>'Paket A',
+							'cn_creator'=>'1',
+							'cn_create_date'=>date('Y-m-d H::s'),
+							'cn_approver'=>1,
+							'cn_approve_date'=>date('Y-m-d H::s')
+					);
+					$cn=$dbCN->isInBillApplId($value['bill_number'], $value['appl_id']);
+					if (!$cn) {
+						$cnid=$dbCN->insert($cndata);
+					} else {
+						$dbCN->updateData($cndata, 'cn_id='.$cn['cn_id']);
+						$cnid=$cn['cn_id'];
+					}
 				}
 				unset($value['id']);
 				$inv=$dbInvoice->isIn($value['bill_number']);
@@ -1995,7 +2018,7 @@ class Application_Model_DbTable_ProformaInvoice extends Zend_Db_Table {
 					$dbInvoice->update($value, 'id='.$id);
 				}
 					//get detail
-					$select = $db ->select()
+				$select = $db ->select()
 					->from('proforma_invoice_detail')
 					->where('invoice_main_id=?',$idpro);
 					$detail=$db->fetchAll($select);
@@ -2003,9 +2026,17 @@ class Application_Model_DbTable_ProformaInvoice extends Zend_Db_Table {
 					foreach ($detail as $det) {
 						unset($det['id']);
 						$det['invoice_main_id']=$id;
-						if ($det['fi_id']==1 && $discount>0) {
-							$det['amount']= $det['amount']-$discount;
-							$discount=0;
+						if (($det['fi_id']==1 || $det['fi_id']==32 ) && $value['cn_amount']>0) {
+							$cndetail=array('cnd_cn_id'=>$cnid,
+										'cnd_fi_id'=>$det['fi_id'],
+										'cnd_fi_name'=>$det['fee_item_description'],
+										'cnd_amount'=>$value['cn_amount']
+							);
+							if (!$dbCNDet->isIn($cnid, $det['fi_id'])) 
+								$dbCNDet->insert($cndetail);
+							else 
+								$dbCNDet->updateData($cndetail, 'cnd_cn_id='.$cnid.' and cnd_fi_id='.$det['fi_id']); 
+							 
 						}
 						if (!$dbInvoiceDet->isIn($id, $det['fi_id'])) $dbInvoiceDet->insertData($det);
 					}

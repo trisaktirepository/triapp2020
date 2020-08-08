@@ -38,21 +38,21 @@ class Studentfinance_Model_DbTable_CreditNote extends Zend_Db_Table_Abstract {
 				
 				
 		if($approve != null && $approve == false){
-			$select->where("cn.cn_approver = null");
-			$select->where("cn.cn_approve_date = null");
+			$selectData->where("cn.cn_approver = null");
+			$selectData->where("cn.cn_approve_date = null");
 		}else
 		if($approve != null && $approve == true){
-			$select->where("cn.cn_approver is not null");
-			$select->where("cn.cn_approve_date is not null");
+			$selectData->where("cn.cn_approver is not null");
+			$selectData->where("cn.cn_approve_date is not null");
 		}else
 				
 		if($cancel != null && $cancel == true){
-			$select->where("cn.cn_cancel_by is not null");
-			$select->where("cn.cn_cancel_date is not null");
+			$selectData->where("cn.cn_cancel_by is not null");
+			$selectData->where("cn.cn_cancel_date is not null");
 		}else				
 		if($cancel != null && $cancel == false){
-			$select->where("cn.cn_cancel_by = null");
-			$select->where("cn.cn_cancel_date = null");
+			$selectData->where("cn.cn_cancel_by = null");
+			$selectData->where("cn.cn_cancel_date = null");
 		}
 			
 		return $selectData;
@@ -100,6 +100,26 @@ class Studentfinance_Model_DbTable_CreditNote extends Zend_Db_Table_Abstract {
 		->where("d.cn_billing_no = '".$nobill."'")
 		->where('d.IdStudentRegistration=?',$idstd)
 		->where('d.cn_description=?',$desc);
+	
+		$row = $db->fetchRow($selectData);
+	
+			
+		if(!$row){
+			return null;
+		}else{
+			return $row;
+		}
+	
+	}
+	
+	public function isInBillApplId($nobill,$idstd){
+	
+		$db = Zend_Db_Table::getDefaultAdapter();
+	
+		$selectData = $db->select()
+		->from(array('d'=>$this->_name))
+		->where("d.cn_billing_no = '".$nobill."'")
+		->where('d.appl_id=?',$idstd);
 	
 		$row = $db->fetchRow($selectData);
 	
