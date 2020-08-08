@@ -441,7 +441,7 @@ function startTimer(endtime,hours,minut,sec){
 		var now = new Date();
 		var endtime=now.addHours(hours).addMinutes(minut).addSeconds(sec);
 		var countDownDate = new Date(endtime).getTime();
-		alert(endtime.format('H:i:s'));
+		alert(endtime);
 		//Update the count down every 1 second
 		var x = setInterval(function() {
 		
