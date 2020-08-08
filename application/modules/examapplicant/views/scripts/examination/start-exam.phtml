@@ -439,7 +439,7 @@ function startTimer(endtime,hours,minut,sec){
 	 	}
 	 	
 		var now = new Date().getTime();
-		var endtime=now.addHourse(hours).addMinutes(minut).addSeconds(sec);
+		var endtime=now.addHours(hours).addMinutes(minut).addSeconds(sec);
 		var countDownDate = new Date(endtime).getTime();
 		alert(endtime.format('H:i:s'));
 		//Update the count down every 1 second
