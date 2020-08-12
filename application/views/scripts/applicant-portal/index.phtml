@@ -525,7 +525,7 @@ $pdb = new App_Model_Application_DbTable_ApplicantPtest();
 			$dbRegChannelQueue=new App_Model_Registration_DbTable_RegChannelQueue();
 			$channel=$dbRegChannel->getDataByTrx($entry['at_trans_id'],$entry['rds_id']);
 			if ($channel) {
-				if (strtotime(date('Y-d-m',strtotime($channel['date_of_event'])).' 20:00:00') < strtotime(date('Y-d-m H:i:s')) && $channel['status'] =="") {
+				if (strtotime(date('Y-m-d',strtotime($channel['date_of_event'])).' 20:00:00') < strtotime(date('Y-m-d H:i:s')) && $channel['status'] =="") {
 					$dialogregistration="1";
 					echo "<a href='#' onclick='jadwal(".$entry['at_trans_id'].")'>Pesan ulang tanggal registrasi</a>";
 
