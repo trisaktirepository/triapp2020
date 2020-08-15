@@ -2222,7 +2222,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 							$data = array(
 									'apcm_at_trans_id'=>$transaction_id,
 									'apcm_apd_id'=>$apldetail['apd_id'],
-									'apcm_mark'=>($formData['aed_mark'][$i]!="" && $formData['aed_mark'][$i]!="0" )?$formData['aed_mark'][$i]:null,
+									'apcm_mark'=>($formData['aed_mark'][$i]!="" && $formData['aed_mark'][$i]!="0" )?$formData['aed_mark'][$i]:0,
 									'apcm_status'=>1,
 									'apcm_prog_code'=>null,
 									'pcode'=>$placementcode
