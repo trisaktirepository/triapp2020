@@ -2919,68 +2919,75 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	//$programs = $this->_getParam('programs', 0);
     	$placecode= $this->_getParam('placecode', 0);
     	$type= $this->_getParam('type', 0);
+    	
     	//if ($programs!=0)
     	//	$programs=implode(',', $programs);
     	 
      	//if ($this->getRequest()->isXmlHttpRequest()) {
-            $this->_helper->layout->disableLayout();
-        //}
-        
-     	$ajaxContext = $this->_helper->getHelper('AjaxContext');
+        $this->_helper->layout->disableLayout();
+        $ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext->addActionContext('view', 'html');
         $ajaxContext->initContext();
-            
-        $auth = Zend_Auth::getInstance(); 
-    	$appl_id = $auth->getIdentity()->appl_id;
-    	$trans_id = $auth->getIdentity()->transaction_id;
-    	
-	  	$db = Zend_Db_Table::getDefaultAdapter();
-	  		  	//get applicant education head data
-	  	$applicationEducationDb = new App_Model_Application_DbTable_ApplicantEducation();
-	  	$educationData = $applicationEducationDb->getDataByapplID($appl_id);
-	  	
-	  	
-	  	 if($type=="1" || $type=="2") {
-	  		//get from UTBK
-	  		$select = $db->select()
-	  			->from(array('a'=>'appl_placement_utbk_test_type'))
-	  			->join(array('c'=>'appl_component'),'a.idcomponent=c.ac_id',array('subjectname'=>'ac_comp_name_bahasa','ac_comp_code'))
-	  			->join(array('e'=>'appl_placement_detl'),'e.apd_comp_code=c.ac_comp_code')
-	  			->where('a.type=?',$type)
-	  			->where('e.apd_placement_code=?',$placecode) ;
-	  			 
-	  		$stmt = $db->query($select);
-	  		$row = $stmt->fetchAll();
-	  		foreach ($row as $key=>$value) {
-	  			$select = $db->select()
-	  			->from(array('d'=>'applicant_ptest_comp_mark'))
-	  			->where('d.apcm_at_trans_id=?',$trans_id)
-	  			->where('d.apcm_apd_id=?',$value['apd_id'])
-	  			->where('d.pcode=?',$placecode);
-	  			$mark=$db->fetchRow($select);
-	  			if ($mark) {
-	  				$row[$key]['mark']=$mark['apcm_mark'];
-	  			} else $row[$key]['mark']=0;
-	  			 
-	  		}
-	  	} else {  
-	  		//get for raport
-		  	$select = $db->select()
-		                 ->from(array('sds'=>'school_decipline_subject'))
-		                 ->where('sds.sds_discipline_code  = ?', $discipline_code)
-		                 ->join(array('s'=>'school_subject'),'s.ss_id = sds.sds_subject')
-		                 //->joinLeft(array('aed'=>'applicant_education_detl'),'aed.')
-		                 ->order('s.ss_core_subject DESC')
-		                 ->order('s.ss_subject ASC');
-		                 
-		    if($educationData){
-		    	$select->joinLeft(array('aed'=>'applicant_education_detl'),"aed.aed_ae_id = ".$educationData['ae_id']." and  aed.aed_subject_id = sds.sds_subject");
-		    }
-		    	   
-	        $stmt = $db->query($select);
-	        $row = $stmt->fetchAll();
-	  	}
-	  
+        //}
+	    if ($this->getRequest()->isPost()) {
+	        $formData = $this->getRequest()->getPost();
+	        $discipline_code =$formData['discipline_code'];
+	        $appltype = $formData['appltype'];
+	        $placecode= $formData['placecode'];
+	        $type= $formData['type'];
+	         
+	            
+	        $auth = Zend_Auth::getInstance(); 
+	    	$appl_id = $auth->getIdentity()->appl_id;
+	    	$trans_id = $auth->getIdentity()->transaction_id;
+	    	
+		  	$db = Zend_Db_Table::getDefaultAdapter();
+		  		  	//get applicant education head data
+		  	$applicationEducationDb = new App_Model_Application_DbTable_ApplicantEducation();
+		  	$educationData = $applicationEducationDb->getDataByapplID($appl_id);
+		  	
+		  	
+		  	 if($type=="1" || $type=="2") {
+		  		//get from UTBK
+		  		$select = $db->select()
+		  			->from(array('a'=>'appl_placement_utbk_test_type'))
+		  			->join(array('c'=>'appl_component'),'a.idcomponent=c.ac_id',array('subjectname'=>'ac_comp_name_bahasa','ac_comp_code'))
+		  			->join(array('e'=>'appl_placement_detl'),'e.apd_comp_code=c.ac_comp_code')
+		  			->where('a.type=?',$type)
+		  			->where('e.apd_placement_code=?',$placecode) ;
+		  			 
+		  		$stmt = $db->query($select);
+		  		$row = $stmt->fetchAll();
+		  		foreach ($row as $key=>$value) {
+		  			$select = $db->select()
+		  			->from(array('d'=>'applicant_ptest_comp_mark'))
+		  			->where('d.apcm_at_trans_id=?',$trans_id)
+		  			->where('d.apcm_apd_id=?',$value['apd_id'])
+		  			->where('d.pcode=?',$placecode);
+		  			$mark=$db->fetchRow($select);
+		  			if ($mark) {
+		  				$row[$key]['mark']=$mark['apcm_mark'];
+		  			} else $row[$key]['mark']=0;
+		  			 
+		  		}
+		  	} else {  
+		  		//get for raport
+			  	$select = $db->select()
+			                 ->from(array('sds'=>'school_decipline_subject'))
+			                 ->where('sds.sds_discipline_code  = ?', $discipline_code)
+			                 ->join(array('s'=>'school_subject'),'s.ss_id = sds.sds_subject')
+			                 //->joinLeft(array('aed'=>'applicant_education_detl'),'aed.')
+			                 ->order('s.ss_core_subject DESC')
+			                 ->order('s.ss_subject ASC');
+			                 
+			    if($educationData){
+			    	$select->joinLeft(array('aed'=>'applicant_education_detl'),"aed.aed_ae_id = ".$educationData['ae_id']." and  aed.aed_subject_id = sds.sds_subject");
+			    }
+			    	   
+		        $stmt = $db->query($select);
+		        $row = $stmt->fetchAll();
+		  	}
+	     }
 		$ajaxContext->addActionContext('view', 'html')
                     ->addActionContext('form', 'html')
                     ->addActionContext('process', 'json')

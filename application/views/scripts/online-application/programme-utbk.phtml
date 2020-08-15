@@ -370,7 +370,7 @@ function validateSchool(element){
 
 	$.ajax({
 		url: "<?php echo $this->url(array('module'=>'default','controller'=>'online-application', 'action'=>'ajax-get-discipline-subject'),'default',true);?>",
-		data: {'discipline_code':$(element).val(),'appl_type':"7",'type':type},
+		data: {'discipline_code':$(element).val(),'appltype':"7",'type':type,'placecode':<?php echo $this->placementcode; ?>},
 		type: 'POST',
 		dataType: 'json'	
 	}).done(function ( data ) {
