@@ -3573,11 +3573,11 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	->where("p.ProgramCode NOT IN (?)",$select_applied)
     	
     	->order('p.ArabicName ASC');
-    
+    	$select->where("p.UtbkOffer = 1");
     	if ($programs!=null) $select->where("p.ProgramCode NOT IN (".$programs.")");
     	//echo $select;
     	// check program offer
-    	//$select->where("p.PssbOffer = 1");
+    	//
     
     	if($discipline_code!=0){
     		$select->where('apr.apr_decipline_code  = ?', $discipline_code);
