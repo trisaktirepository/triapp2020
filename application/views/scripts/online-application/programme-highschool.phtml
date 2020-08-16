@@ -262,7 +262,7 @@ function validateSchool(element){
 
 	$.ajax({
 		url: "<?php echo $this->url(array('module'=>'default','controller'=>'online-application', 'action'=>'ajax-get-discipline-subject'),'default',true);?>",
-		data: {'discipline_code':$(element).val(),'appltype':'2','placecode ':'<?php echo $this->placementcode; ?>','type':type},
+		data: {'discipline_code':$(element).val(),'appltype':'2','placecode':'<?php echo $this->placementcode; ?>','type':type},
 		type: 'POST',
 		dataType: 'json'	
 	}).done(function ( data ) {
@@ -319,7 +319,7 @@ function initSubject(discipline_code){
 	$.ajax({
 		url: "<?php echo $this->url(array('module'=>'default','controller'=>'online-application', 'action'=>'ajax-get-discipline-subject'),'default',true);?>",
 		 
-		data: {'discipline_code':discipline_code,'appltype':'2','placecode ':'<?php echo $this->placementcode; ?>','type':type},
+		data: {'discipline_code':discipline_code,'appltype':'2','placecode':'<?php echo $this->placementcode; ?>','type':type},
 		
 		type: 'POST',
 		dataType: 'json'	
