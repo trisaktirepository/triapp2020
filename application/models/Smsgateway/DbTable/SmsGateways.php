@@ -7,7 +7,7 @@ class App_Model_Smsgateway_DbTable_SmsGateways extends Zend_Db_Table {
 	protected $_primary ='idsms';
 	
 	protected $username='trisakti_api';
-	protected $password='trisakti_api2016!';
+	protected $password='Trisakti_api2020!';
 	protected $_urlsms='http://api.nusasms.com/api/v3/sendsms/plain?';
 	protected $_response='http://api.nusasms.com/api/command?'; 
 	
