@@ -235,7 +235,7 @@ function changeDiscipline(element){
 
 function validateSchool(element){
 	$('#subject_list').show();
-
+	type=$(element).val();
 	$('#subject_list').empty();
 	
 	$('#subject_list').append(	
@@ -262,7 +262,7 @@ function validateSchool(element){
 
 	$.ajax({
 		url: "<?php echo $this->url(array('module'=>'default','controller'=>'online-application', 'action'=>'ajax-get-discipline-subject'),'default',true);?>",
-		data: {'discipline_code':$(element).val()},
+		data: {'discipline_code':$(element).val(),'appltype':'2','placecode ':'<?php echo $this->placementcode; ?>','type':type},
 		type: 'POST',
 		dataType: 'json'	
 	}).done(function ( data ) {
@@ -293,6 +293,7 @@ function validateSchool(element){
 }
 
 function initSubject(discipline_code){
+	type="";
 	$('#subject_list').append(	
 		$('<table id="subject" class="table" width="100%">')
 			.append($('<thead>')
@@ -317,7 +318,9 @@ function initSubject(discipline_code){
 	
 	$.ajax({
 		url: "<?php echo $this->url(array('module'=>'default','controller'=>'online-application', 'action'=>'ajax-get-discipline-subject'),'default',true);?>",
-		data: {'discipline_code':discipline_code},
+		 
+		data: {'discipline_code':discipline_code,'appltype':'2','placecode ':'<?php echo $this->placementcode; ?>','type':type},
+		
 		type: 'POST',
 		dataType: 'json'	
 	}).done(function ( data ) {
