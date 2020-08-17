@@ -183,6 +183,7 @@ public function getComponentSchedulebytype($transaction_id,$com_type=1,$schedule
 			if ($value['at_appl_type']=="1") {
 				if ($value['UsmOffer']=="0")  $this->delete('ap_id='.$value['ap_id']);
 			} else if ($value['at_appl_type']=="2") {
+				echo 'delele'.$value['ap_id'];exit;
 				if ($value['PssbOffer']=="0")  $this->delete('ap_id='.$value['ap_id']);
 			} else if ($value['at_appl_type']=="3") {
 				if ($value['CreditTransferOffer']=="0")  $this->delete('ap_id='.$value['ap_id']);
