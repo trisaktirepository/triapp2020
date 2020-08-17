@@ -177,14 +177,15 @@ public function getComponentSchedulebytype($transaction_id,$com_type=1,$schedule
 		$select = $db ->select()
 		->from(array('ap'=>$this->_name))
 		->join(array('b'=>'tbl_program'),'b.ProgramCode=ap.ap_prog_code')
+		->join(array('c'=>'applicant_transaction'),'ap.ap_at_trans_id=c.at_trans_id',array('at_appl_type'))
 		->where('ap.ap_at_trans_id=?',$transid) ;
 		$row = $db->fetchAll($select);
-		echo var_dump($row);
+		 
 		foreach ($row as $value) {
 			if ($value['at_appl_type']=="1") {
 				if ($value['UsmOffer']=="0")  $this->delete('ap_id='.$value['ap_id']);
 			} else if ($value['at_appl_type']=="2") {
-				echo 'delele'.$value['ap_id'];exit;
+				//echo 'delele'.$value['ap_id'];exit;
 				if ($value['PssbOffer']=="0")  $this->delete('ap_id='.$value['ap_id']);
 			} else if ($value['at_appl_type']=="3") {
 				if ($value['CreditTransferOffer']=="0")  $this->delete('ap_id='.$value['ap_id']);
@@ -196,7 +197,7 @@ public function getComponentSchedulebytype($transaction_id,$com_type=1,$schedule
 				if ($value['UtbkOffer']=="0")  $this->delete('ap_id='.$value['ap_id']);
 			}
 		}
-		exit;
+		
 		return $row;
 	}
 	
