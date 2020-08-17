@@ -170,6 +170,33 @@ public function getComponentSchedulebytype($transaction_id,$com_type=1,$schedule
 		return $row;
 	}
 	
+	public function deleteCloseProgram($transid){
+	
+		$db = Zend_Db_Table::getDefaultAdapter();
+	
+		$select = $db ->select()
+		->from(array('ap'=>$this->_name))
+		->join(array('b'=>'tbl_program'),'b.ProgramCode=ap.ap_prog_code')
+		->where('ap.ap_at_trans_id=?',$transid) ;
+		$row = $db->fetchAll($select);
+		foreach ($row as $value) {
+			if ($value['at_appl_type']=="1") {
+				if ($value['UsmOffer']=="0")  $this->delete('ap_id='.$value['ap_id']);
+			} else if ($value['at_appl_type']=="2") {
+				if ($value['PssbOffer']=="0")  $this->delete('ap_id='.$value['ap_id']);
+			} else if ($value['at_appl_type']=="3") {
+				if ($value['CreditTransferOffer']=="0")  $this->delete('ap_id='.$value['ap_id']);
+			} else if ($value['at_appl_type']=="5") {
+				if ($value['ScholarshipOffer']=="0")  $this->delete('ap_id='.$value['ap_id']);
+			} else if ($value['at_appl_type']=="6") {
+				if ($value['PortofolioOffer']=="0")  $this->delete('ap_id='.$value['ap_id']);
+			} else if ($value['at_appl_type']=="7") {
+				if ($value['UtbkOffer']=="0")  $this->delete('ap_id='.$value['ap_id']);
+			}
+		}
+		return $row;
+	}
+	
 	//for high school only dah default type=2 
 	public function getApplicantProgram($condition=null){
 		

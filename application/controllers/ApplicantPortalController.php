@@ -127,13 +127,15 @@ class ApplicantPortalController extends Zend_Controller_Action
     	
     	$transactionDb = new App_Model_Application_DbTable_ApplicantTransaction();
     	
+    	
     	//check intake session
     	$this->checkIntakeSession($txnId);
     	
     	//check validation txn
     	if($txnId!=0 && $transactionDb->checkValidApplicant($txnId, $appl_id)){
     		$auth->getIdentity()->transaction_id = $txnId;
-    		
+    		$dbProgram=new App_Model_Application_DbTable_ApplicantProgram();
+    		$dbProgram->deleteCloseProgram($txnId);
     		$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application', 'action'=>'biodata'),'default',true));
     	}else{
     		$this->_redirect($this->view->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'index'),'default',true));
