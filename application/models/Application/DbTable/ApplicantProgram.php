@@ -179,6 +179,7 @@ public function getComponentSchedulebytype($transaction_id,$com_type=1,$schedule
 		->join(array('b'=>'tbl_program'),'b.ProgramCode=ap.ap_prog_code')
 		->where('ap.ap_at_trans_id=?',$transid) ;
 		$row = $db->fetchAll($select);
+		echo var_dump($row);
 		foreach ($row as $value) {
 			if ($value['at_appl_type']=="1") {
 				if ($value['UsmOffer']=="0")  $this->delete('ap_id='.$value['ap_id']);
@@ -195,6 +196,7 @@ public function getComponentSchedulebytype($transaction_id,$com_type=1,$schedule
 				if ($value['UtbkOffer']=="0")  $this->delete('ap_id='.$value['ap_id']);
 			}
 		}
+		exit;
 		return $row;
 	}
 	
