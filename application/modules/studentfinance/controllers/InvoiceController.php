@@ -456,7 +456,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 								}
 								//exit;
 							}
-							//echo var_dump($row);exit;
+							echo var_dump($row);exit;
 							if ($row) {
 								$fee_structure = $row;
 								//echo var_dump($row);
