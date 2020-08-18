@@ -559,7 +559,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 						$discounttype=$dbDiscountSetup->getDiscountType();
 						foreach ($discounttype as $idx=>$value) {
 							$iddiscount=$value['dt_id'];
-							$discountSetup=$dbDiscountSetup->getCurrentSetup(1, $std['Strata_code_EPSBED'],$std['IdCollege'], $std['IdProgram'], $std['IdBranch'], $idsemester, $std['IdProgramMajoring'],$iddiscount);
+							$discountSetup=$dbDiscountSetup->getCurrentSetup(1, $registration['Strata_code_EPSBED'],$registration['IdCollege'], $registration['IdProgram'], $registration['IdBranch'], $idsemester, $registration['IdProgramMajoring'],$iddiscount);
 							//echo var_dump($discountSetup);
 							//echo $iddiscount;
 							//echo '<br>';
@@ -585,12 +585,12 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 								}
 									
 								if ($dbDiscountSetup->isIntakeApplied($maind)) {
-									if (!$dbDiscountSetup->isIntakeApplied($maind,$std['IdIntake'])) $valid="0";
+									if (!$dbDiscountSetup->isIntakeApplied($maind,$registration['IdIntake'])) $valid="0";
 									else $valid="0";
 								}
 									
 								if ($dbDiscountSetup->isStudentApplied($maind)) {
-									if (!$dbDiscountSetup->isStudentApplied($maind,$std['IdStudentRegistration'])) $valid="0";
+									if (!$dbDiscountSetup->isStudentApplied($maind,$registration['IdStudentRegistration'])) $valid="0";
 									else $valid="0";
 								}
 								 
