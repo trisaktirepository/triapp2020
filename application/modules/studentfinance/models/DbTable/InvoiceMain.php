@@ -1290,6 +1290,19 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 						$student_category = 314;
 					}
 					$feestrucs =$feeStructure->getApplicantFeeStructure($std['IdIntake'],$std['IdProgram'],$student_category,$std['IdBranch'],$std['IdProgramMajoring']);
+					if (!$feestrucs) {
+						$sql = $db->select()
+						->from(array('sss' => 'tbl_studentregistration'), array('IdProgram','IdIntake','IdBranch','IdProgramMajoring'))
+						->where('sss.registrationId  = ?', $std['registrationId'])
+						->where('sss.IdProgram<>?',$std['IdProgram']);
+						//echo $sql;
+						$reg = $db->fetchRow($sql);
+						//echo var_dump($std);exit;
+						if ($reg) {
+							$feestrucs =$feeStructure->getApplicantFeeStructure($reg['IdIntake'],$reg['IdProgram'],$student_category,$reg['IdBranch'],$reg['IdProgramMajoring']);
+						
+						}
+					}
 					if ($feestrucs) {
 						$selectData = $db->select()
 						->from(array('fsi'=>'fee_structure_item'),array('fsi_item_id'))
