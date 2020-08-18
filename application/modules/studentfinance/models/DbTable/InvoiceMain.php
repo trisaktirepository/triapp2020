@@ -1206,7 +1206,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 							//echo $selectData;
 							$rowbpp = $db->fetchRow($selectData);
 							//echo $selectData;
-							echo var_dump($rowbpp);exit;
+							//echo var_dump($rowbpp);exit;
 							if (!$rowbpp) {
 								//cek mhs baru
 								$selectData = $db->select()
@@ -1215,6 +1215,8 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 								->where('im.IdStudentRegistration = ?', $idstd)
 								->where('im.idSemesterMain=?',$row['IdSemesterMain']);
 								$smt = $db->fetchRow($selectData);
+								echo var_dump($smt);
+								echo var_dump($row);exit;
 								if ($smt['Level']=="1") {
 									//cek pembayaranmahasiswa baru di detail
 									$trx=$smt['transaction_id'];
