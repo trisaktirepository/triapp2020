@@ -1837,7 +1837,7 @@ class ApplicantPortalController extends Zend_Controller_Action
 			$activity=$Dbinvoice->isAnyOpenInvoice($registration_id);
 			//echo $activity;exit;
 			
-			if ($activity!=0 && $student['IdProgram']!=60) $Dbinvoice->dispatcher($registration_id,$activity);
+			if ($activity!=0 ) $Dbinvoice->dispatcher($registration_id,$activity);
 		}
     	//profile
     	$applicantProfileDb = new App_Model_Application_DbTable_ApplicantProfile();
