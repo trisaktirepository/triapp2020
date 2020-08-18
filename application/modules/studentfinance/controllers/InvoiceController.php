@@ -429,7 +429,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 								if ($std) {
 									$row =$feeStructure->getApplicantFeeStructure($std['IdIntake'],$std['IdProgram'],$std['IdBranch'],$student_category,$std['IdProgramMajoring']);
 									 
-									if (!$row) {
+									if (!$row && $registration['IdProgram']==60) {
 										//get from oldnim'
 										$sql = $db->select()
 										->from(array('sss' => 'tbl_studentregistration'), array('IdProgram','IdIntake','IdBranch','IdProgramMajoring'))
@@ -439,7 +439,8 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 										
 										$sql = $db->select()
 										->from(array('sss' => 'tbl_studentregistration'), array('IdProgram','IdIntake','IdBranch','IdProgramMajoring'))
-										->where('sss.registrationId  = ?',$oldnim['oldnim']);
+										->where('sss.registrationId  = ?',$oldnim['oldnim'])
+										->where('sss.IdProgram  = 11');
 										//echo $sql;
 										$std = $db->fetchRow($sql);
 										//echo var_dump($std);
