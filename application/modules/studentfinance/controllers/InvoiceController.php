@@ -424,7 +424,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 								$sql = $db->select()
 								->from(array('sss' => 'tbl_studentregistration'), array('IdProgram','IdIntake','IdBranch','IdProgramMajoring'))
 								->where('sss.registrationId  = ?', $registration['registrationId'])
-								->where('sss.IdProgram<>?',$ses_batch_invoice->program_id);
+								->where('sss.IdProgram<>?',$registration['IdProgram']);
 								//echo $sql;
 								$std = $db->fetchRow($sql);
 								//echo var_dump($std);
