@@ -291,6 +291,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 			
 
 		$bundleDetail=array();
+		echo var_dump($act);exit;
 		if ($act && $idinvoice=="") {
 			foreach ($act as $key=>$value) {
 				 
@@ -310,7 +311,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 				//get current payment setup
 				$bundle=$dbBundle->getCurrentSetup(1, $program['IdCollege'], $std['IdProgram'], $std['IdBranch'], $idsemester,$idactivity,$std['IdProgramMajoring']);
 				$act[$key]['bundle']=$bundle;
-				echo var_dump($bundle);exit;
+			//	echo var_dump($bundle);exit;
 				if ($bundle) {
 				 	//get item detail
 					$bundleDetail=$dbBudleDetail->getDataByBudle($bundle['idfeebundle']);
