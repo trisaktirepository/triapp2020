@@ -772,8 +772,8 @@ class StudentPortalController extends Zend_Controller_Action
 				} else $subject_list[$index]['GroupName']='-';
 			}
 			
-			if ($subject['lecturer_id']!='') $lect=$dbStaff->getStaffFullName($subject['lecturer_id']);
-			else if ($subject['IdLecturer']!='') $lect=$dbStaff->getStaffFullName($subject['IdLecturer']);
+			if ($subject['IdLecturer']!='') $lect=$dbStaff->getStaffFullName($subject['IdLecturer']);
+			else if ($subject['coor']!='') $lect=$dbStaff->getStaffFullName($subject['coor']);
 			else $lect='-';
 			$subject_list[$index]['lec']=$lect; 
 		}
