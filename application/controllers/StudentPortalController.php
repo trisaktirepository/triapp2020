@@ -750,6 +750,7 @@ class StudentPortalController extends Zend_Controller_Action
 		$dbGroupStdMinor=new App_Model_General_DbTable_CourseGroupStudentMinor();
 		$dbSchMinor=new App_Model_General_DbTable_CourseGroupScheduleMinor();
 		$dbGrpMinor=new App_Model_General_DbTable_CourseGroupMinor();
+		$dbStaff=new App_Model_General_DbTable_Staffmaster();
 		foreach ($subject_list as $index=>$subject){
 			if ($student['IdProgram']!=60) {
 				$schedule = $groupSchduleDb->getSchedule($subject['IdCourseTaggingGroup']);
@@ -771,6 +772,10 @@ class StudentPortalController extends Zend_Controller_Action
 				} else $subject_list[$index]['GroupName']='-';
 			}
 			
+			if ($subject['lecturer_id']=='') $lect=$dbStaff->getStaffFullName($subject['IdLecturer']);
+			else $lect=$dbStaff->getStaffFullName($subject['lecturer_id']);
+			if ($lect) $subject_list[$index]['lec']=$lect;
+			else $subject_list[$index]['lec']='-';
 		}
     	//get info dekan faculty
     	$programDb = new App_Model_General_DbTable_Program();

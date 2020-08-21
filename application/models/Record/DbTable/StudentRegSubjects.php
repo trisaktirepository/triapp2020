@@ -17,6 +17,7 @@ class App_Model_Record_DbTable_StudentRegSubjects extends Zend_Db_Table_Abstract
 		 $sql = $db->select()
                         ->from(array('sr' => 'tbl_studentregistration'), array('registrationId'))  
                         ->joinLeft(array('srs'=>'tbl_studentregsubjects'),'srs.IdStudentRegistration = sr.IdStudentRegistration')
+                        ->join(array('ct'=>'tbl_course_tagging_group'),'ct.IdCourseTaggingGroup=srs.IdCourseTaggingGroup')
                         ->joinLeft(array('sm'=>'tbl_subjectmaster'),'sm.IdSubject=srs.IdSubject',array('SubjectName','subjectMainDefaultLanguage','BahasaIndonesia','CreditHours','SubCode'))   
                         ->joinLeft(array('cgs'=>'course_group_schedule'),'idGroup=srs.IdCourseTaggingGroup')                  
                         ->where('sr.IdStudentRegistration = ?', $IdStudentRegistration)
