@@ -772,10 +772,10 @@ class StudentPortalController extends Zend_Controller_Action
 				} else $subject_list[$index]['GroupName']='-';
 			}
 			
-			if ($subject['lecturer_id']=='') $lect=$dbStaff->getStaffFullName($subject['IdLecturer']);
-			else $lect=$dbStaff->getStaffFullName($subject['lecturer_id']);
-			if ($lect) $subject_list[$index]['lec']=$lect;
-			else $subject_list[$index]['lec']='-';
+			if ($subject['lecturer_id']!='') $lect=$dbStaff->getStaffFullName($subject['lecturer_id']);
+			else if ($subject['IdLecturer']!='') $lect=$dbStaff->getStaffFullName($subject['IdLecturer']);
+			else $lect='-';
+			$subject_list[$index]['lec']=$lect; 
 		}
     	//get info dekan faculty
     	$programDb = new App_Model_General_DbTable_Program();
