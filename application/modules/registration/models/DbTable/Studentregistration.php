@@ -26,7 +26,7 @@ class Registration_Model_DbTable_Studentregistration extends Zend_Db_Table_Abstr
 	public function getData($id) {
 		$sql = $this->lobjDbAdpt->select()
 		->from(array('a' => 'tbl_studentregistration'))
-		->joinLeft(array('b' => 'tbl_program'), "a.IdProgram = b.IdProgram", array("b.ProgramName", "b.IdScheme"))
+		->joinLeft(array('b' => 'tbl_program'), "a.IdProgram = b.IdProgram")
 		->joinLeft(array('c' => 'tbl_intake'), "a.IdIntake = c.IdIntake", array("c.IntakeDesc", 'c.ApplicationStartDate as intake_app_start_date'))
 		->joinLeft(array('d' => 'tbl_definationms'), "a.profileStatus = d.idDefinition", array("d.DefinitionDesc"))
 		->joinLeft(array('f' => 'tbl_definationms'), "a.SpecialTreatmentType = f.idDefinition", array("f.DefinitionDesc as specialtreatment"))

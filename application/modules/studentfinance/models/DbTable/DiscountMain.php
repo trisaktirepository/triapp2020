@@ -41,7 +41,7 @@ public function getCurrentSetup($univ,$kkni,$college,$program,$branch,$semester,
 		->where('a.majoring=?',$idmajoring)
 		->where('b.SemesterMainStartDate <=?',$datestart)
 		->order('b.SemesterMainStartDate DESC');
-		echo $select;exit;
+		//echo $select;exit;
 		$row=$this->lobjDbAdpt->fetchRow($select);
 		if (!$row) {
 			$select=$this->lobjDbAdpt->select()
