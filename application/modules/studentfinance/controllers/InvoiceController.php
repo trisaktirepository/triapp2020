@@ -448,10 +448,10 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 										//echo var_dump($std);
 										if ($std) {
 											$row =$feeStructure->getApplicantFeeStructure($std['IdIntake'],$std['IdProgram'],$std['IdBranch'],$student_category,$std['IdProgramMajoring']);
-											//echo var_dump($std); echo var_dump($row);
+											echo var_dump($std); echo var_dump($row);
 												
 										}
-										//exit;
+										exit;
 									}
 								}
 								//exit;
