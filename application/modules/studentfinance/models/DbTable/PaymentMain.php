@@ -151,7 +151,7 @@ class Studentfinance_Model_DbTable_PaymentMain extends Zend_Db_Table_Abstract {
 			->from(array('pm'=>'invoice_main'))
 			//->join(array('pi'=>'invoice_main'),'pm.billing_no = pi.bill_number')
 			->where("pm.no_fomulir ='".$payer."'")
-			->where("pm.bill_paid>500000 or bill_balance=0");
+			->where("pm.bill_paid>500000");
 			$row = $db->fetchAll($select);
 			if ($row) return $row;
 			else return null;
