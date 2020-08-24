@@ -447,7 +447,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 										$std = $db->fetchRow($sql);
 										//echo var_dump($std);
 										if ($std) {
-											$row =$feeStructure->getApplicantFeeStructure($std['IdIntake'],$std['IdProgram'],$std['IdBranch'],$student_category,$std['IdProgramMajoring']);
+											$row =$feeStructure->getApplicantFeeStructure($std['IdIntake'],$std['IdProgram'],$student_category,$std['IdBranch'],$std['IdProgramMajoring']);
 											echo var_dump($std); echo var_dump($row);
 												
 										}
