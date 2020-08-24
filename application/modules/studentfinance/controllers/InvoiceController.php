@@ -451,7 +451,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 											//echo var_dump($std); echo var_dump($row);
 												
 										}
-										exit;
+										//exit;
 									}
 								}
 								//exit;
