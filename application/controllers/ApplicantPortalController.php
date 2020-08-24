@@ -3497,127 +3497,130 @@ class ApplicantPortalController extends Zend_Controller_Action
     		$biaya = number_format($biaya, 2, '.', ',');
     	}
     	
-    	
-    	//fee structure plan
-    	$feeStructurePlanDb = new Studentfinance_Model_DbTable_FeeStructurePlan();
-    	$paymentPlanData = $feeStructurePlanDb->getStructureData($feeStructureData['fs_id']);
-    	$feeStructureData['payment_plan'] = $paymentPlanData;
-    	
-    	//fee structure program
-    	$feeStructureProgramDb = new Studentfinance_Model_DbTable_FeeStructureProgram();
-    	$feeStructureProgramData = $feeStructureProgramDb->getStructureData($feeStructureData['fs_id'],$program[0]["program_id"],$program[0]['IdBranchOffer']);
-    	
-    	//fee structure plan detail
-    	$fspdDb = new Studentfinance_Model_DbTable_FeeStructurePlanDetail();
-    	
-    	foreach ($feeStructureData['payment_plan'] as $key=>$plan){
-    			
-    		for($installment=1; $installment<=$plan['fsp_bil_installment']; $installment++){
-    			$feeStructureData['payment_plan'][$key]['plan_detail'][$installment] = $fspdDb->getPlanData($plan['fsp_structure_id'], $plan['fsp_id'], $installment, 1,$feeStructureProgramData['fsp_program_id'],$assessmentData['aar_rating_rector']);
-    		}
-    	}
-    	
-    	 
-    	$nomor=$assessmentData['asd_nomor'];
-    	
-    	$address = "";
-    	if( isset($applicant["appl_address1"]) && $applicant["appl_address1"]!=""){
-    		$address = $address . $applicant["appl_address1"]."<br />";
-    	}
-    	if( isset($applicant["appl_address2"]) && $applicant["appl_address2"]!=""){
-    		$address = $address . $applicant["appl_address2"]."<br />";
-    	}
-    	if( isset($applicant["CityName"]) && $applicant["CityName"]!=""){
-    		$address = $address . $applicant["CityName"]."<br />";
-    	}
-    	if( isset($applicant["appl_postcode"]) && $applicant["appl_postcode"]!=""){
-    		$address = $address . $applicant["appl_postcode"]."<br />";
-    	}
-    	if( isset($applicant["StateName"]) && $applicant["StateName"]!=""){
-    		$address = $address . $applicant["StateName"]."<br />";
-    	}
-    	
-    	$fieldValues = array(
-    			'NO_PES'=>$txnData["at_pes_id"],
-    			'NOMOR'=>$nomor,
-    			'LAMPIRAN'=>"-",
-    			'TITLE_TEMPLATE'=>$this->view->translate("Pemberitahuan diterima sebagai calon Mahasiswa di Universitas Trisakti"),
-    			'APPLICANT_NAME'=>$applicant["appl_fname"].' '.$applicant["appl_mname"].' '.$applicant["appl_lname"],
-    			'PARENTNAME'=>$father["af_name"],
-    			'ADDRESS' =>$address,
-    			'ADDRESS1'=>$applicant["appl_address1"],
-    			'ADDRESS2'=>$applicant["appl_address2"],
-    			'CITY'=>$applicant["CityName"],
-    			'POSTCODE'=>$applicant["appl_postcode"],
-    			'STATE'=>$applicant["StateName"],
-    			'ACADEMIC_YEAR'=>$txnData['ay_code'],
-    			'PERIOD'=>$txnData['ap_desc'],
-    			'FACULTY'=>$program[0]["faculty2"],
-    			'FACULTY_NAME'=>($facultyData['ArabicName']!=null?$facultyData['ArabicName']." ":"-"),
-    			'FACULTY_SHORTNAME'=>($facultyData['ShortName']!=null?$facultyData['ShortName']." ":"-"),
-    			'FACULTY_ADDRESS1'=>($facultyData['Add1']!=null?$facultyData['Add1']." ":"-"),
-    			'FACULTY_ADDRESS2'=>($facultyData['Add2']!=null?$facultyData['Add2']." ":""),
-    			'FACULTY_ADDRESS'=>($facultyData['Add1']!=null?$facultyData['Add1']." ":"").($facultyData['Add2']!=null?$facultyData['Add2']." ":""),
-    			'FACULTY_PHONE'=>($facultyData['Phone1']!=null?$facultyData['Phone1']." ":"").($facultyData['Phone2']!=null?", ".$facultyData['Phone2']." ":""),
-    			'FACULTY_FAX'=>($facultyData['Fax']!=null?$facultyData['Fax']." ":""),
-    			'PROGRAME'=>$program[0]["program_name_indonesia"],
-    			'KELAS'=>$program[0]["GroupName"],
-    			'RANK' => $rank,
-    			'PRINT_DATE'=>date('j M Y'),
-    			'REGISTRATION_DATE_START'=> date ( 'j F Y' , strtotime ( $assessmentData['aar_reg_start_date'] ) ),
-    			'REGISTRATION_DATE_END'=> date ( 'j F Y' , strtotime ( $assessmentData['aar_reg_end_date'] ) ),
-    			'MESSAGE'=>$message,
-    			'SELECTION_TYPE'=>$typeselection,
-    			'LEARNING_DURATION' => $learning_duration,
-    			'ESTIMASI_BIAYA' => $biaya,
-    			'RECTOR_DATE' => date('j M Y',strtotime($assessmentData['asd_decree_date']))
-    	);
-    	$this->view->dataview=$fieldValues;
-    	
-    	 
-    	//program data
-    //	global $program;
-    	$program = $feeStructureProgramData;
-    	$this->view->program=$program;
-    	//registration date
-    	//global $reg_date;
-    	$reg_date = array(
-    			'REGISTRATION_DATE_START'=> $assessmentData['aar_reg_start_date'],
-    			'REGISTRATION_DATE_END'=> $assessmentData['aar_reg_end_date']
-    	);
-    	
-    	
-    	//date payment
-    	foreach($feeStructureData['payment_plan'] as $key=>$plan){
-    		$start = $assessmentData['aar_reg_start_date'];
-    		$end = $assessmentData['aar_reg_end_date'];
-    			
-    		foreach ($plan['plan_detail'] as $key2=>$installment){
-    			$reg_date['date_payment'][$key][$key2]['start'] = $start;
-    			$reg_date['date_payment'][$key][$key2]['end'] = $end;
-    	
-    			$end = date ( 'F Y' , strtotime ( '+1 month' , strtotime ( $end) ) );
-    		}
-    			
-    		$end = $assessmentData['aar_reg_end_date'];
-    	}
-    	
-    	$this->view->reg_date=$reg_date;
-    	//fee data
-    	//global $fees;
-    	$fees = $feeStructureData['payment_plan'];
-    	$this->view->fees=$fees;
-    	//footer variable
-    	//global $pes;
-    	$pes = $txnData["at_pes_id"];
-    	$this->view->pes=$pes;
-    	 
-    	//regenerate performa invoice
-    	$proformaInvoiceDb = new Application_Model_DbTable_ProformaInvoice();
-    	if (!$proformaInvoiceDb->getTxnData($txnId)) 
-    		$proformaInvoiceDb->regenerateProformaInvoice($txnId);
-    	
-    	
+	    if ($feeStructureData) {
+	    	//fee structure plan
+	    	$feeStructurePlanDb = new Studentfinance_Model_DbTable_FeeStructurePlan();
+	    	$paymentPlanData = $feeStructurePlanDb->getStructureData($feeStructureData['fs_id']);
+	    	$feeStructureData['payment_plan'] = $paymentPlanData;
+	    	
+	    	//fee structure program
+	    	$feeStructureProgramDb = new Studentfinance_Model_DbTable_FeeStructureProgram();
+	    	$feeStructureProgramData = $feeStructureProgramDb->getStructureData($feeStructureData['fs_id'],$program[0]["program_id"],$program[0]['IdBranchOffer']);
+	    	
+	    	//fee structure plan detail
+	    	$fspdDb = new Studentfinance_Model_DbTable_FeeStructurePlanDetail();
+	    	
+	    	foreach ($feeStructureData['payment_plan'] as $key=>$plan){
+	    			
+	    		for($installment=1; $installment<=$plan['fsp_bil_installment']; $installment++){
+	    			$feeStructureData['payment_plan'][$key]['plan_detail'][$installment] = $fspdDb->getPlanData($plan['fsp_structure_id'], $plan['fsp_id'], $installment, 1,$feeStructureProgramData['fsp_program_id'],$assessmentData['aar_rating_rector']);
+	    		}
+	    	}
+	    	
+	    	 
+	    	$nomor=$assessmentData['asd_nomor'];
+	    	
+	    	$address = "";
+	    	if( isset($applicant["appl_address1"]) && $applicant["appl_address1"]!=""){
+	    		$address = $address . $applicant["appl_address1"]."<br />";
+	    	}
+	    	if( isset($applicant["appl_address2"]) && $applicant["appl_address2"]!=""){
+	    		$address = $address . $applicant["appl_address2"]."<br />";
+	    	}
+	    	if( isset($applicant["CityName"]) && $applicant["CityName"]!=""){
+	    		$address = $address . $applicant["CityName"]."<br />";
+	    	}
+	    	if( isset($applicant["appl_postcode"]) && $applicant["appl_postcode"]!=""){
+	    		$address = $address . $applicant["appl_postcode"]."<br />";
+	    	}
+	    	if( isset($applicant["StateName"]) && $applicant["StateName"]!=""){
+	    		$address = $address . $applicant["StateName"]."<br />";
+	    	}
+	    	
+	    	$fieldValues = array(
+	    			'NO_PES'=>$txnData["at_pes_id"],
+	    			'NOMOR'=>$nomor,
+	    			'LAMPIRAN'=>"-",
+	    			'TITLE_TEMPLATE'=>$this->view->translate("Pemberitahuan diterima sebagai calon Mahasiswa di Universitas Trisakti"),
+	    			'APPLICANT_NAME'=>$applicant["appl_fname"].' '.$applicant["appl_mname"].' '.$applicant["appl_lname"],
+	    			'PARENTNAME'=>$father["af_name"],
+	    			'ADDRESS' =>$address,
+	    			'ADDRESS1'=>$applicant["appl_address1"],
+	    			'ADDRESS2'=>$applicant["appl_address2"],
+	    			'CITY'=>$applicant["CityName"],
+	    			'POSTCODE'=>$applicant["appl_postcode"],
+	    			'STATE'=>$applicant["StateName"],
+	    			'ACADEMIC_YEAR'=>$txnData['ay_code'],
+	    			'PERIOD'=>$txnData['ap_desc'],
+	    			'FACULTY'=>$program[0]["faculty2"],
+	    			'FACULTY_NAME'=>($facultyData['ArabicName']!=null?$facultyData['ArabicName']." ":"-"),
+	    			'FACULTY_SHORTNAME'=>($facultyData['ShortName']!=null?$facultyData['ShortName']." ":"-"),
+	    			'FACULTY_ADDRESS1'=>($facultyData['Add1']!=null?$facultyData['Add1']." ":"-"),
+	    			'FACULTY_ADDRESS2'=>($facultyData['Add2']!=null?$facultyData['Add2']." ":""),
+	    			'FACULTY_ADDRESS'=>($facultyData['Add1']!=null?$facultyData['Add1']." ":"").($facultyData['Add2']!=null?$facultyData['Add2']." ":""),
+	    			'FACULTY_PHONE'=>($facultyData['Phone1']!=null?$facultyData['Phone1']." ":"").($facultyData['Phone2']!=null?", ".$facultyData['Phone2']." ":""),
+	    			'FACULTY_FAX'=>($facultyData['Fax']!=null?$facultyData['Fax']." ":""),
+	    			'PROGRAME'=>$program[0]["program_name_indonesia"],
+	    			'KELAS'=>$program[0]["GroupName"],
+	    			'RANK' => $rank,
+	    			'PRINT_DATE'=>date('j M Y'),
+	    			'REGISTRATION_DATE_START'=> date ( 'j F Y' , strtotime ( $assessmentData['aar_reg_start_date'] ) ),
+	    			'REGISTRATION_DATE_END'=> date ( 'j F Y' , strtotime ( $assessmentData['aar_reg_end_date'] ) ),
+	    			'MESSAGE'=>$message,
+	    			'SELECTION_TYPE'=>$typeselection,
+	    			'LEARNING_DURATION' => $learning_duration,
+	    			'ESTIMASI_BIAYA' => $biaya,
+	    			'RECTOR_DATE' => date('j M Y',strtotime($assessmentData['asd_decree_date']))
+	    	);
+	    	$this->view->dataview=$fieldValues;
+	    	
+	    	 
+	    	//program data
+	    //	global $program;
+	    	$program = $feeStructureProgramData;
+	    	$this->view->program=$program;
+	    	//registration date
+	    	//global $reg_date;
+	    	$reg_date = array(
+	    			'REGISTRATION_DATE_START'=> $assessmentData['aar_reg_start_date'],
+	    			'REGISTRATION_DATE_END'=> $assessmentData['aar_reg_end_date']
+	    	);
+	    	
+	    	
+	    	//date payment
+	    	foreach($feeStructureData['payment_plan'] as $key=>$plan){
+	    		$start = $assessmentData['aar_reg_start_date'];
+	    		$end = $assessmentData['aar_reg_end_date'];
+	    			
+	    		foreach ($plan['plan_detail'] as $key2=>$installment){
+	    			$reg_date['date_payment'][$key][$key2]['start'] = $start;
+	    			$reg_date['date_payment'][$key][$key2]['end'] = $end;
+	    	
+	    			$end = date ( 'F Y' , strtotime ( '+1 month' , strtotime ( $end) ) );
+	    		}
+	    			
+	    		$end = $assessmentData['aar_reg_end_date'];
+	    	}
+	    	
+	    	$this->view->reg_date=$reg_date;
+	    	//fee data
+	    	//global $fees;
+	    	$fees = $feeStructureData['payment_plan'];
+	    	$this->view->fees=$fees;
+	    	//footer variable
+	    	//global $pes;
+	    	$pes = $txnData["at_pes_id"];
+	    	$this->view->pes=$pes;
+	    	 
+	    	//regenerate performa invoice
+	    	$proformaInvoiceDb = new Application_Model_DbTable_ProformaInvoice();
+	    	if (!$proformaInvoiceDb->getTxnData($txnId)) 
+	    		$proformaInvoiceDb->regenerateProformaInvoice($txnId);
+	    	
+	    } else {
+	    	echo 'Skema pembayaran blm tersedia silahkan hubungi Admin di nomor WA laman login';
+	    	exit();
+	    }
     	
     }
      
