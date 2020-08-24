@@ -534,7 +534,8 @@ class OnlineApplicationController extends Zend_Controller_Action {
 				$info["appl_parent_salary"]=$formData["appl_parent_salary"];
 
 				if($formData["appl_marital_status"]!=""){
-					$info["appl_no_of_child"]=$formData["appl_no_of_child"];	
+					if (isset($formData["appl_no_of_child"])) $info["appl_no_of_child"]=$formData["appl_no_of_child"];	
+					else $info["appl_no_of_child"]=0;
 				}
 							
 				
@@ -557,7 +558,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 				$father["af_email"]=$formData["email"];
 				$father["af_job"]=$formData["job"];
 				$father["af_family_condition"]=$formData["condition"];
-				$father["af_education_level"]=$formData["fedulevel"];
+				$father["af_education_level"]=$formData["edulevel"];
 							
 				
 				$mother["af_appl_id"]=$formData["appl_id"];

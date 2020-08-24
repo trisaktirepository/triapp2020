@@ -1183,7 +1183,7 @@ class ApplicantPortalController extends Zend_Controller_Action
 		//echo var_dump($feeStructureData);
 		//echo var_dump($program);exit;
 		
-		
+		if ($feeStructureData) {
 		//fee structure plan
 		$feeStructurePlanDb = new App_Model_Finance_DbTable_FeeStructurePlan();
 		$paymentPlanData = $feeStructurePlanDb->getStructureData($feeStructureData['fs_id']);
@@ -1393,7 +1393,7 @@ class ApplicantPortalController extends Zend_Controller_Action
 			
 			$end = $assessmentData['aar_reg_end_date'];
 		}			
-		
+		''
 		
 		//fee data
 		global $fees;
@@ -1461,7 +1461,10 @@ class ApplicantPortalController extends Zend_Controller_Action
 		//$proformaInvoiceDb = new Application_Model_DbTable_ProformaInvoice();
 		//$proformaInvoiceDb->regenerateProformaInvoice($txnId);
 				
-		//exit();
+		} else {
+			echo 'Skema pembayaran belum ada silahkan hubungi nomor WA yang ada di laman login';
+			exit();
+		}
 		
 	}
 	
