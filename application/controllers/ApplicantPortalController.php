@@ -1393,7 +1393,7 @@ class ApplicantPortalController extends Zend_Controller_Action
 			
 			$end = $assessmentData['aar_reg_end_date'];
 		}			
-		''
+		 
 		
 		//fee data
 		global $fees;
