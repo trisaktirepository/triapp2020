@@ -434,7 +434,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 									if (!$row && $registration['IdProgram']==60) {
 										//get from oldnim'
 										$sql = $db->select()
-										->from(array('sss' => 'tbl_studentregistration'), array('IdProgram','IdIntake','IdBranch','IdProgramMajoring'))
+										->from(array('sss' => 'tbl_studentregistration'), array('IdProgram','IdIntake','IdBranch','IdProgramMajoring','oldnim'))
 										->where('sss.registrationId  = ?', $registration['registrationId']);
 										
 										$oldnim=$std = $db->fetchRow($sql);
