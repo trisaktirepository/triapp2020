@@ -158,7 +158,7 @@ class Studentfinance_Model_DbTable_PaymentMain extends Zend_Db_Table_Abstract {
 			else {
 				$select = $db ->select()
 				->from(array('pm'=>'discount'),array('amount'=>'dcnt_letter_number'))
-				->where('pm.dcnt_formulir_id=?',$payer)
+				->where('pm.dcnt_fomulir_id=?',$payer)
 				->where('pm.dcnt_type_id in (6,18,4)');
 				$row = $db->fetchRow($select);
 				if ($row) return $row; 
