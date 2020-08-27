@@ -103,12 +103,13 @@
 			foreach ($bundledetail as $item) {
 				$fee=$item['fee'];
 				$total=$total+$fee['amount'];
+				if ($i%2==0) $cls="shade";else $cls="";
 			?>
 			<input type="hidden" name="item[<?php echo $item['fi_id']?>]" value="<?php echo $fee['amount'];?>">
-		<tr>
+		<tr <?php echo $cls;?>>
 			<td><?php echo $i;?></td>
 			<td><?php echo $item['fi_name_bahasa'];?></td>
-			<td><?php 
+			<td align="right"><?php 
 					$subtotal=$fee['amount'];
 					echo $fee['amount'];?>
 			</td> 
@@ -133,15 +134,15 @@
 					} ?>
 			</ul><?php 
 				} else echo $totaldisc;?></td>
-			<td><?php echo $subtotal-$totaldisc;?></td>
+			<td align="right"><?php if (($subtotal-$totaldisc)>0) echo $subtotal-$totaldisc; else echo "0";?></td>
 		</tr>
 		<?php $i++;
 			}?>
 		<input type="hidden" name="totalamount" value="<?php echo $total?>">
-		<input type="hidden" name="discountamount" value="<?php echo $totaldisc;?>">
+		<input type="hidden" name="discountamount" value="<?php if (($total-$totaldisc)>0) echo $totaldisc; else echo $total?>">
 		<tr>
 			<th colspan="4"><?php echo $this->translate('Total');?></th>
-			<th><?php echo $total-$totaldisc;?></th>
+			<th align="right"><?php if (($total-$totaldisc)>0) echo $total-$totaldisc; else echo "0";?></th>
 		</tr>
 		<?php 
 		//echo var_dump($this->invoice);
