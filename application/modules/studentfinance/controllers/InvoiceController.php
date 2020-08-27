@@ -585,12 +585,12 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 								}
 									
 								if ($dbDiscountSetup->isIntakeApplied($maind)) {
-									if (!$dbDiscountSetup->isIntakeApplied($maind,$registration['IdIntake'])) $valid="0";
+									if ($dbDiscountSetup->isIntakeApplied($maind,$registration['IdIntake'])) $valid="1";
 									else $valid="0";
 								}
 									
 								if ($dbDiscountSetup->isStudentApplied($maind)) {
-									if (!$dbDiscountSetup->isStudentApplied($maind,$registration['IdStudentRegistration'])) $valid="0";
+									if ($dbDiscountSetup->isStudentApplied($maind,$registration['IdStudentRegistration'])) $valid="1";
 									else $valid="0";
 								}
 								 
