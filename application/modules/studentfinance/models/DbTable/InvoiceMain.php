@@ -858,7 +858,9 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 	
 	public function pushToECollForEnrollmentPerBilling($trxid,$billno,$process=null,$mode=null,$re=null) {
 		date_default_timezone_set('Asia/Bangkok');
-			
+		$dbCnote=new Studentfinance_Model_DbTable_CreditNote();
+		$dbNNote=new Studentfinance_Model_DbTable_DebitNote();
+		
 		$invoiceDet = new Studentfinance_Model_DbTable_InvoiceDetail();
 		$dbInvoice = new Studentfinance_Model_DbTable_InvoiceMain();
 		$dbAppProgram=new Application_Model_DbTable_ApplicantProgram();
@@ -915,8 +917,16 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		if ($invoicedetail) {
 			foreach ($invoicedetail as $det) {
 					
-				//echo "kode".$kode;
+				 //echo "kode".$kode;
 				$amount=$det['amount']*1;
+				$cn=$dbCnote->getCN($invoice['bill_number'], $det['fi_id']);
+				if ($cn) $amount=$amount-$cn['cnd_amount'];
+				
+				//debit
+				$dn=$dbNNote->getDN($invoice['bill_number'], $det['fi_id']);
+				if ($dn) $amount=$amount*1+$dn['dnd_amount'];
+					
+				//------
 				$amounttotal=$amounttotal+$amount;
 				$desc[]=$det['account_code']."_".$det['fi_code']."_".$amount;
 					
@@ -930,8 +940,9 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 	
 		if ($billamount>0 && $amounttotal==$billamount && strlen($desc)<=100) {
 			if (!filter_var($profil['appl_email'],FILTER_VALIDATE_EMAIL)) $std['appl_email']="" ;
-			if (substr($billno,0,2)=="01" || substr($billno,0,2)=="11" ) $vaexpired='2020-09-04 23:00:00';
-			else $vaexpired=$invoice['va_expired_dt'];
+			//if (substr($billno,0,2)=="01" || substr($billno,0,2)=="11" ) $vaexpired='2020-09-04 23:00:00';
+			//else 
+			$vaexpired=$invoice['va_expired_dt'];
 			$invoiceData= array(
 	
 					'type'=>$process,
