@@ -49,7 +49,9 @@ function toggle(){
 	<?if(isset($this->noticeError)){?>
 	<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
 	<?}?>
-
+<?php if ($this->close=="1") {?>
+			
+<?php } else {?>
 <div style="width:100%;">
 
 <h3><img src="http://triapp.oum.edu.my/images/icon/business_user_info.png" onclick="toggle();" title="Click Here To Show & Hide Prosedur Pengunduran Diri"> &nbsp; <?php echo $this->translate("PROSEDUR PENGUNDURAN DIRI")?></h3>
@@ -153,5 +155,5 @@ function toggle(){
 		</tr>
 		<?php }?>
 	</table>
-	
+	<?php }?>
 </div>

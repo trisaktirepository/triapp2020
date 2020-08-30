@@ -8,8 +8,10 @@ class QuitController extends Zend_Controller_Action {
 	
 	public function indexAction()
     {
-    	echo 'Jadwal Undur Diri sudah tutup';
-    	exit;
+    	if (true) {
+    		$this->view->close="1";
+    		$this->view->title=$this->view->translate('Jadwal Undur Diri sudah tutup');
+    	} else {
     	$this->view->title=$this->view->translate("Quit");
     	
     	$msg = $this->_getParam('msg', 0);
@@ -37,7 +39,7 @@ class QuitController extends Zend_Controller_Action {
 		}
 			
 		$this->view->txnProgram = $txnProgram;
-    	
+    	}
     }
     
     
