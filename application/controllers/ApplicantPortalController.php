@@ -3641,7 +3641,8 @@ class ApplicantPortalController extends Zend_Controller_Action
     		$formData = $this->getRequest()->getPost();
     		//echo var_dump($formData);exit;
     		//generate payment
-    		$txnData = $applicantTxnDB->getTransaction($formData['transaction_id']);
+    		$txnId=$formData['transaction_id'];
+    		$txnData = $applicantTxnDB->getTransaction($txnId);
     		$paket=$formData['paket'];
     		$proformaInvoiceDb = new Application_Model_DbTable_ProformaInvoice();
     		$dbInv=new Studentfinance_Model_DbTable_InvoiceMain();
