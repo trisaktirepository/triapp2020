@@ -57,6 +57,20 @@ class Application_Model_DbTable_ProformaInvoiceVa extends Zend_Db_Table {
 	
 	}
 	
+	public function isInByNoForm($noform){
+	
+		$db = $this->lobjDbAdpt;
+	
+		$select = $db ->select()
+		->from(array('a'=>$this->_name))
+		//->join(array('b'=>'applicant_transaction'),'a.appl_id=b.at_appl_id')
+	
+		->where("no_fomulir =?",$noform);
+	
+		return $db->fetchRow($select);
+	
+	}
+	
 	public function getDataByVa($va){
 	
 		$db = $this->lobjDbAdpt;

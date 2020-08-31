@@ -3647,7 +3647,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     		$proformaInvoiceDb = new Application_Model_DbTable_ProformaInvoice();
     		$dbInv=new Studentfinance_Model_DbTable_InvoiceMain();
     		$dbinvVa=new Application_Model_DbTable_ProformaInvoiceVa();
-    		if (!$dbinvVa->isInByTrx($txnId)) 
+    		if (!$dbinvVa->isInByNoForm($txnData['at_pes_id'])) 
     		//regenerate performa invoice
     			$proformaInvoiceDb->generateProformaInvoiceEcollection($formData['transaction_id']);
     		
