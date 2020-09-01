@@ -1769,24 +1769,26 @@ public function registerAction(){
     		} else 
     			$idGroup=$formData[$radioGroup];
     		//echo var_dump($formData);exit;
+    		if ($idGroup!='') {
     		$schedule=$dbschedule->getSchedule($idGroup);
-    		foreach ($schedule as $sch) {
-    			$newschedules[]=array('IdCourseTaggingGroup'=>$idGroup,
-    					'IdSubject'=>$idSubject,
-    					'SubCode'=>$subjs['SubCode'],
-    					'SubjectName'=>$subjs['BahasaIndonesia'],
-    					'sc_date'=>$sch['sc_date'],
-    					'sc_date_end'=>$sch['sc_date_end'],
-    					'sc_day'=>$sch['sc_day'],
-    					'sc_start_time'=>$sch['sc_start_time'],
-    					'sc_end_time'=>$sch['sc_end_time']);
+	    		foreach ($schedule as $sch) {
+	    			$newschedules[]=array('IdCourseTaggingGroup'=>$idGroup,
+	    					'IdSubject'=>$idSubject,
+	    					'SubCode'=>$subjs['SubCode'],
+	    					'SubjectName'=>$subjs['BahasaIndonesia'],
+	    					'sc_date'=>$sch['sc_date'],
+	    					'sc_date_end'=>$sch['sc_date_end'],
+	    					'sc_day'=>$sch['sc_day'],
+	    					'sc_start_time'=>$sch['sc_start_time'],
+	    					'sc_end_time'=>$sch['sc_end_time']);
+	    		}
     		}
     	
     	}
     	//check forclash
-    	//echo var_dump($newschedules);echo "-====before<br>";
-    	$newschedules=$this->removeclash($newschedules,$msg);
-    	//echo var_dump($newschedules);echo "-====after<br>";
+    	 
+    	if ($newschedules) $newschedules=$this->removeclash($newschedules,$msg);
+    	 
     	//exit;
     	if ($newschedulesMinor!=array()) {
     		//cleansing for Minor Class
