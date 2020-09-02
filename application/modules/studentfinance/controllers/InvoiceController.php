@@ -573,7 +573,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 							foreach ($discounttype as $idx=>$value) {
 								$setup=$value['discount'];
 								$maind=$setup['id_dm'];
-								echo '<br>'.$maind;
+								//echo '<br>'.$maind;
 								$valid="0";
 								if ($dbDiscountSetup->isSemesterApplied($maind)) {
 									if ($dbDiscountSetup->isSemesterApplied($maind,$idsemester)) $valid="1";
@@ -589,7 +589,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 										if ($dbDiscountSetup->isIntakeApplied($maind,$registration['IdIntake'])) $valid="1";
 										else $valid="0";
 									}
-									echo '<br>discound';
+									//echo '<br>discound';
 									if ($dbDiscountSetup->isStudentApplied($maind)) {
 										echo $registration['IdStudentRegistration'];
 										if ($dbDiscountSetup->isStudentApplied($maind,$registration['IdStudentRegistration'])) $valid="1";
