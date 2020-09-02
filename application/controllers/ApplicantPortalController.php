@@ -50,7 +50,7 @@ class ApplicantPortalController extends Zend_Controller_Action
 		
 		foreach ($paginator as  $txn){
 			$txnProgram[$i] = $applicantProgramDb->getApplicantProgramByID($txn['at_trans_id']);
-			if ($txn['at_intake']>0) $idintake=$txn['at_intake'];
+			if ($txn['at_intake']>0 && $txn['at_status']=='OFFER') $idintake=$txn['at_intake'];
 			$i++;
 		}
 			
