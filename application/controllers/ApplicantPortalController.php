@@ -65,7 +65,7 @@ class ApplicantPortalController extends Zend_Controller_Action
 				$rdsdate=$row['rds_date'];
 				$date=date_create(date('Y-m-d',strtotime($rdsdate)));
 				//echo date_format($date, 'Y-m-d');
-				date_sub($date, date_interval_create_from_date_string("3 days"));
+				date_sub($date, date_interval_create_from_date_string("2 days"));
 				//echo date_format($date, 'Y-m-d');
 				//exit;
 				if (date('Y-m-d') > date_format($date,'Y-m-d')) unset($schedule[$key]); 
