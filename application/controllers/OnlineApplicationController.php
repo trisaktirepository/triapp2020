@@ -9773,7 +9773,8 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	$program=$dbAppProg->getProgramOffered($txn_id,$trans['at_appl_type']);
     	$this->view->program=$program;
     	$confirm=$dbRegConfirm->getData($txn_id);
-    	if ($confirm['status']=="1") $this->view->oto="r"; else $this->view->oto="w"; 
+    	if (isset($confirm['status']) && $confirm['status']=="1") $this->view->oto="r"; else $this->view->oto="w"; 
+    	
     	$dbIntake=new App_Model_General_DbTable_Intake();
     	$intake=$dbIntake->fngetIntakeById($trans['at_intake']);
     	if ($trans['at_appl_type']=="1") $pcode='USM';
