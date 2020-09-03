@@ -9791,7 +9791,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	
     	$applicantProfileProposeDb = new App_Model_Application_DbTable_ApplicantProfilePropose();
     	$applicantProfileDb=new App_Model_Application_DbTable_ApplicantProfile();
-     
+     	echo 'ok';exit;
     	if ($this->getRequest()->isPost()) {
     		$auth = Zend_Auth::getInstance();
     			
