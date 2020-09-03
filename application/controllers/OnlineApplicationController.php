@@ -9759,10 +9759,10 @@ class OnlineApplicationController extends Zend_Controller_Action {
     public function applicantBurekolVerificationAction() {
     
     	$txtid = $this->_getParam('txn_id',null);
-    
+    	echo 'ok';exit;
     	$Transaction = new App_Model_Application_DbTable_ApplicantTransaction();
     	$trans = $Transaction->getDataById($txtid);
-    	echo 'ok';exit;
+    	 
     	$dbRegConfirm=new App_Model_Registration_DbTable_RegConfirmation();
     	
     	$appl_id = $trans['at_appl_id'];
