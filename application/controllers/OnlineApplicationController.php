@@ -9774,7 +9774,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	$this->view->program=$program;
     	$confirm=$dbRegConfirm->getData($txn_id);
     	if (isset($confirm['status']) && $confirm['status']=="1") $this->view->oto="r"; else $this->view->oto="w"; 
-    	
+    	echo 'ok';exit;
     	$dbIntake=new App_Model_General_DbTable_Intake();
     	$intake=$dbIntake->fngetIntakeById($trans['at_intake']);
     	if ($trans['at_appl_type']=="1") $pcode='USM';
@@ -9791,7 +9791,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	
     	$applicantProfileProposeDb = new App_Model_Application_DbTable_ApplicantProfilePropose();
     	$applicantProfileDb=new App_Model_Application_DbTable_ApplicantProfile();
-     	echo 'ok';exit;
+     	
     	if ($this->getRequest()->isPost()) {
     		$auth = Zend_Auth::getInstance();
     			
