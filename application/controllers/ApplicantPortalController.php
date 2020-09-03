@@ -2038,7 +2038,7 @@ class ApplicantPortalController extends Zend_Controller_Action
 							->join(array('bank'=>'tbl_bank'),'fia.fiacc_bank=bank.IdBank',array('IdBank','BankName'))
 							->where('fia.fiacc_program_id=?',$programid)
 							->where('fsi.invoice_main_id=?',$invoiceid);
-					echo $select;
+					echo $select;exit;
 					$bank=$db->fetchRow($select);
 					if (!$bank) $bank=array('IdBank'=>'1','BankName'=>'BNI46');
 				} else $bank=array('IdBank'=>'1','BankName'=>'BNI46');
