@@ -1830,10 +1830,12 @@ class ApplicantPortalController extends Zend_Controller_Action
     	$appl_id = $auth->getIdentity()->appl_id; 
     	
 		$this->view->appl_id = $appl_id;
-		$registration_id = $auth->getIdentity()->registration_id;
 		$Dbinvoice=new Studentfinance_Model_DbTable_InvoiceMain();
 		 
 		$studentRegDB = new App_Model_Record_DbTable_StudentRegistration();
+		if ($studentRegDB->getData($appl_id)) $registration_id = $auth->getIdentity()->registration_id;
+		else $registration_id='';
+		
 		if ($registration_id!='') {
 			$student = $studentRegDB->getStudentInfo($registration_id);
 			
