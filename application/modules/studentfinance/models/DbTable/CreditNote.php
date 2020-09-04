@@ -142,7 +142,7 @@ class Studentfinance_Model_DbTable_CreditNote extends Zend_Db_Table_Abstract {
 		->where("d.cn_billing_no = '".$nobill."'")
 		->where('dd.cnd_fi_id=?',$feeid);
 	
-		$row = $db->fetchRow($selectData);
+		$row = $db->fetchAll($selectData);
 	
 			
 		if(!$row){

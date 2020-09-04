@@ -122,7 +122,7 @@ class Studentfinance_Model_DbTable_DebitNote extends Zend_Db_Table_Abstract {
 		->where("d.dn_billing_no = '".$nobill."'")
 		->where('dd.dnd_fi_id=?',$feeid);
 	
-		$row = $db->fetchRow($selectData);
+		$row = $db->fetchAll($selectData);
 	
 			
 		if(!$row){

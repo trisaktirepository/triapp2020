@@ -705,11 +705,17 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 				//echo "kode".$kode;
 				$amount=$det['amount']*1;
 				$cn=$dbCnote->getCN($invoice['bill_number'], $det['fi_id']);
-				if ($cn) $amount=$amount-$cn['cnd_amount'];
+				if ($cn) 
+					foreach ($cn as $cnd) {
+						$amount=$amount-$cnd['cnd_amount'];
+					}
 				
 				//debit
 				$dn=$dbNNote->getDN($invoice['bill_number'], $det['fi_id']);
-				if ($dn) $amount=$amount*1+$dn['dnd_amount'];
+				if ($dn) 
+					foreach ($dn as $dnd) {
+						$amount=$amount*1+$dnd['dnd_amount'];
+					}
 				 
 				//------
 				$amounttotal=$amounttotal+$amount;
