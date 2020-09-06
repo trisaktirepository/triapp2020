@@ -106,13 +106,15 @@ class App_Form_BiodataUpdate extends Zend_Form {
 				'required'=>true,
 				'decorators'=>array(
 						'ViewHelper',
-						'Description'=>'Perbaikan No HP hubungi admin Fakultas masing-masing',
+						'Description'=>array(''),
 						'Errors',
 						array(array('data'=>'HtmlTag'), array('tag' => 'td', 'colspan'=>'3')),
 						array('Label', array('tag' => 'td' )),
 						array(array('row'=>'HtmlTag'),array('tag'=>'tr'))
 				),
 		));
+		
+		$this->appl_phone_hp->setDescription("Perbaikan No HP hanya dapat dilakukan oleh admin Fakultas");
 		
 		$this->addElement('text','appl_phone_home', array(
 				'label'=>'Home Phone',
