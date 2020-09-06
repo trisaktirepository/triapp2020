@@ -333,9 +333,11 @@ class ApplicantPortalController extends Zend_Controller_Action
                     $info["verifyKey"] = $verifyKey;
                     
                 }			
-                $formData['update_status']="1";
-                $formData['update_st']=date('Y-m-d H:i:s');
-                unset($formData['appl_phone_hp']);
+                $info['appl_phone_home']=$formData['appl_phone_home'];
+                $info['appl_nik']=$formData['appl_nik'];
+                $info['update_status']="1";
+                $info['update_st']=date('Y-m-d H:i:s');
+                //unset($formData['appl_phone_hp']);
 				
 				$appProfileDB->updateData($info, $formData["appl_id"]);
 				

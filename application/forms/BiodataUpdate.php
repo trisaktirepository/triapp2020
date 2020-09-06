@@ -141,6 +141,174 @@ class App_Form_BiodataUpdate extends Zend_Form {
 						array(array('row'=>'HtmlTag'),array('tag'=>'tr'))
 				),
 		));
+		
+		$this->addElement('hidden', 'contact', array(
+				'description' => '<br /><h3>'.$this->getView()->translate('Domisili').'</h3>',
+				'ignore' => true,
+				'decorators'=>array(
+						'ViewHelper',
+						'Description',
+						'Errors',
+						array(array('data'=>'HtmlTag'), array('tag' => 'td', 'colspan'=>'4')),
+						array('Description', array('escape'=>false, 'tag'=>'')),
+						array(array('row'=>'HtmlTag'),array('tag'=>'tr'))
+				),
+		));
+		
+		$this->addElement('text','std_address1', array(
+				'label'=>$this->getView()->translate('address_1'),
+				'decorators'=>array(
+						'ViewHelper',
+						'Description',
+						'Errors',
+						array(array('data'=>'HtmlTag'), array('tag' => 'td')),
+						array('Label', array('tag' => 'td' )),
+						array(array('row'=>'HtmlTag'),array('tag'=>'tr','openOnly' => true))
+				),
+		));
+		
+		 
+		
+		$this->addElement('text','std_address_rt', array(
+				'label'=>$this->getView()->translate('RT'),
+				'maxlength' => '3',
+				'decorators'=>array(
+						'ViewHelper',
+						'Description',
+						'Errors',
+						array(array('data'=>'HtmlTag'), array('tag' => 'td')),
+						array('Label', array('tag' => 'td' )),
+						array(array('row'=>'HtmlTag'),array('tag'=>'tr','openOnly' => true))
+				),
+		));
+		
+		 
+		
+		$this->addElement('text','std_address_rw', array(
+				'label'=>$this->getView()->translate('RW'),
+				'maxlength' => '3',
+				'decorators'=>array(
+						'ViewHelper',
+						'Description',
+						'Errors',
+						array(array('data'=>'HtmlTag'), array('tag' => 'td')),
+						array('Label', array('tag' => 'td' )),
+						array(array('row'=>'HtmlTag'),array('tag'=>'tr','openOnly' => true))
+				),
+		));
+		
+		 
+		
+		//kelurahan
+		$this->addElement('text','std_kelurahan', array(
+				'label'=>$this->getView()->translate('Kelurahan'),
+				'decorators'=>array(
+						'ViewHelper',
+						'Description',
+						'Errors',
+						array(array('data'=>'HtmlTag'), array('tag' => 'td')),
+						array('Label', array('tag' => 'td' )),
+						array(array('row'=>'HtmlTag'),array('tag'=>'tr','openOnly' => true))
+				),
+		));
+		
+		 
+		
+		//kecamatan
+		$this->addElement('text','std_kecamatan', array(
+				'label'=>$this->getView()->translate('Kecamatan'),
+				'decorators'=>array(
+						'ViewHelper',
+						'Description',
+						'Errors',
+						array(array('data'=>'HtmlTag'), array('tag' => 'td')),
+						array('Label', array('tag' => 'td' )),
+						array(array('row'=>'HtmlTag'),array('tag'=>'tr','openOnly' => true))
+				),
+		));
+		
+		 
+		
+			
+		
+		$this->addElement('select','std_province', array(
+				'label'=>$this->getView()->translate('country'),
+				'required'=>true,
+				'onChange'=>"changeState(this, $('#appl_state'));",
+				'decorators'=>array(
+						'ViewHelper',
+						'Description',
+						'Errors',
+						array(array('data'=>'HtmlTag'), array('tag' => 'td')),
+						array('Label', array('tag' => 'td' )),
+						array(array('row'=>'HtmlTag'),array('tag'=>'tr','openOnly' => true))
+				)
+		));
+		
+		$countryDb = new App_Model_General_DbTable_Country();
+		$this->std_province->addMultiOption(null,$this->getView()->translate('Please Select'));
+		foreach ($countryDb->getData() as $list){
+			$this->std_province->addMultiOption($list['idCountry'],$list['CountryName']);
+		}
+		 
+		
+		$this->addElement('select','std_state', array(
+				'label'=>$this->getView()->translate('state_province'),
+				'onChange'=>"changeCity(this, $('#appl_city'));",
+				'decorators'=>array(
+						'ViewHelper',
+						'Description',
+						'Errors',
+						array(array('data'=>'HtmlTag'), array('tag' => 'td')),
+						array('Label', array('tag' => 'td' )),
+						array(array('row'=>'HtmlTag'),array('tag'=>'tr','openOnly' => true))
+				),
+		));
+		
+		$stateDb = new App_Model_General_DbTable_State();
+		$this->std_state->addMultiOption(0,$this->getView()->translate('please_select'));
+		
+		foreach ($stateDb->getState(0) as $list){
+			$this->std_state->addMultiOption($list['idState'],$list['StateName']);
+		}
+		
+		
+		 
+		
+		$this->addElement('select','std_city', array(
+				'label'=>$this->getView()->translate('Kabupaten'),
+				'decorators'=>array(
+						'ViewHelper',
+						'Description',
+						'Errors',
+						array(array('data'=>'HtmlTag'), array('tag' => 'td')),
+						array('Label', array('tag' => 'td' )),
+						array(array('row'=>'HtmlTag'),array('tag'=>'tr','openOnly' => true))
+				),
+		));
+		
+		$cityDb = new App_Model_General_DbTable_City();
+		$this->std_city->addMultiOption(0,$this->getView()->translate('please_select'));
+		foreach ($cityDb->getData() as $list){
+			$this->std_city->addMultiOption($list['idCity'],$list['CityName']);
+		}
+		 
+		
+		
+		//postcode
+		$this->addElement('text','std_postcode', array(
+				'label'=>$this->getView()->translate('postcode'),
+				'maxlength'=>'5',
+				'decorators'=>array(
+						'ViewHelper',
+						'Description',
+						'Errors',
+						array(array('data'=>'HtmlTag'), array('tag' => 'td')),
+						array('Label', array('tag' => 'td' )),
+						array(array('row'=>'HtmlTag'),array('tag'=>'tr','openOnly' => true))
+				),
+		));
+		
  
 		$this->addElement('hidden', 'correspondance', array(
 			'description' => '<br /><h3>'.$this->getView()->translate('parents_info').'</h3>',
