@@ -312,9 +312,7 @@ class ApplicantPortalController extends Zend_Controller_Action
 				//$info["appl_mname"]=strtoupper($formData["appl_mname"]);
 				//$info["appl_lname"]=strtoupper($formData["appl_lname"]);
 				$info["appl_email"]=$formData["appl_email"];			
-				 
-				
-                if($formData["appl_email"] != $applicant["appl_email"])
+		        if($formData["appl_email"] != $applicant["appl_email"])
                 {
                     $verifyKey = '';
                     

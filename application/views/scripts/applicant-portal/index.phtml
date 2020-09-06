@@ -477,7 +477,8 @@ $pdb = new App_Model_Application_DbTable_ApplicantPtest();
                             <a class="popupGrade" href="<?php echo $this->baseUrl().'/applicant-portal/approve-grade/trans_id/'.$entry['at_trans_id']; ?>"><?php echo $this->translate("View Credit Approved");?></a>   
                             <?php
                             
-                            echo "<a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'get-document','id'=>$entry['at_trans_id'],'typeId'=>45),'default',true)."'>".$this->translate("Surat Panggilan")."</a>";
+                           // echo "<a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'get-document','id'=>$entry['at_trans_id'],'typeId'=>45),'default',true)."'>".$this->translate("Surat Panggilan")."</a>";
+                            echo "<a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'offer-letter','transaction_id'=>$entry['at_trans_id']),'default',true)."'>".$this->translate("Surat Panggilan")."</a>";
                             
                             /* display agreement letter */
                             
