@@ -284,8 +284,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     	$appl_id = $auth->getIdentity()->appl_id;    	
     	$this->view->appl_id = $appl_id;
     	
-    	$iduser = $auth->getIdentity()->id;
-    	$this->view->iduser = $iduser;
+     
     	
     	$stdid = $auth->getIdentity()->registration_id;
     	$this->view->stdid = $stdid;

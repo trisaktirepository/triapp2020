@@ -213,7 +213,7 @@ $(window).load(function() {
 	function onClick(){
 		//send confirmation number
 		var hp=$("#diaghp").val();
-		$("#iduser").val(<?php echo $this->iduser;?>);
+		$("#iduser").val(<?php echo $this->appl_id;?>);
 		$("#IdStudentRegistration").val(<?php echo $this->stdid?>);
 		idstudent=$("#IdStudentRegistration").val();
 		$.ajax({
