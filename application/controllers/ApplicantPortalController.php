@@ -434,15 +434,15 @@ class ApplicantPortalController extends Zend_Controller_Action
 			
     	}else{
     		$applicant["std_address_rt"]=$applicant["appl_address_rt"];
-    		$applicant["std_address_rw"]=$rsfather["appl_address_rw"];
-    		$applicant["std_address1"]=$rsfather["appl_address1"];
-    		$applicant["std_address2"]=$rsfather["appl_address2"];
-    		$applicant["std_province"]=$rsfather["appl_province"];
-    		$applicant["std_state"]=$rsfather["appl_state"];
-    		$applicant["std_city"]=$rsfather["appl_city"];
-    		$applicant["std_kelurahan"]=$rsfather["appl_kelurahan"];
-    		$applicant["std_kecamatan"]=$rsfather["appl_kecamatan"];
-    		$applicant["std_postcode"]=$rsfather["appl_postcode"];
+    		$applicant["std_address_rw"]=$applicant["appl_address_rw"];
+    		$applicant["std_address1"]=$applicant["appl_address1"];
+    		$applicant["std_address2"]=$applicant["appl_address2"];
+    		$applicant["std_province"]=$applicant["appl_province"];
+    		$applicant["std_state"]=$applicant["appl_state"];
+    		$applicant["std_city"]=$applicant["appl_city"];
+    		$applicant["std_kelurahan"]=$applicant["appl_kelurahan"];
+    		$applicant["std_kecamatan"]=$applicant["appl_kecamatan"];
+    		$applicant["std_postcode"]=$applicant["appl_postcode"];
     		
     		$family = new App_Model_Application_DbTable_ApplicantFamily();
     		
