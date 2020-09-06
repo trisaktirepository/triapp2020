@@ -304,10 +304,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     		
     		$formData = $this->getRequest()->getPost();  
     		
-    		//check nationality
-			if($formData["appl_nationality"]==96){
-				$form->country_origin->setRequired(false)->setValidators(array());
-			}
+    		 
 			
     		if ($form->isValid($formData)) {
 				
@@ -340,8 +337,7 @@ class ApplicantPortalController extends Zend_Controller_Action
                 //unset($formData['appl_phone_hp']);
                 $info["appl_address_rt"]=$formData["std_address_rt"];
                 $info["appl_address_rw"]=$formData["std_address_rw"];
-                $info["appl_address1"]=$formData["std_address1"];
-                $info["appl_address2"]=$formData["std_address2"];
+                $info["appl_address1"]=$formData["std_address1"]; 
                 $info["appl_province"]=$formData["std_province"];
                 $info["appl_state"]=$formData["std_state"];
                 $info["appl_city"]=$formData["std_city"];
