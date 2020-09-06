@@ -336,7 +336,7 @@ class ApplicantPortalController extends Zend_Controller_Action
                 $info['appl_phone_home']=$formData['appl_phone_home'];
                 $info['appl_nik']=$formData['appl_nik'];
                 $info['update_status']="1";
-                $info['update_st']=date('Y-m-d H:i:s');
+                $info['update_dt']=date('Y-m-d H:i:s');
                 //unset($formData['appl_phone_hp']);
                 $info["appl_address_rt"]=$formData["std_address_rt"];
                 $info["appl_address_rw"]=$formData["std_address_rw"];
