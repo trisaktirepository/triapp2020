@@ -213,12 +213,12 @@ $(window).load(function() {
 	function onClick(){
 		//send confirmation number
 		var hp=$("#diaghp").val();
-		$("#iduser").val(<?php echo $this->appl_id;?>);
+		 
 		$("#IdStudentRegistration").val(<?php echo $this->stdid?>);
 		idstudent=$("#IdStudentRegistration").val();
 		$.ajax({
 			url: "<?php echo $this->url(array('module'=>'default','controller'=>'course-registration', 'action'=>'ajax-send-sms'),'default',true);?>",
-			data: {'hp':hp,'idstudent':idstudent,'iduser':iduser},
+			data: {'hp':hp,'idstudent':idstudent,'iduser':<?php echo $this->appl_id;?>},
 			type: 'POST',
 			dataType: 'json' 
 		}).done(function ( data ) {
