@@ -55,13 +55,7 @@ $(window).load(function() {
 		$('#appl_no_of_child').val("");
 	}
 
-	if( !$('#appl_nationality-96').is(':checked') ){
-		$('#country_origin').removeAttr('disabled');
-		$('#appl_nationality-0').attr('checked', 'checked');
-		$('#country_origin').val('<?php echo $this->data['appl_nationality'];?>');
-	}else{
-		$('#country_origin').attr("disabled", "disabled");
-	}
+	 
 });
 </script>
 
