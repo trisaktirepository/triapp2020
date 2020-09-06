@@ -375,7 +375,7 @@ class ApplicantPortalController extends Zend_Controller_Action
 				
 				
 				$mother["af_appl_id"]=$formData["appl_id"];
-				$mother["af_name"]=$formData["mother_name"];
+				//$mother["af_name"]=$formData["mother_name"];
 				$mother["af_relation_type"]=$formData["mrelationtype"];
 				$mother["af_address_rt"]=$formData["mappl_address_rt"];
 				$mother["af_address_rw"]=$formData["mappl_address_rw"];
