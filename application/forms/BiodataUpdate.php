@@ -342,6 +342,7 @@ class App_Form_BiodataUpdate extends Zend_Form {
 		$this->addElement('text','mother_name', array(
 		'label'=>$this->getView()->translate("Mother's Name").' ',
 		'required'=>true,
+		'disabled'=>true,
 		'decorators'=>array(
 		'ViewHelper',
 		'Description',
