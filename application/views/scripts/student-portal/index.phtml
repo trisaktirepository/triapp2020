@@ -158,6 +158,7 @@ if($this->landscape["LandscapeType"]==43 || $this->landscape["LandscapeType"]==4
 			  		<th><?php echo $this->translate("Credit Hours")?></th>
 			  		<th><?php echo $this->translate("Status")?></th>
 			  		<th><?php echo $this->translate("Schedule")?></th>
+			  		<th><?php echo $this->translate("Attendance")?></th>
 			  </tr>			  	
 			  	<?php   
 			  	foreach($courses as $course){  
@@ -191,6 +192,7 @@ if($this->landscape["LandscapeType"]==43 || $this->landscape["LandscapeType"]==4
 			  </tr>
 			  	<?php  } //end foreach ?>
 			  	
+			  <td><a href="/student-portal/myattendance/grpid/<?php echo $course['IdCourseTaggingGroup']?>">Add/Edit</a></td>
 			  </table>
 			  <br>
  			  <br>

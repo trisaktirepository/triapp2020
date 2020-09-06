@@ -3787,6 +3787,52 @@ class StudentPortalController extends Zend_Controller_Action
 		$this->view->activitylist=$openactivity;
 		
 	}
+	
+	public function reflectionAction(){
+		
+		$cgaid=$this->_getParam('cgaid');
+		$auth = Zend_Auth::getInstance();
+		$appl_id = $auth->getIdentity()->appl_id;
+		$registration_id = $auth->getIdentity()->registration_id;
+		$this->view->stdid=$registration_id;
+	 	$dbReflecton=new App_Model_General_DbTable_CourseGroupAttendanceReflection();
+	 	if($this->getRequest()->isPost()) {
+    			
+    		$formData = $this->getRequest()->getPost();
+    		$data=array('cga_id'=>$cgaid,
+    				'stdid'=>$registration_id,
+    				'keywords'=>$formData['keywords'],
+    				'capability'=>$formData['capability'],
+    				'uncapability'=>$formData['uncapability'],
+    				'entried_date'=>date('Y-m-d H:i:s'),
+    				'entried_by'=>$auth->getIdentity()->id
+    		);
+    		$row=$dbReflecton->isIn($cgaid, $registration_id);
+    		
+    		if (!$row) {
+    			$dbReflecton->insertData();
+    			
+    		} else $dbReflecton->update($data, 'cgar_id='.$row['cgar_id']);
+    		
+	 	}
+	 	
+	 	$this->view->reflection=$dbReflecton->getDataByCatId($cgaid);
+	 	$this->view->reflectionall=$dbReflecton->getDataByStd($cgaid,$stdid);
+	 	
+	}
+	
+	public function myattendanceAction(){
+	
+		$grpid=$this->_getParam('grpid');
+		$auth = Zend_Auth::getInstance();
+		$appl_id = $auth->getIdentity()->appl_id;
+		$registration_id = $auth->getIdentity()->registration_id;
+		$this->view->stdid=$registration_id;
+		$dbAttendanceStd=new App_Model_Exam_DbTable_CourseGroupStudentAttendanceDetail();
+		$dbCourse=new App_Model_General_DbTable_CourseGroup();
+		$this->view->attedance=$dbAttendanceStd->getAttendanceByStd($grpid, $registration_id);
+		$this->view->course=$dbCourse->getInfo($grpid);
+	}
 }
 
 ?>
