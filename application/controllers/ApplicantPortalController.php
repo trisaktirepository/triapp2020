@@ -308,9 +308,9 @@ class ApplicantPortalController extends Zend_Controller_Action
 			
     		if ($form->isValid($formData)) {
 				
-    			$info["appl_fname"]=strtoupper($formData["appl_fname"]);
-				$info["appl_mname"]=strtoupper($formData["appl_mname"]);
-				$info["appl_lname"]=strtoupper($formData["appl_lname"]);
+    			//$info["appl_fname"]=strtoupper($formData["appl_fname"]);
+				//$info["appl_mname"]=strtoupper($formData["appl_mname"]);
+				//$info["appl_lname"]=strtoupper($formData["appl_lname"]);
 				$info["appl_email"]=$formData["appl_email"];			
 				 
 				
