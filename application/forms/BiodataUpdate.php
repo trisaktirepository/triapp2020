@@ -234,7 +234,7 @@ class App_Form_BiodataUpdate extends Zend_Form {
 		$this->addElement('select','std_province', array(
 				'label'=>$this->getView()->translate('country'),
 				'required'=>true,
-				'onChange'=>"changeState(this, $('#appl_state'));",
+				'onChange'=>"changeState(this, $('#std_state'));",
 				'decorators'=>array(
 						'ViewHelper',
 						'Description',
@@ -254,7 +254,7 @@ class App_Form_BiodataUpdate extends Zend_Form {
 		
 		$this->addElement('select','std_state', array(
 				'label'=>$this->getView()->translate('state_province'),
-				'onChange'=>"changeCity(this, $('#appl_city'));",
+				'onChange'=>"changeCity(this, $('#std_city'));",
 				'decorators'=>array(
 						'ViewHelper',
 						'Description',

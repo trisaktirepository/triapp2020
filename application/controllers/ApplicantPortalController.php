@@ -338,7 +338,17 @@ class ApplicantPortalController extends Zend_Controller_Action
                 $info['update_status']="1";
                 $info['update_st']=date('Y-m-d H:i:s');
                 //unset($formData['appl_phone_hp']);
-				
+                $info["appl_address_rt"]=$formData["std_address_rt"];
+                $info["appl_address_rw"]=$formData["std_address_rw"];
+                $info["appl_address1"]=$formData["std_address1"];
+                $info["appl_address2"]=$formData["std_address2"];
+                $info["appl_province"]=$formData["std_province"];
+                $info["appl_state"]=$formData["std_state"];
+                $info["appl_city"]=$formData["std_city"];
+                $info["appl_kelurahan"]=$formData["std_kelurahan"];
+                $info["appl_kecamatan"]=$formData["std_kecamatan"];
+                $info["appl_postcode"]=$formData["std_postcode"];
+                
 				$appProfileDB->updateData($info, $formData["appl_id"]);
 				
                 if(isset($info['verifyKey']))
@@ -423,6 +433,17 @@ class ApplicantPortalController extends Zend_Controller_Action
     		}//end isvalid form
 			
     	}else{
+    		$applicant["std_address_rt"]=$applicant["appl_address_rt"];
+    		$applicant["std_address_rw"]=$rsfather["appl_address_rw"];
+    		$applicant["std_address1"]=$rsfather["appl_address1"];
+    		$applicant["std_address2"]=$rsfather["appl_address2"];
+    		$applicant["std_province"]=$rsfather["appl_province"];
+    		$applicant["std_state"]=$rsfather["appl_state"];
+    		$applicant["std_city"]=$rsfather["appl_city"];
+    		$applicant["std_kelurahan"]=$rsfather["appl_kelurahan"];
+    		$applicant["std_kecamatan"]=$rsfather["appl_kecamatan"];
+    		$applicant["std_postcode"]=$rsfather["appl_postcode"];
+    		
     		$family = new App_Model_Application_DbTable_ApplicantFamily();
     		
     		$rsfather=$family->fetchdata($appl_id,20);
