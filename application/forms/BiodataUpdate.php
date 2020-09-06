@@ -106,7 +106,7 @@ class App_Form_BiodataUpdate extends Zend_Form {
 				'required'=>true,
 				'decorators'=>array(
 						'ViewHelper',
-						'Description'=>array(''),
+						'Description' ,
 						'Errors',
 						array(array('data'=>'HtmlTag'), array('tag' => 'td', 'colspan'=>'3')),
 						array('Label', array('tag' => 'td' )),
