@@ -315,6 +315,7 @@ input#appl_no_of_child{
 	  if (substr($this->student['appl_phone_hp'],0,1)=="8") $hp='62'.$this->data['appl_phone_hp'];
 	  if (substr($this->student['appl_phone_hp'],0,1)=="0") $hp='62'.substr($this->data['appl_phone_hp'],1);
   ?>
+<type input="hidden" id="IdStudentRegistration" name="IdStudentRegistration" value="<?php echo $this->stdid;?>">
  <input type="hidden" id="diaghp" name="diaghp" value="<?php echo $hp?>">
 <tr><td colspan="3"><span id="demo"></span><?php echo ' '.substr($hp,0,strlen($hp)-4)."xxxx". ' Jika nomor Handphone salah silahkan hubungi Admin Fakultas'?></td></tr>
 <tr><td width="40%"><?php echo $this->translate('Masukan Kode Konfirmasi (4 kali gagal kode dibatalkan)')?></td><td width="5px">:</td>
