@@ -289,7 +289,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     	$stdid = $auth->getIdentity()->registration_id;
     	$this->view->stdid = $stdid;
     	    	
-    	$appProfileDB  = new App_Model_Student_DbTable_Studentprofile();	
+    	$appProfileDB  = new App_Model_Student_DbTable_StudentProfile();	
     	$applicant = $appProfileDB->getData($appl_id);
     	$this->view->applicant = $applicant;
     	
