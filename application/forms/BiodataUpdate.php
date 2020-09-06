@@ -46,6 +46,7 @@ class App_Form_BiodataUpdate extends Zend_Form {
 
 		$this->addElement('text','appl_fname', array(
 		'label'=>'First Name',
+		'disabled'=>true,
 		'decorators'=>array(
 		'ViewHelper',
 		'Description',
@@ -60,6 +61,7 @@ class App_Form_BiodataUpdate extends Zend_Form {
 
 		$this->addElement('text','appl_mname', array(
 			'label'=>'Middle Name',
+				'disabled'=>true,
 			'decorators'=>array(
 				'ViewHelper',
 				'Description',
@@ -75,6 +77,7 @@ class App_Form_BiodataUpdate extends Zend_Form {
 
 		$this->addElement('text','appl_lname', array(
 		'label'=>'Last Name',
+				'disabled'=>true,
 		'required'=>true,
 		'decorators'=>array(
 		'ViewHelper',
