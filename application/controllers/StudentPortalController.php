@@ -3825,7 +3825,7 @@ class StudentPortalController extends Zend_Controller_Action
     		$this->_redirect('/student-portal/myattendance/grpid/'.$grpid);
 	 	}
 	 	
-	 	$this->view->ref=$dbReflecton->getDataStd($cgaid, $registration_id);
+	 	$this->view->ref=$dbReflecton->isIn($cgaid, $registration_id);
 	 	//$this->view->reflectionall=$dbReflecton->getDataByStd($cgaid,$stdid);
 	 	
 	}
