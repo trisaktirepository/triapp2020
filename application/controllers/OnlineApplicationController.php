@@ -9788,8 +9788,11 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	else if ($trans['at_appl_type']=="8") $pcode='MGS';
     	else if ($trans['at_appl_type']=="9") $pcode='DOK';
     	$placementcode=$pcode.substr($intake['IntakeId'], 0,4).substr($intake['IntakeId'], 10,1);
-    	if ($trans['at_appl_type']=="1") $placementcode=substr($placementcode, 0,7);
-    	
+    	if ($trans['at_appl_type']=="1") {
+    		 $dbPtest=new App_Model_Application_DbTable_ApplicantPtest();
+    		 $ptest=$dbPtest->getUsmPtestCode($txtid);
+    		 $placementcode=$ptest['apt_ptest_code'];
+    	}
     	$applicantProfileProposeDb = new App_Model_Application_DbTable_ApplicantProfilePropose();
     	$applicantProfileDb=new App_Model_Application_DbTable_ApplicantProfile();
      	

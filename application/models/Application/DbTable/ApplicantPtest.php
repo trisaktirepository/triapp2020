@@ -34,6 +34,25 @@ class App_Model_Application_DbTable_ApplicantPtest extends Zend_Db_Table_Abstrac
 		
 	}
 	
+	public function getUsmPtestCode($transaction_id){
+	
+		$db = Zend_Db_Table::getDefaultAdapter();
+	
+		$select = $db ->select()
+		->from($this->_name)
+		->where('apt_at_trans_id =?', $transaction_id)
+		->where('MID(apt_ptest_code,1,3)="USM"');
+		 
+		$row = $db->fetchRow($select);
+	
+		if($row){
+			return $row;
+		}else{
+			return null;
+		}
+	
+	}
+	
 	public function addData($data){		
 	   $id = $this->insert($data);
 	   return $id;
