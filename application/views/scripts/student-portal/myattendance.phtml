@@ -49,8 +49,8 @@ function edit(id){
  	    	</tr>
 
 	    	<?php 	    	
-	    	if (count($this->paginator)){	    		
-	        foreach ($this->paginator as $lobjstudents){
+	    	if (count($this->attendance)){	    		
+	        foreach ($this->attendance as $lobjstudents){
 	        ?>
 	  		<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">	  		
 	        	<td><?php echo date('d-m-y',strtotime($lobjstudents['class_date']))?></td>
@@ -63,21 +63,13 @@ function edit(id){
 	        	<td><?php echo $this->escape($lobjstudents['capability']);?></td>
 	        	<td><?php echo $this->escape($lobjstudents['uncapabiility']);?></td>
 	         	<td><input type="button" class="btn" onclick="edit('<?php echo $lobjstudents['id']?>')"></td>
+	      </tr>
 	       <?php 
 	       	 } 
 			} 
 	        ?>
-			</tr>
-			<?php 
-			if (count($this->paginator)){
-			?>
-			<tr>
-	        	<td colspan="8" align="right"><div class="pagination"><?php echo $this->paginationControl($this->lobjpaginator,'Sliding',
-	                                    '/partials/my_pagination_control.phtml'); ?></div></td>
-   			</tr>
-   			<?php 
-			}
-   			?>
+			
+			 
 		</table>
 	</fieldset>
 

@@ -3840,10 +3840,7 @@ class StudentPortalController extends Zend_Controller_Action
 			$att[$key]['capability']=$ref['capability'];
 			$att[$key]['uncapability']=$ref['uncapability'];
 		}
-		$paginator = new Zend_Paginator(new Zend_Paginator_Adapter_Array($att));
-		//$paginator->setItemCountPerPage($this->gintPageCount);
-		$paginator->setItemCountPerPage(100);
-		$paginator->setCurrentPageNumber($this->_getParam('page',1));
+		$this->view->attendance=$att;
 		$grp=$dbCourse->getInfo($grpid);
 		$grp['FullName']=$dbStaff->getStaffFullName($grp['IdLecturer']);
 		$this->view->course=$grp;
