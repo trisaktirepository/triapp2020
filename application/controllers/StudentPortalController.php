@@ -3839,7 +3839,7 @@ class StudentPortalController extends Zend_Controller_Action
 			$ref=$dbReflection->getDataStd($cgaid, $registration_id);
 			$att[$key]['capability']=$ref['capability'];
 			$att[$key]['uncapability']=$ref['uncapability'];
-			$att[$key]['FullName']=$dbStaff->getStaffFullName($value['IdLecturer']);
+			$att[$key]['FullName']=$dbStaff->getStaffFullName($value['lecturer_id']);
 		}
 		$this->view->attendance=$att;
 		$grp=$dbCourse->getInfo($grpid);
