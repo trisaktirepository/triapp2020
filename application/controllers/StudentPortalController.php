@@ -3800,7 +3800,7 @@ class StudentPortalController extends Zend_Controller_Action
 		$dbCourse=new App_Model_Registration_DbTable_CourseGroup();
 		$dbStaff=new App_Model_General_DbTable_Staffmaster();
 		$dbAttendanceStd=new App_Model_Exam_DbTable_CourseGroupStudentAttendanceDetail();
-		$att=$dbAttendanceStd->getAttendanceByStd($grpid, $registration_id);
+		$att=$dbAttendanceStd->getAttendanceByStdDate($cgaid,$registration_id);
 		$this->view->att=$att;
 		$grp=$dbCourse->getInfo($grpid);
 		$grp['FullName']=$dbStaff->getStaffFullName($grp['IdLecturer']);

@@ -216,6 +216,24 @@ class App_Model_Exam_DbTable_CourseGroupStudentAttendanceDetail extends Zend_Db_
 	
 	}
 	
+	public function getAttendanceByStdDate($cgaid,$student_id){
+	
+		$db = Zend_Db_Table::getDefaultAdapter();
+	
+		$selectData = $db->select()
+		->from(array('cgad'=>$this->_name))
+		->join(array('cga'=>'course_group_attendance'), 'cga.id = cgad.course_group_att_id')
+		->join(array('c'=>'tbl_definationms'),'cgad.status=c.iddefinition',array('status'=>'BahasaIndonesia'))
+		->where('cga.id=?',$cgaid)
+		->where('cgad.student_id=?',$student_id)
+		->order('cga.class_date');
+	
+		$row = $db->fetchRow($selectData);
+	
+		return $row;
+	
+	}
+	
 	public function getAllgroup($group_id,$program) {
 		
 		$db = Zend_Db_Table::getDefaultAdapter();
