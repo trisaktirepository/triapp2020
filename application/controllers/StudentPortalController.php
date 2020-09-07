@@ -3815,7 +3815,7 @@ class StudentPortalController extends Zend_Controller_Action
     				'capability'=>$formData['capability'],
     				'uncapability'=>$formData['uncapability'],
     				'entried_date'=>date('Y-m-d H:i:s'),
-    				'entried_by'=>$auth->getIdentity()->id
+    				'entried_by'=>$auth->getIdentity()->appl_id
     		);
     		$row=$dbReflecton->isIn($cgaid, $registration_id);
     		
