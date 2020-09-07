@@ -3791,6 +3791,7 @@ class StudentPortalController extends Zend_Controller_Action
 	public function reflectionAction(){
 		
 		$cgaid=$this->_getParam('cgaid');
+		$grpid=$this->_getParam('grpid');
 		$auth = Zend_Auth::getInstance();
 		$appl_id = $auth->getIdentity()->appl_id;
 		$registration_id = $auth->getIdentity()->registration_id;
@@ -3810,14 +3811,13 @@ class StudentPortalController extends Zend_Controller_Action
     		$row=$dbReflecton->isIn($cgaid, $registration_id);
     		
     		if (!$row) {
-    			$dbReflecton->insertData();
-    			
+    			$dbReflecton->insertData();	
     		} else $dbReflecton->update($data, 'cgar_id='.$row['cgar_id']);
-    		
+    		$this->_redirect('/student-portal/myattendance/grpid/'.$grpid);
 	 	}
 	 	
 	 	$this->view->reflection=$dbReflecton->getDataByCatId($cgaid);
-	 	$this->view->reflectionall=$dbReflecton->getDataByStd($cgaid,$stdid);
+	 	//$this->view->reflectionall=$dbReflecton->getDataByStd($cgaid,$stdid);
 	 	
 	}
 	
@@ -3828,10 +3828,16 @@ class StudentPortalController extends Zend_Controller_Action
 		$appl_id = $auth->getIdentity()->appl_id;
 		$registration_id = $auth->getIdentity()->registration_id;
 		$this->view->stdid=$registration_id;
+		$dbStaff=new App_Model_General_DbTable_Staffmaster();
 		$dbAttendanceStd=new App_Model_Exam_DbTable_CourseGroupStudentAttendanceDetail();
-		$dbCourse=new App_Model_General_DbTable_CourseGroup();
-		$this->view->attedance=$dbAttendanceStd->getAttendanceByStd($grpid, $registration_id);
-		$this->view->course=$dbCourse->getInfo($grpid);
+		$dbCourse=new App_Model_Registration_DbTable_CourseGroup();
+		$paginator = new Zend_Paginator(new Zend_Paginator_Adapter_Array($dbAttendanceStd->getAttendanceByStd($grpid, $registration_id)));
+		//$paginator->setItemCountPerPage($this->gintPageCount);
+		$paginator->setItemCountPerPage(1000);
+		$paginator->setCurrentPageNumber($this->_getParam('page',1));
+		$grp=$dbCourse->getInfo($grpid);
+		$grp['FullName']=$dbStaff->getStaffFullName($grp['IdLecturer']);
+		$this->view->course=$grp;
 	}
 }
 

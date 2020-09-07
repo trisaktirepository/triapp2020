@@ -1,0 +1,83 @@
+<script>
+function edit(id){
+	window.open('/student-portal/reflection/cgaid/'+id+'/grpid/<?php echo $this->course['IdCourseTaggingGroup']?>');
+}
+
+</script>
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>	
+		  
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br><br>
+
+	<fieldset>
+	<legend><?php echo $this->translate("Course");?></legend>
+    	<table class="table">
+    	<tr><th><?php echo $this->translate('Subject')?></th><td><?php echo $this->course['subject_name']?></td></tr>
+    	<tr><th><?php echo $this->translate('Subject Code')?></th><td><?php echo $this->course['subject_code']?></td></tr>
+    	<tr><th><?php echo $this->translate('Credit Hours')?></th><td><?php echo $this->course['CreditHours']?></td></tr>
+    	<tr><th><?php echo $this->translate('Group Name')?></th><td><?php echo $this->course['GroupName']?></td></tr>
+    	<tr><th><?php echo $this->translate('Group Code')?></th><td><?php echo $this->course['GroupCode']?></td></tr>
+    	<tr><th><?php echo $this->translate('Lecturer')?></th><td><?php echo $this->course['FullName']?></td></tr>
+    	
+    	</table>
+    </fieldset>
+    <br/>
+	<fieldset>
+		<table class="table" width="100%" cellpadding="5" cellspacing="1">
+		
+		  	<tr>
+	            <th><?php echo $this->translate("Date");?></th>
+	            <th><?php echo $this->translate("Time");?></th>    
+		    	<th><?php echo $this->translate("Lecturer");?></th>
+		    	<th><?php echo $this->translate("Status");?></th>
+		    	<th><?php echo $this->translate("Activity");?></th>
+		    	<th><?php echo $this->translate("Student Assign");?></th>
+		    	<th><?php echo $this->translate("Evaluation");?></th>
+		    	<th><?php echo $this->translate("My Capability");?></th>
+		    	<th><?php echo $this->translate("My Problem");?></th>
+ 	    	</tr>
+
+	    	<?php 	    	
+	    	if (count($this->paginator)){	    		
+	        foreach ($this->paginator as $lobjstudents){
+	        ?>
+	  		<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">	  		
+	        	<td><?php echo date('d-m-y',strtotime($lobjstudents['class_date']))?></td>
+	        	<td><?php echo $lobjstudents['class_time_start'].'-'.$lobjstudents['class_time_start'];?></td>
+	        	<td><?php echo $this->escape($lobjstudents['lecturer']);?></td>
+                <td><?php echo $this->escape($lobjstudents['status']);?></td>
+                 <td><?php echo $this->escape($lobjstudents['lecturer_activity']);?></td>
+                <td><?php echo $this->escape($lobjstudents['student_assigment']);?></td>
+                <td><?php echo $this->escape($lobjstudents['evaluation']);?></td>
+	        	<td><?php echo $this->escape($lobjstudents['capability']);?></td>
+	        	<td><?php echo $this->escape($lobjstudents['uncapabiility']);?></td>
+	         	<td><input type="button" class="btn" onclick="edit('<?php echo $lobjstudents['id']?>')"></td>
+	       <?php 
+	       	 } 
+			} 
+	        ?>
+			</tr>
+			<?php 
+			if (count($this->paginator)){
+			?>
+			<tr>
+	        	<td colspan="8" align="right"><div class="pagination"><?php echo $this->paginationControl($this->lobjpaginator,'Sliding',
+	                                    '/partials/my_pagination_control.phtml'); ?></div></td>
+   			</tr>
+   			<?php 
+			}
+   			?>
+		</table>
+	</fieldset>
+

@@ -141,7 +141,7 @@ class App_Model_Registration_DbTable_CourseGroup extends Zend_Db_Table_Abstract 
 		
 		$select = $db ->select()
 					  ->from(array('cg'=>$this->_name))
-					  ->joinLeft(array('sm'=>'tbl_subjectmaster'),'sm.IdSubject=cg.IdSubject',array('subject_code'=>'SubCode','subject_name'=>'subjectMainDefaultLanguage'))
+					  ->joinLeft(array('sm'=>'tbl_subjectmaster'),'sm.IdSubject=cg.IdSubject',array('subject_code'=>'SubCode','subject_name'=>'subjectMainDefaultLanguage','CreditHours'))
 					  ->joinLeft(array('stm'=>'tbl_staffmaster'),'stm.IdStaff=cg.IdLecturer',array('FrontSalutation','FullName','BackSalutation'))
 					  ->where('IdCourseTaggingGroup = ?',$idGroup);					  
 		 $row = $db->fetchRow($select);	
