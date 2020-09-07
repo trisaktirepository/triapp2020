@@ -3812,7 +3812,7 @@ class StudentPortalController extends Zend_Controller_Action
     		
     		if (!$row) {
     			$dbReflecton->insertData();	
-    		} else $dbReflecton->update($data, 'cgar_id='.$row['cgar_id']);
+    		} else $dbReflecton->updateData($data, 'cgar_id='.$row['cgar_id']);
     		$this->_redirect('/student-portal/myattendance/grpid/'.$grpid);
 	 	}
 	 	
@@ -3833,16 +3833,16 @@ class StudentPortalController extends Zend_Controller_Action
 		$dbAttendanceStd=new App_Model_Exam_DbTable_CourseGroupStudentAttendanceDetail();
 		$dbCourse=new App_Model_Registration_DbTable_CourseGroup();
 		$att=$dbAttendanceStd->getAttendanceByStd($grpid, $registration_id);
-		echo var_dump($att);
+		//echo var_dump($att);
 		foreach ($att as $key=>$value) {
 			$cgaid=$value['id'];
 			$ref=$dbReflection->getDataStd($cgaid, $registration_id);
 			$att[$key]['capability']=$ref['capability'];
 			$att[$key]['uncapability']=$ref['uncapability'];
 		}
-		$paginator = new Zend_Paginator(new Zend_Paginator_Adapter_Array());
+		$paginator = new Zend_Paginator(new Zend_Paginator_Adapter_Array($att));
 		//$paginator->setItemCountPerPage($this->gintPageCount);
-		$paginator->setItemCountPerPage(1000);
+		$paginator->setItemCountPerPage(100);
 		$paginator->setCurrentPageNumber($this->_getParam('page',1));
 		$grp=$dbCourse->getInfo($grpid);
 		$grp['FullName']=$dbStaff->getStaffFullName($grp['IdLecturer']);

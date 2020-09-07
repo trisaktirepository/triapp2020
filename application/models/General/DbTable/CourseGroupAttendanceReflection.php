@@ -16,7 +16,7 @@ class App_Model_General_DbTable_CourseGroupAttendanceReflection extends Zend_Db_
         return $this->lobjDbAdpt->insert($this->_name,$data);
     }
     
-    public function update($data,$key)
+    public function updateData( $data,$key)
     {
     	$this->lobjDbAdpt->update($this->_name,$data,$key);
     }
