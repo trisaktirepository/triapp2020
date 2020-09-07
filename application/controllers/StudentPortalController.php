@@ -3832,6 +3832,7 @@ class StudentPortalController extends Zend_Controller_Action
 	
 	public function myattendanceAction(){
 	
+		$this->view->title='Attendance List';
 		$grpid=$this->_getParam('grpid');
 		$auth = Zend_Auth::getInstance();
 		$appl_id = $auth->getIdentity()->appl_id;
