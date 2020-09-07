@@ -3828,10 +3828,19 @@ class StudentPortalController extends Zend_Controller_Action
 		$appl_id = $auth->getIdentity()->appl_id;
 		$registration_id = $auth->getIdentity()->registration_id;
 		$this->view->stdid=$registration_id;
+		$dbReflection=new App_Model_General_DbTable_CourseGroupAttendanceReflection();
 		$dbStaff=new App_Model_General_DbTable_Staffmaster();
 		$dbAttendanceStd=new App_Model_Exam_DbTable_CourseGroupStudentAttendanceDetail();
 		$dbCourse=new App_Model_Registration_DbTable_CourseGroup();
-		$paginator = new Zend_Paginator(new Zend_Paginator_Adapter_Array($dbAttendanceStd->getAttendanceByStd($grpid, $registration_id)));
+		$att=$dbAttendanceStd->getAttendanceByStd($grpid, $registration_id);
+		echo var_dump($att);
+		foreach ($att as $key=>$value) {
+			$cgaid=$value['id'];
+			$ref=$dbReflection->getDataStd($cgaid, $registration_id);
+			$att[$key]['capability']=$ref['capability'];
+			$att[$key]['uncapability']=$ref['uncapability'];
+		}
+		$paginator = new Zend_Paginator(new Zend_Paginator_Adapter_Array());
 		//$paginator->setItemCountPerPage($this->gintPageCount);
 		$paginator->setItemCountPerPage(1000);
 		$paginator->setCurrentPageNumber($this->_getParam('page',1));
