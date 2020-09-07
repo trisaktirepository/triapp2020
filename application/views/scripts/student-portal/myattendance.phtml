@@ -46,6 +46,7 @@ function edit(id){
 		    	<th><?php echo $this->translate("Evaluation");?></th>
 		    	<th><?php echo $this->translate("My Capability");?></th>
 		    	<th><?php echo $this->translate("My Problem");?></th>
+		    	<th><?php echo $this->translate("Action");?></th>
  	    	</tr>
 
 	    	<?php 	    	
@@ -62,7 +63,7 @@ function edit(id){
                 <td><?php echo $this->escape($lobjstudents['evaluation']);?></td>
 	        	<td><?php echo $this->escape($lobjstudents['capability']);?></td>
 	        	<td><?php echo $this->escape($lobjstudents['uncapability']);?></td>
-	         	<td><input type="button" class="btn" onclick="edit('<?php echo $lobjstudents['id']?>')"></td>
+	         	<td><input type="button" class="btn" value="Refleksi" onclick="edit('<?php echo $lobjstudents['id']?>')"></td>
 	      </tr>
 	       <?php 
 	       	 } 
