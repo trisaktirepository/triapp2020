@@ -3845,7 +3845,7 @@ class StudentPortalController extends Zend_Controller_Action
 		//echo var_dump($att);
 		foreach ($att as $key=>$value) {
 			$cgaid=$value['id'];
-			$ref=$dbReflection->getDataStd($cgaid, $registration_id);
+			$ref=$dbReflection->isIn($cgaid, $registration_id);
 			if ($ref) {
 				$att[$key]['capability']=$ref['capability'];
 				$att[$key]['uncapability']=$ref['uncapability'];
