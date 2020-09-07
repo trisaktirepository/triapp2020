@@ -1,0 +1,42 @@
+<script>
+ 
+
+</script>
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>	
+		  
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br><br>
+	<form method="post">
+	<fieldset>
+	<legend><?php echo $this->translate("Course");?></legend>
+    	<table class="table">
+    	<tr><th><?php echo $this->translate('Subject')?></th><td><?php echo $this->course['subject_name']?></td></tr>
+    	<tr><th><?php echo $this->translate('Subject Code')?></th><td><?php echo $this->course['subject_code']?></td></tr>
+    	<tr><th><?php echo $this->translate('Credit Hours')?></th><td><?php echo $this->course['CreditHours']?></td></tr>
+    	<tr><th><?php echo $this->translate('Group Name')?></th><td><?php echo $this->course['GroupName']?></td></tr>
+    	<tr><th><?php echo $this->translate('Group Code')?></th><td><?php echo $this->course['GroupCode']?></td></tr>
+    	<tr><th><?php echo $this->translate('Lecturer')?></th><td><?php echo $this->course['FullName']?></td></tr>
+    	<tr><th><?php echo $this->translate('Lecturer Activity')?></th><td><?php echo $this->att['lecturer_activity']?></td></tr>
+    	<tr><th><?php echo $this->translate('Student Assignment')?></th><td><?php echo $this->att['student_assignment']?></td></tr>
+    	<tr><th><?php echo $this->translate('Evaluation')?></th><td><?php echo $this->att['evaluation']?></td></tr>
+    	<tr><th><?php echo $this->translate('My Capability')?></th><td><textarea name="capability" cols="70" rows="5"><?php if (isset($this->ref['capability'])) echo $this->ref['capability']?></textarea></td></tr>
+    	<tr><th><?php echo $this->translate('My Problem')?></th><td><textarea name="uncapability" cols="70" rows="5" ><?php if (isset($this->ref['uncapability'])) echo $this->ref['uncapability']?></textarea></td></tr>
+    	<tr><th><?php echo $this->translate('Keyword')?></th><td><textarea name="keywords"  cols="70" rows="1"><?php if (isset($this->ref['keywords'])) echo $this->ref['keywords']?></textarea></td></tr>
+    	<tr><td colspan="2"><input type="submit" name="submit" value="Save"></td></tr>
+    	
+    	
+    	</table>
+    </fieldset>
+    <br/>
+	 </form>

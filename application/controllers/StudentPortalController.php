@@ -3790,12 +3790,21 @@ class StudentPortalController extends Zend_Controller_Action
 	
 	public function reflectionAction(){
 		
+		$this->view->title='Reflection: Add/Edit';
 		$cgaid=$this->_getParam('cgaid');
 		$grpid=$this->_getParam('grpid');
 		$auth = Zend_Auth::getInstance();
 		$appl_id = $auth->getIdentity()->appl_id;
 		$registration_id = $auth->getIdentity()->registration_id;
 		$this->view->stdid=$registration_id;
+		$dbCourse=new App_Model_Registration_DbTable_CourseGroup();
+		$dbStaff=new App_Model_General_DbTable_Staffmaster();
+		$dbAttendanceStd=new App_Model_Exam_DbTable_CourseGroupStudentAttendanceDetail();
+		$att=$dbAttendanceStd->getAttendanceByStd($grpid, $registration_id);
+		$this->view->att=$att;
+		$grp=$dbCourse->getInfo($grpid);
+		$grp['FullName']=$dbStaff->getStaffFullName($grp['IdLecturer']);
+		$this->view->course=$grp;
 	 	$dbReflecton=new App_Model_General_DbTable_CourseGroupAttendanceReflection();
 	 	if($this->getRequest()->isPost()) {
     			
@@ -3816,7 +3825,7 @@ class StudentPortalController extends Zend_Controller_Action
     		$this->_redirect('/student-portal/myattendance/grpid/'.$grpid);
 	 	}
 	 	
-	 	$this->view->reflection=$dbReflecton->getDataByCatId($cgaid);
+	 	$this->view->ref=$dbReflecton->getDataStd($cgaid, $registration_id);
 	 	//$this->view->reflectionall=$dbReflecton->getDataByStd($cgaid,$stdid);
 	 	
 	}
