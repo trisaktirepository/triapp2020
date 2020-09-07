@@ -3846,8 +3846,14 @@ class StudentPortalController extends Zend_Controller_Action
 		foreach ($att as $key=>$value) {
 			$cgaid=$value['id'];
 			$ref=$dbReflection->getDataStd($cgaid, $registration_id);
-			$att[$key]['capability']=$ref['capability'];
-			$att[$key]['uncapability']=$ref['uncapability'];
+			if ($ref) {
+				$att[$key]['capability']=$ref['capability'];
+				$att[$key]['uncapability']=$ref['uncapability'];
+			} else {
+				$att[$key]['capability']='';
+				$att[$key]['uncapability']='';
+			}
+			
 			$att[$key]['FullName']=$dbStaff->getStaffFullName($value['lecturer_id']);
 		}
 		$this->view->attendance=$att;
