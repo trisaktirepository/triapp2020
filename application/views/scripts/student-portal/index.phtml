@@ -189,10 +189,11 @@ if($this->landscape["LandscapeType"]==43 || $this->landscape["LandscapeType"]==4
 			  			<a href="<?php echo $this->url(array('module'=>'default','controller'=>'student-portal','action'=>'view-schedule','idGroup'=>$course["IdCourseTaggingGroup"]),'default',true);?>"><?php  echo $this->translate("View Schedule"); ?></a>
 			  		<?php }else { echo $this->translate("Currently Not Available");} }?>
 			  	</td>
+			  	<td><a href="/student-portal/myattendance/grpid/<?php echo $course['IdCourseTaggingGroup']?>">Add/Edit</a></td>
+			  
 			  </tr>
 			  	<?php  } //end foreach ?>
 			  	
-			  <td><a href="/student-portal/myattendance/grpid/<?php echo $course['IdCourseTaggingGroup']?>">Add/Edit</a></td>
 			  </table>
 			  <br>
  			  <br>
