@@ -9791,7 +9791,9 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	if ($trans['at_appl_type']=="1") {
     		 $dbPtest=new App_Model_Application_DbTable_ApplicantPtest();
     		 $ptest=$dbPtest->getUsmPtestCode($txtid);
-    		 $placementcode=$ptest['apt_ptest_code'];
+    		 if ($ptest)
+    		 	$placementcode=$ptest['apt_ptest_code'];
+    		 else $placementcode='USM2020';
     	}
     	$applicantProfileProposeDb = new App_Model_Application_DbTable_ApplicantProfilePropose();
     	$applicantProfileDb=new App_Model_Application_DbTable_ApplicantProfile();
