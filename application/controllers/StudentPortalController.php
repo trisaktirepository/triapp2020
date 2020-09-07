@@ -3820,7 +3820,7 @@ class StudentPortalController extends Zend_Controller_Action
     		$row=$dbReflecton->isIn($cgaid, $registration_id);
     		
     		if (!$row) {
-    			$dbReflecton->insertData();	
+    			$dbReflecton->insertData($data);	
     		} else $dbReflecton->updateData($data, 'cgar_id='.$row['cgar_id']);
     		$this->_redirect('/student-portal/myattendance/grpid/'.$grpid);
 	 	}
