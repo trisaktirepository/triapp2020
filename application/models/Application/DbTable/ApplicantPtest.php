@@ -41,8 +41,8 @@ class App_Model_Application_DbTable_ApplicantPtest extends Zend_Db_Table_Abstrac
 		$select = $db ->select()
 		->from($this->_name)
 		->where('apt_at_trans_id =?', $transaction_id)
-		->where('MID(apt_ptest_code,1,3)="USM"');
-		echo $select;
+		->where('MID(apt_ptest_code,1,3) <> "TPA"');
+	//	echo $select;
 		$row = $db->fetchRow($select);
 	
 		if($row){
