@@ -165,7 +165,7 @@ $(function() {
 		<?php } else {?>
 			<a href="/finalassignment/proposal/student-apply-staff-proposal/appliedby/<?php echo $this->student['IdStudentRegistration'];?>/idta/<?php echo $batch['IdTA'];?>">Apply</a></td>
 		<?php }?>
-		<td><?php if ($batch['printed_url']!='') {
+		<td><?php if (isset($batch['printed_url']) &&  $batch['printed_url']!='') {
 			 
 			$path = $batch['printed_url'];
 			$path ="<a target='_blank' href=http://".APP_HOSTNAME.$path.">" ;
@@ -173,7 +173,7 @@ $(function() {
 		  echo $path;?><img src='<?php echo $this->baseUrl();?>/images/document.png' border=0 width='20' height='20' title="Download Printed Application to be Assigned by Student" ></a></td>
 		<?php } else { echo 'no doc';}?>
 		 
-		<td><?php if ($batch['doc_url']!='' ) {
+		<td><?php if (isset($batch['doc_url']) &&  $batch['doc_url']!='' ) {
 			$dt = explode("triapp",$batch['doc_url']);
 			//echo var_dump($dt);exit;
 			$path = $dt[1];
@@ -182,7 +182,7 @@ $(function() {
 		  	echo $path;?><img src='<?php echo $this->baseUrl();?>/images/document.png' border=0 width='20' height='20' title="Download Application Letter" ></a></td>
 			<img src='<?php echo $this->baseUrl();?>/images/upload.png' border=0 width='20' height='20' title="Upload Application Letter"  onclick="onclickUpload();" />
 			<?php 
-			} else if ($batch['printed_url']!='') {?>
+			} else if ( isset($batch['printed_url']) && $batch['printed_url']!='') {?>
 				<img src='<?php echo $this->baseUrl();?>/images/upload.png' border=0 width='20' height='20' title="Upload Application Letter"  onclick="onclickUpload();" />
 		<?php }?>
 		</td>
