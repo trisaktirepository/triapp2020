@@ -173,8 +173,8 @@ class Studentfinance_Model_DbTable_PaymentMain extends Zend_Db_Table_Abstract {
 	public function getApplicantPaymentTotalAmount($payer){
     	$db = Zend_Db_Table::getDefaultAdapter();
        	$select = $db ->select()
-				->from(array('im'=>'invoice_main'),array('sum_paid'=>'sum(im.bill_paid)'))
-				->join(array('pi'=>'payment_main'),'im.bill_number = pi.billing_no', array())
+				->from(array('im'=>'invoice_main'),array())
+				->join(array('pi'=>'payment_main'),'im.bill_number = pi.billing_no',array('sum_paid'=>'sum(pi.amount)'))
 				->where("pi.payer ='".$payer."'");
                                                 
 		$row = $db->fetchRow($select);
