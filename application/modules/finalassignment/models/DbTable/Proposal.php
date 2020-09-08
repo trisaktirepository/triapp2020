@@ -75,6 +75,7 @@ class Finalassignment_Model_DbTable_Proposal extends Zend_Db_Table_Abstract { //
 		->orwhere('p.IdBranch =0)')
 		->where('p.STATUS_PENGAJU = "Staff"')
 		->where('app.STS_ACC = 0 or app.STS_ACC is null');
+		echo $lstrSelect;
 		$larrResult = $this->lobjDbAdpt->fetchAll($lstrSelect);
 		
 		return $larrResult;
