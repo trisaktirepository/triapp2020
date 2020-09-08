@@ -162,6 +162,7 @@ class Finalassignment_ProposalController  extends Zend_Controller_Action  {
 		$student['cgpaall']=$gradestatus['sg_all_cgpa'];
 		$this->view->student=$student;
 		$dbFlowmain=new Finalassignment_Model_DbTable_FlowMain();
+		
 		$subject=$dbFlowmain->getFlowNameByProgram($student['IdProgram'],$student['IdProgramMajoring'],$student['IdBranch'],'Proposal',$student['IdLandscape']);
 		
 		$this->view->idflowmain=$subject['IdTAFlowMain'];
