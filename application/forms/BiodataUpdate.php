@@ -106,7 +106,8 @@ class App_Form_BiodataUpdate extends Zend_Form {
 		
 		$this->addElement('text','appl_phone_hp', array(
 				'label'=>'Mobile Phone',
-				'required'=>true,
+				//'required'=>true,
+				'disabled'=>true,
 				'decorators'=>array(
 						'ViewHelper',
 						'Description' ,
