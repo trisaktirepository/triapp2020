@@ -146,6 +146,59 @@ class App_Form_BiodataUpdate extends Zend_Form {
 				),
 		));
 		
+		$this->addElement('text','no_wa', array(
+				'label'=>'Nomor WhatApps',
+				//'required'=>true,
+				'decorators'=>array(
+						'ViewHelper',
+						'Description',
+						'Errors',
+						array(array('data'=>'HtmlTag'), array('tag' => 'td', 'colspan'=>'3')),
+						array('Label', array('tag' => 'td' )),
+						array(array('row'=>'HtmlTag'),array('tag'=>'tr'))
+				),
+		));
+		
+		$this->addElement('text','akun_twitter', array(
+				'label'=>'Twitter',
+				//'required'=>true,
+				'decorators'=>array(
+						'ViewHelper',
+						'Description',
+						'Errors',
+						array(array('data'=>'HtmlTag'), array('tag' => 'td', 'colspan'=>'3')),
+						array('Label', array('tag' => 'td' )),
+						array(array('row'=>'HtmlTag'),array('tag'=>'tr'))
+				),
+		));
+		
+		$this->addElement('text','akun_facebook', array(
+				'label'=>'Facebook',
+				//'required'=>true,
+				'decorators'=>array(
+						'ViewHelper',
+						'Description',
+						'Errors',
+						array(array('data'=>'HtmlTag'), array('tag' => 'td', 'colspan'=>'3')),
+						array('Label', array('tag' => 'td' )),
+						array(array('row'=>'HtmlTag'),array('tag'=>'tr'))
+				),
+		));
+		
+		
+		$this->addElement('text','akun_instagram', array(
+				'label'=>'Instagram',
+				//'required'=>true,
+				'decorators'=>array(
+						'ViewHelper',
+						'Description',
+						'Errors',
+						array(array('data'=>'HtmlTag'), array('tag' => 'td', 'colspan'=>'3')),
+						array('Label', array('tag' => 'td' )),
+						array(array('row'=>'HtmlTag'),array('tag'=>'tr'))
+				),
+		));
+		 
 		$this->addElement('hidden', 'contact', array(
 				'description' => '<br /><h3>'.$this->getView()->translate('Domisili').'</h3>',
 				'ignore' => true,

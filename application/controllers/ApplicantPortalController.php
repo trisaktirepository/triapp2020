@@ -330,6 +330,10 @@ class ApplicantPortalController extends Zend_Controller_Action
                 }			
                 $info['appl_phone_home']=$formData['appl_phone_home'];
                 $info['appl_nik']=$formData['appl_nik'];
+                $info['no_wa']=$formData['no_wa'];
+                $info['akun_twitter']=$formData['akun_twitter'];
+                $info['akun_facebook']=$formData['akun_facebook'];
+                $info['akun_instagram']=$formData['akun_instagram'];
                 $info['update_status']="1";
                 $info['update_dt']=date('Y-m-d H:i:s');
                 //unset($formData['appl_phone_hp']);
