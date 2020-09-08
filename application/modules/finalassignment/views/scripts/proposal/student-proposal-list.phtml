@@ -89,7 +89,7 @@ $(function() {
 		<?php } else {?>
 			<a href="/finalassignment/proposal/student-application/edit/1/proposedby/<?php echo $this->proposedby;?>/idtaapplication/<?php echo $batch['IdTAApplication'];?>">Edit</a></td>
 		<?php }?>
-		<td><?php if ($batch['printed_url']!='') {
+		<td><?php if (isset($batch['printed_url']) && $batch['printed_url']!='') {
 			 
 			$path = $batch['printed_url'];
 			$path ="<a target='_blank' href=http://".APP_HOSTNAME.$path.">" ;
@@ -97,7 +97,7 @@ $(function() {
 		  echo $path;?><img src='<?php echo $this->baseUrl();?>/images/document.png' border=0 width='20' height='20' title="Download Printed Application to be Assigned by Student" ></a></td>
 		<?php } else { echo 'no doc';}?>
 		 
-		<td><?php if ($batch['doc_url']!='') {
+		<td><?php if (isset($batch['doc_url']) && $batch['doc_url']!='') {
 			$path = $batch['doc_url']; 
 		 
 			$path ="<a target='_blank' href=http://".APP_HOSTNAME.$path.">" ;
