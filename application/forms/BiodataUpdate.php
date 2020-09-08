@@ -147,7 +147,7 @@ class App_Form_BiodataUpdate extends Zend_Form {
 		));
 		
 		$this->addElement('text','no_wa', array(
-				'label'=>'Nomor WhatApps',
+				'label'=>'WhatApps',
 				//'required'=>true,
 				'decorators'=>array(
 						'ViewHelper',
