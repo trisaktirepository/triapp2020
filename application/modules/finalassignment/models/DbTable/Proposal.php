@@ -69,11 +69,14 @@ class Finalassignment_Model_DbTable_Proposal extends Zend_Db_Table_Abstract { //
 		->from(array("p"=>$this->_name))
 		->joinLeft(array('app'=>'tbl_TA_Application'),'p.IdTA = app.IdTA',array())
 		->where('p.IdProgram = ?', $program)
-		->where('p.IdMajor = ?', $majoring)
-		->where('p.IdBranch = ?', $branch)
+		->where('(p.IdMajor = ?', $majoring)
+		->orwhere('p.IdMajor is null )')
+		->where('(p.IdBranch = ?', $branch)
+		->orwhere('p.IdBranch = is null)')
 		->where('p.STATUS_PENGAJU = "Staff"')
 		->where('app.STS_ACC = 0 or app.STS_ACC is null');
 		$larrResult = $this->lobjDbAdpt->fetchAll($lstrSelect);
+		
 		return $larrResult;
 	}
 	public function fnGetProposal($id=null){
