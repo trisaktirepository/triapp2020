@@ -57,7 +57,7 @@ class App_Model_Application_DbTable_DocumentPrerequisite extends Zend_Db_Table_A
 		} else {
 			$select->where('a.IdProgram=?',$prog1);
 		}
-		echo $select;exit;
+		//echo $select;exit;
 		return $db->fetchAll($select);
 	
 	}
