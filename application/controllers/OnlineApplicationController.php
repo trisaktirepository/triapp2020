@@ -4149,6 +4149,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 		else if ($transaction["at_appl_type"]=="3") $testCode='CREDIT';
 		else if ($transaction["at_appl_type"]=="4") $testCode='INVITATION';
 		else if ($transaction["at_appl_type"]=="5") $testCode='PORTOFOLIO';
+		else if ($transaction["at_appl_type"]=="8") $testCode='PORTOFOLIO';
 		
 		else if ($transaction["at_appl_type"]=="6") $testCode='SCHOLARSHIP';
 		else if ($transaction["at_appl_type"]=="7") $testCode='UTBK';
