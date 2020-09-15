@@ -10822,6 +10822,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     		//echo var_dump($doc);exit;
     		$documentDB->addData($doc);
     		//------- end high school cert section ----------
+    		
     
     	} else if ($admission_type==6) {
     
@@ -11131,7 +11132,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     			
     
     	}
-    	//$this->_redirect('http://www.spmb.trisakti.ac.id/applicant-portal');
+    	$this->_redirect('/applicant-portal');
     		
     }
 }
