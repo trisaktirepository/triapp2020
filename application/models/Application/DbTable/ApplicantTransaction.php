@@ -292,6 +292,44 @@ class App_Model_Application_DbTable_ApplicantTransaction extends Zend_Db_Table_A
 			//echo $pre.$no;exit;
 			return $pre.$no;
 		
+		} else if ($admission_type==8) {
+
+			$select=$db->select()
+			->from(array('a'=>'tbl_intake'),array('PortofolioCode'))
+			->where('IdIntake=?',$intake);
+			$row=$db->fetchRow($select);
+		 	$pre=$row['PortofolioCode'];
+			$select=$db->select()
+				->from(array('a'=>'applicant_transaction'),array('billing_no'=>'ifnull(max(substr(at_pes_id,-5)) ,0)+1'))
+				->where("at_appl_type = '8'")
+				->where('at_intake=?',$intake); 
+				$row=$db->fetchRow($select);
+			$no=$row['billing_no']+100000;
+			//echo $no;
+			$no=substr($no,1, 5);
+			//echo $no;
+			//echo $pre.$no;exit;
+			return $pre.$no;
+		
+		} else if ($admission_type==9) {
+
+			$select=$db->select()
+			->from(array('a'=>'tbl_intake'),array('PortofolioCode'))
+			->where('IdIntake=?',$intake);
+			$row=$db->fetchRow($select);
+		 	$pre=$row['PortofolioCode'];
+			$select=$db->select()
+				->from(array('a'=>'applicant_transaction'),array('billing_no'=>'ifnull(max(substr(at_pes_id,-5)) ,0)+1'))
+				->where("at_appl_type = '9'")
+				->where('at_intake=?',$intake); 
+				$row=$db->fetchRow($select);
+			$no=$row['billing_no']+100000;
+			//echo $no;
+			$no=substr($no,1, 5);
+			//echo $no;
+			//echo $pre.$no;exit;
+			return $pre.$no;
+		
 		}
 		//$stmt = $db->query("CALL pr_appl_pesno($admission_type,@vApplicantId,$intake,$testcode)");
 		
