@@ -2864,13 +2864,13 @@ class App_Form_Programme extends Zend_Form {
 	
 		$this->addElement('select','ap_prog_code_2', array(
 				'label'=>"Programme Preference 2",
-				'required'=>true,
+				//'required'=>true,
 				'onChange'=>"getGroupNamePssb2(this);"
 		));
 		$this->ap_prog_code_2->setRegisterInArrayValidator(false);
 		$this->addElement('select','grouppssb2', array(
 				'label'=>"Kelas Kuliah",
-				'required'=>true,
+				//'required'=>true,
 				'onChange'=>"changeProgram3();"
 		));
 		$this->grouppssb2->setRegisterInArrayValidator(false);
@@ -2899,13 +2899,13 @@ class App_Form_Programme extends Zend_Form {
 		
 		$this->addElement('select','ap_prog_code_3', array(
 				'label'=>"Programme Preference 3",
-				'required'=>true,
+				//'required'=>true,
 				'onChange'=>"getGroupNamePssb3(this);"
 		));
 		$this->ap_prog_code_3->setRegisterInArrayValidator(false);
 		$this->addElement('select','grouppssb3', array(
 				'label'=>"Kelas Kuliah",
-				'required'=>true,
+				//'required'=>true,
 				'onChange'=>"changeProgram4();"
 		));
 		$this->grouppssb3->setRegisterInArrayValidator(false);
@@ -2933,13 +2933,13 @@ class App_Form_Programme extends Zend_Form {
 		
 		$this->addElement('select','ap_prog_code_4', array(
 				'label'=>"Programme Preference 4",
-				'required'=>true,
+				//'required'=>true,
 				'onChange'=>"getGroupNamePssb4(this);"
 		));
 		$this->ap_prog_code_2->setRegisterInArrayValidator(false);
 		$this->addElement('select','grouppssb4', array(
 				'label'=>"Kelas Kuliah",
-				'required'=>true,
+				//'required'=>true,
 		));
 		$this->grouppssb4->setRegisterInArrayValidator(false);
 		$registry = Zend_Registry::getInstance();
