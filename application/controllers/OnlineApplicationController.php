@@ -2265,31 +2265,34 @@ class OnlineApplicationController extends Zend_Controller_Action {
 							$this->view->form = $form;
 						}
 						//second preferrence
-						$branch2=$dbbranch->getData($formData['grouppssb2']);
-						//add ptest program prefered 2
-						$data2 = array(
-								'ap_at_trans_id' =>$transaction['at_trans_id'],
-								'ap_prog_code' => $formData['ap_prog_code_2'],
-								'ap_preference' =>2,
-								'IdProgramBranch'=>$formData['grouppssb2'],
-								'IdBranch'=>$branch2['IdBranch']
-						);
-							
-						//checking for selected programme
-						if( isset($data2['ap_prog_code']) && $data2['ap_prog_code']!=null && $data2['ap_prog_code']!=""  ){
-							$row=$applicantProgramDb->IsIn($transaction['at_trans_id'], '2');
-							if (!$row)
-								$applicantProgramDb->insert($data2);
-							else
-								$applicantProgramDb->updateData($data2, $row['ap_id']);
-	
-						}else{
-							$this->view->noticeError = $this->translate("Silalah pilih program studi ke-2");
-							//$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'program-invitation'),'default',true));
-							$form->populate($formData);
-							$this->view->form = $form;
+						if ($formData['grouppssb2']!='') {
+							$branch2=$dbbranch->getData($formData['grouppssb2']);
+							//add ptest program prefered 2
+							$data2 = array(
+									'ap_at_trans_id' =>$transaction['at_trans_id'],
+									'ap_prog_code' => $formData['ap_prog_code_2'],
+									'ap_preference' =>2,
+									'IdProgramBranch'=>$formData['grouppssb2'],
+									'IdBranch'=>$branch2['IdBranch']
+							);
+								
+							//checking for selected programme
+							if( isset($data2['ap_prog_code']) && $data2['ap_prog_code']!=null && $data2['ap_prog_code']!=""  ){
+								$row=$applicantProgramDb->IsIn($transaction['at_trans_id'], '2');
+								if (!$row)
+									$applicantProgramDb->insert($data2);
+								else
+									$applicantProgramDb->updateData($data2, $row['ap_id']);
+		
+							}else{
+								$this->view->noticeError = $this->translate("Silalah pilih program studi ke-2");
+								//$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'program-invitation'),'default',true));
+								$form->populate($formData);
+								$this->view->form = $form;
+							}
 						}
 						//third preferrence
+						if ($formData['grouppssb3']!='') {
 						$branch3=$dbbranch->getData($formData['grouppssb3']);
 						//add ptest program prefered 3
 						$data3 = array(
@@ -2314,8 +2317,10 @@ class OnlineApplicationController extends Zend_Controller_Action {
 							$form->populate($formData);
 							$this->view->form = $form;
 						}
+						}
 						
 						//fourth preferrence
+						if ($formData['grouppssb4']!='') {
 						$branch4=$dbbranch->getData($formData['grouppssb4']);
 						//add ptest program prefered 3
 						$data4 = array(
@@ -2339,6 +2344,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 							//$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'program-invitation'),'default',true));
 							$form->populate($formData);
 							$this->view->form = $form;
+						}
 						}
 						//redirect
 						if  ($dbAppMark->getCompMarkByTxnIdCompId($transaction_id))
