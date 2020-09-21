@@ -4078,10 +4078,10 @@ class ApplicantPortalController extends Zend_Controller_Action
     		$fee_structure = $feeStructureDb->getApplicantFeeStructure($intakeData[0]['IdIntake'],$programid,314,$branch);
     		$biaya = number_format($biaya, 2);
     	}
-    
+    	$dbInv=new Studentfinance_Model_DbTable_InvoiceMain();
     	//$feeStructureDb = new Studentfinance_Model_DbTable_FeeStructure();
     	//$fee_structure = $feeStructureDb->getApplicantFeeStructure($txnData['at_intake'], $programData['IdProgram']);
-    	if ($pake=='') {
+    	if ($paket=='') {
     		$invoice=$dbInv->getApplicantInvoice($txnData['at_pes_id']);
     		if ($invoice) {
     			if (substr($invoice[0]['bill_number'], 0,1)=="0") $paket='A';
