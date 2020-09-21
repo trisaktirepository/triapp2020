@@ -3904,15 +3904,11 @@ class ApplicantPortalController extends Zend_Controller_Action
     	//get applicant info
     	$applicantDB = new App_Model_Application_DbTable_ApplicantProfile();
     	$applicant = $applicantDB->getAllProfile($txnId);
-    	 
-    	
-    
-    
     	//getapplicantprogram
     	$appProgramDB = new App_Model_Application_DbTable_ApplicantProgram();
     	$programDb = new GeneralSetup_Model_DbTable_Program();
     
-    	if($txnData['at_appl_type']==2 || $txnData['at_appl_type']==4 || $txnData['at_appl_type']==5 || $txnData['at_appl_type']==6 || $txnData['at_appl_type']==7 || $txnData['at_appl_type']==3){
+    	if($txnData['at_appl_type']==2 || $txnData['at_appl_type']==4 || $txnData['at_appl_type']==5 || $txnData['at_appl_type']==8 || $txnData['at_appl_type']==9 || $txnData['at_appl_type']==6 || $txnData['at_appl_type']==7 || $txnData['at_appl_type']==3){
     		$program = $appProgramDB->getProgramFaculty($txnId,$txnData['at_appl_type']);
     		$branch=$program[0]['IdBranchOffer'];
     		$programid=$program[0]['program_id'];
@@ -4085,7 +4081,13 @@ class ApplicantPortalController extends Zend_Controller_Action
     
     	//$feeStructureDb = new Studentfinance_Model_DbTable_FeeStructure();
     	//$fee_structure = $feeStructureDb->getApplicantFeeStructure($txnData['at_intake'], $programData['IdProgram']);
-    
+    	if ($pake=='') {
+    		$invoice=$dbInv->getApplicantInvoice($txnData['at_pes_id']);
+    		if ($invoice) {
+    			if (substr($invoice[0]['bill_number'], 0,1)=="0") $paket='A';
+    			else $paket="B";
+    		} 
+    	}
     	//get selected payment plan
     	$paymentplanDb = new Studentfinance_Model_DbTable_FeeStructurePlan();
     	$payment_plan = $paymentplanDb->getBillingPlanByPackage($fee_structure['fs_id'],$paket);
