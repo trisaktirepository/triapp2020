@@ -191,7 +191,7 @@ $graduate=$std;
 	<td><?php echo $graduate['appl_birth_place']?></td>
 	<td><?php echo $graduate['appl_dob']?></td>
 	<?php if ($graduate['ijazah']!=null) {?>
-	<td> <a href="<?php echo "http://".ONNAPP_HOSTNAME.$graduate['ijazah'];?>" target="_BLANK" >Ijazah</a></td>
+	<td> <a href="<?php echo ONNAPP_HOSTNAME.$graduate['ijazah'];?>" target="_BLANK" >Ijazah</a></td>
 	<?php } 
 	$statusall=0; 
 	if ($graduate['ijazah']!=null) {
@@ -211,7 +211,7 @@ $graduate=$std;
 	
 	if ($graduate['transcript']!=null) {?>
 	<td> 
-	<a href="<?php echo "http://".ONNAPP_HOSTNAME.$graduate['transcript'];?>" target="_BLANK" >Transcript</a></td>
+	<a href="<?php echo ONNAPP_HOSTNAME.$graduate['transcript'];?>" target="_BLANK" >Transcript</a></td>
 	<?php   
 		$status='';
 		if ($graduate['std_app_transcript']=='1') $status='checked';
@@ -225,7 +225,7 @@ $graduate=$std;
 	} else {?><td>&nbsp;</td><td>&nbsp;</td><?php } 
 	if ($graduate['skpi']!=null) {?>
 	<td> 
-	<a href="<?php echo "http://".ONNAPP_HOSTNAME.$graduate['skpi'];?>" target="_BLANK" >SKPI</a></td>
+	<a href="<?php echo ONNAPP_HOSTNAME.$graduate['skpi'];?>" target="_BLANK" >SKPI</a></td>
 	<?php 
 		$status='';
 		if ($graduate['std_app_skpi']=='1') $status='checked';
