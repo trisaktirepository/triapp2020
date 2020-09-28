@@ -138,6 +138,7 @@ $(function() {
 	</tr>
 	<?php  
 	if (count($this->honors)>0) {
+	$i=1;
 	foreach($this->honors as $index=>$honor){ 
 		$id=$honor['idHonors'];
 	?>
@@ -197,7 +198,7 @@ $(function() {
 			<?php }?></td>
 	
 	</tr>
-	<?php }
+	<?php $i++;}
 } ?>
 
 </table>

@@ -90,6 +90,7 @@ function onclickDeleteSoft(n) {
 	</tr>
 	<?php  
 	if (count($this->softskills)>0) {
+	$i=1;
 	foreach($this->softskills as $index=>$value){ 
 		$id=$value['idSoftskill'];
 	?>
@@ -148,7 +149,8 @@ function onclickDeleteSoft(n) {
 			<?php }?></td>
 	
 	</tr>
-	<?php }
+	<?php $i++;
+ }
 } ?>
 
 </table>

@@ -30,7 +30,7 @@ public function getGraduatesNoWis($idstd=null){
 	return $row;
 }
 
-public function update($data,$id) {
+public function update(array $data,$id) {
 	$db = Zend_Db_Table::getDefaultAdapter();
 	$db->update($this->_name,$data,'idStudentRegistration='.$id);
 }
