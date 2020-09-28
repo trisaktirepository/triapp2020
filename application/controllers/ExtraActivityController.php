@@ -1,6 +1,6 @@
 <?php
 use "Zend\Crypt\BlockCipher";
-class StudentPortalController extends Zend_Controller_Action
+class ExtraActivityController extends Zend_Controller_Action
 {
 	protected $_apikey='UfIzmscPiNCZxJxNYaJY2+evRf4d7C+caJmCAOKrfcU=';
 	protected $_publickey='';
