@@ -1,8 +1,9 @@
 <?php
-
+use "Zend\Crypt\BlockCipher";
 class StudentPortalController extends Zend_Controller_Action
 {
 	protected $_apikey='UfIzmscPiNCZxJxNYaJY2+evRf4d7C+caJmCAOKrfcU=';
+	protected $_publickey='';
 	
     public function init()
     {
@@ -38,10 +39,17 @@ class StudentPortalController extends Zend_Controller_Action
     	  		$token=md5($hp.date('his'));
     	  		//generate PIN
     	  		$dbconf=new App_Model_Record_DbTable_ConfirmationPamira();
-    	  		$rand=$dbconf->genRandomNumber();
-    	  		//encrypt data
+    	  		$pin=$dbconf->genRandomNumber();
+    	  		//ecrypt PIN
+    	  		
+    	  		$Crypt=new Zend_Crypt_Rsa();
+    	  		$encryptedpin=$Crypt->encrypt($pin, $this->_publickey);
     	  		
     	  		//send to pamira
+    	  		$send=$this->sendToPamira($this->dataEncrypt($nim, $token, $encryptedpin));
+				if ($send) {
+					$dbconf->addData(array('IdStudentRegistration'=>$registration_id,'dt_entry'=>date('Y-m-d H:i:s'),'id_user'=>$auth->getIdentity()->id,'encrypted_confirm'=>$encryptedpin,'token'=>$token));
+				}
     	  	}
     	}
     	
@@ -62,7 +70,9 @@ class StudentPortalController extends Zend_Controller_Action
     }
     
     function dataEncrypt($nim,$token,$pin) {
-    	$encypteddata='';
+    	$encypteddata='{"NIM":'.$nim.';"TOKEN:"'.$token.';"OTP":'.$pin.'}';
+    	$Crypt=new Zend_Crypt_Rsa();
+    	$encypteddata=$Crypt->encrypt($encypteddata, $this->_publickey);
     	$data = array('data'=>$encypteddata,
     			'apikey' => $this->_apikey //<=untuk mendapatkan apikey silakan login ke pemira
     	);
@@ -72,8 +82,8 @@ class StudentPortalController extends Zend_Controller_Action
     function sendToPamira($data) {
 	    
 	    $send = $this->curlapi("http://pemira.trisakti.ac.id/apps/webservice/otpsistem",json_encode($data));
-	    print(json_encode($send));
-	    
+	    //print(json_encode($send));
+	    return $send;
 	}
     
 }
