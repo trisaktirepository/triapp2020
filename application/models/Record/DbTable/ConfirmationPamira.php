@@ -16,7 +16,12 @@ class App_Model_Record_DbTable_ConfirmationPamira extends Zend_Db_Table_Abstract
         return $id;
     }
     
-   
+   public function isOpen(){
+   		$dbActCalend=new App_Model_General_DbTable_ActivityCalendar();
+   		$row=$dbActCalend->getActiveEvent(46);
+   		if ($row) return true;
+   }
+    	
     public function deleteData($id){
     	$db = Zend_Db_Table::getDefaultAdapter();
     	$this->delete($this->_primary."=".$id);

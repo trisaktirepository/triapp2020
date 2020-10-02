@@ -26,11 +26,12 @@ M/iqHGl3h765f2buMoXbaRAnYqAk6W3XF5QtMIs2o97oi7HMM3/gVeKxZZQtGySr
     	$this->view->title='PEMILU RAYA';
     	$auth = Zend_Auth::getInstance();
     	$dbActCalend=new App_Model_General_DbTable_ActivityCalendar();
+    	$row=$dbActCalend->getActiveEvent(46);
     	$dbSms=new App_Model_Smsgateway_DbTable_SmsGateways();
     	$active='';
     	$key='';
     	//echo $active;exit;
-    	$row=$dbActCalend->getActiveEvent(46);
+    	
     	if ($row) {
     		$active="1";
     	} 

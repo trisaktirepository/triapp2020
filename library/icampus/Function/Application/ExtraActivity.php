@@ -13,7 +13,7 @@ class icampus_Function_Application_ExtraActivity extends Zend_View_Helper_Abstra
 			$registration_id = $user->getIdentity()->registration_id;
   			if ($registration_id!='') {
   			 // echo $dbSurvey->isAnyOpenSurvey($registration_id);exit;
-				if ( !($action=='feedback'||$action=='logout') && $dbSurvey->isAnyOpenSurvey($registration_id) && ($role=='Student'||$role=='student')) {
+				if ( !($action=='feedback'||$action=='logout') && $dbExtra->isOpen() && ($role=='Student'||$role=='student')) {
 					///$survey=new Servqual_SurveyController();
 					 
 					$dbExtra->dispatcher($registration_id,'student');
