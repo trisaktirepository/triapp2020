@@ -50,20 +50,17 @@ M/iqHGl3h765f2buMoXbaRAnYqAk6W3XF5QtMIs2o97oi7HMM3/gVeKxZZQtGySr
 //     	  		$key=new Zend_Crypt_Rsa_Key_Public($this->_publickey);
 //     	  		$encryptedpin=$Crypt->encrypt($pin,$key );
     	  		$res = openssl_public_encrypt($pin,$encrypted_otp,$this->_publickey,OPENSSL_PKCS1_PADDING);
-    	  		if(!$res){
-    	  			echo "Enkripsi gagal !";
-    	  			exit;
-    	  		}
-    	  		echo $encrypted_otp;exit;
-    	  		//send to pamira
-    	  		$send=$this->sendToPamira($this->dataEncrypt($nim, $token, $encryptedpin));
-				echo var_dump($send);exit;
-				if ($send) {
-					$status=$dbSms->sendMessage($message, $hp, "0");
-					if ($status!='Success Send') $this->view->msg="Pengiriman OTP Gagal, Silahkan coba kembali beberapa saat";
-					else
-						$dbconf->addData(array('IdStudentRegistration'=>$registration_id,'dt_entry'=>date('Y-m-d H:i:s'),'id_user'=>$auth->getIdentity()->id,'encrypted_confirm'=>$encryptedpin,'token'=>$token));
-				}
+    	  		if($res){
+	    	   		//send to pamira
+	    	  		$send=$this->sendToPamira($this->dataEncrypt($nim, $token, $encrypted_otp));
+					echo var_dump($send);exit;
+					if ($send) {
+						$status=$dbSms->sendMessage($message, $hp, "0");
+						if ($status!='Success Send') $this->view->msg="Pengiriman OTP Gagal, Silahkan coba kembali beberapa saat";
+						else
+							$dbconf->addData(array('IdStudentRegistration'=>$registration_id,'dt_entry'=>date('Y-m-d H:i:s'),'id_user'=>$auth->getIdentity()->id,'encrypted_confirm'=>$encryptedpin,'token'=>$token));
+					}
+    	  		} 
     	  	 
     	}
     	
@@ -84,14 +81,15 @@ M/iqHGl3h765f2buMoXbaRAnYqAk6W3XF5QtMIs2o97oi7HMM3/gVeKxZZQtGySr
     }
     
     function dataEncrypt($nim,$token,$pin) {
-    	$encypteddata='{"NIM":'.$nim.';"TOKEN:"'.$token.';"OTP":'.$pin.'}';
-    	$Crypt=new Zend_Crypt_Rsa();
-    	$key=new Zend_Crypt_Rsa_Key_Public($this->_publickey);
-    	$encypteddata=$Crypt->encrypt($encypteddata, $key);
-    	$data = array('data'=>$encypteddata,
-    			'apikey' => $this->_apikey //<=untuk mendapatkan apikey silakan login ke pemira
-    	);
-    	return $data;
+    	$data='{"NIM":'.$nim.';"TOKEN:"'.$token.';"OTP":'.$pin.'}';
+    	$res = openssl_public_encrypt($data,$encypteddata,$this->_publickey,OPENSSL_PKCS1_PADDING);
+    	if ($res)	{ 
+	    	$data = array('data'=>$encypteddata,
+	    			'apikey' => $this->_apikey //<=untuk mendapatkan apikey silakan login ke pemira
+	    	);
+	    	return $data;
+    	} else return false;
+    	
     }
     
     function sendToPamira($data) {
