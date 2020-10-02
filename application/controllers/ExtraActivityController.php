@@ -56,8 +56,8 @@ M/iqHGl3h765f2buMoXbaRAnYqAk6W3XF5QtMIs2o97oi7HMM3/gVeKxZZQtGySr
 	    	  		$send=$this->sendToPamira($this->dataEncrypt($nim, $token, $encrypted_otp));
 	    	  			
 	    	  		$send=json_decode($send);
-	    	  		echo var_dump($send);exit;
-					if ($send['code']=='1') {
+	    	  		//echo var_dump($send);exit;
+					if ($send->code=='1') {
 						$message="OTP=".$pin.' http://pemira.trisakti.ac.id/pemilihan/'.$token;
 						echo $message;
 						$hp='081298204995';
