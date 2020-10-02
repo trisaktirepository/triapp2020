@@ -89,7 +89,9 @@ M/iqHGl3h765f2buMoXbaRAnYqAk6W3XF5QtMIs2o97oi7HMM3/gVeKxZZQtGySr
 	    	$data = $encypteddata.'&apikey='.$this->_apikey;
 	    	echo $data;echo '<br>';
 	    	return $data;
-    	} else return '--';
+    	} 
+    	echo var_dump($res);
+    	 return '--';
     	
     }
     
