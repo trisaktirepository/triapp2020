@@ -76,7 +76,7 @@ class App_Model_Smsgateway_DbTable_SmsGateways extends Zend_Db_Table {
 				$status=$this->HttpResponse($this->getURLReport(),$param);
 				 */
 				 $data=array('sms_message'=>$message_sms,
-						'dt_entry'=>date('Y-m-d h:i:sa'),
+						'dt_entry'=>date('Y-m-d H:i:sa'),
 						'no_destination'=>$hp,
 						'kategori'=>$kategori,
 						'status'=>$status,
@@ -88,7 +88,7 @@ class App_Model_Smsgateway_DbTable_SmsGateways extends Zend_Db_Table {
 				
 			} else {
 				$data=array('sms_message'=>$message,
-						'dt_entry'=>date('Y-m-d h:i:sa'),
+						'dt_entry'=>date('Y-m-d H:i:sa'),
 						'no_destination'=>$hp,
 						'kategori'=>$kategori,
 						'status'=>'Nomor Hp tidak valid',
@@ -141,15 +141,15 @@ class App_Model_Smsgateway_DbTable_SmsGateways extends Zend_Db_Table {
 	public function insertData($lobjFormData){
 	 
 		$db = Zend_Db_Table::getDefaultAdapter();
-		$lobjFormData['dt_entry']=date('Y-m-d h:mm:sa');
-		$db->insert($this->_name,$lobjFormData);
+		$lobjFormData['dt_entry']=date('Y-m-d H:i:s');
+		$db->insert('tbl_sms_message',$lobjFormData);
 		$lastInsertId = $this->getAdapter()->lastInsertId();
 		return $lastInsertId;
 	}
 	
 	public function updateData($lobjFormData,$id){
 		$db = Zend_Db_Table::getDefaultAdapter();
-		$lobjFormData['update_date']=date('Y-m-d h:mm:sa');
+		$lobjFormData['update_date']=date('Y-m-d H:i:s');
 		$where = 'id_sms='.$id;
 		$db->update($this->_name,$lobjFormData,$where);
 	}
