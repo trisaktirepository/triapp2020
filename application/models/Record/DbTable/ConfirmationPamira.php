@@ -19,10 +19,19 @@ class App_Model_Record_DbTable_ConfirmationPamira extends Zend_Db_Table_Abstract
         return $id;
     }
     
-   public function isOpen(){
+   public function isOpen($idstd){
    		$dbActCalend=new App_Model_General_DbTable_ActivityCalendar();
    		$row=$dbActCalend->getActiveEvent(46);
-   		if ($row) return true;
+   		if ($row) {
+   			$db = Zend_Db_Table::getDefaultAdapter();
+   			$select = $db->select()
+   			->from(array($this->_name)) 
+   			->where('a.IdStudentRegistration=?',$idstd);
+   			$row=$db->fetchAll($select);
+   			if (count($row)<=3)
+   				return true;
+   			else return false;
+   		} else return false;
    }
     	
     public function deleteData($id){
