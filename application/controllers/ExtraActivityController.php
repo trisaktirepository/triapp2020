@@ -2,7 +2,7 @@
  
 class ExtraActivityController extends Zend_Controller_Action
 {
-	protected $_apikey='UfIzmscPiNCZxJxNYaJY2+evRf4d7C+caJmCAOKrfcU=';
+	protected $_apikey='fbd49c72b9c1b00d8015e235ab354478';
 	protected $_publickey='
 -----BEGIN PUBLIC KEY----- 
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1eBYZjpnNPkZXvVsF/UU 
