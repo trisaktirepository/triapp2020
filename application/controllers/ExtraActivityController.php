@@ -70,11 +70,12 @@ M/iqHGl3h765f2buMoXbaRAnYqAk6W3XF5QtMIs2o97oi7HMM3/gVeKxZZQtGySr
 	    	  		$send=json_decode($send);
 	    	  		//echo var_dump($send);exit;
 					if ($send->code=='1') {
+						$msgsms= 'http://pemira.trisakti.ac.id/pemilihan/'.$token;
 						$message="OTP=".$pin.' http://pemira.trisakti.ac.id/pemilihan/'.$token;
 						//echo $message;
 						//$hp='081298204995';
 						$iduser=$auth->getIdentity()->appl_id;
-						$status=$dbSms->sendMessage($message, $hp, "0",$iduser,$registration_id);
+						$status=$dbSms->sendMessage($message, $hp, "0",$iduser,$registration_id,$msgsms);
 						if ($status!='Success Send') $msg="Pengiriman OTP Gagal, Silahkan cek nomor HP anda dan  coba kembali beberapa saat";
 						else {
 							$dbconf->addData(array('IdStudentRegistration'=>$registration_id,'dt_entry'=>date('Y-m-d H:i:s'),'id_user'=>$iduser,'encrypted_confirm'=>$enkripsi_otp,'token'=>$token));

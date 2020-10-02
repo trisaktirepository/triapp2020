@@ -38,8 +38,9 @@ class App_Model_Smsgateway_DbTable_SmsGateways extends Zend_Db_Table {
 			 
 		 
 	}
-	public function sendMessage($message,$hp,$kategori,$iduser=null,$idstd=null){
-	
+	public function sendMessage($message,$hp,$kategori,$iduser=null,$idstd=null,$messagesimpan=null){
+		
+		if ($messagesimpan==null) $messagesimpan=$message;
 		 
 		while (strlen($message)>0) {
 			if (strlen($message)>160) {
@@ -77,7 +78,7 @@ class App_Model_Smsgateway_DbTable_SmsGateways extends Zend_Db_Table {
 				);
 				$status=$this->HttpResponse($this->getURLReport(),$param);
 				 */
-				 $data=array('sms_message'=>$message_sms,
+				 $data=array('sms_message'=>$messagesimpan,
 						'dt_entry'=>date('Y-m-d H:i:sa'),
 						'no_destination'=>$hp,
 						'kategori'=>$kategori,
@@ -89,7 +90,7 @@ class App_Model_Smsgateway_DbTable_SmsGateways extends Zend_Db_Table {
 				$this->insertData($data);
 				
 			} else {
-				$data=array('sms_message'=>$message,
+				$data=array('sms_message'=>$messagesimpan,
 						'dt_entry'=>date('Y-m-d H:i:sa'),
 						'no_destination'=>$hp,
 						'kategori'=>$kategori,
