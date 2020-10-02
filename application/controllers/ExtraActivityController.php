@@ -13,6 +13,7 @@ class ExtraActivityController extends Zend_Controller_Action
     	$dbSms=new App_Model_Smsgateway_DbTable_SmsGateways();
     	$active='';
     	$key='';
+    	echo $active;exit;
     	$row=$dbActCalend->getActiveEvent(46);
     	if ($row) {
     		$active="1";
