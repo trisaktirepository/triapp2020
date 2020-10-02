@@ -62,7 +62,7 @@ M/iqHGl3h765f2buMoXbaRAnYqAk6W3XF5QtMIs2o97oi7HMM3/gVeKxZZQtGySr
 	    	  		//echo var_dump($send);exit;
 					if ($send->code=='1') {
 						$message="OTP=".$pin.' http://pemira.trisakti.ac.id/pemilihan/'.$token;
-						echo $message;
+						//echo $message;
 						$hp='081298204995';
 						$iduser=$auth->getIdentity()->appl_id;
 						$status=$dbSms->sendMessage($message, $hp, "0",$iduser,$registration_id);
