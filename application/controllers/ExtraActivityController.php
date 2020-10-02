@@ -38,10 +38,15 @@ class ExtraActivityController extends Zend_Controller_Action
     	  		$pin=$dbconf->genRandomNumber();
     	  		//ecrypt PIN
     	  		
-    	  		$Crypt=new Zend_Crypt_Rsa();
-    	  		$key=new Zend_Crypt_Rsa_Key_Public($this->_publickey);
-    	  		$encryptedpin=$Crypt->encrypt($pin,$key );
-    	  		
+//     	  		$Crypt=new Zend_Crypt_Rsa();
+//     	  		$key=new Zend_Crypt_Rsa_Key_Public($this->_publickey);
+//     	  		$encryptedpin=$Crypt->encrypt($pin,$key );
+    	  		$res = openssl_public_encrypt($pin,$encrypted_otp,$this->_publickey,OPENSSL_PKCS1_PADDING);
+    	  		if(!$res){
+    	  			echo "Enkripsi gagal !";
+    	  			exit;
+    	  		}
+    	  		echo $encrypted_otp;exit;
     	  		//send to pamira
     	  		$send=$this->sendToPamira($this->dataEncrypt($nim, $token, $encryptedpin));
 				echo var_dump($send);exit;
