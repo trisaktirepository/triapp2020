@@ -103,7 +103,7 @@ M/iqHGl3h765f2buMoXbaRAnYqAk6W3XF5QtMIs2o97oi7HMM3/gVeKxZZQtGySr
     
     function sendToPamira($data) {
 	    
-	    $send = $this->curlapi("http://pemira.trisakti.ac.id/apps/webservice/otpsistem",json_encode($data));
+	    $send = $this->curlapi("http://pemira.trisakti.ac.id/apps/webservice/otpsistem",$data);
 	    //print(json_encode($send));
 	    return $send;
 	}
