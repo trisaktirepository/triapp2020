@@ -86,6 +86,7 @@ M/iqHGl3h765f2buMoXbaRAnYqAk6W3XF5QtMIs2o97oi7HMM3/gVeKxZZQtGySr
     	$res = openssl_public_encrypt($data,$encypteddata,$this->_publickey,OPENSSL_PKCS1_PADDING);
     	if ($res)	{ 
 	    	$data = $encypteddata.'&apikey="'.$this->_apikey.'"';
+	    	echo $data;
 	    	return $data;
     	} else return '';
     	
