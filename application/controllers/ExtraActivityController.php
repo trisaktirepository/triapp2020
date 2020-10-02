@@ -16,6 +16,14 @@ M/iqHGl3h765f2buMoXbaRAnYqAk6W3XF5QtMIs2o97oi7HMM3/gVeKxZZQtGySr
 	
     public function pemiraAction(){
     	//
+    	if (PHP_VERSION_ID < 50600) {
+    		iconv_set_encoding('input_encoding', 'UTF-8');
+    		iconv_set_encoding('output_encoding', 'UTF-8');
+    		iconv_set_encoding('internal_encoding', 'UTF-8');
+    	} else {
+    		ini_set('default_charset', 'UTF-8');
+    	}
+    	
     	$auth = Zend_Auth::getInstance();
     	$dbActCalend=new App_Model_General_DbTable_ActivityCalendar();
     	$dbSms=new App_Model_Smsgateway_DbTable_SmsGateways();
