@@ -21,6 +21,7 @@ class ExtraActivityController extends Zend_Controller_Action
     	if ($row) {
     		$active="1";
     	} 
+    	echo $active;exit;
     	if ($this->getRequest()->isPost()) {
     		$formData = $this->getRequest()->getPost();
     		$registration_id = $auth->getIdentity()->registration_id;    
