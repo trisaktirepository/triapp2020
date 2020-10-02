@@ -52,7 +52,7 @@ M/iqHGl3h765f2buMoXbaRAnYqAk6W3XF5QtMIs2o97oi7HMM3/gVeKxZZQtGySr
     	  		$res = openssl_public_encrypt($pin,$encrypted_otp,$this->_publickey,OPENSSL_PKCS1_PADDING);
     	  		if($res){
 	    	   		//send to pamira
-    	  			$enkripsi_otp = strtr(base64_encode($enkripsi_otp), '+/=', '._-');
+    	  			$enkripsi_otp = strtr(base64_encode($encrypted_otp), '+/=', '._-');
     	  			$data="nim=".$nim."&enkripsi_otp=".$enkripsi_otp."&tokenlink=".$token;
     	  			$data = $data.'&apikey='.$this->_apikey;
 	    	  		//$send=$this->sendToPamira($this->dataEncrypt($nim, $token, $encrypted_otp));
