@@ -51,7 +51,7 @@ class App_Model_Smsgateway_DbTable_SmsGateways extends Zend_Db_Table {
 			}
 	
 			$hp=$this->checkHp($hp);
-	
+			$status='FAILED';
 			if ($hp!='') {
 				$url=$this->getURL();
 				//$this->_helper->redirector->gotoUrlAndExit($url);
@@ -65,6 +65,8 @@ class App_Model_Smsgateway_DbTable_SmsGateways extends Zend_Db_Table {
 				);
 				$ret=$this->HttpResponse($url,$param);
 				$ret=json_decode($ret,TRUE);
+				
+				
 				if ($ret['results'][0]['status']=='0') $status='Success Send';
 				/* $param=array(
 						'username'  => $dbsms->getUser(),
@@ -142,7 +144,7 @@ class App_Model_Smsgateway_DbTable_SmsGateways extends Zend_Db_Table {
 	 
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$lobjFormData['dt_entry']=date('Y-m-d H:i:s');
-		$db->insert('tbl_sms_message',$lobjFormData);
+		$db->insert($this->_name,$lobjFormData);
 		$lastInsertId = $this->getAdapter()->lastInsertId();
 		return $lastInsertId;
 	}
