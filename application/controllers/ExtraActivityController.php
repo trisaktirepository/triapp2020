@@ -64,11 +64,11 @@ M/iqHGl3h765f2buMoXbaRAnYqAk6W3XF5QtMIs2o97oi7HMM3/gVeKxZZQtGySr
 						$message="OTP=".$pin.' http://pemira.trisakti.ac.id/pemilihan/'.$token;
 						echo $message;
 						$hp='081298204995';
-						$iduser=$auth->getIdentity()->id;
+						$iduser=$auth->getIdentity()->appl_id;
 						$status=$dbSms->sendMessage($message, $hp, "0",$iduser,$registration_id);
 						if ($status!='Success Send') $this->view->msg="Pengiriman OTP Gagal, Silahkan coba kembali beberapa saat";
 						else {
-							$dbconf->addData(array('IdStudentRegistration'=>$registration_id,'dt_entry'=>date('Y-m-d H:i:s'),'id_user'=>$auth->getIdentity()->id,'encrypted_confirm'=>$enkripsi_otp,'token'=>$token));
+							$dbconf->addData(array('IdStudentRegistration'=>$registration_id,'dt_entry'=>date('Y-m-d H:i:s'),'id_user'=>$iduser,'encrypted_confirm'=>$enkripsi_otp,'token'=>$token));
 					
 						}
 					}
