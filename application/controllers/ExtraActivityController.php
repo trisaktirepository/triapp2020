@@ -4,11 +4,7 @@ class ExtraActivityController extends Zend_Controller_Action
 {
 	protected $_apikey='UfIzmscPiNCZxJxNYaJY2+evRf4d7C+caJmCAOKrfcU=';
 	protected $_publickey='MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1eBYZjpnNPkZXvVsF/UUUAH8GoYkSO/8acbaf5JvjkN8aff0nzKD/8q46W/Lgt167nBFiVpXZ9O3ynRZ6G2S gxXcxZyYdjqX5XHs7u1J+JNDwN92SLWbD4Z+N+Zai5SCNaU9V3A8WNPm/B+3byoVEx354Cgh1+akTf7oJWad75nUZRTHWUwZ+WTIdg66/cuVLK4fV5WlGrpdFZLcfv8bsFfYmnKkTB9GJ6Zri+cjnp6NBm4gqPzA59mxYxrMgKXxPGWosDkE0WbR8a3ynyeiM/iqHGl3h765f2buMoXbaRAnYqAk6W3XF5QtMIs2o97oi7HMM3/gVeKxZZQtGySr7QIDAQAB';
-	
-    public function init()
-    {
-        /* Initialize action controller here */
-    }
+ 
     
     public function pemiraAction(){
     	//
