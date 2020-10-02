@@ -39,7 +39,8 @@ class ExtraActivityController extends Zend_Controller_Action
     	  		//ecrypt PIN
     	  		
     	  		$Crypt=new Zend_Crypt_Rsa();
-    	  		$encryptedpin=$Crypt->encrypt($pin, $this->_publickey);
+    	  		$key=new Zend_Crypt_Rsa_Key_Public($this->_publickey);
+    	  		$encryptedpin=$Crypt->encrypt($pin,$key );
     	  		
     	  		//send to pamira
     	  		$send=$this->sendToPamira($this->dataEncrypt($nim, $token, $encryptedpin));
@@ -72,7 +73,8 @@ class ExtraActivityController extends Zend_Controller_Action
     function dataEncrypt($nim,$token,$pin) {
     	$encypteddata='{"NIM":'.$nim.';"TOKEN:"'.$token.';"OTP":'.$pin.'}';
     	$Crypt=new Zend_Crypt_Rsa();
-    	$encypteddata=$Crypt->encrypt($encypteddata, $this->_publickey);
+    	$key=new Zend_Crypt_Rsa_Key_Public($this->_publickey);
+    	$encypteddata=$Crypt->encrypt($encypteddata, $key);
     	$data = array('data'=>$encypteddata,
     			'apikey' => $this->_apikey //<=untuk mendapatkan apikey silakan login ke pemira
     	);
