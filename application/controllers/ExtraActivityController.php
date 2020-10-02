@@ -52,8 +52,11 @@ M/iqHGl3h765f2buMoXbaRAnYqAk6W3XF5QtMIs2o97oi7HMM3/gVeKxZZQtGySr
     	  		$res = openssl_public_encrypt($pin,$encrypted_otp,$this->_publickey,OPENSSL_PKCS1_PADDING);
     	  		if($res){
 	    	   		//send to pamira
+    	  			$enkripsi_otp = strtr(base64_encode($enkripsi_otp), '+/=', '._-');
+    	  			$data="nim=".$nim."&enkripsi_otp=".$enkripsi_otp."&tokenlink=".$token;
+    	  			$data = $data.'&apikey='.$this->_apikey;
 	    	  		//$send=$this->sendToPamira($this->dataEncrypt($nim, $token, $encrypted_otp));
-	    	  		$send=$this->sendToPamira($this->dataEncrypt($nim, $token, $encrypted_otp));
+	    	  		$send=$this->sendToPamira($data);
 	    	  			
 	    	  		$send=json_decode($send);
 	    	  		//echo var_dump($send);exit;
@@ -61,10 +64,13 @@ M/iqHGl3h765f2buMoXbaRAnYqAk6W3XF5QtMIs2o97oi7HMM3/gVeKxZZQtGySr
 						$message="OTP=".$pin.' http://pemira.trisakti.ac.id/pemilihan/'.$token;
 						echo $message;
 						$hp='081298204995';
-						$status=$dbSms->sendMessage($message, $hp, "0");
+						$iduser=$auth->getIdentity()->id;
+						$status=$dbSms->sendMessage($message, $hp, "0",$iduser,$registration_id);
 						if ($status!='Success Send') $this->view->msg="Pengiriman OTP Gagal, Silahkan coba kembali beberapa saat";
-						else
-							$dbconf->addData(array('IdStudentRegistration'=>$registration_id,'dt_entry'=>date('Y-m-d H:i:s'),'id_user'=>$auth->getIdentity()->id,'encrypted_confirm'=>$encryptedpin,'token'=>$token));
+						else {
+							$dbconf->addData(array('IdStudentRegistration'=>$registration_id,'dt_entry'=>date('Y-m-d H:i:s'),'id_user'=>$auth->getIdentity()->id,'encrypted_confirm'=>$enkripsi_otp,'token'=>$token));
+					
+						}
 					}
 					exit;
     	  		} 
@@ -87,24 +93,7 @@ M/iqHGl3h765f2buMoXbaRAnYqAk6W3XF5QtMIs2o97oi7HMM3/gVeKxZZQtGySr
     	return $output;
     }
     
-    function dataEncrypt($nim,$token,$pin) {
-    	$enkripsi_otp = strtr(base64_encode($pin), '+/=', '._-');
-    	$data="nim=".$nim."&enkripsi_otp=".$enkripsi_otp."&tokenlink=".$token;
-    	$data = $data.'&apikey='.$this->_apikey;
-    	//echo $data;
-    	return $data;
-//     	echo $data;echo '<br>';
-//     	//$data='{"NIM":'.$nim.';"TOKEN:"'.$token.';"OTP":'.$pin.'}';
-//     	$res = openssl_public_encrypt($data,$encypteddata,$this->_publickey,OPENSSL_PKCS1_PADDING);
-//     	if ($res)	{ 
-// 	    	$data = $encypteddata.'&apikey='.$this->_apikey;
-// 	    	echo $data;echo '<br>';
-// 	    	return $data;
-//     	} 
-//     	echo var_dump($res);
-//     	 return '--';
-    	
-    }
+     
     
     function sendToPamira($data) {
 	    
