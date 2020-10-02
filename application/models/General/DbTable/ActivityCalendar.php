@@ -78,9 +78,9 @@ class App_Model_General_DbTable_ActivityCalendar extends Zend_Db_Table_Abstract
 		->from(array('a'=>$this->_name)) 
 		->join(array('c'=>'tbl_semestermaster'),'c.IdSemesterMaster=a.IdSemesterMain')
 		->where('a.idActivity=?',$idact)
-		->where('b.StartDate <= CURDATE()');
-		if ($idprogram!=null) $select->where('b.IdProgram=?',$idprogram);
-		if ($semester!=null) $select->where('b.IdSemesterMain=?',$semester);
+		->where('a.StartDate <= CURDATE()');
+		if ($idprogram!=null) $select->where('a.IdProgram=?',$idprogram);
+		if ($semester!=null) $select->where('a.IdSemesterMain=?',$semester);
 		$row = $db->fetchRow($select);
 			
 	
