@@ -66,13 +66,14 @@ M/iqHGl3h765f2buMoXbaRAnYqAk6W3XF5QtMIs2o97oi7HMM3/gVeKxZZQtGySr
 						$hp='081298204995';
 						$iduser=$auth->getIdentity()->appl_id;
 						$status=$dbSms->sendMessage($message, $hp, "0",$iduser,$registration_id);
-						if ($status!='Success Send') $this->view->msg="Pengiriman OTP Gagal, Silahkan coba kembali beberapa saat";
+						if ($status!='Success Send') $this->view->msg="Pengiriman OTP Gagal, Silahkan cek nomor HP anda dan  coba kembali beberapa saat";
 						else {
 							$dbconf->addData(array('IdStudentRegistration'=>$registration_id,'dt_entry'=>date('Y-m-d H:i:s'),'id_user'=>$iduser,'encrypted_confirm'=>$enkripsi_otp,'token'=>$token));
+							$this->view->msg="Kode OTP dan tautan ke Pemira sudah dikirim ke HP anda menggunakan SMS";
+						}  
 					
-						}
-					}
-					exit;
+					} else $this->view->msg="Gagal mengirim data ke Pemira, silahkan coba lagi";
+					//exit;
     	  		} 
     	  	 
     	}
