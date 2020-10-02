@@ -56,6 +56,7 @@ M/iqHGl3h765f2buMoXbaRAnYqAk6W3XF5QtMIs2o97oi7HMM3/gVeKxZZQtGySr
 	    	  		$send=$this->sendToPamira($this->dataEncrypt($nim, $token, $encrypted_otp));
 	    	  			
 	    	  		$send=json_decode($send);
+	    	  		echo var_dump($send);exit;
 					if ($send['code']=='1') {
 						$message="OTP=".$pin.' http://pemira.trisakti.ac.id/pemilihan/'.$token;
 						echo $message;
@@ -90,7 +91,7 @@ M/iqHGl3h765f2buMoXbaRAnYqAk6W3XF5QtMIs2o97oi7HMM3/gVeKxZZQtGySr
     	$enkripsi_otp = strtr(base64_encode($pin), '+/=', '._-');
     	$data="nim=".$nim."&enkripsi_otp=".$enkripsi_otp."&tokenlink=".$token;
     	$data = $data.'&apikey='.$this->_apikey;
-    	echo $data;
+    	//echo $data;
     	return $data;
 //     	echo $data;echo '<br>';
 //     	//$data='{"NIM":'.$nim.';"TOKEN:"'.$token.';"OTP":'.$pin.'}';
