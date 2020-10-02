@@ -85,6 +85,7 @@ M/iqHGl3h765f2buMoXbaRAnYqAk6W3XF5QtMIs2o97oi7HMM3/gVeKxZZQtGySr
     function dataEncrypt($nim,$token,$pin) {
     	$data="nim=".$nim."&enkripsi_otp=".$pin."&tokenlink=".$token;
     	$data = $data.'&apikey='.$this->_apikey;
+    	echo $data;
     	return $data;
 //     	echo $data;echo '<br>';
 //     	//$data='{"NIM":'.$nim.';"TOKEN:"'.$token.';"OTP":'.$pin.'}';
