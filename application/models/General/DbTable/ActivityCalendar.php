@@ -74,12 +74,10 @@ class App_Model_General_DbTable_ActivityCalendar extends Zend_Db_Table_Abstract
 	public function getActiveEvent($idact,$semester=null,$idprogram=null){
 	
 		$db = Zend_Db_Table::getDefaultAdapter();
-			
-	
-		$select = $db->select()
-		->from(array('a'=>$this->_name))
-		->join(array('b'=>'tbl_activity_calender'),'a.idActivity=b.IdActivity')
-		->join(array('c'=>'tbl_semestermaster'),'c.IdSemesterMaster=b.IdSemesterMain')
+	 	$select = $db->select()
+		->from(array('a'=>$this->_name)) 
+		->join(array('c'=>'tbl_semestermaster'),'c.IdSemesterMaster=a.IdSemesterMain')
+		->where('a.idActivity=?',$idact)
 		->where('b.StartDate <= CURDATE()');
 		if ($idprogram!=null) $select->where('b.IdProgram=?',$idprogram);
 		if ($semester!=null) $select->where('b.IdSemesterMain=?',$semester);
