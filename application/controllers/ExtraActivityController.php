@@ -10,7 +10,7 @@ class ExtraActivityController extends Zend_Controller_Action
         /* Initialize action controller here */
     }
     
-    public function pamiraAction(){
+    public function pemiraAction(){
     	//
     	$auth = Zend_Auth::getInstance();
     	$dbActCalend=new App_Model_General_DbTable_ActivityCalendar();
