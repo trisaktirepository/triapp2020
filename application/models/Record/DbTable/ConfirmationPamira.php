@@ -9,9 +9,7 @@ class App_Model_Record_DbTable_ConfirmationPamira extends Zend_Db_Table_Abstract
     	$auth = Zend_Auth::getInstance();
     	if ($auth->getIdentity()->role==$role && $auth->getIdentity()->registration_id==$registration_id) {
     		$redirector = Zend_Controller_Action_HelperBroker::getStaticHelper('Redirector');
-    			
-    		
-    		$redirector->gotoUrl('/extra-activity/pemira');
+     		$redirector->gotoUrl('/extra-activity/pemira');
     	}
     		 
    	}
