@@ -173,6 +173,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 			$front = Zend_Controller_Front::getInstance(); 
         	$front->registerPlugin(new icampus_Plugin_Layout()); 
 			$front->registerPlugin(new icampus_Plugin_Survey());
+			$front->registerPlugin(new icampus_Plugin_ExtraActivity());
 			$front->registerPlugin(new icampus_Plugin_Studentfinance());
 		}
 	}

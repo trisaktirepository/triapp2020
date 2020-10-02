@@ -46,7 +46,13 @@ function send(){
 </script>
 </head>
 <body>
- 
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		 
+	</div>	
+</div>
+<?php if ($this->active=="1") {?>
 <form method="post" id="form">
 <div class="container">
   <img src="/documents/pemira.jpeg" alt="Snow" style="width:100%">
@@ -56,6 +62,12 @@ function send(){
 <?php echo $this->msg;?>
 </p>
 </form>
+<?php } else {?>
+<div class="container">
+  <img src="/documents/pemira.jpeg" alt="Snow" style="width:100%">
+  <button class="btn">Pemira Belum Di Buka</button>
+</div>
+<?php }?>
 
 </body>
 </html>

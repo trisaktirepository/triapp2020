@@ -4,7 +4,12 @@ class App_Model_Record_DbTable_ConfirmationPamira extends Zend_Db_Table_Abstract
 	protected $_name = 'tbl_confirmasi_pamira';
 	protected $_primary='id';
 	
-   
+	
+    public function dispatcher($registration_id,$role) {
+    	$auth = Zend_Auth::getInstance();
+    	if ($auth->getIdentity()->IdRole==$role && $auth->getIdentity()->registration_id==$registration_id)
+    		$this->_redirect('/extra-activity/pemira');
+   	}
     public function addData($bind){
         $db = Zend_Db_Table::getDefaultAdapter();
         $id=$this->insert($bind);

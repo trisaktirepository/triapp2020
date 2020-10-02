@@ -23,7 +23,7 @@ M/iqHGl3h765f2buMoXbaRAnYqAk6W3XF5QtMIs2o97oi7HMM3/gVeKxZZQtGySr
     	} else {
     		ini_set('default_charset', 'UTF-8');
     	}
-    	
+    	$this->view->title='PEMILU RAYA';
     	$auth = Zend_Auth::getInstance();
     	$dbActCalend=new App_Model_General_DbTable_ActivityCalendar();
     	$dbSms=new App_Model_Smsgateway_DbTable_SmsGateways();
@@ -92,6 +92,7 @@ M/iqHGl3h765f2buMoXbaRAnYqAk6W3XF5QtMIs2o97oi7HMM3/gVeKxZZQtGySr
     }
     
     public function congrateAction(){
+    	$this->view->title='PEMILU RAYA';
     	$this->view->msg=$this->_getParam('msg');
     }
     function curlapi($url, $data){
