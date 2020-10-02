@@ -52,8 +52,10 @@ M/iqHGl3h765f2buMoXbaRAnYqAk6W3XF5QtMIs2o97oi7HMM3/gVeKxZZQtGySr
     	  		$res = openssl_public_encrypt($pin,$encrypted_otp,$this->_publickey,OPENSSL_PKCS1_PADDING);
     	  		if($res){
 	    	   		//send to pamira
+	    	  		//$send=$this->sendToPamira($this->dataEncrypt($nim, $token, $encrypted_otp));
 	    	  		$send=$this->sendToPamira($this->dataEncrypt($nim, $token, $encrypted_otp));
-					echo var_dump($send);exit;
+	    	  			
+	    	  		echo var_dump($send);exit;
 					if ($send) {
 						$status=$dbSms->sendMessage($message, $hp, "0");
 						if ($status!='Success Send') $this->view->msg="Pengiriman OTP Gagal, Silahkan coba kembali beberapa saat";
@@ -82,16 +84,18 @@ M/iqHGl3h765f2buMoXbaRAnYqAk6W3XF5QtMIs2o97oi7HMM3/gVeKxZZQtGySr
     
     function dataEncrypt($nim,$token,$pin) {
     	$data="nim=".$nim."&enkripsi_otp=".$pin."&tokenlink=".$token;
-    	echo $data;echo '<br>';
-    	//$data='{"NIM":'.$nim.';"TOKEN:"'.$token.';"OTP":'.$pin.'}';
-    	$res = openssl_public_encrypt($data,$encypteddata,$this->_publickey,OPENSSL_PKCS1_PADDING);
-    	if ($res)	{ 
-	    	$data = $encypteddata.'&apikey='.$this->_apikey;
-	    	echo $data;echo '<br>';
-	    	return $data;
-    	} 
-    	echo var_dump($res);
-    	 return '--';
+    	$data = $data.'&apikey='.$this->_apikey;
+    	return $data;
+//     	echo $data;echo '<br>';
+//     	//$data='{"NIM":'.$nim.';"TOKEN:"'.$token.';"OTP":'.$pin.'}';
+//     	$res = openssl_public_encrypt($data,$encypteddata,$this->_publickey,OPENSSL_PKCS1_PADDING);
+//     	if ($res)	{ 
+// 	    	$data = $encypteddata.'&apikey='.$this->_apikey;
+// 	    	echo $data;echo '<br>';
+// 	    	return $data;
+//     	} 
+//     	echo var_dump($res);
+//     	 return '--';
     	
     }
     
