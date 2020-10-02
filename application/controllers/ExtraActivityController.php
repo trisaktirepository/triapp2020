@@ -55,13 +55,17 @@ M/iqHGl3h765f2buMoXbaRAnYqAk6W3XF5QtMIs2o97oi7HMM3/gVeKxZZQtGySr
 	    	  		//$send=$this->sendToPamira($this->dataEncrypt($nim, $token, $encrypted_otp));
 	    	  		$send=$this->sendToPamira($this->dataEncrypt($nim, $token, $encrypted_otp));
 	    	  			
-	    	  		echo var_dump($send);exit;
-					if ($send) {
+	    	  		$send=json_decode($send);
+					if ($send['code']=='1') {
+						$message="OTP=".$pin.' http://pemira.trisakti.ac.id/pemilihan/'.$token;
+						echo $message;
+						$hp='081298204995';
 						$status=$dbSms->sendMessage($message, $hp, "0");
 						if ($status!='Success Send') $this->view->msg="Pengiriman OTP Gagal, Silahkan coba kembali beberapa saat";
 						else
 							$dbconf->addData(array('IdStudentRegistration'=>$registration_id,'dt_entry'=>date('Y-m-d H:i:s'),'id_user'=>$auth->getIdentity()->id,'encrypted_confirm'=>$encryptedpin,'token'=>$token));
 					}
+					exit;
     	  		} 
     	  	 
     	}
