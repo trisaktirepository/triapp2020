@@ -1552,8 +1552,7 @@ class StudentPortalController extends Zend_Controller_Action
 	         	$blocks = $studentSemesterDB->getRegisteredSemesterBlock($registration_id);         	
 	        
 	         	foreach($blocks as $key=>$block){
-			
-		         	//get course registered  by block
+			       	//get course registered  by block
 		  			$courseRegisterDb = new App_Model_Record_DbTable_StudentRegistration();
 		  			$courses = $courseRegisterDb->getCourseRegisteredBySemesterBlock($registration_id,$block["IdSemesterMain"],null);
 		  			foreach ($courses as $key=>$value) {
