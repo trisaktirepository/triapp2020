@@ -1522,7 +1522,7 @@ class StudentPortalController extends Zend_Controller_Action
          $landscape = $landscapeDb->getData($student["IdLandscape"]);
          $this->view->landscape = $landscape;
          $semester=array();
-         $dbPdpt=new Reports_Model_DbTable_Mhssetup();
+         $dbPdpt=new App_Model_Record_DbTable_Mhssetup();
          if($landscape["LandscapeType"]==43) {//Semester Based         	
          	
 	         	//get total registered semester 
