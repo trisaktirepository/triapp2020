@@ -38,19 +38,20 @@ $(function() {
 		<th width="10%"><?php echo $this->translate("Status Pelaporan PDPT");?></th>			
 	</tr>
 	<?php  
-	
-	foreach($semester["courses"] as $index=>$course){ 
-	
-	?>
-	<tr>
-		<td><?php echo $index+1;?></td>
-		<td><a href="#" onclick="openDialog('<?php echo $semester["IdSemesterMain"];?>','<?php echo $this->student["IdProgram"];?>','<?php echo $course["IdSubject"];?>');"><?php echo $course["SubCode"];?></a></td>
-		<td><?php echo $course["BahasaIndonesia"];?></td>
-		<td align='center'><?php echo $course["CreditHours"];?></td>
-		<td align='center'><?php echo $course["idkelas"];?></td>		
+	if (isset($semester["courses"])) {
+		foreach($semester["courses"] as $index=>$course){ 
 		
-	</tr>
-	<?php } ?>
+		?>
+		<tr>
+			<td><?php echo $index+1;?></td>
+			<td><a href="#" onclick="openDialog('<?php echo $semester["IdSemesterMain"];?>','<?php echo $this->student["IdProgram"];?>','<?php echo $course["IdSubject"];?>');"><?php echo $course["SubCode"];?></a></td>
+			<td><?php echo $course["BahasaIndonesia"];?></td>
+			<td align='center'><?php echo $course["CreditHours"];?></td>
+			<td align='center'><?php echo $course["idkelas"];?></td>		
+			
+		</tr>
+		<?php } 
+	}?>
 	
 </table>
 <br>
