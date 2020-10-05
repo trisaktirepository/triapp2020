@@ -167,7 +167,7 @@ if(count($barred)==0){
         
 		<td><?php echo (isset($course["mark_approveby"]) && $course["mark_approveby"]!=0) ? $this->translate("Approved"):$this->translate("Waiting for Approval");?></td>
 	 	<?php } else {?> 
-        <td colspan="5" align="center"><?php echo $this->translate('Mark is not publish yet')?></td>
+        <td colspan="6" align="center"><?php echo $this->translate('Mark is not publish yet')?></td>
         <?php }?>
         <td><?php echo $course['idkelas'];?></td>
         <td><?php echo $course['Pdpt_grade'];?></td>
