@@ -1544,12 +1544,12 @@ class StudentPortalController extends Zend_Controller_Action
 					//get course registered  per semester
 		  			$courseRegisterDb = new App_Model_Record_DbTable_StudentRegistration();
 		  			$courses = $courseRegisterDb->getCourseRegisteredBySemester($registration_id,$sem["IdSemesterMain"]);
-		  			foreach ($courses as $key=>$value) {
+		  			foreach ($courses as $idx=>$value) {
 		  				if ($value['IdCourseTaggingGroup']>0) { 
 			  				$kelas=$dbPdpt->getKelasByGrp($value['IdCourseTaggingGroup']);
-			  				if ($kelas) $courses[$key]['idkelas']=$kelas['id_kls'];
-			  				else $courses[$key]['idkelas']='Not Yet';
-		  				} else $courses[$key]['idkelas']='Not Yet';
+			  				if ($kelas) $courses[$idx]['idkelas']=$kelas['id_kls'];
+			  				else $courses[$idx]['idkelas']='Not Yet';
+		  				} else $courses[$idx]['idkelas']='Not Yet';
 		  			}
 		  			$semester[$key]["courses"]=$courses;
 		  				
@@ -1567,12 +1567,12 @@ class StudentPortalController extends Zend_Controller_Action
 			       	//get course registered  by block
 		  			$courseRegisterDb = new App_Model_Record_DbTable_StudentRegistration();
 		  			$courses = $courseRegisterDb->getCourseRegisteredBySemesterBlock($registration_id,$block["IdSemesterMain"],null);
-		  			foreach ($courses as $key=>$value) {
+		  			foreach ($courses as $idx=>$value) {
 		  				if ($value['IdCourseTaggingGroup']>0) {
 			  				$kelas=$dbPdpt->getKelasByGrp($value['IdCourseTaggingGroup']);
-			  				if ($kelas) $courses[$key]['idkelas']=$kelas['id_kls'];
-			  				else $courses[$key]['idkelas']='Not Yet';
-		  				} else $courses[$key]['idkelas']='Not Yet';
+			  				if ($kelas) $courses[$idx]['idkelas']=$kelas['id_kls'];
+			  				else $courses[$idx]['idkelas']='Not Yet';
+		  				} else $courses[$idx]['idkelas']='Not Yet';
 		  			}
 		  			$blocks[$key]["courses"]=$courses;
 		  			
