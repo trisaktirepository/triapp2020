@@ -286,7 +286,7 @@ public function getComponentSchedulebytype($transaction_id,$com_type=1,$schedule
 					->joinLeft(array('c'=>'tbl_collegemaster'),'c.IdCollege=p.IdCollege',array('faculty'=>'c.CollegeName','faculty2'=>'c.ArabicName','faculty_id'=>'c.IdCollege'))
 					->where("ap.ap_at_trans_id  = '".$transaction_id."'")				
 					->order("ap.ap_preference Asc");
-	      if(isset($appl_type) && ($appl_type==1 || $appl_type==4 || $appl_type==7 || $appl_type==5)){
+	      if(isset($appl_type) && ($appl_type==1 || $appl_type==4 || $appl_type==7 || $appl_type==5 || $appl_type==8 || $appl_type==9)){
 	      	$select->where("ap.ap_usm_status  = 1");
 	      }
         $stmt = $db->query($select);

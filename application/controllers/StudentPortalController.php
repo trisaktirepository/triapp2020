@@ -1522,6 +1522,7 @@ class StudentPortalController extends Zend_Controller_Action
          $landscape = $landscapeDb->getData($student["IdLandscape"]);
          $this->view->landscape = $landscape;
          $semester=array();
+         $dbPdpt=new Reports_Model_DbTable_Mhssetup();
          if($landscape["LandscapeType"]==43) {//Semester Based         	
          	
 	         	//get total registered semester 
@@ -1533,8 +1534,13 @@ class StudentPortalController extends Zend_Controller_Action
 					//get course registered  per semester
 		  			$courseRegisterDb = new App_Model_Record_DbTable_StudentRegistration();
 		  			$courses = $courseRegisterDb->getCourseRegisteredBySemester($registration_id,$sem["IdSemesterMain"]);
+		  			foreach ($courses as $key=>$value) {
+		  				$kelas=$dbPdpt->getKelasByGrp($value['IdCourseTaggingGroup']);
+		  				if ($kelas) $courses[$key]['idkelas']=$kelas['id_kls'];
+		  				else $courses[$key]['idkelas']='Not Yet';
+		  			}
 		  			$semester[$key]["courses"]=$courses;
-		  						
+		  				
 		  			
 	         	}
 	         	
@@ -1550,6 +1556,11 @@ class StudentPortalController extends Zend_Controller_Action
 		         	//get course registered  by block
 		  			$courseRegisterDb = new App_Model_Record_DbTable_StudentRegistration();
 		  			$courses = $courseRegisterDb->getCourseRegisteredBySemesterBlock($registration_id,$block["IdSemesterMain"],null);
+		  			foreach ($courses as $key=>$value) {
+		  				$kelas=$dbPdpt->getKelasByGrp($value['IdCourseTaggingGroup']);
+		  				if ($kelas) $courses[$key]['idkelas']=$kelas['id_kls'];
+		  				else $courses[$key]['idkelas']='Not Yet';
+		  			}
 		  			$blocks[$key]["courses"]=$courses;
 		  			
 		  			$semester = $blocks;

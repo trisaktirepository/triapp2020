@@ -3639,7 +3639,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     	} else if ($txnData['at_appl_type']=="4") {
     		$typeselection="Program Seleksi Undangan";
     		$message="-";
-    	} else if ($txnData['at_appl_type']=="5") {
+    	} else if ($txnData['at_appl_type']=="5" || $txnData['at_appl_type']=="8" || $txnData['at_appl_type']=="9") {
     		$typeselection="Program Seleksi Portofolio";
     		$message="-";
     	} else if ($txnData['at_appl_type']=="6") {

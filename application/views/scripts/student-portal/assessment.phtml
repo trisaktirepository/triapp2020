@@ -34,7 +34,8 @@ $(function() {
 		<th width="5%"><?php echo $this->translate("No");?></th>
 		<th width="10%"><?php echo $this->translate("Kode");?></th>
 		<th width="35%"><?php echo $this->translate("Matakuliah");?></th>
-		<th width="10%"><?php echo $this->translate("SKS");?></th>			
+		<th width="10%"><?php echo $this->translate("SKS");?></th>
+		<th width="10%"><?php echo $this->translate("Status Pelaporan PDPT");?></th>			
 	</tr>
 	<?php  
 	
@@ -45,7 +46,8 @@ $(function() {
 		<td><?php echo $index+1;?></td>
 		<td><a href="#" onclick="openDialog('<?php echo $semester["IdSemesterMain"];?>','<?php echo $this->student["IdProgram"];?>','<?php echo $course["IdSubject"];?>');"><?php echo $course["SubCode"];?></a></td>
 		<td><?php echo $course["BahasaIndonesia"];?></td>
-		<td align='center'><?php echo $course["CreditHours"];?></td>		
+		<td align='center'><?php echo $course["CreditHours"];?></td>
+		<td align='center'><?php echo $course["idkelas"];?></td>		
 		
 	</tr>
 	<?php } ?>
