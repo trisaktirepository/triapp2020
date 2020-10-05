@@ -4640,6 +4640,7 @@ public function getstudp($id,$idprogram=null){ //function to find the data to po
 			$db = Zend_Db_Table::getDefaultAdapter();
 			$select = $db->select()
 			->from(array("a"=>"kelas_kuliah"))
+			->join(array('nil'=>'nilai'),'a.id=nil.id_klsk',array('id_reg_pd'))
 			->join(array('b'=>'tbl_split_coursegroup'),'a.IdSplitGroup=b.Id',array())
 			->where('b.IdCourseTaggingGroup  = ?',$idgrp);
 			$result = $db->fetchRow($select);

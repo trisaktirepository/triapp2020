@@ -1026,7 +1026,7 @@ class StudentPortalController extends Zend_Controller_Action
     	$academic_back_salutation  = $defDB->getData($student["BackSalutation"]);
     	
     	$this->view->academic_advisor = $academic_front_salutation['BahasaIndonesia'].' '.$student["AcademicAdvisor"] .' '.$academic_back_salutation['BahasaIndonesia'];  	
-    	 
+    	$dbPdpt=new App_Model_Record_DbTable_Mhssetup();
     	 //To get Registered Courses   
          $landscapeDb = new App_Model_Record_DbTable_Landscape();
          $landscape = $landscapeDb->getData($student["IdLandscape"]);
@@ -1049,6 +1049,11 @@ class StudentPortalController extends Zend_Controller_Action
 		  				if ($dbPublish->isAllMarkShown($value['IdSemesterMain'], $value['IdProgram'], $value['IdSubject'], $value['IdCourseTaggingGroup'])) {
 		  					$courses[$index]['publish']="1";
 		  				} else $courses[$index]['publish']="0";
+		  				 
+		  					$kelas=$dbPdpt->getKelasByGrp($value['IdCourseTaggingGroup']);
+		  					if ($kelas) $courses[$index]['idkelas']=$kelas['id_kls'];
+		  					else $courses[$index]['idkelas']='Not Yet';
+		  				 
 		  			}
 		  			//echo "---";echo var_dump($courses);exit;
 		  			$semester[$key]["courses"]=$courses;
@@ -1090,6 +1095,10 @@ class StudentPortalController extends Zend_Controller_Action
 		  						$courses[$index]['publish']="1";
 		  					} else $courses[$index]['publish']="0";
 						} else $courses[$index]['publish']="0";
+						
+						$kelas=$dbPdpt->getKelasByGrp($value['IdCourseTaggingGroup']);
+						if ($kelas) $courses[$index]['idkelas']=$kelas['id_kls'];
+						else $courses[$index]['idkelas']='Not Yet';
 		  			}
 		  			 
 		  			$blocks[$key]["courses"]=$courses;

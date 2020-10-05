@@ -121,17 +121,19 @@ if(count($barred)==0){
 		<th width="8%"><?php echo $this->translate("Status Nilai");?></th>
 		<th width="8%"><?php echo $this->translate("Status Kelulusan");?></th>
 		<th width="10%"><?php echo $this->translate("Approval Status");?></th>
+		<th width="8%"><?php echo $this->translate("Status Pelaporan");?></th>
+		<th width="8%"><?php echo $this->translate("Nilai Terlapor");?></th>
 	</tr>
 	<?php  
 	$total_credit_hour = 0;
 	$total_bobot=0;
 	foreach($semester["courses"] as $index=>$course){ 
-	$total_credit_hour = $total_credit_hour + $course["CreditHours"];
-	
-	if(isset($course["grade_point"])){
-		$bobot = $course["grade_point"]*$course["CreditHours"];
-		$total_bobot= abs($total_bobot) + abs($bobot);
-	}
+		$total_credit_hour = $total_credit_hour + $course["CreditHours"];
+		
+		if(isset($course["grade_point"])){
+			$bobot = $course["grade_point"]*$course["CreditHours"];
+			$total_bobot= abs($total_bobot) + abs($bobot);
+		}
 	?>
 	<tr>
 		<td><?php echo $index+1;?></td>
@@ -165,8 +167,10 @@ if(count($barred)==0){
         
 		<td><?php echo (isset($course["mark_approveby"]) && $course["mark_approveby"]!=0) ? $this->translate("Approved"):$this->translate("Waiting for Approval");?></td>
 	 	<?php } else {?> 
-        <td colspan="5" align="center"><?php echo $this->translate('Mark is not publish yet')?></td><?php }?>
-        
+        <td colspan="5" align="center"><?php echo $this->translate('Mark is not publish yet')?></td>
+        <?php }?>
+        <td><?php echo $course['idkelas'];?></td>
+        <td><?php echo $course['Pdpt_grade'];?></td>
 	</tr>
 	<?php } ?>
 	<tr>
