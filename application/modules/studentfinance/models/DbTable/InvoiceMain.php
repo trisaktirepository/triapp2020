@@ -779,7 +779,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 	
 		if ($mode==null) $mode="c";
 	 
-		$invoice=$dbInvoice->getInvoiceDataByFormulir($idinvoice);
+		$invoice=$dbInvoice->getData($idinvoice);
 		$applid=$invoice['appl_id'];
 		
 		$profil=$dbAppProfile->getData($applid);
