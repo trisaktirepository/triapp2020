@@ -780,6 +780,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		if ($mode==null) $mode="c";
 	 
 		$invoice=$dbInvoice->getData($idinvoice);
+		if ($invoice && $invoice['va_expired_dt']=='') $dbInvoice->update(array('va_expired_dt'=>$dateexprired), 'id='.$idinvoice);
 		$applid=$invoice['appl_id'];
 		
 		$profil=$dbAppProfile->getData($applid);
@@ -848,7 +849,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 			);
 			
 			//
-			//echo var_dump($invoiceData);exit;
+		    echo var_dump($invoiceData);exit;
 			$respone=$bni->accessBni($clientid, $secretkey, $url, $invoiceData);
 	
 	
