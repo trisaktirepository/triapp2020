@@ -848,7 +848,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 			);
 			
 			//
-			echo var_dump($invoiceData);exit;
+			//echo var_dump($invoiceData);exit;
 			$respone=$bni->accessBni($clientid, $secretkey, $url, $invoiceData);
 	
 	
