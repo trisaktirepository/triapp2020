@@ -17,7 +17,7 @@ class App_Form_Admission extends Zend_Form {
 		$this->at_appl_type->setMultiOptions(array('1'=>' '.$this->getView()->translate('Placement Test'),
 				'2'=>' '.$this->getView()->translate('High School Certificate'),
 				'3'=>' '.$this->getView()->translate('Credit Transfer'),
-				'4'=>' '.$this->getView()->translate('Invitation'),
+				//'4'=>' '.$this->getView()->translate('Invitation'),
 				'5'=>' '.$this->getView()->translate('Portofolio'),
 				'8'=>' '.$this->getView()->translate('Portofolio Magister/Doctor'),
 				'6'=>' '.$this->getView()->translate('Scholarship'),

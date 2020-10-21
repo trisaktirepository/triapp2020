@@ -5705,7 +5705,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 						foreach ($list_program as $prog) {
 							
 							if ($prog['ap_prog_code']=='0300' ||$prog['ap_prog_code']=='0400' ) 
-								$additional=200000;
+								$additional=500000;
 						}
 						$program_fee=$program_fee+$additional;
 						//insert into invoice and invoice detail
