@@ -849,9 +849,9 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 			);
 			
 			//
-		    //echo var_dump($invoiceData);exit;
+		    echo var_dump($invoiceData); 
 			$respone=$bni->accessBni($clientid, $secretkey, $url, $invoiceData);
-	
+			echo var_dump($respone);exit;
 	
 			if (!isset($respone['status']) && $process=='createbilling')
 				$dbInvoice->update(array("va"=>$respone['virtual_account'],"dt_va"=>date('Y-m-d h:i:s'),"Client_id"=>$clientid,"billing_type"=>'c',"Description"=>$desc,'va_expired_dt'=>$dateexprired,"status_remark"=>'ok'), "bill_number ='".$respone['trx_id']."'");
