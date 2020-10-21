@@ -798,7 +798,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 				//echo $bill;exit;
 				$bill=substr($bill, 1,8);
 				$dbInvoice->updatedata(array('bill_number'=>$bill), 'bill_number="'.$invoice['bill_number'].'"');
-				$invoice=$dbInvoice->getInvoiceDataByFormulir($idinvoice);
+				$invoice=$dbInvoice->getData($idinvoice);
 			}  
 			$bill=$invoice['bill_number'];
 			 
