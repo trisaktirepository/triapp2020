@@ -28,7 +28,7 @@
  
  <table class="table">
  <tr><th>Nama Pembayaran</th><td><?php echo 'Pendaftaran Ujian Saringan Masuk Usakti'?></td></tr>
- <tr><th>Nomor Pembayaran</th><td bgcolor="white"><?php if ($this->invoice['va']!='') echo $this->invoice['va']; else echo '<a href="/online-application/push-e-collection/trxid/'.$this->transactionid.'/invoice/'.$this->invoice['no_fomulir'].'/re/1">Buat Nomor Pembayaran</a>'?></td></tr>
+ <tr><th>Nomor Pembayaran</th><td bgcolor="white"><?php if ($this->invoice['va']!='') echo $this->invoice['va']; else echo '<a href="/online-application/push-e-collection/trxid/'.$this->transactionid.'/invoice/'.$this->invoice['id'].'/re/1">Buat Nomor Pembayaran</a>'?></td></tr>
  <tr><th>Besar Pembayaran</th><td bgcolor="white"><?php echo $this->invoice['bill_amount']-$this->invoice['cn_amount']?></td></tr>
  <tr><th>Batas Waktu Pembayaran</th><td bgcolor="white"><?php echo date('d-m-Y H:s:i',strtotime($this->invoice['va_expired_dt']))?></td></tr>
  <tr><th>Dapat Dibayar di ATM</th><td>BNI46, BRI, MANDIRI</td></tr>
