@@ -10170,7 +10170,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	}
     		
     	
-    	echo $vaexpired;exit;
+    	//echo $vaexpired;exit;
     	//create invoice
     	
     	$dbInvoice->pushToECollForEnrollment($invoice,$vaexpired,'createbilling','c',$re);
