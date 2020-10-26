@@ -13,7 +13,12 @@ class Exam_ExamSlipController extends Zend_Controller_Action
 		
 		$auth = Zend_Auth::getInstance(); 
     	$registration_id = $auth->getIdentity()->registration_id;
-		
+    	$Dbinvoice=new Studentfinance_Model_DbTable_InvoiceMain();
+    	$activity=$Dbinvoice->isAnyOpenInvoice($registration_id);
+    	
+    	if ($activity!=0 && $student['IdProgram']!=60) $Dbinvoice->dispatcher($registration_id,$activity);
+    	 
+    	
 		//To get Student Academic Info        
         $studentRegDB = new App_Model_Record_DbTable_StudentRegistration();
         $student = $studentRegDB->getStudentInfo($registration_id);
