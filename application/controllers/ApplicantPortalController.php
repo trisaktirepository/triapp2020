@@ -3451,32 +3451,33 @@ class ApplicantPortalController extends Zend_Controller_Action
     			};
     		}
     	}
-    	
-    	$openactivity=$dbActivityGrp->getOpenActivityApplicant($programid);
-    	foreach ($openactivity as $key=>$value) {
-    		$grp=$dbActivityGrp->getGroupActivity($value['IdActivity'],$programid);
-    		//cek participan
-    		$participant=$dbParticipant->isInStudent($value['IdActivity'], $appl_id,$trx['at_trans_id']);
-    		foreach ($grp as $idx=>$item) {
-    			//check participan
-    			$grp[$idx]['check']="0";
-    			if ($participant) {
-    				if ($dbGrpPartcipant->isIn($item['IdCourseTaggingGroup'], $participant['IdParticipant']))
-    					$grp[$idx]['check']="1";
-    			}
-    			$schs=$dbActSchedule->getScheduleByGroup($item['IdCourseTaggingGroup']);
-    			foreach ($schs as $scidx=>$sc) {
-    				$lec=$dbActScheduleLect->getDetailsAll($sc['sc_id']);
-    				$schs[$scidx]['speaker']=$lec;
-    			}
-    			$grp[$idx]['schedule']=$schs;
-    		}
-    		$openactivity[$key]['group']=$grp;
-    
-    	}
-    	$this->view->activitylist=$openactivity;
-    
-    }
+	    	if ($programid!='') {
+		    	$openactivity=$dbActivityGrp->getOpenActivityApplicant($programid);
+		    	foreach ($openactivity as $key=>$value) {
+		    		$grp=$dbActivityGrp->getGroupActivity($value['IdActivity'],$programid);
+		    		//cek participan
+		    		$participant=$dbParticipant->isInStudent($value['IdActivity'], $appl_id,$trx['at_trans_id']);
+		    		foreach ($grp as $idx=>$item) {
+		    			//check participan
+		    			$grp[$idx]['check']="0";
+		    			if ($participant) {
+		    				if ($dbGrpPartcipant->isIn($item['IdCourseTaggingGroup'], $participant['IdParticipant']))
+		    					$grp[$idx]['check']="1";
+		    			}
+		    			$schs=$dbActSchedule->getScheduleByGroup($item['IdCourseTaggingGroup']);
+		    			foreach ($schs as $scidx=>$sc) {
+		    				$lec=$dbActScheduleLect->getDetailsAll($sc['sc_id']);
+		    				$schs[$scidx]['speaker']=$lec;
+		    			}
+		    			$grp[$idx]['schedule']=$schs;
+		    		}
+		    		$openactivity[$key]['group']=$grp;
+		    
+		    	}
+		    	$this->view->activitylist=$openactivity;
+	    
+	    }else $this->view->activitylist=array();
+    } 
     
     
     public function printNameTagAction(){
