@@ -74,7 +74,7 @@ function chat(){
 });
 
   function savePhoto(){
-	  	$("#tunggu").val("Tunggu pengambilan foto sedang dilakukan, kalau sudah selesai akan muncul tombol 'Ke Proses Berikutnya'");
+	  	$("#tunggu").text("Tunggu pengambilan foto sedang dilakukan, kalau sudah selesai akan muncul tombol 'Ke Proses Berikutnya'");
 		var canvas=document.getElementById("capture");
 		var dataUrl=canvas.toDataURL(); 
 		type=$("#type").val();
