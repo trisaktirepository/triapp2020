@@ -255,7 +255,7 @@ function chat(){
 			 </fieldset>
 			<table  width="100%"> 
 			<tr><td colspan="2" bgcolor="lightgreen" align="center">
-				 <input class="btn" type="button" id="btnstart" value="<?php echo $this->translate('Next');?>" onclick="startExam('<?php echo $this->transaction["at_trans_id"];?>','<?php echo $this->testtype?>')">
+				 <input class="btn" type="button" id="btnstart" value="<?php echo $this->translate('Next');?>" onclick="startExam('<?php echo $this->transaction["at_trans_id"];?>','<?php echo $this->testtype?>')" disabled>
 			</td></tr>
 			</table>
 			<?php } else  {
