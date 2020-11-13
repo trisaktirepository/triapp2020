@@ -74,6 +74,7 @@ function chat(){
 });
 
   function savePhoto(){
+	  	$("#tunggu").val("Tunggu pengambilan foto sedang dilakukan, kalau sudah selesai akan muncul tombol 'Ke Proses Berikutnya'");
 		var canvas=document.getElementById("capture");
 		var dataUrl=canvas.toDataURL(); 
 		type=$("#type").val();
@@ -248,6 +249,7 @@ function chat(){
 			 <td> 
 				   Ambil Foto anda untuk bukti daring 
 				   <button id="btn-capture" type="button" class="button">Ambil Foto</button>
+				  <div id="tunggu"></div> 
 		 	</td>
 		 	<td></td>
 		 	</tr>
