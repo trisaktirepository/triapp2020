@@ -16,14 +16,16 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	//get applicant profile
     	$auth = Zend_Auth::getInstance();
     	$appl_id = $auth->getIdentity()->appl_id; 
-    	if ($appl_id==202673) {
-			$date="2020-08-08";
-    		$time="17:40:00";
-		}
-		else {
-			$date=date('Y-m-d');
-			$time=date('H:s:i');
-		}
+   		 $dbSim=new Examapplicant_Model_DbTable_Simulasi();
+    	$sim=$dbSim->getData($appl_id);
+    	if ($sim) {
+    		$date=$sim['exam_dt'];
+    		$time=$sim['exam_time'];
+    	}
+    	else {
+    		$date=date('Y-m-d');
+    		$time=date('H:s:i');
+    	}
     	$dbApplicant=new App_Model_Application_DbTable_ApplicantTransaction();
     	$dbExamComp=new App_Model_Application_DbTable_PlacementTestComponent();
     	$dbPlacementTest=new App_Model_Application_DbTable_ApplicantPtestDetail();
@@ -113,9 +115,11 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	//get applicant profile
     	$auth = Zend_Auth::getInstance();
     	$appl_id = $auth->getIdentity()->appl_id;
-    	if ($appl_id==202673) {
-    		$date="2020-01-19";
-    		$time="13:40:00";
+    	$dbSim=new Examapplicant_Model_DbTable_Simulasi();
+    	$sim=$dbSim->getData($appl_id);
+    	if ($sim) {
+    		$date=$sim['exam_dt'];
+    		$time=$sim['exam_time'];
     	}
     	else {
     		$date=date('Y-m-d');
