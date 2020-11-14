@@ -123,7 +123,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	}
     	else {
     		$date=date('Y-m-d');
-    		$time=date('H:s:i');
+    		$time=date('H:i:s');
     	}
     	$dbApplicant=new App_Model_Application_DbTable_ApplicantTransaction();
     	$dbExamComp=new App_Model_Application_DbTable_PlacementTestComponent();
@@ -556,7 +556,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	}
     	else {
     		$date=date('Y-m-d');
-    		$time=date('H:s:i');
+    		$time=date('H:i:s');
     	}
     	//generate personal exam
     	$dbTxt=new App_Model_General_DbTable_TmpTxt();
@@ -1049,7 +1049,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     	}
     	else {
     		$date=date('Y-m-d');
-    		$time=date('H:s:i');
+    		$time=date('H:i:s');
     	}
     	//generate personal exam
     	$dbTxt=new App_Model_General_DbTable_TmpTxt();
