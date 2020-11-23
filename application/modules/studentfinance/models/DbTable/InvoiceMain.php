@@ -914,7 +914,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		}
 		else
 			$va=$invoice['va'];//$billamount=$invoice['bill_balance'];
-		$billamount=$invoice['bill_amount']-$invoice['cn_amount'];
+		$billamount=$invoice['bill_amount']-$invoice['cn_amount']+-$invoice['dn_amount'];
 		 
 		//get detail
 		$invoicedetail=$invoiceDet->getInvoiceDetailBank($invoice['id'], $program['program_id'],$program['IdBranchOffer']);
@@ -929,11 +929,19 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 				 //echo "kode".$kode;
 				$amount=$det['amount']*1;
 				$cn=$dbCnote->getCN($invoice['bill_number'], $det['fi_id']);
-				if ($cn) $amount=$amount-$cn['cnd_amount'];
+				if ($cn) {
+					foreach ($cn as $value) {
+						$amount=$amount-$value['cnd_amount'];
+					}
+				}
 				
 				//debit
 				$dn=$dbNNote->getDN($invoice['bill_number'], $det['fi_id']);
-				if ($dn) $amount=$amount*1+$dn['dnd_amount'];
+				if ($dn) {
+					foreach ($dn as $value) {
+						$amount=$amount*1+$value['dnd_amount'];;
+					}
+				}
 					
 				//------
 				$amounttotal=$amounttotal+$amount;
