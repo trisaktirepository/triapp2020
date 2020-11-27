@@ -914,7 +914,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		}
 		else
 			$va=$invoice['va'];//$billamount=$invoice['bill_balance'];
-		$billamount=$invoice['bill_amount']-$invoice['cn_amount']+-$invoice['dn_amount'];
+		$billamount=$invoice['bill_amount']-$invoice['cn_amount']+$invoice['dn_amount'];
 		 
 		//get detail
 		$invoicedetail=$invoiceDet->getInvoiceDetailBank($invoice['id'], $program['program_id'],$program['IdBranchOffer']);
