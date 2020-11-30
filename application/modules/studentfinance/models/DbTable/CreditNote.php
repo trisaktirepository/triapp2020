@@ -75,8 +75,8 @@ class Studentfinance_Model_DbTable_CreditNote extends Zend_Db_Table_Abstract {
 
 	public function updateData(array $data,$where){
 		$auth = Zend_Auth::getInstance();
-		$data['update_by'] = $auth->getIdentity()->appl_id;
-		$data['update_date'] = date('Y-m-d H:i:s');
+		//$data['update_by'] = $auth->getIdentity()->appl_id;
+		//$data['update_date'] = date('Y-m-d H:i:s');
 		
 		return parent::update($data, $where);
 	}
