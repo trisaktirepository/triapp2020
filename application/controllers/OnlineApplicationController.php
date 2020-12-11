@@ -8389,8 +8389,10 @@ class OnlineApplicationController extends Zend_Controller_Action {
  		$inv=$dbInvoice->getInvoiceDataByFormulir($invoice);
  		if ($inv) 
  			$this->view->invoice=$inv;
- 		else 
- 		 	echo 'Ada kelasahan sistem, silahkan menghubungi admin di nomor WA laman login'; 
+ 		else {
+	 		 	echo 'Ada kelasahan sistem, silahkan menghubungi admin di nomor WA laman login'; 
+	 			exit;
+ 		}
  	}
  	
  	public function viewkartuAction(){
