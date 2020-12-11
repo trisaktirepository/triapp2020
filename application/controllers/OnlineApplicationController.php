@@ -8386,7 +8386,11 @@ class OnlineApplicationController extends Zend_Controller_Action {
 			
 			$invoice=$formData['noform'];
  		}
- 		$this->view->invoice=$dbInvoice->getInvoiceDataByFormulir($invoice);
+ 		$inv=$dbInvoice->getInvoiceDataByFormulir($invoice);
+ 		if ($inv) 
+ 			$this->view->invoice=$inv;
+ 		else 
+ 		 	echo 'Ada kelasahan sistem, silahkan menghubungi admin di nomor WA laman login'; 
  	}
  	
  	public function viewkartuAction(){
