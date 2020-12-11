@@ -91,7 +91,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		->from(array('im'=>$this->_name))
 		->where("im.no_fomulir = '".$noform."'");
 		if ($addinfo!=null) $selectData->where('im.bill_description like "%'.$addinfo.'_%"');
-		$row = $db->fetchRow($selectData);
+		$row = $db->fetchAll($selectData);
 	
 		if(!$row){
 			return null;
