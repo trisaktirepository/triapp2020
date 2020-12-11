@@ -373,12 +373,22 @@ td.bold-text{
 	<table bgcolor="lightgreen">
 	<tr><td>
 	<input type="hidden" name="transaction_id" value="<?php echo $this->transaction_id;?>">
-	
+	<?php if ($this->paid!="1") {
+		if ($this->paket!='') {?>
+	  
 	<ol>
-		<li><input type="radio" name="paket" value="A">Paket A: di bayar lunas sebesar Rp. <?php echo number_format($paket_a_total, 2, '.', ','); ?> tanggal: <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['REGISTRATION_DATE_START'])); ?>  s/d <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['REGISTRATION_DATE_END'])); ?> <?php if ($discountA>0) echo ' ( dengan pengurangan pembayaran sebesar Rp '.number_format( $discountA, 2, '.', ',').')'?><?php if ($discountA>0) echo '<strong> Paket A mendapatkan potongan sebesar Rp '.number_format($discountA, 2, '.', ',').' </strong>';?></li>
-		<li><input type="radio" name="paket" value="B">Paket B: di bayar pertama sebesar Rp. <?php echo number_format($paket_b_c1_total, 2, '.', ','); ?> tanggal: <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['REGISTRATION_DATE_START'])); ?> s/d <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['REGISTRATION_DATE_END'])); ?> sisanya Rp. <?php echo number_format( ($paket_a_total - $paket_b_c1_total), 2, '.', ','); ?> dibayar <?php echo sizeof($fee['plan_detail'])-1?> X angsuran setiap bulan terhitung mulai bulan <?php echo date ( 'F Y' , strtotime ( '+1 month' , strtotime ( $this->reg_date['REGISTRATION_DATE_END'] ) ) ); ?></li>
+		<li><input type="radio" name="paket" value="A" <?php if ($this->paket=="A") echo "checked"?>>Paket A: di bayar lunas sebesar Rp. <?php echo number_format($paket_a_total, 2, '.', ','); ?> tanggal: <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['REGISTRATION_DATE_START'])); ?>  s/d <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['REGISTRATION_DATE_END'])); ?> <?php if ($discountA>0) echo ' ( dengan pengurangan pembayaran sebesar Rp '.number_format( $discountA, 2, '.', ',').')'?><?php if ($discountA>0) echo '<strong> Paket A mendapatkan potongan sebesar Rp '.number_format($discountA, 2, '.', ',').' </strong>';?></li>
+		<li><input type="radio" name="paket" value="B" <?php if ($this->paket=="B") echo "checked"?>>Paket B: di bayar pertama sebesar Rp. <?php echo number_format($paket_b_c1_total, 2, '.', ','); ?> tanggal: <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['REGISTRATION_DATE_START'])); ?> s/d <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['REGISTRATION_DATE_END'])); ?> sisanya Rp. <?php echo number_format( ($paket_a_total - $paket_b_c1_total), 2, '.', ','); ?> dibayar <?php echo sizeof($fee['plan_detail'])-1?> X angsuran setiap bulan terhitung mulai bulan <?php echo date ( 'F Y' , strtotime ( '+1 month' , strtotime ( $this->reg_date['REGISTRATION_DATE_END'] ) ) ); ?></li>
 	</ol>
 	<input type="submit" name="submit" value="Pilih Paket"> 
+		<?php } else {
+			 if ($this->paket=="A") $paketto= "B"; else $paketto= "A";?>
+				<input type="hidden" name="paketto" value="<?php echo $paketto;?>">
+				Anda telah memilih Paket <?php echo $this->paket;?>  <input type="submit" name="submit" value="Ganti Paket <?php echo $paketto;?>"> 
+				<br>
+				<p>Jika anda mengubah Paket Pembayaran maka nomor pembayaran lama (Virtual Account) tidak berlaku lagi. Hindari pembayaran menggunakan Virtual Account lama </p>
+		<?php }?>
+	<?php }?>
 	<?php $dbUploadfile=new App_Model_Application_DbTable_ApplicantDocument();
 		$file=$dbUploadfile->getData($this->transaction_id,45);
 		if (!$file) {?>

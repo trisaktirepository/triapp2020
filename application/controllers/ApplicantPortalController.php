@@ -3617,6 +3617,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     		} else {
     			$txnId=$formData['transaction_id'];
     			$paket=$formData['paket'];
+    			if (isset($formData['paketto'])) $paket=$formData['paketto'];
     			$this->_redirect('/applicant-portal/agreement-letter/transaction_id/'.$txnId.'/paket/'.$paket);
     		}
     	}
@@ -3854,6 +3855,25 @@ class ApplicantPortalController extends Zend_Controller_Action
 	    	$proformaInvoiceDb = new Application_Model_DbTable_ProformaInvoice();
 	    	if (!$proformaInvoiceDb->getTxnData($txnId)) 
 	    		$proformaInvoiceDb->regenerateProformaInvoice($txnId);
+	    	//cek paket invoice
+	    	$dbInvoice=new Studentfinance_Model_DbTable_InvoiceMain();
+	    	$invoce=$dbInvoice->getInvoiceDataByFormulir($txnData['at_pes_id']);
+	    	$paid='0';$paket="";
+	    	if ($invoce) {
+	    		
+	    		foreach ($invoce as $value) {
+	    			if ($value['bill_paid']>0 && (substr($value['bill_number'], 0,2)=='01' 
+	    					|| substr($value['bill_number'], 0,2)=='11'
+	    					|| substr($value['bill_number'], 0,2)=='12'
+	    					|| substr($value['bill_number'], 0,2)=='13'
+	    					|| substr($value['bill_number'], 0,2)=='14' ) 
+	    					) $paid="1";
+	    			
+	    		}
+	    		if (count($invoce)>1) $paket="B"; else $paket="A";
+	    	}
+	    	$this->view->paket=$paket;
+	    	$this->view->paid=$paid;
 	    	
 	    } else {
 	    	echo 'Skema pembayaran blm tersedia silahkan hubungi Admin di nomor WA laman login';
@@ -3888,10 +3908,45 @@ class ApplicantPortalController extends Zend_Controller_Action
     		
     		$inv=$dbInv->getApplicantInvoice($txnData['at_pes_id']);
     		//echo var_dump($inv);exit;
-    		if (!$inv) {
+    		$ok="1";
+    		if ($inv) {
+    			//delete invoice
+    			$paid="0";
+    				foreach ($inv as $value) {
+    					if ($value['bill_paid']>0 && (substr($value['bill_number'], 0,2)=='01'
+    							|| substr($value['bill_number'], 0,2)=='11'
+    							|| substr($value['bill_number'], 0,2)=='12'
+    							|| substr($value['bill_number'], 0,2)=='13'
+    							|| substr($value['bill_number'], 0,2)=='14' )
+    					) $paid="1";
+    					$invoiceid[]=$value['id'];
+    				}
+    				 
+    		 
+    			if ($paid=="0") {
+    				$db = Zend_Db_Table::getDefaultAdapter();
+    				$db->beginTransaction();
+    				$dbInvDet=new Studentfinance_Model_DbTable_InvoiceDetail();
+    				try {
+    					foreach ($invoiceid as $invid) {
+    						$dbInvDet->delete('invoice_main_id='.$invid);
+    					}
+    					$dbInv->delete('no_fomulir="'.$txnData['at_pes_id'].'"');
+    					$db->commit();
+    					
+    				}
+    				catch (exception $e) {
+    					$ok="0";
+    					$db->rollBack();
+    					//echo $e->getMessage(); exit;
+    				}
+    			}
+    		}
+    		if ($ok=="1") {
     			$proformaInvoiceDb->moveToInvoiceBasedOnPaket($txnData['at_pes_id'], $formData['paket']);
     			$inv=$dbInv->getApplicantInvoice($txnData['at_pes_id']);
     		}
+    		
     	 
     		
     		foreach ($inv as $value) {
