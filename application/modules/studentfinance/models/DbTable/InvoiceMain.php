@@ -101,6 +101,23 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 	
 	}
 	
+	public function getInvoicePaketByFormulir($noform){
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$selectData = $db->select()
+		->from(array('im'=>$this->_name))
+		->where("im.no_fomulir = '".$noform."'")
+		->where("im.program_code<>'0'");
+		//if ($addinfo!=null) $selectData->where('im.bill_description like "%'.$addinfo.'_%"');
+		$row = $db->fetchAll($selectData);
+	
+		if(!$row){
+			return null;
+		}else{
+			return $row;
+		}
+	
+	}
+	
 	public function getIssuedInvoiceData($payee, $program_code=null){
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$selectData = $db->select()
