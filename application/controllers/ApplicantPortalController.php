@@ -3857,7 +3857,7 @@ class ApplicantPortalController extends Zend_Controller_Action
 	    		$proformaInvoiceDb->regenerateProformaInvoice($txnId);
 	    	//cek paket invoice
 	    	$dbInvoice=new Studentfinance_Model_DbTable_InvoiceMain();
-	    	$invoce=$dbInvoice->getInvoiceDataByFormulir($txnData['at_pes_id']);
+	    	$invoce=$dbInvoice->getInvoicePaketByFormulir($txnData['at_pes_id']);
 	    	$paid='0';$paket="";
 	    	if ($invoce) {
 	    		
