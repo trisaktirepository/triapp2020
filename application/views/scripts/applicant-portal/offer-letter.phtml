@@ -374,7 +374,7 @@ td.bold-text{
 	<tr><td>
 	<input type="hidden" name="transaction_id" value="<?php echo $this->transaction_id;?>">
 	<?php if ($this->paid!="1") {
-		if ($this->paket!='') {?>
+		if ($this->paket=='') {?>
 	  
 	<ol>
 		<li><input type="radio" name="paket" value="A" <?php if ($this->paket=="A") echo "checked"?>>Paket A: di bayar lunas sebesar Rp. <?php echo number_format($paket_a_total, 2, '.', ','); ?> tanggal: <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['REGISTRATION_DATE_START'])); ?>  s/d <?php echo date ( 'j F Y' , strtotime ( $this->reg_date['REGISTRATION_DATE_END'])); ?> <?php if ($discountA>0) echo ' ( dengan pengurangan pembayaran sebesar Rp '.number_format( $discountA, 2, '.', ',').')'?><?php if ($discountA>0) echo '<strong> Paket A mendapatkan potongan sebesar Rp '.number_format($discountA, 2, '.', ',').' </strong>';?></li>
