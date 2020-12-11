@@ -976,13 +976,13 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 			if (!filter_var($profil['appl_email'],FILTER_VALIDATE_EMAIL)) $std['appl_email']="" ;
 			$vaexpired=date_create('2021-09-04 23:00:00');
 			if (substr($billno,0,2)=="12" ) 
-				date_add($vaexpired,date_interval_create_from_date_string("30 days"));
+				 date_add($vaexpired,date_interval_create_from_date_string("30 days"));
 			else if (substr($billno,0,2)=="13" )
 				date_add($vaexpired,date_interval_create_from_date_string("60 days"));
 			else if (substr($billno,0,2)=="14" )
 				date_add($vaexpired,date_interval_create_from_date_string("90 days"));
 		
-			$vaexpired=date('Y-m-d H:i:s',strtotime($vaexpired));
+			$vaexpired=date('Y-m-d H:i:s',strtotime(date_format($vaexpired,'Y-m-d H:i:s')));
 			//$invoice['va_expired_dt'];
 			$invoiceData= array(
 	
