@@ -86,9 +86,13 @@ $(function() {
 <?php 
 $today = date("d-m-Y"); 
 $barredDB = new App_Model_Record_DbTable_Barringrelease();
+$dbInvoice=new Studentfinance_Model_DbTable_InvoiceMain();
 foreach($this->semester as $semester){
 	if(isset($semester["publish_date"]) && $semester["publish_date"]!=''){
 	      	$barred = $barredDB->getBarringStudent($this->idstudreg,$semester['IdSemesterMain']);		
+	      	if (!$barred) {
+				$barred=$dbInvoice->isOutstandingPayment($semester['IdSemesterMain'],$this->idstudreg);
+			}
 	      	if(strtotime($semester["publish_date"]) <= strtotime($today)) {
 ?>
 <fieldset>
@@ -187,7 +191,7 @@ if(count($barred)==0){
 }else{
 ?>
 <table>
-<tr><td><font color="red"><?php echo $this->translate("KHS anda diblok ");?></font></td></tr>
+<tr><td><font color="red"><?php echo $this->translate("KHS anda diblok karena ada kewajiban yang harus dipenuhi ");?></font></td></tr>
 </table>
 <?php 
 }
