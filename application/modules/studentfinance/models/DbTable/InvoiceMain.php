@@ -13,6 +13,20 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		$db->update($this->_name,$data, $key);
 	}
 	
+	public function isOutstandingPayment($semester,$idstd){
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$selectData = $db->select()
+		->from(array('im'=>'invoice_main'))
+		->join(array('idtl'=>'invoice_detail'), 'idtl.invoice_main_id = im.id',array('idtl.fi_id'))
+		->where("im.semester =?", $semester)
+		->where("im.IdStudentRegistration=?",$idstd)
+		->where('im.bill_balance > 0');
+		//echo $selectData;exit;
+		$row = $db->fetchAll($selectData);
+	
+		return $row;
+	}
+	
 	public function getData($id){
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$selectData = $db->select()
