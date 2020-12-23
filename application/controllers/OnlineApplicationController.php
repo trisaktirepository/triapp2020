@@ -5779,7 +5779,87 @@ class OnlineApplicationController extends Zend_Controller_Action {
 							
 						
 		
-			}else $this->_redirect('/online-application/print-bukti-daftar/trxid/'.$transaction_id.'/at_appl_type/'.$admission_type);
+			}else {
+				$va='';$program_fee=0;
+				//1st:check how many program apply.
+				$ptestDB = new App_Model_Application_DbTable_ApplicantProgram();
+				$list_program = $ptestDB->getPlacementProgram($transaction_id);
+				
+				if ($prog['ap_prog_code']=='0300' ||$prog['ap_prog_code']=='0400' ) {
+				
+					$total_program_apply = count($list_program);
+					
+					$feeDB = new App_Model_Application_DbTable_PlacementFeeSetup();
+					$dbPlaceHead=new App_Model_Application_DbTable_PlacementTest();
+					$head=$dbPlaceHead->getDataByCode($testCode);
+					if ($head['aph_fees_location']== "1") $condition = array('type'=>'LOCATION','value'=>'','aptcode'=>$testCode);
+					if ($head['aph_fees_program']== "1") $condition = array('type'=>'PROGRAM','value'=>$total_program_apply,'aptcode'=>$testCode);
+					$fees_info = $feeDB->getFees($condition);
+					$program_fee = $fees_info["apfs_amt"];
+					//add 200.000 if prgram fk dan atau fkg
+					$additional=0;
+					foreach ($list_program as $prog) {
+							
+						if ($prog['ap_prog_code']=='0300' ||$prog['ap_prog_code']=='0400' )
+							$additional=400000;
+					}
+					$program_fee=$program_fee+$additional;
+					//insert into invoice and invoice detail
+					$inv_data = array(
+							'bill_number' => $applicantID,
+							'appl_id' => $appl_id,
+							'academic_year' => $academic_year,
+							'semester' =>0,
+							'no_fomulir' => $applicantID,
+							'bill_amount' => $program_fee,
+							'bill_paid' => 0.00,
+							'bill_balance' => $program_fee,
+							'bill_description' => 'Biaya Pendaftaran USM',
+							'college_id' => 0,
+							'program_code' => 0,
+							'creator' => '1',
+							'fs_id' => 0,
+							'status' => 'A',
+							'date_create' => date('Y-m-d h:i:s')
+					);
+					//echo var_dump($inv_data);exit;
+					$invoiceDb=new Studentfinance_Model_DbTable_InvoiceMain();
+					$invoiceDetailDb=new Studentfinance_Model_DbTable_InvoiceDetail();
+					$inv=$invoiceDb->getInvoiceData($applicantID);
+					//echo var_dump($inv);
+					//exit;
+					if (!$inv)
+						$invoice_id = $invoiceDb->insert($inv_data);
+					else {
+						$invoice_id=$inv['id'];
+						$invoiceDb->update($inv_data, 'id='.$invoice_id);
+					
+					}
+						
+					//insert invoice detail
+						
+					$inv_detail_data = array(
+							'invoice_main_id' => $invoice_id,
+							'fi_id' => 19,//biaya pendaftaran
+							'fee_item_description' => 'Biaya Pendaftaran TPA/PSIKOTEST',
+							'amount' => $program_fee
+					);
+					$detail=$invoiceDetailDb->isIn($applicantID, 19);
+					if (!$detail)
+						$invoiceDetailDb->insert($inv_detail_data);
+					
+					else {
+						$invoiceDetailDb->updateData($inv_detail_data, 'id='.$detail['id']);
+					}
+		 		
+					//push to VA
+					$invoiceDb->pushToECollForEnrollment($invoice_id, '2021-08-31 23:00:00','createbilling');
+					$inv=$invoiceDb->getInvoiceData($applicantID);
+					$va=$inv['va'];
+					
+				}
+				$this->_redirect('/online-application/print-bukti-daftar/trxid/'.$transaction_id.'/at_appl_type/'.$admission_type.'/fee/'.$program_fee.'/va/'.$va );
+			}
 						
 			/*
 			if($admission_type==2){
