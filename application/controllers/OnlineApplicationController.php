@@ -5784,8 +5784,13 @@ class OnlineApplicationController extends Zend_Controller_Action {
 				//1st:check how many program apply.
 				$ptestDB = new App_Model_Application_DbTable_ApplicantProgram();
 				$list_program = $ptestDB->getPlacementProgram($transaction_id);
-				
-				if ($prog['ap_prog_code']=='0300' ||$prog['ap_prog_code']=='0400' ) {
+				$bayar="";
+				foreach ($list_program as $prog) {
+						
+					if ($prog['ap_prog_code']=='0300' ||$prog['ap_prog_code']=='0400' )
+						$bayar="1";
+				}
+				if ($bayar=="1") {
 				
 					$total_program_apply = count($list_program);
 					
@@ -5798,11 +5803,11 @@ class OnlineApplicationController extends Zend_Controller_Action {
 					$program_fee = $fees_info["apfs_amt"];
 					//add 200.000 if prgram fk dan atau fkg
 					$additional=0;
-					foreach ($list_program as $prog) {
+					///foreach ($list_program as $prog) {
 							
-						if ($prog['ap_prog_code']=='0300' ||$prog['ap_prog_code']=='0400' )
-							$additional=400000;
-					}
+					//	if ($prog['ap_prog_code']=='0300' ||$prog['ap_prog_code']=='0400' )
+					$additional=400000;
+					//}
 					$program_fee=$program_fee+$additional;
 					//insert into invoice and invoice detail
 					$inv_data = array(
