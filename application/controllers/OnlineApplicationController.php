@@ -5790,6 +5790,8 @@ class OnlineApplicationController extends Zend_Controller_Action {
 					if ($prog['ap_prog_code']=='0300' ||$prog['ap_prog_code']=='0400' )
 						$bayar="1";
 				}
+				echo var_dump($list_program);
+				echo $bayar;exit;
 				if ($bayar=="1") {
 				
 					$total_program_apply = count($list_program);
