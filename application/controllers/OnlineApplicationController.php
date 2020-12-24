@@ -10282,7 +10282,12 @@ class OnlineApplicationController extends Zend_Controller_Action {
     
     	$admission_type=$this->_getParam('at_appl_type');
     	$transaction_id=$this->_getParam('trxid');
-    
+     
+    	$fee=$this->_getParam('fee',0);
+    	$va=$this->_getParam('va',0);
+    	global $fees;
+    	$fees=array('fee'=>$fee,'va'=>$va);
+    	
     	//get transaction data
     	$transDB = new App_Model_Application_DbTable_ApplicantTransaction();
     	$transData = $transDB->getTransactionData($transaction_id);
