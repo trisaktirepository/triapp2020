@@ -10402,10 +10402,10 @@ class OnlineApplicationController extends Zend_Controller_Action {
     		$matapelajaran = $educationDB->getEducationDetail($transaction_id);
     		//echo var_dump($matapelajaran);
     		// ------- create PDF File section	--------
-    		echo var_dump($matapelajaran);
-    		echo var_dump($fee);
-    		echo var_dump($fieldValues);
-    		exit;
+    		//echo var_dump($matapelajaran);
+    		//echo var_dump($fee);
+    		///echo var_dump($fieldValues);
+    		//exit;
     		require_once 'dompdf_config.inc.php';
     
     		$autoloader = Zend_Loader_Autoloader::getInstance(); // assuming we're in a controller
