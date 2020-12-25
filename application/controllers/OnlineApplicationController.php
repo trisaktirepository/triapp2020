@@ -10432,7 +10432,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     			$html = str_replace($key,$value,$html);
     		}
     
-    		echo $html;exit;
+    		//echo $html;exit;
     
     		$dompdf = new DOMPDF();
     		$dompdf->load_html($html);
