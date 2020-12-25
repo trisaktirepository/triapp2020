@@ -10439,9 +10439,9 @@ class OnlineApplicationController extends Zend_Controller_Action {
     		$dompdf = new DOMPDF();
     		$dompdf->load_html($html);
     		$dompdf->set_paper('a4', 'potrait');
-    		$dompdf->render();
+    		@$dompdf->render();
     
-    		$dompdf = $dompdf->output();
+    		$dompdf = @$dompdf->output();
     
     		//to rename output file
     		$output_file_path = $output_directory_path."/".$output_filename;
@@ -10600,9 +10600,9 @@ class OnlineApplicationController extends Zend_Controller_Action {
     		$dompdf = new DOMPDF();
     		$dompdf->load_html($html);
     		$dompdf->set_paper('a4', 'potrait');
-    		$dompdf->render();
+    		@$dompdf->render();
     
-    		$dompdf = $dompdf->output();
+    		$dompdf = @$dompdf->output();
     
     		//to rename output file
     		$output_file_path = $output_directory_path."/".$output_filename;
@@ -10755,9 +10755,9 @@ class OnlineApplicationController extends Zend_Controller_Action {
     		$dompdf = new DOMPDF();
     		$dompdf->load_html($html);
     		$dompdf->set_paper('a4', 'potrait');
-    		$dompdf->render();
+    		@$dompdf->render();
     
-    		$dompdf = $dompdf->output();
+    		$dompdf = @$dompdf->output();
     
     		//to rename output file
     		$output_file_path = $output_directory_path."/".$output_filename;
@@ -10905,9 +10905,9 @@ class OnlineApplicationController extends Zend_Controller_Action {
     		$dompdf = new DOMPDF();
     		$dompdf->load_html($html);
     		$dompdf->set_paper('a4', 'potrait');
-    		$dompdf->render();
+    		@$dompdf->render();
     
-    		$dompdf = $dompdf->output();
+    		$dompdf = @$dompdf->output();
     
     		//to rename output file
     		$output_file_path = $output_directory_path."/".$output_filename;
@@ -11056,9 +11056,9 @@ class OnlineApplicationController extends Zend_Controller_Action {
     		$dompdf = new DOMPDF();
     		$dompdf->load_html($html);
     		$dompdf->set_paper('a4', 'potrait');
-    		$dompdf->render();
+    		@$dompdf->render();
     
-    		$dompdf = $dompdf->output();
+    		$dompdf = @$dompdf->output();
     
     		//to rename output file
     		$output_file_path = $output_directory_path."/".$output_filename;
@@ -11212,9 +11212,9 @@ class OnlineApplicationController extends Zend_Controller_Action {
     		$dompdf = new DOMPDF();
     		$dompdf->load_html($html);
     		$dompdf->set_paper('a4', 'potrait');
-    		$dompdf->render();
+    		@$dompdf->render();
     
-    		$dompdf = $dompdf->output();
+    		$dompdf = @$dompdf->output();
     
     		//to rename output file
     		$output_file_path = $output_directory_path."/".$output_filename;
