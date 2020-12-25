@@ -5798,17 +5798,10 @@ class OnlineApplicationController extends Zend_Controller_Action {
 					
 					$feeDB = new App_Model_Application_DbTable_PlacementFeeSetup();
 					$dbPlaceHead=new App_Model_Application_DbTable_PlacementTest();
-					$head=$dbPlaceHead->getDataByCode($testCode);
-					if ($head['aph_fees_location']== "1") $condition = array('type'=>'LOCATION','value'=>'','aptcode'=>$testCode);
-					if ($head['aph_fees_program']== "1") $condition = array('type'=>'PROGRAM','value'=>$total_program_apply,'aptcode'=>$testCode);
-					$fees_info = $feeDB->getFees($condition);
-					$program_fee = $fees_info["apfs_amt"];
-					//add 200.000 if prgram fk dan atau fkg
-					$additional=0;
 					///foreach ($list_program as $prog) {
 							
 					//	if ($prog['ap_prog_code']=='0300' ||$prog['ap_prog_code']=='0400' )
-					$additional=400000;
+					$additional=700000;
 					//}
 					$program_fee=$program_fee+$additional;
 					//insert into invoice and invoice detail
@@ -5821,7 +5814,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 							'bill_amount' => $program_fee,
 							'bill_paid' => 0.00,
 							'bill_balance' => $program_fee,
-							'bill_description' => 'Biaya Pendaftaran USM',
+							'bill_description' => 'Biaya Test TPA/PSIKOLOGI',
 							'college_id' => 0,
 							'program_code' => 0,
 							'creator' => '1',
@@ -5839,7 +5832,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 						$invoice_id = $invoiceDb->insert($inv_data);
 					else {
 						$invoice_id=$inv['id'];
-						$invoiceDb->update($inv_data, 'id='.$invoice_id);
+						//$invoiceDb->update($inv_data, 'id='.$invoice_id);
 					
 					}
 						
@@ -5855,9 +5848,9 @@ class OnlineApplicationController extends Zend_Controller_Action {
 					if (!$detail)
 						$invoiceDetailDb->insert($inv_detail_data);
 					
-					else {
-						$invoiceDetailDb->updateData($inv_detail_data, 'id='.$detail['id']);
-					}
+					//else {
+					//	$invoiceDetailDb->updateData($inv_detail_data, 'id='.$detail['id']);
+					//}
 		 		
 					//push to VA
 					$invoiceDb->pushToECollForEnrollment($invoice_id, '2021-08-31 23:00:00','createbilling');
@@ -10285,7 +10278,9 @@ class OnlineApplicationController extends Zend_Controller_Action {
      
     	$fee=$this->_getParam('fee',0);
     	$va=$this->_getParam('va',0);
+    	
     	global $fees;
+    	
     	$fees=array('fee'=>$fee,'va'=>$va);
     	
     	//get transaction data
