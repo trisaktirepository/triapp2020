@@ -95,6 +95,43 @@ public function getAvailableDate($appl_id=0, $txn_id=0,$aphtype=0,$placementcode
 		    return $row;
 	}
 	
+	public function getAvailableDateByTestCode($type,$appl_id,$intake){
+			
+		$db = Zend_Db_Table::getDefaultAdapter();
+			
+		$select_date = $db ->select()
+		 ->from(array('at'=>'appl_placement_head'))
+		->where('aph_academic_year=?',$intake)
+		->where('aph_appl_type=>?',$type);
+		$txn=$db->fetchRow($select_date); 
+	
+			
+		$select_date = $db ->select()
+		->from(array('at'=>'applicant_transaction'),array()) 
+		->join(array('apt'=>'applicant_ptest'),'apt.apt_at_trans_id=at.at_trans_id',array())
+		->join(array('aps'=>'appl_placement_schedule'),'aps.aps_id=apt.apt_aps_id',array('aps_test_date'=>'distinct(aps.aps_test_date)'))
+		->where("at_appl_id= '".$appl_id."'")
+		->where('aps.aps_placement_code=?',$txn['aph_placement_code'])
+		->where('at.at_pes_id is not null');
+		 
+	
+		$select = $db ->select()
+		->from(array('aps'=>$this->_name))
+		->join(array('aph'=>'appl_placement_head'),'aps.aps_placement_code=aph.aph_placement_code',array('aph_fees_program','aph_fees_location'))
+		->where("aph.aph_appl_type = '".$type."'")
+		->where('aps.aps_placement_code=?',$txn['aph_placement_code'])
+		->where("aps_test_date NOT IN (?)",$select_date)
+		->where("aps_test_date >= DATE_ADD(NOW(), INTERVAL 2 DAYS)");
+		//->where("aps_test_date > NOW()");
+			
+		$stmt = $db->query($select);
+		$row = $stmt->fetchRow();
+		// echo date('Y-m-d h:s:i', strtotime(date('now')));
+		// echo $select;
+		//echo var_dump($row);exit;
+		return $row;
+	}
+	
 	
 	public function getAvailableDateOld($appl_id=0, $txn_id=0,$aphtype=0,$placementcode=0){
 			

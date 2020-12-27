@@ -366,7 +366,11 @@ $pdb = new App_Model_Application_DbTable_ApplicantPtest();
 						}
 						
 						echo "<a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'get-document','id'=>$entry['at_trans_id'],'typeId'=>31),'default',true)."'>".$this->translate("Bukti Daftar PSSB")."</a>";
-						
+						$dbDoc=new App_Model_Application_DbTable_ApplicantDocument();
+						if ($dbDoc->getData($entry['at_trans_id'], 30)) {
+							echo "<a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'get-document','id'=>$entry['at_trans_id'],'typeId'=>30),'default',true)."'>".$this->translate("USM Card")."</a>";
+	
+						}
 				}else 
 				if( $entry['at_status']=="PROCESS" && $entry['at_appl_type']==3 ){
 						
@@ -418,7 +422,11 @@ $pdb = new App_Model_Application_DbTable_ApplicantPtest();
 						}
 						
 						echo "<a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'get-document','id'=>$entry['at_trans_id'],'typeId'=>87),'default',true)."'>".$this->translate("Bukti Daftar Jalur UTBK")."</a>";
+						$dbDoc=new App_Model_Application_DbTable_ApplicantDocument();
+						if ($dbDoc->getData($entry['at_trans_id'], 30)) {
+							echo "<a href='".$this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'get-document','id'=>$entry['at_trans_id'],'typeId'=>30),'default',true)."'>".$this->translate("USM Card")."</a>";
 						
+						}
 				}else
 				if( $entry['at_status']=="OFFER"){
 					
