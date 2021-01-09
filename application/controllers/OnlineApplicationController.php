@@ -8223,6 +8223,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	$placementcode = $this->_getParam('placement_code', 0);
     	$applid=$this->_getParam('applid', 0);
     	$transactionid=$this->_getParam('transactionid', 0);
+    	$changedate=$this->_getParam('changedate', 0);
     	
     	if ($this->getRequest()->isXmlHttpRequest()) {
     		$this->_helper->layout->disableLayout();
@@ -8233,7 +8234,8 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	$ajaxContext->initContext();
     
     	$applicantPlacementScheduleDB = new App_Model_Application_DbTable_ApplicantPlacementSchedule();
-    	$datelist = $applicantPlacementScheduleDB->getAvailableDate($applid,$transactionid,0,$placementcode);
+    	if ($changedate=="1") $datelist = $applicantPlacementScheduleDB->getAvailableChangeDate($applid,$transactionid,0,$placementcode);
+    	else $datelist = $applicantPlacementScheduleDB->getAvailableDate($applid,$transactionid,0,$placementcode);
     	 
     	$ajaxContext->addActionContext('view', 'html')
     	->addActionContext('form', 'html')

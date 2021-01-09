@@ -18,7 +18,7 @@ function getDate(element){
 	 
 	$.ajax({ 
 		type: "POST",
-		url: "<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'ajax-get-date'),'default',true);?>/placement_code/"+placement_code+"/transactionid/<?php echo $this->transaction_id; ?>/applid/<?php echo $this->appl_id; ?>", 
+		url: "<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'ajax-get-date'),'default',true);?>/placement_code/"+placement_code+"/transactionid/<?php echo $this->transaction_id; ?>/applid/<?php echo $this->appl_id; ?>/changedate/1", 
 		data: "placement_code=" + placement_code,
 		dataType: 'json',
 		beforeSend: function() {
