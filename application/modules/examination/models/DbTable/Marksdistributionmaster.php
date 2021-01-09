@@ -530,20 +530,27 @@ class Examination_Model_DbTable_Marksdistributionmaster extends Zend_Db_Table {
 		
 		$row=$lobjDbAdpt->fetchRow($sql);
 		if ($row) {
-			$idmarkdis=$row['IdMarksDistributionMaster'];
-			$sql =  $this->lobjDbAdpt->select()->from(array("mdm" =>"tbl_marksdistributionmaster"))
-			 ->where("mdm.IdMarksDistributionMaster = ?",$idmarkdis);
-			$row=$lobjDbAdpt->fetchRow($sql);
-			$sql =  $this->lobjDbAdpt->select()->from(array("mdm" =>"tbl_marksdistributionmaster"))
-			->joinLeft(array('eat'=>'tbl_examination_assessment_type'),'eat.IdExaminationAssessmentType=mdm.IdComponentType',array('IdDescription','component_name'=>'DescriptionDefaultlang'))
-			->where("mdm.semester = ?",$row['semester'])
-			->where("mdm.IdProgram = ?",$row['IdProgram'])
-			->where("mdm.IdCourse = ?",$row['IdCourse'])
-			->where("mdm.IdBranch = ?",$row['IdBranch'])
-			->where("mdm.Status = 243 OR mdm.Status = 193 ")
-			->order('mdm.OrderComponent');
-			if ($header!=null) $sql->where('mdm.IdHeader=?',$header);
-			$row=$lobjDbAdpt->fetchAll($sql);
+			$rowmark=false;
+			foreach ($row as $value) {
+				$idmarkdis=$value['IdMarksDistributionMaster'];
+				$sql =  $this->lobjDbAdpt->select()->from(array("mdm" =>"tbl_marksdistributionmaster"))
+			 	->where("mdm.IdMarksDistributionMaster = ?",$idmarkdis);
+				$rowmark=$lobjDbAdpt->fetchRow($sql);
+				if ($rowmark) break;
+			}
+			
+			if ($rowmark) {
+				$sql =  $this->lobjDbAdpt->select()->from(array("mdm" =>"tbl_marksdistributionmaster"))
+				->joinLeft(array('eat'=>'tbl_examination_assessment_type'),'eat.IdExaminationAssessmentType=mdm.IdComponentType',array('IdDescription','component_name'=>'DescriptionDefaultlang'))
+				->where("mdm.semester = ?",$rowmark['semester'])
+				->where("mdm.IdProgram = ?",$rowmark['IdProgram'])
+				->where("mdm.IdCourse = ?",$rowmark['IdCourse'])
+		 		->where("mdm.Status = 243 OR mdm.Status = 193 ")
+				->order('mdm.OrderComponent');
+				if ($header!=null) $sql->where('mdm.IdHeader=?',$header);
+				if ($rowmark['IdBranch']!=null) $sql->where("mdm.IdBranch = ?",$rowmark['IdBranch']);
+				$row=$lobjDbAdpt->fetchAll($sql);
+			}  else $row=array();
 		} else {
 			$sql =  $this->lobjDbAdpt->select()->from(array("mdm" =>"tbl_marksdistributionmaster"))
 			->joinLeft(array('eat'=>'tbl_examination_assessment_type'),'eat.IdExaminationAssessmentType=mdm.IdComponentType',array('IdDescription','component_name'=>'DescriptionDefaultlang'))
