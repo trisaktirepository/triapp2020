@@ -10465,7 +10465,10 @@ class OnlineApplicationController extends Zend_Controller_Action {
     		$doc["ad_filename"]=$output_filename;
     		$doc["ad_createddt"]=date("Y-m-d");
     		//echo var_dump($doc);exit;
-    		$documentDB->addData($doc);
+    		$docs=$documentDB->getData($transaction_id,$fileType);
+    		if (!$docs)
+    			$documentDB->addData($doc);
+    		else $documentDB->update($doc, 'ad_id='.$docs['ad_id']);
     		//------- end high school cert section ----------
     	}
     	elseif ($admission_type==3)
@@ -11246,7 +11249,10 @@ class OnlineApplicationController extends Zend_Controller_Action {
     		$doc["ad_filename"]=$output_filename;
     		$doc["ad_createddt"]=date("Y-m-d");
     		//echo var_dump($doc);exit;
-    		$documentDB->addData($doc);
+    		$docs=$documentDB->getData($transaction_id,$fileType);
+    		if (!$docs)
+    			$documentDB->addData($doc);
+    		else $documentDB->update($doc, 'ad_id='.$docs['ad_id']);
     		//------- end high school cert section ----------
     			
     
