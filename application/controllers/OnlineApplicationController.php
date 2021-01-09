@@ -8235,7 +8235,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     
     	$applicantPlacementScheduleDB = new App_Model_Application_DbTable_ApplicantPlacementSchedule();
     	if ($changedate=="1") 
-    		$datelist = $applicantPlacementScheduleDB->getAvailableChangeDate($applid,$transactionid,0,$placementcode);
+    		$datelist = $applicantPlacementScheduleDB->getAvailableChangeDate($applid,$transactionid,$placementcode);
     	else 
     		$datelist = $applicantPlacementScheduleDB->getAvailableDate($applid,$transactionid,0,$placementcode);
     	 
