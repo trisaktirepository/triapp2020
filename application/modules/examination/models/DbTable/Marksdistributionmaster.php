@@ -528,7 +528,7 @@ class Examination_Model_DbTable_Marksdistributionmaster extends Zend_Db_Table {
 		->where('a.IdSemester=?',$idSemester)
 		->where('a.Course=?',$idSubject);
 		
-		$row=$lobjDbAdpt->fetchRow($sql);
+		$row=$lobjDbAdpt->fetchAll($sql);
 		if ($row) {
 			$rowmark=false;
 			foreach ($row as $value) {
