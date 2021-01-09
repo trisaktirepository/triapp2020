@@ -5,6 +5,34 @@ class App_Model_Application_DbTable_ApplicantPlacementSchedule extends Zend_Db_T
 	protected $_primary = "aps_id";
 	
 	
+	public function getAvailableChangeDate($appl_id=0, $txn_id=0,$placementcode){
+			
+		$db = Zend_Db_Table::getDefaultAdapter();
+			
+		$select_date = $db ->select()
+		->from(array('at'=>'applicant_transaction'),array())
+		->join(array('apt'=>'applicant_ptest'),'apt.apt_at_trans_id=at.at_trans_id',array())
+		->join(array('aps'=>'appl_placement_schedule'),'aps.aps_id=apt.apt_aps_id',array('aps_test_date'=>'distinct(aps.aps_test_date)'))
+		->where("at_appl_id= '".$appl_id."'")
+		->where("at_appl_type = 1");
+	
+		if($txn_id!=0){
+			$select_date->where("at_trans_id != '".$txn_id."'");
+		}
+	
+		$select = $db ->select()
+		->from(array('aps'=>$this->_name))
+		->where("DATE_SUB(aps_test_date,INTERVAL 2 DAY) > curdate()")
+		->where("aps_test_date NOT IN (?)",$select_date)
+		->where('aps_placement_code=?',$placementcode);
+	
+		//echo $select;
+			
+		$stmt = $db->query($select);
+		$row = $stmt->fetchAll();
+		return $row;
+	}
+	
 	public function getInfo($id=0){
 		
 		$db = Zend_Db_Table::getDefaultAdapter();
