@@ -5857,6 +5857,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 					$inv=$invoiceDb->getInvoiceData($applicantID);
 					$va=$inv['va'];
 					
+					
 				}
 				$this->_redirect('/online-application/print-bukti-daftar/trxid/'.$transaction_id.'/at_appl_type/'.$admission_type.'/fee/'.$program_fee.'/va/'.$va );
 			}
@@ -10396,6 +10397,14 @@ class OnlineApplicationController extends Zend_Controller_Action {
     		$educationDB = new App_Model_Application_DbTable_ApplicantEducation();
     		$matapelajaran = $educationDB->getEducationDetail($transaction_id);
     		//echo var_dump($matapelajaran);
+
+    		 
+    		//get avaliable date
+    		global $schtest;
+    		
+    		$dbSch=new App_Model_Application_DbTable_PlacementTestSchedule();
+    		$schtest=$dbSch->getAvailablePtestDateUSM($transData['at_intake']);
+    			
     		// ------- create PDF File section	--------
     		//echo var_dump($matapelajaran);
     		//echo var_dump($fee);
@@ -11172,6 +11181,14 @@ class OnlineApplicationController extends Zend_Controller_Action {
     
     		$matapelajaran = $educationDB->getUTBKDetail($transaction_id);
     		//echo var_dump($matapelajaran);
+    		
+    		//get avaliable date
+    		global $schtest;
+    		
+    		$dbSch=new App_Model_Application_DbTable_PlacementTestSchedule();
+    		$schtest=$dbSch->getAvailablePtestDateUSM($transData['at_intake']);
+    		 
+    		
     		// ------- create PDF File section	--------
     
     		require_once 'dompdf_config.inc.php';

@@ -50,6 +50,20 @@ class App_Model_Application_DbTable_PlacementTestSchedule extends Zend_Db_Table_
 		
 	}
 	
+	public function getAvailablePtestDateUSM($intake){
+			
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$select = $db->select()
+		->from(array('aps'=>'appl_placement_schedule'),array('paymentdate'=>'DATE_SUB(aps_test_date, INTERVAL 2 DAY)','testdate'=>'aps_test_date'))
+		->join(array('h'=>'appl_placement_head'),'aps.aps_placement_code=h.aph_placement_code',array())
+		->where("aps_test_date >= CURDATE()")
+		->where('h.aph_academic_year=?',$intake)
+		->where("MID(aps_placement_code,1,3) = 'USM'");
+	    $row = $db->fetchAll($select);
+		return $row;
+	}
+	
+	
 	public function getActivePlacementTestData($placementTestCode=null){
 	
 		if($placementTestCode!=null){
