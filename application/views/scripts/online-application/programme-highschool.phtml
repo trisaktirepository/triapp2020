@@ -299,9 +299,9 @@ function initSubject(discipline_code){
 			.append($('<thead>')
 				.append($('<tr>')
 	        		.append($('<th rowspan="2">').text("<?php echo $this->translate("Subjects"); ?>"))
-	            	.append($('<th colspan="2">').text("<?php echo $this->translate("Class 1"); ?>"))
-	            	.append($('<th colspan="2">').text("<?php echo $this->translate("Class 2"); ?>"))
-	            	.append($('<th colspan="2">').text("<?php echo $this->translate("Class 3"); ?>"))
+	            	.append($('<th colspan="2">').text("<?php echo $this->translate("Class 10"); ?>"))
+	            	.append($('<th colspan="2">').text("<?php echo $this->translate("Class 11"); ?>"))
+	            	.append($('<th colspan="2">').text("<?php echo $this->translate("Class 12"); ?>"))
 	            	.append($('<th rowspan="2">').text("<?php echo $this->translate("Average"); ?>"))
 	        	)
 	        	.append($('<tr>')
@@ -460,7 +460,7 @@ function changeProgram(discipline){
 	<ul class="tri-steps">
 		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'biodata'),'default',true);?>"><?php echo $this->translate("biodata"); ?></a></div></li>
 		
-		<?php if($this->transaction["entry_type"]!=2){ //case agent(manual entry- which is already have no peserta/choose admission type)?>
+		<?php if ($this->transaction["entry_type"]!=2){ //case agent(manual entry- which is already have no peserta/choose admission type)?>
 		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'contactinfo'),'default',true);?>"><?php echo $this->translate("contact_info"); ?></a></div></li>
 		<li class="prevDone"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'admission'),'default',true);?>"><?php echo $this->translate("Admission Type"); ?></a></div></li>
 		<?php }else{ //end admission?>
@@ -468,7 +468,7 @@ function changeProgram(discipline){
 		<?php }//end else?>
 		<li class="current"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'programme'),'default',true);?>"><?php echo $this->translate("programme"); ?></a></div></li>
 		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'uploaddocument'),'default',true);?>"><?php echo $this->translate("upload_document"); ?></a></div></li>
-		<?php if($this->transaction['at_appl_type']=='1'){?>
+		<?php if ($this->transaction['at_appl_type']=='1'){?>
 		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'uploaddocument'),'default',true);?>"><?php echo $this->translate("test_schedule"); ?></a></div></li>
 		<?php }?>
 		<li class="last"><div class="text"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'online-application','action'=>'confirmation'),'default',true);?>"><?php echo $this->translate("confirmation"); ?></a></div></li>	
