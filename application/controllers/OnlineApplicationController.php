@@ -8219,7 +8219,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	if (! $data) {
     		$this->_redirect ( 'index/index' );
     	}
-    		
+    	$this->_helper->layout->disableLayout();
     	$placementcode = $this->_getParam('placement_code', 0);
     	$applid=$this->_getParam('applid', 0);
     	$transactionid=$this->_getParam('transactionid', 0);
