@@ -27,27 +27,31 @@ class App_Model_Application_DbTable_ApplicantEducation extends Zend_Db_Table_Abs
 		
 		$db = Zend_Db_Table::getDefaultAdapter();
 		
-	     $select = $db ->select()
-					->from(array('ae'=>$this->_name))
-					->joinLeft(array('sm'=>'school_master'),'sm.sm_id = ae.ae_institution')
-					->joinLeft(array('sd'=>'school_discipline'),'sd.smd_code = ae.ae_discipline_code')
-					->where("ae.ae_appl_id = '".$appl_id."'")
-					->where("ae.ae_transaction_id = '".$txn_id."'");
-       
-        $row = $db->fetchRow($select);
-        
-        if($row){
-        	return $row;
-        }else{
-        	$select = $db ->select()
+
+		$select = $db ->select()
+		->from(array('ae'=>'applicant_transaction'))
+		->where('at_trans_id=?',$txn_id);
+		$row=$db->getFetchRow($select);
+		
+		if ($row['at_appl_type']=="8" || $row['at_appl_type']=="9") {
+			$select = $db ->select()
         	->from(array('ae'=>$this->_name))
-        	->joinLeft(array('sm'=>'tbl_sms_pdpt'),'sm.kode_prodi = ae.ae_institution')
+        	->join(array('sm'=>'tbl_sms_pdpt'),'sm.kode_prodi = ae.ae_institution',array('id_sms','smd_desc'=>'CONCAT(nm_lemb," (",ISNULL(nm_jenjang,"-"),") ")'))
+        	->join(array('pt'=>'tbl_pt_pdpt'),'sm.id_sp=pt.id_sp',array('sm_name'=>'nm_sp'))
         	->where("ae.ae_appl_id = '".$appl_id."'")
 			->where("ae.ae_transaction_id = '".$txn_id."'");
         	$row = $db->fetchRow($select);
-        	if ($row) return $row; else 
-        		return null;
-        }
+		} else {
+		     $select = $db ->select()
+						->from(array('ae'=>$this->_name))
+						->joinLeft(array('sm'=>'school_master'),'sm.sm_id = ae.ae_institution')
+						->joinLeft(array('sd'=>'school_discipline'),'sd.smd_code = ae.ae_discipline_code')
+						->where("ae.ae_appl_id = '".$appl_id."'")
+						->where("ae.ae_transaction_id = '".$txn_id."'");
+	       
+	        $row = $db->fetchRow($select);
+		}
+       return $row;
 	}
 	
 	public function getDataByapplID($appl_id){
