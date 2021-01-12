@@ -31,7 +31,7 @@ class App_Model_Application_DbTable_ApplicantEducation extends Zend_Db_Table_Abs
 		$select = $db ->select()
 		->from(array('ae'=>'applicant_transaction'))
 		->where('at_trans_id=?',$txn_id);
-		$row=$db->getFetchRow($select);
+		$row=$db->fetchRow($select);
 		
 		if ($row['at_appl_type']=="8" || $row['at_appl_type']=="9") {
 			$select = $db ->select()
