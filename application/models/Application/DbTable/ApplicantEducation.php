@@ -29,11 +29,13 @@ class App_Model_Application_DbTable_ApplicantEducation extends Zend_Db_Table_Abs
 		
 
 		$select = $db ->select()
-		->from(array('ae'=>'applicant_transaction'))
+		->from(array('at'=>'applicant_transaction'))
+		->joinLeft(array('ap'=>'applicant_ptest'),'ap.ap_at_trans_id=at.at_trans_id')
+		->jonLeft(array('h'=>'appl_placement_head'),'h.aph_placement_code=ap.ap_placement_code')
 		->where('at_trans_id=?',$txn_id);
 		$row=$db->fetchRow($select);
 		
-		if ($row['at_appl_type']=="8" || $row['at_appl_type']=="9") {
+		if ($row['level_kkni'] > "6") {
 			$select = $db ->select()
         	->from(array('ae'=>$this->_name))
         	->join(array('sm'=>'tbl_sms_pdpt'),'sm.kode_prodi = ae.ae_institution',array('id_sms','smd_desc'=>'CONCAT(nm_lemb," (",ISNULL(nm_jenjang,"-"),") ")'))
