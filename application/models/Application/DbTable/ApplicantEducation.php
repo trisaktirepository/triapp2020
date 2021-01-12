@@ -31,7 +31,7 @@ class App_Model_Application_DbTable_ApplicantEducation extends Zend_Db_Table_Abs
 		$select = $db ->select()
 		->from(array('at'=>'applicant_transaction'))
 		->joinLeft(array('ap'=>'applicant_ptest'),'ap.apt_at_trans_id=at.at_trans_id')
-		->joinLeft(array('h'=>'appl_placement_head'),'h.aph_placement_code=ap.ap_placement_code')
+		->joinLeft(array('h'=>'appl_placement_head'),'h.aph_placement_code=ap.apt_placement_code')
 		->where('at_trans_id=?',$txn_id);
 		$row=$db->fetchRow($select);
 		
