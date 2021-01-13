@@ -60,6 +60,21 @@ class App_Model_Application_DbTable_Pt extends Zend_Db_Table_Abstract {
 	
 	}
 	
+	
+	public function getByNamaApplication($nama) {
+			
+	
+		$db = Zend_Db_Table::getDefaultAdapter();
+	
+		$select = $db ->select()
+		->from(array('a'=>$this->_name),array('key'=>'id_pt','value'=>'nm_sp'))
+		->order('a.nm_sp');
+			
+		$select->where("a.nm_sp like '%".$nama."%'") ;
+		return $db->fetchAll($select);
+	
+	}
+	
 	public function getByWilayah($idwilayah='') {
 			
 	

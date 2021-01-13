@@ -3727,7 +3727,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	$db = Zend_Db_Table::getDefaultAdapter();
     
      	$dbsms=new App_Model_Application_DbTable_Sms();
-     	$row=$dbsms->getDataByPT($idsp);
+     	$row=$dbsms->getDataByPTApplication($idsp);
      	if (!$row) $row=array('0'=>array('key'=>'','value'=>'Other'));
      	$ajaxContext = $this->_helper->getHelper('AjaxContext');
      	$ajaxContext->addActionContext('view', 'html');

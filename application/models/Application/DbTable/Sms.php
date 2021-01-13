@@ -42,6 +42,19 @@ class App_Model_Application_DbTable_Sms extends Zend_Db_Table_Abstract {
 		return $db->fetchAll($select);
 	
 	}
+	
+	public function getDataByPTApplication($idpt) {
+			
+	
+		$db = Zend_Db_Table::getDefaultAdapter();
+	
+		$select = $db ->select()
+		->from(array('a'=>$this->_name),array('key'=>'kode_prodi','value'=>"nm_lemb","nm_jenjang"))
+		->where('TRIM(a.id_sp)=?',$idpt)
+		->order('a.nm_lemb');
+		return $db->fetchAll($select);
+	
+	}
 	  
 	
 	
