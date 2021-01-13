@@ -38,7 +38,7 @@ class App_Model_Application_DbTable_ApplicantEducation extends Zend_Db_Table_Abs
 		if ($row['level_kkni'] > "6") {
 			$select = $db ->select()
         	->from(array('ae'=>$this->_name))
-        	->join(array('sm'=>'tbl_sms_pdpt'),'sm.kode_prodi = ae.ae_institution',array('id_sms','smd_desc'=>'CONCAT(nm_lemb," (",IFNULL(nm_jenjang,"-"),") ")'))
+        	->join(array('sm'=>'tbl_sms_pdpt'),'sm.sms_id = ae.ae_institution',array('id_sms','smd_desc'=>'CONCAT(nm_lemb," (",IFNULL(nm_jenjang,"-"),") ")'))
         	->join(array('pt'=>'tbl_pt_pdpt'),'sm.id_sp=pt.id_sp',array('sm_name'=>'nm_sp'))
         	->where("ae.ae_appl_id = '".$appl_id."'")
 			->where("ae.ae_transaction_id = '".$txn_id."'");
