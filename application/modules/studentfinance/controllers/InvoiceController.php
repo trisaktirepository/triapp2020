@@ -574,29 +574,29 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 								$setup=$value['discount'];
 								$maind=$setup['id_dm'];
 								//echo '<br>'.$maind;
-								$valid="0";
+								$valid="0"; $validsem="0"; $validintake="0"; $validlevel="0"; $validstd="1";
 								if ($dbDiscountSetup->isSemesterApplied($maind)) {
-									if ($dbDiscountSetup->isSemesterApplied($maind,$idsemester)) $valid="1";
+									if ($dbDiscountSetup->isSemesterApplied($maind,$idsemester)) $validsem="1";
 								} 
 								 
 									if ($dbDiscountSetup->isLevelApplied($maind)) {
 										$level=$actitem['level'];//$this->getLevel($std['IdStudentRegistration'], $idsemester, $std['IdIntake']);
-										if ($dbDiscountSetup->isLevelApplied($maind,$level)) $valid="1";
-										else $valid="0";
+										if ($dbDiscountSetup->isLevelApplied($maind,$level)) $validlevel="1";
+										 
 									} 
 										
 									if ($dbDiscountSetup->isIntakeApplied($maind)) {
-										if ($dbDiscountSetup->isIntakeApplied($maind,$registration['IdIntake'])) $valid="1";
-										else $valid="0";
+										if ($dbDiscountSetup->isIntakeApplied($maind,$registration['IdIntake'])) $validintake="1";
+										 
 									}
 									//echo '<br>discound';
 									if ($dbDiscountSetup->isStudentApplied($maind)) {
-										echo $registration['IdStudentRegistration'];
-										if ($dbDiscountSetup->isStudentApplied($maind,$registration['IdStudentRegistration'])) $valid="1";
-										else $valid="0";
+									//	echo $registration['IdStudentRegistration'];
+										if (!$dbDiscountSetup->isStudentApplied($maind,$registration['IdStudentRegistration'])) $validstd="0";
+										 
 									}
 								 
-								if ($valid=="0") unset($discounttype[$idx]);
+								if (!($validsem=="1" && $validlevel=="1" && $validintake=="1" && $validstd=="1")) unset($discounttype[$idx]);
 							}
 							
 							if ($discounttype) {
