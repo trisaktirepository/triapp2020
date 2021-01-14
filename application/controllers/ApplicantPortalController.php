@@ -3904,7 +3904,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     		$dbinvVa=new Application_Model_DbTable_ProformaInvoiceVa();
     		if (!$dbinvVa->isInByNoForm($txnData['at_pes_id'])) 
     		//regenerate performa invoice
-    			$proformaInvoiceDb->generateProformaInvoiceEcollection($formData['transaction_id']);
+    		$proformaInvoiceDb->generateProformaInvoiceEcollection($formData['transaction_id']);
     		
     		$inv=$dbInv->getApplicantInvoice($txnData['at_pes_id']);
     		//echo var_dump($inv);exit;
@@ -3913,7 +3913,7 @@ class ApplicantPortalController extends Zend_Controller_Action
     			//delete invoice
     			$paid="0";
     				foreach ($inv as $value) {
-    					if ($value['bill_paid']>0 && (substr($value['bill_number'], 0,2)=='01'
+    					if (($value['bill_paid']>0 || trim($value['va'])!='') && (substr($value['bill_number'], 0,2)=='01'
     							|| substr($value['bill_number'], 0,2)=='11'
     							|| substr($value['bill_number'], 0,2)=='12'
     							|| substr($value['bill_number'], 0,2)=='13'
