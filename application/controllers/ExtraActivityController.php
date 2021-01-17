@@ -70,8 +70,8 @@ M/iqHGl3h765f2buMoXbaRAnYqAk6W3XF5QtMIs2o97oi7HMM3/gVeKxZZQtGySr
 	    	  		$send=json_decode($send);
 	    	  		//echo var_dump($send);exit;
 					if ($send->code=='1') {
-						$msgsms= 'http://pemira.fh.trisakti.ac.id/'.$token;
-						$message="OTP=".$pin.' http://pemira.fh.trisakti.ac.id/'.$token;
+						$msgsms= 'http://pemira.fh.trisakti.ac.id/pemilihan/'.$token;
+						$message="OTP=".$pin.' http://pemira.fh.trisakti.ac.id/pemilihan/'.$token;
 						//echo $message;
 						//$hp='081298204995';
 						$iduser=$auth->getIdentity()->appl_id;
