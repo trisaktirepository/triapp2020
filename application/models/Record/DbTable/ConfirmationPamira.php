@@ -23,7 +23,7 @@ class App_Model_Record_DbTable_ConfirmationPamira extends Zend_Db_Table_Abstract
    		$db = Zend_Db_Table::getDefaultAdapter();
    		$dbActCalend=new App_Model_General_DbTable_ActivityCalendar();
    		$dbStd=new App_Model_Record_DbTable_StudentRegistration();
-   		$std=$dbStd->getById($idstd);
+   		$std=$dbStd->getStudentInfo($idstd);
    		$row=$dbActCalend->getActiveEvent(46,null,$std['IdProgram']);
    		if ($row) {
    			//start
