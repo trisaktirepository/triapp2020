@@ -2,7 +2,7 @@
  
 class ExtraActivityController extends Zend_Controller_Action
 {
-	protected $_apikey='fbd49c72b9c1b00d8015e235ab354478';
+	protected $_apikey='7b77c990ee5003cd5b920f48fbc6104a';
 	protected $_publickey='
 -----BEGIN PUBLIC KEY----- 
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1eBYZjpnNPkZXvVsF/UU 
@@ -70,8 +70,8 @@ M/iqHGl3h765f2buMoXbaRAnYqAk6W3XF5QtMIs2o97oi7HMM3/gVeKxZZQtGySr
 	    	  		$send=json_decode($send);
 	    	  		//echo var_dump($send);exit;
 					if ($send->code=='1') {
-						$msgsms= 'http://pemira.trisakti.ac.id/pemilihan/'.$token;
-						$message="OTP=".$pin.' http://pemira.trisakti.ac.id/pemilihan/'.$token;
+						$msgsms= 'http://pemira.fh.trisakti.ac.id/'.$token;
+						$message="OTP=".$pin.' http://pemira.fh.trisakti.ac.id/'.$token;
 						//echo $message;
 						//$hp='081298204995';
 						$iduser=$auth->getIdentity()->appl_id;
@@ -114,7 +114,7 @@ M/iqHGl3h765f2buMoXbaRAnYqAk6W3XF5QtMIs2o97oi7HMM3/gVeKxZZQtGySr
     
     function sendToPamira($data) {
 	    
-	    $send = $this->curlapi("http://pemira.trisakti.ac.id/apps/webservice/otpsistem",$data);
+	    $send = $this->curlapi("http://pemira.fh.trisakti.ac.id/apps/webservice/otpsistem",$data);
 	    //print(json_encode($send));
 	    return $send;
 	}

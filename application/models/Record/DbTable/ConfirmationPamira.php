@@ -20,17 +20,23 @@ class App_Model_Record_DbTable_ConfirmationPamira extends Zend_Db_Table_Abstract
     }
     
    public function isOpen($idstd){
+   		$db = Zend_Db_Table::getDefaultAdapter();
    		$dbActCalend=new App_Model_General_DbTable_ActivityCalendar();
-   		$row=$dbActCalend->getActiveEvent(46);
+   		$dbStd=new App_Model_Record_DbTable_StudentRegistration();
+   		$std=$dbStd->getById($idstd);
+   		$row=$dbActCalend->getActiveEvent(46,null,$std['IdProgram']);
    		if ($row) {
-   			$db = Zend_Db_Table::getDefaultAdapter();
-   			$select = $db->select()
-   			->from(array($this->_name)) 
-   			->where('IdStudentRegistration=?',$idstd);
-   			$row=$db->fetchAll($select);
-   			if (count($row)<=3)
-   				return true;
-   			else return false;
+   			//start
+   			if (strtotime($row['StartDate'].' '.$row['StartTime'])<=time() && strtotime($row['EndDate'].' '.$row['EndTime'])>=time()) {
+	   			//stop
+	   	 		$select = $db->select()
+	   			->from(array('a'=>$this->_name)) 
+	   			->where('IdStudentRegistration=?',$idstd);
+	   			$row=$db->fetchAll($select);
+	   			if (count($row)<=3)
+	   				return true;
+	   			else return false;
+   			} else return false;
    		} else return false;
    }
     	
