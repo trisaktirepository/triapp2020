@@ -331,6 +331,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 							//$dbtxt->add(array('txt'=>'no msh baru'.$IdStudentRegistration));
 							$act[$key]['idinvoice']=$invoice['id'];
 							$restamount=$invoiceDb->inCompatibilityInvoice($IdStudentRegistration, $idsemester, $idactivity);
+							echo var_dump($restamount);exit;
 							$act[$key]['invoicerest']=$restamount;
 							//$dbtxt->add(array('txt'=>'rest'.var_dump($restamount).'-'.$IdStudentRegistration));
 							$bundleDetail=array();
@@ -550,6 +551,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 					exit;
 				}
 				
+			//discount calculation
 		 	foreach ($act as $key=>$actitem) { 
 				if (isset($actitem['bundledetail'])) {
 					foreach ($actitem['bundledetail'] as $idxitem=>$item) {
