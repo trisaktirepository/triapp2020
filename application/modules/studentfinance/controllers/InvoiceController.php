@@ -291,7 +291,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 			
 
 		$bundleDetail=array();
-		//echo var_dump($act);exit;
+		echo var_dump($act); echo 'd='.$idinvoice;exit;
 		if ($act && $idinvoice=="") {
 			foreach ($act as $key=>$value) {
 				 
