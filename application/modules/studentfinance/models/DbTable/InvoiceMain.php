@@ -1199,6 +1199,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 														->where('inv.idactivity=?',$row['idActivity'])
 														->where('inv.IdStudentRegistration=?',$idstd);
 														$details= $db->fetchAll($selectData);
+														$amount=array();
 														foreach ($details as $det) {
 															if ($det['fi_amount_calculation_type']==299 || $det['fi_amount_calculation_type']==301 ) {
 																$amount[$det['fi_id']]=0;
@@ -1212,7 +1213,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 															} else unset($amount[$det['fi_id']]);
 														}
 														$itemss=0;
-														echo var_dump($amount);
+														//echo var_dump($amount);
 														foreach ($amount as $fiid=>$itemamount) {
 															//get fee structure
 															$selectData = $db->select()
@@ -1243,15 +1244,15 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 														}
 														
 														//$dbtxt->add(array('txt'=>$actualamount.'='.$itemss.' '.$idstd));
-														echo $actualamount;echo '-';echo $itemss;echo '-'.$row['idActivity'];echo '<br>';  
+														//echo $actualamount;echo '-';echo $itemss;echo '-'.$row['idActivity'];echo '<br>';  
 														//exit;
 														if (($actualamount-$itemss)!=0) {
-															exit; return $row['idActivity'];
+															  return $row['idActivity'];
 														}
 														
 														//echo $status;echo '<br>';
 													} else {
-														echo $row['idActivity'];exit;
+														//echo $row['idActivity'];exit;
 														return $row['idActivity'];
 														
 													}
