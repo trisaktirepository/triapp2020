@@ -99,12 +99,12 @@ function refresh(){
 	$("#program").submit();
 }
 
-function next(){
-	window.location('/applicant-portal/new-application')
+function nexttask(){
+	window.location('/applicant-portal/new-application');
 }
 
-function cancel(){
-	window.location('/applicant-portal')
+function canceltask(){
+	window.location('/applicant-portal');
 }
 
 </script>
@@ -177,8 +177,8 @@ function cancel(){
 			</ol></td>
 		</tr>
 		<tr><td colspan="3" bgcolor="lightgreen" align="center">
-		<button class="btn" onclick="next()">Lanjutkan Pendaftaran</button>
-		<button onclick="cancel()">Batal</button></td></tr>
+		<button class="btn" onclick="nexttask()">Lanjutkan Pendaftaran</button>
+		<button onclick="canceltask()">Batal</button></td></tr>
 		</table>
 	
 	</fieldset>
