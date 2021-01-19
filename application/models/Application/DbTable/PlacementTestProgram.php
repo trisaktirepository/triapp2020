@@ -57,7 +57,7 @@ class App_Model_Application_DbTable_PlacementTestProgram extends Zend_Db_Table_A
 		$select =  $db->select()
 		->from(array('app'=>$this->_name))
 		->join(array('h'=>'appl_placement_head'),'app.app_placement_code=h.aph_placement_code')
-		->joinLeft(array('p'=>'tbl_program'),'p.ProgramCode = app.app_program_code', array('IdProgram' => 'IdProgram','ProgramName' => 'ProgramName', 'ProgramNameIndonesia' => 'ArabicName'))
+		->joinLeft(array('p'=>'tbl_program'),'p.ProgramCode = app.app_program_code', array('IdProgram' => 'IdProgram','ProgramName' => 'ProgramName', 'ProgramNameIndonesia' => 'ArabicName','jenjang_akademik'))
 		->where("h.aph_start_date <= CURDATE() and h.aph_end_date >=CURDATE()");
 	 	$row = $db->fetchAll($select);
 	

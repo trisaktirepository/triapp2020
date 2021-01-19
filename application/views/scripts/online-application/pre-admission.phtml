@@ -135,7 +135,7 @@ function next(){
 		<select name="IdProgram" onchange="refresh()">
 			<?php foreach ($this->programlist as $value) {
 					if ($this->idprogram==$value['IdProgram']) $status="selected";else $status="";
-				?><option value="<?php echo $value['IdProgram']?>" <?php echo $status;?>><?php echo $value['ProgramNameIndonesia']?></option><?php 
+				?><option value="<?php echo $value['IdProgram']?>" <?php echo $status;?>><?php echo $value['ProgramNameIndonesia'].' ('.$value['jenjang_akademik'].')'?></option><?php 
 			}?>
 		</select>		
 	</form>
