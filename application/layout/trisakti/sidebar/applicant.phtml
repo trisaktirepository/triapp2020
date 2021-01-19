@@ -2,7 +2,7 @@
 	function new_application(){
 
 		if(confirm('<?php echo $this->translate("Are you sure you want to create new application?"); ?>')){
-			window.location = "<?php echo $this->url(array('module'=>'default','controller'=>'applicant-portal', 'action'=>'new-application'),'default',true); ?>";
+			window.location = "<?php echo $this->url(array('module'=>'default','controller'=>'online-application', 'action'=>'pre-addmission'),'default',true); ?>";
 		}
 	}
 </script>

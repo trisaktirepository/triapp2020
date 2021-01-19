@@ -62,6 +62,22 @@ class App_Model_Application_DbTable_DocumentPrerequisite extends Zend_Db_Table_A
 	
 	}
 	  
+	public function getActiveDataByProgram($appltype,$prog1,$for) {
+			
+	
+		$db = Zend_Db_Table::getDefaultAdapter();
+	
+		$select = $db ->select()
+		->from(array('a'=>$this->_name),array('IdDocument'))
+		->join(array('def'=>'sis_setup_detl'),'a.IdDocument=def.ssd_id',array('document_name'=>'def.ssd_name_bahasa','code'=>'ssd_name_bahasa','ssd_id'))
+		->join(array('h'=>'appl_placement_head'),'h.aph_placement_code=a.test_code')
+		->where('h.aph_appl_type=?',$appltype)
+		->where('a.IdProgram=?',$prog1)
+		->where('a.for_admission=?',$for);
+	 	//echo $select;exit;
+		return $db->fetchAll($select);
+	
+	}
 	
 	
 }

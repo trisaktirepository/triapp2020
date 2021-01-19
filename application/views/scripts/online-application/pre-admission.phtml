@@ -1,0 +1,174 @@
+
+
+<?php
+
+$registry = Zend_Registry::getInstance();
+$locale = $registry->get('Zend_Locale');
+$this->locale = $locale->toString();
+?>
+ 
+<?php 
+	echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery/plugin/colorbox/jquery.colorbox-min.js');
+	echo $this->headLink()->prependStylesheet($this->baseUrl().'/js/jquery/plugin/colorbox/colorbox.css');
+?>
+ 
+
+<style type="text/css">
+	ol{
+		padding: 0;
+		margin: 0 0 0 18px;	
+	}
+	
+	ol li{
+		padding: 2px 0;
+	}
+	
+	
+* {box-sizing: border-box;}
+body {font-family: Verdana, sans-serif;}
+.mySlides {display: none;}
+img {vertical-align: middle;}
+
+/* Slideshow container */
+.slideshow-container {
+  max-width: 1000px;
+  position: relative;
+  margin: auto;
+}
+
+/* Caption text */
+.text {
+  color: #f2f2f2;
+  font-size: 15px;
+  padding: 8px 12px;
+  position: absolute;
+  bottom: 8px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Number text (1/3 etc) */
+.numbertext {
+  color: #f2f2f2;
+  font-size: 12px;
+  padding: 8px 12px;
+  position: absolute;
+  top: 0;
+}
+
+/* The dots/bullets/indicators */
+.dot {
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+
+.active {
+  background-color: #717171;
+}
+
+/* Fading animation */
+.fade {
+  -webkit-animation-name: fade;
+  -webkit-animation-duration: 1.5s;
+  animation-name: fade;
+  animation-duration: 1.5s;
+}
+
+@-webkit-keyframes fade {
+  from {opacity: .4} 
+  to {opacity: 1}
+}
+
+@keyframes fade {
+  from {opacity: .4} 
+  to {opacity: 1}
+}
+
+/* On smaller screens, decrease text size */
+@media only screen and (max-width: 300px) {
+  .text {font-size: 11px}
+}
+</style>
+<script type="text/javascript">
+function refresh(){
+	$("#program").submit();
+}
+
+function next(){
+	window.location('/applicant-portal/new-application')
+}
+
+</script>
+ 
+<div style="float:left; width:100%;">
+	<div class="message toolbar">
+		<h2><?php echo $this->title; ?></h2>
+		<div class="toolbar-button">
+			<ul>
+				<li>
+					<a href="http://www.infopmb.trisakti.ac.id" target="_blank" >
+						<span class='link'></span>
+						<font size="4"><?php echo $this->translate("Info Detail PMB")?> </font>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	
+	<?php if(isset($this->noticeMessage)){?>
+	<div class="message notice"><strong><?php echo $this->noticeMessage;?></strong>.</div>
+	<?php }?>
+	<?php if(isset($this->noticeSuccess)){?>
+	<div class="message success"><strong><?php echo $this->noticeSuccess;?></strong>.</div>
+	<?php }?>
+	<?php if(isset($this->noticeError)){?>
+	<div class="message error"><strong><?php echo $this->noticeError;?></strong>.</div>
+	<?php }?>
+	<br>
+	<fieldset><legend>Program Studi Tujuan</legend>
+	<form id="program" method="post">
+		<select name="IdProgram" onchange="refresh()">
+			<?php foreach ($this->programlist as $value) {
+					if ($this->idprogram==$value['IdProgram']) $status="selected";else $status="";
+				?><option value="<?php echo $value['IdProgram']?>" <?php echo $status;?>><?php echo $value['ProgramNameIndonesia']?></option><?php 
+			}?>
+		</select>		
+	</form>
+	
+	</fieldset>
+	<?php foreach ($this->admission as $addmission) {?>
+	<fieldset><legend><?php echo $addmission['title']?></legend>
+		<table class="table">
+		<tr><th>Dokumen Diunduh</th><th>Dokumen Pendaftaran</th><th>Dokumen Registrasi</th></tr>
+		<tr>
+		<td>
+			<ol>
+			<?php foreach ($addmission['docdownload'] as $doc) {
+				echo '<li>'.$doc['document_name'].'</li>';
+			}?>
+			</ol>
+		</td>
+		<td><ol>
+			<?php foreach ($addmission['docadmission'] as $doc) {
+				echo '<li>'.$doc['document_name'].'</li>';
+			}
+			?>
+			</ol></td>
+		<td><ol>
+			<?php foreach ($addmission['docreg'] as $doc) {
+				echo '<li>'.$doc['document_name'].'</li>';
+		}?>
+			</ol></td>
+		</tr>
+		<tr><td colspan="3"><button class="btn" onclick="next()">Lanjutkan Pendaftaran</button></td></tr>
+		</table>
+	
+	</fieldset>
+	<?php }?>
+</div>
+ 

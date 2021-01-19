@@ -374,6 +374,31 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	
 	}
 	
+	public function preAdmissionAction(){
+		$this->view->title="Informasi Umum";
+		$dbPTestProgram=new App_Model_Application_DbTable_PlacementTestProgram();
+		$dbPreDoc=new App_Model_Application_DbTable_DocumentPrerequisite();
+		$dbProgram=new App_Model_General_DbTable_Program();
+		$this->view->programlist=$dbPTestProgram->getActivePlacementtestProgram();
+		if ($this->getRequest()->isPost()) { 
+			$formData = $this->getRequest()->getPost();
+			$this->view->idprogram=$formData['IdProgram'];
+			$program=$dbProgram->getData($this->view->idprogram);
+			if ($program['PssbOffer']) $admissiontype['2']['title']='Program Seleksi Siswa Berpotensi (Seleksi Nilai Rapor)';
+			if ($program['UsmOffer']) $admissiontype['1']['title']='Ujian Seleksi Masuk';
+			if ($program['CreditTransferOffer']) $admissiontype['3']['title']='Jalur Pindahan';
+			if ($program['PortofolioTransfer']) $admissiontype['5']['title']='Jalur Seleksi Portofolio';
+			if ($program['ScholarshipOffer']) $admissiontype['6']['title']='Jalur Seleksi Beasiswa';
+			if ($program['UtbkOffer']) $admissiontype['7']['title']='Jalur Seleksi Nilai UTBK';
+			foreach ($admissiontype as $key=>$value) {
+				$admissiontype[$key]['docadmission']=$dbPreDoc->getActiveDataByProgram($key, $this->view->idprogram,'1');
+				$admissiontype[$key]['docreg']=$dbPreDoc->getActiveDataByProgram($key, $this->view->idprogram,'2');
+				$admissiontype[$key]['docdownload']=$dbPreDoc->getActiveDataByProgram($key, $this->view->idprogram,'3');
+			}
+			$this->view->admission=$admissiontype;
+			//document 
+		}
+	}
 	public function adminAction(){
 		$this->view->title = $this->view->translate("Admin : Login as student/applicant");
 		$form = new App_Form_AdminLogin();
