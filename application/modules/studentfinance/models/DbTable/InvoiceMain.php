@@ -1213,7 +1213,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 															} else unset($amount[$det['fi_id']]);
 														}
 														$itemss=0;
-														echo var_dump($amount);
+														//echo var_dump($amount);
 														foreach ($amount as $fiid=>$itemamount) {
 															//get fee structure
 															$selectData = $db->select()
@@ -1244,10 +1244,11 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 														}
 														
 														//$dbtxt->add(array('txt'=>$actualamount.'='.$itemss.' '.$idstd));
-														echo $actualamount;echo '-';echo $itemss;echo '-'.$row['idActivity'];echo '<br>';  
+														//echo $actualamount;echo '-';echo $itemss;echo '-'.$row['idActivity'];echo '<br>';  
 														//exit;
 														if (($actualamount-$itemss)!=0) {
-															  exit;return $row['idActivity'];
+															  //exit;
+															  return $row['idActivity'];
 														}
 														
 														//echo $status;echo '<br>';
@@ -1453,6 +1454,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 											->where('inv.idactivity=?',$idactivity)
 											->where('inv.IdStudentRegistration=?',$idstd);
 											$details= $db->fetchAll($selectData);
+											$amount=array();
 											foreach ($details as $det) {
 												if ($det['fi_amount_calculation_type']==299 || $det['fi_amount_calculation_type']==301 ) {
 													$amount[$det['fi_id']]=0;
@@ -1481,18 +1483,17 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 														//per sks
 														$actualamount=$rowkrs['sks']*$feestructure['fsi_amount'];
 														//	echo $actualamount;echo $itemamount;exit;
-														if ($actualamount-$itemamount>0) {
+														if ($actualamount-$itemamount!=0) {
 															$restamount[$fiid]['amount']=$actualamount-$itemamount;
 															$restamount[$fiid]['fi_name_bahasa']=$feestructure['fi_name_bahasa'];
 														}
 													} else if ($feestructure['fi_amount_calculation_type']==301) {
 														//per MK
 														$actualamount=$rowkrs['jmlmk']*$feestructure['fsi_amount'];
-														if ($actualamount-$itemamount>0) {
-															
-															$restamount[$fiid]['amount']=$actualamount-$itemamount;
+														if ($actualamount-$itemamount!=0) {
+														 	$restamount[$fiid]['amount']=$actualamount-$itemamount;
 															$restamount[$fiid]['fi_name_bahasa']=$feestructure['fi_name_bahasa'];
-														}
+														}  
 													}
 												}
 											}

@@ -168,7 +168,7 @@
 		}?>
 	</table>
 	<br>
-	<?php if (count($act['invoice'])==0 || $act['invoice']['va']=='') { ?>
+	<?php if ((count($act['invoice'])==0 || $act['invoice']['va']=='') && count($act['invoicerest'])==0) { ?>
 	<input type="checkbox" name="agree" > Saya memahami jumlah total dan rincian pembayaran ini, dan akan melakukan pembayaran sesuai dengan ketentuan yang berlaku
 	<br>
 	<input type="submit" name="submit" value="Buat Virtual Account Pembayaran">
@@ -183,27 +183,46 @@
 			<th><?php echo $this->translate('No');?></th>
 			<th><?php echo $this->translate('Component Name');?></th>
 			<th><?php echo $this->translate('Amount');?></th> 
+			<th><?php echo $this->translate('Remark');?></th> 
 			
 		</tr>
-		<?php $i=1;$total=0;
+		<?php $i=1;$total=0;$totalneg=0;
 			foreach ($invoicerest as $fiid=>$item) {
 				//$fee=$item['fee'];
-				$total=$total+$item['amount'];
-			?>
-			<input type="hidden" name="itemrest[<?php echo $fiid?>]" value="<?php echo $item['amount'];?>">
+	 		?>
+			<?php if ($item['amount']>0) {?>
+				<input type="hidden" name="itemrestpos[<?php echo $fiid?>]" value="<?php echo $item['amount'];?>">
+			<?php $total=$total+$item['amount']; } else {?>
+				<input type="hidden" name="itemrestneg[<?php echo $fiid?>]" value="<?php echo $item['amount'];?>">
+			<?php $totalneg=$totalneg+$item['amount'];}?>
 		<tr>
 			<td><?php echo $i;?></td>
 			<td><?php echo $item['fi_name_bahasa'];?></td>
 			<td><?php echo $item['amount'];?></td> 
+			<td><?php if ($item['amount']>0) {
+						echo $this->translate('Create Additional Invoice');
+					 
+			} else {
+				echo $this->translate('Move To Advance Payment');
+			}
+			?></td> 
 			
 		</tr>
 		<?php $i++;
 			}?>
-		<input type="hidden" name="totalamountrest" value="<?php echo $total?>">
-		<tr>
-			<th colspan="2"><?php echo $this->translate('Total');?></th>
-			<th><?php echo $total;?></th>
+		<input type="hidden" name="totalamountpos" value="<?php echo $total?>">
+		<input type="hidden" name="totalamountneg" value="<?php echo $totalneg?>">
+		<?php if ($totalpos>0) {?><tr>
+			<th colspan="2"><?php echo $this->translate('Total Additonal');?></th>
+			<th><?php echo $totalpos;?></th>
 		</tr>
+		<?php }
+		if ($totalneg<0) {?>
+		<tr>
+			<th colspan="2"><?php echo $this->translate('Total Addvance');?></th>
+			<th><?php echo $totalneg;?></th>
+		</tr>
+		<?php }?>
 		 
 	</table>
 	<br>

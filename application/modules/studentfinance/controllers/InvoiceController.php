@@ -66,7 +66,6 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 				$formData=$this->getRequest()->getPost();
 				if (isset($formData['agree'])) {
 					if (!isset($formData['restpayment'])) {
-						 
 						//get invoice no from sequence
 						$idsemester=$formData['idsemester'];
 						$semester = $semesterDb->fnGetSemestermaster($idsemester);
@@ -118,7 +117,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 							$invoice_id = $invoiceDb->insert($inv_data);
 							$dbFeeitem=new Studentfinance_Model_DbTable_FeeItem();
 							//insert invoice detail
-							foreach ($formData['item'] as $itemid=>$amount){
+							foreach ($formData['itemrest'] as $itemid=>$amount){
 								$item=$dbFeeitem->getData($itemid);
 								$inv_detail_data = array(
 										'invoice_main_id' => $invoice_id,
