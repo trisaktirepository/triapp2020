@@ -68,7 +68,7 @@ class App_Model_Application_DbTable_DocumentPrerequisite extends Zend_Db_Table_A
 		$db = Zend_Db_Table::getDefaultAdapter();
 	
 		$select = $db ->select()
-		->from(array('a'=>$this->_name),array('IdDocument'))
+		->from(array('a'=>$this->_name),array('IdDocument','url_doc'))
 		->join(array('def'=>'sis_setup_detl'),'a.IdDocument=def.ssd_id',array('document_name'=>'def.ssd_name_bahasa','code'=>'ssd_name_bahasa','ssd_id'))
 		->join(array('h'=>'appl_placement_head'),'h.aph_placement_code=a.test_code')
 		->where('h.aph_appl_type=?',$appltype)
