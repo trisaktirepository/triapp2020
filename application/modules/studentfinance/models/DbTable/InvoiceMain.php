@@ -1250,7 +1250,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 														
 														//echo $status;echo '<br>';
 													} else {
-														exit;
+														echo $row['idActivity'];exit;
 														return $row['idActivity'];
 														
 													}
