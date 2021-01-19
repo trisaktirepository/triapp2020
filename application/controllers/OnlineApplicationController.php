@@ -380,9 +380,11 @@ class OnlineApplicationController extends Zend_Controller_Action {
 		$dbPreDoc=new App_Model_Application_DbTable_DocumentPrerequisite();
 		$dbProgram=new App_Model_General_DbTable_Program();
 		$this->view->programlist=$dbPTestProgram->getActivePlacementtestProgram();
+		$this->view->idprogram=$this->view->programlist[0]['IdProgram'];
 		if ($this->getRequest()->isPost()) { 
 			$formData = $this->getRequest()->getPost();
 			$this->view->idprogram=$formData['IdProgram'];
+		}
 			$program=$dbProgram->getData($this->view->idprogram);
 			if ($program['PssbOffer']) $admissiontype['2']['title']='Program Seleksi Siswa Berpotensi (Seleksi Nilai Rapor)';
 			if ($program['UsmOffer']) $admissiontype['1']['title']='Ujian Seleksi Masuk';
@@ -397,7 +399,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 			}
 			$this->view->admission=$admissiontype;
 			//document 
-		}
+		
 	}
 	public function adminAction(){
 		$this->view->title = $this->view->translate("Admin : Login as student/applicant");
