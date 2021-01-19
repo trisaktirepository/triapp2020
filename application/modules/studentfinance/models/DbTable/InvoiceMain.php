@@ -1242,7 +1242,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 														}
 														
 														//$dbtxt->add(array('txt'=>$actualamount.'='.$itemss.' '.$idstd));
-														//echo $actualamount;echo '-';echo $itemss;echo '-'.$row['idActivity'];echo '<br>';  
+														echo $actualamount;echo '-';echo $itemss;echo '-'.$row['idActivity'];echo '<br>';  
 														if ($actualamount-$itemss!=0) return $row['idActivity'];
 														
 														//echo $status;echo '<br>';
