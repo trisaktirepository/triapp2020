@@ -54,12 +54,14 @@ class App_Model_Application_DbTable_PlacementTestProgram extends Zend_Db_Table_A
 	public function getActivePlacementtestProgram(){
 	
 		$db = Zend_Db_Table::getDefaultAdapter();
-		$select =  $db->select()
-		->from(array('app'=>$this->_name))
-		->join(array('h'=>'appl_placement_head'),'app.app_placement_code=h.aph_placement_code')
+		$select =  $db->select()->distinct
+		->from(array('app'=>$this->_name),array())
+		->join(array('h'=>'appl_placement_head'),'app.app_placement_code=h.aph_placement_code',array())
 		->joinLeft(array('p'=>'tbl_program'),'p.ProgramCode = app.app_program_code', array('IdProgram' => 'IdProgram','ProgramName' => 'ProgramName', 'ProgramNameIndonesia' => 'ArabicName','jenjang_akademik'))
-		->where("h.aph_start_date <= CURDATE() and h.aph_end_date >=CURDATE()");
-	 	$row = $db->fetchAll($select);
+		->where("h.aph_start_date <= CURDATE() and h.aph_end_date >=CURDATE()")
+		->order('p.ArabicName');
+	 	
+		$row = $db->fetchAll($select);
 	
 		if($row){
 			return $row;
