@@ -1262,7 +1262,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 											
 											
 										}
-										 exit;
+										 //exit;
 										//echo var_dump($row);
 									//	if ($status=="1") $activity= $row['idActivity'];
 										
