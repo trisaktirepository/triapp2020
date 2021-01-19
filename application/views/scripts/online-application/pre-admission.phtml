@@ -149,6 +149,13 @@ function next(){
 		<td bgcolor="white">
 			<ol>
 			<?php foreach ($addmission['docdownload'] as $doc) {
+				if ($doc['url_doc']!='') {
+					$dt = explode("sis",$doc['url_doc']);
+					$path = $dt[1];
+					$download ="<a target='_blank' href=".$path.">".$doc['document_name']."</a>";
+					 
+					echo '<li>'.$download.'</li>';
+				} else
 				echo '<li>'.$doc['document_name'].'</li>';
 			}?>
 			</ol>
