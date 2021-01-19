@@ -387,7 +387,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 			if ($program['PssbOffer']) $admissiontype['2']['title']='Program Seleksi Siswa Berpotensi (Seleksi Nilai Rapor)';
 			if ($program['UsmOffer']) $admissiontype['1']['title']='Ujian Seleksi Masuk';
 			if ($program['CreditTransferOffer']) $admissiontype['3']['title']='Jalur Pindahan';
-			if ($program['PortofolioTransfer']) $admissiontype['5']['title']='Jalur Seleksi Portofolio';
+			if ($program['PortofolioOffer']) $admissiontype['5']['title']='Jalur Seleksi Portofolio';
 			if ($program['ScholarshipOffer']) $admissiontype['6']['title']='Jalur Seleksi Beasiswa';
 			if ($program['UtbkOffer']) $admissiontype['7']['title']='Jalur Seleksi Nilai UTBK';
 			foreach ($admissiontype as $key=>$value) {
