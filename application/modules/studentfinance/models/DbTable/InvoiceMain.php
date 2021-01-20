@@ -1208,7 +1208,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 														}
 														foreach ($details as $det) {
 															if ($det['fi_amount_calculation_type']==299 || $det['fi_amount_calculation_type']==301 ) {
-																$amount[$det['fi_id']]=$amount[$det['fi_id']]+$det['amount'];
+																$amount[$det['fi_id']]=$amount[$det['fi_id']]+$det['amount']-$det['cn_amount']+$det['dn_amount'];
 														
 															} else unset($amount[$det['fi_id']]);
 														}
@@ -1463,7 +1463,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 											}
 											foreach ($details as $det) {
 												if ($det['fi_amount_calculation_type']==299 || $det['fi_amount_calculation_type']==301 ) {
-													$amount[$det['fi_id']]=$amount[$det['fi_id']]+$det['amount'];
+													$amount[$det['fi_id']]=$amount[$det['fi_id']]+$det['amount']-$det['cn_amount']+$det['dn_amount'];
 														
 												} else unset($amount[$det['fi_id']]);
 											}
