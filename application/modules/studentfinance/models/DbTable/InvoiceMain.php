@@ -1184,7 +1184,8 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 													->from(array('im'=>'invoice_main'))
 													->where('im.IdStudentRegistration=?',$idstd)
 													->where('im.idactivity=?',$row['idActivity'])
-													->where('im.semester=?',$rowkrs['IdSemesterMain']);
+													->where('im.semester=?',$rowkrs['IdSemesterMain'])
+													->where('im.status="A"');
 													$invoice = $db->fetchRow($selectData);
 													
 													// echo 'aciviyi='.$row['idActivity'];
@@ -1197,7 +1198,8 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 														->join(array('i'=>'fee_item'),'im.fi_id=i.fi_id')
 														->where('inv.semester=?',$rowkrs['IdSemesterMain'])
 														->where('inv.idactivity=?',$row['idActivity'])
-														->where('inv.IdStudentRegistration=?',$idstd);
+														->where('inv.IdStudentRegistration=?',$idstd)
+														->where('inv.status="A"');
 														$details= $db->fetchAll($selectData);
 														$amount=array();
 														foreach ($details as $det) {
@@ -1438,7 +1440,9 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 									->join(array('sb'=>'tbl_subjectmaster'),'im.IdSubject=sb.IdSubject',array('sks'=>'SUM(CreditHours)','jmlmk'=>'COUNT(*)'))
 									->where('im.IdStudentRegistration=?',$idstd)
 									->where('im.IdSemesterMain=?',$idsemester)
-									->group('im.IdSemesterMain');
+									->where('im.status="A"')
+									->group('im.IdSemesterMain')
+									;
 									$rowkrs = $db->fetchRow($selectData);
 									//echo var_dump($rowkrs);
 									if ($rowkrs) {
@@ -1452,7 +1456,8 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 											->join(array('i'=>'fee_item'),'im.fi_id=i.fi_id')
 											->where('inv.semester=?',$idsemester)
 											->where('inv.idactivity=?',$idactivity)
-											->where('inv.IdStudentRegistration=?',$idstd);
+											->where('inv.IdStudentRegistration=?',$idstd)
+											->where('inv.status="A"');
 											$details= $db->fetchAll($selectData);
 											$amount=array();
 											foreach ($details as $det) {
