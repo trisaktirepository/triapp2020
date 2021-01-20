@@ -32,7 +32,7 @@ class Studentfinance_Model_DbTable_PaymentMain extends Zend_Db_Table_Abstract {
 		}
 	}
 	
-	public function getInvoicePaymentRecord($billing_no, $payer){
+	public function getInvoicePaymentRecord($billing_no, $payer=null){
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$selectData = $db->select()
 					->from(array('pm'=>$this->_name))

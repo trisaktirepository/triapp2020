@@ -90,6 +90,7 @@
 	</table>
 	<br><br>
 	<?php if ($bundledetail!=array()) {?>
+	<input type="hidden" name="payment">
 	<table class="table">
 		<tr>
 			<th><?php echo $this->translate('No');?></th>
@@ -176,7 +177,7 @@
 	}
 	if (count($act['invoicerest']) >0) {
 		$invoicerest=$act['invoicerest'];?>
-	<br><h2>Kekurangan Pembayaran</h2><br>
+	<br><h2>Kekurangan/Kelebihan Pembayaran</h2><br>
 	<input type="hidden" name="restpayment">
 	<table class="table">
 		<tr>
@@ -200,10 +201,10 @@
 			<td><?php echo $item['fi_name_bahasa'];?></td>
 			<td><?php echo $item['amount'];?></td> 
 			<td><?php if ($item['amount']>0) {
-						echo $this->translate('Create Additional Invoice');
+						echo $this->translate('Kekurangan Pembayaran');
 					 
 			} else {
-				echo $this->translate('Move To Advance Payment');
+				echo $this->translate('Kelebihan Pembayaran');
 			}
 			?></td> 
 			
@@ -212,9 +213,9 @@
 			}?>
 		<input type="hidden" name="totalamountpos" value="<?php echo $total?>">
 		<input type="hidden" name="totalamountneg" value="<?php echo $totalneg?>">
-		<?php if ($totalpos>0) {?><tr>
+		<?php if ($total>0) {?><tr>
 			<th colspan="2"><?php echo $this->translate('Total Additonal');?></th>
-			<th><?php echo $totalpos;?></th>
+			<th><?php echo $total;?></th>
 		</tr>
 		<?php }
 		if ($totalneg<0) {?>
@@ -225,11 +226,16 @@
 		<?php }?>
 		 
 	</table>
-	<br>
-	 
+	<br> 
 	<input type="checkbox" name="agree" > Saya memahami jumlah total dan rincian pembayaran ini, dan akan melakukan pembayaran sesuai dengan ketentuan yang berlaku
 	<br>
-	<input type="submit" name="submit" value="Buat Virtual Account Pembayaran">
+		<?php  if (($total + $totalneg )>0) {?>
+			<input type="submit" name="submit" value="Buat Virtual Account Pembayaran">
+	
+		<?php } else {?>
+			<input type="submit" name="submit" value="Pindahkan Ke Tabungan">
+	
+		<?php }?>
 	 <?php }?>
 </form>
 </fieldset> 
