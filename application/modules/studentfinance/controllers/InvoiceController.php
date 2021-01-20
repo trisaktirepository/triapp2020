@@ -45,7 +45,10 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 		$invoiceDetailDb = new Studentfinance_Model_DbTable_InvoiceDetail();
 		$semesterDb = new App_Model_General_DbTable_Semestermaster();
 		$academicYearDb = new App_Model_Record_DbTable_AcademicYear();
-
+		$dbCreditNote=new Studentfinance_Model_DbTable_CreditNote();
+		$dbCnDetail=new Studentfinance_Model_DbTable_CreditNoteDetail();
+		$dbInvoice=new Studentfinance_Model_DbTable_InvoiceMain();
+		
 		$dbBundle=new Studentfinance_Model_DbTable_BundleFee();
 		//get type of active invoice from active activity
 		$dbActivity=new App_Model_General_DbTable_Activity();
@@ -163,9 +166,6 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 								}
 								$dbDiscount->update(array('dcnt_amount'=>$tamount), 'dcnt_id='.$iddisc);
 								//put to credirt note and invoice
-								$dbCreditNote=new Studentfinance_Model_DbTable_CreditNote();
-								$dbCnDetail=new Studentfinance_Model_DbTable_CreditNoteDetail();
-								$dbInvoice=new Studentfinance_Model_DbTable_InvoiceMain();
 								$disc=$dbDiscount->getDataByInvoice($invoice_id);
 								if ($disc) {
 									$tamount=0;
@@ -288,7 +288,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 						if ($formData['totalamountneg']!=0) {
 							//move to advance payment
 							$idinvoice=$formData['idinvoice'];
-							$invoice=$dbInvoice->getData($idinvoice);
+							$invoice=$invoiceDb->getData($idinvoice);
 							$data = array(
 									'cn_billing_no' => $invoice['bill_number'],
 									'appl_id' => $invoice['appl_id'],
@@ -307,6 +307,16 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 								}
 							if (($invoice['bill_amount']-$invoice['bill_paid'])>abs($formData['totalamountneg'])) {
 								$dbInvoice->update(array('cn_amount'=>abs($formData['totalamountneg']),'bill_balance'=>$invoice['bill_balance']-abs($formData['totalamountneg'])), 'id='.$invoice['id']);
+								//push to BNI
+								$dbActCalendar=new App_Model_General_DbTable_ActivityCalendar();
+								if ($formData['id']!='') $calendar=$dbActCalendar->getData($formData['id']);
+									
+								else $calendar=$dbActCalendar->getDataBySem($formData['idsemester'], $program['IdProgram'], $formData['idactivity']);
+									
+								if ($calendar) {
+									$dateexprired=date('Y-m-d H:s:i',strtotime($calendar['EndDate'].' '.$calendar['EndTime']));
+									$invoiceDb->pushToEColl($invoice_id, $dateexprired,'createbilling');
+								}
 							} else 
 								if ($invoice['bill_paid']>0) {
 								
