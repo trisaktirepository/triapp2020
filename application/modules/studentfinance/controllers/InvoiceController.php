@@ -336,7 +336,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 										'advpy_total_paid' => 0,
 										'advpy_total_balance' => $adv_amount,
 										'advpy_status' => 'A',
-										'advpy_creator' => $auth->getIdentity()->id
+										'advpy_creator' => $auth->getIdentity()->appl_id
 											
 								
 								);
