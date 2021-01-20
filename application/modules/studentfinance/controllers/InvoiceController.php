@@ -48,7 +48,8 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 		$dbCreditNote=new Studentfinance_Model_DbTable_CreditNote();
 		$dbCnDetail=new Studentfinance_Model_DbTable_CreditNoteDetail();
 		$dbInvoice=new Studentfinance_Model_DbTable_InvoiceMain();
-		
+		$dbFeeitem=new Studentfinance_Model_DbTable_FeeItem();
+			
 		$dbBundle=new Studentfinance_Model_DbTable_BundleFee();
 		//get type of active invoice from active activity
 		$dbActivity=new App_Model_General_DbTable_Activity();
@@ -118,7 +119,6 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 						);
 						if ($formData["idinvoice"]=='') {
 							$invoice_id = $invoiceDb->insert($inv_data);
-							$dbFeeitem=new Studentfinance_Model_DbTable_FeeItem();
 							//insert invoice detail
 							foreach ($formData['item'] as $itemid=>$amount){
 								$item=$dbFeeitem->getData($itemid);
