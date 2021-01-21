@@ -1045,6 +1045,23 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 	}
 	
 	
+	public function isPaid($semester,$idstd,$feeid){
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$selectData = $db->select()
+		->from(array('im'=>$this->_name))
+		->join(array('det'=>'invoice_detail'),'det.invoice_main_id=im.id')
+		->where('det.fi_id = ?', $feeid)
+		->where('im.IdStudentRegistration=?',$idstd)
+		->where('im.semester=?',$semester)
+		->where('im.bill_paid>0');
+	
+		$row = $db->fetchRow($selectData);
+	
+		return $row;
+	
+	}
+	
+	
 	public function isAnyOpenInvoice($idstd){
 		
 		$dbInvoice=new Studentfinance_Model_DbTable_InvoiceMain();

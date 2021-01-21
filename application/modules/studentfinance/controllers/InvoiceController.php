@@ -289,12 +289,15 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 							//move to advance payment
 							$idinvoice=$formData['idinvoice'];
 							$invoice=$invoiceDb->getData($idinvoice);
-							$data = array(
+							$formname=$formData['itemrestnegname'];
+							 
+							//foreach ($formitem as $fii=>$amount) {
+								$data = array(
 									'cn_billing_no' => $invoice['bill_number'],
 									'appl_id' => $invoice['appl_id'],
 									'IdStudentRegistration' => $invoice['IdStudentRegistration'],
 									'cn_amount' => abs($formData['totalamountneg']),
-									'cn_description' =>'Kelebihan Pembayaran',
+									'cn_description' =>'Kelebihan Tagihan',
 									'cn_creator'=>1,
 									'cn_create_date'=>date('Y-m-d H:i:s'),
 									'cn_approver'=>1,
@@ -302,9 +305,10 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 								);
 								$idcn=$dbCreditNote->insert($data);
 								foreach ($formData['itemrestneg'] as $fii=>$amount) {
-									$item=$dbFeeitem->getData($fii);
-									$dbCnDetail->insert(array('cnd_cn_id'=>$idcn,'cnd_fi_id'=>$fii,'cnd_fi_name'=>$item['fi_name_bahasa'],'cnd_amount'=>abs($amount)));
+									//$item=$dbFeeitem->getData($fii);
+									$dbCnDetail->insert(array('cnd_cn_id'=>$idcn,'cnd_fi_id'=>$fii,'cnd_fi_name'=>$formname[$fii],'cnd_amount'=>abs($amount)));
 								}
+							//}
 							if (($invoice['bill_amount']-$invoice['bill_paid'])>abs($formData['totalamountneg'])) {
 								$dbInvoice->update(array('cn_amount'=>abs($formData['totalamountneg']),'bill_balance'=>$invoice['bill_balance']-abs($formData['totalamountneg'])), 'id='.$invoice['id']);
 								//push to BNI

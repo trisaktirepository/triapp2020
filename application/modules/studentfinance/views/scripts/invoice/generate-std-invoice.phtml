@@ -193,8 +193,11 @@
 	 		?>
 			<?php if ($item['amount']>0) {?>
 				<input type="hidden" name="itemrestpos[<?php echo $fiid?>]" value="<?php echo $item['amount'];?>">
+				<input type="hidden" name="itemrestposname[<?php echo $fiid?>]" value="<?php echo $item['fi_name_bahasa'];?>">
+			
 			<?php $total=$total+$item['amount']; } else {?>
 				<input type="hidden" name="itemrestneg[<?php echo $fiid?>]" value="<?php echo $item['amount'];?>">
+			    <input type="hidden" name="itemrestnegname[<?php echo $fiid?>]" value="<?php echo $item['fi_name_bahasa'];?>">
 			<?php $totalneg=$totalneg+$item['amount'];}?>
 		<tr>
 			<td><?php echo $i;?></td>
@@ -229,7 +232,11 @@
 	<br> 
 	<input type="checkbox" name="agree" > Saya memahami jumlah total dan rincian pembayaran ini, dan akan melakukan pembayaran sesuai dengan ketentuan yang berlaku
 	<br>
-		<?php  if (($total + $totalneg )>0) {?>
+		<?php  
+			//cek paid
+			$dbInv=new Studentfinance_Model_DbTable_InvoiceMain();
+			if ($dbInv->isPaid($act['IdSemesterMaster'], $this->student_registration_id, $fiid)) $paid="1";else $paid="";
+			if (($total + $totalneg )>0 || $paid=="0") {?>
 			<input type="submit" name="submit" value="Buat Virtual Account Pembayaran">
 	
 		<?php } else {?>
