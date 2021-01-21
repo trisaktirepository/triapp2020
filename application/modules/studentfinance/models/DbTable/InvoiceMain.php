@@ -1584,10 +1584,8 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 												//$totalamountact=$totalamountact+$det['fee']['amount'];
 											}
 										}
-										if ($totalamount!=$totalamountact) {
-											//cek detail comonent
-											echo var_dump($restamount);
-											exit;
+										if ($totalamount==$totalamountact) {
+											 $restamount=array();
 										}
 									}
 								}
