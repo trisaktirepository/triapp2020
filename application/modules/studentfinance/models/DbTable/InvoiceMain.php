@@ -1961,7 +1961,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		 //registration info
 		$studentRegistrationDb = new Registration_Model_DbTable_Studentregistration();
 		$registration = $studentRegistrationDb->getData($IdStudentRegistration);
-		$this->view->registration = $registration;
+		//$this->view->registration = $registration;
 		
 		//student profile
 		$studentProfileDb = new App_Model_Student_DbTable_StudentProfile();
