@@ -2226,6 +2226,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 							foreach ($discounttype as $idx=>$value) {
 								$setup=$value['discount'];
 								$maind=$setup['id_dm'];
+								echo $item['fi_id'];echo '<br>';
 								$discount=$dbDiscountSetup->getDiscount($maind,$item['fi_id']);
 								if ($discount) {
 									$discount["type"]=$value['dt_discount'];
