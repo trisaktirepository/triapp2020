@@ -2045,7 +2045,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 							//echo var_dump($std);exit;
 							foreach ($bundleDetail as $key1=>$value) {
 		
-								$invoicedet = $invoiceDb->getInvoiceFee($idsemester,$registration['IdStudentRegistration'], $fee_structure['fs_id'], $value['fee_item'], $value['percentage'],"1",$idactivity);
+								$invoicedet = $invoiceDb->getInvoiceFee($idsemester,$registration['IdStudentRegistration'], $fee_structure['fs_id'], $value['fee_item'], $value['percentage'],"0",$idactivity);
 								echo var_dump($invoicedet);
 								if ($invoicedet['amount']>0) $bundleDetail[$key1]['fee']=$invoicedet;
 								else unset($bundleDetail[$key1]);
