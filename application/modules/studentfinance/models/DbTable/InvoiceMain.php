@@ -1301,8 +1301,8 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 							->where('im.status="A"');
 							//echo $selectData;
 							$rowbpp = $db->fetchAll($selectData);
-							//echo $selectData;
-							//echo var_dump($rowbpp);exit;
+							echo $selectData;
+							echo var_dump($rowbpp);exit;
 							if (!$rowbpp) {
 								//cek mhs baru
 								$selectData = $db->select()
