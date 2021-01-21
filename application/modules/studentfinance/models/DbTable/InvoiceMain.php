@@ -2039,9 +2039,9 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 						if ($row) {
 							$fee_structure = $row;
 							//echo var_dump($row);
-							$this->view->fee_structure=$fee_structure;
+							//$this->view->fee_structure=$fee_structure;
 							$amount=0;
-							//echo var_dump($bundleDetail);
+							echo var_dump($bundleDetail);
 							//echo var_dump($std);exit;
 							foreach ($bundleDetail as $key1=>$value) {
 		
