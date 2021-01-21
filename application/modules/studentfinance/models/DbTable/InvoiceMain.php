@@ -1334,11 +1334,24 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 								} else return $row['idActivity'];
 								 
 							} else {
-								//cek discount 
-								$totalamount=0;
-								foreach ($rowbpp as $value) {
+								 
+								//cek discount
+								$totalamount=0;$actual=array();$discount=0;$dn=0;
+								foreach ($rowbpp as $key=>$value) {
 									$totalamount=$totalamount+$value['bill_amount']-$value['cn_amount']+$value['dn_amount'];
+									$discount=$discount+$value['cn_amount'];
+									$dn=$dn+$value['dn_amount'];
+								
+									$selectData = $db->select()
+									->from(array('im'=>'invoice_detail'))
+									->where('im.invoice_main_id=?',$value['id']);
+									$dets=$db->fetchAll($selectData);
+									foreach ($dets as $det) {
+										if (!isset($actual[$det['fi_id']])) $actual[$det['fi_id']]=$det['amount'];
+										else $actual[$det['fi_id']]=$actual[$det['fi_id']]+$det['amount'];
+									}
 								}
+								 
 								//cek rule
 								$totalamountact=0;
 								$act=$dbInvoice->getActualInvoce($idstd,$row['idActivity']);
@@ -1348,6 +1361,10 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 										$totalamountact=$totalamountact+$det['fee']['amount'];
 										if (isset($det['discount'])) foreach ($det['discount'] as $disc) $totalamountact=$totalamountact-$disc['amount'];
 										//$totalamountact=$totalamountact+$det['fee']['amount'];
+										if ($discount>0 && isset($det['fee'][0]['fi_name_bahasa'])) {
+											$restamount[$det['fee'][0]['fi_id']]['amount']=$discount;
+											$restamount[$det['fee'][0]['fi_id']]['fi_name_bahasa']=$det['fee'][0]['fi_name_bahasa'];
+										} else $totalamountact=$totalamount;
 									}
 								}
 								if ($totalamount!=$totalamountact) return $row['idActivity'];
