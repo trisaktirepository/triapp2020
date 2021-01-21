@@ -196,6 +196,7 @@ public function getCurrentSetup($univ,$kkni,$college,$program,$branch,$semester,
 			$row=$this->lobjDbAdpt->fetchRow($select);
 		} else 
 			$row=$this->lobjDbAdpt->fetchAll($select);
+		echo $select;
 		return $row;
 	}
 	
