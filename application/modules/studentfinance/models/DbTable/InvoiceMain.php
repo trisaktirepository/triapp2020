@@ -2163,5 +2163,74 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		}
 		return $act;
 	}
+	
+	public function  getLevel($IdStudentRegistration,$idsemester,$intake) {
+	
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$semselect=$db->select()
+		->from('tbl_semestermaster')
+		->where('IdSemesterMaster=?',$idsemester);
+		$semester=$db->fetchRow($semselect);
+	
+		$sql = $db->select()
+		->from(array('sss' => 'tbl_studentsemesterstatus'), array(new Zend_Db_Expr('max(Level) as Level')))
+		->join(array('b'=>'tbl_semestermaster'),'b.IdSemesterMaster=sss.IdSemesterMain')
+		->where('sss.IdStudentRegistration  = ?', $IdStudentRegistration)
+		->where('b.IdSemesterMaster=?',$idsemester);
+			
+		$result = $db->fetchRow($sql);
+		if (!$result) {
+	
+				
+	
+			$sql = $db->select()
+			->from(array('sss' => 'tbl_studentsemesterstatus'), array(new Zend_Db_Expr('max(Level) as Level')))
+			->join(array('b'=>'tbl_semestermaster'),'b.IdSemesterMaster=sss.IdSemesterMain')
+			->where('sss.IdStudentRegistration  = ?', $IdStudentRegistration)
+			->where('b.SemesterMainStartDate<= ?',$semester['SemesterMainStartDate']);
+	
+			$result = $db->fetchRow($sql);
+			if (!$result) $result['Level']=1;
+			else $result['Level']=$result['Level'];
+			//echo $sql;
+		}
+		else if( $result['Level'] ){
+			$current_level = $result['Level'];
+		}else{
+			//check if senior student then hardcode level
+			$intake_year = substr($intake['IntakeId'], 0,4);
+			$cur_sem_year = substr($semester['SemesterMainCode'], 0,4);
+	
+			if($intake_year<2013){
+				$current_level=0;
+	
+				while($intake_year<=$cur_sem_year){
+					//check current gasal or genap for currencty
+					if($intake_year == $cur_sem_year){
+	
+						if($semester['SemesterCountType']==1){
+							$current_level += 1;
+						}else{
+							$current_level += 2;
+						}
+	
+					}else{
+						$current_level+= 2;
+					}
+	
+					$intake_year++;
+				}
+	
+				//remove 1 because we will add 1 in view
+				$current_level -= 1;
+	
+			}else{
+				$current_level = 0;
+	
+				//unset($student_list[$i]);
+			}
+		}
+		return $current_level;
+	}
 }
 ?>
