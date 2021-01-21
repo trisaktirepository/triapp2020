@@ -1917,35 +1917,11 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 				if ($bundle) {
 					//get item detail
 					$bundleDetail=$dbBudleDetail->getDataByBudle($bundle['idfeebundle']);
-					$invoice=$invoiceDb->isInByActivity($idsemester, $IdStudentRegistration, $idactivity);
+					//$invoice=$invoiceDb->isInByActivity($idsemester, $IdStudentRegistration, $idactivity);
 					$restamount=array();
 					$act[$key]['invoicerest']=array();
-					$act[$key]['invoice']=$invoice;
-						
-					if ($invoice) {
-						//echo var_dump($invoice);
-						//echo var_dump($bundleDetail);
-						$current_level=$this->getLevel($IdStudentRegistration, $idsemester, $intake);
-		
-						//$this->view->invoice=$invoice;
-						//chek for incompatibility
-						if ($invoice['mhsbaru']=="0") {
-							//$dbtxt->add(array('txt'=>'no msh baru'.$IdStudentRegistration));
-							$act[$key]['idinvoice']=$invoice['id'];
-							$restamount=$invoiceDb->inCompatibilityInvoice($IdStudentRegistration, $idsemester, $idactivity);
-							//echo var_dump($restamount);exit;
-							$act[$key]['invoicerest']=$restamount;
-							//$dbtxt->add(array('txt'=>'rest'.var_dump($restamount).'-'.$IdStudentRegistration));
-							$bundleDetail=array();
-								
-						} else {
-							$act[$key]['invoicerest']=array();
-							$bundleDetail=array();
-						}
-		
-						//if ($invoice['va']!='' && $restamount!=array()) $this->_redirect('/applicant-portal/account');
-					} else {
-							
+					//$act[$key]['invoice']=$invoice;
+					 
 						$note=$bundle['bundlename'].' '.$semester['SemesterMainName'];
 		
 						//foreach ($ses_batch_invoice->student_list as $student):
@@ -2079,7 +2055,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 							//exit;
 						}
 		
-					}
+					
 					//echo var_dump($bundleDetail);exit;
 					if ($bundleDetail!=array() || $restamount!=array()) {
 						$act[$key]['bundledetail']=$bundleDetail;
@@ -2087,7 +2063,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 					} else unset($act[$key]);
 				}  else unset($act[$key]);
 			}
-		echo var_dump($act);
+		//echo var_dump($act);
 			//$this->view->activity= $act;
 		  
 		
