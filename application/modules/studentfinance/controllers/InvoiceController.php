@@ -281,7 +281,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 							
 							if ($calendar) {
 								$dateexprired=date('Y-m-d H:s:i',strtotime($calendar['EndDate'].' '.$calendar['EndTime']));
-								$invoiceDb->pushToEColl($invoice_id, $dateexprired,'createbilling');
+								$invoiceDb->pushToEColl($idinvoice, $dateexprired,'createbilling');
 							}
 						}
 						
@@ -319,10 +319,10 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 									
 								if ($calendar) {
 									$dateexprired=date('Y-m-d H:s:i',strtotime($calendar['EndDate'].' '.$calendar['EndTime']));
-									$invoiceDb->pushToEColl($invoice_id, $dateexprired,'createbilling');
+									$invoiceDb->pushToEColl($idinvoice, $dateexprired,'createbilling');
 								}
-							} else 
-								if ($invoice['bill_paid']>0) {
+							}  
+							if ($invoice['bill_paid']>0) {
 								
 								//add advance payment
 								 
