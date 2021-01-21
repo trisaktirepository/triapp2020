@@ -2233,7 +2233,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 									$act[$key]['bundledetail'][$idxitem]['discount'][]=$discount;
 								}
 							}
-							echo var_dump($discounttype);exit;
+							echo var_dump($discounttype); 
 						}
 					}
 				}
@@ -2242,6 +2242,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 			}
 			
 		}
+		exit;
 		return $act;
 	}
 	
