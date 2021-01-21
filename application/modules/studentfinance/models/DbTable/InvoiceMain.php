@@ -1553,8 +1553,8 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 									->where('im.status="A"');
 									//echo $selectData;
 									$rowbpp = $db->fetchAll($selectData);
-									//echo $selectData;
-									//echo var_dump($rowbpp);exit;
+									echo $selectData;
+									echo var_dump($rowbpp);exit;
 									if ($rowbpp) {
 									 	//cek discount
 										$totalamount=0;$actual=array();$discount=0;$dn=0;
@@ -1604,6 +1604,8 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 										if ($totalamount==$totalamountact) {
 											 $restamount=array();
 										}
+									} else {
+										$restamount=array();
 									}
 								}
 	
