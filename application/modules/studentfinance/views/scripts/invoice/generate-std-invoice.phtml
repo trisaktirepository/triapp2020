@@ -235,7 +235,7 @@
 		<?php  
 			//cek paid
 			$dbInv=new Studentfinance_Model_DbTable_InvoiceMain();
-			if ($dbInv->isPaid($act['IdSemesterMaster'], $this->student_registration_id, $fiid)) $paid="1";else $paid="";
+			if ($dbInv->isPaid($act['IdSemesterMaster'], $this->student_registration_id, $fiid)) $paid="1";else $paid="0";
 			if (($total + $totalneg )>0 || $paid=="0") {?>
 			<input type="submit" name="submit" value="Buat Virtual Account Pembayaran">
 	
