@@ -1864,7 +1864,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		//student profile
 		$studentProfileDb = new App_Model_Student_DbTable_StudentProfile();
 		$profile = $studentProfileDb->getData($registration['IdApplication']);
-		$this->view->profile = $profile;
+		 
 		//-------
 		//echo var_dump($bundleDetail);exit;
 		$dbregsub=new App_Model_Record_DbTable_StudentRegSubjects();
@@ -1893,7 +1893,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		$dbDiscountSetup=new Studentfinance_Model_DbTable_DiscountMain();
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$bundleDetail=array();
-		//echo var_dump($act); echo 'd='.$idinvoice;exit;
+		echo var_dump($act); echo 'd='.$idinvoice; 
 		if ($act) {
 			foreach ($act as $key=>$value) {
 					
