@@ -2218,10 +2218,10 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 								if (!$dbDiscountSetup->isStudentApplied($maind,$registration['IdStudentRegistration'])) $validstd="0";
 									
 							}
-							// echo $maind.'=';echo $validsem;echo $validlevel;echo $validintake;echo $validstd; echo '<br>';
+							echo $maind.'=';echo $validsem;echo $validlevel;echo $validintake;echo $validstd; echo '<br>';
 							if (!($validsem=="1" && $validlevel=="1" && $validintake=="1" && $validstd=="1")) unset($discounttype[$idx]);
 						}
-						//echo var_dump($discounttype);exit;
+						echo var_dump($discounttype);exit;
 						if ($discounttype) {
 							foreach ($discounttype as $idx=>$value) {
 								$setup=$value['discount'];
