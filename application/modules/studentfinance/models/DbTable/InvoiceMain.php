@@ -1540,29 +1540,53 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 									//echo var_dump($rowbpp);exit;
 									if ($rowbpp) {
 									 	//cek discount
-										$totalamount=0;
-										foreach ($rowbpp as $value) {
+										$totalamount=0;$actual=array();$discount=0;$dn=0;
+										foreach ($rowbpp as $key=>$value) {
 											$totalamount=$totalamount+$value['bill_amount']-$value['cn_amount']+$value['dn_amount'];
+											$discount=$discount+$value['cn_amount'];
+											$dn=$dn+$value['dn_amount'];
+												
+											$selectData = $db->select()
+												->from(array('im'=>'invoice_detail'))
+												->where('im.invoice_main_id=?',$value['id']);
+											$dets=$db->fetchAll($selectData);
+											foreach ($dets as $det) {
+												if (!isset($actual[$det['fi_id']])) $actual[$det['fi_id']]=$det['amount'];
+												else $actual[$det['fi_id']]=$actual[$det['fi_id']]+$det['amount'];
+											}
 										}
+										
+										
 										//cek rule
 										$totalamountact=0;
 									
 										$act=$this->getActualInvoce($idstd,$idactivity);
 										//echo var_dump($act);
 										foreach ($act as $value) {
-											foreach ($value['bundledetail'] as $det) {
+											foreach ($value['bundledetail'] as $key=>$det) {
 												$totalamountact=$totalamountact+$det['fee']['amount'];
 												if (isset($det['discount'])) {
-													echo var_dump($det['discount']);echo 'ds<br>';
-													foreach ($det['discount'] as $disc) $totalamountact=$totalamountact-$disc['amount'];
-												}
-												echo var_dump($det['fee']);
-												echo 'fee<br>';
+													//echo var_dump($det['discount']);echo 'ds<br>';
+													foreach ($det['discount'] as $disc) {
+														if (($discount-$disc['amount'])>0) $discount=$discount-$disc['amount'];
+														else {
+															$restamount[$disc['fi_id']]['amount']=$discount-$disc['amount'];
+															$restamount[$disc['fi_id']]['fi_name_bahasa']=$disc['type'];
+														}
+														$totalamountact=$totalamountact-$disc['amount'];
+													}
+													if ($discount>0) {
+														$restamount[$det['fee'][0]['fi_id']]['amount']=$discount;
+														$restamount[$det['fee'][0]['fi_id']]['fi_name_bahasa']=$det['fee'][0]['fi_name_bahasa'];
+													}
+												} 
+												
 												//$totalamountact=$totalamountact+$det['fee']['amount'];
 											}
 										}
 										if ($totalamount!=$totalamountact) {
 											//cek detail comonent
+											echo var_dump($restamount);
 											exit;
 										}
 									}
