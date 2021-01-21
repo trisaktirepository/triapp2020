@@ -1325,6 +1325,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 								//cek rule
 								$totalamountact=0;
 								$act=$dbInvoice->getActualInvoce($idstd,$row['idActivity']);
+								echo var_dump($act);
 								foreach ($act as $value) {
 									foreach ($value['bundledetail'] as $det) {
 										echo var_dump($det);
