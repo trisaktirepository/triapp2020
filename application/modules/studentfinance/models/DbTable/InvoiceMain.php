@@ -1328,12 +1328,12 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 								//echo var_dump($act);
 								foreach ($act as $value) {
 									foreach ($value['bundledetail'] as $det) {
-										echo $det['fee']['amount'];echo '<br>';
-										foreach ($det['discount'] as $disc) echo $disc['amount'];
+										$totalamountact=$totalamountact+$det['fee']['amount'];
+										if (isset($det['discount'])) foreach ($det['discount'] as $disc) $totalamountact=$totalamountact-$disc['amount'];
 										//$totalamountact=$totalamountact+$det['fee']['amount'];
 									}
 								}
-								exit;
+								if ($totalamount!=$totalamountact) return $row['idActivity'];
 							}
 							 
 						}
@@ -1525,6 +1525,46 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 	
 										}  
 											
+									}
+								} else {
+									//BPP Pokok
+									$selectData = $db->select()
+									->from(array('im'=>'invoice_main'))
+									->where('im.IdStudentRegistration=?',$idstd)
+									->where('im.semester=?',$idsemester)
+									->where('im.idactivity=?',$idactivity)
+									->where('im.status="A"');
+									//echo $selectData;
+									$rowbpp = $db->fetchAll($selectData);
+									//echo $selectData;
+									//echo var_dump($rowbpp);exit;
+									if ($rowbpp) {
+									 	//cek discount
+										$totalamount=0;
+										foreach ($rowbpp as $value) {
+											$totalamount=$totalamount+$value['bill_amount']-$value['cn_amount']+$value['dn_amount'];
+										}
+										//cek rule
+										$totalamountact=0;
+									
+										$act=$this->getActualInvoce($idstd,$idactivity);
+										//echo var_dump($act);
+										foreach ($act as $value) {
+											foreach ($value['bundledetail'] as $det) {
+												$totalamountact=$totalamountact+$det['fee']['amount'];
+												if (isset($det['discount'])) {
+													echo var_dump($det['discount']);echo 'ds<br>';
+													foreach ($det['discount'] as $disc) $totalamountact=$totalamountact-$disc['amount'];
+												}
+												echo var_dump($det['fee']);
+												echo 'fee<br>';
+												//$totalamountact=$totalamountact+$det['fee']['amount'];
+											}
+										}
+										if ($totalamount!=$totalamountact) {
+											//cek detail comonent
+											exit;
+										}
 									}
 								}
 	
@@ -2042,7 +2082,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 							//echo var_dump($row);
 							//$this->view->fee_structure=$fee_structure;
 							$amount=0;
-							echo var_dump($bundleDetail);
+						//	echo var_dump($bundleDetail);
 							//echo var_dump($std);exit;
 							foreach ($bundleDetail as $key1=>$value) {
 		
