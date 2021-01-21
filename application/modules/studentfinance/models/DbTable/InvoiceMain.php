@@ -2006,7 +2006,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 				//semester
 				$semester = $semesterDb->fnGetSemestermaster($idsemester);
 				//echo $semester;echo "semesterif=".$idsemester;
-				$this->view->semester=$semester;
+				//$this->view->semester=$semester;
 					
 				//academic year
 				$academicYear = $academicYearDb->getData($semester['idacadyear']);
