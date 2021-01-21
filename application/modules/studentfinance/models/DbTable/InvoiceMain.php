@@ -1440,7 +1440,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 									->join(array('sb'=>'tbl_subjectmaster'),'im.IdSubject=sb.IdSubject',array('sks'=>'SUM(CreditHours)','jmlmk'=>'COUNT(*)'))
 									->where('im.IdStudentRegistration=?',$idstd)
 									->where('im.IdSemesterMain=?',$idsemester)
-									->where('im.status="A"')
+									 
 									->group('im.IdSemesterMain')
 									;
 									$rowkrs = $db->fetchRow($selectData);
