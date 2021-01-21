@@ -1893,7 +1893,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		$dbDiscountSetup=new Studentfinance_Model_DbTable_DiscountMain();
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$bundleDetail=array();
-		echo var_dump($act); echo 'd='.$idinvoice; 
+		//echo var_dump($act); echo 'd='.$idinvoice; 
 		if ($act) {
 			foreach ($act as $key=>$value) {
 					
@@ -2087,7 +2087,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 					} else unset($act[$key]);
 				}  else unset($act[$key]);
 			}
-			//echo var_dump($act);
+		echo var_dump($act);
 			//$this->view->activity= $act;
 		  
 		
