@@ -1637,7 +1637,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 												//echo var_dump($det);echo '<br>';
 												//$totalamountact=$totalamountact+$det['fee']['amount'];
 												if (abs($discount)>0 && $discitem>0 && isset($det['fee']['fee_item'][0]['fi_name_bahasa'])) {
-													$restamount[$det['fee']['fee_item'][0]['fi_id']]['amount']=$discitem;
+													$restamount[$det['fee']['fee_item'][0]['fi_id']]['amount']=-$discitem;
 													$restamount[$det['fee']['fee_item'][0]['fi_id']]['fi_name_bahasa']=$det['fee']['fee_item'][0]['fi_name_bahasa'];
 												}  
 												
