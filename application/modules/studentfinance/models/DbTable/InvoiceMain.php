@@ -1359,8 +1359,13 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 								foreach ($act as $value) {
 									foreach ($value['bundledetail'] as $det) {
 										$totalamountact=$totalamountact+$det['fee']['amount'];
-										if (isset($det['discount'])) foreach ($det['discount'] as $disc) $discount=$discount-$disc['amount'];
-										echo var_dump($det);echo '<br>';
+										if (isset($det['discount'])) { 
+											foreach ($det['discount'] as $disc) {
+												if ($disc['percentage']>0) $discount=$discount-$disc['percentage']*$det['fee']['amount']/100; 
+												else $discount=$discount-$disc['amount'];
+											}
+										}
+										//echo var_dump($det);echo '<br>';
 										//$totalamountact=$totalamountact+$det['fee']['amount'];
 										if (abs($discount)>0 && isset($det['fee'][0]['fi_name_bahasa'])) {
 											$restamount[$det['fee'][0]['fi_id']]['amount']=$discount;
