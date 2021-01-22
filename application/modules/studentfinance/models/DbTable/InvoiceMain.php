@@ -2160,7 +2160,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 						}
 		
 					
-					echo var_dump($bundleDetail);exit;
+					//echo var_dump($bundleDetail);exit;
 					if ($bundleDetail!=array() || $restamount!=array()) {
 						$act[$key]['bundledetail']=$bundleDetail;
 						$act[$key]['level']=$current_level;
@@ -2234,7 +2234,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 									$act[$key]['bundledetail'][$idxitem]['discount'][]=$discount;
 								}
 							}
-							echo var_dump($discounttype); 
+							echo var_dump($discounttype); echo '<br>';
 						}
 					}
 				}
