@@ -2227,11 +2227,11 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 								$setup=$value['discount'];
 								$maind=$setup['id_dm'];
 								echo $item['fi_id'];echo '<br>';
-								$discount=$dbDiscountSetup->getDiscount($maind,$item['fi_id']);
-								if ($discount) {
-									$discount["type"]=$value['dt_discount'];
-									$discount["id_dm"]=$setup['id_dm'];
-									$act[$key]['bundledetail'][$idxitem]['discount'][]=$discount;
+								$discountrec=$dbDiscountSetup->getDiscount($maind,$item['fi_id']);
+								if ($discountrec) {
+									$discountrec["type"]=$value['dt_discount'];
+									$discountrec["id_dm"]=$setup['id_dm'];
+									$act[$key]['bundledetail'][$idxitem]['discount'][]=$discountrec;
 								}
 							}
 							echo var_dump($discounttype); echo '<br>';
