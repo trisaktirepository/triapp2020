@@ -1376,8 +1376,8 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 									}
 								}
 								//echo var_dump($act);
-								echo $totalamount.'='.($totalamountact+$discount);
-								exit;
+								//echo $totalamount.'='.($totalamountact+$discount);
+								//exit;
 								if ($totalamount!=($totalamountact+$discount)) 
 									return $row['idActivity'];
 							}
@@ -1609,29 +1609,25 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 										$act=$this->getActualInvoce($idstd,$idactivity);
 										
 										foreach ($act as $value) {
-											foreach ($value['bundledetail'] as $key=>$det) {
+											foreach ($value['bundledetail'] as $det) {
 												$totalamountact=$totalamountact+$det['fee']['amount'];
-												if (isset($det['discount'])) {
-													//echo var_dump($det['discount']);echo 'ds<br>';
+												if (isset($det['discount'])) { 
 													foreach ($det['discount'] as $disc) {
-														if (($discount-$disc['amount'])>0) $discount=$discount-$disc['amount'];
-														else {
-															$restamount[$disc['fi_id']]['amount']=$discount-$disc['amount'];
-															$restamount[$disc['fi_id']]['fi_name_bahasa']=$disc['type'];
-														}
-														$totalamountact=$totalamountact-$disc['amount'];
+														if ($disc['percentage']>0) $discount=$discount-$disc['percentage']*$det['fee']['amount']/100; 
+														else $discount=$discount-$disc['amount'];
 													}
-													if ($discount>0 && isset($det['fee'][0]['fi_name_bahasa'])) {
-														$restamount[$det['fee'][0]['fi_id']]['amount']=$discount;
-														$restamount[$det['fee'][0]['fi_id']]['fi_name_bahasa']=$det['fee'][0]['fi_name_bahasa'];
-													} else $totalamountact=$totalamount;
-												} 
-												
+												}
+												//echo var_dump($det);echo '<br>';
 												//$totalamountact=$totalamountact+$det['fee']['amount'];
+												if (abs($discount)>0 && isset($det['fee']['fee_item'][0]['fi_name_bahasa'])) {
+													$restamount[$det['fee']['fee_item'][0]['fi_id']]['amount']=$discount;
+													$restamount[$det['fee']['fee_item'][0]['fi_id']]['fi_name_bahasa']=$det['fee']['fee_item'][0]['fi_name_bahasa'];
+												}  
+												
 											}
 										}
-										if ($totalamount==$totalamountact) {
-											 $restamount=array();
+										if ($totalamount==($totalamountact-$discount)) {
+												 $restamount=array();
 										}
 									} else {
 										$restamount=array();
