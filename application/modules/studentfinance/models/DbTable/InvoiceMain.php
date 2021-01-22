@@ -2182,15 +2182,15 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 					foreach ($discounttype as $idx=>$value) {
 						$iddiscount=$value['dt_id'];
 						$discountSetup=$dbDiscountSetup->getCurrentSetup(1, $registration['Strata_code_EPSBED'],$registration['IdCollege'], $registration['IdProgram'], $registration['IdBranch'], $idsemester, $registration['IdProgramMajoring'],$iddiscount);
-						echo var_dump($discountSetup);
-						echo $iddiscount;
-						echo '<br>';
+						//echo var_dump($discountSetup);
+						//echo $iddiscount;
+						//echo '<br>';
 						if  ($discountSetup) {
 							$discounttype[$idx]['discount']=$discountSetup;
 						} else unset($discounttype[$idx]);
 					}
-					echo var_dump($discounttype);
-					exit;
+					//echo var_dump($discounttype);
+					//exit;
 					if ($discounttype) {
 						foreach ($discounttype as $idx=>$value) {
 							$setup=$value['discount'];
@@ -2228,7 +2228,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 								$maind=$setup['id_dm'];
 								echo $item['fi_id'];echo '<br>';
 								$discountrec=$dbDiscountSetup->getDiscount($maind,$item['fi_id']);
-								echo var_dump($discountrec);
+								echo var_dump($discountrec);echo '<br>';
 								if ($discountrec) {
 									$discountrec["type"]=$value['dt_discount'];
 									$discountrec["id_dm"]=$setup['id_dm'];
