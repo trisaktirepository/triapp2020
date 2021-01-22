@@ -1334,7 +1334,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 								} else return $row['idActivity'];
 								 
 							} else {
-								 
+								 $dbAdv=new Studentfinance_Model_DbTable_AdvancePayment();
 								//cek discount
 								$totalamount=0;$actual=array();$discount=0;$dn=0;
 								foreach ($rowbpp as $key=>$value) {
@@ -1350,8 +1350,11 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 										if (!isset($actual[$det['fi_id']])) $actual[$det['fi_id']]=$det['amount'];
 										else $actual[$det['fi_id']]=$actual[$det['fi_id']]+$det['amount'];
 									}
+									//cek adv paymenrt
+									$adv=$dbAdv->getAdvancePaymentFromInvoice($value['bill_number']);
+									if ($adv) $totalamount=$totalamount+$adv['advpy_amount'];
 								}
-								 
+								
 								//cek rule
 								$totalamountact=0;
 								$act=$dbInvoice->getActualInvoce($idstd,$row['idActivity']);
