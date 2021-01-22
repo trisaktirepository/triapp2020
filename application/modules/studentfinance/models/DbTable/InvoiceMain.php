@@ -1351,7 +1351,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 										else $actual[$det['fi_id']]=$actual[$det['fi_id']]+$det['amount'];
 									}
 									//cek adv paymenrt
-									$adv=$dbAdv->getAdvancePaymentFromInvoice($value['bill_number']);
+									$adv=$dbAdv->getAdvancePaymentFromInvoice($value['id']);
 									if ($adv) $totalamount=$totalamount+$adv['advpy_amount'];
 								}
 								
