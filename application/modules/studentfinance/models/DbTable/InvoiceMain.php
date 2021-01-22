@@ -1364,31 +1364,31 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 									foreach ($value['bundledetail'] as $det) {
 										$totalamountact=$totalamountact+$det['fee']['amount'];
 										if (isset($det['discount'])) {
-											$discitem=0; 
+											//$discitem=0; 
 											foreach ($det['discount'] as $disc) {
 												if ($disc['percentage']>0) {
-													$discitem=$discitem+$disc['percentage']*$det['fee']['amount']/100;
+													//$discitem=$discitem+$disc['percentage']*$det['fee']['amount']/100;
 													$discount=$discount-$disc['percentage']*$det['fee']['amount']/100; 
 												}
 												else {
 													$discount=$discount-$disc['amount'];
-													$discitem=$discitem+$disc['percentage']*$det['fee']['amount']/100;
+													//$discitem=$discitem+$disc['percentage']*$det['fee']['amount']/100;
 												}
 											}
 										}
 										//echo var_dump($det);echo '<br>';
 										//$totalamountact=$totalamountact+$det['fee']['amount'];
-										if (abs($discount)>0 && isset($det['fee']['fee_item'][0]['fi_name_bahasa'])) {
-											$restamount[$det['fee']['fee_item'][0]['fi_id']]['amount']=$discitem;
-											$restamount[$det['fee']['fee_item'][0]['fi_id']]['fi_name_bahasa']=$det['fee']['fee_item'][0]['fi_name_bahasa'];
-										}  
+										//if (abs($discount)>0 && isset($det['fee']['fee_item'][0]['fi_name_bahasa'])) {
+											//$restamount[$det['fee']['fee_item'][0]['fi_id']]['amount']=$discitem;
+											//$restamount[$det['fee']['fee_item'][0]['fi_id']]['fi_name_bahasa']=$det['fee']['fee_item'][0]['fi_name_bahasa'];
+										//}  
 										
 									}
 								}
 								//echo var_dump($act);
-								echo $totalamount.'='.($totalamountact+$discount);
-								exit;
-								if ($totalamount!=($totalamountact+$discount)) 
+								//echo $totalamount.'='.($totalamountact+$discount);
+								//exit;
+								if (($totalamount!=($totalamountact+$discount)) && $discount<0) 
 									return $row['idActivity'];
 							}
 							 
