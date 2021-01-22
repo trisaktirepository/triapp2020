@@ -2228,6 +2228,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 								$maind=$setup['id_dm'];
 								echo $item['fi_id'];echo '<br>';
 								$discountrec=$dbDiscountSetup->getDiscount($maind,$item['fi_id']);
+								echo var_dump($discountrec);
 								if ($discountrec) {
 									$discountrec["type"]=$value['dt_discount'];
 									$discountrec["id_dm"]=$setup['id_dm'];
