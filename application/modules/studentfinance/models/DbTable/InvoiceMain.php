@@ -2226,16 +2226,16 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 							foreach ($discounttype as $idx=>$value) {
 								$setup=$value['discount'];
 								$maind=$setup['id_dm'];
-								echo $item['fi_id'];echo '<br>';
+								//echo $item['fi_id'];echo '<br>';
 								$discountrec=$dbDiscountSetup->getDiscount($maind,$item['fi_id']);
-								echo var_dump($discountrec);echo '<br>';
+								//echo var_dump($discountrec);echo '<br>';
 								if ($discountrec) {
 									$discountrec["type"]=$value['dt_discount'];
 									$discountrec["id_dm"]=$setup['id_dm'];
 									$act[$key]['bundledetail'][$idxitem]['discount'][]=$discountrec;
 								}
 							}
-							echo var_dump($discounttype); echo '<br>';
+							//echo var_dump($discounttype); echo '<br>';
 						}
 					}
 				}
@@ -2244,7 +2244,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 			}
 			
 		}
-		exit;
+		//exit;
 		return $act;
 	}
 	
