@@ -9595,15 +9595,17 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	 
     	$placementDB = new App_Model_Record_DbTable_PlacementHead();
     	$applicantTransactionDn->updateData(array('at_intake'=>$intake,'at_academic_year'=>$yearacad), $formData['transactionId']);
-    	
+    	$dbSms=new App_Model_Application_DbTable_Sms();
     	
     	$row=$dbApply->isIn($formData['transactionId']);
     	if ($row) $idapply=$row['idApply']; else $idapply=0;
     	//echo var_dump($formData);
     	if ($formData['nim_asal']!='') {
 	    	if (isset($formData['pt_asal'])) {
+	    		$sms=$dbSms->getData($formData['prodi_asal']);
+	    		
 	    		$data=array('PT_Asal'=>$formData['pt_asal'],
-	    				'Prodi_Asal'=>$formData['prodi_asal'],
+	    				'Prodi_Asal'=>$sms['id_sms'],
 	    				'nim_asal'=>$formData['nim_asal'],
 	    				'transaction_id'=>$formData['transactionId'],
 	    				'ipk_asal'=>$formData['ipk'],

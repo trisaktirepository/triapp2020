@@ -43,6 +43,19 @@ class App_Model_Application_DbTable_Sms extends Zend_Db_Table_Abstract {
 	
 	}
 	
+	public function getData($idsms) {
+			
+	
+		$db = Zend_Db_Table::getDefaultAdapter();
+	
+		$select = $db ->select()
+		->from(array('a'=>$this->_name))
+		->where('sms_id=?',$idsms)
+		;
+		return $db->fetchRow($select);
+	
+	}
+	
 	public function getDataByPTApplication($idpt) {
 			
 	
