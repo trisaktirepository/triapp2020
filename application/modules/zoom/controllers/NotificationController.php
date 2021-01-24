@@ -17,12 +17,9 @@ class Zoom_NotificationController extends Zend_Controller_Action {
 	}
 
 	 public function meetingAction() {
-		
-		$this->_helper->layout->setLayout('application');
-
-		if ($this->getRequest()->isXmlHttpRequest()) {
-			$this->_helper->layout->disableLayout();
-		}
+	 
+	 	 
+		$this->_helper->layout->disableLayout(); 
 		
 		$ajaxContext = $this->_helper->getHelper('AjaxContext');
 		$ajaxContext->addActionContext('view', 'html');
@@ -34,7 +31,7 @@ class Zoom_NotificationController extends Zend_Controller_Action {
     	
     	if ($this->getRequest()->isPost()) {
     		$data = $this->_request->getParams();
-			$dbZoom->add(array('json'=>$data['applicationId']));
+			$dbZoom->add(array('json'=>$data));
     		 
     	}
     	
