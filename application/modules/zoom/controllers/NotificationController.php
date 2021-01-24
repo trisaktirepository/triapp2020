@@ -31,7 +31,7 @@ class Zoom_NotificationController extends Zend_Controller_Action {
     	
     	if ($this->getRequest()->isPost()) {
     		$data = $this->_request->getParams();
-			$dbZoom->add(array('json'=>var_dump($data)));
+			$dbZoom->add(array('json'=>implode(';',$data)));
     		 
     	}
     	
