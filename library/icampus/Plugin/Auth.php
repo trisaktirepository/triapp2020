@@ -6,7 +6,7 @@ class icampus_Plugin_Auth extends Zend_Controller_Plugin_Abstract
     private $_acl;
     private $current_role;
     
-    private $no_check_module = array("onnapp","test","application",'authentication', 'admin');
+    private $no_check_module = array("onnapp","test","application",'authentication', 'admin','zoom');
 
     private $_noauth = array('module' => 'default',
                              'controller' => 'online-application',
