@@ -1671,7 +1671,8 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		->from(array('im'=>$this->_name))
 		->where('im.IdStudentRegistration = ?', $idstd)
 		->where('im.idactivity = ?', $idactivity)
-		->where('im.semester = ?', $idsemester);
+		->where('im.semester = ?', $idsemester)
+		->where('im.status="A"');
 		//echo $selectData;exit;
 		$row = $db->fetchRow($selectData);
 		if (!$row) {
@@ -1697,7 +1698,8 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 									->where('im.no_fomulir=?',$applicant['at_pes_id'])
 									//->where('im.semester='.$row['IdSemesterMain'].' or semester is null')
 									->where('im.bill_balance<bill_amount')
-									->where('im.bill_paid>500000');
+									->where('im.bill_paid>500000')
+									->where('im.status="A"');
 					$row = $db->fetchRow($selectData);
 					if ($row) {
 						$row['mhsbaru']="1";
