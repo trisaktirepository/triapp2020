@@ -166,6 +166,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 								}
 								$dbDiscount->update(array('dcnt_amount'=>$tamount), 'dcnt_id='.$iddisc);
 								//put to credirt note and invoice
+							}
 								$disc=$dbDiscount->getDataFeeItemByInvoice($invoice_id);
 								if ($disc) {
 									echo var_dump($disc);exit;
@@ -227,7 +228,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 									if (($formData['totalamount']-$total)>=0) $dbInvoice->update(array('cn_amount'=>$total,'bill_balance'=>$formData['totalamount']-$total), 'id='.$invoice_id);
 									   
 								}
-							}
+							 
 						}
 						
 						//------------------------------
