@@ -87,6 +87,26 @@ class Studentfinance_Model_DbTable_Discount extends Zend_Db_Table_Abstract {
 			return null;
 		}
 	}
+	
+	public function getDataFeeItemByInvoice($invoice){
+	
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$selectData = $db->select()
+		->from(array('d'=>$this->_name),array('dcnt_letter_number','dcnt_appl_id'))
+		->join(array('a'=>'discount_type'),'d.dcnt_type_id=a.dt_id',array('dt_discount'))
+		->join(array('b'=>'discount_detal'),'b.dcnt_id=d.dcnt_id',array('amount'=>'dcntdtl_amount','fi_id'=>'dcntdtl_fi_id','fi_name'=>'dcntdtl_fi_name'))
+		->where('d.dcnt_invoice_id =?',$invoice)
+		->order('b.dcntdtl_fi_id')
+		->order('b.dcntdtl_amount DESC');
+			
+		$row = $db->fetchAll($selectData);
+	
+		if($row){
+			return $row;
+		}else{
+			return null;
+		}
+	}
 	 
 	public function insert(array $data){
 		

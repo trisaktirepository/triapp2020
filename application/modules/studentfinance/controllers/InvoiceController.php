@@ -166,40 +166,61 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 								}
 								$dbDiscount->update(array('dcnt_amount'=>$tamount), 'dcnt_id='.$iddisc);
 								//put to credirt note and invoice
-								$disc=$dbDiscount->getDataByInvoice($invoice_id);
+								$disc=$dbDiscount->getDataFeeItemByInvoice($invoice_id);
 								if ($disc) {
-									$tamount=0;
+									$tamount=array();
 									foreach ($disc as $discvalue) {
-										$tamount=$tamount+$discvalue['dcnt_amount'];
-										$cn=array('cn_billing_no'=>$invoice_no['invoice_no'],
-												'appl_id'=>$discvalue['dcnt_appl_id'],
-												'IdStudentRegistration'=>$formData['IdStudentRegistration'],
-												'cn_amount'=>$discvalue['dcnt_amount'],
-												'cn_description'=>$discvalue['dt_discount'].' '.$discvalue['dcnt_letter_number'],
-												'cn_approver'=>1,
-												'cn_approve_date'=>date('Y-m-d H:i:s')
-										);
-										$row=$dbCreditNote->isIn($invoice_no['invoice_no'], $formData['IdStudentRegistration'], $discvalue['dt_discount'].' '.$discvalue['dcnt_letter_number']);
-										if ($row) {
-											$cnid=$row['cn_id'];
-											$dbCreditNote->update($cn, 'cn_id='.$row['cn_id']);
+										if (isset($tamount[$discvalue['fi_id']])) $tamount[$discvalue['fi_id']]=$tamount[$discvalue['fi_id']]+$discvalue['amount'];
+										else $tamount[$discvalue['fi_id']]=$discvalue['amount'];
+										//check for fi invoice
+										$invdet=$invoiceDetailDb->isIn($invoice_id, $discvalue['fi_id']);
+										if ($tamount[$discvalue['fi_id']]>$invdet['amount']) {
+											$discvalue['amount']=$discvalue['amount']-($tamount[$discvalue['fi_id']]-$invdet['amount']);
+											$tamount[$discvalue['fi_id']]=$invdet['amount'];
+											
 										}
-										else $cnid=$dbCreditNote->insert($cn);
-										//detail
-										$discdet=$dbDisDetail->getDataByMain($discvalue['dcnt_id']);
-										foreach ($discdet as $det) {
-											$cndet=array('cnd_cn_id'=>$cnid,
-													'cnd_fi_id'=>$det['dcntdtl_fi_id'],
-													'cnd_fi_name'=>$det['dcntdtl_fi_name'],
-													'cnd_amount'=>$det['dcntdtl_amount']
+										if ($discvalue['amount']>0) {
+											$cn=array('cn_billing_no'=>$invoice_no['invoice_no'],
+													'appl_id'=>$discvalue['dcnt_appl_id'],
+													'IdStudentRegistration'=>$formData['IdStudentRegistration'],
+													'cn_amount'=>$tamount[$discvalue['fi_id']],
+													'cn_description'=>$discvalue['dt_discount'].' '.$discvalue['dcnt_letter_number'],
+													'cn_approver'=>1,
+													'cn_approve_date'=>date('Y-m-d H:i:s')
+											);
+											$row=$dbCreditNote->isIn($invoice_no['invoice_no'], $formData['IdStudentRegistration'], $discvalue['dt_discount'].' '.$discvalue['dcnt_letter_number']);
+											if ($row) {
+												$cnid=$row['cn_id'];
+												$dbCreditNote->update($cn, 'cn_id='.$row['cn_id']);
+											}
+											else $cnid=$dbCreditNote->insert($cn);
+											//detail
+											/* $discdet=$dbDisDetail->getDataByMain($discvalue['dcnt_id']);
+											foreach ($discdet as $det) {
+												$cndet=array('cnd_cn_id'=>$cnid,
+														'cnd_fi_id'=>$det['dcntdtl_fi_id'],
+														'cnd_fi_name'=>$det['dcntdtl_fi_name'],
+														'cnd_amount'=>$det['dcntdtl_amount']
 											);
 											$row=$dbCnDetail->isIn($cnid, $det['dcntdtl_fi_id']);
 											if ($row) $dbCnDetail->updateData($cndet, 'cnd_id='.$row['cnd_id']);
 											else $dbCnDetail->addData($cndet);
+										} */
+										
+											$cndet=array('cnd_cn_id'=>$cnid,
+													'cnd_fi_id'=>$discvalue['fi_id'],
+													'cnd_fi_name'=>$discvalue['fi_name'],
+													'cnd_amount'=>$discvalue['amount']
+											);
+											$row=$dbCnDetail->isIn($cnid, $discvalue['fi_id']);
+											if ($row) $dbCnDetail->updateData($cndet, 'cnd_id='.$row['cnd_id']);
+											else $dbCnDetail->addData($cndet);
 										}
 										
+										
 									}
-									if (($formData['totalamount']-$tamount)>0) $dbInvoice->update(array('cn_amount'=>$tamount,'bill_balance'=>$formData['totalamount']-$tamount), 'id='.$invoice_id);
+									if (($formData['totalamount']-$tamount)>=0) $dbInvoice->update(array('cn_amount'=>$tamount,'bill_balance'=>$formData['totalamount']-$tamount), 'id='.$invoice_id);
+									   
 								}
 							}
 						}
