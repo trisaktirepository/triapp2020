@@ -219,7 +219,11 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 										
 										
 									}
-									if (($formData['totalamount']-$tamount)>=0) $dbInvoice->update(array('cn_amount'=>$tamount,'bill_balance'=>$formData['totalamount']-$tamount), 'id='.$invoice_id);
+									$total=0;
+									foreach ($tamount as $amount) {
+										$total=$total+$amount;
+									}
+									if (($formData['totalamount']-$total)>=0) $dbInvoice->update(array('cn_amount'=>$total,'bill_balance'=>$formData['totalamount']-$total), 'id='.$invoice_id);
 									   
 								}
 							}
