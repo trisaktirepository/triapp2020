@@ -168,6 +168,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 								//put to credirt note and invoice
 								$disc=$dbDiscount->getDataFeeItemByInvoice($invoice_id);
 								if ($disc) {
+									echo var_dump($disc);exit;
 									$tamount=array();
 									foreach ($disc as $discvalue) {
 										if (isset($tamount[$discvalue['fi_id']])) $tamount[$discvalue['fi_id']]=$tamount[$discvalue['fi_id']]+$discvalue['amount'];
