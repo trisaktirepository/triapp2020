@@ -667,7 +667,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 								$discounttype[$idx]['discount']=$discountSetup;
 							} else unset($discounttype[$idx]);
 						}
-					  echo var_dump($discounttype);
+					 // echo var_dump($discounttype);
 					//exit;
 						if ($discounttype) {
 							foreach ($discounttype as $idx=>$disrecs) {
@@ -698,25 +698,30 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 											if (!$dbDiscountSetup->isStudentApplied($maind,$registration['IdStudentRegistration'])) $validstd="0";
 											 
 										}
-									echo $maind.'=';echo $validsem;echo $validlevel;echo $validintake;echo $validstd; echo '--'.$idx.'<br>';
+									//echo $maind.'=';echo $validsem;echo $validlevel;echo $validintake;echo $validstd; echo '--'.$idx.'<br>';
 									if (!($validsem=="1" && $validlevel=="1" && $validintake=="1" && $validstd=="1")) unset($discounttype[$idx]['discount'][$ix]);
+									
 								}
 							}
-								echo var_dump($discounttype);exit;
+								//echo var_dump($discounttype);exit;
 								if ($discounttype) {
 									foreach ($discounttype as $idx=>$detrecs) {
-										foreach ($detrecs as $value) {
-											$setup=$value['discount'];
-											$maind=$setup['id_dm'];
-											$discount=$dbDiscountSetup->getDiscount($maind,$item['fi_id']);
-											if ($discount) {
-												$discount["type"]=$value['dt_discount'];
-												$discount["id_dm"]=$setup['id_dm'];
-												$act[$key]['bundledetail'][$idxitem]['discount'][]=$discount;
+										foreach ($detrecs['discount'] as $valid) {
+									 		if (!$valid) {
+									 			foreach ($valid as $setup) { 
+													$maind=$setup['id_dm'];
+													$discount=$dbDiscountSetup->getDiscount($maind,$item['fi_id']);
+													if ($discount) {
+														$discount["type"]=$valid['dt_discount'];
+														$discount["id_dm"]=$setup['id_dm'];
+														$act[$key]['bundledetail'][$idxitem]['discount'][]=$discount;
+													}
+									 			}
 											}
 										}
 									}
-									//echo var_dump($discounttype);
+									echo var_dump($discounttype);
+									exit;
 								} 
 							//}
 						}
