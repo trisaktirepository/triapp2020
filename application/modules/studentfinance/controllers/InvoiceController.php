@@ -712,6 +712,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 									 			foreach ($valid as $setup) { 
 													$maind=$setup['id_dm'];
 													$discount=$dbDiscountSetup->getDiscount($maind,$item['fi_id']);
+													echo var_dump($discount);echo '---'.$item['fi_id'].'<br>';
 													if ($discount) {
 														$discount["type"]=$valid['dt_discount'];
 														$discount["id_dm"]=$setup['id_dm'];
