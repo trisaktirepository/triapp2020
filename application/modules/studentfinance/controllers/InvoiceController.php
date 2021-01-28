@@ -717,7 +717,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 														$act[$key]['bundledetail'][$idxitem]['discount'][]=$discount;
 													}
 									 			}
-											}
+											} else unset($discounttype[$idx]);
 										}
 									}
 									echo var_dump($discounttype);
