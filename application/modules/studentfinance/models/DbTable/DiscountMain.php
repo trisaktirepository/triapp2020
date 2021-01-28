@@ -42,7 +42,7 @@ public function getCurrentSetup($univ,$kkni,$college,$program,$branch,$semester,
 		->where('b.SemesterMainStartDate <=?',$datestart)
 		->order('b.SemesterMainStartDate DESC');
 		//echo $select;exit;
-		$row=$this->lobjDbAdpt->fetchRow($select);
+		$row=$this->lobjDbAdpt->fetchAll($select);
 		if (!$row) {
 			$select=$this->lobjDbAdpt->select()
 			->from(array('a'=>$this->_name))
@@ -56,7 +56,7 @@ public function getCurrentSetup($univ,$kkni,$college,$program,$branch,$semester,
 			->where('idbranch is null or idbranch=0')
 			->where('b.SemesterMainStartDate <=?',$datestart)
 			->order('b.SemesterMainStartDate DESC');
-			$row=$this->lobjDbAdpt->fetchRow($select);
+			$row=$this->lobjDbAdpt->fetchAll($select);
 			//echo var_dump($row);echo $select;exit;
 			if (!$row) {
 				$select=$this->lobjDbAdpt->select()
@@ -71,7 +71,7 @@ public function getCurrentSetup($univ,$kkni,$college,$program,$branch,$semester,
 				->where('majoring is null or majoring=0')
 				->where('b.SemesterMainStartDate <=?',$datestart)
 				->order('b.SemesterMainStartDate DESC');
-				$row=$this->lobjDbAdpt->fetchRow($select);
+				$row=$this->lobjDbAdpt->fetchAll($select);
 				if (!$row) {
 					 
 						$select=$this->lobjDbAdpt->select()
@@ -86,7 +86,7 @@ public function getCurrentSetup($univ,$kkni,$college,$program,$branch,$semester,
 						->where('majoring is null or majoring=0')
 						->where('b.SemesterMainStartDate <=?',$datestart)
 						->order('b.SemesterMainStartDate DESC');
-						$row=$this->lobjDbAdpt->fetchRow($select);
+						$row=$this->lobjDbAdpt->fetchAll($select);
 					if (!$row) {
 					$select=$this->lobjDbAdpt->select()
 					->from(array('a'=>$this->_name))
@@ -101,7 +101,7 @@ public function getCurrentSetup($univ,$kkni,$college,$program,$branch,$semester,
 					->where('majoring is null or majoring=0')
 					->where('b.SemesterMainStartDate <=?',$datestart)
 					->order('b.SemesterMainStartDate DESC');
-					$row=$this->lobjDbAdpt->fetchRow($select);
+					$row=$this->lobjDbAdpt->fetchAll($select);
 					
 					if (!$row) {
 						$select=$this->lobjDbAdpt->select()
@@ -116,7 +116,7 @@ public function getCurrentSetup($univ,$kkni,$college,$program,$branch,$semester,
 						->where('majoring is null or majoring=0')
 						->where('b.SemesterMainStartDate <=?',$datestart)
 						->order('b.SemesterMainStartDate DESC');
-						$row=$this->lobjDbAdpt->fetchRow($select);
+						$row=$this->lobjDbAdpt->fetchAll($select);
 						if (!$row) {
 							$select=$this->lobjDbAdpt->select()
 							->from(array('a'=>$this->_name))
@@ -130,7 +130,7 @@ public function getCurrentSetup($univ,$kkni,$college,$program,$branch,$semester,
 							->where('majoring is null or majoring=0')
 							->where('b.SemesterMainStartDate <=?',$datestart)
 							->order('b.SemesterMainStartDate DESC');
-							$row=$this->lobjDbAdpt->fetchRow($select);
+							$row=$this->lobjDbAdpt->fetchAll($select);
 								
 						}
 					}
@@ -181,6 +181,7 @@ public function getCurrentSetup($univ,$kkni,$college,$program,$branch,$semester,
 		if ($semester!=null)
 			$select->where('idsemestermain=?',$semester);
 		$row=$this->lobjDbAdpt->fetchRow($select);
+		echo $select;exit;
 		return $row;
 	}
 	
