@@ -671,9 +671,9 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 					//exit;
 						if ($discounttype) {
 							foreach ($discounttype as $idx=>$disrecs) {
-								foreach ($disrecs as $value) {
-									$setup=$value['discount'];
-									$maind=$setup['id_dm'];
+								foreach ($disrecs['discount'] as $value) {
+									//$setup=$value['discount'];
+									$maind=$value['id_dm'];
 									//echo '<br>'.$maind;
 									if ($idsemester=='' || $maind==''){
 										echo $maind;
