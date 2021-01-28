@@ -716,7 +716,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 													//echo var_dump($discount);
 													//echo '---'.$item['fi_id'].'<br>';
 													if ($discount) {
-														$discount["type"]=$valid['dt_discount'];
+														$discount["type"]=$detrecs['dt_discount'];
 														$discount["id_dm"]=$valid['id_dm'];
 														$act[$key]['bundledetail'][$idxitem]['discount'][]=$discount;
 													} 
