@@ -181,7 +181,7 @@ public function getCurrentSetup($univ,$kkni,$college,$program,$branch,$semester,
 		if ($semester!=null)
 			$select->where('idsemestermain=?',$semester);
 		$row=$this->lobjDbAdpt->fetchRow($select);
-		echo $select;exit;
+		//echo $select; 
 		return $row;
 	}
 	

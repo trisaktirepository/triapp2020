@@ -675,11 +675,16 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 									$setup=$value['discount'];
 									$maind=$setup['id_dm'];
 									//echo '<br>'.$maind;
+									if ($idsemester==''){
+										echo $maind;
+										exit;
+									}
 									$valid="0"; $validsem="0"; $validintake="1"; $validlevel="1"; $validstd="1";
 									if ($dbDiscountSetup->isSemesterApplied($maind)) {
 										if ($dbDiscountSetup->isSemesterApplied($maind,$idsemester)) $validsem="1";
+										 
 									} 
-									 
+									
 										if ($dbDiscountSetup->isLevelApplied($maind)) {
 											$level=$actitem['level'];//$this->getLevel($std['IdStudentRegistration'], $idsemester, $std['IdIntake']);
 											if ($dbDiscountSetup->isLevelApplied($maind,$level)) $validlevel="1";
