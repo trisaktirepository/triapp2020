@@ -788,7 +788,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 					
 			}
 			//echo var_dump($invoiceData);
-			echo var_dump($respone);exit;
+			//echo var_dump($respone);exit;
 		} else  {
 	    		
 	    		$dbTxt->add(array('txt'=>$invoice['trx_id'].' total '.$amounttotal.'= tagihan'.$billamount.' Legth '.strlen($desc).' '.$desc));
