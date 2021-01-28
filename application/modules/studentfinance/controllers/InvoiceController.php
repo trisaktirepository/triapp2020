@@ -698,7 +698,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 											if (!$dbDiscountSetup->isStudentApplied($maind,$registration['IdStudentRegistration'])) $validstd="0";
 											 
 										}
-									echo $maind.'=';echo $validsem;echo $validlevel;echo $validintake;echo $validstd; echo '<br>';
+									echo $maind.'=';echo $validsem;echo $validlevel;echo $validintake;echo $validstd; echo '--'.$idx.'<br>';
 									if (!($validsem=="1" && $validlevel=="1" && $validintake=="1" && $validstd=="1")) unset($discounttype[$idx]);
 								}
 							}
