@@ -724,8 +724,8 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 											} //else un set($discounttype[$idx]); 
 										}
 									}
-									echo var_dump($act);
-									exit;
+									//echo var_dump($act);
+									//exit;
 								} 
 							//}
 						}
