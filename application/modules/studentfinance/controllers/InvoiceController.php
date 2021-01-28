@@ -675,10 +675,6 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 									//$setup=$value['discount'];
 									$maind=$value['id_dm'];
 									//echo '<br>'.$maind;
-									if ($idsemester=='' || $maind==''){
-										echo $maind;
-										exit;
-									}
 									$valid="0"; $validsem="0"; $validintake="1"; $validlevel="1"; $validstd="1";
 									if ($dbDiscountSetup->isSemesterApplied($maind)) {
 										if ($dbDiscountSetup->isSemesterApplied($maind,$idsemester)) $validsem="1";
