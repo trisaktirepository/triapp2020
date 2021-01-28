@@ -750,13 +750,13 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 				 
 				//------
 				$amounttotal=$amounttotal+$amount;
-				$desc[]=$det['account_code']."_".$det['fi_code']."_".$amount;
+				if ($amount>0) $desc[]=$det['account_code']."_".$det['fi_code']."_".$amount;
 					
 	
 			}
 		}
 		$desc=implode(';', $desc);
-		echo $amounttotal.'-'.$billamount.' -'.$desc;exit;
+		//echo $amounttotal.'-'.$billamount.' -'.$desc;exit;
 			
 	
 	
@@ -778,7 +778,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 			);
 				
 			//
-			//echo var_dump($invoiceData);exit;
+			echo var_dump($invoiceData);exit;
 			$respone=$bni->accessBni($clientid, $secretkey, $url, $invoiceData);
 	
 			if (!isset($respone['status']) && $process=='createbilling')
