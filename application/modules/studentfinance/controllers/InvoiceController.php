@@ -670,49 +670,53 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 					//echo var_dump($discounttype);
 					//exit;
 						if ($discounttype) {
-							foreach ($discounttype as $idx=>$value) {
-								$setup=$value['discount'];
-								$maind=$setup['id_dm'];
-								//echo '<br>'.$maind;
-								$valid="0"; $validsem="0"; $validintake="1"; $validlevel="1"; $validstd="1";
-								if ($dbDiscountSetup->isSemesterApplied($maind)) {
-									if ($dbDiscountSetup->isSemesterApplied($maind,$idsemester)) $validsem="1";
-								} 
-								 
-									if ($dbDiscountSetup->isLevelApplied($maind)) {
-										$level=$actitem['level'];//$this->getLevel($std['IdStudentRegistration'], $idsemester, $std['IdIntake']);
-										if ($dbDiscountSetup->isLevelApplied($maind,$level)) $validlevel="1";
-										else $validlevel="0";
-										 
-									} 
-										
-									if ($dbDiscountSetup->isIntakeApplied($maind)) {
-										if ($dbDiscountSetup->isIntakeApplied($maind,$registration['IdIntake'])) $validintake="1";
-										else $validintake="0";
-									}
-									//echo '<br>discound';
-									if ($dbDiscountSetup->isStudentApplied($maind)) {
-									//	echo $registration['IdStudentRegistration'];
-										if (!$dbDiscountSetup->isStudentApplied($maind,$registration['IdStudentRegistration'])) $validstd="0";
-										 
-									}
-								echo $maind.'=';echo $validsem;echo $validlevel;echo $validintake;echo $validstd; echo '<br>';
-								if (!($validsem=="1" && $validlevel=="1" && $validintake=="1" && $validstd=="1")) unset($discounttype[$idx]);
-							}
-							echo var_dump($discounttype);exit;
-							if ($discounttype) {
-								foreach ($discounttype as $idx=>$value) {
+							foreach ($discounttype as $idx=>$disrecs) {
+								foreach ($disrecs as $value) {
 									$setup=$value['discount'];
 									$maind=$setup['id_dm'];
-									$discount=$dbDiscountSetup->getDiscount($maind,$item['fi_id']);
-									if ($discount) {
-										$discount["type"]=$value['dt_discount'];
-										$discount["id_dm"]=$setup['id_dm'];
-										$act[$key]['bundledetail'][$idxitem]['discount'][]=$discount;
-									}
+									//echo '<br>'.$maind;
+									$valid="0"; $validsem="0"; $validintake="1"; $validlevel="1"; $validstd="1";
+									if ($dbDiscountSetup->isSemesterApplied($maind)) {
+										if ($dbDiscountSetup->isSemesterApplied($maind,$idsemester)) $validsem="1";
+									} 
+									 
+										if ($dbDiscountSetup->isLevelApplied($maind)) {
+											$level=$actitem['level'];//$this->getLevel($std['IdStudentRegistration'], $idsemester, $std['IdIntake']);
+											if ($dbDiscountSetup->isLevelApplied($maind,$level)) $validlevel="1";
+											else $validlevel="0";
+											 
+										} 
+											
+										if ($dbDiscountSetup->isIntakeApplied($maind)) {
+											if ($dbDiscountSetup->isIntakeApplied($maind,$registration['IdIntake'])) $validintake="1";
+											else $validintake="0";
+										}
+										//echo '<br>discound';
+										if ($dbDiscountSetup->isStudentApplied($maind)) {
+										//	echo $registration['IdStudentRegistration'];
+											if (!$dbDiscountSetup->isStudentApplied($maind,$registration['IdStudentRegistration'])) $validstd="0";
+											 
+										}
+									echo $maind.'=';echo $validsem;echo $validlevel;echo $validintake;echo $validstd; echo '<br>';
+									if (!($validsem=="1" && $validlevel=="1" && $validintake=="1" && $validstd=="1")) unset($discounttype[$idx]);
 								}
-								//echo var_dump($discounttype);
-							} 
+								echo var_dump($discounttype);exit;
+								if ($discounttype) {
+									foreach ($discounttype as $idx=>$detrecs) {
+										foreach ($detrecs as $value) {
+											$setup=$value['discount'];
+											$maind=$setup['id_dm'];
+											$discount=$dbDiscountSetup->getDiscount($maind,$item['fi_id']);
+											if ($discount) {
+												$discount["type"]=$value['dt_discount'];
+												$discount["id_dm"]=$setup['id_dm'];
+												$act[$key]['bundledetail'][$idxitem]['discount'][]=$discount;
+											}
+										}
+									}
+									//echo var_dump($discounttype);
+								} 
+							}
 						}
 						
 					}
