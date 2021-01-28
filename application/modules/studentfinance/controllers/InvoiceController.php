@@ -708,6 +708,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 									foreach ($discounttype as $idx=>$detrecs) {
 										foreach ($detrecs['discount'] as $valid) {
 									 		if (!$valid) {
+									 			echo var_dump($valid);
 									 			foreach ($valid as $setup) { 
 													$maind=$setup['id_dm'];
 													$discount=$dbDiscountSetup->getDiscount($maind,$item['fi_id']);
@@ -720,8 +721,8 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 											} //else unset($discounttype[$idx]);
 										}
 									}
-									//echo var_dump($act);
-									//exit;
+									echo var_dump($act);
+									exit;
 								} 
 							//}
 						}
