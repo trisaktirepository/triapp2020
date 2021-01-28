@@ -707,7 +707,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 								if ($discounttype) {
 									foreach ($discounttype as $idx=>$detrecs) {
 										foreach ($detrecs['discount'] as $valid) {
-											echo var_dump($valid);
+											echo var_dump($valid);echo '<br>';
 									 		if (!$valid) {
 									 			
 									 			foreach ($valid as $setup) { 
