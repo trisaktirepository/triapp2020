@@ -139,7 +139,7 @@ class App_Model_Exam_DbTable_PublishMark extends Zend_Db_Table {
 		$markDistributionDB =  new Examination_Model_DbTable_Marksdistributionmaster();
 		$select = $db->select()
 		->distinct()
-		->from(array('a'=>'ttbl_student_marks_entry'),array('IdMarksDistributionMaster'))
+		->from(array('a'=>'tbl_student_marks_entry'),array('IdMarksDistributionMaster'))
 		->join(array('b'=>'tbl_studentregsubjects'),'a.IdStudentRegSubjects=b.IdStudentRegSubjects',array())
 		->where('a.course=?',$idSubject)
 		->where('a.IdSemester=?',$idSemester)
