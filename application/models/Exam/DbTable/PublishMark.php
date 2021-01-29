@@ -133,11 +133,11 @@ class App_Model_Exam_DbTable_PublishMark extends Zend_Db_Table {
 		//get component
 		$dbCourse=new App_Model_General_DbTable_CourseGroupStudent();
 		$branchs=$dbCourse->getStudentMarkDistribution($idGroup);
-		
+		$db = Zend_Db_Table::getDefaultAdapter();
 		if ($branchs) $idBranch=$branchs[0]['IdBranch']; else $idBranch=null;
 		//
 		$markDistributionDB =  new Examination_Model_DbTable_Marksdistributionmaster();
-		$select 	= $db->select()
+		$select = $db->select()
 		->distinct()
 		->from(array('a'=>'ttbl_student_marks_entry'),array('IdMarksDistributionMaster'))
 		->join(array('b'=>'tbl_studentregsubjects'),'a.IdStudentRegSubjects=b.IdStudentRegSubjects',array())
@@ -148,7 +148,7 @@ class App_Model_Exam_DbTable_PublishMark extends Zend_Db_Table {
 		//$list_component = $markDistributionDB->getListMainComponent($idSemester,$idProgram,$idSubject,$idBranch);
 		if (!$list_component) return true;
 		//academic year bottom limit
-		$db = Zend_Db_Table::getDefaultAdapter();
+	
 	
 		$yearini=$this->getInitSemester($idProgram);
 		
