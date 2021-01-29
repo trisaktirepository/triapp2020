@@ -1131,13 +1131,14 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 							}else{
 								$student_category = 314;
 							}
+							$itemsfi=array();
 							$feestrucs =$feeStructure->getApplicantFeeStructure($std['IdIntake'],$std['IdProgram'],$student_category,$std['IdBranch'],$std['IdProgramMajoring']);
 							if ($feestrucs) {
 								$selectData = $db->select()
 								->from(array('fsi'=>'fee_structure_item'),array('fsi_item_id'))
 								->where("fsi.fsi_structure_id = '".$feestrucs['fs_id']."'");
 								$fiitems = $db->fetchAll($selectData);
-								$itemsfi=array();
+								 
 								foreach ($fiitems as $itm) {
 									$itemsfi[]=$itm['fsi_item_id'];
 								}
