@@ -137,7 +137,15 @@ class App_Model_Exam_DbTable_PublishMark extends Zend_Db_Table {
 		if ($branchs) $idBranch=$branchs[0]['IdBranch']; else $idBranch=null;
 		//
 		$markDistributionDB =  new Examination_Model_DbTable_Marksdistributionmaster();
-		$list_component = $markDistributionDB->getListMainComponent($idSemester,$idProgram,$idSubject,$idBranch);
+		$select 	= $db->select()
+		->distinct()
+		->from(array('a'=>'ttbl_student_marks_entry'),array('IdMarksDistributionMaster'))
+		->join(array('b'=>'tbl_studentregsubjects'),'a.IdStudentRegSubjects=b.IdStudentRegSubjects',array())
+		->where('a.course=?',$idSubject)
+		->where('a.IdSemester=?',$idSemester)
+		->where('b.IdCourseTaggingGroup=?',$idGroup);
+		$list_component=$db->fetchAll($select);
+		//$list_component = $markDistributionDB->getListMainComponent($idSemester,$idProgram,$idSubject,$idBranch);
 		if (!$list_component) return true;
 		//academic year bottom limit
 		$db = Zend_Db_Table::getDefaultAdapter();
