@@ -1137,6 +1137,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 								->from(array('fsi'=>'fee_structure_item'),array('fsi_item_id'))
 								->where("fsi.fsi_structure_id = '".$feestrucs['fs_id']."'");
 								$fiitems = $db->fetchAll($selectData);
+								$itemsfi=array();
 								foreach ($fiitems as $itm) {
 									$itemsfi[]=$itm['fsi_item_id'];
 								}
