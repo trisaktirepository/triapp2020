@@ -1360,7 +1360,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 								//cek rule
 								$totalamountact=0;
 								$act=$this->getActualInvoce($idstd,$row['idActivity']);
-								//echo var_dump($act);
+								echo var_dump($act);echo '===<br>';
 								$fail="0";
 								foreach ($act as $value) {
 									foreach ($value['bundledetail'] as $det) {
@@ -1378,7 +1378,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 												}
 											}
 										}
-										//echo var_dump($det);echo '<br>';
+										echo var_dump($det);echo '<br>';
 										//$totalamountact=$totalamountact+$det['fee']['amount'];
 										//if (abs($discount)>0 && isset($det['fee']['fee_item'][0]['fi_name_bahasa'])) {
 											//$restamount[$det['fee']['fee_item'][0]['fi_id']]['amount']=$discitem;
@@ -1388,9 +1388,9 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 									}
 								}
 								//echo var_dump($act);
-								//echo $totalamount.'='.($totalamountact+$discount);
+								echo $totalamount.'='.$totalamountact.'='.$discount; exit;
 								//echo '<br>';
-								 
+								
 								if (($totalamount!=($totalamountact+$discount)) && $discount<0) 
 									return $row['idActivity'];
 							}
