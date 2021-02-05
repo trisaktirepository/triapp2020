@@ -1360,25 +1360,25 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 								//cek rule
 								$totalamountact=0;
 								$act=$this->getActualInvoce($idstd,$row['idActivity']);
-								echo var_dump($act);echo '===<br>';
+								//echo var_dump($act);echo '===<br>';
 								$fail="0";
 								foreach ($act as $value) {
 									foreach ($value['bundledetail'] as $det) {
 										$totalamountact=$totalamountact+$det['fee']['amount'];
 										if (isset($det['discount'])) {
-											//$discitem=0; 
+											$discitem=0; 
 											foreach ($det['discount'] as $disc) {
 												if ($disc['percentage']>0) {
-													//$discitem=$discitem+$disc['percentage']*$det['fee']['amount']/100;
+													$discitem=$discitem+$disc['percentage']*$det['fee']['amount']/100;
 													$discount=$discount-$disc['percentage']*$det['fee']['amount']/100; 
 												}
 												else {
 													$discount=$discount-$disc['amount'];
-													//$discitem=$discitem+$disc['percentage']*$det['fee']['amount']/100;
+													$discitem=$discitem+$disc['percentage']*$det['fee']['amount']/100;
 												}
 											}
 										}
-										echo var_dump($det);echo '<br>';
+										//echo var_dump($det);echo '<br>';
 										//$totalamountact=$totalamountact+$det['fee']['amount'];
 										//if (abs($discount)>0 && isset($det['fee']['fee_item'][0]['fi_name_bahasa'])) {
 											//$restamount[$det['fee']['fee_item'][0]['fi_id']]['amount']=$discitem;
@@ -1388,7 +1388,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 									}
 								}
 								//echo var_dump($act);
-								echo $totalamount.'='.$totalamountact.'='.$discount; exit;
+								echo $totalamount.'='.$totalamountact.'='.$discitem; exit;
 								//echo '<br>';
 								
 								if (($totalamount!=($totalamountact+$discount)) && $discount<0) 
@@ -2256,12 +2256,12 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 							}
 					}
 			//echo var_dump($discounttype);exit;
-						echo $item['fi_id'].'--p====<br>';
+						//echo $item['fi_id'].'--p====<br>';
 							if ($discounttype) {
 								foreach ($actitem['bundledetail'] as $idxitem=>$item) {
 									foreach ($discounttype as $idx=>$detrecs) {
 										foreach ($detrecs['discount'] as $valid) {
-											echo var_dump($valid);echo '---'.$item['fi_id'].'---<br>';
+											//echo var_dump($valid);echo '---'.$item['fi_id'].'---<br>';
 									 		 if ($valid) { 
 									 			 
 													$maind=$valid['id_dm'];
