@@ -2218,8 +2218,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 						} else unset($discounttype[$idx]);
 					}
 				}
-					//echo var_dump($discounttype);
-					//exit;
+				 
 			if ($discounttype) {
 							foreach ($discounttype as $idx=>$disrecs) {
 								foreach ($disrecs['discount'] as $ix=>$value) {
@@ -2259,7 +2258,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 								if ($discounttype) {
 									foreach ($discounttype as $idx=>$detrecs) {
 										foreach ($detrecs['discount'] as $valid) {
-											//echo var_dump($valid);echo '---'.$item['fi_id'].'<br>';
+											echo var_dump($valid);echo '---'.$item['fi_id'].'---<br>';
 									 		 if ($valid) { 
 									 			 
 													$maind=$valid['id_dm'];
