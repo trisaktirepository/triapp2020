@@ -2255,6 +2255,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 							}
 					}
 			//echo var_dump($discounttype);exit;
+						echo $item['fi_id'].'--p====<br>';
 								if ($discounttype) {
 									foreach ($discounttype as $idx=>$detrecs) {
 										foreach ($detrecs['discount'] as $valid) {
