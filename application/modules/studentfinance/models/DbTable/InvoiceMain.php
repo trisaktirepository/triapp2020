@@ -2189,7 +2189,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		
 					
 					//echo var_dump($bundleDetail);exit;
-					if ($bundleDetail!=array() || $restamount!=array()) {
+					if ($bundleDetail!=array()) {
 						$act[$key]['bundledetail']=$bundleDetail;
 						$act[$key]['level']=$current_level;
 					} else unset($act[$key]);
