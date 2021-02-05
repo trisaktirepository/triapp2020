@@ -1362,21 +1362,26 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 								$discount=$cn;
 								$act=$this->getActualInvoce($idstd,$row['idActivity']);
 								//echo var_dump($act);echo '===<br>';
-								$fail="0";
+								$fail="0";$discitem=array();
 								foreach ($act as $value) {
 									foreach ($value['bundledetail'] as $det) {
 										$totalamountact=$totalamountact+$det['fee']['amount'];
 										echo var_dump($det);echo '---<br>';
+										$amount=$det['fsi_amount'];
 										if (isset($det['discount'])) {
-											$discitem=0; 
+											$discitem[$det['fi_id']]=0; 
 											foreach ($det['discount'] as $disc) {
-												if ($disc['percentage']>0) {
-													$discitem=$discitem+$disc['percentage']*$det['fee']['amount']/100;
-													$discount=$discount-$disc['percentage']*$det['fee']['amount']/100; 
-												}
-												else {
-													$discount=$discount-$disc['amount'];
-													$discitem=$discitem+$disc['amount'];
+												if ($amount>0) {
+													if ($disc['percentage']>0) {
+														$discitem[$det['fi_id']]=[$det['fi_id']]+$disc['percentage']*$det['fee']['amount']/100;
+														$discount=$discount-$disc['percentage']*$det['fee']['amount']/100; 
+														$amount=$amount-$$disc['percentage']*$det['fee']['amount']/100;
+													}
+													else {
+														$discount=$discount-$disc['amount'];
+														$discitem[$det['fi_id']]=$discitem[$det['fi_id']]+$disc['amount'];
+														$amount=$amount-$disc['amount'];
+													}
 												}
 											}
 										}
