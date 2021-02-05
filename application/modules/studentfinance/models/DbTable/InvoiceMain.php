@@ -1338,12 +1338,12 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 							} else {
 								 $dbAdv=new Studentfinance_Model_DbTable_AdvancePayment();
 								//cek discount
-								$totalamount=0;$actual=array();$discount=0;$dn=0;
+								$totalamount=0;$actual=array();$discount=0;$dn=0;$bill=0; $cn=0;
 								foreach ($rowbpp as $key=>$value) {
 									$totalamount=$totalamount+$value['bill_amount']-$value['cn_amount']+$value['dn_amount'];
-									$discount=$discount+$value['cn_amount'];
+									$cn=$cn+$value['cn_amount'];
 									$dn=$dn+$value['dn_amount'];
-								
+									$bill=$bill+$value['bill_amount'];
 									$selectData = $db->select()
 									->from(array('im'=>'invoice_detail'))
 									->where('im.invoice_main_id=?',$value['id']);
@@ -1359,6 +1359,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 								
 								//cek rule
 								$totalamountact=0;
+								$discount=$cn;
 								$act=$this->getActualInvoce($idstd,$row['idActivity']);
 								//echo var_dump($act);echo '===<br>';
 								$fail="0";
@@ -1388,11 +1389,14 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 									}
 								}
 								//echo var_dump($act);
-								echo $totalamount.'='.$totalamountact.'='.$discitem; exit;
+								//echo $totalamount.'='.$totalamountact.'='.$discitem; exit;
 								//echo '<br>';
 								
-								if (($totalamount!=($totalamountact+$discount)) && $discount<0) 
+								if (($totalamount!=($totalamountact+$discount)) && ($bill - $cn + $dn)>0){
+									
 									return $row['idActivity'];
+								} 
+									
 							}
 							 
 						}
