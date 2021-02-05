@@ -2178,13 +2178,13 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 							foreach ($bundleDetail as $key1=>$value) {
 		
 								$invoicedet = $invoiceDb->getInvoiceFee($idsemester,$registration['IdStudentRegistration'], $fee_structure['fs_id'], $value['fee_item'], $value['percentage'],"0",$idactivity);
-								echo var_dump($invoicedet);echo '--<br>';
+								//echo var_dump($invoicedet);echo '--<br>';
 								if ($invoicedet['amount']>0) $bundleDetail[$key1]['fee']=$invoicedet;
 								else unset($bundleDetail[$key1]);
 								$amount=$amount+$invoicedet['amount'];
 							}
 		
-							exit;
+							//exit;
 						}
 		
 					
@@ -2200,9 +2200,10 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 		  
 		
 		//discount calculation
+		
 		foreach ($act as $key=>$actitem) {
 			if (isset($actitem['bundledetail'])) {
-				foreach ($actitem['bundledetail'] as $idxitem=>$item) {
+				//foreach ($actitem['bundledetail'] as $idxitem=>$item) {
 					//echo $std['Strata_code_EPSBED'];
 					//discount processing
 					$dbDiscountSetup=new Studentfinance_Model_DbTable_DiscountMain();
@@ -2217,7 +2218,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 							$discounttype[$idx]['discount']=$discountSetup;
 						} else unset($discounttype[$idx]);
 					}
-				}
+				//}
 				 
 			if ($discounttype) {
 							foreach ($discounttype as $idx=>$disrecs) {
@@ -2256,7 +2257,8 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 					}
 			//echo var_dump($discounttype);exit;
 						echo $item['fi_id'].'--p====<br>';
-								if ($discounttype) {
+							if ($discounttype) {
+								foreach ($actitem['bundledetail'] as $idxitem=>$item) {
 									foreach ($discounttype as $idx=>$detrecs) {
 										foreach ($detrecs['discount'] as $valid) {
 											echo var_dump($valid);echo '---'.$item['fi_id'].'---<br>';
@@ -2279,6 +2281,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 									//echo var_dump($act);
 									//exit;
 								} 
+							}
 				}
 			}
 			
