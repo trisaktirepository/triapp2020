@@ -1373,7 +1373,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 											foreach ($det['discount'] as $disc) {
 												if ($amount>0) {
 													if ($disc['percentage']>0) {
-														$discitem[$det['fi_id']]=[$det['fi_id']]+$disc['percentage']*$det['fee']['amount']/100;
+														$discitem[$det['fi_id']]=$discitem[$det['fi_id']]+$disc['percentage']*$det['fee']['amount']/100;
 														$discount=$discount-$disc['percentage']*$det['fee']['amount']/100; 
 														$amount=$amount-$$disc['percentage']*$det['fee']['amount']/100;
 													}
