@@ -1369,17 +1369,17 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 										echo var_dump($det);echo '---<br>';
 										$amount=$det['fsi_amount'];
 										if (isset($det['discount'])) {
-											$discitem[$det['fi_id']]=0; 
+											//$discitem[$det['fi_id']]=0; 
 											foreach ($det['discount'] as $disc) {
 												if ($amount>0) {
 													if ($disc['percentage']>0) {
-														$discitem[$det['fi_id']]=$discitem[$det['fi_id']]+$disc['percentage']*$det['fee']['amount']/100;
+														$discitem=$discitem+$disc['percentage']*$det['fee']['amount']/100;
 														$discount=$discount-$disc['percentage']*$det['fee']['amount']/100; 
 														$amount=$amount-$$disc['percentage']*$det['fee']['amount']/100;
 													}
 													else {
 														$discount=$discount-$disc['amount'];
-														$discitem[$det['fi_id']]=$discitem[$det['fi_id']]+$disc['amount'];
+														$discitem=$discitem+$disc['amount'];
 														$amount=$amount-$disc['amount'];
 													}
 												}
