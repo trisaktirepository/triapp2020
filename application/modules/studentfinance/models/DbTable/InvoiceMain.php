@@ -1329,9 +1329,9 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 									if (array_key_exists($itm['fee_item'], $itemsfi)) $feeitem="1";
 								}
 							}
-							echo var_dump($itemsfi);echo '---<br>';
-							echo var_dump($feeitems);echo '-x-<br>';
-							echo $feeitem;
+							//echo var_dump($itemsfi);echo '---<br>';
+							//echo var_dump($feeitems);echo '-x-<br>';
+							//echo $feeitem;
 							if ($feeitem=="1") {
 								//BPP Pokok
 								$selectData = $db->select()
@@ -1343,7 +1343,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 								//echo $selectData;
 								$rowbpp = $db->fetchAll($selectData);
 								//echo $selectData;
-								echo var_dump($rowbpp); 
+								//echo var_dump($rowbpp); 
 									if (!$rowbpp) {
 										//cek mhs baru
 										$selectData = $db->select()
@@ -1352,7 +1352,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 										->where('im.IdStudentRegistration = ?', $idstd)
 										->where('im.idSemesterMain=?',$row['IdSemesterMain']);
 										$smt = $db->fetchRow($selectData);
-										echo var_dump($smt);
+										//echo var_dump($smt);
 										//echo var_dump($row);exit;
 										if ($smt['Level']=="1") {
 											//cek pembayaranmahasiswa baru di detail
