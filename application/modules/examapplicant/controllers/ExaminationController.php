@@ -71,7 +71,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     			$i++;
     		}
     		
-    		//$timestart="23:00:00";
+    		$timestart="23:00:00";
     		foreach ($examdetail as $key=>$value) {
     			if ($timestart>$value['time_start']) 
     				$timestart=$value['time_start'];
