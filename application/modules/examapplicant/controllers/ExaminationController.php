@@ -71,7 +71,7 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     			$i++;
     		}
     		
-    		$timestart="23:00:00";
+    		//$timestart="23:00:00";
     		foreach ($examdetail as $key=>$value) {
     			if ($timestart>$value['time_start']) 
     				$timestart=$value['time_start'];
@@ -609,10 +609,12 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     				}
     				$question=$dbAppPtestDet->getQuestionBySequence($response['apa_id'], 1);
     				$dt = explode("triapp",$question['question_url']);
+    				if (!isset( $dt[1])) $dt = explode("sis",$question['question_url']);
     				$path = $dt[1];
     				$question['question_url']=$path;
     				if ($question['question_parent_url']!='') {
     					$dt = explode("triapp",$question['question_parent_url']);
+    					if (!isset( $dt[1])) $dt = explode("sis",$question['question_url']);
     					$path = $dt[1];
     					$question['question_parent_url']=$path;
     				}
