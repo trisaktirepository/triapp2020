@@ -2109,6 +2109,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 					//get item detail
 					$bundleDetail=$dbBudleDetail->getDataByBudle($bundle['idfeebundle']);
 					//$invoice=$invoiceDb->isInByActivity($idsemester, $IdStudentRegistration, $idactivity);
+					echo var_dump($bundleDetail);
 					$restamount=array();
 					$act[$key]['invoicerest']=array();
 					//$act[$key]['invoice']=$invoice;

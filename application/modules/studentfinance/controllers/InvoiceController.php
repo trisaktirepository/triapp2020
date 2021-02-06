@@ -640,10 +640,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 							$act[0]['SemesterMainName']=$semester['SemesterMainName'];
 					} 
 					 
-					
-					
-					
-				} else {
+	 			} else {
 				 
 					echo "Jadwal Pembuatan Invoice Belum dibuka, Hubungi admin Fakultas masing-masing";
 					exit;
