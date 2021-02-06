@@ -572,7 +572,7 @@ class Studentfinance_InvoiceController extends Zend_Controller_Action {
 									$amount=$amount+$invoicedet['amount'];
 								}
 						
-								exit;
+								 
 							}
 					 
 						} 

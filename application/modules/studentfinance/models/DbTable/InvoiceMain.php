@@ -1294,119 +1294,159 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 								} 
 							}
 						} else {
-							//BPP Pokok
-							$selectData = $db->select()
-							->from(array('im'=>'invoice_main'))
-							->where('im.IdStudentRegistration=?',$idstd)
-							->where('im.semester=?',$row['IdSemesterMain'])
-							->where('im.idactivity=?',$row['idActivity'])
-							->where('im.status="A"');
-							//echo $selectData;
-							$rowbpp = $db->fetchAll($selectData);
-							//echo $selectData;
-							//echo var_dump($rowbpp);exit;
-							if (!$rowbpp) {
-								//cek mhs baru
+							//BPP Pokok set
+							//fee structure
+							if($std['appl_nationality']!=96){
+								$student_category = 315;
+							}else{
+								$student_category = 314;
+							}
+							$itemsfi=array();
+							$feestrucs =$feeStructure->getApplicantFeeStructure($std['IdIntake'],$std['IdProgram'],$student_category,$std['IdBranch'],$std['IdProgramMajoring']);
+							if ($feestrucs) {
 								$selectData = $db->select()
-								->from(array('im'=>'tbl_studentsemesterstatus'))
-								->join(array('std'=>'tbl_studentregistration'),'std.IdStudentregistration=im.IdStudentregistration')
-								->where('im.IdStudentRegistration = ?', $idstd)
-								->where('im.idSemesterMain=?',$row['IdSemesterMain']);
-								$smt = $db->fetchRow($selectData);
-								//echo var_dump($smt);
-								//echo var_dump($row);exit;
-								if ($smt['Level']=="1") {
-									//cek pembayaranmahasiswa baru di detail
-									$trx=$smt['transaction_id'];
+								->from(array('fsi'=>'fee_structure_item'),array('fsi_item_id'))
+								->where("fsi.fsi_structure_id = '".$feestrucs['fs_id']."'");
+								$fiitems = $db->fetchAll($selectData);
 									
-									$selectData = $db->select()
-									->from(array('im'=>'applicant_transaction'))
-									->where('im.at_trans_id=?',$trx);
-									$applicant = $db->fetchRow($selectData);
-									 
-									$selectData = $db->select()
-									->from(array('im'=>$this->_name))
-									->join(array('det'=>"invoice_detail"),'im.id=det.invoice_main_id')
-									->where('im.no_fomulir=?',$applicant['at_pes_id'])
-									->where('im.semester='.$row['IdSemesterMain'].' or semester is null')
-									->where('im.bill_balance<bill_amount')
-									->where('im.bill_paid>500000');
-									$smt = $db->fetchRow($selectData);
-									if (!$smt)  return $row['idActivity'];
-								} else return $row['idActivity'];
-								 
-							} else {
-								 $dbAdv=new Studentfinance_Model_DbTable_AdvancePayment();
-								//cek discount
-								$totalamount=0;$actual=array();$discount=0;$dn=0;$bill=0; $cn=0;
-								foreach ($rowbpp as $key=>$value) {
-									$totalamount=$totalamount+$value['bill_amount']-$value['cn_amount']+$value['dn_amount'];
-									$cn=$cn+$value['cn_amount'];
-									$dn=$dn+$value['dn_amount'];
-									$bill=$bill+$value['bill_amount'];
-									$selectData = $db->select()
-									->from(array('im'=>'invoice_detail'))
-									->where('im.invoice_main_id=?',$value['id']);
-									$dets=$db->fetchAll($selectData);
-									foreach ($dets as $det) {
-										if (!isset($actual[$det['fi_id']])) $actual[$det['fi_id']]=$det['amount'];
-										else $actual[$det['fi_id']]=$actual[$det['fi_id']]+$det['amount'];
-									}
-									//cek adv paymenrt
-									//$adv=$dbAdv->getSumAvdPaymentByApplid($value['appl_id']);
-									//if ($adv) $totalamount=$totalamount+$adv['total_amount'];
+								foreach ($fiitems as $itm) {
+									$itemsfi[$itm['fsi_item_id']]=$itm['fsi_item_id'];
 								}
-								
-								//cek rule
-								$totalamountact=0;
-								$discount=$cn;
-								$act=$this->getActualInvoce($idstd,$row['idActivity']);
-								//echo var_dump($act);echo '===<br>';
-								$fail="0"; $discitem=0;
-								foreach ($act as $value) {
-									foreach ($value['bundledetail'] as $det) {
-										$totalamountact=$totalamountact+$det['fee']['amount'];
-										//echo var_dump($det);echo '---<br>';
-										$amount=$det['fee']['amount'];
-										if (isset($det['discount'])) {
-											$discitem =0; 
-											foreach ($det['discount'] as $disc) {
-												if ($amount>0) {
-													if ($disc['percentage']>0) {
-														$discitem=$discitem+$disc['percentage']*$det['fee']['amount']/100;
-														$discount=$discount-$disc['percentage']*$det['fee']['amount']/100; 
-														$amount=$amount-$disc['percentage']*$det['fee']['amount']/100;
-													}
-													else {
-														$discount=$discount-$disc['amount'];
-														$discitem=$discitem+$disc['amount'];
-														$amount=$amount-$disc['amount'];
-													}
-												}
-											}
-										}
-										//echo var_dump($det);echo '<br>';
-										//$totalamountact=$totalamountact+$det['fee']['amount'];
-										//if (abs($discount)>0 && isset($det['fee']['fee_item'][0]['fi_name_bahasa'])) {
-											//$restamount[$det['fee']['fee_item'][0]['fi_id']]['amount']=$discitem;
-											//$restamount[$det['fee']['fee_item'][0]['fi_id']]['fi_name_bahasa']=$det['fee']['fee_item'][0]['fi_name_bahasa'];
-										//}  
-										
-									}
-								}
-								//echo var_dump($act);
-								//if ($row['idActivity']==44) {
-								//	echo $totalamount.'='.$totalamountact.'='.$discitem; exit;
-								 
-								//}
-								//echo '<br>';
-								
-								if (($totalamount!=($totalamountact-$discitem)) && ($bill - $cn + $dn)>0){
-									
-									return $row['idActivity'];
-								} 
 									
 							}
+							//check bundle fee
+							//cek bundle
+							$idbundle=$bundle['idfeebundle'];
+							$selectData = $db->select()
+							->from(array('im'=>'fee_budle_detail'))
+							->where('im.idfeebundle=?',$idbundle) ;
+							//echo $selectData;
+							$feeitems = $db->fetchAll($selectData);
+							//cek feesttructure
+							$feeitem="0";
+							if ($itemsfi!=array() && $feeitems) {
+								foreach ($feeitems as $itm) {
+									if (array_key_exists($itm['fee_item'], $itemsfi)) $feeitem="1";
+								}
+							}
+							if ($feeitem=="1") {
+								//BPP Pokok
+								$selectData = $db->select()
+								->from(array('im'=>'invoice_main'))
+								->where('im.IdStudentRegistration=?',$idstd)
+								->where('im.semester=?',$row['IdSemesterMain'])
+								->where('im.idactivity=?',$row['idActivity'])
+								->where('im.status="A"');
+								//echo $selectData;
+								$rowbpp = $db->fetchAll($selectData);
+								//echo $selectData;
+								//echo var_dump($rowbpp);exit;
+									if (!$rowbpp) {
+										//cek mhs baru
+										$selectData = $db->select()
+										->from(array('im'=>'tbl_studentsemesterstatus'))
+										->join(array('std'=>'tbl_studentregistration'),'std.IdStudentregistration=im.IdStudentregistration')
+										->where('im.IdStudentRegistration = ?', $idstd)
+										->where('im.idSemesterMain=?',$row['IdSemesterMain']);
+										$smt = $db->fetchRow($selectData);
+										//echo var_dump($smt);
+										//echo var_dump($row);exit;
+										if ($smt['Level']=="1") {
+											//cek pembayaranmahasiswa baru di detail
+											$trx=$smt['transaction_id'];
+											
+											$selectData = $db->select()
+											->from(array('im'=>'applicant_transaction'))
+											->where('im.at_trans_id=?',$trx);
+											$applicant = $db->fetchRow($selectData);
+											 
+											$selectData = $db->select()
+											->from(array('im'=>$this->_name))
+											->join(array('det'=>"invoice_detail"),'im.id=det.invoice_main_id')
+											->where('im.no_fomulir=?',$applicant['at_pes_id'])
+											->where('im.semester='.$row['IdSemesterMain'].' or semester is null')
+											->where('im.bill_balance<bill_amount')
+											->where('im.bill_paid>500000');
+											$smt = $db->fetchRow($selectData);
+											if (!$smt)  return $row['idActivity'];
+										} else {
+											
+											return $row['idActivity'];
+										}
+										 
+										} else {
+										 $dbAdv=new Studentfinance_Model_DbTable_AdvancePayment();
+										//cek discount
+										$totalamount=0;$actual=array();$discount=0;$dn=0;$bill=0; $cn=0;
+										foreach ($rowbpp as $key=>$value) {
+											$totalamount=$totalamount+$value['bill_amount']-$value['cn_amount']+$value['dn_amount'];
+											$cn=$cn+$value['cn_amount'];
+											$dn=$dn+$value['dn_amount'];
+											$bill=$bill+$value['bill_amount'];
+											$selectData = $db->select()
+											->from(array('im'=>'invoice_detail'))
+											->where('im.invoice_main_id=?',$value['id']);
+											$dets=$db->fetchAll($selectData);
+											foreach ($dets as $det) {
+												if (!isset($actual[$det['fi_id']])) $actual[$det['fi_id']]=$det['amount'];
+												else $actual[$det['fi_id']]=$actual[$det['fi_id']]+$det['amount'];
+											}
+											//cek adv paymenrt
+											//$adv=$dbAdv->getSumAvdPaymentByApplid($value['appl_id']);
+											//if ($adv) $totalamount=$totalamount+$adv['total_amount'];
+										}
+										
+										//cek rule
+										$totalamountact=0;
+										$discount=$cn;
+										$act=$this->getActualInvoce($idstd,$row['idActivity']);
+										//echo var_dump($act);echo '===<br>';
+										$fail="0"; $discitem=0;
+										foreach ($act as $value) {
+											foreach ($value['bundledetail'] as $det) {
+												$totalamountact=$totalamountact+$det['fee']['amount'];
+												//echo var_dump($det);echo '---<br>';
+												$amount=$det['fee']['amount'];
+												if (isset($det['discount'])) {
+													$discitem =0; 
+													foreach ($det['discount'] as $disc) {
+														if ($amount>0) {
+															if ($disc['percentage']>0) {
+																$discitem=$discitem+$disc['percentage']*$det['fee']['amount']/100;
+																$discount=$discount-$disc['percentage']*$det['fee']['amount']/100; 
+																$amount=$amount-$disc['percentage']*$det['fee']['amount']/100;
+															}
+															else {
+																$discount=$discount-$disc['amount'];
+																$discitem=$discitem+$disc['amount'];
+																$amount=$amount-$disc['amount'];
+															}
+														}
+													}
+												}
+												//echo var_dump($det);echo '<br>';
+												//$totalamountact=$totalamountact+$det['fee']['amount'];
+												//if (abs($discount)>0 && isset($det['fee']['fee_item'][0]['fi_name_bahasa'])) {
+													//$restamount[$det['fee']['fee_item'][0]['fi_id']]['amount']=$discitem;
+													//$restamount[$det['fee']['fee_item'][0]['fi_id']]['fi_name_bahasa']=$det['fee']['fee_item'][0]['fi_name_bahasa'];
+												//}  
+												
+											}
+										}
+										//echo var_dump($act);
+										//if ($row['idActivity']==44) {
+										//	echo $totalamount.'='.$totalamountact.'='.$discitem; exit;
+										 
+										//}
+										//echo '<br>';
+										
+										if (($totalamount!=($totalamountact-$discitem)) && ($bill - $cn + $dn)>0){
+											
+											return $row['idActivity'];
+										} 
+											
+									}
+								} //end of feeitem cek
 							 
 						}
 					 
