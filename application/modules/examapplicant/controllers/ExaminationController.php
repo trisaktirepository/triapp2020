@@ -1122,10 +1122,14 @@ class Examapplicant_ExaminationController extends Zend_Controller_Action
     		$formData = $this->getRequest()->getPost();
     		$quest=$dbQuestdet->getQuestionBySequence($formData['apa_id'], $formData['order']);
     		$dt = explode("triapp",$quest['question_url']);
+    		if (!isset( $dt[1])) $dt = explode("sis",$question['question_url']);
+    		
     		$path = $dt[1];
     		$quest['question_url']=$path;
     		if ($quest['question_parent_url']!='') {
     			$dt = explode("triapp",$quest['question_parent_url']);
+    			if (!isset( $dt[1])) $dt = explode("sis",$question['question_url']);
+    			
     			$path = $dt[1];
     			$quest['question_parent_url']=$path;
     		}
