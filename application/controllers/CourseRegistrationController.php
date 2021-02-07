@@ -233,7 +233,7 @@ class CourseRegistrationController extends Zend_Controller_Action
 		         	//check for financial report
 		         		
 						$sfhelper= new icampus_Function_Studentfinance_PaymentInfo();
-                		$pymtinfo=$sfhelper->getStudentPaymentInfo($registration_id,$idSemester);
+                		$pymtinfo=$sfhelper->getStudentPaymentInfo($registration_id,$idSemester,null,'1');
                 		if($pymtinfo["invoices"]==''){
                 			echo "belum ada invoice";
                 			//$this->view->paymentstatus=0;

@@ -5,7 +5,7 @@ class icampus_Function_Studentfinance_PaymentInfo{
    * Get payment status and invoice detail
    */
 	
-  public function getStudentPaymentInfo($idRegistration,$semesterMainId=null, $academicYearId=null){
+  public function getStudentPaymentInfo($idRegistration,$semesterMainId=null, $academicYearId=null,$sts=null){
     
     //get student profile info
     $studentRegistrationDb = new App_Model_Record_DbTable_StudentRegistration();
@@ -15,7 +15,7 @@ class icampus_Function_Studentfinance_PaymentInfo{
     $invoiceMainDb = new Studentfinance_Model_DbTable_InvoiceMain();
     $program=$profile['IdProgram'];
     
-    
+   
     //specific semester
     //if($semesterMainId){
     //  $condition['semester = ?'] = $semesterMainId;
@@ -31,7 +31,10 @@ class icampus_Function_Studentfinance_PaymentInfo{
     $select=$invoiceMainDb->select()
     	->from(array('invoice_main'))
     	->where("status='A'");
-    
+
+    if ($sts=="1") {
+    	 $select->where('semester in (select idsemestermaster from tbl_semestermaster where SemesterMainStartDate <= (select SemesterMainStartDate from tbl_semestermaster where idsemestermaster=?))',$semesterMainId);
+    }
    
     /*
     if ($program==11) {
