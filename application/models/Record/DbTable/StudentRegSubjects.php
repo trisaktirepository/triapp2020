@@ -514,7 +514,6 @@ class App_Model_Record_DbTable_StudentRegSubjects extends Zend_Db_Table_Abstract
 				->joinLeft(array("d"=>"tbl_definationms"),'d.idDefinition=lss.SubjectType',array('SubjectType'=>'DefinitionDesc'))
 				->join(array("so"=>'tbl_subjectsoffered'),'so.IdSubject=s.IdSubject',array())
 				->where('so.IdSemester = ?',$semester_id) //offer pada semester ini
-				->where('ls.idpackage = ?',$row['idpackage'])
 				->where('ls.idsemestermain <>?',$semester_id)
 				->where('ls.grade_point < 3')
 				->order('s.SubCode')
