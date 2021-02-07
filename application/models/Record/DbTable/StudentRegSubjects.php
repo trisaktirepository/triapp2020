@@ -507,7 +507,7 @@ class App_Model_Record_DbTable_StudentRegSubjects extends Zend_Db_Table_Abstract
 				///echo $sql;exit;
 				$result =  $db->fetchAll($sql);
 				//get course ulang
-				$sql = $db->select()
+				$sql = $db->select()->distinct()
 				->from(array("s"=>"tbl_subjectmaster"),array('BahasaIndonesia','SubCode','CreditHours','IdSubject'))
 				->join(array('ls'=>'tbl_studentregsubjects'),'ls.IdSubject=s.IdSubject',array())
 				->join(array('lss'=>'tbl_landscapesubject'),'lss.IdSubject=s.IdSubject',array('IdLandscapeSub'))
@@ -515,6 +515,7 @@ class App_Model_Record_DbTable_StudentRegSubjects extends Zend_Db_Table_Abstract
 				->join(array("so"=>'tbl_subjectsoffered'),'so.IdSubject=s.IdSubject',array())
 				->where('so.IdSemester = ?',$semester_id) //offer pada semester ini
 				->where('ls.idsemestermain <>?',$semester_id)
+				->where('ls.IdStudentRegistration=?',$IdStudentRegistration)
 				->where('ls.grade_point < 3')
 				->order('s.SubCode')
 				->group('s.IdSubject');
