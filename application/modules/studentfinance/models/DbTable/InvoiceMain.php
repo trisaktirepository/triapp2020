@@ -1329,9 +1329,9 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 									if (!array_key_exists($itm['fee_item'], $itemsfi)) $feeitem="0";
 								}
 							}
-							//echo var_dump($itemsfi);echo '---<br>';
-							//echo var_dump($feeitems);echo '-x-<br>';
-							//echo $feeitem;exit;
+							echo var_dump($itemsfi);echo '---<br>';
+							echo var_dump($feeitems);echo '-x-<br>';
+							echo $feeitem; 
 							if ($feeitem=="1") {
 								//BPP Pokok
 								$selectData = $db->select()
