@@ -1323,15 +1323,15 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 							//echo $selectData;
 							$feeitems = $db->fetchAll($selectData);
 							//cek feesttructure
-							$feeitem="1";
+							$feeitem="0";
 							if ($itemsfi!=array() && $feeitems) {
 								foreach ($feeitems as $itm) {
-									if (!array_key_exists($itm['fee_item'], $itemsfi)) $feeitem="0";
+									if (array_key_exists($itm['fee_item'], $itemsfi)) $feeitem="1";
 								}
 							}
-							echo var_dump($itemsfi);echo '---<br>';
-							echo var_dump($feeitems);echo '-x-<br>';
-							echo $feeitem; 
+							//echo var_dump($itemsfi);echo '---<br>';
+							//echo var_dump($feeitems);echo '-x-<br>';
+							//echo $feeitem; 
 							if ($feeitem=="1") {
 								//BPP Pokok
 								$selectData = $db->select()
