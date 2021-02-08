@@ -1323,10 +1323,10 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 							//echo $selectData;
 							$feeitems = $db->fetchAll($selectData);
 							//cek feesttructure
-							$feeitem="0";
+							$feeitem="1";
 							if ($itemsfi!=array() && $feeitems) {
 								foreach ($feeitems as $itm) {
-									if (array_key_exists($itm['fee_item'], $itemsfi)) $feeitem="1";
+									if (!array_key_exists($itm['fee_item'], $itemsfi)) $feeitem="0";
 								}
 							}
 							//echo var_dump($itemsfi);echo '---<br>';
