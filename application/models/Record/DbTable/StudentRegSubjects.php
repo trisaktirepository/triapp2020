@@ -647,18 +647,19 @@ class App_Model_Record_DbTable_StudentRegSubjects extends Zend_Db_Table_Abstract
 										->order('ls.blockid')
 										->order('s.SubCode')
 										->group('s.IdSubject');
-										if ($program==11 && $lastblock==7) {
+				if ($program==11 && $lastblock==7) {
 										//just for medicine program for studnet in last block can not take lower block
-												$sql->where("bl.block=7");
-			}
+						$sql->where("bl.block=7");
+				}
 			 
 				if(isset($subject_code) && $subject_code!=''){
-				$sql->where("s.SubCode LIKE '%".$subject_code."%'");
-			}
+					$sql->where("s.SubCode LIKE '%".$subject_code."%'");
+				}
 		 
 				
-			$result =  $db->fetchAll($sql);
+			
 		}
+		$result =  $db->fetchAll($sql);
 	
 					if(count($result)>0){
 					foreach($result as $key=>$row){
