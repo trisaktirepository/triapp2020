@@ -1301,8 +1301,9 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 							}else{
 								$student_category = 314;
 							}
+							if ($std['IdProgram']==60) $idprogram=11; else $idprogram=$std['IdProgram'];
 							$itemsfi=array();
-							$feestrucs =$feeStructure->getApplicantFeeStructure($std['IdIntake'],$std['IdProgram'],$student_category,$std['IdBranch'],$std['IdProgramMajoring']);
+							$feestrucs =$feeStructure->getApplicantFeeStructure($std['IdIntake'],$idprogram,$student_category,$std['IdBranch'],$std['IdProgramMajoring']);
 							if ($feestrucs) {
 								$selectData = $db->select()
 								->from(array('fsi'=>'fee_structure_item'),array('fsi_item_id'))
