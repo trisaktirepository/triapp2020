@@ -467,7 +467,7 @@ class App_Model_Record_DbTable_StudentRegSubjects extends Zend_Db_Table_Abstract
 		
 		$db = Zend_Db_Table::getDefaultAdapter();
 		//check for configure package
-		 echo $idbranch;echo $intake;exit;
+		  
 		if ($idbranch!=null && $intake!=null) {
 			$sql=$db->select()
 			->from('course_register_package')
@@ -475,6 +475,7 @@ class App_Model_Record_DbTable_StudentRegSubjects extends Zend_Db_Table_Abstract
 			->where('IdBranch=?',$idbranch);
 			
 			$row=$db->fetchRow($sql);
+			echo var_dump($row); exit;
 			if ($row) {
 				if($landscape_type==43){
 					$sql = $db->select()
