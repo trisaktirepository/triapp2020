@@ -559,7 +559,7 @@ class CourseRegistrationController extends Zend_Controller_Action
  		         		//get offered subjects====================
  		         		
 		  				$subjectDB = new App_Model_Record_DbTable_StudentRegSubjects();
-		  				
+		  				echo $paket;exit;
 		  				if ($paket=='1') {
 		  					
 		  					$landscape_subject = $subjectDB->getSubjectOfferedPackage($registration_id,$student["IdLandscape"],$idSemester,$landscape["LandscapeType"],null,$landscapeSem,$lastblock,$programid,$student['IdBranch'],$student['IdIntake']);
