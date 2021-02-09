@@ -475,7 +475,7 @@ class App_Model_Record_DbTable_StudentRegSubjects extends Zend_Db_Table_Abstract
 			->where('IdBranch=?',$idbranch);
 			
 			$row=$db->fetchRow($sql);
-			echo var_dump($row); exit;
+			//echo var_dump($row); exit;
 			if ($row) {
 				if($landscape_type==43){
 					$sql = $db->select()
@@ -508,7 +508,7 @@ class App_Model_Record_DbTable_StudentRegSubjects extends Zend_Db_Table_Abstract
 				
 			}	else {
 				//semester based
-				echo $level; echo $landscape_type;exit;
+				//echo $level; echo $landscape_type;exit;
 				if($landscape_type==43){
 				
 					$sql = $db->select()
