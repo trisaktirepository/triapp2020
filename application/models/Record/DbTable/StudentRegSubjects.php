@@ -470,7 +470,8 @@ class App_Model_Record_DbTable_StudentRegSubjects extends Zend_Db_Table_Abstract
 		  
 		if ($idbranch!=null && $intake!=null) {
 			$sql=$db->select()
-			->from('course_register_package')
+			->from(array('a'=>'course_register_package'))
+			->join(array('b'=>'course_register_package_scheme'),'a.idpackage=b.idpackage')
 			->where('IdProgram=?',$program)
 			->where('IdBranch=?',$idbranch);
 			
