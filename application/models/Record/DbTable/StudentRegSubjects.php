@@ -463,7 +463,7 @@ class App_Model_Record_DbTable_StudentRegSubjects extends Zend_Db_Table_Abstract
         }
     }
 	
-	public function getSubjectOfferedReg($IdStudentRegistration,$landscape_id,$semester_id,$landscape_type,$subject_code,$level=null,$lastblock,$program=null,$idbranch=null,$intake=null){
+	public function getSubjectOfferedPackage($IdStudentRegistration,$landscape_id,$semester_id,$landscape_type,$subject_code,$level=null,$lastblock,$program=null,$idbranch=null,$intake=null){
 		
 		$db = Zend_Db_Table::getDefaultAdapter();
 		//check for configure package
@@ -504,6 +504,60 @@ class App_Model_Record_DbTable_StudentRegSubjects extends Zend_Db_Table_Abstract
 					->order('s.SubCode')
 					->group('s.IdSubject');
 				}
+				
+			}	else {
+				//semester based
+				if($landscape_type==43){
+				
+					$sql = $db->select()
+					->from(array("s"=>"tbl_subjectmaster"),array('BahasaIndonesia','SubCode','CreditHours','IdSubject'))
+					->join(array('ls'=>'tbl_landscapesubject'),'ls.IdSubject=s.IdSubject',array('IdLandscapeSub'))
+					->joinLeft(array("d"=>"tbl_definationms"),'d.idDefinition=ls.SubjectType',array('SubjectType'=>'DefinitionDesc'))
+					->join(array("so"=>'tbl_subjectsoffered'),'so.IdSubject=s.IdSubject',array())
+					->where('so.IdSemester = ?',$semester_id) //offer pada semester ini
+					->where('ls.IdLandscape = ?',$landscape_id)
+					->where('ls.IdSemester=?',$level)
+					->order('s.SubCode')
+					->group('s.IdSubject');
+						
+					if(isset($subject_code) && $subject_code!=''){
+						$sql->where("s.SubCode LIKE '%".$subject_code."%'");
+					}
+				}
+				
+				
+				if($landscape_type==44){
+					//
+						
+					$sql = $db->select()
+					->from(array("s"=>"tbl_subjectmaster"),array('BahasaIndonesia','SubCode','CreditHours','IdSubject'))
+					->join(array('ls'=>'tbl_landscapeblocksubject'),'ls.subjectid=s.IdSubject',array('blockid','IdLandscapeblocksubject'))
+					->join(array('bl'=>'tbl_landscapeblock'),'bl.idblock=ls.blockid')
+					->joinLeft(array("d"=>"tbl_definationms"),'d.idDefinition=ls.coursetypeid',array('SubjectType'=>'DefinitionDesc'))
+					->join(array("so"=>'tbl_subjectsoffered'),'so.IdSubject=s.IdSubject',array())
+					->where('so.IdSemester = ?',$semester_id) //offer pada semester ini
+					->where('ls.IdLandscape = ?',$landscape_id)
+					->order('ls.blockid')
+					->order('s.SubCode')
+					->group('s.IdSubject');
+					
+					if ($program==11 && $lastblock==7) {
+						//just for medicine program for studnet in last block can not take lower block
+						$sql->where("bl.block=7");
+					} else if ($program==11 ) {
+						$sql->where("bl.block<=?",$lastblock);
+					}
+				
+					if(isset($subject_code) && $subject_code!=''){
+						$sql->where("s.SubCode LIKE '%".$subject_code."%'");
+					}
+						
+				
+					$result =  $db->fetchAll($sql);
+				}
+			}
+			
+			if ($program!=11 ) {
 				///echo $sql;exit;
 				$result =  $db->fetchAll($sql);
 				//get course ulang
@@ -523,56 +577,10 @@ class App_Model_Record_DbTable_StudentRegSubjects extends Zend_Db_Table_Abstract
 				
 				$result=array_merge($result,$resultulang);
 			}
+		
 		}
 		
-		if ($result==array()) {
-			//semester based
-			if($landscape_type==43){
-				
-				 $sql = $db->select()
-	                        ->from(array("s"=>"tbl_subjectmaster"),array('BahasaIndonesia','SubCode','CreditHours','IdSubject'))
-	                        ->join(array('ls'=>'tbl_landscapesubject'),'ls.IdSubject=s.IdSubject',array('IdLandscapeSub'))
-	                        ->joinLeft(array("d"=>"tbl_definationms"),'d.idDefinition=ls.SubjectType',array('SubjectType'=>'DefinitionDesc')) 
-	                        ->join(array("so"=>'tbl_subjectsoffered'),'so.IdSubject=s.IdSubject',array())
-	                        ->where('so.IdSemester = ?',$semester_id) //offer pada semester ini
-	                        ->where('ls.IdLandscape = ?',$landscape_id)    
-	                        ->order('s.SubCode') 
-	                        ->group('s.IdSubject');
-	             if ($level!=null)  {
-	             	$sql->where('ls.IdSemester<=?',$level);        
-	             }
-				 if(isset($subject_code) && $subject_code!=''){
-				  	$sql->where("s.SubCode LIKE '%".$subject_code."%'");
-				  }
-			}
-			
-			
-			if($landscape_type==44){
-				 // 
-				 
-				 $sql = $db->select()
-	                        ->from(array("s"=>"tbl_subjectmaster"),array('BahasaIndonesia','SubCode','CreditHours','IdSubject'))
-	                        ->join(array('ls'=>'tbl_landscapeblocksubject'),'ls.subjectid=s.IdSubject',array('blockid','IdLandscapeblocksubject'))
-	                        ->join(array('bl'=>'tbl_landscapeblock'),'bl.idblock=ls.blockid')
-	                        ->joinLeft(array("d"=>"tbl_definationms"),'d.idDefinition=ls.coursetypeid',array('SubjectType'=>'DefinitionDesc')) 
-	                        ->join(array("so"=>'tbl_subjectsoffered'),'so.IdSubject=s.IdSubject',array())
-	                        ->where('so.IdSemester = ?',$semester_id) //offer pada semester ini
-	                        ->where('ls.IdLandscape = ?',$landscape_id)    
-	                        ->order('ls.blockid') 
-	                        ->order('s.SubCode')
-	                        ->group('s.IdSubject');
-				 if ($program==11 && $lastblock==7) {
-				 	//just for medicine program for studnet in last block can not take lower block
-				 	$sql->where("bl.block=7");
-				 }
-				 if ($level!=null)   $sql->where('ls.IdSemester=?',$level);
-				 if(isset($subject_code) && $subject_code!=''){
-				  	$sql->where("s.SubCode LIKE '%".$subject_code."%'");
-				  }
-			}
-			
-		    $result =  $db->fetchAll($sql);
-		}
+		 
 	   
         if(count($result)>0){
 		foreach($result as $key=>$row){
@@ -596,6 +604,81 @@ class App_Model_Record_DbTable_StudentRegSubjects extends Zend_Db_Table_Abstract
 		  
         return $result;
 	}
+	
+	
+	public function getSubjectOfferedReg($IdStudentRegistration,$landscape_id,$semester_id,$landscape_type,$subject_code,$level=null,$lastblock,$program=null,$idbranch=null,$intake=null){
+	
+		$db = Zend_Db_Table::getDefaultAdapter();
+		//check for configure package
+		 
+			//semester based
+			if($landscape_type==43){
+	
+				$sql = $db->select()
+				->from(array("s"=>"tbl_subjectmaster"),array('BahasaIndonesia','SubCode','CreditHours','IdSubject'))
+				->join(array('ls'=>'tbl_landscapesubject'),'ls.IdSubject=s.IdSubject',array('IdLandscapeSub'))
+				->joinLeft(array("d"=>"tbl_definationms"),'d.idDefinition=ls.SubjectType',array('SubjectType'=>'DefinitionDesc'))
+				->join(array("so"=>'tbl_subjectsoffered'),'so.IdSubject=s.IdSubject',array())
+				->where('so.IdSemester = ?',$semester_id) //offer pada semester ini
+				->where('ls.IdLandscape = ?',$landscape_id)
+				->order('s.SubCode')
+				->group('s.IdSubject');
+				 
+				if(isset($subject_code) && $subject_code!=''){
+					$sql->where("s.SubCode LIKE '%".$subject_code."%'");
+				}
+			}
+				
+				
+			if($landscape_type==44){
+				//
+					
+				$sql = $db->select()
+				->from(array("s"=>"tbl_subjectmaster"),array('BahasaIndonesia','SubCode','CreditHours','IdSubject'))
+						->join(array('ls'=>'tbl_landscapeblocksubject'),'ls.subjectid=s.IdSubject',array('blockid','IdLandscapeblocksubject'))
+						->join(array('bl'=>'tbl_landscapeblock'),'bl.idblock=ls.blockid')
+						->joinLeft(array("d"=>"tbl_definationms"),'d.idDefinition=ls.coursetypeid',array('SubjectType'=>'DefinitionDesc'))
+								->join(array("so"=>'tbl_subjectsoffered'),'so.IdSubject=s.IdSubject',array())
+								->where('so.IdSemester = ?',$semester_id) //offer pada semester ini
+										->where('ls.IdLandscape = ?',$landscape_id)
+										->order('ls.blockid')
+										->order('s.SubCode')
+										->group('s.IdSubject');
+										if ($program==11 && $lastblock==7) {
+										//just for medicine program for studnet in last block can not take lower block
+												$sql->where("bl.block=7");
+			}
+			 
+				if(isset($subject_code) && $subject_code!=''){
+				$sql->where("s.SubCode LIKE '%".$subject_code."%'");
+			}
+		 
+				
+			$result =  $db->fetchAll($sql);
+		}
+	
+					if(count($result)>0){
+					foreach($result as $key=>$row){
+	
+							//setkan child=='' sebab guna jquery loop yg sama kalo x nanti display ada bugs
+							$result[$key]['child'] = '';
+							 
+							//get subject status already taken/registered or not
+							$subjectRegDB = new App_Model_Record_DbTable_StudentRegSubjects();
+					$subject_registered = $subjectRegDB->isRegister($IdStudentRegistration,$row["IdSubject"],$semester_id);
+				 
+				if(is_array($subject_registered)){
+				$result[$key]['register_status']="Registered";
+				$result[$key]['register']=1;
+							} else{
+							$result[$key]['register_status']="Not Registered";
+									$result[$key]['register']=2;
+							}
+							}
+							}
+	
+							return $result;
+							}
 	
 
 	
