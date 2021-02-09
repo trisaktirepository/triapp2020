@@ -525,7 +525,7 @@ class App_Model_Record_DbTable_StudentRegSubjects extends Zend_Db_Table_Abstract
 					}
 				}
 				
-				
+				echo $sql;
 				if($landscape_type==44){
 					//
 						
