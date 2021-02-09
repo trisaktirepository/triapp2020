@@ -102,7 +102,7 @@ class CourseRegistrationController extends Zend_Controller_Action
     	
     	$paket='';
     	if ($dbRelease->isIn($registration_id, $idSemester))
-    		$this->_redirect($this->view->url(array('module'=>'default','controller'=>'course-registration', 'action'=>'block-view-student','idSemester'=>$idSemester,'errmsg' => 1),'default',true));
+    		$this->_redirect($this->view->url(array('module'=>'default','controller'=>'course-registration', 'action'=>'block-view-student','idSemester'=>$idSemester,'errMsg' => 1),'default',true));
     	//=============================================
     	
     	//1) Get Student Academic Info
