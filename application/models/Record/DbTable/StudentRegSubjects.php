@@ -467,7 +467,7 @@ class App_Model_Record_DbTable_StudentRegSubjects extends Zend_Db_Table_Abstract
 		
 		$db = Zend_Db_Table::getDefaultAdapter();
 		//check for configure package
-		$result=array();
+		 echo $idbranch;echo $intake;exit;
 		if ($idbranch!=null && $intake!=null) {
 			$sql=$db->select()
 			->from('course_register_package')
