@@ -93,7 +93,7 @@ class Studentfinance_Model_DbTable_BundleFee extends Zend_Db_Table { //Model Cla
 						//->where('b.SemesterMainStartDate <=?',$datestart)
 						->order('b.SemesterMainStartDate DESC');
 						$row=$this->lobjDbAdpt->fetchRow($select);
-						echo $select;
+						//echo $select;
 					if (!$row) {
 					$select=$this->lobjDbAdpt->select()
 					->from(array('a'=>$this->_name))
