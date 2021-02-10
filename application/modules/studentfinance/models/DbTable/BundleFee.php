@@ -130,7 +130,7 @@ class Studentfinance_Model_DbTable_BundleFee extends Zend_Db_Table { //Model Cla
 				}
 			}
 		}
-		//echo $select;
+		echo $select;
 		return $row;
 	}
 	
