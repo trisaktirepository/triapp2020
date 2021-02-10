@@ -1098,7 +1098,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 				 
 				$dbBundle=new Studentfinance_Model_DbTable_BundleFee();
 				$bundle=$dbBundle->getCurrentSetup(1, $std['IdCollege'], $std['IdProgram'], $std['IdBranch'], $row['IdSemesterMain'], $row['idActivity'],$std['IdProgramMajoring']);
-				//echo var_dump($bundle);exit;
+				echo var_dump($bundle);exit;
 				if ($bundle) {
 					if (($row['idActivity']==39 || $row['idActivity']==40 || $row['idActivity']==42)) {
 						
@@ -1330,9 +1330,9 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 									if (array_key_exists($itm['fee_item'], $itemsfi)) $feeitem="1";
 								}
 							}
-							echo var_dump($itemsfi);echo '---<br>';
-							echo var_dump($feeitems);echo '-x-<br>';
-							echo $feeitem; exit;
+							//echo var_dump($itemsfi);echo '---<br>';
+							//echo var_dump($feeitems);echo '-x-<br>';
+							//echo $feeitem; exit;
 							if ($feeitem=="1") {
 								//BPP Pokok
 								$selectData = $db->select()
@@ -1440,7 +1440,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 										//echo var_dump($act);
 										//if ($row['idActivity']==44) {
 										
-										echo $totalamount.'='.$totalamountact.'='.$discitem;  exit;
+										//echo $totalamount.'='.$totalamountact.'='.$discitem;  exit;
 										 
 										//}
 										//echo '<br>';
