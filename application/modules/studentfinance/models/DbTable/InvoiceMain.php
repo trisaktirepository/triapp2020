@@ -1447,7 +1447,7 @@ class Studentfinance_Model_DbTable_InvoiceMain extends Zend_Db_Table_Abstract {
 										
 										if (($totalamount!=($totalamountact-$discitem) ) && ($bill - $cn + $dn)>0){
 											
-											if (!($discitem==0 && $cn>0)) return $row['idActivity'];
+											if ($cn < $discitem) return $row['idActivity'];
 										} 
 											
 									}
