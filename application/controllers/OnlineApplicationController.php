@@ -3183,7 +3183,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     		$kkni=$formData['kkni'];
     		$row=array();
     		if ($kkni=="8" || $kkni=="9" || $kkni=="7" ) {
-    			
+    			if ($kkni=="7") $appltype="10";else $appltype=$kkni;
     			$yearend = $formData['ae_year_end'];
     			$programasal=$formData['ae_institution'];
     			//get transaction data
