@@ -919,6 +919,8 @@ class OnlineApplicationController extends Zend_Controller_Action {
         		$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'programme-portfolio','kkni'=>8),'default',true));
         else if ($transaction['at_appl_type'] == 9)
         	$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'programme-portfolio','kkni'=>9),'default',true));
+        else if ($transaction['at_appl_type'] ==10)
+        	$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'programme-portfolio','kkni'=>7),'default',true));
         
         else{//admission type = placement test (id=1)
 			//check ptest

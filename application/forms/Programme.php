@@ -27,7 +27,7 @@ class App_Form_Programme extends Zend_Form {
 		$transactionData = $transactionDb->getTransactionData($transaction_id);
 		
 		if( $this->admissiontype == 1 ){
-			if ($this->testcode=="8" || $this->testcode=="9") 
+			if ($this->testcode=="7" || $this->testcode=="8" || $this->testcode=="9") 
 				$this->initPlacementTestMagister($this->testcode,$this->admissiontype);
 			else 
 				$this->initPlacementTest($this->testcode);
@@ -39,7 +39,7 @@ class App_Form_Programme extends Zend_Form {
 		}else if( $this->admissiontype == 4 ){
 				$this->initInvitation();
 		} else if( $this->admissiontype == 5 || $this->admissiontype == 8 || $this->admissiontype == 9 ){
-			if ($this->testcode=="8" || $this->testcode=="9")
+			if ($this->testcode=="7" || $this->testcode=="8" || $this->testcode=="9")
 				$this->initPlacementTestMagister($this->testcode,$this->admissiontype);
 			else $this->initPortfolioTest();
 		}else if( $this->admissiontype == 6 ){

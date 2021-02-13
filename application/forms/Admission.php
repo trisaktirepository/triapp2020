@@ -18,8 +18,10 @@ class App_Form_Admission extends Zend_Form {
 				'2'=>' '.$this->getView()->translate('High School Certificate'),
 				'3'=>' '.$this->getView()->translate('Credit Transfer'),
 				//'4'=>' '.$this->getView()->translate('Invitation'),
-				'5'=>' '.$this->getView()->translate('Portofolio'),
-				'8'=>' '.$this->getView()->translate('Portofolio Magister/Doctor'),
+				'5'=>' '.$this->getView()->translate('Portofolio Sarjana/Diploma'),
+				'8'=>' '.$this->getView()->translate('Portofolio Magister'),
+				'9'=>' '.$this->getView()->translate('Portofolio Doctor'),
+				'10'=>' '.$this->getView()->translate('Portofolio Profesi'),
 				'6'=>' '.$this->getView()->translate('Scholarship'),
 				'7'=>' '.$this->getView()->translate('Nilai UTBK')))->setRequired(true);
 		$this->at_appl_type->setValue(1);
