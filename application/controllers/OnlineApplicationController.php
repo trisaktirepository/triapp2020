@@ -10825,7 +10825,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
     		$documentDB->addData($doc);
     		//------- end high school cert section ----------
     
-    	} else if ($admission_type==5 || $admission_type==8 || $admission_type==9) {
+    	} else if ($admission_type==5 || $admission_type==8 || $admission_type==9  || $admission_type==10) {
     
     
     		//-------- Protfolio section -------------
