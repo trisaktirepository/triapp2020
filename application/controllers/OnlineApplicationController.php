@@ -1150,7 +1150,7 @@ class OnlineApplicationController extends Zend_Controller_Action {
 			if ($this->getRequest()->isPost()) {
 				$formData = $this->getRequest()->getPost();
 	
-				if($form->isValid($formData)){
+				//if($form->isValid($formData)){
 					$intake=$formData['intake_id'];
 					$dbIntake=new App_Model_Record_DbTable_IntakeAcademicYear();
 					$yearacad=$dbIntake->getDataByIntake($intake);
@@ -1249,10 +1249,10 @@ class OnlineApplicationController extends Zend_Controller_Action {
 					//redirect
 					$this->_redirect($this->view->url(array('module'=>'default','controller'=>'online-application','action'=>'uploaddocument'),'default',true));
 	
-				}else{
+				/*}else{
 					$form->populate($formData);
 					$this->view->form = $form;
-				}
+				}*/
 				 
 			}else{
 		   
