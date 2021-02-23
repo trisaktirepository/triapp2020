@@ -295,7 +295,7 @@ class App_Model_Record_DbTable_StudentRegistration extends Zend_Db_Table_Abstrac
 			if ($row['TotalCreditHours']-$row['sks_diakui']<0) $max=1;
 			else
 			if ((($row['TotalCreditHours']-$row['sks_diakui'])%12)>0) 
-				$max=((int)($row['TotalCreditHours']-$row['sks_diakui'])/12)+1;
+				$max=(int)((($row['TotalCreditHours']-$row['sks_diakui'])/12)+1);
 			else $max=(int)($row['TotalCreditHours']-$row['sks_diakui'])/12;
 			$row['semestermax']=$max;
 			for ($i=0;$i<$row['semestermax']/2;$i++) {
