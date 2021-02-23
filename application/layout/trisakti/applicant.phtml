@@ -224,28 +224,40 @@
 		 	$regid=$auth->getIdentity()->registration_id;
 		 	$smt=$dbStd->getSemesterStd($regid);
 		 	$semesterlist=$smt['sem'];
-		 	$i=1;
+		 	$i=1;$semcount=$smt['semestermax'];
 		 	foreach ($semesterlist as $value) {
 				if ($i>$smt['semestercount'] && ($i<=$smt['semestermax']-2) ) $alert="yellow";
 				else if ($i>$smt['semestermax']-2) $alert="red";
 				else $alert="";
-		 		if ($dbStd->isIn($regid, $value.'1')) {?>
-		 			<td align="center" bgcolor="green"><font color="white"><?php echo  $value.'-1'?></font></td>
-		 		<?php } else {?>
-		 			<td align="center" bgcolor="<?php echo $alert;?>"><?php echo  $value.'-1'?></td>
-		 		<?php }?>
-		 		<?php $i++;
+				//--------
+				if ($semcount>0) {
+				  if ($smt['semesterstart']=="1") {
+			 			if ($dbStd->isIn($regid, $value.'1')) {
+							?><td align="center" bgcolor="green"><font color="white"><?php echo  $value.'-1'?></font></td>
+					 		<?php } else {?>
+					 			<td align="center" bgcolor="<?php echo $alert;?>"><?php echo  $value.'-1'?></td>
+					 	<?php }?>
+					  <?php $i++; $semcount--;
+					 		
+			 		} else $smt['semesterstart']="1";
+		 		}
 		 		if ($i>$smt['semestercount'] && ($i<=$smt['semestermax']-2)) $alert="yellow";
 		 		else if ($i>$smt['semestermax']-2) $alert="red";
 		 		else $alert="";
-		 		if ($dbStd->isIn($regid, $value.'2')) { ?>
-		 			<td align="center" bgcolor="green"><font color="white"><?php echo $value.'-2'?></font></td>
-		 		<?php }else {?>
-		 			<td align="center" bgcolor="<?php echo $alert;?>"><?php echo  $value.'-2'?></td>
-		 		<?php }  
-		 		$i++;
+		 		if ($semcount>0) {
+			 		if ($dbStd->isIn($regid, $value.'2')) { ?>
+			 			<td align="center" bgcolor="green"><font color="white"><?php echo $value.'-2'?></font></td>
+			 		<?php }else {?>
+			 			<td align="center" bgcolor="<?php echo $alert;?>"><?php echo  $value.'-2'?></td>
+			 		<?php }  
+			 		
+			 		$i++;$semcount--;
+		 		}
 		 		
 		 	}
+		 	if ($smt['semesterstart']=="2") {
+				
+			}
 		 }?></tr>
 		 </table>
 	</div>

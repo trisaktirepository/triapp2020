@@ -289,12 +289,24 @@ class App_Model_Record_DbTable_StudentRegistration extends Zend_Db_Table_Abstrac
 		
 		$row=$db->fetchRow($select);
 		$intake=substr($row['IntakeId'], 0,4);
+		$semesterstart=substr($row['IntakeId'], 10,1);
 		$semester=array();
-		for ($i=0;$i<$row['semestermax']/2;$i++) {
-			$semester[$i]=$intake;
-			$intake++;
+		if ($row['sks_diakui']>0) {
+			if ((($row['TotalCreditHours']-$row['sks_diakui'])%12)>0) 
+				$max=((int)($row['TotalCreditHours']-$row['sks_diakui'])/12)+1;
+			else $max=(int)($row['TotalCreditHours']-$row['sks_diakui'])/12;
+			$row['semestermax']=$max;
+			for ($i=0;$i<$row['semestermax']/2;$i++) {
+				$semester[$i]=$intake;
+				$intake++;
+			}
+		} else {
+			for ($i=0;$i<$row['semestermax']/2;$i++) {
+				$semester[$i]=$intake;
+				$intake++;
+			}
 		}
-		return array('semestercount'=>$row['SemsterCount'],'semestermax'=>$row['semestermax'],'sem'=>$semester);
+		return array('semesterstart'=>$semesterstart,'semestercount'=>$row['SemsterCount'],'semestermax'=>$row['semestermax'],'sem'=>$semester);
 	}
 	
 	function isIn($stdid,$semestercode) {
