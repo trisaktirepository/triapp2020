@@ -97,27 +97,7 @@ function print_bank_slip(invoice_id,bank_id){
 		<td><?php echo number_format($entry['bill_balance'], 2, '.', ','); ?></td>
 		<td align="center">
 		
-		 
-			<?php 
-				if( strlen($entry['document'])>8 && isset($entry['bill_balance']) && $entry['bill_balance']!=0.00 && ($entry['bill_amount'] != $entry['bill_balance']) ){
-			?>
-			<a href="#" class="printLink" onclick="print_bank_slip(<?php echo $entry['id'];?>);">Cetak</a>
-			<?php 
-				}else
-                if( isset($entry['ppd_id']) && $entry['ppd_id']!=null && $entry['ppd_id'] !=0 ){
-			?>
-			<a href="#" class="printLink" onclick="print_bank_slip(<?php echo $entry['id'];?>);">Cetak</a>  
-			<?php 
-				}else if ($entry['IdBank']==1) {
-			?>
-				SPC (BNI46)
-		 	<?php 
-		 		} else {
-
-		 	?>
-		 		
-		 	<a href="#" class="printLink" onclick="print_bank_slip(<?php echo $entry['id'];?>,<?php echo $entry['IdBank'];?>);">   <?php echo 'Cetak Slip '.$entry['BankName'];}?></a>
-		</td>
+		 </td>
 	</tr>
 	<?php 
 	$i++;
