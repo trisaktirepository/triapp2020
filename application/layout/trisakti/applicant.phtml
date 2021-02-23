@@ -223,6 +223,7 @@
 		 	$dbStd=new App_Model_Record_DbTable_StudentRegistration();
 		 	$regid=$auth->getIdentity()->registration_id;
 		 	$smt=$dbStd->getSemesterStd($regid);
+		 	echo var_dump($smt);
 		 	$semesterlist=$smt['sem'];
 		 	$i=1;$semcount=$smt['semestermax'];
 		 	foreach ($semesterlist as $value) {
