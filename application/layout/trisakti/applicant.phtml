@@ -218,14 +218,16 @@
 		
 	</div>
 	<div id="live">
-		<table class="table" width="100%" border="0" ><tr>
+		<table class="table" width="100%" border="0" >
+		<tr>
 		 <?php if ($auth->getIdentity()->role=="student") {
 		 	$dbStd=new App_Model_Record_DbTable_StudentRegistration();
 		 	$regid=$auth->getIdentity()->registration_id;
 		 	$smt=$dbStd->getSemesterStd($regid);
-		 	echo var_dump($smt);
+		 //	echo var_dump($smt);
 		 	$semesterlist=$smt['sem'];
 		 	$i=1;$semcount=$smt['semestermax'];
+		 	$finis=1;
 		 	foreach ($semesterlist as $value) {
 				if ($i>$smt['semestercount'] && ($i<=$smt['semestermax']-2) ) $alert="yellow";
 				else if ($i>$smt['semestermax']-2) $alert="red";
@@ -235,7 +237,7 @@
 				  if ($smt['semesterstart']=="1") {
 			 			if ($dbStd->isIn($regid, $value.'1')) {
 							?><td align="center" bgcolor="green"><font color="white"><?php echo  $value.'-1'?></font></td>
-					 		<?php } else {?>
+					 		<?php } else { $finis=0;?>
 					 			<td align="center" bgcolor="<?php echo $alert;?>"><?php echo  $value.'-1'?></td>
 					 	<?php }?>
 					  <?php $i++; $semcount--;
@@ -248,7 +250,7 @@
 		 		if ($semcount>0) {
 			 		if ($dbStd->isIn($regid, $value.'2')) { ?>
 			 			<td align="center" bgcolor="green"><font color="white"><?php echo $value.'-2'?></font></td>
-			 		<?php }else {?>
+			 		<?php }else {  $finis=0;?>
 			 			<td align="center" bgcolor="<?php echo $alert;?>"><?php echo  $value.'-2'?></td>
 			 		<?php }  
 			 		
@@ -259,7 +261,15 @@
 		 	if ($smt['semesterstart']=="2") {
 				
 			}
-		 }?></tr>
+			?>
+			</tr>
+		 	<tr>
+		 	<td colspan="<?php echo $i-1?>"> <?php echo "Maksimum masa sttudi anda ".$smt['semestermax'].' semester'; if ($finis=="1") echo "<h2> dan Sudah Habis</h2>";?></td>
+		 	</tr>
+			
+			<?php 
+		 }?>
+		 
 		 </table>
 	</div>
 		<!-- Header end -->
