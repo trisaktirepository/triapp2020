@@ -203,7 +203,7 @@ class App_Model_Application_DbTable_ApplicantTransaction extends Zend_Db_Table_A
 				->from(array('a'=>'applicant_transaction'),array('billing_no'=>'ifnull(max(substr(at_pes_id,-6)) ,0)+1'))
 			
 				->where("at_appl_type = '3'")
-				->where('at_intake=?',$intake); 
+				->where('left(at_pes_id,3)=?',$row['CreditTransferCode']); 
 				$row=$db->fetchRow($select);
 			//$no=$row['billing_no']+100000;
 			$no=$row['billing_no']+1000000;
@@ -244,8 +244,9 @@ class App_Model_Application_DbTable_ApplicantTransaction extends Zend_Db_Table_A
 		 	$pre=$row['PortofolioCode'];
 			$select=$db->select()
 				->from(array('a'=>'applicant_transaction'),array('billing_no'=>'ifnull(max(substr(at_pes_id,-5)) ,0)+1'))
-				->where("at_appl_type in ('5','8','9')")
-				->where('at_intake=?',$intake); 
+				->where("at_appl_type in ('5','8','9','10')")
+				->where('left(at_pes_id,3)=?',$row['PortofolioCode']); 
+				
 				$row=$db->fetchRow($select);
 			$no=$row['billing_no']+100000;
 			//echo $no;
@@ -264,7 +265,7 @@ class App_Model_Application_DbTable_ApplicantTransaction extends Zend_Db_Table_A
 			$select=$db->select()
 				->from(array('a'=>'applicant_transaction'),array('billing_no'=>'ifnull(max(substr(at_pes_id,-5)) ,0)+1'))
 				->where("at_appl_type = '6'")
-				->where('at_intake=?',$intake); 
+				->where('left(at_pes_id,3)=?',$row['ScholarshipCode']); 
 				$row=$db->fetchRow($select);
 			$no=$row['billing_no']+100000;
 			//echo $no;
@@ -301,8 +302,8 @@ class App_Model_Application_DbTable_ApplicantTransaction extends Zend_Db_Table_A
 		 	$pre=$row['PortofolioCode'];
 			$select=$db->select()
 				->from(array('a'=>'applicant_transaction'),array('billing_no'=>'ifnull(max(substr(at_pes_id,-5)) ,0)+1'))
-				->where("at_appl_type in ('5','8','9')")
-				->where('at_intake=?',$intake); 
+				->where("at_appl_type in ('5','8','9','10')")
+				->where('left(at_pes_id,3)=?',$row['PortofolioCode']);  
 				$row=$db->fetchRow($select);
 			$no=$row['billing_no']+100000;
 			//echo $no;
@@ -320,8 +321,8 @@ class App_Model_Application_DbTable_ApplicantTransaction extends Zend_Db_Table_A
 		 	$pre=$row['PortofolioCode'];
 			$select=$db->select()
 				->from(array('a'=>'applicant_transaction'),array('billing_no'=>'ifnull(max(substr(at_pes_id,-5)) ,0)+1'))
-				->where("at_appl_type in ('5','8','9')")
-				->where('at_intake=?',$intake); 
+				->where("at_appl_type in ('5','8','9','10')")
+				->where('left(at_pes_id,3)=?',$row['PortofolioCode']); 
 				$row=$db->fetchRow($select);
 			$no=$row['billing_no']+100000;
 			//echo $no;
@@ -340,7 +341,7 @@ class App_Model_Application_DbTable_ApplicantTransaction extends Zend_Db_Table_A
 			$select=$db->select()
 				->from(array('a'=>'applicant_transaction'),array('billing_no'=>'ifnull(max(substr(at_pes_id,-5)) ,0)+1'))
 				->where("at_appl_type in ('5','8','9','10')")
-				->where('at_intake=?',$intake); 
+				->where('left(at_pes_id,3)=?',$row['PortofolioCode']); 
 				$row=$db->fetchRow($select);
 			$no=$row['billing_no']+100000;
 			//echo $no;
