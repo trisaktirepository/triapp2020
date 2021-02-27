@@ -586,7 +586,7 @@ class CourseRegistrationController extends Zend_Controller_Action
 		  					///cek daring luring prerequisite
 		  					
 		  					foreach ($subjectOffered as $key=>$subjects){
-		  						if (!$studentRegSubjectDB->tookOnline($idSemester,$registration_id, $subjects['IdSubject'])) {
+		  						if ($studentRegSubjectDB->isLuring($idSemester,$registration_id, $subjects['IdSubject']) && !$studentRegSubjectDB->tookOnline($idSemester,$registration_id, $subjects['IdSubject'])) {
 		  							unset($subjectOffered[$key]);
 		  						}
 		  					}
