@@ -739,6 +739,28 @@ class App_Model_Record_DbTable_StudentRegSubjects extends Zend_Db_Table_Abstract
 			}
 		}
 	}
+	
+	public function tookOnline($idsemester,$IdStudentRegistration,$idSubject){
+	
+		$db = Zend_Db_Table::getDefaultAdapter();
+		if(($grade==null)){
+			$sql = $db->select()
+			->from(array('srs' => 'tbl_studentregsubjects'))
+			->join(array('ct'=>'tbl_course_tagging_group'),'srs.IdCourseTaggingGroup=ct.IdCourseTaggingGroup')
+			->join(array('sc'=>'course_group_schedule'),'sc.idGroup=ct.IdCourseTaggingGroup')
+			->where('srs.IdStudentRegistration = ?', $IdStudentRegistration)
+			->where('srs.IdSubject = ?',$idSubject)
+			->where('srs.IdSemesterMain <> ?',$idsemester)
+			->where('sc.learning_mode="1"');
+			$result = $db->fetchRow($sql);
+			if(!empty($result)){
+				return true;
+			}else{
+				return false;
+			}
+		}
+	}
+	
 	public function isCompleted($IdStudentRegistration,$idSubject,$grade=null,$type=null,$total_credit=null,$passtotal_credit=null,$cgpa=null,$currentsem=null,$cheklate=null){
 		
 		$db = Zend_Db_Table::getDefaultAdapter();

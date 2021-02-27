@@ -582,6 +582,16 @@ class CourseRegistrationController extends Zend_Controller_Action
 		  							unset($subjectOffered[$key]);
 		  						}
 		  					}
+		  					
+		  					///cek daring luring prerequisite
+		  					
+		  					foreach ($subjectOffered as $key=>$subjects){
+		  						if (!$studentRegSubjectDB->tookOnline($idSemester,$registration_id, $subjects['IdSubject'])) {
+		  							unset($subjectOffered[$key]);
+		  						}
+		  					}
+		  					
+		  					
 		  				
 		  				}
                        	$dbGroupSchedule=new App_Model_Registration_DbTable_CourseGroupSchedule();
