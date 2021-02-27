@@ -155,7 +155,7 @@ $pdb = new App_Model_Application_DbTable_ApplicantPtest();
 			$decree_date = $selection["asd_decree_date"];
 			$reg_start_date = $selection["aar_reg_start_date"];
 		} else
-		if($entry['at_appl_type']==5){
+		if($entry['at_appl_type']==5 || $entry['at_appl_type']==8 || $entry['at_appl_type']==9 || $entry['at_appl_type']==10){
 			$assessmentDB = new App_Model_Application_DbTable_ApplicantAssessment();
 			$selection = $assessmentDB->getData($entry['at_trans_id']);
 			$decree_date = $selection["asd_decree_date"];
