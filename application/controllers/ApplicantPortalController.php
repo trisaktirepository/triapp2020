@@ -3727,13 +3727,13 @@ class ApplicantPortalController extends Zend_Controller_Action
     		//local
     		$feeStructureDb = new Studentfinance_Model_DbTable_FeeStructure();
     		$feeStructureData = $feeStructureDb->getApplicantFeeStructure($intakeData['IdIntake'],$program[0]["program_id"],314,$program[0]['IdBranchOffer']);
-    		if (biaya!='') $biaya = number_format($biaya, 2, '.', ',');
+    		if ($biaya!='') $biaya = number_format($biaya, 2, '.', ',');
     	
     	}else{
     		//foreigner
     		$feeStructureData = $feeStructureDb->getApplicantFeeStructure($intakeData['IdIntake'],$program[0]["program_id"],315,$program[0]['IdBranchOffer']);
     		$biaya = $biaya*2;
-    		if (biaya!='') $biaya = number_format($biaya, 2, '.', ',');
+    		if ($biaya!='') $biaya = number_format($biaya, 2, '.', ',');
     	}
     	
 	    if ($feeStructureData) {
