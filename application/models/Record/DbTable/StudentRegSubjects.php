@@ -766,12 +766,12 @@ class App_Model_Record_DbTable_StudentRegSubjects extends Zend_Db_Table_Abstract
 		$db = Zend_Db_Table::getDefaultAdapter();
 		if(($grade==null)){
 			$sql = $db->select()
-			->from(array('srs' => 'tbl_studentregsubjects'))
-			->join(array('ct'=>'tbl_course_tagging_group'),'srs.IdCourseTaggingGroup=ct.IdCourseTaggingGroup')
+			//->from(array('srs' => 'tbl_studentregsubjects'))
+			->from(array('ct'=>'tbl_course_tagging_group'))
 			->join(array('sc'=>'course_group_schedule'),'sc.idGroup=ct.IdCourseTaggingGroup')
-			->where('srs.IdStudentRegistration = ?', $IdStudentRegistration)
-			->where('srs.IdSubject = ?',$idSubject)
-			->where('srs.IdSemesterMain = ?',$idsemester)
+			//->where('srs.IdStudentRegistration = ?', $IdStudentRegistration)
+			->where('ct.IdSubject = ?',$idSubject)
+			->where('ct.IdSemester = ?',$idsemester)
 			->where('sc.learning_mode="0"');
 			$result = $db->fetchRow($sql);
 			if(!empty($result)){

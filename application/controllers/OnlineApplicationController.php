@@ -9919,13 +9919,14 @@ class OnlineApplicationController extends Zend_Controller_Action {
     	else if ($trans['at_appl_type']=="7") $pcode='UTBK';
     	else if ($trans['at_appl_type']=="8") $pcode='MGS';
     	else if ($trans['at_appl_type']=="9") $pcode='DOK';
+    	else if ($trans['at_appl_type']=="10") $pcode='PROF';
     	$placementcode=$pcode.substr($intake['IntakeId'], 0,4).substr($intake['IntakeId'], 10,1);
     	if ($trans['at_appl_type']=="1") {
     		 $dbPtest=new App_Model_Application_DbTable_ApplicantPtest();
     		 $ptest=$dbPtest->getUsmPtestCode($txtid);
     		 if ($ptest)
     		 	$placementcode=$ptest['apt_ptest_code'];
-    		 else $placementcode='USM2020';
+    		 else $placementcode='USM20211';
     	}
     	$applicantProfileProposeDb = new App_Model_Application_DbTable_ApplicantProfilePropose();
     	$applicantProfileDb=new App_Model_Application_DbTable_ApplicantProfile();
