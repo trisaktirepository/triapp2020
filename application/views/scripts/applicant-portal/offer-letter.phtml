@@ -198,10 +198,10 @@ td.bold-text{
 						$paket_a_total = $paket_total_amount;
 
 						$mode = "";
-						if($fee_item['fi_frequency_mode'] == 302 || $fee_item['fi_frequency_mode'] == 305  ){
+						if($fee_item['fi_frequency_mode'] == 302  ){
 							$mode="(hanya sekali selama mahasiswa)";
 						}else
-						if($fee_item['fi_frequency_mode'] == 303 ){
+						if($fee_item['fi_frequency_mode'] == 303 || $fee_item['fi_frequency_mode'] == 305  ){
 							$mode="(tiap semester)";
 						}else
 						if($fee_item['fi_frequency_mode'] == 304 ){
@@ -284,10 +284,10 @@ td.bold-text{
 						if($fee_item['total_amount']!=0){
 						
 						$mode = "";
-						if($fee_item['fi_frequency_mode'] == 302 || $fee_item['fi_frequency_mode'] == 305  ){
+						if($fee_item['fi_frequency_mode'] == 302   ){
 							$mode="(hanya sekali selama mahasiswa)";
 						}else
-						if($fee_item['fi_frequency_mode'] == 303 ){
+						if($fee_item['fi_frequency_mode'] == 303  || $fee_item['fi_frequency_mode'] == 305 ){
 							$mode="(tiap semester)";
 						}else
 						if($fee_item['fi_frequency_mode'] == 304 ){
