@@ -137,7 +137,7 @@ class Studentfinance_Model_DbTable_PaymentMain extends Zend_Db_Table_Abstract {
 				->from(array('pm'=>'payment_main'))
 				->joinLeft(array('pi'=>'applicant_proforma_invoice'),'pm.billing_no = pi.billing_no')
 				->where("pm.payer ='".$payer."'")
-        		->where("pm.amount>500000");
+        		->where("pm.amount>700000");
 
 				
 		$row = $db->fetchAll($select);
@@ -152,7 +152,7 @@ class Studentfinance_Model_DbTable_PaymentMain extends Zend_Db_Table_Abstract {
 			->from(array('pm'=>'invoice_main'))
 			//->join(array('pi'=>'invoice_main'),'pm.billing_no = pi.bill_number')
 			->where("pm.no_fomulir ='".$payer."'")
-			->where("pm.bill_paid>500000");
+			->where("pm.bill_paid>700000 or (cn_amount/bill_amount)>0.5");
 			$row = $db->fetchAll($select);
 			if ($row) return $row;
 			else {
